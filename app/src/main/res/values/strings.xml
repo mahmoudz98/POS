@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">POS</string>
+    <string name="default_web_client_id" translatable="false">578787836284-1ha2u4nugqtbj3qkvnaioqfbei14trji.apps.googleusercontent.com</string>
+    <string name="extra_uid">EXTRA_UID</string>
+    <string name="extra_display_name">EXTRA_DISPLAY_NAME</string>
+    <string name="extra_email">EXTRA_EMAIL</string>
 </resources>

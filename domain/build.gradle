@@ -1,21 +1,18 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.gms.google-services'
 }
 
 android {
-    namespace 'com.casecode.pos'
+    namespace 'com.casecode.domain'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.casecode.pos"
         minSdk 24
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -30,10 +27,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-    }
-    buildFeatures {
-        dataBinding true
-        viewBinding true
     }
 }
 
@@ -57,14 +50,4 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
-
-    // Android Utility's
-    implementation "com.github.abdelaz9z:AndroidUtilities:$AndroidUtilities_version"
-
-    // firebase auth
-    implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
-
-    // navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 }
