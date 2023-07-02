@@ -53,6 +53,10 @@ dependencies {
     // play services auth
     implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
 
+    // lifecycle (livedata, ViewModel)
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_livedata_ktx_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_viewmodel_ktx_version"
+
     // testing
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
@@ -67,4 +71,7 @@ dependencies {
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // circle image view
+    implementation "de.hdodenhof:circleimageview:$circleimageview_version"
 }

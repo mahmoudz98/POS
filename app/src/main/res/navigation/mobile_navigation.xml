@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_statistics">
+
+    <fragment
+        android:id="@+id/nav_statistics"
+        android:name="com.casecode.pos.ui.statistics.StatisticsFragment"
+        android:label="@string/menu_statistics"
+        tools:layout="@layout/fragment_statistics" />
+
+    <fragment
+        android:id="@+id/nav_pos"
+        android:name="com.casecode.pos.ui.pos.PointOfSaleFragment"
+        android:label="@string/menu_pos"
+        tools:layout="@layout/fragment_point_of_sale" />
+
+    <fragment
+        android:id="@+id/nav_invoices"
+        android:name="com.casecode.pos.ui.invoices.InvoicesFragment"
+        android:label="@string/menu_invoices"
+        tools:layout="@layout/fragment_invoices" />
+</navigation>

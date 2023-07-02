@@ -4,8 +4,8 @@ buildscript {
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '8.0.0' apply false
-    id 'com.android.library' version '8.0.0' apply false
+    id 'com.android.application' version '8.0.2' apply false
+    id 'com.android.library' version '8.0.2' apply false
     id 'org.jetbrains.kotlin.android' version '1.8.0' apply false
 }
 
@@ -15,11 +15,14 @@ ext {
     material_version = '1.9.0'
     constraintlayout_version = '2.1.4'
     play_services_auth_version = '20.5.0'
-    junit_version = '1.1.5'
+    junit_version = '4.13.2'
     test_junit_version = '1.1.5'
     espresso_core_version = '3.5.1'
-    AndroidUtilities_version = '1.0.0'
+    AndroidUtilities_version = '1.0.1'
     firebase_auth_version = '22.0.0'
     kotlin_version = "1.7.10"
-    nav_version = '2.5.3'
+    nav_version = '2.6.0'
+    lifecycle_livedata_ktx_version = '2.6.1'
+    lifecycle_viewmodel_ktx_version = '2.6.1'
+    circleimageview_version = '3.1.0'
 }

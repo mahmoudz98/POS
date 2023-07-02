@@ -12,18 +12,24 @@
         android:theme="@style/Theme.POS"
         tools:targetApi="31">
         <activity
-            android:name=".GoogleSignInActivity"
-            android:label="Google Sign In"
-            android:exported="true">
+            android:name=".ui.main.MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.POS.NoActionBar" />
+        <activity
+            android:name=".ui.signIn.SignInActivity"
+            android:exported="true"
+            android:label="Google Sign In">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
