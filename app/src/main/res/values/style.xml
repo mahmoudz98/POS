@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="TextAppearance.pos.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+
+    </style>
+
+    <style name="TextAppearance.pos.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/work_sans_medium</item>
+        <item name="android:fontFamily">@font/work_sans_medium</item>
+    </style>
+
+    <style name="TextAppearance.pos.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/work_sans_medium</item>
+        <item name="android:fontFamily">@font/work_sans_medium</item>
+    </style>
+
+    <style name="TextAppearance.pos.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/work_sans_regular</item>
+        <item name="android:fontFamily">@font/work_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.pos.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/work_sans_medium</item>
+        <item name="android:fontFamily">@font/work_sans_medium</item>
+    </style>
+
+    <style name="TextAppearance.pos.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/work_sans_medium</item>
+        <item name="android:fontFamily">@font/work_sans_medium</item>
+    </style>
+
+    <style name="TextAppearance.pos.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/work_sans_medium</item>
+        <item name="android:fontFamily">@font/work_sans_medium</item>
+    </style>
+
+    <style name="Widget.pos.CardView.Elevated" parent="Widget.Material3.CardView.Elevated">
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:checkable">true</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="checkedIcon">@null</item>
+    </style>
+</resources>

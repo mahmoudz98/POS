@@ -32,22 +32,22 @@ android {
 
 dependencies {
     // core ktx
-    implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation libs.androidx.core.ktx
 
     // appcompat
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation libs.androidx.appcompat
 
     // material design
-    implementation "com.google.android.material:material:$material_version"
+    implementation libs.material
 
     // constraint layout
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation libs.androidx.constraintlayout
 
     // play services auth
-    implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
+    implementation libs.play.services.auth
 
     // testing
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 }

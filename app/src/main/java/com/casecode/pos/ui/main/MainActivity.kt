@@ -10,15 +10,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.casecode.androidutils.AndroidUtils
-import com.casecode.androidutils.extenstion.hideKeyboard
-import com.casecode.androidutils.extenstion.toDate
-import com.casecode.androidutils.extenstion.toStringFormat
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import java.util.Date
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,7 +39,13 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_statistics, R.id.nav_pos, R.id.nav_invoices
+                R.id.nav_statistics,
+                R.id.nav_pos,
+                R.id.nav_invoices,
+                R.id.nav_products,
+                R.id.nav_code_scanner,
+                R.id.nav_users,
+                R.id.nav_setting
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -52,6 +53,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.appBarMain.includeSearchBar.imageButtonMenu.setOnClickListener {
             openMenu(drawerLayout)
+        }
+        // Set the checked item in the navigation drawer based on the current screen
+        val currentDestination = navController.currentDestination?.id
+        if (currentDestination != null) {
+            navView.setCheckedItem(currentDestination)
         }
     }
 
@@ -67,7 +73,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openMenu(drawerLayout: DrawerLayout) {
-        if (!drawerLayout.isDrawerOpen(GravityCompat.START)) drawerLayout.openDrawer(GravityCompat.START);
-        else drawerLayout.closeDrawer(GravityCompat.END);
+        if (!drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.openDrawer(GravityCompat.START)
+        else drawerLayout.closeDrawer(GravityCompat.END)
     }
 }

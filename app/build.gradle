@@ -39,39 +39,40 @@ android {
 
 dependencies {
     // core ktx
-    implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation libs.androidx.core.ktx
 
     // appcompat
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation libs.androidx.appcompat
 
     // material design
-    implementation "com.google.android.material:material:$material_version"
+    implementation libs.material
 
     // constraint layout
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation libs.androidx.constraintlayout
 
     // play services auth
-    implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
+    implementation libs.play.services.auth
 
     // lifecycle (livedata, ViewModel)
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_livedata_ktx_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_viewmodel_ktx_version"
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.legacy.support.v4
 
     // testing
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 
     // Android Utility's
-    implementation "com.github.abdelaz9z:AndroidUtilities:$AndroidUtilities_version"
+    implementation libs.android.utilities
 
     // firebase auth
-    implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
+    implementation libs.firebase.auth
 
     // navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
 
     // circle image view
-    implementation "de.hdodenhof:circleimageview:$circleimageview_version"
+    implementation libs.circleimageview
 }

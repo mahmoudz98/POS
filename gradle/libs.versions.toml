@@ -1,0 +1,49 @@
+[versions]
+androidGradlePlugin = "8.0.2"
+
+android-utilities = "1.0.1"
+androidx-junit = "1.1.5"
+appcompat = "1.6.1"
+circleimageview = "3.1.0"
+constraintlayout = "2.1.4"
+core-ktx = "1.10.1"
+espresso-core = "3.5.1"
+firebase-auth = "22.0.0"
+google-services = "4.3.15"
+junit = "4.13.2"
+lifecycle-livedata-ktx = "2.6.1"
+material = "1.9.0"
+navigation-fragment-ktx = "2.6.0"
+play-services-auth = "20.5.0"
+kotlin = "1.8.0"
+legacy-support-v4 = "1.0.0"
+hilt = "2.46.1"
+
+[libraries]
+android-utilities = { module = "com.github.abdelaz9z:AndroidUtilities", version.ref = "android-utilities" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle-livedata-ktx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-livedata-ktx" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-fragment-ktx" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebase-auth" }
+google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
+junit = { module = "junit:junit", version.ref = "junit" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
+legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support-v4" }
+
+[plugins]
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
+
+
