@@ -18,6 +18,8 @@ play-services-auth = "20.5.0"
 kotlin = "1.8.0"
 legacy-support-v4 = "1.0.0"
 hilt = "2.46.1"
+timber = "4.7.1"
+
 
 [libraries]
 android-utilities = { module = "com.github.abdelaz9z:AndroidUtilities", version.ref = "android-utilities" }
@@ -37,6 +39,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support-v4" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

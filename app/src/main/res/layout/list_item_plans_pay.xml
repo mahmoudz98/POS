@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="@dimen/padding_all_element"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_plans_pay_trxn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1000 TRXN Free"
+
+        android:textAppearance="@style/TextAppearance.pos.BodyLarge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_plans_pay_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EGP 58.99 / month"
+
+        android:textAppearance="@style/TextAppearance.pos.BodyMedium"
+        app:layout_constraintStart_toStartOf="@+id/tv_plans_pay_trxn"
+        app:layout_constraintTop_toBottomOf="@+id/tv_plans_pay_trxn" />
+
+    <Button
+        android:id="@+id/btn_plans_pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pay_title"
+        style="@style/Widget.pos.tertiaryButton"
+        app:icon="@drawable/ic_google"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

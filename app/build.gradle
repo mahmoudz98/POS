@@ -75,4 +75,6 @@ dependencies {
 
     // circle image view
     implementation libs.circleimageview
+
+    implementation libs.timber
 }

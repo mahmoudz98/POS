@@ -24,4 +24,17 @@
     <string name="sales_services">Sales services</string>
     <string name="permissions_and_settings">Permissions and settings</string>
     <string name="products_services">Products services</string>
+    <string name="profile_title">Profile</string>
+    <string name="business_plans_title">Business plans</string>
+    <string name="business_info_title">Business info</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="store_type">Store type</string>
+    <string name="work_mail">Work mail</string>
+    <string name="work_phone_number">Work phone number</string>
+    <string name="pay_title">Pay</string>
+    <string name="storage_and_data">Storage and Data</string>
+    <string name="plans">Plans</string>
+    <string name="used">Used</string>
+
 </resources>

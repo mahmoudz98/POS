@@ -28,7 +28,7 @@ class StatisticsFragment : Fragment() {
         _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
+        val textView: TextView = binding.tvLastInvoice
         statisticsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }

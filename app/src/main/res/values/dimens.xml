@@ -7,4 +7,11 @@
     <dimen name="nav_header_height">90dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="spacing_large">15dp</dimen>
+
+
+
+    <dimen name="padding_all_element">8dp</dimen>
+    <dimen name="margin_all_guideline">16dp</dimen>
+    <dimen name="margin_profile_top">40dp</dimen>
+
 </resources>

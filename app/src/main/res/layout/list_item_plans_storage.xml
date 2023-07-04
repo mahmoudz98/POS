@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/padding_all_element">
+
+    <TextView
+        android:id="@+id/tv_plans_storage_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/used"
+        android:textAppearance="@style/TextAppearance.pos.LabelMedium"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_plans_storage_used"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="600TRXN"
+        android:textAppearance="@style/TextAppearance.pos.LabelLarge"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/tv_plans_storage_title" />
+
+    <TextView
+        android:id="@+id/tv_plans_storage_trxn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1000 TRXN Free"
+
+        android:textAppearance="@style/TextAppearance.pos.BodyLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_plans_storage_title" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/pb_plans_storage"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_all_element"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_plans_storage_used" />
+</androidx.constraintlayout.widget.ConstraintLayout>

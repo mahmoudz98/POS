@@ -78,6 +78,37 @@
         <item name="android:fontFamily">@font/work_sans_medium</item>
     </style>
 
+    <style name="Widget.pos.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/md_theme_light_surface</item>
+        <item name="navigationIconTint">@color/md_theme_light_onSurface</item>
+        <item name="titleTextColor">@color/md_theme_light_onSurface</item>
+        <item name="collapseIcon">@drawable/ic_back</item>
+        <item name="titleCentered">true</item>
+    </style>
+
+    <style name="circleImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="errorEnabled">false</item>
+        <item name="helperTextEnabled">true</item>
+    </style>
+
+    <style name="Widget.pos.TextInputLayout.OutlinedBox.Dense" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
+
+        <item name="errorEnabled">false</item>
+        <item name="helperTextEnabled">true</item>
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+        <item name="colorError">@color/md_theme_light_error</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.pos.TitleMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.pos.BodySmall</item>
+        <item name="hintTextColor">@color/md_theme_light_onSurface</item>
+
+
+    </style>
+
     <style name="Widget.pos.CardView.Elevated" parent="Widget.Material3.CardView.Elevated">
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
@@ -85,5 +116,30 @@
         <item name="cardElevation">1dp</item>
         <item name="strokeWidth">0dp</item>
         <item name="checkedIcon">@null</item>
+    </style>
+
+    <style name="Widget.pos.button" parent="Widget.Material3.Button.IconButton.Filled.Tonal">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+
+        <item name="android:textAlignment">center</item>
+        <item name="cornerRadius">24dp</item>
+    </style>
+    <style name="Widget.pos.primaryButton" parent="Widget.pos.button">
+        <item name="android:textColor">@color/md_theme_light_onPrimary</item>
+        <item name="android:backgroundTint">@color/md_theme_light_primary</item>
+        <item name="rippleColor">@color/md_theme_light_onPrimary</item>
+    </style>
+
+    <style name="Widget.pos.secondaryButton" parent="Widget.pos.button">
+        <item name="android:textColor">@color/md_theme_light_onSecondary</item>
+        <item name="android:backgroundTint">@color/md_theme_light_secondary</item>
+        <item name="rippleColor">@color/md_theme_light_onSecondaryContainer</item>
+    </style>
+
+    <style name="Widget.pos.tertiaryButton" parent="Widget.pos.button">
+        <item name="android:textColor">@color/md_theme_light_onTertiary</item>
+        <item name="android:backgroundTint">@color/md_theme_light_tertiary</item>
+        <item name="rippleColor">@color/md_theme_light_onTertiaryContainer</item>
     </style>
 </resources>
