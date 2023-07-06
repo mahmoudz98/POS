@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.casecode.pos.R
@@ -49,8 +50,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_products,
                 R.id.nav_code_scanner,
                 R.id.nav_users,
-                R.id.nav_setting,
-                R.id.nav_sign_out
+                R.id.nav_setting
+                /*
+                                R.id.nav_sign_out
+                */
             ), binding.drawerLayout
         )
 
@@ -60,18 +63,25 @@ class MainActivity : AppCompatActivity() {
         )
         binding.navView.setupWithNavController(navController)
 
-    /*    binding.navView.setNavigationItemSelectedListener { menuItem ->
+
+        binding.navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_sign_out -> {
-                    navController.navigate(R.id.nav_sign_out)
+                    val dialog = SignOutDialog()
+                    dialog.show(supportFragmentManager, "saf")
 
-                    true
                 }
 
-                else -> false
-            }
+                else -> {
+                    NavigationUI.onNavDestinationSelected(menuItem, navController)
+                    binding.drawerLayout.closeDrawers()
 
-        }*/
+
+                }
+
+            }
+            true
+        }
 
         // Set the checked item in the navigation drawer based on the current screen
         val currentDestination = navController.currentDestination?.id

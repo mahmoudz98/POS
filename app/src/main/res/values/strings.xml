@@ -37,5 +37,6 @@
     <string name="plans">Plans</string>
     <string name="used">Used</string>
     <string name="menu_sign_out">Sign out</string>
+    <string name="sign_out">Sign out</string>
 
 </resources>

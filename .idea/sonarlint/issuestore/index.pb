@@ -37,8 +37,6 @@ Q.idea/sonarlint/securityhotspotstore/b/1/b14a26c75051d717ef8d4b3cf96b68f9685518
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
 S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
-I
-gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 p
 @app/src/main/java/com/casecode/pos/ui/profile/ProfileFragment.kt,e\2\e272d65540b22f01990b8bae1cf2d52707c921fd
 t
@@ -53,7 +51,5 @@ k
 ;app/src/main/java/com/casecode/pos/ui/user/UsersFragment.kt,0\8\08bad72631f21c0cb0130e34693d0f19ecad8d27
 F
 app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 v
 Fapp/src/main/java/com/casecode/pos/ui/statistics/StatisticsFragment.kt,c\8\c870f7aefd811a95a0da448f58f600b6623848f1

@@ -27,8 +27,6 @@ y
 Iapp/src/main/java/com/casecode/pos/ui/code_scanner/CodeScannerFragment.kt,a\2\a23541909ee7d2467c541eaaf4192be3832f279d
 z
 Japp/src/main/java/com/casecode/pos/ui/code_scanner/CodeScannerViewModel.kt,4\0\40a1598c62c117af6adf5180001b043273300c15
-I
-gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 w
 G.idea/sonarlint/issuestore/b/1/b14a26c75051d717ef8d4b3cf96b68f96855187e,8\3\83ff549b062ecf105d5e54a1914ef2f21671c21b
 q
@@ -53,7 +51,5 @@ S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 F
 app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 v
 Fapp/src/main/java/com/casecode/pos/ui/statistics/StatisticsFragment.kt,c\8\c870f7aefd811a95a0da448f58f600b6623848f1
