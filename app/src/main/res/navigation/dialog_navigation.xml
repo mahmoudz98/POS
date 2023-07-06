@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_navigation"
+    app:startDestination="@id/signOutDialog">
+
+    <dialog
+        android:id="@+id/signOutDialog"
+        android:name="com.casecode.pos.ui.signout.SignOutDialog"
+        android:label="SignOutDialog" />
+</navigation>

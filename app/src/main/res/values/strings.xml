@@ -36,5 +36,6 @@
     <string name="storage_and_data">Storage and Data</string>
     <string name="plans">Plans</string>
     <string name="used">Used</string>
+    <string name="menu_sign_out">Sign out</string>
 
 </resources>

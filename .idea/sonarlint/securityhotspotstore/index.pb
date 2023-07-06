@@ -1,8 +1,6 @@
 
 w
 Gapp/src/main/java/com/casecode/pos/ui/statistics/StatisticsViewModel.kt,b\1\b14a26c75051d717ef8d4b3cf96b68f96855187e
-n
->app/src/main/java/com/casecode/pos/ui/signIn/SignInActivity.kt,a\9\a990e83bb39bfc902120561425a821c05acd66d7
 p
 @app/src/main/java/com/casecode/pos/ui/pos/PointOfSaleFragment.kt,a\f\af6787dbfcb1196f56f6c17fb895b321f7c0611a
 p
@@ -15,12 +13,8 @@ A
 data/build.gradle,7\2\72c2781d3d9ac8b82a3543f0fba5c796b2975232
 T
 $.idea/codeStyles/codeStyleConfig.xml,d\d\dd7b3350c29c49497756c7f32c69a3bed18b1cba
-P
- app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 L
 .idea/codeStyles/Project.xml,6\e\6ecd6000a7b6f4a2884412ff19f74193ed089648
-<
-build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 X
 (gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 r
@@ -33,3 +27,33 @@ y
 Iapp/src/main/java/com/casecode/pos/ui/code_scanner/CodeScannerFragment.kt,a\2\a23541909ee7d2467c541eaaf4192be3832f279d
 z
 Japp/src/main/java/com/casecode/pos/ui/code_scanner/CodeScannerViewModel.kt,4\0\40a1598c62c117af6adf5180001b043273300c15
+I
+gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
+w
+G.idea/sonarlint/issuestore/b/1/b14a26c75051d717ef8d4b3cf96b68f96855187e,8\3\83ff549b062ecf105d5e54a1914ef2f21671c21b
+q
+Aapp/src/main/java/com/casecode/pos/ui/profile/ProfileViewModel.kt,d\f\dff8b97c1f6ccc1df98422f974b0b3ee120e836b
+p
+@app/src/main/java/com/casecode/pos/ui/profile/ProfileFragment.kt,e\2\e272d65540b22f01990b8bae1cf2d52707c921fd
+u
+Eapp/src/main/java/com/casecode/pos/ui/profile/ProfilePlansFragment.kt,e\5\e52e70a9f0fe99190d13d051b42f636abba9b354
+t
+Dapp/src/main/java/com/casecode/pos/ui/profile/ProfileInfoFragment.kt,1\2\12ae2286f1fad567a3affb7c293b73399ca17540
+t
+Dapp/src/main/java/com/casecode/pos/ui/profile/ProfilePagerAdapter.kt,5\3\536a56ca9f685a05003c4f8ddd682bb541a2c2e8
+
+Q.idea/sonarlint/securityhotspotstore/a/9/a990e83bb39bfc902120561425a821c05acd66d7,2\e\2ea3bc967139c215797505cfcec83a7942e00b16
+k
+;app/src/main/java/com/casecode/pos/ui/user/UsersFragment.kt,0\8\08bad72631f21c0cb0130e34693d0f19ecad8d27
+
+Q.idea/sonarlint/securityhotspotstore/b/1/b14a26c75051d717ef8d4b3cf96b68f96855187e,5\a\5abdf50324ddf83cdad20b8e68c2b093b15ea9ee
+]
+-.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+F
+app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
+<
+build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+v
+Fapp/src/main/java/com/casecode/pos/ui/statistics/StatisticsFragment.kt,c\8\c870f7aefd811a95a0da448f58f600b6623848f1

@@ -44,4 +44,12 @@
         android:name="com.casecode.pos.ui.profile.ProfileFragment"
         tools:layout="@layout/fragment_profile"
         android:label="@string/profile_title" />
+    <dialog
+
+        android:id="@+id/nav_sign_out"
+        android:name="com.casecode.pos.ui.signout.SignOutDialog"
+        tools:layout="@layout/dialog_sign_out"
+
+
+        />
 </navigation>
