@@ -25,7 +25,6 @@ class SignOutDialog : DialogFragment() {
     ): View? {
         binding.ivSignOutClose.setOnClickListener {
             dismiss()
-            findNavController().popBackStack()
         }
         isCancelable = false
         return binding.root

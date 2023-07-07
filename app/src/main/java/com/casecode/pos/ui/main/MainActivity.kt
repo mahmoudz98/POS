@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivityMainBinding
 import com.casecode.pos.ui.signout.SignOutDialog
+import timber.log.Timber
 
 private const val TAG = "MainActivity"
 
@@ -23,7 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment).navController
-
     }
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavigationDrawer() {
 
+
         setupToolbar()
 
         appBarConfiguration = AppBarConfiguration(
@@ -51,9 +52,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_code_scanner,
                 R.id.nav_users,
                 R.id.nav_setting
-                /*
-                                R.id.nav_sign_out
-                */
             ), binding.drawerLayout
         )
 
@@ -69,18 +67,20 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_sign_out -> {
                     val dialog = SignOutDialog()
                     dialog.show(supportFragmentManager, "saf")
-
+                    false
                 }
 
                 else -> {
-                    NavigationUI.onNavDestinationSelected(menuItem, navController)
-                    binding.drawerLayout.closeDrawers()
+
+                        NavigationUI.onNavDestinationSelected(menuItem, navController)
+                        binding.drawerLayout.closeDrawers()
+                    true
 
 
                 }
 
             }
-            true
+
         }
 
         // Set the checked item in the navigation drawer based on the current screen
