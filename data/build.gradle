@@ -5,11 +5,11 @@ plugins {
 
 android {
     namespace 'com.casecode.data'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 24
-        targetSdk 33
+        targetSdk 34
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -45,6 +45,19 @@ dependencies {
 
     // play services auth
     implementation libs.play.services.auth
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
+
+    // domain module
+    implementation project(path: ':domain')
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
 
     // testing
     testImplementation libs.junit

@@ -2,16 +2,19 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+    id "dagger.hilt.android.plugin"
+    id 'kotlin-parcelize'
 }
 
 android {
     namespace 'com.casecode.pos'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.casecode.pos"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -61,6 +64,13 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.ktx
     implementation libs.legacy.support.v4
 
+    // data module
+    implementation project(path: ':data')
+    // domain module
+    implementation project(path: ':domain')
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+
     // testing
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
@@ -79,5 +89,19 @@ dependencies {
     // circle image view
     implementation libs.circleimageview
 
+    // timber
     implementation libs.timber
+
+    // hilt
+    implementation 'com.google.dagger:hilt-android:2.46.1'
+    kapt 'com.google.dagger:hilt-android-compiler:2.46.1'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation('com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0')
+
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
 }

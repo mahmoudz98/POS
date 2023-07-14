@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.casecode.pos.databinding.FragmentProdcutsBinding
+import com.casecode.pos.viewmodel.ProudctsViewModel
 
 class ProductsFragment : Fragment() {
 

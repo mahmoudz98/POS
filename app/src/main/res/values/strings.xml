@@ -4,6 +4,7 @@
     <string name="extra_uid">EXTRA_UID</string>
     <string name="extra_display_name">EXTRA_DISPLAY_NAME</string>
     <string name="extra_email">EXTRA_EMAIL</string>
+    <string name="extra_phone_number">EXTRA_PHONE_NUMBER</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -38,5 +39,9 @@
     <string name="used">Used</string>
     <string name="menu_sign_out">Sign out</string>
     <string name="sign_out">Sign out</string>
+
+    <!-- collection -->
+    <string name="COLLECTION_CUSTOMER" translatable="false">Customer</string>
+    <string name="COLLECTION_BRANCHES" translatable="false">Branches</string>
 
 </resources>

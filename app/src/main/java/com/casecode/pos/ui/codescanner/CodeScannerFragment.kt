@@ -1,4 +1,4 @@
-package com.casecode.pos.ui.code_scanner
+package com.casecode.pos.ui.codescanner
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.casecode.pos.R
 import com.casecode.pos.databinding.FragmentCodeScannerBinding
+import com.casecode.pos.viewmodel.CodeScannerViewModel
 
 class CodeScannerFragment : Fragment() {
 

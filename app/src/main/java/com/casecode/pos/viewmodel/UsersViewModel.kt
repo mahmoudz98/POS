@@ -1,4 +1,4 @@
-package com.casecode.pos.ui.user
+package com.casecode.pos.viewmodel
 
 import androidx.lifecycle.ViewModel
 

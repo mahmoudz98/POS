@@ -1,4 +1,4 @@
-package com.casecode.pos.ui.code_scanner
+package com.casecode.pos.viewmodel
 
 import androidx.lifecycle.ViewModel
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.casecode.pos.databinding.FragmentUsersBinding
+import com.casecode.pos.viewmodel.UsersViewModel
 
 class UsersFragment : Fragment() {
 

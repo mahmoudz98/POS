@@ -1,13 +1,13 @@
-package com.casecode.pos.ui.invoices
+package com.casecode.pos.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class InvoicesViewModel : ViewModel() {
+class PointOfSaleViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is slideshow Fragment"
+        value = "This is gallery Fragment"
     }
     val text: LiveData<String> = _text
 }

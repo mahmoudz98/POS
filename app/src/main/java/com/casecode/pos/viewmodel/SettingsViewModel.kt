@@ -1,7 +1,7 @@
-package com.casecode.pos.ui.product
+package com.casecode.pos.viewmodel
 
 import androidx.lifecycle.ViewModel
 
-class ProudctsViewModel : ViewModel() {
+class SettingsViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }

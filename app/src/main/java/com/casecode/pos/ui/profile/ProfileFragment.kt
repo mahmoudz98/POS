@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.casecode.pos.R
+import com.casecode.pos.adapter.ProfilePagerAdapter
 import com.casecode.pos.databinding.FragmentProfileBinding
+import com.casecode.pos.viewmodel.ProfileViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ProfileFragment : Fragment() {

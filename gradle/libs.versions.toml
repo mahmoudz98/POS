@@ -1,6 +1,5 @@
 [versions]
 androidGradlePlugin = "8.0.2"
-
 android-utilities = "1.0.1"
 androidx-junit = "1.1.5"
 appcompat = "1.6.1"
@@ -19,7 +18,7 @@ kotlin = "1.8.0"
 legacy-support-v4 = "1.0.0"
 hilt = "2.46.1"
 timber = "5.0.1"
-
+retrofit = "2.9.0"
 
 [libraries]
 android-utilities = { module = "com.github.abdelaz9z:AndroidUtilities", version.ref = "android-utilities" }
@@ -40,6 +39,7 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support-v4" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
 
 [plugins]
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

@@ -28,11 +28,11 @@
         android:label="ProductFragment" />
     <fragment
         android:id="@+id/nav_code_scanner"
-        android:name="com.casecode.pos.ui.code_scanner.CodeScannerFragment"
+        android:name="com.casecode.pos.ui.codescanner.CodeScannerFragment"
         android:label="CodeScannerFragment" />
     <fragment
         android:id="@+id/nav_setting"
-        android:name="com.casecode.pos.ui.setting.SettingFragment"
+        android:name="com.casecode.pos.ui.settings.SettingsFragment"
         android:label="SettingFragment" />
     <fragment
         android:id="@+id/nav_users"
