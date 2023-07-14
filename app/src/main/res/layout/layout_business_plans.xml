@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/fragment_business_plans">
+
+
+    <LinearLayout
+        android:id="@+id/ll_business_plans_storage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/md_theme_light_inverseOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gl_business_plans_top">
+
+        <ImageView
+            android:id="@+id/iv_business_plans_storage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_storage"
+            android:contentDescription="@null" />
+        <!-- add two widgets here -->
+        <TextView
+            android:id="@+id/tv_business_plans_storage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_all_element"
+
+            android:text="@string/storage_and_data"
+            android:textAppearance="@style/TextAppearance.pos.BodyLarge" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_business_plans_storage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_business_plans_storage"
+        tools:itemCount="1"
+        tools:listitem="@layout/list_item_plans_storage">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/ll_business_plans_pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_all_element"
+        android:background="@color/md_theme_light_inverseOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_business_plans_storage">
+
+        <ImageView
+            android:id="@+id/iv_business_plans_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_storage"
+            android:contentDescription="@null" />
+        <!-- add two widgets here -->
+        <TextView
+            android:id="@+id/tv_business_plans_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_all_element"
+            android:paddingEnd="@dimen/padding_all_element"
+
+            android:text="@string/plans"
+            android:textAppearance="@style/TextAppearance.pos.BodyLarge" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_business_plans_pay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_all_element"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_business_plans_pay"
+
+        tools:itemCount="4"
+        tools:listitem="@layout/list_item_plans_pay" />
+</merge>

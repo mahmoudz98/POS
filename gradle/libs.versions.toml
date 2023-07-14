@@ -1,6 +1,7 @@
 [versions]
 androidGradlePlugin = "8.0.2"
 android-utilities = "1.0.1"
+androidStepper = "0.3.0"
 androidx-junit = "1.1.5"
 appcompat = "1.6.1"
 circleimageview = "3.1.0"
@@ -21,6 +22,7 @@ timber = "5.0.1"
 retrofit = "2.9.0"
 
 [libraries]
+android-stepper = { module = "com.github.acefalobi:android-stepper", version.ref = "androidStepper" }
 android-utilities = { module = "com.github.abdelaz9z:AndroidUtilities", version.ref = "android-utilities" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }

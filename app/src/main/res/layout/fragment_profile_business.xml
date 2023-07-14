@@ -11,18 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <include layout="@layout/layout_business" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gl_profile_plans_top"
+            android:id="@+id/gl_profile_info_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="@dimen/margin_all_guideline" />
-
-        <include layout="@layout/layout_business_plans"
-
-            />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

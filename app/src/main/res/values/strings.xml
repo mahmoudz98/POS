@@ -39,6 +39,11 @@
     <string name="used">Used</string>
     <string name="menu_sign_out">Sign out</string>
     <string name="sign_out">Sign out</string>
+    <string name="branches">branches</string>
+    <string name="branch_name">Branch name</string>
+    <string name="add">Add</string>
+    <string name="phone_number_branch">Phone number branch</string>
+    <string name="add_a_branches">Add a branches</string>
 
     <!-- collection -->
     <string name="COLLECTION_CUSTOMER" translatable="false">Customer</string>

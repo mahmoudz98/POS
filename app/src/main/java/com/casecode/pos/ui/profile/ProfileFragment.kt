@@ -14,7 +14,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ProfileFragment : Fragment() {
 
-    private var binding: FragmentProfileBinding? = null
+    private var _binding: FragmentProfileBinding? = null
+    private val binding : FragmentProfileBinding get() = _binding!!
 
     private lateinit var viewModel: ProfileViewModel
 
@@ -22,19 +23,20 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
 
         setupPagerAdapter()
-        return binding?.root
+        return binding.root
     }
 
     private fun setupPagerAdapter() {
         val profilePagerAdapter = ProfilePagerAdapter(this)
-        binding?.vpProfile?.adapter = profilePagerAdapter
-        TabLayoutMediator(binding?.tabLayout!!, binding?.vpProfile!!) { tab, position ->
+        binding.vpProfile.adapter = profilePagerAdapter
+        TabLayoutMediator(binding.tabLayout, binding.vpProfile) { tab, position ->
             tab.text = when (position) {
                 0 -> getString(R.string.business_info_title)
+                1 -> getString(R.string.branches)
                 else -> getString(R.string.business_plans_title)
             }
         }.attach()
@@ -49,7 +51,7 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        _binding = null
     }
 
 
