@@ -46,6 +46,7 @@ android {
 dependencies {
     // core ktx
     implementation libs.androidx.core.ktx
+    implementation libs.android.stepper
 
     // appcompat
     implementation libs.androidx.appcompat
@@ -68,8 +69,8 @@ dependencies {
     implementation project(path: ':data')
     // domain module
     implementation project(path: ':domain')
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation libs.firebase.firestore.ktx
+    implementation libs.androidx.core.ktx
 
     // testing
     testImplementation libs.junit
@@ -93,15 +94,15 @@ dependencies {
     implementation libs.timber
 
     // hilt
-    implementation 'com.google.dagger:hilt-android:2.46.1'
-    kapt 'com.google.dagger:hilt-android-compiler:2.46.1'
+    implementation libs.hilt.android
+    kapt libs.hilt.android.compiler
 
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation('com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0')
+    implementation libs.retrofit
+    implementation libs.converter.gson
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
 }

@@ -53,9 +53,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_code_scanner,
                 R.id.nav_users,
                 R.id.nav_setting
-                /*
-                                R.id.nav_sign_out
-                */
+
             ), binding.drawerLayout
         )
 
@@ -71,18 +69,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_sign_out -> {
                     val dialog = SignOutDialog()
                     dialog.show(supportFragmentManager, "saf")
-
+                    false
                 }
 
                 else -> {
                     NavigationUI.onNavDestinationSelected(menuItem, navController)
                     binding.drawerLayout.closeDrawers()
-
+                    true
 
                 }
 
             }
-            true
         }
 
         // Set the checked item in the navigation drawer based on the current screen

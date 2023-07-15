@@ -11,22 +11,22 @@ import com.casecode.pos.databinding.ActivityStepperBinding
 class StepperActivity : AppCompatActivity(), StepperNavListener {
 
 
-    private var binding: ActivityStepperBinding? = null
-    private val _binding: ActivityStepperBinding get() = binding!!
+    private var _binding: ActivityStepperBinding? = null
+    private val binding: ActivityStepperBinding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityStepperBinding.inflate(layoutInflater)
-        setContentView(_binding.root)
+        _binding = ActivityStepperBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        _binding.stepper.setupWithNavController(findNavController(R.id.frame_stepper))
+        binding.stepper.setupWithNavController(findNavController(R.id.frame_stepper))
     }
 
     fun getNextStep() {
-        _binding.stepper.goToNextStep()
+        binding.stepper.goToNextStep()
     }
 
     fun getPreviousStep() {
-        _binding.stepper.goToPreviousStep()
+        binding.stepper.goToPreviousStep()
     }
 
 
@@ -34,7 +34,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
 
         Toast.makeText(
             this,
-            "Step changed to: ${_binding.stepper.goToNextStep()}",
+            "Step changed to: ${binding.stepper.goToNextStep()}",
             Toast.LENGTH_SHORT
         ).show()
 

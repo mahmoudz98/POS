@@ -78,13 +78,13 @@ class SignInActivity : AppCompatActivity() {
 
                     is FirebaseAuthResult.SignInFails -> {
                         // If sign in fails, display a message to the user.
-                        Timber.w(TAG, "signInWithCredential:ign in fails", result.exception)
+                        Timber.tag(TAG).w( "signInWithCredential:ign in fails $result.exception")
                         updateUI(null)
                     }
 
                     is FirebaseAuthResult.Failure -> {
                         // If sign in fails, display a message to the user.
-                        Timber.w(TAG, "signInWithCredential:failure", result.exception)
+                        Timber.tag(TAG).w( "signInWithCredential:failure $result.exception")
                         updateUI(null)
                     }
                 }
@@ -107,11 +107,11 @@ class SignInActivity : AppCompatActivity() {
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     val account = task.getResult(ApiException::class.java)!!
-                    Timber.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                    Timber.tag(TAG).d( "firebaseAuthWithGoogle: $account.id")
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
-                    Timber.w(TAG, "Google sign in failed", e)
+                    Timber.tag(TAG).w( "Google sign in failed $e")
                 }
             }
         }
@@ -142,10 +142,10 @@ class SignInActivity : AppCompatActivity() {
                         * 01. user exists
                         * 02. login
                         * */
-                        Timber.i("User exists")
+                        Timber.tag(TAG).i("User exists")
                         moveToMainActivity(currentUser)
                     } else {
-                        Timber.i("User does not exist")
+                        Timber.tag(TAG).i("User does not exist")
                         /*
                         * 01. user does not exist
                         * 02. create user on (Firebase)
@@ -156,6 +156,8 @@ class SignInActivity : AppCompatActivity() {
 
                 is FirebaseResult.Failure -> {
                     // Handle authentication failure
+                    Timber.tag(TAG).e(result.exception)
+
                 }
             }
         }
@@ -171,6 +173,6 @@ class SignInActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val TAG = SignInActivity::class.simpleName
+        private const val TAG = "SignInActivity"
     }
 }

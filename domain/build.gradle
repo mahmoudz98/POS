@@ -45,8 +45,8 @@ dependencies {
 
     // play services auth
     implementation libs.play.services.auth
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'
+    implementation libs.androidx.core.ktx
+    implementation libs.firebase.firestore.ktx
 
     // testing
     testImplementation libs.junit
