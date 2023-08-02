@@ -49,7 +49,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="5dp"
-            android:src="@drawable/abdelaziz" />
+            android:src="@drawable/ic_google" />
 
         <View
             android:layout_width="@dimen/spacing_large"

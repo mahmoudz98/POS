@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.casecode.domain.model.Branches
+import com.casecode.domain.entity.Branches
 import com.casecode.pos.R
 import com.casecode.pos.databinding.FragmentStatisticsBinding
 import com.casecode.pos.utils.FirebaseResult

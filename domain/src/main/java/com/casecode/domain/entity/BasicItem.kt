@@ -1,10 +1,8 @@
-package com.casecode.domain.model
+package com.casecode.domain.entity
 
-data class CustomerItem(
+data class BasicItem(
     val image: String,
     val name: String,
-    val price: Int,
-    val quantity: Int,
     val sku: String,
     val unitOfMeasurement: String
 )

@@ -78,13 +78,13 @@ class SignInActivity : AppCompatActivity() {
 
                     is FirebaseAuthResult.SignInFails -> {
                         // If sign in fails, display a message to the user.
-                        Timber.tag(TAG).w( "signInWithCredential:ign in fails $result.exception")
+                        Timber.tag(TAG).w("signInWithCredential:ign in fails $result.exception")
                         updateUI(null)
                     }
 
                     is FirebaseAuthResult.Failure -> {
                         // If sign in fails, display a message to the user.
-                        Timber.tag(TAG).w( "signInWithCredential:failure $result.exception")
+                        Timber.tag(TAG).w("signInWithCredential:failure $result.exception")
                         updateUI(null)
                     }
                 }
@@ -107,11 +107,11 @@ class SignInActivity : AppCompatActivity() {
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     val account = task.getResult(ApiException::class.java)!!
-                    Timber.tag(TAG).d( "firebaseAuthWithGoogle: $account.id")
+                    Timber.tag(TAG).d("firebaseAuthWithGoogle: $account.id")
                     firebaseAuthWithGoogle(account.idToken!!)
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
-                    Timber.tag(TAG).w( "Google sign in failed $e")
+                    Timber.tag(TAG).w("Google sign in failed $e")
                 }
             }
         }
@@ -169,6 +169,7 @@ class SignInActivity : AppCompatActivity() {
         intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
         intent.putExtra(getString(R.string.extra_email), currentUser?.email)
         intent.putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
+        intent.putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString())
         startActivity(intent)
     }
 

@@ -16,7 +16,7 @@ class BranchesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentBranchesBinding.inflate(inflater, container, false)
         return binding.root
@@ -24,17 +24,16 @@ class BranchesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnBranchesPlan.setOnClickListener {
-            (activity as StepperActivity).getNextStep()
 
-        }
-        binding.btnBranchesInfo.setOnClickListener {
-            (activity as StepperActivity).getPreviousStep()
+        binding.apply {
+            btnBranchesPlan.setOnClickListener { (activity as StepperActivity).getNextStep() }
 
-        }
-        binding.branches.btnBranchesAdd.setOnClickListener{
-            val dialog = AddBranchesDialogFragment()
-            dialog.show(parentFragmentManager, "Dialog")
+            btnBranchesInfo.setOnClickListener { (activity as StepperActivity).getPreviousStep() }
+
+            branches.btnBranchesAdd.setOnClickListener {
+                val dialog = AddBranchesDialogFragment()
+                dialog.show(parentFragmentManager, "Dialog")
+            }
         }
     }
 

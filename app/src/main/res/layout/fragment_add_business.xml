@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.business.AddBusinessFragment">
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_add_business_top"
             android:layout_width="wrap_content"
@@ -15,23 +16,20 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_begin="@dimen/margin_all_guideline" />
 
-        <include android:id="@+id/business"
+        <include
+            android:id="@+id/business"
             layout="@layout/layout_business"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
+            android:layout_height="match_parent" />
 
         <Button
             android:id="@+id/btn_ad_business_branches"
             style="@style/Widget.pos.Button.TextButton.icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/branches"
             app:icon="@drawable/ic_arrow_left"
-
             app:iconGravity="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

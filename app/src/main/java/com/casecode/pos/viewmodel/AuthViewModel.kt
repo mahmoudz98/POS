@@ -86,4 +86,9 @@ class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewMo
 
         return resultLiveData
     }
+
+
+    fun signOut() {
+        auth.signOut()
+    }
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/add_a_branches" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_add_branches_name"
+        style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_all_element"
+        android:hint="@string/branch_name"
+        app:startIconDrawable="@drawable/ic_code">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_add_branches_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_add_branches_phone"
+        style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_all_element"
+        android:hint="@string/phone_number_branch"
+        app:startIconDrawable="@drawable/ic_call">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_add_branches_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_branches_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_all_element"
+        android:text="@string/add" />
+</LinearLayout>

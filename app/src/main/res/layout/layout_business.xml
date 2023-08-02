@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="@layout/fragment_add_business">
 
@@ -64,7 +64,4 @@
             android:layout_height="wrap_content"
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
-
-
-
 </merge>

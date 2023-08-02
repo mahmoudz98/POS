@@ -31,21 +31,16 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
 
 
     override fun onCompleted() {
-
         Toast.makeText(
             this,
             "Step changed to: ${binding.stepper.goToNextStep()}",
             Toast.LENGTH_SHORT
         ).show()
-
-
     }
 
     override fun onStepChanged(step: Int) {
         Toast.makeText(this, "Stepper completed", Toast.LENGTH_SHORT).show()
-
     }
 
-    override fun onSupportNavigateUp(): Boolean =
-        findNavController(R.id.frame_stepper).navigateUp()
+    override fun onSupportNavigateUp(): Boolean = findNavController(R.id.frame_stepper).navigateUp()
 }

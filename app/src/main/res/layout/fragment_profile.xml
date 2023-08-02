@@ -41,7 +41,7 @@
             app:layout_constraintStart_toStartOf="@+id/gl_profile_left"
             app:layout_constraintTop_toTopOf="@+id/gl_profile_top"
             app:shapeAppearanceOverlay="@style/circleImageView"
-            app:srcCompat="@drawable/abdelaziz" />
+            app:srcCompat="@drawable/ic_google" />
 
         <TextView
             android:id="@+id/tv_profile_name"

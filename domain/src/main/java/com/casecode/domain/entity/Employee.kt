@@ -1,4 +1,4 @@
-package com.casecode.domain.model
+package com.casecode.domain.entity
 
 data class Employee(
     val employeeId: Int,

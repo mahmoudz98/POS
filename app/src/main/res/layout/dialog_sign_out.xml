@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/iv_sign_out_close"
+            android:id="@+id/iv_close"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
@@ -22,48 +23,57 @@
             app:srcCompat="@drawable/ic_close" />
 
         <ImageView
-            android:id="@+id/iv_sign_out_logo"
+            android:id="@+id/iv_google_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:importantForAccessibility="no"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_logo_google" />
 
-
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_sign_out_user"
+            android:id="@+id/iv_photo"
             android:layout_width="64dp"
             android:layout_height="64dp"
-
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_sign_out_close"
+            app:layout_constraintTop_toBottomOf="@+id/iv_close"
             app:shapeAppearanceOverlay="@style/circleImageView"
-            app:srcCompat="@drawable/abdelaziz" />
+            app:srcCompat="@drawable/ic_google" />
 
-        <TextView
-            android:id="@+id/tv_sign_out_name"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textAppearance="@style/TextAppearance.pos.BodyLarge"
-            android:text="Abdelziz Daoud"
-            app:layout_constraintStart_toEndOf="@+id/iv_sign_out_user"
-            app:layout_constraintTop_toTopOf="@+id/iv_sign_out_user" />
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_photo"
+            app:layout_constraintStart_toEndOf="@+id/iv_photo"
+            app:layout_constraintTop_toTopOf="@+id/iv_photo">
 
-        <TextView
-            android:id="@+id/tv_sign_out_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.pos.LabelMedium"
-            android:text="abdelaz9z@icloud.com"
-            app:layout_constraintStart_toStartOf="@+id/tv_sign_out_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_sign_out_name" />
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.pos.BodyLarge"
+                app:layout_constraintStart_toEndOf="@+id/iv_photo"
+                app:layout_constraintTop_toTopOf="@+id/iv_photo"
+                tools:text="Abdelaziz Daoud" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.pos.LabelMedium"
+                app:layout_constraintStart_toStartOf="@+id/tv_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                tools:text="abdelaz9z@icloud.com" />
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/btn_sign_out"
@@ -71,12 +81,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-
             android:layout_marginBottom="16dp"
             android:text="@string/sign_out"
             android:textColor="@color/md_theme_light_error"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_sign_out_user" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_photo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

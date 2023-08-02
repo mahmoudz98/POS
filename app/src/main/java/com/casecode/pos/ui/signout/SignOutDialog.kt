@@ -1,31 +1,64 @@
 package com.casecode.pos.ui.signout
 
 import android.app.Dialog
-import android.content.DialogInterface
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.findNavController
 import com.casecode.pos.databinding.DialogSignOutBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-
+import com.squareup.picasso.Picasso
 
 class SignOutDialog : DialogFragment() {
 
-
     private var _binding: DialogSignOutBinding? = null
     private val binding get() = _binding!!
+
+    interface SignOutDialogListener {
+        fun onSignOut()
+    }
+
+    private var listener: SignOutDialogListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SignOutDialogListener) {
+            listener = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding.ivSignOutClose.setOnClickListener {
-            dismiss()
+    ): View {
+        binding.apply {
+            // Get the string argument passed to the fragment and set it in the TextView
+
+            // name
+            val name = arguments?.getString("name")
+            tvName.text = name
+
+            // email
+            val email = arguments?.getString("email")
+            tvEmail.text = email
+
+            // photo
+            val photoUrl = arguments?.getString("photoUrl")
+            Picasso.get().load(photoUrl).into(ivPhoto)
+
+            ivClose.setOnClickListener {
+                dismiss()
+            }
+
+            btnSignOut.setOnClickListener {
+                listener?.onSignOut()
+                dismiss()
+            }
         }
+
         isCancelable = false
         return binding.root
     }
@@ -41,11 +74,6 @@ class SignOutDialog : DialogFragment() {
         builder.setCancelable(false)
 
         return builder.create()
-    }
-
-    override fun onCancel(dialog: DialogInterface) {
-        super.onCancel(dialog)
-
     }
 
     override fun onDestroyView() {

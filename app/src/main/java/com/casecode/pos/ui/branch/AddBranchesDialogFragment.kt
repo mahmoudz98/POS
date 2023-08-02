@@ -6,21 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.casecode.pos.databinding.FragmentAddBranchesDialogBinding
+import com.casecode.pos.databinding.DialogAddBranchesBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class AddBranchesDialogFragment : DialogFragment() {
 
-    private var _binding: FragmentAddBranchesDialogBinding? = null
-    private val binding: FragmentAddBranchesDialogBinding get() = _binding!!
+    private var _binding: DialogAddBranchesBinding? = null
+    private val binding: DialogAddBranchesBinding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = MaterialAlertDialogBuilder(
-            requireContext()
-
-        )
-        _binding = FragmentAddBranchesDialogBinding.inflate(layoutInflater)
+        val builder = MaterialAlertDialogBuilder(requireContext())
+        _binding = DialogAddBranchesBinding.inflate(layoutInflater)
 
         builder.setView(binding.root)
 

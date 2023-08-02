@@ -1,6 +1,6 @@
-package com.casecode.domain.model
+package com.casecode.domain.entity
 
-data class DocumentsCore(
+data class DocumentsUsed(
     val deletes: Int,
     val reads: Int,
     val writes: Int

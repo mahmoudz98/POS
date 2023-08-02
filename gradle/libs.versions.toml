@@ -17,6 +17,7 @@ kotlinxCoroutinesCore = "1.7.2"
 lifecycle-livedata-ktx = "2.6.1"
 material = "1.9.0"
 navigation-fragment-ktx = "2.6.0"
+picasso = "2.71828"
 play-services-auth = "20.6.0"
 kotlin = "1.8.0"
 legacy-support-v4 = "1.0.0"
@@ -49,6 +50,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support-v4" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
