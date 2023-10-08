@@ -6,37 +6,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.casecode.pos.databinding.FragmentPointOfSaleBinding
 import com.casecode.pos.viewmodel.PointOfSaleViewModel
 
 class PointOfSaleFragment : Fragment() {
 
-    private var _binding: FragmentPointOfSaleBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentPointOfSaleBinding
+    private val viewModel: PointOfSaleViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val pointOfSaleViewModel = ViewModelProvider(this)[PointOfSaleViewModel::class.java]
-
-        _binding = FragmentPointOfSaleBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding = FragmentPointOfSaleBinding.inflate(inflater, container, false)
 
         val textView: TextView = binding.textGallery
-        pointOfSaleViewModel.text.observe(viewLifecycleOwner) {
+        viewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        return root
+
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

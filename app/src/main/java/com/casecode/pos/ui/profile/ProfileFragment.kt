@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.casecode.pos.R
 import com.casecode.pos.adapter.ProfilePagerAdapter
 import com.casecode.pos.databinding.FragmentProfileBinding
@@ -14,19 +14,18 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: FragmentProfileBinding? = null
-    private val binding : FragmentProfileBinding get() = _binding!!
+    private lateinit var binding: FragmentProfileBinding
 
-    private lateinit var viewModel: ProfileViewModel
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         setupPagerAdapter()
+
         return binding.root
     }
 
@@ -41,18 +40,5 @@ class ProfileFragment : Fragment() {
             }
         }.attach()
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 
 }

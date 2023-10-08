@@ -9,15 +9,13 @@ import androidx.fragment.app.DialogFragment
 import com.casecode.pos.databinding.DialogAddBranchesBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-
 class AddBranchesDialogFragment : DialogFragment() {
 
-    private var _binding: DialogAddBranchesBinding? = null
-    private val binding: DialogAddBranchesBinding get() = _binding!!
+    private lateinit var binding: DialogAddBranchesBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
-        _binding = DialogAddBranchesBinding.inflate(layoutInflater)
+        binding = DialogAddBranchesBinding.inflate(layoutInflater)
 
         builder.setView(binding.root)
 
@@ -31,17 +29,6 @@ class AddBranchesDialogFragment : DialogFragment() {
         // Inflate the layout for this fragment
 
         return binding.root
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

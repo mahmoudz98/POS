@@ -13,8 +13,7 @@ import com.squareup.picasso.Picasso
 
 class SignOutDialog : DialogFragment() {
 
-    private var _binding: DialogSignOutBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: DialogSignOutBinding
 
     interface SignOutDialogListener {
         fun onSignOut()
@@ -68,7 +67,7 @@ class SignOutDialog : DialogFragment() {
             requireContext()
 
         )
-        _binding = DialogSignOutBinding.inflate(layoutInflater)
+        binding = DialogSignOutBinding.inflate(layoutInflater)
 
         builder.setView(binding.root)
         builder.setCancelable(false)
@@ -76,8 +75,4 @@ class SignOutDialog : DialogFragment() {
         return builder.create()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

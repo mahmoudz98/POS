@@ -11,11 +11,11 @@ import com.casecode.pos.databinding.ActivityStepperBinding
 class StepperActivity : AppCompatActivity(), StepperNavListener {
 
 
-    private var _binding: ActivityStepperBinding? = null
-    private val binding: ActivityStepperBinding get() = _binding!!
+    private lateinit var binding: ActivityStepperBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityStepperBinding.inflate(layoutInflater)
+        binding = ActivityStepperBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.stepper.setupWithNavController(findNavController(R.id.frame_stepper))

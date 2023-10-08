@@ -9,15 +9,16 @@ import com.casecode.pos.databinding.FragmentProfilePlansBinding
 
 
 class ProfilePlansFragment : Fragment() {
-    private var binding: FragmentProfilePlansBinding? = null
+
+    private lateinit var binding: FragmentProfilePlansBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentProfilePlansBinding.inflate(inflater, container, false)
-        return binding?.root
-    }
 
+        return binding.root
+    }
 
 }

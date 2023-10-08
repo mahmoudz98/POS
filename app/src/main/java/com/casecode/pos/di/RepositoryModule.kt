@@ -10,7 +10,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepoModule {
+object RepositoryModule {
 
     @Provides
     fun provideFirestoreRepo(firestore: FirebaseFirestore): FirestoreRepository {

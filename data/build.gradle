@@ -58,6 +58,7 @@ dependencies {
     implementation project(path: ':domain')
     implementation libs.androidx.core.ktx
     implementation libs.firebase.firestore.ktx
+    implementation libs.firebase.auth.ktx
 
     // testing
     testImplementation libs.junit

@@ -29,22 +29,19 @@ class MainActivity : AppCompatActivity(), SignOutDialog.SignOutDialogListener {
 
     private lateinit var binding: ActivityMainBinding
 
-    // Keep track of the visibility of the menu item
-    private var isMenuItemVisible = true
-
-    private val navController by lazy {
-        (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment).navController
-
-    }
     private lateinit var appBarConfiguration: AppBarConfiguration
-
     private lateinit var viewModel: AuthViewModel
-
     private lateinit var uid: String
     private lateinit var displayName: String
     private lateinit var email: String
     private lateinit var phoneNumber: String
     private lateinit var photoUrl: String
+
+    // Keep track of the visibility of the menu item
+    private var isMenuItemVisible = true
+    private val navController by lazy {
+        (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment).navController
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

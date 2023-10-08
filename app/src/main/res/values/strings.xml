@@ -52,5 +52,6 @@
     <string name="business_plans">Business plans</string>
     <string name="business_info">Business info</string>
     <string name="done">Done</string>
+    <string name="document_successfully_deleted">Document successfully deleted, %1$s</string>
 
 </resources>

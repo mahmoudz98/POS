@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "8.0.2"
+androidGradlePlugin = "8.1.1"
 android-utilities = "1.0.1"
 androidStepper = "0.3.0"
 androidx-junit = "1.1.5"
@@ -10,6 +10,7 @@ core-ktx = "1.10.1"
 espresso-core = "3.5.1"
 firebase-auth = "22.0.0"
 firebaseFirestoreKtx = "24.6.1"
+firebaseMessaging = "23.2.1"
 google-services = "4.3.15"
 hiltAndroid = "2.46.1"
 junit = "4.13.2"
@@ -43,6 +44,7 @@ circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circ
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebase-auth" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
@@ -56,6 +58,7 @@ legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", ver
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit"}
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version = "22.1.1" }
 
 [plugins]
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

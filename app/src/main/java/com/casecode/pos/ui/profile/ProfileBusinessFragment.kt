@@ -10,15 +10,16 @@ import com.casecode.pos.databinding.FragmentProfileBusinessBinding
 
 class ProfileBusinessFragment : Fragment() {
 
-    private var binding: FragmentProfileBusinessBinding? = null
+    private lateinit var binding: FragmentProfileBusinessBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentProfileBusinessBinding.inflate(inflater, container, false)
-        return binding?.root
-    }
 
+        return binding.root
+    }
 
 }

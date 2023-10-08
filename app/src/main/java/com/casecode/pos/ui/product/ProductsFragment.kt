@@ -5,35 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.casecode.pos.databinding.FragmentProdcutsBinding
 import com.casecode.pos.viewmodel.ProudctsViewModel
 
 class ProductsFragment : Fragment() {
 
+    private lateinit var binding: FragmentProdcutsBinding
 
-    private lateinit var viewModel: ProudctsViewModel
-    private var _binding: FragmentProdcutsBinding? = null
-    private val binding get() = _binding
-
+    private val viewModel: ProudctsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentProdcutsBinding.inflate(inflater, container, false)
-        return _binding?.root
+    ): View {
+        binding = FragmentProdcutsBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[ProudctsViewModel::class.java]
-
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

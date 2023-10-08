@@ -12,11 +12,7 @@ import com.casecode.pos.viewmodel.InvoicesViewModel
 
 class InvoicesFragment : Fragment() {
 
-    private var _binding: FragmentInvoicesBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentInvoicesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,18 +22,14 @@ class InvoicesFragment : Fragment() {
         val invoicesViewModel =
             ViewModelProvider(this).get(InvoicesViewModel::class.java)
 
-        _binding = FragmentInvoicesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        binding = FragmentInvoicesBinding.inflate(inflater, container, false)
 
         val textView: TextView = binding.textSlideshow
         invoicesViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        return root
+
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }

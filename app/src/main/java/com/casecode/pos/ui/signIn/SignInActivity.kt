@@ -4,8 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivitySignInBinding
@@ -30,7 +30,8 @@ import javax.inject.Inject
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
-    private lateinit var viewModel: AuthViewModel
+
+    private val viewModel: AuthViewModel by viewModels()
 
     // declare auth
     @Inject
@@ -41,8 +42,6 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         // config sign-in
         // Configure Google Sign In

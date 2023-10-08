@@ -11,14 +11,15 @@ import com.casecode.pos.ui.stepper.StepperActivity
 
 class BranchesFragment : Fragment() {
 
-    private var _binding: FragmentBranchesBinding? = null
-    private val binding: FragmentBranchesBinding get() = _binding!!
+    private lateinit var binding: FragmentBranchesBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentBranchesBinding.inflate(inflater, container, false)
+        binding = FragmentBranchesBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -35,11 +36,6 @@ class BranchesFragment : Fragment() {
                 dialog.show(parentFragmentManager, "Dialog")
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }
