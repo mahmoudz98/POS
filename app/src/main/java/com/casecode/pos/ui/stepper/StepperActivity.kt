@@ -7,7 +7,9 @@ import androidx.navigation.findNavController
 import com.aceinteract.android.stepper.StepperNavListener
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivityStepperBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StepperActivity : AppCompatActivity(), StepperNavListener {
 
 
