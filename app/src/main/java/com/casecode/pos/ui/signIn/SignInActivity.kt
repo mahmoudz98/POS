@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivitySignInBinding
 import com.casecode.pos.ui.main.MainActivity
+import com.casecode.pos.ui.stepper.StepperActivity
 import com.casecode.pos.utils.FirebaseAuthResult
 import com.casecode.pos.utils.FirebaseResult
 import com.casecode.pos.viewmodel.AuthViewModel
@@ -149,7 +150,7 @@ class SignInActivity : AppCompatActivity() {
                         * 01. user does not exist
                         * 02. create user on (Firebase)
                         * */
-
+                        moveToStepperActivity(currentUser)
                     }
                 }
 
@@ -164,6 +165,16 @@ class SignInActivity : AppCompatActivity() {
 
     private fun moveToMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(getString(R.string.extra_uid), currentUser?.uid)
+        intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
+        intent.putExtra(getString(R.string.extra_email), currentUser?.email)
+        intent.putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
+        intent.putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString())
+        startActivity(intent)
+    }
+
+    private fun moveToStepperActivity(currentUser: FirebaseUser?) {
+        val intent = Intent(this, StepperActivity::class.java)
         intent.putExtra(getString(R.string.extra_uid), currentUser?.uid)
         intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
         intent.putExtra(getString(R.string.extra_email), currentUser?.email)
