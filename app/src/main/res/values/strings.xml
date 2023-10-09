@@ -29,8 +29,7 @@
     <string name="profile_title">Profile</string>
     <string name="business_plans_title">Business plans</string>
     <string name="business_info_title">Business info</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="store_type">Store type</string>
     <string name="work_mail">Work mail</string>
     <string name="work_phone_number">Work phone number</string>
@@ -41,10 +40,14 @@
     <string name="menu_sign_out">Sign out</string>
     <string name="sign_out">Sign out</string>
     <string name="branches">Branches</string>
-    <string name="branch_name">Branch name</string>
+    <string name="branch_name">Name:&#32;</string>
     <string name="add">Add</string>
+    <string name="update">Update</string>
     <string name="phone_number_branch">Phone number branch</string>
-    <string name="add_a_branches">Add a branches</string>
+    <string name="add_branch">Add a branch</string>
+    <string name="update_branch">Update a branch</string>
+
+
 
     <!-- collection -->
     <string name="COLLECTION_CUSTOMER" translatable="false">Customer</string>
@@ -53,5 +56,58 @@
     <string name="business_info">Business info</string>
     <string name="done">Done</string>
     <string name="document_successfully_deleted">Document successfully deleted, %1$s</string>
+
+
+    // business
+    <string name="add_business_empty">Please add your data correctly</string>
+    <string name="add_business_store_type_empty">Please add type of your business</string>
+    <string name="add_business_email_invalid">Enter valid email</string>
+    <string name="add_business_email_empty">Email is empty</string>
+    <string name="add_business_phone_empty">Phone is empty</string>
+    <string name="add_business_phone_invalid">Enter valid phone number</string>
+
+    // types of store
+    <string name="store_type_clothes">Clothes</string>
+    <string name="store_type_hyper">Hyper</string>
+    <string name="store_type_coffee">Coffee</string>
+
+    <string-array name="business_store_types">
+        <item>@string/store_type_clothes</item>
+        <item>@string/store_type_hyper</item>
+        <item>@string/store_type_coffee</item>
+    </string-array>
+
+
+    //Branch
+    <string name="branches_title">Branches</string>
+    <string name="add_branch_success">Branch Added success.</string>
+    <string name="add_branch_fail">Branch Added failed.</string>
+    <string name="update_branch_success">Branch updated success.</string>
+    <string name="update_branch_fail">Branch updated failed.</string>
+    <string name="add_branch_empty">Please add your data correctly</string>
+    <string name="add_branch_name_empty">Name branch is empty</string>
+    <string name="add_branch_phone_empty">Phone is empty</string>
+    <string name="add_branch_phone_invalid">Enter valid phone number</string>
+
+    // Subscription
+    <string name="subscription_title">Subscription</string>
+    <string name="plan_trxn">\u0020TRXN</string>
+    <string name="subscription_price_currency">EGP</string>
+    <string name="subscription_price_month">\u0020month</string>
+
+    // Network labels
+    <string name="network_error">Check your internet connection Please</string>
+    <string name="network_available">back online</string>
+
+
+
+    // Users
+    <string name="users_title">Users</string>
+    <string name="users">Users</string>
+    <string name="add_user">Add a user</string>
+    <string name="update_user">Update a uer</string>
+    <string name="user_name">Name:&#32;</string>
+    <string name="phone_number">Phone number</string>
+    <string name="user_permissions">User permissions</string>
 
 </resources>

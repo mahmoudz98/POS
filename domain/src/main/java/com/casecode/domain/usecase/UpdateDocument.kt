@@ -1,8 +1,11 @@
 package com.casecode.domain.usecase
 
 import com.casecode.domain.repository.FirestoreRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UpdateDocument(private val firestoreRepository: FirestoreRepository) {
+@Singleton
+class UpdateDocument @Inject constructor(private val firestoreRepository: FirestoreRepository) {
     suspend operator fun invoke(
         collectionPath: String,
         documentId: String,

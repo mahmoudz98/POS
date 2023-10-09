@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.invoices.InvoicesFragment">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_slideshow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

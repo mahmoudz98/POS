@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/nav_business"
-        android:title="Business info" />
+        android:title="@string/business_info_title" />
 
     <item android:id="@+id/nav_branches"
-        android:title="Branches" />
+        android:title="@string/branches_title" />
 
-    <item android:id="@+id/nav_plans"
-        android:title="Business plans" />
+    <item android:id="@+id/nav_subscription"
+        android:title="@string/subscription_title" />
+
+    <item android:id="@+id/nav_users"
+        android:title="@string/users_title" />
 </menu>

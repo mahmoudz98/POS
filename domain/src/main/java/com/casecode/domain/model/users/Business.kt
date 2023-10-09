@@ -1,10 +1,33 @@
 package com.casecode.domain.model.users
 
+
+
 data class Business(
-    val type: String,
-    val email: String,
-    val branches: List<Branch>
-) {
-    // Add a no-argument constructor
-    constructor() : this("", "", emptyList())
+     val storeType: StoreType? = null,
+     val email: String? = null,
+     val phone: String? = null,
+     
+     val branches: List<Branch> = listOf(),
+                   )
+
+enum class StoreType(
+     val englishName: String,
+     val arabicName: String,
+                    )
+{
+   Clothes("Clothes", "ملابس"),
+   Coffee("Coffee", "قهوة"),
+   Hyper("Hyper", "هايبر");
+   
+   
+   companion object
+   {
+      fun toStoreType(storeType: String): StoreType?
+      {
+         return entries.find { type ->
+            type.arabicName == storeType || type.englishName == storeType
+         }
+      }
+ 
+   }
 }

@@ -1,18 +1,17 @@
 package com.casecode.pos.ui.signIn
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivitySignInBinding
 import com.casecode.pos.ui.main.MainActivity
 import com.casecode.pos.ui.stepper.StepperActivity
 import com.casecode.pos.utils.FirebaseAuthResult
-import com.casecode.pos.utils.FirebaseResult
+import com.casecode.domain.utils.Resource
 import com.casecode.pos.viewmodel.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -99,7 +98,7 @@ class SignInActivity : AppCompatActivity() {
 
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
                 // Handle the result of the activity here
                 val data: Intent? = result.data
 
@@ -133,38 +132,48 @@ class SignInActivity : AppCompatActivity() {
     private fun checkTheRegistration(currentUser: FirebaseUser?) {
         viewModel.checkTheRegistration.observe(this) { result ->
             when (result) {
-                is FirebaseResult.Success -> {
+                is Resource.Success -> {
                     // Handle successful authentication
-                    val signInMethods = result.data
+                       var created = currentUser?.metadata?.creationTimestamp
+
+                   val current = System.currentTimeMillis() - 20000
+
                     // Check if the user exists
-                    if (signInMethods.isNotEmpty()) {
-                        /*
-                        * 01. user exists
-                        * 02. login
-                        * */
-                        Timber.tag(TAG).i("User exists")
-                        moveToMainActivity(currentUser)
-                    } else {
-                        Timber.tag(TAG).i("User does not exist")
-                        /*
-                        * 01. user does not exist
-                        * 02. create user on (Firebase)
-                        * */
-                        moveToStepperActivity(currentUser)
+                    if (created != null) {
+                        if (created < current) {
+                            /*
+                                        * 01. user exists
+                                        * 02. login
+                                        * */
+                            Timber.tag(TAG).i("User exists")
+                            moveToMainActivity(currentUser)
+                        } else {
+                            Timber.tag(TAG).i("User does not exist")
+                            /*
+                                        * 01. user does not exist
+                                        * 02. create user on (Firebase)
+                                        * */
+                            moveToStepperActivity(currentUser)
+                        }
                     }
                 }
 
-                is FirebaseResult.Failure -> {
+                is Resource.Error -> {
                     // Handle authentication failure
                     Timber.tag(TAG).e(result.exception)
 
                 }
+
+                is Resource.Empty -> TODO()
+                is Resource.Loading -> TODO()
             }
         }
     }
 
     private fun moveToMainActivity(currentUser: FirebaseUser?) {
         val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // used to clean activity and al activities above it will be removed.
+
         intent.putExtra(getString(R.string.extra_uid), currentUser?.uid)
         intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
         intent.putExtra(getString(R.string.extra_email), currentUser?.email)

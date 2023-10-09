@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+  <!--  <style name="FragmentScenarioEmptyFragmentActivityTheme" parent="android:Theme.WithActionBar" tools:ignore="PrivateResource">
+        <item name="android:windowIsFloating">false</item>
+    </style>-->
 
     <style name="TextAppearance.pos.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
         <item name="fontFamily">@font/work_sans_regular</item>
@@ -78,7 +81,7 @@
     </style>
 
     <style name="Widget.pos.Toolbar" parent="Widget.Material3.Toolbar">
-        <item name="android:background">@color/md_theme_light_surface</item>
+        <item name="background">@color/md_theme_light_surface</item>
         <item name="navigationIconTint">@color/md_theme_light_onSurface</item>
         <item name="titleTextColor">@color/md_theme_light_onSurface</item>
         <item name="collapseIcon">@drawable/ic_back</item>
@@ -96,7 +99,7 @@
 
     <style name="Widget.pos.TextInputLayout.OutlinedBox.Dense" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
 
-        <item name="errorEnabled">false</item>
+        <item name="errorEnabled">true</item>
         <item name="helperTextEnabled">true</item>
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
@@ -125,25 +128,25 @@
         <item name="cornerRadius">24dp</item>
     </style>
     <style name="Widget.pos.Button.TextButton.icon" parent="Widget.Material3.Button.TextButton.Icon">
-        <item name="android:backgroundTint">@color/md_theme_light_onPrimary</item>
+        <item name="backgroundTint">@color/md_theme_light_onPrimary</item>
 
     </style>
     <style name="Widget.pos.primaryButton" parent="Widget.pos.button">
         <item name="android:textColor">@color/md_theme_light_primary</item>
-        <item name="android:backgroundTint">@color/md_theme_light_onPrimary</item>
+        <item name="backgroundTint">@color/md_theme_light_onPrimary</item>
         <item name="rippleColor">@color/md_theme_light_primary</item>
         <item name="iconTint">@color/md_theme_light_primary</item>
     </style>
 
     <style name="Widget.pos.secondaryButton" parent="Widget.pos.button">
         <item name="android:textColor">@color/md_theme_light_onSecondary</item>
-        <item name="android:backgroundTint">@color/md_theme_light_secondary</item>
+        <item name="backgroundTint">@color/md_theme_light_secondary</item>
         <item name="rippleColor">@color/md_theme_light_onSecondaryContainer</item>
     </style>
 
     <style name="Widget.pos.tertiaryButton" parent="Widget.pos.button">
         <item name="android:textColor">@color/md_theme_light_onTertiary</item>
-        <item name="android:backgroundTint">@color/md_theme_light_tertiary</item>
+        <item name="backgroundTint">@color/md_theme_light_tertiary</item>
         <item name="rippleColor">@color/md_theme_light_onTertiaryContainer</item>
     </style>
 </resources>

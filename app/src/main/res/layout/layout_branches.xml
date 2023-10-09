@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="viewModel"
+            type="com.casecode.pos.viewmodel.BusinessViewModel" />
 
     </data>
 
@@ -18,11 +21,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_branches_storage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/small_spacing"
                 android:baselineAlignBottom="true"
                 android:contentDescription="@null"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -31,13 +34,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5"
                 app:srcCompat="@drawable/ic_storage" />
-            <!-- add two widgets here -->
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_branches_storage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/small_spacing"
 
                 android:text="@string/branches"
                 android:textAppearance="@style/TextAppearance.pos.BodyLarge"
@@ -62,12 +64,13 @@
             android:id="@+id/rv_branches"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
+            android:layout_marginTop="@dimen/smaller_spacing"
+            app:itemsBranch="@{viewModel.branches}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/btn_branches_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ll_business_plans_storage"
-            tools:listitem="@layout/list_item_branches" />
+            app:layout_constraintTop_toBottomOf="@+id/csl_branches_storage"
+            tools:listitem="@layout/item_branch" />
     </merge>
 </layout>

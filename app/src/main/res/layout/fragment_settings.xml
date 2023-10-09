@@ -6,15 +6,15 @@
 
     </data>
 
-    <FrameLayout
+    <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.settings.SettingsFragment">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="Hello" />
 
-    </FrameLayout>
+    </com.google.android.material.carousel.MaskableFrameLayout>
 </layout>

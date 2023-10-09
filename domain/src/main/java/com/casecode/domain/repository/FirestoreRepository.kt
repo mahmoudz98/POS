@@ -2,11 +2,21 @@ package com.casecode.domain.repository
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
+import javax.inject.Singleton
 
-interface FirestoreRepository {
+@Singleton
+ interface FirestoreRepository {
 
     suspend fun getDocuments(collection: String): Task<QuerySnapshot>
+    suspend fun getSubDocuments(collection: String, sub1 : String, sub2: String): Task<QuerySnapshot>
+
+    suspend fun getDocuments(
+        collection: String,
+        documentId: String,
+        subCollection: String
+    ): Task<QuerySnapshot>
 
     suspend fun getDocuments(
         collection: String,

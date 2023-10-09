@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+<variable
+    name="isAvailable"
+    type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_stepper_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.stepper.StepperActivity">
@@ -33,15 +36,32 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/normal_spacing"
+            android:layout_marginTop="@dimen/normal_spacing"
+            android:layout_marginEnd="@dimen/normal_spacing"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/stepper"
-            app:navGraph="@navigation/stepper_navigation" />
+            app:navGraph="@navigation/nav_stepper" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:isAvailable="@{isAvailable}"
+            android:background="@color/md_theme_light_onSurface"
+            android:textColor="@color/md_theme_light_surface"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.pos.LabelSmall"
+            app:layout_constraintBottom_toBottomOf="@+id/frame_stepper"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:text="@{isAvailable ? @string/network_available : @string/network_error}"
+
+            tools:visibility="visible"
+
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

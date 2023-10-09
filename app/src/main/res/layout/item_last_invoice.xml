@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <!-- invoice date -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_invoice_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         tools:text="15 May 2023" />
 
     <!-- invoice no -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_invoice_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         tools:text="invoice no. 123" />
 
     <!-- grand total -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_grand_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         tools:text="EGP 60.00" />
 
     <!-- payment method -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_payment_method"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

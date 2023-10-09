@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.utils.FirebaseAuthResult
-import com.casecode.pos.utils.FirebaseResult
+import com.casecode.domain.utils.Resource
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,11 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewModel() {
 
-    private val _signInResult = MutableLiveData<FirebaseResult<FirebaseUser>>()
-    val signInResult: LiveData<FirebaseResult<FirebaseUser>> = _signInResult
+    private val _signInResult = MutableLiveData<Resource<FirebaseUser>>()
+    val signInResult: LiveData<Resource<FirebaseUser>> = _signInResult
 
-    private val _checkTheRegistration = MutableLiveData<FirebaseResult<List<String>>>()
-    val checkTheRegistration: LiveData<FirebaseResult<List<String>>> = _checkTheRegistration
+    private val _checkTheRegistration = MutableLiveData<Resource<List<String>>>()
+    val checkTheRegistration: LiveData<Resource<List<String>>> = _checkTheRegistration
 
     fun signInWithEmail(email: String, password: String) {
         viewModelScope.launch {
@@ -35,14 +35,14 @@ class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewMo
     private suspend fun signInWithEmailAndPassword(
         email: String,
         password: String
-    ): FirebaseResult<FirebaseUser> {
+    ): Resource<FirebaseUser> {
         return try {
             val authResult = withContext(Dispatchers.IO) {
                 auth.signInWithEmailAndPassword(email, password).await()
             }
-            FirebaseResult.Success(authResult.user!!)
+            Resource.Success(authResult.user!!)
         } catch (e: Exception) {
-            FirebaseResult.Failure(e)
+            Resource.Error(e)
         }
     }
 
@@ -53,14 +53,14 @@ class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewMo
         }
     }
 
-    private suspend fun fetchSignInMethodsForEmail(email: String): FirebaseResult<List<String>> {
+    private suspend fun fetchSignInMethodsForEmail(email: String): Resource<List<String>> {
         return try {
             val signInMethodQueryResult = withContext(Dispatchers.IO) {
                 auth.fetchSignInMethodsForEmail(email).await()
             }
-            FirebaseResult.Success(signInMethodQueryResult.signInMethods!!)
+            Resource.Success(signInMethodQueryResult.signInMethods!!)
         } catch (e: Exception) {
-            FirebaseResult.Failure(e)
+            Resource.Error(e)
         }
     }
 

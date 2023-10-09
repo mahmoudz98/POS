@@ -14,12 +14,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
+import coil.load
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivityMainBinding
 import com.casecode.pos.ui.signIn.SignInActivity
 import com.casecode.pos.ui.signout.SignOutDialog
 import com.casecode.pos.viewmodel.AuthViewModel
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -181,7 +181,8 @@ class MainActivity : AppCompatActivity(), SignOutDialog.SignOutDialogListener {
 
         val actionView = menuItem?.actionView
         val photoImageView = actionView?.findViewById<ImageView>(R.id.menu_item_photo)
-        Picasso.get().load(photoUrl).into(photoImageView)
+        photoImageView?.load(photoUrl)
+
         photoImageView?.setOnClickListener {
             navController.navigate(R.id.nav_profile)
         }

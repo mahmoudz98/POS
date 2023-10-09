@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <!-- item name -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatCheckedTextView
         android:id="@+id/tv_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

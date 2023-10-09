@@ -17,11 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/margin_all_guideline" />
+            app:layout_constraintGuide_begin="@dimen/normal_spacing" />
 
-        <include layout="@layout/layout_business_plans"
 
-            />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

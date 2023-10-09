@@ -1,67 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="@layout/fragment_add_business">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_business_type"
-        style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/store_type"
-        app:helperText="ex: 123Aa#"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
-        app:startIconDrawable="@drawable/ic_store">
+    <data>
 
-        <AutoCompleteTextView
-            android:id="@+id/actv_business"
+        <import type="android.text.TextUtils" />
+
+
+        <variable
+            name="viewModel"
+            type="com.casecode.pos.viewmodel.BusinessViewModel" />
+
+
+    </data>
+
+    <merge tools:showIn="@layout/fragment_add_business">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_business_type"
+            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/store_type"
+            app:helperText="ex: 123Aa#"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
+            app:startIconDrawable="@drawable/ic_store">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/actv_business"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:text="@{TextUtils.isEmpty(viewModel.storeType) ? null : viewModel.storeType}"
+                app:items="@{@stringArray/business_store_types}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_business_mail"
+            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:inputType="none"
-            tools:ignore="LabelFor" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="@dimen/small_spacing"
+            android:hint="@string/work_mail"
+            app:helperText="ex: example@gmail.com"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_business_type"
+            app:startIconDrawable="@drawable/ic_mail">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_business_mail"
-        style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_all_element"
-        android:hint="@string/work_mail"
-        app:helperText="ex: example@gmail.com"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_business_type"
-        app:startIconDrawable="@drawable/ic_mail">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_business_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_business_mail"
-            android:layout_width="match_parent"
+                android:text="@{TextUtils.isEmpty(viewModel.email) ? null: viewModel.email}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_business_phone"
+            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="@dimen/small_spacing"
+            android:hint="@string/work_phone_number"
+            app:helperText="ex: +200000000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_business_mail"
+            app:startIconDrawable="@drawable/ic_call">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_business_phone"
-        style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/padding_all_element"
-        android:hint="@string/work_phone_number"
-        app:helperText="ex: +200000000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_business_mail"
-        app:startIconDrawable="@drawable/ic_call">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_business_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_business_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone" />
-    </com.google.android.material.textfield.TextInputLayout>
-</merge>
+                android:text="@{viewModel.phoneBusiness == null ? null: viewModel.phoneBusiness}" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </merge>
+</layout>

@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <!-- money -->
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             app:srcCompat="@drawable/baseline_attach_money_24" />
 
         <!-- statistic type -->
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_statistic_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             tools:text="Today's sales" />
 
         <!-- total price -->
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

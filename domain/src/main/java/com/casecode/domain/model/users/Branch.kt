@@ -1,9 +1,12 @@
 package com.casecode.domain.model.users
 
 data class Branch(
-    val name: String,
-    val phoneNumber: String
+    val branchCode: Int? = -1,
+    val branchName: String? = "",
+    val phoneNumber: String? = ""
 ) {
-    // Add a no-argument constructor
-    constructor() : this("", "")
+
+    // Add any additional properties or methods here
+
+
 }

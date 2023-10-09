@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import coil.load
 import com.casecode.pos.databinding.DialogSignOutBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.squareup.picasso.Picasso
 
 class SignOutDialog : DialogFragment() {
 
@@ -46,7 +46,7 @@ class SignOutDialog : DialogFragment() {
 
             // photo
             val photoUrl = arguments?.getString("photoUrl")
-            Picasso.get().load(photoUrl).into(ivPhoto)
+            ivPhoto.load(photoUrl)
 
             ivClose.setOnClickListener {
                 dismiss()
