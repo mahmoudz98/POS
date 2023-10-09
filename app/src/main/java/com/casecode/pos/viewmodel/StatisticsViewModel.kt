@@ -45,6 +45,32 @@ class StatisticsViewModel @Inject constructor(
         return resultLiveData
     }
 
+    fun getDocuments(
+        collection: String,
+        documentId: String,
+        subCollection: String
+    ): LiveData<FirebaseResult<List<DocumentSnapshot>>> {
+        val resultLiveData = MutableLiveData<FirebaseResult<List<DocumentSnapshot>>>()
+
+        viewModelScope.launch {
+            getDocumentsUseCase(
+                collection,
+                documentId,
+                subCollection
+            ).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documents = task.result!!.documents
+                    resultLiveData.value = FirebaseResult.Success(documents)
+                } else {
+                    Timber.e(task.exception)
+                    resultLiveData.value = FirebaseResult.Failure(task.exception!!)
+                }
+            }
+        }
+
+        return resultLiveData
+    }
+
     fun addDocuments(
         collection: String,
         date: Any
@@ -130,7 +156,8 @@ class StatisticsViewModel @Inject constructor(
                         application.getString(
                             R.string.document_successfully_deleted,
                             documentId
-                        ))
+                        )
+                    )
                 }.addOnFailureListener { error ->
                     // An error occurred while deleting the document
                     // Handle the error appropriately

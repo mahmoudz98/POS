@@ -8,6 +8,12 @@ interface FirestoreRepository {
 
     suspend fun getDocuments(collection: String): Task<QuerySnapshot>
 
+    suspend fun getDocuments(
+        collection: String,
+        documentId: String,
+        subCollection: String
+    ): Task<QuerySnapshot>
+
     suspend fun addDocuments(collection: String, data: Any): Task<DocumentReference>
 
     suspend fun updateDocument(

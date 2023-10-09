@@ -7,8 +7,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
 class FirestoreRepositoryImpl(private val firestore: FirebaseFirestore) : FirestoreRepository {
+
     override suspend fun getDocuments(collection: String): Task<QuerySnapshot> =
         firestore.collection(collection).get()
+
+    override suspend fun getDocuments(
+        collection: String,
+        documentId: String,
+        subCollection: String
+    ): Task<QuerySnapshot> =
+        firestore.collection(collection).document(documentId).collection(subCollection).get()
+
 
     override suspend fun addDocuments(collection: String, data: Any): Task<DocumentReference> {
         val collectionReference = firestore.collection(collection)
@@ -45,4 +54,5 @@ class FirestoreRepositoryImpl(private val firestore: FirebaseFirestore) : Firest
         // Delete the document
         return documentRef.delete()
     }
+
 }
