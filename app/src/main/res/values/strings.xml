@@ -77,7 +77,6 @@
         <item>@string/store_type_coffee</item>
     </string-array>
 
-
     //Branch
     <string name="branches_title">Branches</string>
     <string name="add_branch_success">Branch Added success.</string>
@@ -99,8 +98,6 @@
     <string name="network_error">Check your internet connection Please</string>
     <string name="network_available">back online</string>
 
-
-
     // Users
     <string name="users_title">Users</string>
     <string name="users">Users</string>
@@ -109,5 +106,12 @@
     <string name="user_name">Name:&#32;</string>
     <string name="phone_number">Phone number</string>
     <string name="user_permissions">User permissions</string>
+
+    // add product
+    <string name="barcode">Barcode</string>
+    <string name="product_name">Product name</string>
+    <string name="price">Price</string>
+    <string name="quantity">Quantity</string>
+    <string name="add_a_branches">Add a product</string>
 
 </resources>
