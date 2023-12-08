@@ -4,9 +4,14 @@
 # files for the dex VM
 *.dex
 
-*.iml
+# Ignore gradle files
 .gradle
+build/
+# Local configuration file (sdk path, etc)
 /local.properties
+
+# Android Studio/IDEA
+*.iml
 .idea
 /.idea/caches
 /.idea/libraries

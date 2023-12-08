@@ -5,7 +5,6 @@ import com.casecode.data.model.asEntitySubscriptions
 import com.casecode.data.utils.AppDispatchers
 import com.casecode.data.utils.Dispatcher
 import com.casecode.domain.model.subscriptions.Subscription
-import com.casecode.domain.repository.PlansResponse
 import com.casecode.domain.repository.SubscriptionsRepository
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.SUBSCRIPTIONS_COLLECTION_PATH

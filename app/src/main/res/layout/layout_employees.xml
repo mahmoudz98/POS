@@ -9,10 +9,10 @@
             type="com.casecode.pos.viewmodel.BusinessViewModel" />
 
     </data>
-    <merge tools:showIn="@layout/fragment_users">
+    <merge tools:showIn="@layout/fragment_employees">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/csl_users_storage"
+            android:id="@+id/csl_employees_storage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/md_theme_light_inverseOnSurface"
@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/iv_users"
+                android:id="@+id/iv_employees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/small_spacing"
@@ -35,20 +35,20 @@
                 app:srcCompat="@drawable/ic_storage" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_users"
+                android:id="@+id/tv_employees"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/small_spacing"
 
-                android:text="@string/users"
+                android:text="@string/employees"
                 android:textAppearance="@style/TextAppearance.pos.BodyLarge"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_users"
+                app:layout_constraintStart_toEndOf="@+id/iv_employees"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5" />
 
             <Button
-                android:id="@+id/btn_users_add"
+                android:id="@+id/btn_employees_add"
                 style="?attr/materialIconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,19 +60,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_users"
+            android:id="@+id/rv_employees"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/smaller_spacing"
-
+            app:bindListEmployee="@{viewModel.employees}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/btn_users_info"
+            app:layout_constraintBottom_toTopOf="@+id/btn_employees_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/csl_users_storage"
-            tools:listitem="@layout/item_user" />
+            app:layout_constraintTop_toBottomOf="@+id/csl_employees_storage"
+            tools:listitem="@layout/item_employee" />
     </merge>
 </layout>
-    <!--
-                app:itemsBranch="@{viewModel.users}"
-    -->

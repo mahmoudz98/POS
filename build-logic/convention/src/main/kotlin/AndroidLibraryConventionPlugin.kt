@@ -20,7 +20,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
          with(pluginManager) {
             apply("com.android.library")
             apply("org.jetbrains.kotlin.android")
-            apply("de.mannodermaus.android-junit5")
+          //  apply("de.mannodermaus.android-junit5")
             //   apply("pos.android.lint")
             
          }
@@ -35,8 +35,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
             disableUnnecessaryAndroidTests(target)
          }
          dependencies {
-            add("testImplementation", kotlin("test"))
-            add("testImplementation", project(":testing"))
+//            add("testImplementation", kotlin("test"))
+          //  add("testImplementation", project(":testing"))
             add("testImplementation", libs.findLibrary("junit.jupiter").get())
             
             add("testImplementation", libs.findLibrary("test.hamcrest").get())

@@ -8,9 +8,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.casecode.domain.entity.Branch
+import com.casecode.domain.model.users.Branch
 import com.casecode.pos.R
-import com.casecode.pos.base.BaseStepperTest
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.viewmodel.BusinessViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -38,15 +37,15 @@ class BranchesFragmentTest
    private lateinit var businessViewModel: BusinessViewModel
    
    @Before
-    fun init()
+   fun init()
    {
       hiltRule.inject()
       // Subject under test
-       launchFragmentInHiltContainer<BranchesFragment>{
-       this@BranchesFragmentTest.businessViewModel = businessViewModel
-      
-       
-       }
+      launchFragmentInHiltContainer<BranchesFragment> {
+         this@BranchesFragmentTest.businessViewModel = businessViewModel
+         
+         
+      }
       
       
    }

@@ -63,7 +63,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_branches"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/smaller_spacing"
             app:itemsBranch="@{viewModel.branches}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

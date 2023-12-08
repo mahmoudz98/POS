@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Singleton
 
 typealias Subscriptions = List<Subscription>
-typealias PlansResponse = Resource<Subscriptions>
 @Singleton
  interface SubscriptionsRepository {
     fun getSubscriptions(): Flow<Resource<List<Subscription>>>

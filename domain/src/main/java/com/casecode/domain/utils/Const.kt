@@ -31,16 +31,21 @@ const val SUBSCRIPTION_TYPE_FIELD = "type"
 const val SUBSCRIPTION_DURATION_FIELD = "duration"
 const val SUBSCRIPTION_PERMISSIONS_FIELD = "permissions"
 
+// fields in Employees
+const val EMPLOYEES_FIELD = "employees"
+const val EMPLOYEE_NAME_FIELD = "name"
+const val EMPLOYEE_PHONE_NUMBER_FIELD = "phoneNumber"
+const val EMPLOYEE_PASSWORD_FIELD = "password"
+const val EMPLOYEE_BRANCH_NAME_FIELD = "branchName"
+const val EMPLOYEE_PERMISSION_FIELD = "permission"
+
 // fields in planUsed and plan
 const val DURATION_USED_FIELD = "durationUsed"
 const val PLAN_CODE_FIELD = "planCode"
 const val PLAN_NAME_FIELD = "planName"
 const val PLAN_PRICE_FIELD = "price"
 
-//documentUsed fields in planUsed and plan
-const val WRITES_USED_FIELD = "writes"
-const val READS_FIELD = "reads"
-const val DELETES_FIELD = "deletes"
+
 
 
 //  fields in Store

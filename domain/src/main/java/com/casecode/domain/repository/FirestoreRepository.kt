@@ -12,11 +12,7 @@ import javax.inject.Singleton
     suspend fun getDocuments(collection: String): Task<QuerySnapshot>
     suspend fun getSubDocuments(collection: String, sub1 : String, sub2: String): Task<QuerySnapshot>
 
-    suspend fun getDocuments(
-        collection: String,
-        documentId: String,
-        subCollection: String
-    ): Task<QuerySnapshot>
+  
 
     suspend fun getDocuments(
         collection: String,

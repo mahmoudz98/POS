@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckedTextView
 
-class StoreTypeAdapter (context: Context, items: List<String?>) :
+class AutoCompleteAdapter(context: Context, items: List<String?>) :
     ArrayAdapter<String?>(context, android.R.layout.simple_list_item_single_choice, items) {
 
     private var selectedItemPosition = -1

@@ -1,7 +1,7 @@
 package com.casecode.pos.viewmodel
 
-import com.casecode.domain.entity.Branch
-import com.casecode.domain.entity.StoreType
+import com.casecode.domain.model.users.Branch
+import com.casecode.domain.model.users.StoreType
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.InstantTaskExecutorExtension
 import com.casecode.pos.R
@@ -16,7 +16,6 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.util.ArrayList
 
 @ExtendWith(InstantTaskExecutorExtension::class, CoroutinesTestExtension::class)
 class BusinessViewModelTest : BaseTest()
@@ -51,7 +50,7 @@ class BusinessViewModelTest : BaseTest()
       
       var isSuccess: Resource.Success<Boolean>? = Resource.Success(false)
       val job = launch {
-         isSuccess = businessViewModel.addBusiness.value as Resource.Success<Boolean>
+         isSuccess = businessViewModel.isAddBusiness.value as Resource.Success<Boolean>
       }
       
       // Execute pending coroutines actions
@@ -96,15 +95,16 @@ class BusinessViewModelTest : BaseTest()
    {
       // Given
       val branch = Branch(1, "branch1", "1234")
-     businessViewModel.branches.value = arrayListOf(branch)
-      businessViewModel.setBranchSelected(branch )
+      businessViewModel.branches.value = arrayListOf(branch)
+      businessViewModel.setBranchSelected(branch)
       businessViewModel.setBranchName("branch2")
       
       // When
       businessViewModel.setUpdateBranch()
       
       // Then
-      assertThat(R.string.update_branch_success, `is`(businessViewModel.userMessage.getOrAwaitValue()))
+      assertThat(R.string.update_branch_success,
+         `is`(businessViewModel.userMessage.getOrAwaitValue()))
       assertThat(businessViewModel.isUpdateBranch.value?.peekContent(), `is`(true))
       
    }
@@ -116,8 +116,8 @@ class BusinessViewModelTest : BaseTest()
       val branch = Branch(1, "branch1", "1234")
       businessViewModel.branches.value = arrayListOf(branch)
       businessViewModel.setBranchSelected(branch)
-      businessViewModel.setBranchName(branch.branchName!!)
-      businessViewModel.setBranchPhone(branch.phoneNumber!!)
+      businessViewModel.setBranchName(branch.branchName !!)
+      businessViewModel.setBranchPhone(branch.phoneNumber !!)
       
       // When
       businessViewModel.setUpdateBranch()
@@ -129,7 +129,8 @@ class BusinessViewModelTest : BaseTest()
    }
    
    @Test
-   fun `updateBranch when branches is out of index return failed and false`(){
+   fun `updateBranch when branches is out of index return failed and false`()
+   {
       // Given
       val branch = Branch(1, "branch1", "1234")
       businessViewModel.setBranchSelected(branch)
@@ -142,6 +143,30 @@ class BusinessViewModelTest : BaseTest()
       assertThat(businessViewModel.isUpdateBranch.value?.peekContent(), `is`(false))
       
       
+   }
+   //
+   @Test
+   fun setEmployee_validate_updateEmployeeList(){
+      // Given
+      val name = "mahmoud"
+      val phone = "12345"
+      val password = "12345m"
+      val branchName = "Branch 1"
+      val permission  = "Admin"
+      
+      // When
+      businessViewModel.setEmployee(name, phone, password,branchName, permission)
+      businessViewModel.addEmployee()
+      
+      val expectedEmployee = businessViewModel.employees.getOrAwaitValue ().last()
+      println(expectedEmployee)
+      
+      // Then - Assert the expected outcomes
+      assertThat(name , `is`(expectedEmployee.name))
+      assertThat(phone , `is`(expectedEmployee.phoneNumber))
+      assertThat(password , `is`(expectedEmployee.password))
+      assertThat(branchName , `is`(expectedEmployee.branchName))
+      assertThat(permission , `is`(expectedEmployee.permission))
    }
 }
    

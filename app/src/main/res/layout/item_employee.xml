@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="user"
-            type="com.casecode.domain.model.users.User" />
+            name="employee"
+            type="com.casecode.domain.model.users.Employee" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,34 +16,37 @@
 
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_user_type"
+            android:id="@+id/tv_employee_permission"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.pos.BodyLarge"
+            android:textAppearance="@style/TextAppearance.pos.TitleSmall"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Admin: 1" />
+            android:text="@{employee.permission + '/' + employee.branchName}"
+            tools:text="Admin: 1 / branchName" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_user_name"
+            android:id="@+id/tv_employee_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.pos.BodyLarge"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_type"
+            app:layout_constraintTop_toBottomOf="@+id/tv_employee_permission"
+            android:text="@{employee.name}"
+
             tools:text="bracnh: 1" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_user_phone"
+            android:id="@+id/tv_employee_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="22342222222342"
             android:layout_marginTop="@dimen/smaller_spacing"
             android:layout_marginBottom="@dimen/small_spacing"
-            android:text="@{String.valueOf(user.phoneNumber)}"
+            android:text="@{employee.phoneNumber}"
             android:textAppearance="@style/TextAppearance.pos.BodyMedium"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_user_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
+            app:layout_constraintStart_toStartOf="@+id/tv_employee_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_employee_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

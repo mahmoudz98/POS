@@ -6,14 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.casecode.domain.utils.Resource
 import com.casecode.pos.adapter.SubscriptionAdapter
 import com.casecode.pos.databinding.FragmentBusinessSubscriptionBinding
+import com.casecode.pos.utils.EventObserver
+import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
 /**
- * A fragment that displays the business plans.
+ * A fragment that displays the business Subscription.
  */
 @AndroidEntryPoint
 class BusinessSubscriptionFragment : Fragment()
@@ -25,10 +29,9 @@ class BusinessSubscriptionFragment : Fragment()
  
    private val subscriptionAdapter: SubscriptionAdapter by lazy {
       SubscriptionAdapter {
-         Timber.e("click on plan: $it")
+         Timber.e("click on Subscription: $it")
          Timber.d("Current thread adapter = ${Thread.currentThread()}")
-         
-       //  businessViewModel.addPlanToPlanUsed(it)
+         businessViewModel.setSubscriptionBusinessSelected(it)
       }
    }
    
@@ -59,7 +62,7 @@ class BusinessSubscriptionFragment : Fragment()
    {
       businessViewModel.getSubscriptionsBusiness()
       
-      binding.lifecycleOwner = viewLifecycleOwner
+      binding.lifecycleOwner = this.viewLifecycleOwner
       binding.viewModel = businessViewModel
    }
    
@@ -69,11 +72,24 @@ class BusinessSubscriptionFragment : Fragment()
       
    }
    
+   private fun observerIsAddSubscription(){
+      businessViewModel.isAddSubscriptionBusiness.observe(viewLifecycleOwner, EventObserver{
+         when(it){
+            is Resource.Success ->{
+               businessViewModel.moveToNextStep()
+               
+            }else ->{
+               binding.root.showSnackbar("Something went wrong !", Snackbar.LENGTH_SHORT)
+            }
+         }
+      })
+   }
    
    private fun initClickListener()
    {
       binding.btnBusinessSubscriptionUser.setOnClickListener {
-         businessViewModel.moveToNextStep()
+         businessViewModel.setSubscriptionBusinessSelected()
+         observerIsAddSubscription()
       }
       
       

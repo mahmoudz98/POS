@@ -27,8 +27,7 @@ class AddBusinessFragment : Fragment()
    
    private var _binding: FragmentAddBusinessBinding? = null
    
-   @Inject
-   lateinit var firebaseAuth: FirebaseAuth
+   
    val binding get() = _binding !!
    
    @get:OpenForTesting
@@ -53,7 +52,6 @@ class AddBusinessFragment : Fragment()
    private fun init()
    {
       initViewModel()
-      initAddUID()
       
       validateAddBusiness()
       initAddBusiness()
@@ -69,12 +67,7 @@ class AddBusinessFragment : Fragment()
       binding.lifecycleOwner = this.viewLifecycleOwner
    }
    
-   private fun initAddUID()
-   {
-      val currentUid = firebaseAuth.currentUser?.uid
-      businessViewModel.setCurrentUid(currentUid)
-      Timber.e("currentUid = $currentUid")
-   }
+
    
    
    private fun validateAddBusiness()

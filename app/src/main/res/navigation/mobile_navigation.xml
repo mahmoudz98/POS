@@ -36,7 +36,7 @@
         android:label="SettingFragment" />
     <fragment
         android:id="@+id/nav_users"
-        android:name="com.casecode.pos.ui.user.UsersFragment"
+        android:name="com.casecode.pos.ui.employee.EmployeesFragment"
         android:label="UsersFragment" />
 
     <fragment

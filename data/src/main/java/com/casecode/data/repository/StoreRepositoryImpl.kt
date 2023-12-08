@@ -1,8 +1,8 @@
 package com.casecode.data.repository
 
+import com.casecode.domain.model.users.Item
 import com.casecode.data.utils.AppDispatchers
 import com.casecode.data.utils.Dispatcher
-import com.casecode.domain.entity.BasicItem
 import com.casecode.domain.model.stores.Store
 import com.casecode.domain.repository.StoreRepository
 import com.casecode.domain.repository.StoresResponse
@@ -65,14 +65,14 @@ class StoreRepositoryImpl @Inject constructor(
          AtomicInteger(documents.size) // Use AtomicInteger to track remaining documents
       
       documents.forEach { document ->
-         val basicItems = mutableListOf<BasicItem>()
+         val basicItems = mutableListOf<Item>()
          document.reference.collection(BASICITEMS_COLLECTION_PATH).get()
             .addOnSuccessListener { collections ->
                collections.documents.forEach {
                   try
                   {
                      // TODO: when document is not have any object to convert, error in runtime
-                     val basicItem = it.toObject(BasicItem::class.java)
+                     val basicItem = it.toObject(Item::class.java)
                      if (basicItem != null)
                      {
                         basicItems.add(basicItem)

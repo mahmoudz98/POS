@@ -10,6 +10,9 @@ abstract class BaseViewHolder<VB: ViewDataBinding, E : Any>(protected open val b
         get() {
             return itemView.context
         }
+    val absolutePosition : Int get(){
+       return absoluteAdapterPosition
+    }
 
     lateinit var element:E
     open fun bind(element: E){

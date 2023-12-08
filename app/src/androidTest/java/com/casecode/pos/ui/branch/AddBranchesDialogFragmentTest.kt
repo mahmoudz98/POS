@@ -1,7 +1,6 @@
 package com.casecode.pos.ui.branch
 
 import android.content.Context
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
@@ -18,11 +17,9 @@ import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.utils.withHint
 import com.casecode.pos.viewmodel.BusinessViewModel
-import com.casecode.testing.util.getOrAwaitValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -193,7 +190,7 @@ class AddBranchesDialogFragmentTest
    
    private fun thenUserShouldSeeErrorForBranchPhone()
    {
-      onView(withId(R.id.til_add_branches_phone)).check(matches(withHint(context.getString(R.string.add_branch_phone_invalid))))
+      onView(withId(R.id.til_add_branches_phone)).check(matches(withHint(context.getString(R.string.all_phone_invalid))))
    }
    
    private fun thenUserShouldSeeAddBranchConfirmationMessage()

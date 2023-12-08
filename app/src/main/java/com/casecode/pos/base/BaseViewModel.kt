@@ -11,16 +11,16 @@ abstract class BaseViewModel : ViewModel()
    private val _isLoading = MutableLiveData(false)
    val isLoading: LiveData<Boolean> get() = _isLoading
    
-   private val _currentUid: MutableLiveData<String> = MutableLiveData("")
+   private val _currentUid: MutableLiveData<String> = MutableLiveData()
    val currentUid: LiveData<String> get() = _currentUid
-   fun setCurrentUid(currentUid: String?)
+   fun setCurrentUid(currentUid: String)
    {
-      if(currentUid.isNullOrBlank()){
+      if(currentUid.isBlank()){
          //TODO: handle when no uid
          _currentUid.value = ("Error")
       }else{
       
-      _currentUid.value = (currentUid)
+      _currentUid.value = currentUid
       }
    }
    

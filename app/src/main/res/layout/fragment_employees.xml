@@ -10,15 +10,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/csl_users_root">
+        android:id="@+id/csl_employees_root">
         <include
-            android:id="@+id/l_users"
-            layout="@layout/layout_users"
+            android:id="@+id/l_employees"
+            layout="@layout/layout_employees"
 
             />
 
         <Button
-            android:id="@+id/btn_users_done"
+            android:id="@+id/btn_employees_done"
             style="@style/Widget.pos.Button.TextButton.icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
         <Button
-            android:id="@+id/btn_users_subscription"
+            android:id="@+id/btn_employees_subscription"
             style="@style/Widget.pos.Button.TextButton.icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

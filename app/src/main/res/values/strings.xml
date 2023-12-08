@@ -71,11 +71,7 @@
     <string name="store_type_hyper">Hyper</string>
     <string name="store_type_coffee">Coffee</string>
 
-    <string-array name="business_store_types">
-        <item>@string/store_type_clothes</item>
-        <item>@string/store_type_hyper</item>
-        <item>@string/store_type_coffee</item>
-    </string-array>
+
 
 
     //Branch
@@ -86,8 +82,8 @@
     <string name="update_branch_fail">Branch updated failed.</string>
     <string name="add_branch_empty">Please add your data correctly</string>
     <string name="add_branch_name_empty">Name branch is empty</string>
-    <string name="add_branch_phone_empty">Phone is empty</string>
-    <string name="add_branch_phone_invalid">Enter valid phone number</string>
+    <string name="all_phone_empty">Phone is empty</string>
+    <string name="all_phone_invalid">Enter valid phone number</string>
 
     // Subscription
     <string name="subscription_title">Subscription</string>
@@ -101,13 +97,36 @@
 
 
 
-    // Users
-    <string name="users_title">Users</string>
-    <string name="users">Users</string>
-    <string name="add_user">Add a user</string>
-    <string name="update_user">Update a uer</string>
-    <string name="user_name">Name:&#32;</string>
+    // Employees
+    <string name="employees_title">Employees</string>
+    <string name="employees">Employees</string>
+    <string name="add_employee">Add a employee</string>
+    <string name="update_employee">Update a employee</string>
+    <string name="employee_name">Name:&#32;</string>
     <string name="phone_number">Phone number</string>
-    <string name="user_permissions">User permissions</string>
+    <string name="employee_branch_name">Branch name</string>
+    <string name="password">Password</string>
+    <string name="employee_permissions">Employee permissions</string>
+
+    // Add Employee
+    <string name="add_employee_name_empty">Name employee is empty</string>
+    <string name="add_employee_password_empty">Password employee is empty</string>
+    <string name="add_employee_branch_empty">Branch employee is empty</string>
+    <string name="add_employee_permission_empty">Permission employee is empty</string>
+
+    <string name="add_employee_password_error">Password must be at least 6 characters. </string>
+
+    <string name="add_employee_success">Employee Added success.</string>
+    <string name="add_employee_fail">Employee Added failed.</string>
+    <string name="update_employee_success">Employee updated success.</string>
+    <string name="update_employee_fail">Employee updated failed.</string>
+
+    // Permission
+    <string name="permission_admin">Admin</string>
+    <string name="permission_sales">Sales</string>
+    <string name="permission_non">Non</string>
+
+    <string name="all_error_save">Something went wrong!</string>
+
 
 </resources>

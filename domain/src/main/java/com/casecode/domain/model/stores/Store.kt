@@ -1,9 +1,10 @@
 package com.casecode.domain.model.stores
 
-import com.casecode.domain.entity.BasicItem
+import com.casecode.domain.model.users.Item
+
 
 data class Store(
-     var basicItems: MutableList<BasicItem>? = null,
+     var basicItems: MutableList<Item>? = null,
      val storeCode: Long? = null,
      val storeType: String? = null
 ) {

@@ -7,11 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.model.users.Branch
 import com.casecode.pos.R
+import com.casecode.pos.adapter.AutoCompleteAdapter
 import com.casecode.pos.adapter.BranchesAdapter
-import com.casecode.pos.adapter.StoreTypeAdapter
 import com.casecode.pos.adapter.SubscriptionAdapter
 import timber.log.Timber
-import java.time.Month
 
 @BindingAdapter("items")
 fun AppCompatAutoCompleteTextView.setAutoCompleteItems(items: Array<String>?)
@@ -19,10 +18,10 @@ fun AppCompatAutoCompleteTextView.setAutoCompleteItems(items: Array<String>?)
    Timber.e("items $items")
    if (items != null)
    {
-      val adapter = StoreTypeAdapter(
+      val adapter = AutoCompleteAdapter(
          context,
          items.toList()
-                                    )
+                                       )
       setOnItemClickListener { _, _, position, _ ->
          adapter.setSelectedItem(position)
          setText(adapter.getItem(position), false)
@@ -40,8 +39,7 @@ fun RecyclerView.bindListSubscriptions(items: List<Subscription>?)
 {
    
    items?.let {
-      val adapter = adapter as SubscriptionAdapter
-      adapter.submitList(items)
+      (adapter as SubscriptionAdapter).submitSubscriptions(items)
    }
    
 }
@@ -62,9 +60,10 @@ fun TextView.bindCostAndDuration(cost: Long, duration: Long)
 @BindingAdapter("itemsBranch")
 fun RecyclerView.bindListBranch(items: ArrayList<Branch>?)
 {
-   Timber.e("size of items in branches = ${items?.size}")
+   Timber.i("size of items in branches = ${items?.size}")
    
    items?.let {
       (adapter as BranchesAdapter).submitList(items)
    }
 }
+

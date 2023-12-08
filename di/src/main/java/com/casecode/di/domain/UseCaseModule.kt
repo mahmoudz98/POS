@@ -1,15 +1,19 @@
 package com.casecode.di.domain
 
 import com.casecode.domain.repository.BusinessRepository
+import com.casecode.domain.repository.EmployeesBusinessRepository
 import com.casecode.domain.repository.FirestoreRepository
 import com.casecode.domain.repository.SubscriptionsRepository
 import com.casecode.domain.repository.StoreRepository
+import com.casecode.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.domain.usecase.AddDocuments
 import com.casecode.domain.usecase.SetBusinessUseCase
 import com.casecode.domain.usecase.DeleteDocument
 import com.casecode.domain.usecase.GetDocuments
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.domain.usecase.GetStoreUseCase
+import com.casecode.domain.usecase.SetEmployeesBusinessUseCase
+import com.casecode.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.domain.usecase.UpdateDocument
 import dagger.Module
 import dagger.Provides
@@ -27,8 +31,16 @@ object UseCaseModule {
 
 
     @Provides
-    fun provideSubscriptionsUseCase(plansRepo: SubscriptionsRepository): GetSubscriptionsUseCase {
-        return GetSubscriptionsUseCase(plansRepo)
+    fun provideSubscriptionsUseCase(subscriptionsRepository: SubscriptionsRepository): GetSubscriptionsUseCase {
+        return GetSubscriptionsUseCase(subscriptionsRepository)
+    }
+    @Provides
+    fun provideSetSubscriptionBusinessUseCase(subscriptionsBusinessRepository: SubscriptionsBusinessRepository): SetSubscriptionBusinessUseCase {
+        return SetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
+    }
+    @Provides
+    fun provideSetEmployeesBusinessUseCase(employeesBusRepo: EmployeesBusinessRepository): SetEmployeesBusinessUseCase {
+        return SetEmployeesBusinessUseCase(employeesBusRepo)
     }
     @Provides
     fun provideStoreUseCase(storeRep: StoreRepository): GetStoreUseCase {

@@ -187,6 +187,9 @@ dependencies {
    implementation(libs.appcompat)
    implementation(libs.lifecycle.viewmodel)
    implementation(libs.recyclerview)
+   implementation(libs.slidingpanelayout)
+   implementation(libs.window)
+   androidTestImplementation(libs.window.testing)
    
    
    // UI tools

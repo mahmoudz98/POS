@@ -12,11 +12,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.casecode.pos.R
 import com.casecode.pos.base.BaseTextWatcher
-import com.casecode.pos.databinding.DialogAddBranchesBinding
-import com.casecode.pos.utils.showSnackbar
+import com.casecode.pos.databinding.DialogAddBranchBinding
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar
+
 
 /**
  * A Dialog fragment that displays the Add branch in branches fragment.
@@ -27,17 +26,22 @@ class AddBranchesDialogFragment : DialogFragment()
    {
       const val ADD_BRANCH_TAG = "AddBranchesDialogFragment"
       const val UPDATE_BRANCH_TAG = "updateBranchesDialogFragment"
+      fun newInstance(): AddBranchesDialogFragment
+      {
+         return AddBranchesDialogFragment()
+      }
    }
    
-   private var _binding: DialogAddBranchesBinding? = null
-   private val binding: DialogAddBranchesBinding
+   
+   private var _binding: DialogAddBranchBinding? = null
+   private val binding: DialogAddBranchBinding
       get() = _binding !!
    private val businessViewModel by activityViewModels<BusinessViewModel>()
    
    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
    {
       val builder = MaterialAlertDialogBuilder(requireContext())
-      _binding = DialogAddBranchesBinding.inflate(layoutInflater)
+       _binding = DialogAddBranchBinding.inflate(layoutInflater)
       
       builder.setView(binding.root)
       
@@ -47,11 +51,12 @@ class AddBranchesDialogFragment : DialogFragment()
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-                            ): View
+                            ): View?
    {
       // Inflate the layout for this fragment
+    //  _binding = DialogAddBranchBinding.inflate(layoutInflater)
       
-      return binding.root
+      return _binding?.root
    }
    
    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
@@ -62,22 +67,17 @@ class AddBranchesDialogFragment : DialogFragment()
    
    private fun init()
    {
-      validateAddBusiness()
-      initAddAndUpdateBusiness()
+      validateAddBranch()
+      initAddAndUpdateBranch()
       if (tag == UPDATE_BRANCH_TAG)
       {
          observerViewModel()
       }
    }
    
-   private fun observerViewModel()
-   {
-      businessViewModel.branchSelected.observe(viewLifecycleOwner) {
-         binding.branch = it
-      }
-   }
+
    
-   private fun validateAddBusiness()
+   private fun validateAddBranch()
    {
       
       binding.etAddBranchesName.addTextChangedListener(object : BaseTextWatcher()
@@ -110,13 +110,13 @@ class AddBranchesDialogFragment : DialogFragment()
             {
                binding.tilAddBranchesPhone.boxStrokeErrorColor
                binding.tilAddBranchesPhone.error =
-                  getString(R.string.add_branch_phone_empty)
+                  getString(R.string.all_phone_empty)
                
             } else if (! s.toString().trim { it <= ' ' }
                   .matches(Patterns.PHONE.toString().toRegex()))
             {
                binding.tilAddBranchesPhone.error =
-                  getString(R.string.add_branch_phone_invalid)
+                  getString(R.string.all_phone_invalid)
             } else
             {
                binding.tilAddBranchesPhone.boxStrokeColor =
@@ -130,20 +130,20 @@ class AddBranchesDialogFragment : DialogFragment()
       
    }
    
-   private fun initAddAndUpdateBusiness()
+   private fun initAddAndUpdateBranch()
    {
       binding.etAddBranchesPhone.setOnEditorActionListener { _, actionId, _ ->
          if (actionId == EditorInfo.IME_ACTION_DONE)
          {
-            binding.btnBranchAdd.performClick()
+            binding.btnBranch.performClick()
             return@setOnEditorActionListener true
          }
          false
       }
       
-      binding.btnBranchAdd.setOnClickListener {
+      binding.btnBranch.setOnClickListener {
          
-         if (isAddBusinessValid())
+         if (isValidBranchInput())
          {
             if (tag == ADD_BRANCH_TAG)
             {
@@ -152,13 +152,16 @@ class AddBranchesDialogFragment : DialogFragment()
             {
                businessViewModel.setUpdateBranch()
             }
-            dismiss()
+            
+            dismissDialog()
          }
          
       }
    }
    
-   private fun isAddBusinessValid(): Boolean
+
+   
+   private fun isValidBranchInput(): Boolean
    {
       val name = binding.etAddBranchesName.text.toString()
       val phone = binding.etAddBranchesPhone.text.toString()
@@ -178,14 +181,14 @@ class AddBranchesDialogFragment : DialogFragment()
          if (TextUtils.isEmpty(phone))
          {
             binding.tilAddBranchesPhone.error =
-               getString(R.string.add_branch_phone_empty)
+               getString(R.string.all_phone_empty)
          }
          
          if (! phone.trim { it <= ' ' }
                .matches(Patterns.PHONE.toString().toRegex()))
          {
             binding.tilAddBranchesPhone.error =
-               getString(R.string.add_branch_phone_invalid)
+               getString(R.string.all_phone_invalid)
          }
          
          return false
@@ -196,6 +199,25 @@ class AddBranchesDialogFragment : DialogFragment()
       return true
       
    }
+   private fun dismissDialog()
+   {
+      val isCompact = businessViewModel.isCompact.value?.peekContent()
+      if (isCompact == true)
+      {
+         dismiss()
+         
+      } else
+      {
+         // binding.etAddBranchesName.text = null
+         // binding.etAddBranchesPhone.text = null
+      }
+   }
+   private fun observerViewModel()
+   {
+      businessViewModel.branchSelected.observe(viewLifecycleOwner) {
+         binding.branch = it
+      }
+   }
    
    override fun onDestroyView()
    {
@@ -203,3 +225,5 @@ class AddBranchesDialogFragment : DialogFragment()
       _binding = null
    }
 }
+
+

@@ -9,7 +9,7 @@ data class User(
      val name: String,
      val password: String,
      val phoneNumber: String,
-     val subscription: Subscription,
+     val subscriptionBusiness: SubscriptionBusiness,
      val uid: String
                ) {
    // Add a no-argument constructor
@@ -22,7 +22,7 @@ data class User(
       "",
       "",
       "",
-      Subscription(),
+      SubscriptionBusiness(),
       ""
                        )
 }
