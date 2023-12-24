@@ -69,7 +69,7 @@ class StatisticsViewModel @Inject constructor(
                     resultLiveData.value = Resource.Success(documents)
                 } else {
                     Timber.e("task.exception: ${task.exception}")
-                    resultLiveData.value = Resource.Error(task.exception!!)
+                    resultLiveData.value = Resource.Error(task.exception?.message)
                 }
             }
         }
@@ -96,7 +96,7 @@ class StatisticsViewModel @Inject constructor(
                     resultLiveData.value = Resource.Success(documents)
                 } else {
                     Timber.e(task.exception)
-                    resultLiveData.value = Resource.Error(task.exception!!)
+                    resultLiveData.value = Resource.Error(task.exception?.message)
                 }
             }
         }
@@ -120,7 +120,7 @@ class StatisticsViewModel @Inject constructor(
             }.addOnFailureListener { e ->
                 // Error occurred while adding the document
                 Timber.e("Error adding document", e)
-                resultLiveData.value = Resource.Error(e)
+                resultLiveData.value = Resource.Error(e.message)
             }
         }
 
@@ -143,7 +143,7 @@ class StatisticsViewModel @Inject constructor(
                 }.addOnFailureListener { error ->
                     // Handle error
                     Timber.e("Error updating document", error)
-                    resultLiveData.value = Resource.Error(error)
+                    resultLiveData.value = Resource.Error(error.message)
                 }
         }
 
@@ -167,7 +167,7 @@ class StatisticsViewModel @Inject constructor(
                 }.addOnFailureListener { error ->
                     // Handle error
                     Timber.e("Error updating document", error)
-                    resultLiveData.value = Resource.Error(error)
+                    resultLiveData.value = Resource.Error(error.message)
                 }
 
 
@@ -197,7 +197,7 @@ class StatisticsViewModel @Inject constructor(
                     // An error occurred while deleting the document
                     // Handle the error appropriately
                     Timber.e("Error deleting document", error)
-                    resultLiveData.value = Resource.Error(error)
+                    resultLiveData.value = Resource.Error(error.message)
                 }
         }
 

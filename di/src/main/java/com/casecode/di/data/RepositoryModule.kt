@@ -23,18 +23,19 @@ import dagger.hilt.components.SingletonComponent
 {
    
    @Binds
-   fun provideBusinessRepo(businessRepositoryImpl: BusinessRepositoryImpl): BusinessRepository
+   fun bindBusinessRepo(businessRepositoryImpl: BusinessRepositoryImpl): BusinessRepository
     @Binds
-   fun provideEmployeesBusinessRepo(employeesBusinessRepositoryImpl: EmployeesBusinessRepositoryImpl): EmployeesBusinessRepository
+   fun bindEmployeesBusinessRepo(employeesBusinessRepositoryImpl: EmployeesBusinessRepositoryImpl): EmployeesBusinessRepository
+   @Binds
+   fun bindFirestoreRepo(firestoreRepositoryImpl: FirestoreRepositoryImpl): FirestoreRepository
+   @Binds
+   fun bindStoreRepo(storeRepositoryImpl: StoreRepositoryImpl): StoreRepository
+   @Binds
+   fun bindSubscriptionsBusinessRepo(subscriptionsBusinessRepositoryImpl: SubscriptionsBusinessRepositoryImpl): SubscriptionsBusinessRepository
    
    @Binds
-   fun provideSubscriptionsRepo(subscriptionsRepositoryImpl: SubscriptionsRepositoryImpl): SubscriptionsRepository
-   @Binds
-   fun provideSubscriptionsBusinessRepo(subscriptionsBusinessRepositoryImpl: SubscriptionsBusinessRepositoryImpl): SubscriptionsBusinessRepository
-   
-   @Binds
-   fun provideStoreRepo(storeRepositoryImpl: StoreRepositoryImpl): StoreRepository
-   
-   @Binds
-   fun provideFirestoreRepo(firestoreRepositoryImpl: FirestoreRepositoryImpl): FirestoreRepository
+   fun bindSubscriptionsRepo(subscriptionsRepositoryImpl: SubscriptionsRepositoryImpl): SubscriptionsRepository
+
+
+
 }

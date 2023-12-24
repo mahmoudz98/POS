@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirestoreRepositoryImpl @Inject constructor(
@@ -47,7 +48,7 @@ class FirestoreRepositoryImpl @Inject constructor(
       val collectionReference =
          firestore.collection(collectionPath).document(documentId)
       
-      return collectionReference.set(updates)
+      return collectionReference.update(updates)
    }
    
    override suspend fun setDocument(

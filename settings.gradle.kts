@@ -2,14 +2,7 @@
 
 pluginManagement {
    includeBuild("build-logic")
- /*   resolutionStrategy {
-      eachPlugin {
-         if (requested.id.namespace == "com.example")
-         {
-            useModule("com.example:sample-plugins:1.0.0")
-         }
-      }
-   } */
+
    repositories {
       google()
       mavenCentral()

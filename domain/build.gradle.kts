@@ -4,36 +4,40 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.domain"
- 
+   namespace = "com.casecode.pos.domain"
    
-    
-    @Suppress("UnstableApiUsage")
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-        }
-    }
    
-   lint {
-      abortOnError = false
+   
+   testOptions {
+      unitTests {
+         this.all {
+            it.useJUnitPlatform()
+         }
+         isReturnDefaultValues = true
+      }
    }
- 
+  
+   /*  lint {
+       abortOnError = false
+    } */
+   
 }
 
 dependencies {
-    
-    
-    api(libs.firebase.firestore.ktx)
-    
    
-    testApi(projects.testing)
-    //testApi(libs.test.hamcrest)
-    //testApi(libs.test.hamcrest.library)
-    
    
-    //testApi(libs.test.mockk)
-    
-    testApi(libs.coroutines.test)
-    
+   api(libs.firebase.firestore.ktx)
+   
+  // testApi(libs.junit.jupiter)
+   testRuntimeOnly(libs.junit.jupiter.engine)
+   testApi(libs.test.hamcrest)
+   testApi(libs.test.hamcrest.library)
+   
+  // testImplementation(projects.testing)
+   
+   
+   //testApi(libs.test.mockk)
+   
+   testApi(libs.coroutines.test)
+   
 }

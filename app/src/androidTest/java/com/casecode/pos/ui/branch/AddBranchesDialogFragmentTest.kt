@@ -147,7 +147,7 @@ class AddBranchesDialogFragmentTest
    
    private fun thenUserShouldSeeAddBranchesDialog()
    {
-      onView(withId(R.id.btn_branch_add)).check(matches(isDisplayed()))
+      onView(withId(R.id.btn_branch)).check(matches(isDisplayed()))
    }
    
    private fun whenUserEntersEmptyBranchName()
@@ -162,7 +162,7 @@ class AddBranchesDialogFragmentTest
    
    private fun whenUserClicksAddBranchOrUpdateButton()
    {
-      onView(withId(R.id.btn_branch_add)).perform(click())
+      onView(withId(R.id.btn_branch)).perform(click())
       
    }
    

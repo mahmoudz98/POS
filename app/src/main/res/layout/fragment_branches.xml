@@ -62,12 +62,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
         <Button
-            android:id="@+id/btn_branches_plan"
+            android:id="@+id/btn_branches_subscription"
             style="@style/Widget.pos.Button.TextButton.icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/normal_spacing"
-            android:text="@string/business_plans"
+            android:text="@string/business_subscription"
             app:icon="@drawable/ic_arrow_left"
             app:iconGravity="end"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -3,10 +3,14 @@ package com.casecode.testing
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.casecode.domain.usecase.GetBusinessUseCase
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
-import com.casecode.domain.usecase.GetStoreUseCase
 import com.casecode.domain.usecase.SetBusinessUseCase
+import com.casecode.domain.usecase.SetEmployeesBusinessUseCase
+import com.casecode.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.testing.repository.TestBusinessRepository
+import com.casecode.testing.repository.TestEmployeesBusinessRepository
+import com.casecode.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.testing.repository.TestSubscriptionsRepository
+import com.casecode.testing.util.TestNetworkMonitor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
@@ -16,7 +20,6 @@ import org.junit.jupiter.api.extension.Extensions
 abstract class BaseTest
 {
    
-
    
    // Set the main coroutines dispatcher for unit testing.
    @get:Extensions
@@ -25,25 +28,34 @@ abstract class BaseTest
    @Rule
    @JvmField
    val instantTaskExecutorRule = InstantTaskExecutorRule()
-   
+   lateinit var testNetworkMonitor: TestNetworkMonitor
    private lateinit var testBusinessRepository: TestBusinessRepository
-   private lateinit var testPlansRepository: TestSubscriptionsRepository
-   
+    lateinit var testSubscriptionsRepository: TestSubscriptionsRepository
+   private lateinit var testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
+   private lateinit var testEmployeesBusinessRepository: TestEmployeesBusinessRepository
    
    private lateinit var getBusinessUseCase: GetBusinessUseCase
    lateinit var setBusinessUseCase: SetBusinessUseCase
-   lateinit var getStoreUseCase: GetStoreUseCase
-   lateinit var getPlanUseCase: GetSubscriptionsUseCase
+   lateinit var getSubscriptionsUseCase: GetSubscriptionsUseCase
+   lateinit var setSubscriptionBusinessUseCase: SetSubscriptionBusinessUseCase
+   lateinit var setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase
    
    @BeforeEach
    fun setup()
    {
+      testNetworkMonitor = TestNetworkMonitor()
       testBusinessRepository = TestBusinessRepository()
-      testPlansRepository = TestSubscriptionsRepository()
+      testSubscriptionsRepository = TestSubscriptionsRepository()
+      testSubscriptionsBusinessRepository = TestSubscriptionsBusinessRepository()
+      testEmployeesBusinessRepository = TestEmployeesBusinessRepository()
       
+      // use cases
       getBusinessUseCase = GetBusinessUseCase(testBusinessRepository)
       setBusinessUseCase = SetBusinessUseCase(testBusinessRepository)
-      getPlanUseCase = GetSubscriptionsUseCase(testPlansRepository)
+      getSubscriptionsUseCase = GetSubscriptionsUseCase(testSubscriptionsRepository)
+      setSubscriptionBusinessUseCase =
+         SetSubscriptionBusinessUseCase(testSubscriptionsBusinessRepository)
+      setEmployeesBusinessUseCase = SetEmployeesBusinessUseCase(testEmployeesBusinessRepository)
       
       init()
    }

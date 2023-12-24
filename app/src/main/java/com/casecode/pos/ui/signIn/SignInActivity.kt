@@ -160,7 +160,7 @@ class SignInActivity : AppCompatActivity() {
 
                 is Resource.Error -> {
                     // Handle authentication failure
-                    Timber.tag(TAG).e(result.exception)
+                    Timber.tag(TAG).e(result.message)
 
                 }
 

@@ -1,4 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
@@ -13,20 +12,19 @@ group = "com.casecode.pos.buildlogic"
 // Configure the build-logic plugins to target JDK 17
 // This matches the JDK used to build the project, and is not related to what is running on device.
 java {
-   sourceCompatibility = JavaVersion.VERSION_17
-   targetCompatibility = JavaVersion.VERSION_17
+   toolchain {
+      languageVersion.set(JavaLanguageVersion.of(17))
+   }
 }
+
 tasks.withType<KotlinCompile>().configureEach {
    kotlinOptions {
       jvmTarget = JavaVersion.VERSION_17.toString()
    }
 }
 
-
-
-
-
 dependencies {
+   //compileOnly("org.gradle.android.cache-fix:org.gradle.android.cache-fix.gradle.plugin:3.0")
    compileOnly(libs.android.gradlePlugin)
    compileOnly(libs.android.tools.common)
    compileOnly(libs.firebase.crashlytics.gradlePlugin)
@@ -34,6 +32,13 @@ dependencies {
    compileOnly(libs.kotlin.gradlePlugin)
    compileOnly(libs.ksp.gradlePlugin)
    testCompileOnly(libs.android.junit5.plugin)
+}
+
+tasks{
+   validatePlugins{
+      enableStricterValidation = true
+      failOnWarning = true
+   }
 }
 
 gradlePlugin {
@@ -48,6 +53,7 @@ gradlePlugin {
       register("androidLibrary") {
          id = "pos.android.library"
          implementationClass = "AndroidLibraryConventionPlugin"
+         
       }
       register("androidHilt") {
          id = "pos.android.hilt"

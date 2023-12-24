@@ -42,7 +42,7 @@ class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewMo
             }
             Resource.Success(authResult.user!!)
         } catch (e: Exception) {
-            Resource.Error(e)
+            Resource.Error(e.message)
         }
     }
 
@@ -60,7 +60,7 @@ class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewMo
             }
             Resource.Success(signInMethodQueryResult.signInMethods!!)
         } catch (e: Exception) {
-            Resource.Error(e)
+            Resource.Error(e.message)
         }
     }
 

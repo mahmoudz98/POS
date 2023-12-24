@@ -12,6 +12,7 @@ import com.casecode.domain.usecase.DeleteDocument
 import com.casecode.domain.usecase.GetDocuments
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.domain.usecase.GetStoreUseCase
+import com.casecode.domain.usecase.GetSubscriptionBusinessUseCase
 import com.casecode.domain.usecase.SetEmployeesBusinessUseCase
 import com.casecode.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.domain.usecase.UpdateDocument
@@ -23,27 +24,32 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
-
-    @Provides
-    fun provideBusinessUseCase(storeRep: BusinessRepository): SetBusinessUseCase {
-        return SetBusinessUseCase(storeRep)
-    }
-
-
-    @Provides
-    fun provideSubscriptionsUseCase(subscriptionsRepository: SubscriptionsRepository): GetSubscriptionsUseCase {
-        return GetSubscriptionsUseCase(subscriptionsRepository)
-    }
+    
     @Provides
     fun provideSetSubscriptionBusinessUseCase(subscriptionsBusinessRepository: SubscriptionsBusinessRepository): SetSubscriptionBusinessUseCase {
         return SetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
     }
     @Provides
+    fun provideGetSubscriptionBusinessUseCase(subscriptionsBusinessRepository: SubscriptionsBusinessRepository): GetSubscriptionBusinessUseCase {
+        return GetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
+    }
+    
+    @Provides
+    fun provideSetBusinessUseCase(storeRep: BusinessRepository): SetBusinessUseCase {
+        return SetBusinessUseCase(storeRep)
+    }
+    
+    @Provides
+    fun provideGetSubscriptionsUseCase(subscriptionsRepository: SubscriptionsRepository): GetSubscriptionsUseCase {
+        return GetSubscriptionsUseCase(subscriptionsRepository)
+    }
+  
+    @Provides
     fun provideSetEmployeesBusinessUseCase(employeesBusRepo: EmployeesBusinessRepository): SetEmployeesBusinessUseCase {
         return SetEmployeesBusinessUseCase(employeesBusRepo)
     }
     @Provides
-    fun provideStoreUseCase(storeRep: StoreRepository): GetStoreUseCase {
+    fun provideGetStoreUseCase(storeRep: StoreRepository): GetStoreUseCase {
         return GetStoreUseCase(storeRep)
     }
     @Provides

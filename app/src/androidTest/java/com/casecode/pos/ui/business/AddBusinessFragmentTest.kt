@@ -57,6 +57,21 @@ class AddBusinessFragmentTest
    }
    
    @Test
+   fun shouldNavigateToNextStepWhenAllFieldsAreValid()
+   {
+      // Given
+      givenUserHasEnteredValidStoreType()
+      givenUserHasEnteredValidEmail()
+      givenUserHasEnteredValidPhone()
+      
+      // When
+      whenUserClicksSubmitButton()
+      
+      // Then
+      thenUserShouldBeDirectedToNextScreenWithBranches()
+   }
+   
+   @Test
    fun shouldShowErrorWhenStoreTypeIsEmpty()
    {
       // Given - on the add business screen
@@ -95,22 +110,6 @@ class AddBusinessFragmentTest
       whenUserClicksSubmitButton()
       // Then
       thenUserShouldSeePhoneInvalidError()
-   }
-   
-   
-   @Test
-   fun shouldNavigateToNextStepWhenAllFieldsAreValid()
-   {
-      // Given
-      givenUserHasEnteredValidStoreType()
-      givenUserHasEnteredValidEmail()
-      givenUserHasEnteredValidPhone()
-      
-      // When
-      whenUserClicksSubmitButton()
-      
-      // Then
-      thenUserShouldBeDirectedToNextScreenWithBranches()
    }
    
    @Test

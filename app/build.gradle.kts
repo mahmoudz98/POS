@@ -3,7 +3,6 @@ import com.casecode.pos.Configuration
 import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
    alias(libs.plugins.pos.android.application)
    alias(libs.plugins.pos.android.hilt)
@@ -38,21 +37,21 @@ android {
       testInstrumentationRunnerArguments["runnerBuilder"] =
          "de.mannodermaus.junit5.AndroidJUnit5Builder"
       
-          testInstrumentationRunnerArguments["configurationParameters"] =
-             "junit.jupiter.execution.parallel.enabled=true,junit.jupiter.execution.parallel.mode.default=concurrent"
-           
+      testInstrumentationRunnerArguments["configurationParameters"] =
+         "junit.jupiter.execution.parallel.enabled=true,junit.jupiter.execution.parallel.mode.default=concurrent"
+      
    }
-  
+   
    
    buildTypes {
       debug {
          isPseudoLocalesEnabled = true
          
-       //  isDebuggable = true
+         //  isDebuggable = true
          isMinifyEnabled = false
          enableAndroidTestCoverage = true
-         proguardFiles ( getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-         testProguardFiles (  getDefaultProguardFile("proguard-android.txt"), "proguardTest-rules.pro")
+         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+         testProguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguardTest-rules.pro")
       }
       val release by getting {
          isMinifyEnabled = true
@@ -65,8 +64,6 @@ android {
       }
       
    }
-   
- 
    
    
    /*     if (project.hasProperty("debug"))
@@ -82,20 +79,21 @@ android {
    packaging {
       resources {
          excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        excludes.add("META-INF/NOTICE")
+         excludes.add("META-INF/NOTICE")
          excludes.add("META-INF/licenses/**")
          excludes.add("META-INF/DEPENDENCIES")
          excludes.add("META-INF/LICENSE")
          excludes.add("META-INF/NOTICE.txt")
+         excludes.add("META-INF/LICENSE-notice.md")
          excludes.add("META-INF/DEPENDENCIES")
          excludes.add("MANIFEST.MF")
-         //excludes.add("build.xml")
+         excludes.add("build.xml")
       }
    }
    @Suppress("UnstableApiUsage")
    testOptions {
-   
-       animationsDisabled = true
+      
+      animationsDisabled = true
       
       unitTests {
          isIncludeAndroidResources = true
@@ -122,34 +120,27 @@ android {
       
    }
    
-  /* junitPlatform {
-      // Configure JUnit 5 tests here
-      filters("debug") {
-         excludeTags("slow")
-      }
-      
-      // Using local dependency instead of Maven coordinates
-      //   instrumentationTests.enabled = false
-   }**/
+   /* junitPlatform {
+       // Configure JUnit 5 tests here
+       filters("debug") {
+          excludeTags("slow")
+       }
+       
+       // Using local dependency instead of Maven coordinates
+       //   instrumentationTests.enabled = false
+    }**/
    
    buildFeatures {
-  
+      
       dataBinding = true
       viewBinding = true
       buildConfig = true
    }
-   
- 
-   
-   namespace = "com.casecode.pos"
-   
    lint {
       abortOnError = false
    }
- 
-   
+   namespace = "com.casecode.pos"
 }
-
 
 
 androidComponents {
@@ -174,6 +165,7 @@ dependencies {
    implementation(projects.data)
    implementation(projects.domain)
    implementation(projects.di)
+   implementation(projects.testing)
    
    testImplementation(projects.domain)
    testImplementation(projects.data)
@@ -206,7 +198,6 @@ dependencies {
    implementation(libs.navigation.fragment)
    implementation(libs.navigation.ui)
    
-
    
    // coroutines
    implementation(libs.kotlinx.coroutines.android)
@@ -214,9 +205,8 @@ dependencies {
    debugCompileOnly(libs.kotlinx.coroutines.debug)
    
    
-   
    // Debug tools
-  // debugImplementation(libs.leakcanary)
+   // debugImplementation(libs.leakcanary)
    implementation(libs.timber)
    
    
@@ -235,23 +225,23 @@ dependencies {
    testImplementation(libs.coroutines.test)
    testImplementation(libs.coroutines.android.test)
    
-
+   
    // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
    debugImplementation(libs.fragment.testing)
    implementation(libs.fragment.ktx)
-/*    implementation(libs.test.core)
-   implementation(libs.test.ext.junit) */
+   /*    implementation(libs.test.core)
+      implementation(libs.test.ext.junit) */
    
    
    // ******* ANDROID TESTING ***************************************************
    implementation(libs.test.espresso.idlingResource)
    
-
+   
    // Resolve conflicts between main and test APK:
    androidTestImplementation(libs.appcompat)
    androidTestImplementation(libs.material)
    androidTestImplementation(libs.androidx.annotation)
-
+   
    
    androidTestImplementation(libs.test.core)
    androidTestImplementation(libs.test.ext.junit)
@@ -267,7 +257,7 @@ dependencies {
    androidTestImplementation(libs.test.hamcrest)
    androidTestImplementation(libs.test.hamcrest.library)
    
-   androidTestImplementation (libs.mockk.android)
+   androidTestImplementation(libs.mockk.android)
    
    androidTestImplementation(libs.navigation.testing)
    androidTestImplementation(libs.test.espresso.core)
@@ -283,8 +273,4 @@ dependencies {
    }
    
    
-   
-
-   
- 
 }

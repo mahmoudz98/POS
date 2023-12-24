@@ -1,6 +1,5 @@
 package com.casecode.pos.utils
 
-import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
@@ -31,8 +30,9 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
      fragmentArgs: Bundle? = null,
      themeResId: Int = R.style.Theme_POS,
      fragmentFactory: FragmentFactory? = null,
-     crossinline action: T.() -> Unit = {}
-                                                               ) {
+     crossinline action: T.() -> Unit = {},
+                                                               )
+{
    val mainActivityIntent = Intent.makeMainActivity(
       ComponentName(
          ApplicationProvider.getApplicationContext(),
@@ -54,11 +54,12 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
       (fragment as T).action()
    }
 }
-inline fun <reified T : Fragment, reified A: AppCompatActivity> launchFragmentInHiltContainerWithActivity(
+
+inline fun <reified T : Fragment, reified A : AppCompatActivity> launchFragmentInHiltContainerWithActivity(
      fragmentArgs: Bundle? = null,
      @StyleRes themeResId: Int = R.style.Theme_POS,
      crossinline action: Fragment.() -> Unit = {},
-                                                                                             ):ActivityScenario<A>
+                                                                                                          ): ActivityScenario<A>
 {
    val startActivityIntent = Intent.makeMainActivity(
       ComponentName(
@@ -86,6 +87,7 @@ inline fun <reified T : Fragment, reified A: AppCompatActivity> launchFragmentIn
       fragment.action()
    }
 }
+
 
 /*
 const val THEME_EXTRAS_BUNDLE_KEY = "androidx.fragment.app.testing.FragmentScenario.EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY"

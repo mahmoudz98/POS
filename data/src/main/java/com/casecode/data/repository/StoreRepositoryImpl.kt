@@ -1,7 +1,7 @@
 package com.casecode.data.repository
 
 import com.casecode.domain.model.users.Item
-import com.casecode.data.utils.AppDispatchers
+import com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.Dispatcher
 import com.casecode.domain.model.stores.Store
 import com.casecode.domain.repository.StoreRepository
@@ -26,16 +26,16 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 class StoreRepositoryImpl @Inject constructor(
-     private val db: FirebaseFirestore,
-     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+     private val firestore: FirebaseFirestore,
+     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
                                              ) : StoreRepository
 {
    
    
-   override fun getStores(): Flow<StoresResponse> = callbackFlow {
-      trySend(Resource.Loading())
+   override fun getStores(): Flow<StoresResponse> = callbackFlow<StoresResponse> {
+      trySend(Resource.loading())
       val callback =
-         db.collection(STORES_COLLECTION_PATH).get().addOnCompleteListener { tasks ->
+         firestore.collection(STORES_COLLECTION_PATH).get().addOnCompleteListener { tasks ->
             if (tasks.isSuccessful)
             {
                getStoresAndBasicItems(tasks)
@@ -43,7 +43,7 @@ class StoreRepositoryImpl @Inject constructor(
             } else
             {
                Timber.e("getStores: ${tasks.exception}")
-               trySend(Resource.Error(tasks.exception))
+               trySend(Resource.error(tasks.exception?.message!!))
                close()
             }
          }

@@ -1,7 +1,7 @@
 package com.casecode.data.repository
 
 import com.casecode.data.model.asSubscriptionRequest
-import com.casecode.data.utils.AppDispatchers
+import com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.Dispatcher
 import com.casecode.domain.model.users.SubscriptionBusiness
 import com.casecode.domain.repository.AddSubscriptionBusiness
@@ -18,7 +18,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class SubscriptionsBusinessRepositoryImpl @Inject constructor(private val fireStore: FirebaseFirestore,
-   @Dispatcher(AppDispatchers.IO)private val ioDispatcher: CoroutineDispatcher):SubscriptionsBusinessRepository
+   @Dispatcher(IO)private val ioDispatcher: CoroutineDispatcher):SubscriptionsBusinessRepository
 {
    override suspend fun setSubscriptionBusiness(
         subscriptionBusiness: SubscriptionBusiness,
@@ -27,20 +27,20 @@ class SubscriptionsBusinessRepositoryImpl @Inject constructor(private val fireSt
    {
       if (uid.isBlank())
       {
-         return Resource.Error(Exception("can't find uid"))
+         return Resource.error("can't find uid")
       }
       
       return withContext(ioDispatcher) {
          try
          {
-            val resultAddSubscription = suspendCoroutine { continuation ->
+            val resultAddSubscription = suspendCoroutine<AddSubscriptionBusiness> { continuation ->
                val addSubscriptionBusinessRequest = subscriptionBusiness.asSubscriptionRequest()
                fireStore.collection(USERS_COLLECTION_PATH).document(uid)
                   .update(addSubscriptionBusinessRequest).addOnSuccessListener {
                      Timber.d("Subscription business is added successfully")
                      continuation.resume(Resource.Success(true))
                   }.addOnFailureListener {
-                     continuation.resume(Resource.Error(it))
+                     continuation.resume(Resource.error(it.message!!))
                      
                      Timber.e("Subscription Business Failure: $it")
                   }
@@ -50,7 +50,7 @@ class SubscriptionsBusinessRepositoryImpl @Inject constructor(private val fireSt
          } catch (e: Exception)
          {
             Timber.e("Exception while adding business: $e")
-            Resource.Error(e)
+            Resource.error(e.message!!)
          }
       }
    }

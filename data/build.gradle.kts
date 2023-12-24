@@ -12,23 +12,25 @@ android {
    testOptions {
       unitTests {
          isReturnDefaultValues = true
+         this.all {
+            it.useJUnitPlatform()
+         }
       }
    }
-   
-   lint {
-      abortOnError = false
-   }
 
+   
+  /*  lint {
+      abortOnError = false
+   } */
+ 
 
 }
 
 dependencies {
    
-  
-   
-   api(projects.domain)
-   testApi(projects.domain)
-   testApi(projects.testing)
+   implementation(projects.domain)
+   testImplementation(projects.domain)
+  // testImplementation(projects.testing)
    
    
    //Coroutines
@@ -37,10 +39,13 @@ dependencies {
    api(libs.hilt.android)
  //  ksp(libs.hilt.compiler)
    
-   
+  // testApi(libs.junit.jupiter)
+   testRuntimeOnly(libs.junit.jupiter.engine)
+   testImplementation(libs.mockito.junit5)
+   testImplementation(libs.test.mockk)
    // assertion test
-   //testApi(libs.test.hamcrest)
- //  testApi(libs.test.hamcrest.library)
+   testApi(libs.test.hamcrest)
+   testApi(libs.test.hamcrest.library)
    //testApi(libs.test.mockk)
    
   

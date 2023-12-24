@@ -25,7 +25,7 @@ class BusinessSubscriptionFragment : Fragment()
    
    private var _binding: FragmentBusinessSubscriptionBinding? = null
    private val binding get() = _binding !!
-   private val businessViewModel by activityViewModels<BusinessViewModel>()
+   internal val businessViewModel by activityViewModels<BusinessViewModel>()
  
    private val subscriptionAdapter: SubscriptionAdapter by lazy {
       SubscriptionAdapter {
@@ -78,7 +78,10 @@ class BusinessSubscriptionFragment : Fragment()
             is Resource.Success ->{
                businessViewModel.moveToNextStep()
                
-            }else ->{
+            }is Resource.Error -> {
+            
+            }
+            else ->{
                binding.root.showSnackbar("Something went wrong !", Snackbar.LENGTH_SHORT)
             }
          }

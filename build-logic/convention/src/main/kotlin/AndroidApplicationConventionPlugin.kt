@@ -27,7 +27,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project>
          with(pluginManager) {
             apply("com.android.application")
             apply("org.jetbrains.kotlin.android")
-          //  apply("pos.android.lint")
+            apply("org.gradle.android.cache-fix")
+            
+            //  apply("pos.android.lint")
          }
       
          extensions.configure<ApplicationExtension> {

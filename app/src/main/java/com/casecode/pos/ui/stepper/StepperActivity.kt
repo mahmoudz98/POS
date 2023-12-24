@@ -8,10 +8,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.aceinteract.android.stepper.StepperNavListener
+import com.casecode.data.utils.ConnectivityManagerNetworkMonitor
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivityStepperBinding
 import com.casecode.data.utils.NetworkConnection
 import com.casecode.pos.ui.main.MainActivity
+import com.casecode.pos.ui.signIn.SignInActivity
 import com.casecode.pos.utils.EventObserver
 import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
@@ -30,9 +32,6 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    private val binding: ActivityStepperBinding get() = _binding !!
    
    @Inject
-   lateinit var networkConnection: NetworkConnection
-   
-   @Inject
    lateinit var firebaseAuth: FirebaseAuth
    
    private val businessViewModel by viewModels<BusinessViewModel>()
@@ -46,18 +45,28 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
       
       binding.stepper.setupWithNavController(findNavController(R.id.frame_stepper))
       initAddUID()
-      
       observerNextStep()
       observerPreviousStep()
       observerCompleteStep()
       observerNetwork()
-      
    }
+   
    private fun initAddUID()
    {
-      val currentUid = firebaseAuth.currentUser?.uid ?: "can't find uid"
+      val currentUid = firebaseAuth.currentUser?.uid ?: ""
+      if(currentUid.isBlank()){
+         startLoginActivity()
+      }
       businessViewModel.setCurrentUid(currentUid)
       Timber.e("currentUid = $currentUid")
+   }
+   
+   private fun startLoginActivity()
+   {
+      val intent = Intent(this, SignInActivity::class.java)
+      // used to clean activity and al activities above it will be removed.
+      intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+      startActivity(intent)
    }
    
    private  fun observerNextStep(){
@@ -81,14 +90,14 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    
    private fun observerNetwork()
    {
-      lifecycleScope.launch {
-         networkConnection.isAvailable.collect {
-            binding.isAvailable = it
-            Timber.d("IsAvailable = $it")
-            
-         }
+      viewModel.setNetworkMonitor()
+      viewModel.isOnline.observe(this)
+      {
+         binding.isAvailable = it
+         Timber.i("IsAvailable = $it")
+         
       }
-    
+      
    }
   
 
@@ -108,7 +117,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    override fun onDestroy()
    {
       super.onDestroy()
-      networkConnection.onDestroy()
+     // networkConnection.onDestroy()
       
       // removeObservers()
       _binding = null
@@ -117,16 +126,6 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    
    private fun removeObservers()
    {
-      for (field in networkConnection.javaClass.declaredFields)
-      {
-         field.isAccessible = true
-         val fieldValue = field.get(networkConnection)
-         if (fieldValue is LiveData<*>)
-         {
-            fieldValue.removeObservers(this)
-         }
-      }
-      
       for (field in businessViewModel.javaClass.declaredFields)
       {
          field.isAccessible = true

@@ -15,11 +15,8 @@ import com.casecode.pos.databinding.FragmentAddBusinessBinding
 import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.util.Locale
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddBusinessFragment : Fragment()
@@ -66,8 +63,6 @@ class AddBusinessFragment : Fragment()
       // Set the lifecycle owner to the lifecycle of the view
       binding.lifecycleOwner = this.viewLifecycleOwner
    }
-   
-
    
    
    private fun validateAddBusiness()
@@ -190,7 +185,7 @@ class AddBusinessFragment : Fragment()
       }
       businessViewModel.setStoreType(storeType.lowercase(Locale.ENGLISH))
       businessViewModel.setEmail(email)
-      businessViewModel.setPhone(phone)
+      businessViewModel.setPhoneBusiness(phone)
       
       return true
       

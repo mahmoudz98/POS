@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.casecode.data.model.asSubscriptionBusiness
+import com.casecode.data.utils.NetworkMonitor
 import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.Business
@@ -34,18 +35,19 @@ import javax.inject.Inject
 @HiltViewModel
 class BusinessViewModel @Inject constructor(
    //   private val getStoreUseCase: GetStoreUseCase,
+     private val networkMonitor: NetworkMonitor,
      private val setBusinessUseCase: SetBusinessUseCase,
      private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
      private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
      private val setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase,
                                            ) : BaseViewModel()
 {
-   private var _isCompact: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(true))
-   val isCompact get() = _isCompact
-   
+ 
+   private val _isOnline: MutableLiveData<Boolean> = MutableLiveData(false)
+   val isOnline get() = _isOnline
    private val _userMessage: MutableLiveData<Int?> = MutableLiveData(null)
    val userMessage get() = _userMessage
-   var isAddBusiness: MutableLiveData<AddBusiness?> = MutableLiveData(Resource.Success(false))
+   var isAddBusiness: MutableLiveData<AddBusiness> = MutableLiveData()
       private set
    
    private val _storeType: MutableLiveData<String> = MutableLiveData()
@@ -53,7 +55,7 @@ class BusinessViewModel @Inject constructor(
       get() = _storeType
    
    private val _email: MutableLiveData<String> = MutableLiveData()
-   val email: LiveData<String>
+   val emailBusiness: LiveData<String>
       get() = _email
    
    private val _phoneBusiness: MutableLiveData<String> = MutableLiveData()
@@ -88,18 +90,6 @@ class BusinessViewModel @Inject constructor(
    
    private var _subscriptionSelected: MutableLiveData<Subscription> = MutableLiveData()
    
-   private val _buttonNextStep: MutableLiveData<Event<Unit>> = MutableLiveData()
-   val buttonNextStep: LiveData<Event<Unit>> get() = _buttonNextStep
-   
-   private val _buttonPreviousStep: MutableLiveData<Event<Unit>> = MutableLiveData()
-   val buttonPreviousStep: LiveData<Event<Unit>> get() = _buttonPreviousStep
-   
-   // ToDO: add use this button to complete step in plan business screen
-   private val _buttonCompletedSteps: MutableLiveData<Event<Unit>> = MutableLiveData()
-   val buttonCompletedSteps get() = _buttonCompletedSteps
-   
- 
-   
    private var _employees: MutableLiveData<ArrayList<Employee>> =
       MutableLiveData(arrayListOf(newEmployee()))
    val employees get() = _employees
@@ -122,10 +112,33 @@ class BusinessViewModel @Inject constructor(
    private val _isAddEmployees: MutableLiveData<Event<AddEmployees>> = MutableLiveData()
    val isAddEmployees get() = _isAddEmployees
    
+   private val _buttonNextStep: MutableLiveData<Event<Unit>> = MutableLiveData()
+   val buttonNextStep: LiveData<Event<Unit>> get() = _buttonNextStep
+   
+   private val _buttonPreviousStep: MutableLiveData<Event<Unit>> = MutableLiveData()
+   val buttonPreviousStep: LiveData<Event<Unit>> get() = _buttonPreviousStep
+   
+   private val _buttonCompletedSteps: MutableLiveData<Event<Unit>> = MutableLiveData()
+   val buttonCompletedSteps get() = _buttonCompletedSteps
+   
+   private var _isCompact: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(true))
+   val isCompact get() = _isCompact
+   
    init
    {
       hideProgress()
       
+   }
+   
+   fun setNetworkMonitor() = viewModelScope.launch {
+      networkMonitor.isOnline.collect {
+         setConnected(it)
+      }
+      
+      
+   }
+   fun setConnected(isOnline: Boolean){
+      _isOnline.value = isOnline
    }
    
    fun snackbarMessageShown()
@@ -139,67 +152,6 @@ class BusinessViewModel @Inject constructor(
       _userMessage.value = message
    }
    
-   @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-   fun addBusiness(): Business
-   {
-      
-      //Complete : test with arabic and if has issues with english
-      
-      return Business(
-         storeType = (_storeType.value?.let { StoreType.toStoreType(it) }),
-         email = email.value,
-         phone = phoneBusiness.value,
-         branches = _branches.value?.toList() !!
-                     )
-   }
-   
-   fun setBusiness() = viewModelScope.launch {
-      // TODO: handel when uid is empty
-      val uid = currentUid.value ?: ""
-      
-      isAddBusiness.value = setBusinessUseCase(addBusiness(), uid)
-      
-   }
-   fun setSubscriptionBusinessSelected() = viewModelScope.launch {
-      val uid = currentUid.value ?: ""
-      val subscription = _subscriptionSelected.value
-      if(subscription != null)
-      {
-         Timber.d("setSubscriptionBusinessSelected not equal null")
-         _isAddSubscriptionBusiness.value =
-            Event(setSubscriptionsBusinessUseCase(subscription.asSubscriptionBusiness(), uid))
-      }else{
-         Timber.e("setSubscriptionBusinessSelected is equal null")
-         showSnackbarMessage(R.string.all_error_save)
-         
-         _isAddSubscriptionBusiness.value =
-            Event(Resource.Empty())
-      }
-      
-   }
-   fun setEmployees() = viewModelScope.launch {
-      val uid = currentUid.value ?: "Can't find uid"
-      val employeesList = _employees.value
-      if (employeesList != null)
-      {
-       _isAddEmployees.value =  Event( setEmployeesBusinessUseCase(employeesList,uid))
-      }
-      else{
-         _isAddEmployees.value = Event(Resource.Empty())
-         showSnackbarMessage(R.string.all_error_save)
-         
-      }
-   }
-   
-   fun setBusinessFake() = viewModelScope.launch {
-      val uid = currentUid.value ?: "Can't find uid"
-      
-      val business = Business(StoreType.Clothes, "mahmoud@gmailc.com", "12312",
-         listOf(Branch(1, "brnach1", "12313"),
-            Branch(2, "branch2", "123123")))
-      setBusinessUseCase(business, uid)
-   }
-   
    fun setStoreType(store: String)
    {
       _storeType.value = store
@@ -210,12 +162,12 @@ class BusinessViewModel @Inject constructor(
       _email.value = email
    }
    
-   fun setPhone(phone: String)
+   fun setPhoneBusiness(phone: String)
    {
-      _phoneBusiness.value.let {
-         phone.toInt()
-      }
+      _phoneBusiness.value = phone
+     
    }
+   
    
    fun setBranchName(name: String)
    {
@@ -268,7 +220,6 @@ class BusinessViewModel @Inject constructor(
          val updateBranch =
             Branch(branchSelected.value?.branchCode, _branchName.value, _branchPhone.value)
          
-         
          if (currentBranch != updateBranch)
          {
             branchesValue[index] = updateBranch
@@ -300,71 +251,124 @@ class BusinessViewModel @Inject constructor(
       _branchSelected.value = branch
    }
    
+   @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+   fun addBusiness(): Business {
+      Timber.e("storeType = ${storeType.value} phone  = ${_phoneBusiness.value}")
+     return Business(
+         storeType = (storeType.value?.let { StoreType.toStoreType(it) }),
+         email = emailBusiness.value,
+         phone = phoneBusiness.value,
+         branches = _branches.value?.toList()!!
+              )
+   }
    
+   fun setBusiness() = viewModelScope.launch {
+      if(isOnline.value == true)
+      {
+         // COMPLETE: when no uid move  to sign in screen.
+         val uid = currentUid.value ?: ""
+         
+         isAddBusiness.value = setBusinessUseCase(addBusiness(), uid)
+      }else{
+         isAddBusiness.value = AddBusiness.success(false)
+      showSnackbarMessage(R.string.network_error)
+      }
+      
+   }
    fun getSubscriptionsBusiness() = viewModelScope.launch {
-      getSubscriptionsUseCase().collect { subscriptionsResource ->
-         when (subscriptionsResource)
-         {
-            
-            is Resource.Loading ->
+      Timber.e("isOnline = ${isOnline.value}")
+      println("isOnline: ${isOnline.value}")
+      if(isOnline.value == false){
+         hideProgress()
+         _subscriptions.value = emptyList()
+      }else
+      {
+         getSubscriptionsUseCase().collect { subscriptionsResource ->
+            when (subscriptionsResource)
             {
-               showProgress()
-               Timber.i("getSubscriptions:Loading")
-            }
-            
-            is Resource.Success ->
-            {
-               // select first subscription from the subscription list
-               val subscriptionFree = subscriptionsResource.data.first()
-               setSubscriptionBusinessSelected(subscriptionFree)
                
-               _subscriptions.value = subscriptionsResource.data
-               Timber.i("getSubscriptions:Success:data, ${subscriptionsResource.data}")
+               is Resource.Loading ->
+               {
+                  showProgress()
+                  Timber.i("getSubscriptions:Loading")
+               }
                
+               is Resource.Success ->
+               {
+                  // select first subscription from the subscription list
+                  val subscriptionFree = subscriptionsResource.data.first()
+                  setSubscriptionBusinessSelected(subscriptionFree)
+                  
+                  _subscriptions.value = subscriptionsResource.data
+                  Timber.i("getSubscriptions:Success:data, ${subscriptionsResource.data}")
+                  
+                  hideProgress()
+               }
                
-               hideProgress()
-            }
-            
-            is Resource.Error ->
-            {
-               //TODO: handle when resource get error
-               Timber.e("getSubscriptions:ERROR")
+               is Resource.Error ->
+               {
+                  _subscriptions.value = emptyList()
+                  //TODO: handle when resource get error
+                  Timber.e("getSubscriptions:ERROR: ${subscriptionsResource.message}")
+                  
+                  
+               }
                
-               
-            }
-            
-            is Resource.Empty ->
-            {
-               //TODO: handle when resource get empty
-               Timber.e("getSubscriptions:ELSE")
-               
+               is Resource.Empty ->
+               {
+                  _subscriptions.value = emptyList()
+                  
+                  //TODO: handle when resource get empty
+                  Timber.e("getSubscriptions:ELSE")
+                  
+               }
             }
          }
       }
+      
    }
    fun setSubscriptionBusinessSelected(subscription: Subscription){
       _subscriptionSelected.value = subscription
    }
    
+   fun setSubscriptionBusinessSelected() = viewModelScope.launch {
+      val uid = currentUid.value ?: ""
+      val subscription = _subscriptionSelected.value
+      if(subscription != null)
+      {
+         Timber.d("setSubscriptionBusinessSelected not equal null")
+         _isAddSubscriptionBusiness.value =
+            Event(setSubscriptionsBusinessUseCase(subscription.asSubscriptionBusiness(), uid))
+         showSnackbarMessage(R.string.add_subscription_success)
+         
+      }else{
+         Timber.e("setSubscriptionBusinessSelected is equal null")
+         showSnackbarMessage(R.string.all_error_save)
+         
+         _isAddSubscriptionBusiness.value =
+            Event(Resource.Empty())
+      }
+      
+   }
+ 
+   
+   fun setEmployees() = viewModelScope.launch {
+      val uid = currentUid.value ?: ""
+      val employeesList = _employees.value
+      if (employeesList != null)
+      {
+       _isAddEmployees.value =  Event( setEmployeesBusinessUseCase(employeesList,uid))
+      }
+      else{
+         _isAddEmployees.value = Event(Resource.Empty())
+         showSnackbarMessage(R.string.all_error_save)
+         
+      }
+   }
+   
    fun moveToNextStep()
    {
       _buttonNextStep.value = Event(Unit)
-   }
-
-   
-   fun moveToPreviousStep()
-   {
-      _buttonPreviousStep.value = Event(Unit)
-      
-   }
-   fun completedSteps() {
-      _buttonCompletedSteps.value = Event(Unit)
-      
-   }
-   
-   fun setCompact(isCompact: Boolean)
-   {
-      _isCompact.value = Event(isCompact)
    }
    
    private fun newEmployee(): Employee
@@ -453,6 +457,20 @@ class BusinessViewModel @Inject constructor(
       
    }
    
+   fun moveToPreviousStep()
+   {
+      _buttonPreviousStep.value = Event(Unit)
+      
+   }
+   fun completedSteps() {
+      _buttonCompletedSteps.value = Event(Unit)
+      
+   }
+   
+   fun setCompact(isCompact: Boolean)
+   {
+      _isCompact.value = Event(isCompact)
+   }
    
 }
 

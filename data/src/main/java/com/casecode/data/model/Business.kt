@@ -9,6 +9,9 @@ import com.casecode.domain.utils.BUSINESS_FIELD
 import com.casecode.domain.utils.BUSINESS_EMAIL_FIELD
 import com.casecode.domain.utils.BUSINESS_PHONE_NUMBER_FIELD
 import com.casecode.domain.utils.BUSINESS_STORE_TYPE_FIELD
+/**
+ * Created by Mahmoud Abdalhafeez
+ */
 
 fun Business.toBusinessRequest(): HashMap<String, HashMap<String, Any?>>
 {

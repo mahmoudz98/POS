@@ -7,7 +7,9 @@ import com.casecode.domain.utils.EMPLOYEE_NAME_FIELD
 import com.casecode.domain.utils.EMPLOYEE_PASSWORD_FIELD
 import com.casecode.domain.utils.EMPLOYEE_PERMISSION_FIELD
 import com.casecode.domain.utils.EMPLOYEE_PHONE_NUMBER_FIELD
-
+/**
+ * Created by Mahmoud Abdalhafeez
+ */
 fun List<Employee>.toEmployeesRequest(): HashMap<String, MutableList<Map<String, Any?>>>
 {
    val employeesRequest = mutableListOf<Map<String, Any?>>()

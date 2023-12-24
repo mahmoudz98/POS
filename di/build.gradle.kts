@@ -6,7 +6,8 @@ plugins {
 
 android {
    namespace = "com.casecode.pos.di"
-  
+   
+   
    hilt {
       enableAggregatingTask = true
    }
@@ -16,12 +17,12 @@ android {
    
 }
 dependencies {
-   api(projects.data)
-   api(projects.domain)
-   api(libs.firebase.firestore.ktx)
-   api(libs.firebase.auth.ktx)
-   
-  
-   
+   implementation(projects.data)
+   implementation(projects.domain)
+   implementation(libs.firebase.firestore.ktx)
+   implementation(libs.firebase.auth.ktx)
 
+   
+   
+   
 }

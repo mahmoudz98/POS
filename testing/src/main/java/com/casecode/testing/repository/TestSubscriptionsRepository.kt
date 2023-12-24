@@ -2,7 +2,10 @@ package com.casecode.testing.repository
 
 import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.repository.SubscriptionsRepository
+import com.casecode.domain.repository.SubscriptionsResource
+import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
+import com.casecode.testing.util.EspressoIdlingResource
 import com.casecode.testing.util.MainDispatcherRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.trySendBlocking
@@ -11,8 +14,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import org.junit.Rule
 import org.junit.jupiter.api.BeforeEach
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TestSubscriptionsRepository : SubscriptionsRepository
+@Singleton
+class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepository
 {
    @get:Rule
    val mainDispatcherRule = MainDispatcherRule()
@@ -37,22 +43,24 @@ class TestSubscriptionsRepository : SubscriptionsRepository
     *
     * @return A Flow of plans.
     */
-   override fun getSubscriptions(): Flow<Resource<List<Subscription>>> = callbackFlow {
-      // Return a Flow of fake plans, depending on the edge case
-      if (shouldReturnError)
-      {
-         trySendBlocking(Resource.Error(Exception()))
-      } else if (shouldReturnEmpty)
-      {
-         trySendBlocking(Resource.Empty(null))
-      } else
-      {
-         trySendBlocking(Resource.Success(subscriptions))
+   override fun getSubscriptions(): Flow<SubscriptionsResource> = callbackFlow {
+      EspressoIdlingResource.wrapEspressoIdlingResource {
+         // Return a Flow of fake plans, depending on the edge case
+         if (shouldReturnError)
+         {
+            trySend(Resource.error("Error"))
+         } else if (shouldReturnEmpty)
+         {
+            trySend(Resource.empty(EmptyType.DATA, "Empty"))
+         } else
+         {
+            trySend(Resource.success(subscriptions))
+         }
+         close()
       }
-      close()
    }.flowOn(Dispatchers.IO)
    
-   fun sendPlans(subscriptions: List<Subscription>)
+   fun sendSubscriptions(subscriptions: List<Subscription>)
    {
       this.subscriptions = subscriptions
    }
@@ -66,6 +74,13 @@ class TestSubscriptionsRepository : SubscriptionsRepository
    {
       shouldReturnEmpty = value
    }
-   
-   
+   fun subscriptionsFake(): List<Subscription>
+   {
+      return listOf(Subscription(duration = 30,
+         cost = 0, type = "basic", permissions = listOf("write", "read", "admin")),
+         Subscription(duration = 30,
+            cost = 20, type = "pro", permissions = listOf("write", "read", "admin")),
+         Subscription(duration = 90,
+            cost = 60, type = "premium", permissions = listOf("write", "read", "admin")))
+   }
 }

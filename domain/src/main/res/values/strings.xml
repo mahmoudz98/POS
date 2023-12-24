@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="uid_empty">Uid is empty</string>
+
+    // Business use case
+    <string name="branches_empty">Branches are empty</string>
+    <string name="phone_business_empty">Phone in business is empty</string>
+    <string name="email_business_empty">Email in business is empty</string>
+
+</resources>

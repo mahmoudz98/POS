@@ -2,13 +2,13 @@
 # AGP and tools should be updated together
 agp = "8.2.0"
 androidTools = "31.2.0"
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 kotlinKover = "0.7.4"
 androidDesugarJdkLibs = "2.0.4"
 
 
 # Androidx
-activity = "1.8.0"
+activity = "1.8.1"
 appcompat = "1.6.1"
 core-splashscreen = "1.0.1"
 annotation ="1.7.0"
@@ -42,7 +42,7 @@ okhttp = "4.12.0" # https://github.com/square/okhttp/blob/master/CHANGELOG.md
 retrofit = "2.9.0" # https://github.com/square/retrofit/blob/master/CHANGELOG.md
 
 # DI
-hilt = "2.48.1"
+hilt = "2.49"
 hiltExt = "1.1.0"
 hiltTesting = "1.1.0"
 
@@ -61,7 +61,7 @@ leakcanary = "2.11"
 timber = "5.0.1"
 
 # Annotations procesing
-ksp = "1.9.20-1.0.14"
+ksp = "1.9.21-1.0.15"
 
 # Firebase Services
 # https://firebase.google.com/support/release-notes/android
@@ -161,6 +161,7 @@ retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", ve
 
 # DI
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+degger-android = { module = "com.google.dagger:dagger", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 
@@ -223,9 +224,11 @@ test-hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "testhamcrest"
 test-hamcrest-library = { module = "org.hamcrest:hamcrest-library", version.ref = "testhamcrest" }
 
 test-mochito = { module = "org.mockito:mockito-core", version.ref = "testmochito" }
+mockito-junit5 = { module = "org.mockito:mockito-junit-jupiter", version.ref = "testmochito" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk-andrdoid" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk-andrdoid" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk-andrdoid" }
 
 
 
@@ -260,6 +263,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinKover" }
+gradle-cache-fix = { id = "org.gradle.android.cache-fix", version = "3.0" }
 
 android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "android-junit5" }
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
@@ -284,7 +288,7 @@ org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org
 # Plugins defined by this project
 pos-android-application = { id = "pos.android.application", version = "unspecified" }
 pos-android-library = { id = "pos.android.library", version = "unspecified" }
-pos-android-hilt = { id = "pos.android.hilt", version = "unspecified" }
+pos-android-hilt = { id = "pos.android.hilt", version = "unspecified"}
 pos-android-firebase = { id = "pos.android.firebase", version = "unspecified" }
 pos-android-test = { id = "pos.android.test", version = "unspecified" }
 pos-android-lint = { id = "pos.android.lint", version = "unspecified" }
