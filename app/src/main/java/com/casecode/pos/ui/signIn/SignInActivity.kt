@@ -1,17 +1,17 @@
 package com.casecode.pos.ui.signIn
 
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.casecode.domain.utils.FirebaseAuthResult
+import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivitySignInBinding
 import com.casecode.pos.ui.main.MainActivity
 import com.casecode.pos.ui.stepper.StepperActivity
-import com.casecode.pos.utils.FirebaseAuthResult
-import com.casecode.domain.utils.Resource
 import com.casecode.pos.viewmodel.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -30,10 +30,8 @@ import javax.inject.Inject
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
+    private val authViewModel: AuthViewModel by viewModels()
 
-    private val viewModel: AuthViewModel by viewModels()
-
-    // declare auth
     @Inject
     lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -43,51 +41,49 @@ class SignInActivity : AppCompatActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // config sign-in
-        // Configure Google Sign In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
+        configureGoogleSignIn()
+        setupSignInButton()
+    }
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+    private fun configureGoogleSignIn() {
+        try {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail().build()
 
+            googleSignInClient = GoogleSignIn.getClient(this, gso)
+        } catch (e: Exception) {
+            Timber.tag(TAG).e("Error configuring Google Sign In: $e")
+            // Handle the exception or log an error message
+            // You might want to show a user-friendly message in case of a configuration error.
+        }
+    }
+
+    private fun setupSignInButton() {
         binding.signInButton.setSize(SignInButton.SIZE_STANDARD)
         binding.signInButton.setOnClickListener { signIn() }
     }
 
-    // check user
     override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
+        updateUI(auth.currentUser)
     }
 
-    // auth with google
     private fun firebaseAuthWithGoogle(idToken: String) {
-        // Add additional functions for updating the UI or other tasks
         val credential = GoogleAuthProvider.getCredential(idToken, null)
+
         lifecycleScope.launch {
-            viewModel.signInWithCredential(credential).observe(this@SignInActivity) { result ->
-                when (result) {
-                    is FirebaseAuthResult.SignInSuccess -> {
-                        // Sign in success, update UI with the signed-in user's information
-                        Timber.d(TAG, "signInWithCredential:success")
-                        updateUI(result.user)
-                    }
-
-                    is FirebaseAuthResult.SignInFails -> {
-                        // If sign in fails, display a message to the user.
-                        Timber.tag(TAG).w("signInWithCredential:ign in fails $result.exception")
-                        updateUI(null)
-                    }
-
-                    is FirebaseAuthResult.Failure -> {
-                        // If sign in fails, display a message to the user.
-                        Timber.tag(TAG).w("signInWithCredential:failure $result.exception")
-                        updateUI(null)
-                    }
-                }
+            authViewModel.signInWithCredential(credential).observe(this@SignInActivity) { result ->
+                handleAuthResult(result)
             }
+        }
+    }
+
+    private fun handleAuthResult(result: FirebaseAuthResult) {
+        when (result) {
+            is FirebaseAuthResult.SignInSuccess -> updateUI(result.user)
+            is FirebaseAuthResult.SignInFails, is FirebaseAuthResult.Failure -> updateUI(null)
+            else -> {}
         }
     }
 
@@ -98,101 +94,74 @@ class SignInActivity : AppCompatActivity() {
 
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                // Handle the result of the activity here
-                val data: Intent? = result.data
-
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                try {
-                    // Google Sign In was successful, authenticate with Firebase
-                    val account = task.getResult(ApiException::class.java)!!
-                    Timber.tag(TAG).d("firebaseAuthWithGoogle: $account.id")
-                    firebaseAuthWithGoogle(account.idToken!!)
-                } catch (e: ApiException) {
-                    // Google Sign In failed, update UI appropriately
-                    Timber.tag(TAG).w("Google sign in failed $e")
-                }
+            if (result.resultCode == RESULT_OK) {
+                handleSignInResult(result.data)
             }
         }
 
-    private fun updateUI(currentUser: FirebaseUser?) {
-        val email = currentUser?.email
-        if (email != null) {
-            viewModel.checkTheRegistration(email)
+    private fun handleSignInResult(data: Intent?) {
+        val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        try {
+            val account = task.getResult(ApiException::class.java)!!
+            firebaseAuthWithGoogle(account.idToken!!)
+        } catch (e: ApiException) {
+            Timber.tag(TAG).w(getString(R.string.google_sign_in_failed, e))
         }
-
-        checkTheRegistration(currentUser)
     }
 
-    /**
-     * Checking if a new user is creating a new user in the database or logging in directly
-     *
-     * @param currentUser data for user
-     */
+    private fun updateUI(currentUser: FirebaseUser?) {
+        currentUser?.let {
+            authViewModel.checkTheRegistration(it.email.toString())
+            checkTheRegistration(it)
+        }
+    }
+
     private fun checkTheRegistration(currentUser: FirebaseUser?) {
-        viewModel.checkTheRegistration.observe(this) { result ->
+        authViewModel.checkTheRegistration.observe(this) { result ->
             when (result) {
-                is Resource.Success -> {
-                    // Handle successful authentication
-                       var created = currentUser?.metadata?.creationTimestamp
-
-                   val current = System.currentTimeMillis() - 20000
-
-                    // Check if the user exists
-                    if (created != null) {
-                        if (created < current) {
-                            /*
-                                        * 01. user exists
-                                        * 02. login
-                                        * */
-                            Timber.tag(TAG).i("User exists")
-                            moveToMainActivity(currentUser)
-                        } else {
-                            Timber.tag(TAG).i("User does not exist")
-                            /*
-                                        * 01. user does not exist
-                                        * 02. create user on (Firebase)
-                                        * */
-                            moveToStepperActivity(currentUser)
-                        }
-                    }
-                }
-
-                is Resource.Error -> {
-                    // Handle authentication failure
-                    Timber.tag(TAG).e(result.message)
-
-                }
-
-                is Resource.Empty -> TODO()
-                is Resource.Loading -> TODO()
+                is Resource.Success -> handleRegistrationSuccess(currentUser)
+                is Resource.Error -> Timber.tag(TAG).e(result.message)
+                is Resource.Empty, is Resource.Loading -> {}
+                else -> {}
             }
+        }
+    }
+
+    private fun handleRegistrationSuccess(currentUser: FirebaseUser?) {
+        val created = currentUser?.metadata?.creationTimestamp ?: 0
+        val current = System.currentTimeMillis() - 20000
+
+        if (created < current) {
+            Timber.tag(TAG).i(getString(R.string.user_exists))
+            moveToMainActivity(currentUser)
+        } else {
+            Timber.tag(TAG).i(getString(R.string.user_does_not_exist))
+            moveToStepperActivity(currentUser)
         }
     }
 
     private fun moveToMainActivity(currentUser: FirebaseUser?) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // used to clean activity and al activities above it will be removed.
-
-        intent.putExtra(getString(R.string.extra_uid), currentUser?.uid)
-        intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
-        intent.putExtra(getString(R.string.extra_email), currentUser?.email)
-        intent.putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
-        intent.putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString())
+        val intent = createIntent(MainActivity::class.java, currentUser)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 
     private fun moveToStepperActivity(currentUser: FirebaseUser?) {
-        val intent = Intent(this, StepperActivity::class.java)
-        intent.putExtra(getString(R.string.extra_uid), currentUser?.uid)
-        intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
-        intent.putExtra(getString(R.string.extra_email), currentUser?.email)
-        intent.putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
-        intent.putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString())
-        startActivity(intent)
+        startActivity(createIntent(StepperActivity::class.java, currentUser))
+    }
+
+    private fun createIntent(cls: Class<*>, currentUser: FirebaseUser?): Intent {
+        return Intent(this, cls).apply {
+            putExtra(getString(R.string.extra_uid), currentUser?.uid)
+            putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
+            putExtra(getString(R.string.extra_email), currentUser?.email)
+            putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
+            putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString())
+        }
     }
 
     companion object {
         private const val TAG = "SignInActivity"
     }
+
 }

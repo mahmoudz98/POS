@@ -17,47 +17,38 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class EmployeesBusinessRepositoryImpl @Inject constructor(
-     private val firestore: FirebaseFirestore,
-     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-                                                         )
-   : EmployeesBusinessRepository
-{
-   override suspend fun getEmployees(uid: String): List<Employee>
-   {
-      TODO("Not yet implemented")
-   }
-   
-   override suspend fun setEmployees(employees: ArrayList<Employee>, uid: String):
-        AddEmployees
-   {
-   return withContext(ioDispatcher) {
-      try
-      {
-         
-         
-         val resultAddEmployee = suspendCoroutine<AddEmployees> { continuation ->
-               Timber.e("uid = $uid")
-            val employeesRequest = employees.toEmployeesRequest()
-            Timber.e("employeesRequest = $employeesRequest")
-            
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
-               .update(employeesRequest as Map<String, Any>)
-               .addOnSuccessListener {
-                  Timber.d("employees is added successfully")
-                  continuation.resume(Resource.Success(true))
-               }.addOnFailureListener {
-                  continuation.resume(Resource.error(it.message!!))
-                  
-                  Timber.e("employees Failure: $it")
-               }
-            
-         }
-         resultAddEmployee
-      }catch (e: Exception){
-         Timber.e("Exception while adding employees: $e")
-         Resource.error(e.message!!)
-      }
-   }
-   
-   }
+    private val firestore: FirebaseFirestore,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+) : EmployeesBusinessRepository {
+
+    override suspend fun getEmployees(uid: String): List<Employee> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setEmployees(employees: ArrayList<Employee>, uid: String):
+            AddEmployees {
+        return withContext(ioDispatcher) {
+            try {
+                val resultAddEmployee = suspendCoroutine<AddEmployees> { continuation ->
+                    Timber.e("uid = $uid")
+                    val employeesRequest = employees.toEmployeesRequest()
+                    Timber.e("employeesRequest = $employeesRequest")
+
+                    firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                        .update(employeesRequest as Map<String, Any>)
+                        .addOnSuccessListener {
+                            Timber.d("employees is added successfully")
+                            continuation.resume(Resource.Success(true))
+                        }.addOnFailureListener {
+                            continuation.resume(Resource.error(it.message!!))
+                            Timber.e("employees Failure: $it")
+                        }
+                }
+                resultAddEmployee
+            } catch (e: Exception) {
+                Timber.e("Exception while adding employees: $e")
+                Resource.error(e.message!!)
+            }
+        }
+    }
 }

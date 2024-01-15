@@ -1,43 +1,28 @@
 plugins {
-   alias(libs.plugins.pos.android.library)
-   
+    alias(libs.plugins.pos.android.library)
 }
 
 android {
-   namespace = "com.casecode.pos.domain"
-   
-   
-   
-   testOptions {
-      unitTests {
-         this.all {
-            it.useJUnitPlatform()
-         }
-         isReturnDefaultValues = true
-      }
-   }
-  
-   /*  lint {
-       abortOnError = false
-    } */
-   
+    namespace = "com.casecode.pos.domain"
+
+    testOptions {
+        unitTests {
+            this.all {
+                it.useJUnitPlatform()
+            }
+            isReturnDefaultValues = true
+        }
+    }
+
 }
 
 dependencies {
-   
-   
-   api(libs.firebase.firestore.ktx)
-   
-  // testApi(libs.junit.jupiter)
-   testRuntimeOnly(libs.junit.jupiter.engine)
-   testApi(libs.test.hamcrest)
-   testApi(libs.test.hamcrest.library)
-   
-  // testImplementation(projects.testing)
-   
-   
-   //testApi(libs.test.mockk)
-   
-   testApi(libs.coroutines.test)
-   
+    // firebase
+    api(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.auth.ktx)
+
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testApi(libs.test.hamcrest)
+    testApi(libs.test.hamcrest.library)
+    testApi(libs.coroutines.test)
 }
