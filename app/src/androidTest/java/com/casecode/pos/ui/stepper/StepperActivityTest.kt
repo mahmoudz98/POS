@@ -5,12 +5,11 @@ import com.casecode.testing.BaseTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+
 import org.junit.runner.RunWith
 
-@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class StepperActivityTest:BaseTest()
 {
    @get:Rule
@@ -21,8 +20,5 @@ class StepperActivityTest:BaseTest()
    {
    
    }
-   @Test
-   fun testCompleted(){
-   
-   }
+ 
 }

@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.casecode.domain.utils.Resource
+import androidx.lifecycle.lifecycleScope
 import com.casecode.pos.adapter.SubscriptionAdapter
 import com.casecode.pos.databinding.FragmentBusinessSubscriptionBinding
-import com.casecode.pos.utils.EventObserver
-import com.casecode.pos.utils.showSnackbar
+import com.casecode.pos.utils.setupSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * A fragment that displays the business Subscription.
@@ -26,15 +26,6 @@ class BusinessSubscriptionFragment : Fragment()
    private var _binding: FragmentBusinessSubscriptionBinding? = null
    private val binding get() = _binding !!
    internal val businessViewModel by activityViewModels<BusinessViewModel>()
- 
-   private val subscriptionAdapter: SubscriptionAdapter by lazy {
-      SubscriptionAdapter {
-         Timber.e("click on Subscription: $it")
-         Timber.d("Current thread adapter = ${Thread.currentThread()}")
-         businessViewModel.setSubscriptionBusinessSelected(it)
-      }
-   }
-   
    
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +39,7 @@ class BusinessSubscriptionFragment : Fragment()
    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
    {
       super.onViewCreated(view, savedInstanceState)
+      binding.lifecycleOwner = this.viewLifecycleOwner
       init()
    }
    
@@ -55,47 +47,68 @@ class BusinessSubscriptionFragment : Fragment()
    {
       initViewModel()
       initAdapter()
+      setupSnackbar()
       initClickListener()
    }
-   
    private fun initViewModel()
    {
-      businessViewModel.getSubscriptionsBusiness()
-      
-      binding.lifecycleOwner = this.viewLifecycleOwner
-      binding.viewModel = businessViewModel
+      observerNetworkAndGetSubscriptions()
+      observerSubscriptions()
+      observerDataSubscriptionsIsLoading()
+   }
+   private fun observerDataSubscriptionsIsLoading()
+   {
+      businessViewModel.isLoading.observe(viewLifecycleOwner) {
+         lifecycleScope.launch {
+            if (! it)
+            {
+               delay(200L)
+            }
+            binding.isLoading = it
+         }
+      }
+   }
+   
+   private fun observerSubscriptions()
+   {
+      businessViewModel.subscriptions.observe(viewLifecycleOwner) {
+         
+         binding.subscriptions = it;
+      }
+   }
+   
+   private fun observerNetworkAndGetSubscriptions()
+   {
+      businessViewModel.isOnline.observe(viewLifecycleOwner) {
+         if (it )
+         {
+            businessViewModel.getSubscriptionsBusiness()
+         }
+      }
    }
    
    private fun initAdapter()
    {
+      val subscriptionAdapter: SubscriptionAdapter by lazy {
+         SubscriptionAdapter {
+            businessViewModel.setSubscriptionBusinessSelected(it)
+         }
+      }
       binding.rvBusinessSubscription.adapter = subscriptionAdapter
-      
    }
    
-   private fun observerIsAddSubscription(){
-      businessViewModel.isAddSubscriptionBusiness.observe(viewLifecycleOwner, EventObserver{
-         when(it){
-            is Resource.Success ->{
-               businessViewModel.moveToNextStep()
-               
-            }is Resource.Error -> {
-            
-            }
-            else ->{
-               binding.root.showSnackbar("Something went wrong !", Snackbar.LENGTH_SHORT)
-            }
-         }
-      })
+   private fun setupSnackbar()
+   {
+      binding.root.setupSnackbar(viewLifecycleOwner,
+         businessViewModel.userMessage,
+         Snackbar.LENGTH_LONG)
    }
    
    private fun initClickListener()
    {
-      binding.btnBusinessSubscriptionUser.setOnClickListener {
-         businessViewModel.setSubscriptionBusinessSelected()
-         observerIsAddSubscription()
+      binding.btnBusinessSubscriptionEmployee.setOnClickListener {
+         businessViewModel.checkNetworkThenSetSubscriptionBusinessSelected()
       }
-      
-      
       binding.btnBusinessSubscriptionBranches.setOnClickListener {
          businessViewModel.moveToPreviousStep()
       }
@@ -105,7 +118,6 @@ class BusinessSubscriptionFragment : Fragment()
    override fun onDestroyView()
    {
       super.onDestroyView()
-      
       _binding = null
    }
    

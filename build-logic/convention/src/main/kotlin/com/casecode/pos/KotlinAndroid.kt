@@ -26,15 +26,12 @@ internal fun Project.configureKotlinAndroid(
          minSdk = Configuration.minSdk
       }
       
- /*      compileOptions {
-         // Up to Java 11 APIs are available through desugaring
-         // https://developer.android.com/studio/write/java11-minimal-support-table
-          *//*   sourceCompatibility = JavaVersion.VERSION_17
-           targetCompatibility = JavaVersion.VERSION_17 *//*
-      } */
+      compileOptions {
+         sourceCompatibility = JavaVersion.VERSION_17
+         targetCompatibility = JavaVersion.VERSION_17
+         isCoreLibraryDesugaringEnabled = true
+      }
       
-      kotlinExtension.jvmToolchain(17)
-      compileOptions.isCoreLibraryDesugaringEnabled = true
       
    }
    
@@ -52,10 +49,8 @@ internal fun Project.configureKotlinJvm()
 {
    extensions.configure<JavaPluginExtension> {
       
-      
-      toolchain {
-         languageVersion.set(JavaLanguageVersion.of(17))
-      }
+      sourceCompatibility = JavaVersion.VERSION_17
+      targetCompatibility = JavaVersion.VERSION_17
    }
    
    
@@ -79,10 +74,7 @@ private fun Project.configureKotlin()
          allWarningsAsErrors = warningsAsErrors.toBoolean()
          freeCompilerArgs = freeCompilerArgs + listOf(
             "-opt-in=kotlin.RequiresOptIn",
-            // Enable experimental coroutines APIs, including Flow
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-            "-opt-in=kotlinx.coroutines.FlowPreview",
-            //  "-opt-in=kotlin.time.ExperimentalTime"
                                                      
                                                      )
       }

@@ -1,6 +1,6 @@
 package com.casecode.data.repository
 
-import com.casecode.data.model.toEmployeesRequest
+import com.casecode.data.mapper.toEmployeesRequest
 import com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.Dispatcher
 import com.casecode.domain.model.users.Employee

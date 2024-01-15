@@ -28,14 +28,13 @@ class AndroidApplicationConventionPlugin : Plugin<Project>
             apply("com.android.application")
             apply("org.jetbrains.kotlin.android")
             apply("org.gradle.android.cache-fix")
-            
-            //  apply("pos.android.lint")
+              apply("pos.android.lint")
          }
       
          extensions.configure<ApplicationExtension> {
             configureKotlinAndroid(this)
             defaultConfig.targetSdk = Configuration.targetSdk
-         //   configureGradleManagedDevices(this)
+           configureGradleManagedDevices(this)
          }
          
          extensions.configure<ApplicationAndroidComponentsExtension> {

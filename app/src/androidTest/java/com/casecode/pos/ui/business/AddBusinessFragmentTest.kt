@@ -1,5 +1,6 @@
 package com.casecode.pos.ui.business
 
+import android.content.Context
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -7,24 +8,26 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.casecode.pos.R
-import com.casecode.pos.ui.stepper.StepperActivity
+import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.utils.withHint
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.mockk.every
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 
 /**
  * Integration test for the Add Business screen.
  */
-@RunWith(AndroidJUnit4::class)
 @MediumTest
+@RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class AddBusinessFragmentTest
 {
@@ -32,11 +35,11 @@ class AddBusinessFragmentTest
    @get:Rule(order = 0)
    var hiltRule = HiltAndroidRule(this)
    
-   // subject under test
-   @Rule(order = 1)
-   @JvmField
-   val activityRule = ActivityScenarioRule(StepperActivity::class.java)
-   private lateinit var acitvity: StepperActivity
+   
+   private lateinit var context: Context
+   
+   @Inject
+   lateinit var firebaseAuth: FirebaseAuth
    
    private val validEmail = "validEmail@example.com"
    private val invalidEmail = "invalidEmail.com"
@@ -51,9 +54,12 @@ class AddBusinessFragmentTest
    {
       hiltRule.inject()
       
-      activityRule.scenario.onActivity {
-         acitvity = it
+     // every { firebaseAuth.currentUser?.uid } answers { "test" }
+      launchFragmentInHiltContainer<AddBusinessFragment> {
+         this@AddBusinessFragmentTest.context = context !!
       }
+      println("uid = " + firebaseAuth.currentUser?.uid)
+      
    }
    
    @Test
@@ -186,19 +192,19 @@ class AddBusinessFragmentTest
    private fun thenUserShouldSeeStoreTypeEmptyError()
    {
       onView(withId(R.id.til_business_type))
-         .check(matches(withHint(acitvity.getString(R.string.add_business_store_type_empty))))
+         .check(matches(withHint(context.getString(R.string.add_business_store_type_empty))))
    }
    
    private fun thenUserShouldSeeEmailInvalidError()
    {
       onView(withId(R.id.til_business_mail))
-         .check(matches(withHint(acitvity.getString(R.string.add_business_email_invalid))))
+         .check(matches(withHint(context.getString(R.string.add_business_email_invalid))))
    }
    
    private fun thenUserShouldSeePhoneInvalidError()
    {
       onView(withId(R.id.til_business_phone))
-         .check(matches(withHint(acitvity.getString(R.string.add_business_phone_invalid))))
+         .check(matches(withHint(context.getString(R.string.add_business_phone_invalid))))
    }
    
    private fun thenUserShouldBeDirectedToNextScreenWithBranches()

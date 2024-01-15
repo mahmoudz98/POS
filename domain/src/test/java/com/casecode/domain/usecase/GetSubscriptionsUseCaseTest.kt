@@ -9,13 +9,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.Extensions
+import org.junit.Rule
+import org.junit.Test
+
 
 class GetSubscriptionsUseCaseTest
 {
    
-   @get:Extensions
+   @get:Rule
    val mainDispatcherRule = MainDispatcherRule()
    
    // Subject under test

@@ -4,10 +4,9 @@ import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.StoreType
 import com.casecode.domain.repository.AddBusiness
-import com.casecode.pos.InstantTaskExecutorExtension
 import com.casecode.pos.R
 import com.casecode.testing.BaseTest
-import com.casecode.testing.CoroutinesTestExtension
+import com.casecode.testing.util.MainDispatcherRule
 import com.casecode.testing.util.getOrAwaitValue
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -15,26 +14,27 @@ import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.Rule
+import org.junit.Test
 
 /**
  * A JUnit test class for the [BusinessViewModel] class.
  *
  * Created by Mahmoud Abdalhafeez on 12/13/2023
  */
-@ExtendWith(InstantTaskExecutorExtension::class, CoroutinesTestExtension::class)
 class BusinessViewModelTest : BaseTest()
 {
+   @get:Rule
+   val mainDispatcherRule = MainDispatcherRule()
    
    // subject under test
    private lateinit var businessViewModel: BusinessViewModel
    
    override fun init()
    {
-      businessViewModel =
-         BusinessViewModel(testNetworkMonitor, setBusinessUseCase, getSubscriptionsUseCase,
-            setSubscriptionBusinessUseCase, setEmployeesBusinessUseCase)
+      /*    businessViewModel =
+            BusinessViewModel(testNetworkMonitor, setBusinessUseCase, getSubscriptionsUseCase,
+               setSubscriptionBusinessUseCase, setEmployeesBusinessUseCase) */
       
    }
    
@@ -53,6 +53,7 @@ class BusinessViewModelTest : BaseTest()
       assertThat(storeTypeEn, `is`(StoreType.Coffee))
       
    }
+   
    
    @Test
    fun addBranch_WhenHasBranch_returnsTrueAndMessageSuccess()
@@ -78,7 +79,7 @@ class BusinessViewModelTest : BaseTest()
       businessViewModel.setBranchName("branch2")
       
       // When
-      businessViewModel.setUpdateBranch()
+      businessViewModel.updateBranch()
       
       // Then
       assertThat(R.string.update_branch_success,
@@ -98,7 +99,7 @@ class BusinessViewModelTest : BaseTest()
       businessViewModel.setBranchPhone(branch.phoneNumber !!)
       
       // When
-      businessViewModel.setUpdateBranch()
+      businessViewModel.updateBranch()
       
       // Then
       assertThat(R.string.update_branch_fail, `is`(businessViewModel.userMessage.getOrAwaitValue()))
@@ -114,7 +115,7 @@ class BusinessViewModelTest : BaseTest()
       businessViewModel.setBranchSelected(branch)
       
       // When
-      businessViewModel.setUpdateBranch()
+      businessViewModel.updateBranch()
       
       // Then
       assertThat(R.string.update_branch_fail, `is`(businessViewModel.userMessage.getOrAwaitValue()))

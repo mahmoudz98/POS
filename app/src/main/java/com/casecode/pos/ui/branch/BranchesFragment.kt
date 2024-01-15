@@ -13,6 +13,7 @@ import com.casecode.pos.adapter.BranchesAdapter
 import com.casecode.pos.databinding.FragmentBranchesBinding
 import com.casecode.pos.utils.asInt
 import com.casecode.pos.utils.compactScreen
+import com.casecode.pos.utils.setupSnackbar
 import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -64,6 +65,7 @@ class BranchesFragment : Fragment()
       init()
       
    }
+   
    /**
     * Initializes the ViewModel, Adapter, and click events for the fragment.
     */
@@ -189,15 +191,15 @@ class BranchesFragment : Fragment()
     */
    private fun observerUserMessage()
    {
-      businessViewModel.userMessage.observe(viewLifecycleOwner) { idString ->
+      binding.root.setupSnackbar(viewLifecycleOwner, businessViewModel.userMessage, BaseTransientBottomBar.LENGTH_SHORT)
+     /*  businessViewModel.userMessage.observe(viewLifecycleOwner) { idString ->
          if (idString != null)
          {
             binding.root.showSnackbar(getString(idString),
                BaseTransientBottomBar.LENGTH_SHORT)
-            businessViewModel.snackbarMessageShown()
             
          }
-      }
+      } */
       
    }
    

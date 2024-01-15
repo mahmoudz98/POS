@@ -10,6 +10,7 @@ import com.casecode.domain.utils.Resource
 import com.casecode.pos.adapter.EmployeeAdapter
 import com.casecode.pos.databinding.FragmentEmployeesBinding
 import com.casecode.pos.utils.EventObserver
+import com.casecode.pos.utils.setupSnackbar
 import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -59,30 +60,32 @@ class EmployeesFragment : Fragment()
    }
    
    private fun observerViewModel(){
-      businessViewModel.isAddEmployee.observe(viewLifecycleOwner, EventObserver { isAdd ->
-         if (isAdd)
-         {
-            businessViewModel.userMessage.observe(viewLifecycleOwner) { idString ->
-               if (idString != null)
-               {
-                  binding.root.showSnackbar(getString(idString), BaseTransientBottomBar.LENGTH_SHORT)
-                  businessViewModel.snackbarMessageShown()
-                  
-               }
-            }
-            
-         }
-      })
-      businessViewModel.isUpdateEmployee.observe(viewLifecycleOwner, EventObserver{isUpdate->
-         if(isUpdate){
-            businessViewModel.userMessage.observe(viewLifecycleOwner){idString->
-               if(idString != null){
-                  binding.root.showSnackbar(getString(idString), BaseTransientBottomBar.LENGTH_SHORT)
-                  businessViewModel.snackbarMessageShown()
-               }
-            }
-         }
-      })
+      binding.root.setupSnackbar(viewLifecycleOwner, businessViewModel.userMessage, BaseTransientBottomBar.LENGTH_SHORT)
+      
+      /*  businessViewModel.isAddEmployee.observe(viewLifecycleOwner, EventObserver { isAdd ->
+          if (isAdd)
+          {
+             businessViewModel.userMessage.observe(viewLifecycleOwner) { idString ->
+                if (idString != null)
+                {
+                   binding.root.showSnackbar(getString(idString), BaseTransientBottomBar.LENGTH_SHORT)
+                   businessViewModel.snackbarMessageShown()
+                   
+                }
+             }
+             
+          }
+       })
+       businessViewModel.isUpdateEmployee.observe(viewLifecycleOwner, EventObserver{isUpdate->
+          if(isUpdate){
+             businessViewModel.userMessage.observe(viewLifecycleOwner){idString->
+                if(idString != null){
+                   binding.root.showSnackbar(getString(idString), BaseTransientBottomBar.LENGTH_SHORT)
+                   businessViewModel.snackbarMessageShown()
+                }
+             }
+          }
+       }) */
    }
    private fun initAdapter()
    {
@@ -120,10 +123,10 @@ class EmployeesFragment : Fragment()
             is Resource.Success ->{
                businessViewModel.completedSteps()
             }else ->{
-               businessViewModel.userMessage.observe(viewLifecycleOwner){idString->
+             /*   businessViewModel.userMessage.observe(viewLifecycleOwner){idString->
                   if(idString!= null)
                binding.root.showSnackbar(getString(idString), Snackbar.LENGTH_SHORT)
-               }
+               } */
             }
          }
       })

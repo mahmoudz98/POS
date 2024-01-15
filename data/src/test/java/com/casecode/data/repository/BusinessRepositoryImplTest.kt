@@ -1,7 +1,7 @@
 package com.casecode.data.repository
 
 
-import com.casecode.data.model.toBusinessRequest
+import com.casecode.data.mapper.toBusinessRequest
 import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.model.users.StoreType
@@ -24,10 +24,10 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+
 
 /**
  * A JUnit test class for the [BusinessRepositoryImpl] class.
@@ -35,7 +35,6 @@ import org.junit.jupiter.api.extension.ExtendWith
  *
  * Created by Mahmoud Abdalhafeez on 12/13/2023
  */
-@ExtendWith(MockKExtension::class)
 class BusinessRepositoryImplTest
 {
    
@@ -47,16 +46,13 @@ class BusinessRepositoryImplTest
    // subject under test
    private lateinit var businessRepository: BusinessRepositoryImpl
    
-
-   
    private val uid = "test"
    
    // Capture the success and failure listeners
    private val successListenerSlot = slot<OnSuccessListener<Void>>()
    private val failureListenerSlot = slot<OnFailureListener>()
    
-   
-   @BeforeEach
+   @Before
    fun setup()
    {
       businessRepository =
@@ -64,7 +60,7 @@ class BusinessRepositoryImplTest
       
    }
    
-   @AfterEach
+   @After
    fun tearDown()
    {
       unmockkAll()
@@ -92,19 +88,6 @@ class BusinessRepositoryImplTest
       
       
    }
-   @Test
-   fun `setBusiness with incomplete data should return empty`() = testScope.runTest {
-      // arrange
-      val incompleteBusiness = createIncompleteBusiness()
-      // act
-      val result = businessRepository.setBusiness(incompleteBusiness, "test")
-      
-      // assert
-      assertThat(result, `is`(Resource.empty(EmptyType.DATA, "Incomplete data")))
-      
-   }
-   
-   
    
    @Test
    fun `setBusiness should handle when fail`() = testScope.runTest {
@@ -114,7 +97,6 @@ class BusinessRepositoryImplTest
       val result = businessRepository.setBusiness(createValidBusiness(), "test_network_error")
       
       assertThat(result, `is`(Resource.error("business failed")))
-      
    }
    
    @Test
@@ -123,7 +105,7 @@ class BusinessRepositoryImplTest
       mockFirestoreException()
       
       // Call the method you want to test
-      val result = businessRepository.setBusiness(createValidBusiness(), "test_network_error")
+      val result = businessRepository.setBusiness(createValidBusiness(), uid)
       
       
       assertThat(result, `is`(Resource.error("Failed to update business. Please try again later.")))
@@ -162,14 +144,14 @@ class BusinessRepositoryImplTest
    private fun mockFirestoreException()
    {
       every {
-         firestore.collection(any()).document(any())
-            .update(any() as Map<String, Any>)
+         firestore.collection(USERS_COLLECTION_PATH).document(uid)
+            .set(createValidBusiness().toBusinessRequest()  as Map<String, Any>)
             .addOnSuccessListener(capture(successListenerSlot))
             .addOnFailureListener(capture(failureListenerSlot))
       } answers {
-         //failureListenerSlot.captured.onFailure(Exception("business failed"))
-         throw throw FirebaseFirestoreException("Failed to update business. Please try again later.",
-            FirebaseFirestoreException.Code.CANCELLED)
+         failureListenerSlot.captured.onFailure(Exception("business failed"))
+         throw  FirebaseFirestoreException("Failed to update business. Please try again later.",
+            FirebaseFirestoreException.Code.INTERNAL)
       }
    }
    
@@ -196,12 +178,7 @@ class BusinessRepositoryImplTest
          )
    }
    
-   private fun createIncompleteBusiness(): Business
-   {
-      // Create an incomplete Business object for testing
-      // Replace with your incomplete business data
-      return Business(/* incomplete data */)
-   }
+  
    
    
 }

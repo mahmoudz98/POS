@@ -5,13 +5,11 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.aceinteract.android.stepper.StepperNavListener
-import com.casecode.data.utils.ConnectivityManagerNetworkMonitor
 import com.casecode.pos.R
 import com.casecode.pos.databinding.ActivityStepperBinding
-import com.casecode.data.utils.NetworkConnection
 import com.casecode.pos.ui.main.MainActivity
 import com.casecode.pos.ui.signIn.SignInActivity
 import com.casecode.pos.utils.EventObserver
@@ -20,7 +18,6 @@ import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +31,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    @Inject
    lateinit var firebaseAuth: FirebaseAuth
    
-   private val businessViewModel by viewModels<BusinessViewModel>()
+   val businessViewModel by viewModels<BusinessViewModel>()
   internal val viewModel : BusinessViewModel get() = businessViewModel
    
    override fun onCreate(savedInstanceState: Bundle?)
@@ -43,24 +40,37 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
       _binding = ActivityStepperBinding.inflate(layoutInflater)
       setContentView(_binding?.root)
       
-      binding.stepper.setupWithNavController(findNavController(R.id.frame_stepper))
-      initAddUID()
-      observerNextStep()
-      observerPreviousStep()
-      observerCompleteStep()
+      setupStepper()
+      observerUId()
+      observerSteps()
       observerNetwork()
+      
    }
    
-   private fun initAddUID()
+   private fun setupStepper()
    {
-      val currentUid = firebaseAuth.currentUser?.uid ?: ""
-      if(currentUid.isBlank()){
-         startLoginActivity()
-      }
-      businessViewModel.setCurrentUid(currentUid)
-      Timber.e("currentUid = $currentUid")
+      val navHostFragment =
+         supportFragmentManager.findFragmentById(R.id.frame_stepper) as NavHostFragment
+      
+      val navController = navHostFragment.navController
+      binding.stepper.setupWithNavController(navController)
    }
    
+   
+   private fun observerUId()
+   {
+      businessViewModel.currentUid.observe(this){
+         if(it.isBlank()){
+            // startLoginActivity()
+            Timber.e("uid is blank")
+         }else{
+            Timber.e("uid  = $it")
+            
+         }
+      }
+    
+      
+   }
    private fun startLoginActivity()
    {
       val intent = Intent(this, SignInActivity::class.java)
@@ -68,6 +78,15 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
       intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
       startActivity(intent)
    }
+   
+   private fun observerSteps()
+   {
+      observerNextStep()
+      observerPreviousStep()
+      observerCompleteStep()
+   }
+   
+  
    
    private  fun observerNextStep(){
       businessViewModel.buttonNextStep.observe(this, EventObserver{

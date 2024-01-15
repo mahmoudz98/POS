@@ -1,12 +1,11 @@
 package com.casecode.data.repository
 
-import com.casecode.data.model.toBusinessRequest
+import com.casecode.data.mapper.toBusinessRequest
 import com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.Dispatcher
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
-import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -45,7 +44,7 @@ class BusinessRepositoryImpl @Inject constructor(
                      Timber.d("Business is added successfully")
                      continuation.resume(AddBusiness.success(true))
                   }.addOnFailureListener {
-                     val message = it.message ?: "Failure when added new business"
+                     val message = it.message ?: "Failure in database, when add new business"
                      continuation.resume(AddBusiness.error(message))
                      Timber.e("Business Failure: $it")
                   }

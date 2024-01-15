@@ -5,13 +5,13 @@ import com.casecode.domain.repository.AddEmployees
 import com.casecode.domain.repository.EmployeesBusinessRepository
 import com.casecode.domain.utils.Resource
 import com.casecode.testing.util.MainDispatcherRule
+import org.junit.Before
 import org.junit.Rule
-import org.junit.jupiter.api.BeforeEach
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestEmployeesBusinessRepository@Inject constructor() : EmployeesBusinessRepository
+class TestEmployeesBusinessRepository @Inject constructor() : EmployeesBusinessRepository
 {
    @get:Rule
    val mainDispatcherRule = MainDispatcherRule()
@@ -21,7 +21,7 @@ class TestEmployeesBusinessRepository@Inject constructor() : EmployeesBusinessRe
    private var shouldReturnEmpty = false
    
    
-   @BeforeEach
+   @Before
    fun setup()
    {
       shouldReturnError = false

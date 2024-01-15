@@ -1,8 +1,11 @@
 package com.casecode.pos.ui.business
 
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import androidx.databinding.BindingConversion
 import androidx.recyclerview.widget.RecyclerView
 import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.model.users.Branch
@@ -43,6 +46,7 @@ fun RecyclerView.bindListSubscriptions(items: List<Subscription>?)
    }
    
 }
+
 
 @BindingAdapter("bindCost", "bindDuration")
 fun TextView.bindCostAndDuration(cost: Long, duration: Long)

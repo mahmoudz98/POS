@@ -26,14 +26,6 @@ class StatisticsFragment : Fragment() {
         binding = FragmentStatisticsBinding.inflate(inflater, container, false)
 
 
-        viewModel.stores.observe(viewLifecycleOwner) {
-            Timber.e("working in data = ${it.size}")
-            it.map { store->
-                Timber.e("store = ${store} ")
-
-            }
-        }
-
         return binding.root
     }
 

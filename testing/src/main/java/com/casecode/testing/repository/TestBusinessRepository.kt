@@ -5,10 +5,8 @@ import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.utils.Resource
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class TestBusinessRepository @Inject constructor(): BusinessRepository
+class TestBusinessRepository @Inject constructor() : BusinessRepository
 {
    
    private var business: Business = Business()
@@ -22,8 +20,8 @@ class TestBusinessRepository @Inject constructor(): BusinessRepository
    
    override suspend fun setBusiness(business: Business, uid: String): AddBusiness
    {
-    
-      return   Resource.Success(true)
+      
+      return Resource.Success(true)
       
    }
    
@@ -32,4 +30,5 @@ class TestBusinessRepository @Inject constructor(): BusinessRepository
       
       this.business = business
    }
+   
 }

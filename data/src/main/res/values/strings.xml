@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_subscription_business_failure">Add Subscription Business failure,</string>
+    <string name="add_subscription_business_network">Failure when add subscription business, Check internet connection</string>
+
+</resources>
