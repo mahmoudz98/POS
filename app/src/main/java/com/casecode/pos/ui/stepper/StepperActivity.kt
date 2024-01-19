@@ -61,7 +61,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    {
       businessViewModel.currentUid.observe(this){
          if(it.isBlank()){
-            // startLoginActivity()
+             startLoginActivity()
             Timber.e("uid is blank")
          }else{
             Timber.e("uid  = $it")
@@ -136,13 +136,10 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    override fun onDestroy()
    {
       super.onDestroy()
-     // networkConnection.onDestroy()
-      
-      // removeObservers()
+      removeObservers()
       _binding = null
       
    }
-   
    private fun removeObservers()
    {
       for (field in businessViewModel.javaClass.declaredFields)

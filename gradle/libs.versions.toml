@@ -46,6 +46,8 @@ hiltTesting = "1.1.0"
 # Test
 junit4 = "4.13.2"
 coreTesting = "2.2.0"
+truth = "1.1.5"
+
 
 # Debug Tools
 leakcanary = "2.11"
@@ -56,10 +58,10 @@ ksp = "1.9.22-1.0.16"
 
 # Firebase Services
 # https://firebase.google.com/support/release-notes/android
-firebaseBom = "32.4.0"
-firebase-auth = "22.2.0"
-firebaseFirestoreKtx = "24.9.1"
-firebaseMessaging = "23.3.1"
+firebaseBom = "32.7.0"
+firebase-auth = "22.3.0"
+firebaseFirestoreKtx = "24.10.0"
+firebaseMessaging = "23.4.0"
 google-services = "4.4.0"
 play-services-auth = "20.7.0"
 firebaseCrashlyticsPlugin = "2.9.9"
@@ -190,6 +192,7 @@ core-testing = { module = "androidx.arch.core:core-testing", version.ref = "core
 
 test-hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "testhamcrest" }
 test-hamcrest-library = { module = "org.hamcrest:hamcrest-library", version.ref = "testhamcrest" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 
 test-mockk = { module = "io.mockk:mockk", version.ref = "mockk-andrdoid" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk-andrdoid" }

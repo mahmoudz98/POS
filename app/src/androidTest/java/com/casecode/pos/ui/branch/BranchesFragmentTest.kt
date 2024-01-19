@@ -9,14 +9,13 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.casecode.di.data.RepositoryModule
 import com.casecode.domain.model.users.Branch
+import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.viewmodel.BusinessViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Rule
@@ -31,12 +30,14 @@ import org.junit.runner.RunWith
 @HiltAndroidTest
 class BranchesFragmentTest
 {
-   @Rule
-   @JvmField
-   val instantTaskExecutorRule = InstantTaskExecutorRule()
+   
    
    @get:Rule(order = 0)
    var hiltRule = HiltAndroidRule(this)
+   
+   // Executes tasks in the Architecture Components in the same thread
+   @get:Rule(order = 1)
+   var instantTaskExecutorRule = InstantTaskExecutorRule()
    
    private lateinit var businessViewModel: BusinessViewModel
    
@@ -50,26 +51,23 @@ class BranchesFragmentTest
       }
    }
    
-   
-   
    @Test
-   fun givenUserHasAddedBranches_whenUserNavigatesToSubscriptionScreen_thenShouldShowBranchesInRecyclerView() {
-   
+   fun givenUserHasAddedBranches_whenUserClickButtonSubscription_thenShowMessageAddBusinessSuccess() {
       // Given
       givenUserHasAddedBranches()
+      businessViewModel.setConnected(true)
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
-      
+      whenUserClickBranchSubscription()
       // Then
-      thenUserShouldSeeBranchesRecyclerView()
+      assertThat(businessViewModel.userMessage.value?.peekContent(), `is`(R.string.add_business_success))
    }
    
    @Test
-   fun whenUserNavigatesToSubscriptionScreen_thenShouldShowAddBranchesButton() {
+   fun shouldShowMessageBranchesAreEmpty_whenClickSubscription() {
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       thenUserShouldSeeAddBranchesButton()
@@ -82,18 +80,18 @@ class BranchesFragmentTest
       givenUserHasAddedBranches()
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       thenUserShouldSeeSubscriptionButton()
    }
    @Test
-   fun givenNetworkIsUnavailable_whenUserNavigatesToSubscriptionScreen_thenReturnFalse(){
+   fun givenNetworkIsUnavailable_whenUserClickBranchSubscription_thenReturnFalse(){
       // Given
       businessViewModel.setConnected(false)
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       assertThat( businessViewModel.isOnline.value, `is`(false))
@@ -101,13 +99,13 @@ class BranchesFragmentTest
    }
    
    @Test
-   fun givenUserHasAddedBranches_whenUserNavigatesToSubscriptionScreen_thenShouldShowInfoButton() {
+   fun givenUserHasAddedBranches_whenUserClickBranchSubscription_thenShouldShowInfoButton() {
    
       // Given
       givenUserHasAddedBranches()
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       thenUserShouldSeeInfoButton()
@@ -118,7 +116,7 @@ class BranchesFragmentTest
    fun whenUserClicksAddBranchesButton_thenShouldShowAddBranchesDialog() {
    
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       whenUserClicksAddBranchesButton()
       
       // Then
@@ -135,17 +133,10 @@ class BranchesFragmentTest
       
    }
    
-   private fun whenUserNavigatesToSubscriptionScreen()
+   private fun whenUserClickBranchSubscription()
    {
       // Navigate to the BranchesFragment
       onView(withId(R.id.btn_branches_subscription)).perform(click())
-   }
-   
-   private fun thenUserShouldSeeBranchesRecyclerView()
-   {
-      
-      onView(withId(R.id.rv_branches)).check(matches(isDisplayed()))
-      
    }
    
    private fun thenUserShouldSeeAddBranchesButton()

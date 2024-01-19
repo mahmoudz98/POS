@@ -4,6 +4,7 @@ import com.casecode.pos.Configuration
 import com.casecode.pos.configureGradleManagedDevices
 import com.casecode.pos.configureKotlinAndroid
 import com.casecode.pos.configurePrintApksTask
+import com.casecode.pos.disableUnnecessaryAndroidTests
 import com.casecode.pos.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -20,31 +21,28 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
          with(pluginManager) {
             apply("com.android.library")
             apply("org.jetbrains.kotlin.android")
-            apply("org.gradle.android.cache-fix")
-            
             apply("pos.android.lint")
-            
+            apply("org.gradle.android.cache-fix")
          }
+         
          extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
             defaultConfig.targetSdk = Configuration.compileSdk
             configureGradleManagedDevices(this)
          }
-         tasks.named("checkKotlinGradlePluginConfigurationErrors") {
-            outputs.upToDateWhen { false } // Declare outputs
-         }
+        
          extensions.configure<LibraryAndroidComponentsExtension> {
             configurePrintApksTask(this)
             
-            // disableUnnecessaryAndroidTests(target)
+             disableUnnecessaryAndroidTests(target)
          }
          
          dependencies {
             add("implementation", libs.findLibrary("timber").get())
             add("testImplementation", kotlin("test"))
             
-            add("testImplementation", libs.findLibrary("test.hamcrest").get())
-            add("testImplementation", libs.findLibrary("test.hamcrest.library").get())
+           // add("testImplementation", libs.findLibrary("test.hamcrest").get())
+            //add("testImplementation", libs.findLibrary("test.hamcrest.library").get())
          }
       }
    }

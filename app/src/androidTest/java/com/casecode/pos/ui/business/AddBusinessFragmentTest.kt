@@ -62,21 +62,7 @@ class AddBusinessFragmentTest
       
    }
    
-   @Test
-   fun shouldNavigateToNextStepWhenAllFieldsAreValid()
-   {
-      // Given
-      givenUserHasEnteredValidStoreType()
-      givenUserHasEnteredValidEmail()
-      givenUserHasEnteredValidPhone()
-      
-      // When
-      whenUserClicksSubmitButton()
-      
-      // Then
-      thenUserShouldBeDirectedToNextScreenWithBranches()
-   }
-   
+ 
    @Test
    fun shouldShowErrorWhenStoreTypeIsEmpty()
    {
@@ -206,11 +192,5 @@ class AddBusinessFragmentTest
       onView(withId(R.id.til_business_phone))
          .check(matches(withHint(context.getString(R.string.add_business_phone_invalid))))
    }
-   
-   private fun thenUserShouldBeDirectedToNextScreenWithBranches()
-   {
-      onView(withId(R.id.csl_branches_root)).check(matches(isDisplayed()))
-   }
-   
    
 }

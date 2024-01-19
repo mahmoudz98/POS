@@ -23,7 +23,6 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include (":app")
 include (":domain")
 include(":di")
-include(":benchmark")
 
 include (":data")
 include(":testing")

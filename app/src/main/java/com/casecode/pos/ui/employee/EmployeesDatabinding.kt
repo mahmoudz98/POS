@@ -29,6 +29,16 @@ fun AppCompatAutoCompleteTextView.setItemsBranch(branches: List<Branch>?)
    }
 }
 
+@BindingAdapter("textSelected")
+fun AppCompatAutoCompleteTextView.setSelected(itemSelected: String?)
+{
+   if (itemSelected.isNullOrBlank()) return
+   val adapter = (adapter as AutoCompleteAdapter)
+   val position = adapter.getPosition(itemSelected)
+   adapter.setSelectedItem(position)
+   setText(adapter.getItem(position), false)
+   
+}
 @BindingAdapter("bindListEmployee")
 fun RecyclerView.bindListEmployee(items: MutableList<Employee>?)
 {

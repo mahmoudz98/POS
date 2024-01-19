@@ -32,11 +32,7 @@ plugins {
 // TODo: use gradle profile https://developer.android.com/build/profile-your-build#getting_started
 //TODO: Add Dependency graph let visualize dependencies in a graph.
 
-tasks {
-   register("clean", Delete::class) {
-      delete(rootProject.buildDir)
-   }
-}
+
 
 
 

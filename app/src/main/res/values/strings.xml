@@ -94,7 +94,6 @@
     <string name="subscription_price_month">\u0020month</string>
     <string name="add_subscription_failed">Failure when add new Subscription, please try again</string>
     <string name="add_subscription_success">Subscription added is Successfully.</string>
-    <string name="add_subscription_business_empty">Please select subscription business.</string>
 
     // Network labels
     <string name="network_error">Check your internet connection Please</string>
@@ -121,6 +120,7 @@
 
     <string name="add_employee_password_error">Password must be at least 6 characters. </string>
 
+    <string name="add_employees_success">Employees Added success, Go on.</string>
     <string name="add_employee_success">Employee Added success.</string>
     <string name="add_employee_fail">Employee Added failed.</string>
     <string name="update_employee_success">Employee updated success.</string>

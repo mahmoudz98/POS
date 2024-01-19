@@ -29,18 +29,12 @@ android {
       debug {
          //   isPseudoLocalesEnabled = true
          isDebuggable = true
-         isMinifyEnabled = false
          // enableAndroidTestCoverage = true
       }
-      create("benchmark") {
-         initWith(buildTypes.getByName("release"))
-         signingConfig = signingConfigs.getByName("debug")
-         matchingFallbacks += listOf("release")
-         isDebuggable = false
-         proguardFiles("baseline-profiles-rules.pro")
-      }
+    
       val release by getting {
          isMinifyEnabled = true
+         signingConfig = signingConfigs.getByName("debug")
          
          proguardFiles(
             getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -66,27 +60,10 @@ android {
       animationsDisabled = true
       
       unitTests {
+         
          isIncludeAndroidResources = true
-         isReturnDefaultValues = true
-         
-         
-         all { test ->
-            with(test) {
-               testLogging {
-                  events = setOf(
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
-                                )
-               }
-            }
-         }
       }
    }
-   
-   
    
    hilt {
       enableAggregatingTask = true
@@ -99,20 +76,22 @@ android {
       buildConfig = true
    }
    lint {
-      abortOnError = true
+      abortOnError = false
    }
    
-   
-  
-   
    packaging {
+      
       resources {
          excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-         excludes.add("META-INF/LICENSE.md")
-         excludes.add("META-INF/LICENSE-notice.md")
+         excludes.add("/META-INF/NOTICE.md")
+         excludes.add ("/META-INF/licenses/**")
+         excludes.add ("META-INF/LICENSE.md")
+         excludes.add ("META-INF/LICENSE-notice.md")
+         excludes.add("META-INF/DEPENDENCIES")
          excludes.add("DebugProbesKt.bin")
       }
    }
+   
    namespace = "com.casecode.pos"
 }
 

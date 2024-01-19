@@ -3,6 +3,7 @@ package com.casecode.domain.usecase
 import com.casecode.domain.model.users.SubscriptionBusiness
 import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
+import com.casecode.pos.domain.R
 import com.casecode.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.testing.util.CoroutinesTestRule
 import kotlinx.coroutines.test.runTest
@@ -47,7 +48,7 @@ class SetSubscriptionBusinessUseCaseTest
       
       // Then - return Resource of empty uid.
       assertThat(resultEmptyUidSubscriptionBusiness,
-         `is`(Resource.empty(EmptyType.DATA, "uid is empty")))
+         `is`(Resource.empty(EmptyType.DATA, R.string.uid_empty)))
       
       
    }
@@ -60,7 +61,7 @@ class SetSubscriptionBusinessUseCaseTest
       
       // Then - return Resource of empty data
       assertThat(resultEmptySubscriptionBusiness,
-         `is`(Resource.empty(EmptyType.DATA, "Subscription business type is empty")))
+         `is`(Resource.empty(EmptyType.DATA, R.string.add_subscription_business_empty)))
    }
    
 }

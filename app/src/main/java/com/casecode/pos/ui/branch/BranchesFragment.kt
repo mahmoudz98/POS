@@ -74,7 +74,7 @@ class BranchesFragment : Fragment()
       initViewModel()
       initAdapter()
       initClicked()
-      observerUserMessage()
+      setupSnackbar()
       setupWithTwoPane()
    }
    
@@ -140,66 +140,16 @@ class BranchesFragment : Fragment()
    {
       binding.btnBranchesSubscription.setOnClickListener {
          businessViewModel.setBusiness()
-         observerIsAddBusiness()
       }
    }
    
    
-   private fun observerIsAddBusiness()
-   {
-      
-      businessViewModel.isAddBusiness.observe(viewLifecycleOwner) {
-         when (it)
-         {
-            is Resource.Success ->
-            {
-               if (it.data)
-               {
-                  binding.root.showSnackbar(getString(R.string.add_business_success),
-                     Snackbar.LENGTH_SHORT)
-                  businessViewModel.moveToNextStep()
-               }
-               
-            }
-            
-            is Resource.Empty ->
-            {
-               val messageId = it.message.asInt()
-               Timber.e("Empty: ${getString(messageId)}")
-               binding.root.showSnackbar(getString(messageId), Snackbar.LENGTH_SHORT)
-            }
-            
-            is Resource.Error ->
-            {
-               Timber.e("Error: ${it.message}")
-               binding.root.showSnackbar(getString(R.string.add_business_failed) + it.message,
-                  Snackbar.LENGTH_SHORT)
-               
-            }
-            
-            else ->
-            {
-               binding.root.showSnackbar("Error:${it?.toString()} ", Snackbar.LENGTH_SHORT)
-               Timber.e("Error: ${it.toString()}")
-            }
-         }
-      }
-   }
+  
    
-   /**
-    * Observes changes in the ViewModel related to shows corresponding messages.
-    */
-   private fun observerUserMessage()
+  
+   private fun setupSnackbar()
    {
       binding.root.setupSnackbar(viewLifecycleOwner, businessViewModel.userMessage, BaseTransientBottomBar.LENGTH_SHORT)
-     /*  businessViewModel.userMessage.observe(viewLifecycleOwner) { idString ->
-         if (idString != null)
-         {
-            binding.root.showSnackbar(getString(idString),
-               BaseTransientBottomBar.LENGTH_SHORT)
-            
-         }
-      } */
       
    }
    

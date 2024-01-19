@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class SetEmployeesBusinessUseCase @Inject constructor(private val employeesRepo: EmployeesBusinessRepository)
 {
-   suspend operator fun invoke(employees: ArrayList<Employee>, uid: String): AddEmployees
+   suspend operator fun invoke(employees: MutableList<Employee>, uid: String): AddEmployees
    {
       if (uid.isEmpty())
       {

@@ -8,10 +8,12 @@ import com.casecode.domain.repository.AddEmployees
 import com.casecode.domain.repository.EmployeesBusinessRepository
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
+import com.casecode.pos.data.R
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -27,14 +29,12 @@ class EmployeesBusinessRepositoryImpl @Inject constructor(
       TODO("Not yet implemented")
    }
    
-   override suspend fun setEmployees(employees: ArrayList<Employee>, uid: String):
+   override suspend fun setEmployees(employees: MutableList<Employee>, uid: String):
         AddEmployees
    {
    return withContext(ioDispatcher) {
       try
       {
-         
-         
          val resultAddEmployee = suspendCoroutine<AddEmployees> { continuation ->
                Timber.e("uid = $uid")
             val employeesRequest = employees.toEmployeesRequest()
@@ -46,7 +46,7 @@ class EmployeesBusinessRepositoryImpl @Inject constructor(
                   Timber.d("employees is added successfully")
                   continuation.resume(Resource.Success(true))
                }.addOnFailureListener {
-                  continuation.resume(Resource.error(it.message!!))
+                  continuation.resume(Resource.error(R.string.add_employees_business_failure))
                   
                   Timber.e("employees Failure: $it")
                }
@@ -55,7 +55,12 @@ class EmployeesBusinessRepositoryImpl @Inject constructor(
          resultAddEmployee
       }catch (e: Exception){
          Timber.e("Exception while adding employees: $e")
-         Resource.error(e.message!!)
+         Resource.error(R.string.add_employees_business_failure)
+      }
+      catch (e: UnknownHostException)
+      {
+         Resource.error(R.string.add_employees_business_network)
+         
       }
    }
    

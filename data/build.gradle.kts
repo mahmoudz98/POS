@@ -10,6 +10,18 @@ android {
          isReturnDefaultValues = true
       }
    }
+   packaging {
+      
+      resources {
+         excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+         excludes.add("/META-INF/NOTICE.md")
+         excludes.add ("/META-INF/licenses/**")
+         excludes.add ("META-INF/LICENSE.md")
+         excludes.add ("META-INF/LICENSE-notice.md")
+         excludes.add("META-INF/DEPENDENCIES")
+         excludes.add("DebugProbesKt.bin")
+      }
+   }
 }
 
 dependencies {
@@ -17,26 +29,14 @@ dependencies {
    api(projects.domain)
    testApi(projects.domain)
    testApi(projects.testing)
-  // testImplementation(projects.testing)
-   
    
    //Coroutines
    implementation(libs.kotlinx.coroutines.services)
    api(libs.kotlinx.coroutines.android)
    
    api(libs.hilt.android)
- //  ksp(libs.hilt.compiler)
-   
-  // testApi(libs.junit.jupiter)
-  // testRuntimeOnly(libs.junit.jupiter.engine)
-   //testImplementation(libs.mockito.junit5)
+
    testImplementation(libs.test.mockk)
-   // assertion test
-   //testApi(libs.test.hamcrest)
-   //testApi(libs.test.hamcrest.library)
-   //testApi(libs.test.mockk)
-   
-  
    
    testApi(libs.coroutines.test)
    testApi(libs.hilt.android.testing)

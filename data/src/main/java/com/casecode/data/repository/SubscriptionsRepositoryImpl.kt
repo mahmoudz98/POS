@@ -84,7 +84,6 @@ class SubscriptionsRepositoryImpl @Inject constructor(
          Timber.i("subscriptions = $subscriptions")
          close()
       }
-      
    }
    
    private fun countDownLatch(count: Int): CountDownLatch

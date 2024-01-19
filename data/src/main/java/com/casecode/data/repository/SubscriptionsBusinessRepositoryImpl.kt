@@ -29,10 +29,6 @@ class SubscriptionsBusinessRepositoryImpl @Inject constructor(
         uid: String,
                                                ): AddSubscriptionBusiness
    {
-      if (uid.isBlank())
-      {
-         return Resource.error("can't find uid")
-      }
       
       return withContext(ioDispatcher) {
          try

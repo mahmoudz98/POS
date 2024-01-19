@@ -6,8 +6,10 @@
     // Business use case
     <string name="branches_empty">Branches are empty</string>
     <string name="phone_business_empty">Phone in business is empty</string>
+    <string name="store_type_business_empty">Store type in business is empty</string>
     <string name="email_business_empty">Email in business is empty</string>
-
+    // Subscription business
+    <string name="add_subscription_business_empty">Please select subscription business.</string>
     // employees use case
     <string name="employees_empty">Employees are empty</string>
 

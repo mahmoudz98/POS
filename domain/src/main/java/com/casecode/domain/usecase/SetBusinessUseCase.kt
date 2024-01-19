@@ -19,6 +19,9 @@ class SetBusinessUseCase @Inject constructor(private val businessRep: BusinessRe
       {
          return Resource.empty( EmptyType.DATA, R.string.branches_empty)
       }
+      if(business.storeType?.name.isNullOrBlank()){
+         return Resource.empty( EmptyType.DATA, R.string.store_type_business_empty)
+      }
       if(business.phone?.isEmpty() == true){
          return Resource.empty( EmptyType.DATA, R.string.phone_business_empty)
       }

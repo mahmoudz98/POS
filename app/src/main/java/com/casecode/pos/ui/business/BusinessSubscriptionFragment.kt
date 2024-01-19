@@ -91,7 +91,7 @@ class BusinessSubscriptionFragment : Fragment()
    {
       val subscriptionAdapter: SubscriptionAdapter by lazy {
          SubscriptionAdapter {
-            businessViewModel.setSubscriptionBusinessSelected(it)
+            businessViewModel.addSubscriptionBusinessSelected(it)
          }
       }
       binding.rvBusinessSubscription.adapter = subscriptionAdapter

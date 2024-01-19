@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -38,8 +37,6 @@ class BusinessSubscriptionFragmentTest
    @get:Rule(order = 1)
    var instantTaskExecutorRule = InstantTaskExecutorRule()
    
-   @Inject
-   lateinit var testSubscriptionRepo: SubscriptionsRepository
    
    private lateinit var businessViewModel: BusinessViewModel
    
@@ -68,8 +65,10 @@ class BusinessSubscriptionFragmentTest
       onView(withId(R.id.imv_business_subscription_empty)).check(matches(isDisplayed()))
       
    }
+   
    @Test
-   fun shouldShowSubscriptionsList_whenNetworkAvailable(){
+   fun shouldShowSubscriptionsList_whenNetworkAvailable()
+   {
       businessViewModel.setConnected(true)
       businessViewModel.getSubscriptionsBusiness()
       
@@ -84,7 +83,7 @@ class BusinessSubscriptionFragmentTest
       // Given
       businessViewModel.setConnected(true)
       businessViewModel.getSubscriptionsBusiness()
-     
+      
       
       // When click item in list and click move to next step: Employees
       onView(withId(R.id.rv_business_subscription)).perform(
@@ -101,5 +100,38 @@ class BusinessSubscriptionFragmentTest
       
    }
    
- 
+   @Test
+   fun shouldReturnNetworkUnavailable_whenAddBusinessSubscription()
+   {
+      // Given
+      businessViewModel.setConnected(true)
+      businessViewModel.getSubscriptionsBusiness()
+      
+      // When click item in list and click move to next step: Employees
+      onView(withId(R.id.rv_business_subscription)).perform(
+         RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0,
+            click()))
+      
+      businessViewModel.setConnected(false)
+      onView(withId(R.id.btn_business_subscription_employee)).perform(click())
+      
+      // Then
+      assertThat(businessViewModel.userMessage.value?.peekContent(),
+         `is`(R.string.network_error))
+   }
+   
+   @Test
+   fun shouldReturnMessageEmpty_whenAddBusinessSubscriptionIsEmpty(){
+      // Given
+      businessViewModel.setConnected(true)
+      businessViewModel.getSubscriptionsBusiness()
+      
+      // When
+      onView(withId(R.id.btn_business_subscription_employee)).perform(click())
+      
+      // Then
+      assertThat(businessViewModel.userMessage.value?.peekContent(),
+         `is`(com.casecode.pos.domain.R.string.add_subscription_business_empty))
+   }
+   
 }

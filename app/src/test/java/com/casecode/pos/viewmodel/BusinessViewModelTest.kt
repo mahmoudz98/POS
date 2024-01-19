@@ -270,7 +270,7 @@ class BusinessViewModelTest : BaseTest()
       val permission = "Admin"
       
       // When
-      businessViewModel.setEmployee(name, phone, password, branchName, permission)
+      businessViewModel.newEmployee(name, phone, password, branchName, permission)
       businessViewModel.addEmployee()
       
       val expectedEmployee = businessViewModel.employees.getOrAwaitValue().last()

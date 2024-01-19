@@ -7,11 +7,13 @@ import com.casecode.domain.model.users.Business
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
+import com.casecode.pos.data.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -40,27 +42,30 @@ class BusinessRepositoryImpl @Inject constructor(
                firestore.collection(USERS_COLLECTION_PATH).document(uid)
                   .set(business.toBusinessRequest() as Map<String, Any>)
                   .addOnSuccessListener {
-                     
-                     Timber.d("Business is added successfully")
                      continuation.resume(AddBusiness.success(true))
                   }.addOnFailureListener {
                      val message = it.message ?: "Failure in database, when add new business"
-                     continuation.resume(AddBusiness.error(message))
-                     Timber.e("Business Failure: $it")
+                     Timber.e("Business Failure: $message")
+                     continuation.resume(AddBusiness.error(R.string.add_subscription_business_failure))
                   }
             }
             
             resultAddBusiness
             
-         }  catch (e: FirebaseFirestoreException)
+         } catch (e: FirebaseFirestoreException)
          {
             Timber.e("Firebase error while adding business: ${e.message}")
-            AddBusiness.error(e.message!!)
+            AddBusiness.error(R.string.add_subscription_business_failure)
          } catch (e: Exception)
          {
             Timber.e("Exception while adding business: ${e.message}")
-            AddBusiness.error(e.message !!)
+            AddBusiness.error(R.string.add_subscription_business_failure)
+         } catch (e: UnknownHostException)
+         {
+            AddBusiness.error(R.string.add_business_network)
+            
          }
+         
       }
       
    }

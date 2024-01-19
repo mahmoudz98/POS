@@ -1,11 +1,8 @@
 package com.casecode.pos.ui.business
 
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import androidx.databinding.BindingConversion
 import androidx.recyclerview.widget.RecyclerView
 import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.model.users.Branch
@@ -23,16 +20,15 @@ fun AppCompatAutoCompleteTextView.setAutoCompleteItems(items: Array<String>?)
    {
       val adapter = AutoCompleteAdapter(
          context,
-         items.toList()
-                                       )
+         items.toList())
       setOnItemClickListener { _, _, position, _ ->
          adapter.setSelectedItem(position)
          setText(adapter.getItem(position), false)
-         
       }
       setAdapter(adapter)
    }
 }
+
 
 /**
  * When there is no  data (data is null), hide the [RecyclerView], otherwise show it.

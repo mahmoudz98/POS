@@ -41,10 +41,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project>
             configurePrintApksTask(this)
             configureBadgingTasks(extensions.getByType<BaseExtension>(), this)
       
-        
-         
             }
-         
          }
  
       }

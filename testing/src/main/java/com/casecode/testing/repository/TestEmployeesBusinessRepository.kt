@@ -33,7 +33,7 @@ class TestEmployeesBusinessRepository @Inject constructor() : EmployeesBusinessR
       TODO("Not yet implemented")
    }
    
-   override suspend fun setEmployees(employees: ArrayList<Employee>, uid: String): AddEmployees
+   override suspend fun setEmployees(employees: MutableList<Employee>, uid: String): AddEmployees
    {
       if (shouldReturnError)
       {

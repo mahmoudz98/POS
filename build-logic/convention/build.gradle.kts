@@ -3,17 +3,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
    `kotlin-dsl`
-   
 }
-
 group = "com.casecode.pos.buildlogic"
 
 
 
 java {
-   toolchain {
-      languageVersion.set(JavaLanguageVersion.of(17))
-   }
+   sourceCompatibility = JavaVersion.VERSION_17
+   targetCompatibility = JavaVersion.VERSION_17
 }
 tasks.withType<KotlinCompile>().configureEach {
    kotlinOptions {
@@ -28,7 +25,7 @@ dependencies {
    compileOnly(libs.firebase.performance.gradlePlugin)
    compileOnly(libs.kotlin.gradlePlugin)
    compileOnly(libs.ksp.gradlePlugin)
- //  testCompileOnly(libs.android.junit5.plugin)
+   implementation(libs.truth)
 }
 
 tasks{
@@ -62,10 +59,7 @@ gradlePlugin {
          implementationClass = "AndroidApplicationFirebaseConventionPlugin"
          
       }
-    /*   register("androidTest") {
-         id = "pos.android.test"
-         implementationClass = "AndroidTestConventionPlugin"
-      } */
+   
       register("androidTest4") {
          id = "pos.android.test4"
          implementationClass = "AndroidTest4ConventionPlugin"
