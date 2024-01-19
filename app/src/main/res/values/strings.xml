@@ -52,7 +52,7 @@
     <!-- collection -->
     <string name="COLLECTION_CUSTOMER" translatable="false">Customer</string>
     <string name="COLLECTION_BRANCHES" translatable="false">Branches</string>
-    <string name="business_plans">Business plans</string>
+    <string name="business_subscription">Subscription</string>
     <string name="business_info">Business info</string>
     <string name="done">Done</string>
     <string name="document_successfully_deleted">Document successfully deleted, %1$s</string>
@@ -65,6 +65,8 @@
     <string name="add_business_email_empty">Email is empty</string>
     <string name="add_business_phone_empty">Phone is empty</string>
     <string name="add_business_phone_invalid">Enter valid phone number</string>
+    <string name="add_business_failed">Failure when add new business, please try again</string>
+    <string name="add_business_success">Business added is Successfully.</string>
 
     // types of store
     <string name="store_type_clothes">Clothes</string>
@@ -90,6 +92,8 @@
     <string name="plan_trxn">\u0020TRXN</string>
     <string name="subscription_price_currency">EGP</string>
     <string name="subscription_price_month">\u0020month</string>
+    <string name="add_subscription_failed">Failure when add new Subscription, please try again</string>
+    <string name="add_subscription_success">Subscription added is Successfully.</string>
 
     // Network labels
     <string name="network_error">Check your internet connection Please</string>
@@ -116,6 +120,7 @@
 
     <string name="add_employee_password_error">Password must be at least 6 characters. </string>
 
+    <string name="add_employees_success">Employees Added success, Go on.</string>
     <string name="add_employee_success">Employee Added success.</string>
     <string name="add_employee_fail">Employee Added failed.</string>
     <string name="update_employee_success">Employee updated success.</string>

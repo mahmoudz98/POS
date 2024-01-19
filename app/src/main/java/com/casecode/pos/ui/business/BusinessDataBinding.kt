@@ -20,16 +20,15 @@ fun AppCompatAutoCompleteTextView.setAutoCompleteItems(items: Array<String>?)
    {
       val adapter = AutoCompleteAdapter(
          context,
-         items.toList()
-                                       )
+         items.toList())
       setOnItemClickListener { _, _, position, _ ->
          adapter.setSelectedItem(position)
          setText(adapter.getItem(position), false)
-         
       }
       setAdapter(adapter)
    }
 }
+
 
 /**
  * When there is no  data (data is null), hide the [RecyclerView], otherwise show it.
@@ -43,6 +42,7 @@ fun RecyclerView.bindListSubscriptions(items: List<Subscription>?)
    }
    
 }
+
 
 @BindingAdapter("bindCost", "bindDuration")
 fun TextView.bindCostAndDuration(cost: Long, duration: Long)

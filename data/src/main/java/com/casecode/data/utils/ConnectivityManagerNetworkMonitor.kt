@@ -16,6 +16,7 @@
 
 package com.casecode.data.utils
 
+
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.ConnectivityManager.NetworkCallback
@@ -23,18 +24,19 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
+import timber.log.Timber
 import javax.inject.Inject
 
 class ConnectivityManagerNetworkMonitor @Inject constructor(
      @ApplicationContext private val context: Context,
+     val coroutineScope: CoroutineScope,
                                                            ) : NetworkMonitor
 {
    override val isOnline: Flow<Boolean> = callbackFlow {
@@ -66,10 +68,12 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
             networks -= network
             channel.trySend(networks.isNotEmpty())
          }
+         
       }
       
       val request = Builder()
          .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+         .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
          .build()
       connectivityManager.registerNetworkCallback(request, callback)
       
@@ -80,18 +84,20 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
       
       awaitClose {
          connectivityManager.unregisterNetworkCallback(callback)
+         Timber.d("close connectivity manager")
       }
    }
       .conflate()
    
-   @Suppress("DEPRECATION")
-   private fun ConnectivityManager.isCurrentlyConnected() = when
+   
+   private fun ConnectivityManager.isCurrentlyConnected(): Boolean
    {
-      VERSION.SDK_INT >= VERSION_CODES.M ->
-         activeNetwork
-            ?.let(::getNetworkCapabilities)
-            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-      
-      else -> activeNetworkInfo?.isConnected
-   } ?: false
+      val capabilities = this.getNetworkCapabilities(
+         this.activeNetwork)
+      return capabilities != null &&
+           (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) && capabilities.hasCapability(
+              NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
+                (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)))
+   }
 }

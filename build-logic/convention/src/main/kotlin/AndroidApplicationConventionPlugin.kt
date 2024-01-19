@@ -27,23 +27,21 @@ class AndroidApplicationConventionPlugin : Plugin<Project>
          with(pluginManager) {
             apply("com.android.application")
             apply("org.jetbrains.kotlin.android")
-          //  apply("pos.android.lint")
+            apply("org.gradle.android.cache-fix")
+              apply("pos.android.lint")
          }
       
          extensions.configure<ApplicationExtension> {
             configureKotlinAndroid(this)
             defaultConfig.targetSdk = Configuration.targetSdk
-         //   configureGradleManagedDevices(this)
+           configureGradleManagedDevices(this)
          }
          
          extensions.configure<ApplicationAndroidComponentsExtension> {
             configurePrintApksTask(this)
             configureBadgingTasks(extensions.getByType<BaseExtension>(), this)
       
-        
-         
             }
-         
          }
  
       }

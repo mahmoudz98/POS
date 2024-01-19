@@ -12,6 +12,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
 
+
 class AndroidLibraryConventionPlugin : Plugin<Project>
 {
    override fun apply(target: Project)
@@ -20,31 +21,28 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
          with(pluginManager) {
             apply("com.android.library")
             apply("org.jetbrains.kotlin.android")
-          //  apply("de.mannodermaus.android-junit5")
-            //   apply("pos.android.lint")
-            
+            apply("pos.android.lint")
+            apply("org.gradle.android.cache-fix")
          }
+         
          extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
             defaultConfig.targetSdk = Configuration.compileSdk
             configureGradleManagedDevices(this)
          }
+        
          extensions.configure<LibraryAndroidComponentsExtension> {
             configurePrintApksTask(this)
             
-            disableUnnecessaryAndroidTests(target)
+             disableUnnecessaryAndroidTests(target)
          }
+         
          dependencies {
-//            add("testImplementation", kotlin("test"))
-          //  add("testImplementation", project(":testing"))
-            add("testImplementation", libs.findLibrary("junit.jupiter").get())
-            
-            add("testImplementation", libs.findLibrary("test.hamcrest").get())
-            add("testImplementation", libs.findLibrary("test.hamcrest.library").get())
-            add("testImplementation", libs.findLibrary("test.mockk").get())
             add("implementation", libs.findLibrary("timber").get())
-            add("implementation", libs.findLibrary("kotlinx.coroutines.android").get())
-            add("testRuntimeOnly", libs.findLibrary("junit.jupiter.engine").get())
+            add("testImplementation", kotlin("test"))
+            
+           // add("testImplementation", libs.findLibrary("test.hamcrest").get())
+            //add("testImplementation", libs.findLibrary("test.hamcrest.library").get())
          }
       }
    }

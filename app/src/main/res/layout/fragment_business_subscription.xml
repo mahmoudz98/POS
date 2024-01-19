@@ -4,7 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
+
+        <import type="java.util.List" />
+
+        <import type="com.casecode.domain.model.subscriptions.Subscription" />
+
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <variable
+            name="subscriptions"
+            type="List&lt;Subscription>" />
 
         <variable
             name="viewModel"
@@ -13,7 +26,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/csl_business_subscription"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.business.BusinessSubscriptionFragment">
@@ -29,24 +41,36 @@
             android:id="@+id/rv_business_subscription"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="@{viewModel.isLoading() ? View.INVISIBLE : View.VISIBLE}"
+            android:visibility="@{isLoading ? View.INVISIBLE : View.VISIBLE}"
+            app:bindListSubscriptions="@{subscriptions}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/btn_business_subscription_branches"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:bindListSubscriptions="@{viewModel.subscriptions}"
             app:layout_constraintTop_toTopOf="@+id/gl_business_subscription_top"
             tools:itemCount="3"
             tools:listitem="@layout/item_subscription" />
 
+        <ImageView
+            android:id="@+id/imv_business_subscription_empty"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_error"
+            android:visibility="@{subscriptions.size() == 0 &amp; !isLoading ? View.VISIBLE: View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/btn_business_subscription_branches"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="gone"
+            app:layout_constraintTop_toTopOf="@+id/gl_business_subscription_top" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/pi_business_subscription"
+            android:id="@+id/cpi_business_subscription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
+            android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
 
-            android:visibility="@{viewModel.isLoading() ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +91,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/btn_business_subscription_user"
+            android:id="@+id/btn_business_subscription_employee"
             style="@style/Widget.pos.Button.TextButton.icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

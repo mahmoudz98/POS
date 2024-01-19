@@ -1,61 +1,40 @@
 ﻿import com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask
-import com.casecode.pos.Configuration
 import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
    alias(libs.plugins.pos.android.application)
    alias(libs.plugins.pos.android.hilt)
    alias(libs.plugins.kotlin.kapt)
-   alias(libs.plugins.pos.android.test)
    alias(libs.plugins.pos.android.firebase)
    
 }
-// Once the plugin is enabled, you can add JUnit 5 configuration options. Here, I set the test
-// lifecycle to 'per_class'. By default, Junit 5 creates a new test class instance for each of your
-// functions. This means that if you have 5 test cases inside a class, 5 instances are created in
-// memory. By setting the lifecycle to per_class, only one test instance is created, and all of your
-// test case functions run inside it with the same memory id. You can also annotate your classes
-// on a class-by-class basis, but here, I'm enabling the lifecycle options globally.
-/* junitPlatform {
-   configurationParameter("junit.jupiter.testinstance.lifecycle.default", "per_class")
-} */
-
 
 android {
    
-   
    defaultConfig {
       applicationId = "com.casecode.pos"
-      versionCode = Configuration.versionCode
-      versionName = Configuration.versionName
+      versionCode = com.casecode.pos.Configuration.versionCode
+      versionName = com.casecode.pos.Configuration.versionName
       
       resourceConfigurations.addAll(listOf("en", "ar"))
       
       // add the AndroidJUnitRunner, then connect JUnit 5 to the runner
-      testInstrumentationRunner = "com.casecode.pos.PosTestRunner"
-      testInstrumentationRunnerArguments["runnerBuilder"] =
-         "de.mannodermaus.junit5.AndroidJUnit5Builder"
+      testInstrumentationRunner = "com.casecode.testing.PosTestRunner"
       
-          testInstrumentationRunnerArguments["configurationParameters"] =
-             "junit.jupiter.execution.parallel.enabled=true,junit.jupiter.execution.parallel.mode.default=concurrent"
-           
    }
-  
+   
    
    buildTypes {
       debug {
-         isPseudoLocalesEnabled = true
-         
-       //  isDebuggable = true
-         isMinifyEnabled = false
-         enableAndroidTestCoverage = true
-         proguardFiles ( getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-         testProguardFiles (  getDefaultProguardFile("proguard-android.txt"), "proguardTest-rules.pro")
+         //   isPseudoLocalesEnabled = true
+         isDebuggable = true
+         // enableAndroidTestCoverage = true
       }
+    
       val release by getting {
          isMinifyEnabled = true
+         signingConfig = signingConfigs.getByName("debug")
          
          proguardFiles(
             getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -66,8 +45,6 @@ android {
       
    }
    
- 
-   
    
    /*     if (project.hasProperty("debug"))
       {
@@ -77,79 +54,45 @@ android {
       } */
    
    
-   
-   
-   packaging {
-      resources {
-         excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        excludes.add("META-INF/NOTICE")
-         excludes.add("META-INF/licenses/**")
-         excludes.add("META-INF/DEPENDENCIES")
-         excludes.add("META-INF/LICENSE")
-         excludes.add("META-INF/NOTICE.txt")
-         excludes.add("META-INF/DEPENDENCIES")
-         excludes.add("MANIFEST.MF")
-         //excludes.add("build.xml")
-      }
-   }
    @Suppress("UnstableApiUsage")
    testOptions {
-   
-       animationsDisabled = true
+      
+      animationsDisabled = true
       
       unitTests {
+         
          isIncludeAndroidResources = true
-         isReturnDefaultValues = true
-         
-         
-         all { test ->
-            test.useJUnitPlatform()
-            with(test) {
-               testLogging {
-                  events = setOf(
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT,
-                     org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_ERROR,
-                                )
-               }
-            }
-         }
-         
       }
-      
-      
    }
    
-  /* junitPlatform {
-      // Configure JUnit 5 tests here
-      filters("debug") {
-         excludeTags("slow")
-      }
-      
-      // Using local dependency instead of Maven coordinates
-      //   instrumentationTests.enabled = false
-   }**/
+   hilt {
+      enableAggregatingTask = true
+   }
    
    buildFeatures {
-  
+      
       dataBinding = true
       viewBinding = true
       buildConfig = true
    }
-   
- 
-   
-   namespace = "com.casecode.pos"
-   
    lint {
       abortOnError = false
    }
- 
    
+   packaging {
+      
+      resources {
+         excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+         excludes.add("/META-INF/NOTICE.md")
+         excludes.add ("/META-INF/licenses/**")
+         excludes.add ("META-INF/LICENSE.md")
+         excludes.add ("META-INF/LICENSE-notice.md")
+         excludes.add("DebugProbesKt.bin")
+      }
+   }
+   
+   namespace = "com.casecode.pos"
 }
-
 
 
 androidComponents {
@@ -174,10 +117,16 @@ dependencies {
    implementation(projects.data)
    implementation(projects.domain)
    implementation(projects.di)
+   // implementation(projects.testing)
    
    testImplementation(projects.domain)
    testImplementation(projects.data)
+   testImplementation(projects.di)
    testImplementation(projects.testing)
+   
+   // androidTestImplementation(projects.data)
+   androidTestImplementation(projects.domain)
+   // androidTestImplementation(projects.di)
    androidTestImplementation(projects.testing)
    
    // AndroidX
@@ -189,7 +138,6 @@ dependencies {
    implementation(libs.recyclerview)
    implementation(libs.slidingpanelayout)
    implementation(libs.window)
-   androidTestImplementation(libs.window.testing)
    
    
    // UI tools
@@ -206,7 +154,6 @@ dependencies {
    implementation(libs.navigation.fragment)
    implementation(libs.navigation.ui)
    
-
    
    // coroutines
    implementation(libs.kotlinx.coroutines.android)
@@ -214,9 +161,8 @@ dependencies {
    debugCompileOnly(libs.kotlinx.coroutines.debug)
    
    
-   
    // Debug tools
-  // debugImplementation(libs.leakcanary)
+   // debugImplementation(libs.leakcanary)
    implementation(libs.timber)
    
    
@@ -224,34 +170,39 @@ dependencies {
    // use for testing live data
    testImplementation(libs.core.testing)
    
+   // jvm test - Hilt
+   kspTest(libs.hilt.compiler)
+   
    // assertion
    testImplementation(libs.test.hamcrest)
    testImplementation(libs.test.hamcrest.library)
    
    // mockito with kotlin
-   testImplementation(libs.test.mockk)
+   // testImplementation(libs.test.mockk)
    
    // coroutines unit test
    testImplementation(libs.coroutines.test)
    testImplementation(libs.coroutines.android.test)
    
-
+   
    // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
    debugImplementation(libs.fragment.testing)
    implementation(libs.fragment.ktx)
-/*    implementation(libs.test.core)
-   implementation(libs.test.ext.junit) */
+   /*    implementation(libs.test.core)
+      implementation(libs.test.ext.junit) */
    
    
    // ******* ANDROID TESTING ***************************************************
    implementation(libs.test.espresso.idlingResource)
    
-
+   androidTestImplementation(libs.window.testing)
+   
    // Resolve conflicts between main and test APK:
    androidTestImplementation(libs.appcompat)
    androidTestImplementation(libs.material)
    androidTestImplementation(libs.androidx.annotation)
-
+   
+   
    
    androidTestImplementation(libs.test.core)
    androidTestImplementation(libs.test.ext.junit)
@@ -262,12 +213,11 @@ dependencies {
    androidTestImplementation(libs.test.rules)
    androidTestImplementation(libs.core.testing)
    
-   
-   
    androidTestImplementation(libs.test.hamcrest)
    androidTestImplementation(libs.test.hamcrest.library)
    
-   androidTestImplementation (libs.mockk.android)
+   androidTestImplementation(libs.mockk.android)
+   // androidTestImplementation(libs.test.mockk)
    
    androidTestImplementation(libs.navigation.testing)
    androidTestImplementation(libs.test.espresso.core)
@@ -279,12 +229,14 @@ dependencies {
    }
    androidTestImplementation(libs.test.espresso.contrib) {
       exclude(module = "protobuf-lite")
-      
    }
    
+   // AndroidX Test - Hilt testing
+   kspAndroidTest(libs.hilt.compiler)
+   androidTestImplementation(libs.hilt.android.testing)
+   
+   //implementation(kotlin("reflect"))
+   //  androidTestImplementation(kotlin("reflect"))
    
    
-
-   
- 
 }

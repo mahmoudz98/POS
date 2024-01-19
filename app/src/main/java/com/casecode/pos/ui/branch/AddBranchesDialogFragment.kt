@@ -150,7 +150,7 @@ class AddBranchesDialogFragment : DialogFragment()
                businessViewModel.addBranch()
             } else
             {
-               businessViewModel.setUpdateBranch()
+               businessViewModel.updateBranch()
             }
             
             dismissDialog()

@@ -149,4 +149,13 @@
         <item name="backgroundTint">@color/md_theme_light_tertiary</item>
         <item name="rippleColor">@color/md_theme_light_onTertiaryContainer</item>
     </style>
+
+
+    <style name="Widget.pos.CircularProgressIndicator" parent="Widget.Material3.CircularProgressIndicator.Medium">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CircularProgressIndicator</item>
+        <item name="trackThickness">20dp</item>
+    </style>
+    <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
+        <item name="colorPrimary">@color/md_theme_light_primaryContainer</item>
+    </style>
 </resources>

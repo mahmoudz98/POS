@@ -1,8 +1,9 @@
 package com.casecode.di.data
 
+import  com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.AppDispatchers.DEFAULT
-import com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.AppDispatchers.MAIN
+
 import com.casecode.data.utils.Dispatcher
 import dagger.Module
 import dagger.Provides
@@ -13,9 +14,8 @@ import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
- object DispatchersModule
+object DispatchersModule
 {
-   
    
    @Dispatcher(DEFAULT)
    @Provides

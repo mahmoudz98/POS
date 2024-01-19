@@ -6,7 +6,6 @@ import javax.inject.Singleton
 
 typealias AddBusiness = Resource<Boolean>
 
-@Singleton
 interface BusinessRepository
 {
    

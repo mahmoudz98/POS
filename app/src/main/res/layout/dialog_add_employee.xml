@@ -5,9 +5,10 @@
     <data>
 
         <import type="android.text.TextUtils" />
+        <import type="java.util.List" />
         <variable
-            name="viewModel"
-            type="com.casecode.pos.viewmodel.BusinessViewModel" />
+            name="branches"
+            type="List&lt;com.casecode.domain.model.users.Branch>" />
         <variable
             name="employee"
             type="com.casecode.domain.model.users.Employee" />
@@ -96,8 +97,8 @@
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="false"
                 android:cursorVisible="false"
-                android:text="@{employee.branchName  ??  null}"
-                app:itemsBranch="@{viewModel.branches}" />
+                app:textSelected="@{employee.branchName ?? null}"
+                app:itemsBranch="@{branches}" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -118,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="false"
                 android:cursorVisible="false"
-                android:text="@{employee.permission ?? null}"
+                app:textSelected="@{employee.permission ?? null}"
                 app:items="@{@stringArray/employee_permissions}" />
         </com.google.android.material.textfield.TextInputLayout>
 

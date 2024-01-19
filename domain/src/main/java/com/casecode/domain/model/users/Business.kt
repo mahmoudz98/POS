@@ -1,5 +1,6 @@
 package com.casecode.domain.model.users
 
+import timber.log.Timber
 
 
 data class Business(
@@ -24,8 +25,8 @@ enum class StoreType(
    {
       fun toStoreType(storeType: String): StoreType?
       {
-         return entries.find { type ->
-            type.arabicName == storeType || type.englishName == storeType
+         return entries.find{ type ->
+            type.arabicName == storeType || type.englishName.lowercase() == storeType.lowercase()
          }
       }
  

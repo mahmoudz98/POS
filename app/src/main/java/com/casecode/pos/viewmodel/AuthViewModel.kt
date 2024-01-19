@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
+//https://firebase.blog/posts/2022/10/using-coroutines-flows-with-firebase-on-android/
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewModel() {
 
@@ -42,7 +42,7 @@ class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewMo
             }
             Resource.Success(authResult.user!!)
         } catch (e: Exception) {
-            Resource.Error(e)
+            Resource.Error(e.message)
         }
     }
 
@@ -60,7 +60,7 @@ class AuthViewModel @Inject constructor(private val auth: FirebaseAuth) : ViewMo
             }
             Resource.Success(signInMethodQueryResult.signInMethods!!)
         } catch (e: Exception) {
-            Resource.Error(e)
+            Resource.Error(e.message)
         }
     }
 

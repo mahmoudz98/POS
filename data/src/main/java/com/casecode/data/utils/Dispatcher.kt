@@ -1,10 +1,15 @@
 package com.casecode.data.utils
 
 import javax.inject.Qualifier
+import kotlin.annotation.AnnotationRetention.RUNTIME
 
-@Retention(AnnotationRetention.RUNTIME)
+
+/*  @Target(AnnotationTarget.PROPERTY,
+   AnnotationTarget.VALUE_PARAMETER,
+   AnnotationTarget.FUNCTION) */
 @Qualifier
-annotation class Dispatcher(val appDispatchers: AppDispatchers)
+@Retention(RUNTIME)
+annotation class Dispatcher(val appDispatcher: AppDispatchers)
 enum class AppDispatchers {
    IO,
    DEFAULT,

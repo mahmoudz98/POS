@@ -1,6 +1,5 @@
 package com.casecode.pos.utils
 
-import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +12,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.casecode.pos.HiltTestActivity
 import com.casecode.pos.R
+import com.casecode.pos.ui.stepper.StepperActivity
 
 const val THEME_EXTRAS_BUNDLE_KEY =
    "androidx.fragment.app.testing.FragmentScenario.EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY"
@@ -31,8 +31,8 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
      fragmentArgs: Bundle? = null,
      themeResId: Int = R.style.Theme_POS,
      fragmentFactory: FragmentFactory? = null,
-     crossinline action: T.() -> Unit = {}
-                                                               ) {
+     crossinline action: T.() -> Unit = {}, )
+{
    val mainActivityIntent = Intent.makeMainActivity(
       ComponentName(
          ApplicationProvider.getApplicationContext(),
@@ -45,74 +45,44 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
       }
       val fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
          Preconditions.checkNotNull(T::class.java.classLoader),
-         T::class.java.name
-                                                                                )
+         T::class.java.name)
+      
       fragment.arguments = fragmentArgs
       activity.supportFragmentManager.beginTransaction()
          .add(android.R.id.content, fragment, "")
          .commitNow()
       (fragment as T).action()
-   }
-}
-inline fun <reified T : Fragment, reified A: AppCompatActivity> launchFragmentInHiltContainerWithActivity(
-     fragmentArgs: Bundle? = null,
-     @StyleRes themeResId: Int = R.style.Theme_POS,
-     crossinline action: Fragment.() -> Unit = {},
-                                                                                             ):ActivityScenario<A>
-{
-   val startActivityIntent = Intent.makeMainActivity(
-      ComponentName(
-         ApplicationProvider.getApplicationContext(),
-         A::class.java,
-                   ),
-                                                    ).putExtra(
-      THEME_EXTRAS_BUNDLE_KEY,
-      themeResId,
-                                                              )
-   
-   return ActivityScenario.launch<A>(startActivityIntent).onActivity { activity ->
-      
-      
-      val fragment: Fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
-         Preconditions.checkNotNull(T::class.java.classLoader),
-         T::class.java.name,
-                                                                                          )
-      fragment.arguments = fragmentArgs
-      activity.supportFragmentManager
-         .beginTransaction()
-         .add(android.R.id.content, fragment, "")
-         .commitNow()
-      
-      fragment.action()
    }
 }
 
-/*
-const val THEME_EXTRAS_BUNDLE_KEY = "androidx.fragment.app.testing.FragmentScenario.EmptyFragmentActivity.THEME_EXTRAS_BUNDLE_KEY"
-inline fun <reified T : Fragment> launchFragmentInHiltContainer(
-     fragmentArgs: Bundle? = null,
-     themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
+inline fun <reified T : Fragment, reified A : AppCompatActivity> launchFragmentInHiltContainerWithActivity(
+     @StyleRes themeResId: Int = R.style.Theme_POS,
      fragmentFactory: FragmentFactory? = null,
-     crossinline action: T.() -> Unit = {}
-                                                               ) {
+     
+     crossinline action: T.() -> Unit = {},
+     )
+{
+
+   
    val mainActivityIntent = Intent.makeMainActivity(
       ComponentName(
          ApplicationProvider.getApplicationContext(),
-         HiltTestActivity::class.java
-                   )
-                                                   ).putExtra(THEME_EXTRAS_BUNDLE_KEY, themeResId)
-   ActivityScenario.launch<HiltTestActivity>(mainActivityIntent).onActivity { activity ->
+         A::class.java))
+      .putExtra(THEME_EXTRAS_BUNDLE_KEY, themeResId)
+   
+   ActivityScenario.launch<A>(mainActivityIntent).onActivity { activity ->
       fragmentFactory?.let {
-         activity.supportFragmentManager. = it
+         activity.supportFragmentManager.fragmentFactory = it
       }
-      val fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
+   /*    val fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
          Preconditions.checkNotNull(T::class.java.classLoader),
-         T::class.java.name
-                                                                                )
+         T::class.java.name)
+      
       fragment.arguments = fragmentArgs
       activity.supportFragmentManager.beginTransaction()
          .add(android.R.id.content, fragment, "")
          .commitNow()
-      (fragment as T).action()
+      (fragment as T).action() */
+  
    }
-}*/
+}
