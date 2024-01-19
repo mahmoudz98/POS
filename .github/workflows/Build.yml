@@ -48,8 +48,4 @@ jobs:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports-${{ matrix.api-level }}
-          path: '**/build/reports/androidTests'
+  
