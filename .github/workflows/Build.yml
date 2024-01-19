@@ -1,4 +1,5 @@
 name: Build
+
 on:
   pull_request:
     branches: [ master ]
@@ -6,16 +7,18 @@ on:
     branches: [ master ]
 
   jobs:
-     test_and_apk:
-     name: "Local tests and apk"
-     runs_on: ubuntu_latest
+  test_and_apk:
+    name: "Local tests and APKs"
+    runs-on: ubuntu-latest
 
-     permissions:
+    permissions:
       contents: write
+      
+    timeout-minutes: 60
 
-      timeout_minutes: 60
+    timeout_minutes: 60
 
-      steps:
+    steps:
       - name: checkout
         uses: actions/checkout@v4
 
