@@ -1,14 +1,13 @@
 name: Build
-
 on:
-  push:
-    branches:
-      - master
   pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
 
   jobs:
      test_and_apk:
-     name: "Local tests and apks"
+     name: "Local tests and apk"
      run_on: ubuntu_latest
 
      permissions:
