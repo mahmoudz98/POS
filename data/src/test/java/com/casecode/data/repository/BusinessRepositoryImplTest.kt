@@ -8,6 +8,7 @@ import com.casecode.domain.model.users.StoreType
 import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
+import com.casecode.pos.data.R
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -96,7 +97,7 @@ class BusinessRepositoryImplTest
       
       val result = businessRepository.setBusiness(createValidBusiness(), "test_network_error")
       
-      assertThat(result, `is`(Resource.error("business failed")))
+      assertThat(result, `is`(Resource.error(R.string.add_subscription_business_failure)))
    }
    
    @Test
@@ -108,7 +109,7 @@ class BusinessRepositoryImplTest
       val result = businessRepository.setBusiness(createValidBusiness(), uid)
       
       
-      assertThat(result, `is`(Resource.error("Failed to update business. Please try again later.")))
+      assertThat(result, `is`(Resource.error(R.string.add_subscription_business_failure)))
       
    }
    

@@ -61,8 +61,8 @@ To get started with the POS app, follow these steps:
 3. Build and run the app on an emulator or a physical device.
 
 ### Download
-    * [POS APK from githubAction](https://github.com/Case-Code/POS/actions) 
-
+*  Check out for the [POS APK from githubAction](https://github.com/Case-Code/POS/actions) 
+    
 ## Contributing
 
 If you would like to contribute to the project, follow these steps:

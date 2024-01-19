@@ -119,3 +119,7 @@ Eapp/src/test/java/com/casecode/pos/viewmodel/BusinessViewModelTest.kt,c\2\c2cd
 Odomain/src/main/java/com/casecode/domain/usecase/SubscriptionBusinessUsecase.kt,9\2\92f67261e5f781f3e28e8a0de3966f696468fc29
 ~
 Napp/src/main/java/com/casecode/pos/ui/business/BusinessSubscriptionFragment.kt,e\4\e477b82ac8580c668051f1e102a8724fa9ee70ba
+j
+:app/src/androidTest/java/com/casecode/pos/utils/HiltExt.kt,1\d\1dc8a151c4e40b1d637cf20ff2930362bb68259d
+}
+Mdata/src/test/java/com/casecode/data/repository/BusinessRepositoryImplTest.kt,3\3\336cc3cf4da81afe9a3a8c062804ce6d2ebcc4ff

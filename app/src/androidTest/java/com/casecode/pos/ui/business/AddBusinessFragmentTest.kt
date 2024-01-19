@@ -6,22 +6,18 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.utils.withHint
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.mockk.every
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
 
 /**
  * Integration test for the Add Business screen.
@@ -38,8 +34,6 @@ class AddBusinessFragmentTest
    
    private lateinit var context: Context
    
-   @Inject
-   lateinit var firebaseAuth: FirebaseAuth
    
    private val validEmail = "validEmail@example.com"
    private val invalidEmail = "invalidEmail.com"
@@ -54,17 +48,15 @@ class AddBusinessFragmentTest
    {
       hiltRule.inject()
       
-     // every { firebaseAuth.currentUser?.uid } answers { "test" }
       launchFragmentInHiltContainer<AddBusinessFragment> {
          this@AddBusinessFragmentTest.context = context !!
       }
-      println("uid = " + firebaseAuth.currentUser?.uid)
       
    }
    
  
    @Test
-   fun shouldShowErrorWhenStoreTypeIsEmpty()
+   fun shouldShowError_WhenStoreTypeIsEmpty()
    {
       // Given - on the add business screen
       givenUserHasEnteredEmptyStoreType()
@@ -78,7 +70,7 @@ class AddBusinessFragmentTest
    }
    
    @Test
-   fun shouldShowErrorWhenEmailInvalid()
+   fun shouldShowError_WhenEmailInvalid()
    {
       // Given
       givenUserHasEnteredInvalidEmail()
@@ -93,7 +85,7 @@ class AddBusinessFragmentTest
    
    
    @Test
-   fun shouldShowErrorWhenPhoneIsInValid()
+   fun shouldShowError_WhenPhoneIsInValid()
    {
       // Given
       givenUserHasEnteredInvalidPhone()
@@ -105,7 +97,7 @@ class AddBusinessFragmentTest
    }
    
    @Test
-   fun shouldShowStoreTypeEmptyErrorWhenStoreTypeIsEmpty()
+   fun shouldShowStoreType_EmptyError_WhenStoreTypeIsEmpty()
    {
       // Given
       givenUserHasEnteredValidEmail()
@@ -120,7 +112,7 @@ class AddBusinessFragmentTest
    }
    
    @Test
-   fun shouldShowEmailInvalidErrorWhenEmailIsInvalid()
+   fun shouldShowEmailInvalid_WhenEmailIsInvalid()
    {
       // Given
       givenUserHasEnteredValidStoreType()

@@ -87,7 +87,6 @@ android {
          excludes.add ("/META-INF/licenses/**")
          excludes.add ("META-INF/LICENSE.md")
          excludes.add ("META-INF/LICENSE-notice.md")
-         excludes.add("META-INF/DEPENDENCIES")
          excludes.add("DebugProbesKt.bin")
       }
    }

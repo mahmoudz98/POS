@@ -92,7 +92,6 @@ class BusinessViewModel @Inject constructor(
    private val _subscriptions: MutableLiveData<List<Subscription>> = MutableLiveData()
    val subscriptions: LiveData<List<Subscription>> get() = _subscriptions
    
-   private val _isErrorDataSubscriptions: MutableLiveData<Boolean> = MutableLiveData()
    
    private var _subscriptionSelected: MutableLiveData<Subscription> = MutableLiveData()
    
@@ -115,7 +114,7 @@ class BusinessViewModel @Inject constructor(
    val isAddSubscriptionBusiness get() = _isAddSubscriptionBusiness
    
    private val _isAddEmployees: MutableLiveData<AddEmployees?> = MutableLiveData()
-   val isAddEmployees get() = _isAddEmployees
+   private val isAddEmployees get() = _isAddEmployees
    
    private val _buttonNextStep: MutableLiveData<Event<Unit>> = MutableLiveData()
    val buttonNextStep: LiveData<Event<Unit>> get() = _buttonNextStep

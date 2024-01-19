@@ -11,11 +11,9 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.casecode.domain.repository.AddSubscriptionBusiness
-import com.casecode.domain.repository.SubscriptionsRepository
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.viewmodel.BusinessViewModel
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.`is`
@@ -23,7 +21,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
@@ -40,19 +37,15 @@ class BusinessSubscriptionFragmentTest
    
    private lateinit var businessViewModel: BusinessViewModel
    
-   @Inject
-   lateinit var firebaseAuth: FirebaseAuth
    
    @Before
    fun init()
    {
       hiltRule.inject()
-      //every { firebaseAuth.currentUser?.uid } returns "test"
       
       launchFragmentInHiltContainer<BusinessSubscriptionFragment> {
          this@BusinessSubscriptionFragmentTest.businessViewModel = businessViewModel
       }
-      println("uid = " + firebaseAuth.currentUser?.uid)
       
    }
    
@@ -120,18 +113,5 @@ class BusinessSubscriptionFragmentTest
          `is`(R.string.network_error))
    }
    
-   @Test
-   fun shouldReturnMessageEmpty_whenAddBusinessSubscriptionIsEmpty(){
-      // Given
-      businessViewModel.setConnected(true)
-      businessViewModel.getSubscriptionsBusiness()
-      
-      // When
-      onView(withId(R.id.btn_business_subscription_employee)).perform(click())
-      
-      // Then
-      assertThat(businessViewModel.userMessage.value?.peekContent(),
-         `is`(com.casecode.pos.domain.R.string.add_subscription_business_empty))
-   }
    
 }

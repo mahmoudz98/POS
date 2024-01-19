@@ -125,10 +125,14 @@ class BranchesFragmentTest
    
    private fun givenUserHasAddedBranches()
    {
+      businessViewModel.setEmail("test@gmail.com")
+      businessViewModel.setStoreType("Clothes")
+      businessViewModel.setPhoneBusiness("123456777")
       val branches =
          arrayListOf(Branch(1, "Branch 1", "1234567890"),
             Branch(2, "Branch 2", "9876543210"))
       businessViewModel.branches.value = branches
+      // Error when not find business storetype and email
       
       
    }
