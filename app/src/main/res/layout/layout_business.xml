@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
 
-                android:text="@{TextUtils.isEmpty(viewModel.email) ? null: viewModel.email}" />
+                android:text="@{TextUtils.isEmpty(viewModel.emailBusiness) ? null: viewModel.emailBusiness}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

@@ -5,8 +5,8 @@ import com.casecode.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Singleton
 
-typealias Subscriptions = List<Subscription>
-@Singleton
+typealias SubscriptionsResource = Resource<List<Subscription>>
+
  interface SubscriptionsRepository {
-    fun getSubscriptions(): Flow<Resource<List<Subscription>>>
+    fun getSubscriptions(): Flow<SubscriptionsResource>
 }

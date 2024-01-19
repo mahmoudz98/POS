@@ -1,4 +1,5 @@
 package com.casecode.pos
+/*
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor
@@ -27,4 +28,4 @@ class InstantTaskExecutorExtension : BeforeEachCallback, AfterEachCallback
    override fun afterEach(context: ExtensionContext?) {
       ArchTaskExecutor.getInstance().setDelegate(null)
    }
-}
+}*/

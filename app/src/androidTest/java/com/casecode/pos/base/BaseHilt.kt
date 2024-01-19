@@ -5,19 +5,18 @@ import com.casecode.domain.usecase.GetBusinessUseCase
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.domain.usecase.GetStoreUseCase
 import com.casecode.domain.usecase.SetBusinessUseCase
-import com.casecode.testing.CoroutinesTestExtension
 import com.casecode.testing.repository.TestBusinessRepository
 import com.casecode.testing.repository.TestSubscriptionsRepository
+import com.casecode.testing.util.MainDispatcherRule
 import org.junit.Before
 import org.junit.Rule
-import org.junit.jupiter.api.extension.Extensions
 
 abstract class BaseStepperTest
 {
    
    // Set the main coroutines dispatcher for unit testing.
-   @get:Extensions
-   var mainCoroutineRule = CoroutinesTestExtension()
+   @get:Rule
+   val mainDispatcherRule = MainDispatcherRule()
    
    @Rule
    @JvmField

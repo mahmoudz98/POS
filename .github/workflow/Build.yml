@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+    concurrency:
+      group: build-${{ github.ref }}
+      cancel-in-progress: true
+
+  jobs:
+    test_and_apk:
+    name: "Local tests and apks"
+    run_on: ubuntu_latest
+
+    permissions:
+      contents: write
+
+    timeout_minutes: 60
+
+  steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v1
+
+    - name: Copy CI gradle.properties
+      run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+         distribution: 'zulu'
+         java-version: 17
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+
+    - name: Check build-logic
+      run: ./gradlew check -p build-logic
+
+    - name: Upload build outputs (APKs)
+      uses: actions/upload-artifact@v4
+      with:
+          name: APKs
+          path: '**/build/outputs/apk/**/*.apk'

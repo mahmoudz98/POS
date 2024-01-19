@@ -8,7 +8,6 @@ import javax.inject.Singleton
 
 typealias Stores = List<Store>
 typealias StoresResponse = Resource<Stores>
-@Singleton
  interface StoreRepository {
     fun getStores(): Flow<StoresResponse>
 

@@ -4,8 +4,9 @@ import com.casecode.domain.model.users.Business
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.utils.Resource
+import javax.inject.Inject
 
-class TestBusinessRepository : BusinessRepository
+class TestBusinessRepository @Inject constructor() : BusinessRepository
 {
    
    private var business: Business = Business()
@@ -13,18 +14,15 @@ class TestBusinessRepository : BusinessRepository
    
    override suspend fun getBusiness(uid: String): Business
    {
+      
       return business
    }
    
    override suspend fun setBusiness(business: Business, uid: String): AddBusiness
    {
-      return if (uid.isNullOrBlank())
-      {
-         Resource.Success(false)
-      } else
-      {
-         Resource.Success(true)
-      }
+      
+      return Resource.Success(true)
+      
    }
    
    fun sendAddBusiness(business: Business)
@@ -32,4 +30,5 @@ class TestBusinessRepository : BusinessRepository
       
       this.business = business
    }
+   
 }

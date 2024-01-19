@@ -17,7 +17,7 @@ abstract class BaseViewModel : ViewModel()
    {
       if(currentUid.isBlank()){
          //TODO: handle when no uid
-         _currentUid.value = ("Error")
+         _currentUid.value = ""
       }else{
       
       _currentUid.value = currentUid

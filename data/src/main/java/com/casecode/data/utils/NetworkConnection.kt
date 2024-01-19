@@ -6,7 +6,6 @@ import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.os.Build
 import androidx.core.content.getSystemService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -24,14 +23,14 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
 class NetworkConnection @Inject constructor(
    @ApplicationContext  private val context: Context,
-     private val coroutineScope: CoroutineScope,
+    val coroutineScope: CoroutineScope,
                                            ) : NetworkMonitor
 {
    
    override val isOnline: Flow<Boolean> = callbackFlow {
+      
       val connectivityManager = context.getSystemService<ConnectivityManager>()
       if (connectivityManager == null)
       {
@@ -86,7 +85,7 @@ class NetworkConnection @Inject constructor(
             ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             
       
-      else -> true //activeNetworkInfo?.isConnected
+      else -> true//activeNetworkInfo?.isConnected
    } ?: false
    
    
@@ -207,6 +206,6 @@ class NetworkConnection @Inject constructor(
    
    companion object
    {
-      private const val TAG = "NetworkConnection"
+      const val TAG = "NetworkConnection"
    }
 }
