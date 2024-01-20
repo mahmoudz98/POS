@@ -32,7 +32,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    lateinit var firebaseAuth: FirebaseAuth
    
    val businessViewModel by viewModels<BusinessViewModel>()
-  internal val viewModel : BusinessViewModel get() = businessViewModel
+   internal val viewModel: BusinessViewModel get() = businessViewModel
    
    override fun onCreate(savedInstanceState: Bundle?)
    {
@@ -59,18 +59,21 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
    
    private fun observerUId()
    {
-      businessViewModel.currentUid.observe(this){
-         if(it.isBlank()){
-             startLoginActivity()
+      businessViewModel.currentUid.observe(this) {
+         if (it.isBlank())
+         {
+            startLoginActivity()
             Timber.e("uid is blank")
-         }else{
+         } else
+         {
             Timber.e("uid  = $it")
             
          }
       }
-    
+      
       
    }
+   
    private fun startLoginActivity()
    {
       val intent = Intent(this, SignInActivity::class.java)
@@ -86,23 +89,27 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
       observerCompleteStep()
    }
    
-  
    
-   private  fun observerNextStep(){
-      businessViewModel.buttonNextStep.observe(this, EventObserver{
-      binding.stepper.goToNextStep()
+   private fun observerNextStep()
+   {
+      businessViewModel.buttonNextStep.observe(this, EventObserver {
+         binding.stepper.goToNextStep()
       })
    }
-   private  fun observerPreviousStep(){
-      businessViewModel.buttonPreviousStep.observe(this, EventObserver{
+   
+   private fun observerPreviousStep()
+   {
+      businessViewModel.buttonPreviousStep.observe(this, EventObserver {
          binding.stepper.goToPreviousStep()
       })
    }
-   private fun observerCompleteStep(){
-      businessViewModel.buttonCompletedSteps.observe(this, EventObserver{
+   
+   private fun observerCompleteStep()
+   {
+      businessViewModel.buttonCompletedSteps.observe(this, EventObserver {
          val intent = Intent(this, MainActivity::class.java)
          // used to clean activity and al activities above it will be removed.
-         intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
          startActivity(intent)
       })
    }
@@ -118,12 +125,12 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
       }
       
    }
-  
-
+   
+   
    override fun onCompleted()
    {
       binding.stepper.showSnackbar("Step Changed", Snackbar.LENGTH_SHORT)
-    
+      
    }
    
    override fun onStepChanged(step: Int)
@@ -140,6 +147,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
       _binding = null
       
    }
+   
    private fun removeObservers()
    {
       for (field in businessViewModel.javaClass.declaredFields)

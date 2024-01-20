@@ -2,7 +2,8 @@ plugins {
    alias(libs.plugins.pos.android.library)
    
 }
-
+//https://www.youtube.com/watch?v=YORvmxQBPeM
+//https://proandroiddev.com/testing-github-actions-workflows-for-android-locally-with-docker-eb73b683dc34
 android {
    namespace = "com.casecode.pos.domain"
    
