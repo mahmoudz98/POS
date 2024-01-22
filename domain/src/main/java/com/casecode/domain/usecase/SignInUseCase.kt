@@ -6,8 +6,7 @@ import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(private val signInRepository: SignInRepository) {
 
-    suspend fun checkRegistration(email: String) =
-        signInRepository.checkRegistration(email)
+    suspend fun checkRegistration(email: String) = signInRepository.checkRegistration(email)
 
     suspend fun signInWithCredential(credential: AuthCredential) =
         signInRepository.signInWithCredential(credential)

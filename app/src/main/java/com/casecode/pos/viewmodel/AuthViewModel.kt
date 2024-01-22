@@ -1,14 +1,14 @@
 package com.casecode.pos.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.domain.repository.SignInRepository
-import com.casecode.domain.utils.FirebaseAuthResult
 import com.casecode.domain.utils.Resource
 import com.google.firebase.auth.AuthCredential
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,8 +16,9 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(private val signInRepository: SignInRepository) :
     ViewModel() {
 
-    private val _checkTheRegistration = MutableLiveData<Resource<List<String>>>()
-    val checkTheRegistration: LiveData<Resource<List<String>>> = _checkTheRegistration
+    private val _checkTheRegistration =
+        MutableStateFlow<Resource<List<String>>>(Resource.loading())
+    val checkTheRegistration: StateFlow<Resource<List<String>>> = _checkTheRegistration
 
 
     fun checkTheRegistration(email: String) {
@@ -27,9 +28,9 @@ class AuthViewModel @Inject constructor(private val signInRepository: SignInRepo
         }
     }
 
-    suspend fun signInWithCredential(credential: AuthCredential): LiveData<FirebaseAuthResult> {
-        return signInRepository.signInWithCredential(credential)
-    }
+    suspend fun signInWithCredential(credential: AuthCredential) =
+        signInRepository.signInWithCredential(credential)
+
 
     fun signOut() {
         signInRepository.signOut()

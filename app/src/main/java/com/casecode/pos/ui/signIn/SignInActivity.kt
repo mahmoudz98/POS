@@ -73,7 +73,7 @@ class SignInActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         lifecycleScope.launch {
-            authViewModel.signInWithCredential(credential).observe(this@SignInActivity) { result ->
+            authViewModel.signInWithCredential(credential).collect { result ->
                 handleAuthResult(result)
             }
         }
@@ -117,12 +117,14 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun checkTheRegistration(currentUser: FirebaseUser?) {
-        authViewModel.checkTheRegistration.observe(this) { result ->
-            when (result) {
-                is Resource.Success -> handleRegistrationSuccess(currentUser)
-                is Resource.Error -> Timber.tag(TAG).e(result.message)
-                is Resource.Empty, is Resource.Loading -> {}
-                else -> {}
+        lifecycleScope.launch {
+            authViewModel.checkTheRegistration.collect { result ->
+                when (result) {
+                    is Resource.Success -> handleRegistrationSuccess(currentUser)
+                    is Resource.Error -> Timber.tag(TAG).e(result.message)
+                    is Resource.Empty, is Resource.Loading -> {}
+                    else -> {}
+                }
             }
         }
     }
