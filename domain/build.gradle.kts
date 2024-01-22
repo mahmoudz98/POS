@@ -34,6 +34,7 @@ dependencies {
    
    testApi(projects.testing)
    api(libs.firebase.firestore.ktx)
+   api(libs.firebase.auth.ktx)
    
    testApi(libs.coroutines.test)
    

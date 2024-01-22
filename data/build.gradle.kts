@@ -33,7 +33,7 @@ dependencies {
    //Coroutines
    implementation(libs.kotlinx.coroutines.services)
    api(libs.kotlinx.coroutines.android)
-   
+   api(libs.firebase.auth.ktx)
    api(libs.hilt.android)
 
    testImplementation(libs.test.mockk)
