@@ -18,7 +18,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 /**
  * A add Employee Dialog fragment that displays the Add Employee in Users fragment.
  */
-
 class AddEmployeeDialogFragment : DialogFragment()
 {
    companion object
@@ -48,8 +47,6 @@ class AddEmployeeDialogFragment : DialogFragment()
         savedInstanceState: Bundle?,
                             ): View
    {
-      // Inflate the layout for this fragment
-      
       return binding.root
    }
    
@@ -57,21 +54,27 @@ class AddEmployeeDialogFragment : DialogFragment()
    {
       super.onViewCreated(view, savedInstanceState)
       binding.lifecycleOwner = this.viewLifecycleOwner
-      binding.viewModel = businessViewModel
       init()
    }
    
+
+   
    private fun init()
    {
+      initViewModel()
       validateInputEmployee()
       initAddEmployee()
       if (tag == UPDATE_EMPLOYEE_TAG)
       {
-         observerViewModel()
+         observerEmployeeSelected()
          
       }
    }
    
+   private fun initViewModel()
+   {
+      binding.branches = businessViewModel.branches.value
+   }
    /**
     * validate for Name, phone number, password, branch name , permission
     */
@@ -190,13 +193,12 @@ class AddEmployeeDialogFragment : DialogFragment()
          ! isPhoneValid(phone) ||
          ! isPasswordValid(password) ||
          ! isBranchNameValid(branchName) ||
-         ! isPermissionValid(permission)
-      )
+         ! isPermissionValid(permission))
       {
          return false
       }
       
-      businessViewModel.setEmployee(name, phone, password, branchName, permission)
+      businessViewModel.newEmployee(name, phone, password, branchName, permission)
       return true
    }
    
@@ -277,7 +279,7 @@ class AddEmployeeDialogFragment : DialogFragment()
       
    }
    
-   private fun observerViewModel()
+   private fun observerEmployeeSelected()
    {
       businessViewModel.employeeSelected.observe(viewLifecycleOwner) {
          binding.employee = it

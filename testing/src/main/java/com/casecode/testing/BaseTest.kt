@@ -10,11 +10,11 @@ import com.casecode.testing.repository.TestBusinessRepository
 import com.casecode.testing.repository.TestEmployeesBusinessRepository
 import com.casecode.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.testing.repository.TestSubscriptionsRepository
+import com.casecode.testing.util.CoroutinesTestRule
 import com.casecode.testing.util.TestNetworkMonitor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.Before
 import org.junit.Rule
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.extension.Extensions
 
 @ExperimentalCoroutinesApi
 abstract class BaseTest
@@ -22,25 +22,28 @@ abstract class BaseTest
    
    
    // Set the main coroutines dispatcher for unit testing.
-   @get:Extensions
-   var mainCoroutineRule = CoroutinesTestExtension()
+   @get:Rule
+   var mainCoroutineRule = CoroutinesTestRule()
    
    @Rule
    @JvmField
    val instantTaskExecutorRule = InstantTaskExecutorRule()
+   
+   // Repo
    lateinit var testNetworkMonitor: TestNetworkMonitor
    private lateinit var testBusinessRepository: TestBusinessRepository
-    lateinit var testSubscriptionsRepository: TestSubscriptionsRepository
+   lateinit var testSubscriptionsRepository: TestSubscriptionsRepository
    private lateinit var testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
    private lateinit var testEmployeesBusinessRepository: TestEmployeesBusinessRepository
    
+   // Use cases
    private lateinit var getBusinessUseCase: GetBusinessUseCase
    lateinit var setBusinessUseCase: SetBusinessUseCase
    lateinit var getSubscriptionsUseCase: GetSubscriptionsUseCase
    lateinit var setSubscriptionBusinessUseCase: SetSubscriptionBusinessUseCase
    lateinit var setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase
    
-   @BeforeEach
+   @Before
    fun setup()
    {
       testNetworkMonitor = TestNetworkMonitor()

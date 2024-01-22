@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.casecode.domain.model.users.Branch
+import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.viewmodel.BusinessViewModel
@@ -24,17 +25,19 @@ import org.junit.runner.RunWith
 /**
  * Integration test for the  Branches screen.
  */
-@RunWith(AndroidJUnit4::class)
 @MediumTest
+@RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class BranchesFragmentTest
 {
-   @Rule
-   @JvmField
-   val instantTaskExecutorRule = InstantTaskExecutorRule()
+   
    
    @get:Rule(order = 0)
    var hiltRule = HiltAndroidRule(this)
+   
+   // Executes tasks in the Architecture Components in the same thread
+   @get:Rule(order = 1)
+   var instantTaskExecutorRule = InstantTaskExecutorRule()
    
    private lateinit var businessViewModel: BusinessViewModel
    
@@ -49,23 +52,22 @@ class BranchesFragmentTest
    }
    
    @Test
-   fun givenUserHasAddedBranches_whenUserNavigatesToSubscriptionScreen_thenShouldShowBranchesInRecyclerView() {
-   
+   fun givenUserHasAddedBranches_whenUserClickButtonSubscription_thenShowMessageAddBusinessSuccess() {
       // Given
       givenUserHasAddedBranches()
+      businessViewModel.setConnected(true)
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
-      
+      whenUserClickBranchSubscription()
       // Then
-      thenUserShouldSeeBranchesRecyclerView()
+      assertThat(businessViewModel.userMessage.value?.peekContent(), `is`(R.string.add_business_success))
    }
    
    @Test
-   fun whenUserNavigatesToSubscriptionScreen_thenShouldShowAddBranchesButton() {
+   fun shouldShowMessageBranchesAreEmpty_whenClickSubscription() {
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       thenUserShouldSeeAddBranchesButton()
@@ -78,18 +80,18 @@ class BranchesFragmentTest
       givenUserHasAddedBranches()
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       thenUserShouldSeeSubscriptionButton()
    }
    @Test
-   fun givenNetworkIsUnavailable_whenUserNavigatesToSubscriptionScreen_thenReturnFalse(){
+   fun givenNetworkIsUnavailable_whenUserClickBranchSubscription_thenReturnFalse(){
       // Given
       businessViewModel.setConnected(false)
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       assertThat( businessViewModel.isOnline.value, `is`(false))
@@ -97,13 +99,13 @@ class BranchesFragmentTest
    }
    
    @Test
-   fun givenUserHasAddedBranches_whenUserNavigatesToSubscriptionScreen_thenShouldShowInfoButton() {
+   fun givenUserHasAddedBranches_whenUserClickBranchSubscription_thenShouldShowInfoButton() {
    
       // Given
       givenUserHasAddedBranches()
       
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       
       // Then
       thenUserShouldSeeInfoButton()
@@ -114,7 +116,7 @@ class BranchesFragmentTest
    fun whenUserClicksAddBranchesButton_thenShouldShowAddBranchesDialog() {
    
       // When
-      whenUserNavigatesToSubscriptionScreen()
+      whenUserClickBranchSubscription()
       whenUserClicksAddBranchesButton()
       
       // Then
@@ -123,25 +125,22 @@ class BranchesFragmentTest
    
    private fun givenUserHasAddedBranches()
    {
+      businessViewModel.setEmail("test@gmail.com")
+      businessViewModel.setStoreType("Clothes")
+      businessViewModel.setPhoneBusiness("123456777")
       val branches =
          arrayListOf(Branch(1, "Branch 1", "1234567890"),
             Branch(2, "Branch 2", "9876543210"))
       businessViewModel.branches.value = branches
+      // Error when not find business storetype and email
       
       
    }
    
-   private fun whenUserNavigatesToSubscriptionScreen()
+   private fun whenUserClickBranchSubscription()
    {
       // Navigate to the BranchesFragment
       onView(withId(R.id.btn_branches_subscription)).perform(click())
-   }
-   
-   private fun thenUserShouldSeeBranchesRecyclerView()
-   {
-      
-      onView(withId(R.id.rv_branches)).check(matches(isDisplayed()))
-      
    }
    
    private fun thenUserShouldSeeAddBranchesButton()

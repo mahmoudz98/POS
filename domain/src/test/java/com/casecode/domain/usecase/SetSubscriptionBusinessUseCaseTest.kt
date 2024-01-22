@@ -3,17 +3,19 @@ package com.casecode.domain.usecase
 import com.casecode.domain.model.users.SubscriptionBusiness
 import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
+import com.casecode.pos.domain.R
 import com.casecode.testing.repository.TestSubscriptionsBusinessRepository
-import com.casecode.testing.util.CoroutinesTestExtension
+import com.casecode.testing.util.CoroutinesTestRule
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.Rule
+import org.junit.Test
 
-@ExtendWith(CoroutinesTestExtension::class)
 class SetSubscriptionBusinessUseCaseTest
 {
+   @get:Rule
+   val coroutineTestRule = CoroutinesTestRule()
    // Given uid and subscription
    private val uid = "test"
    private val subscription: SubscriptionBusiness =
@@ -46,7 +48,7 @@ class SetSubscriptionBusinessUseCaseTest
       
       // Then - return Resource of empty uid.
       assertThat(resultEmptyUidSubscriptionBusiness,
-         `is`(Resource.empty(EmptyType.DATA, "uid is empty")))
+         `is`(Resource.empty(EmptyType.DATA, R.string.uid_empty)))
       
       
    }
@@ -59,7 +61,7 @@ class SetSubscriptionBusinessUseCaseTest
       
       // Then - return Resource of empty data
       assertThat(resultEmptySubscriptionBusiness,
-         `is`(Resource.empty(EmptyType.DATA, "Subscription business type is empty")))
+         `is`(Resource.empty(EmptyType.DATA, R.string.add_subscription_business_empty)))
    }
    
 }

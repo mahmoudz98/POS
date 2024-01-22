@@ -3,11 +3,12 @@ package com.casecode.domain.usecase
 import com.casecode.domain.model.users.Employee
 import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
+import com.casecode.pos.domain.R
 import com.casecode.testing.repository.TestEmployeesBusinessRepository
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 
 class SetEmployeesBusinessUseCaseTest{
@@ -31,28 +32,26 @@ class SetEmployeesBusinessUseCaseTest{
    }
    
    @Test
-   fun setEmployeesBusinessUseCase_emptyUid_returnEmptyUid() = runTest {
+   fun `invoke with empty UID return resource with UID empty`() = runTest {
       // When uid is empty
       val resultAddEmployeesBusiness =
          setEmployeesBusinessUseCase(employees, "")
       
       // Then - return Resource of empty uid.
-      val exceptedResultAddEmployees = Resource.empty<Boolean>(EmptyType.DATA, "uid is empty")
-      
-      assertThat(exceptedResultAddEmployees, `is`(resultAddEmployeesBusiness))
-      
+      assertThat(resultAddEmployeesBusiness,
+         `is`(Resource.empty(EmptyType.DATA,  R.string.uid_empty)))
       
    }
-   
+
    @Test
-   fun setEmployeesBusinessUseCase_emptyBusiness_returnEmptyTypeOfSubscription() = runTest {
+   fun `invoke with empty Business return resource with employees empty`() = runTest {
       // When subscription business fields is empty
       val resultEmptySubscriptionBusiness =
          setEmployeesBusinessUseCase(arrayListOf(), uid)
       
       // Then - return Resource of empty data.
       assertThat(resultEmptySubscriptionBusiness,
-         `is`(Resource.empty(EmptyType.DATA, "employees are empty")))
+         `is`(Resource.empty(EmptyType.DATA,  R.string.employees_empty)))
    }
    
    

@@ -13,12 +13,14 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
+import com.casecode.di.data.RepositoryModule
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.utils.withHint
 import com.casecode.pos.viewmodel.BusinessViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Rule
@@ -28,8 +30,8 @@ import org.junit.runner.RunWith
 /**
  * Integration test for the  add Branch screen.
  */
-@RunWith(AndroidJUnit4::class)
 @MediumTest
+@RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class AddBranchesDialogFragmentTest
 {

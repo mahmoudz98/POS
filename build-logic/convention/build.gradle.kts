@@ -3,20 +3,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
    `kotlin-dsl`
-   
 }
-
 group = "com.casecode.pos.buildlogic"
 
 
-// Configure the build-logic plugins to target JDK 17
-// This matches the JDK used to build the project, and is not related to what is running on device.
-java {
-   toolchain {
-      languageVersion.set(JavaLanguageVersion.of(17))
-   }
-}
 
+java {
+   sourceCompatibility = JavaVersion.VERSION_17
+   targetCompatibility = JavaVersion.VERSION_17
+}
 tasks.withType<KotlinCompile>().configureEach {
    kotlinOptions {
       jvmTarget = JavaVersion.VERSION_17.toString()
@@ -24,14 +19,13 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-   //compileOnly("org.gradle.android.cache-fix:org.gradle.android.cache-fix.gradle.plugin:3.0")
    compileOnly(libs.android.gradlePlugin)
    compileOnly(libs.android.tools.common)
    compileOnly(libs.firebase.crashlytics.gradlePlugin)
    compileOnly(libs.firebase.performance.gradlePlugin)
    compileOnly(libs.kotlin.gradlePlugin)
    compileOnly(libs.ksp.gradlePlugin)
-   testCompileOnly(libs.android.junit5.plugin)
+   implementation(libs.truth)
 }
 
 tasks{
@@ -65,9 +59,10 @@ gradlePlugin {
          implementationClass = "AndroidApplicationFirebaseConventionPlugin"
          
       }
-      register("androidTest") {
-         id = "pos.android.test"
-         implementationClass = "AndroidTestConventionPlugin"
+   
+      register("androidTest4") {
+         id = "pos.android.test4"
+         implementationClass = "AndroidTest4ConventionPlugin"
       }
       
       register("androidLint") {

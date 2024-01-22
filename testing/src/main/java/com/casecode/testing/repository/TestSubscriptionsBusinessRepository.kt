@@ -5,18 +5,18 @@ import com.casecode.domain.repository.AddSubscriptionBusiness
 import com.casecode.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
-import org.junit.jupiter.api.BeforeEach
+import org.junit.Before
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestSubscriptionsBusinessRepository@Inject constructor() : SubscriptionsBusinessRepository
+class TestSubscriptionsBusinessRepository @Inject constructor() : SubscriptionsBusinessRepository
 {
    
    private var shouldReturnError = false
    private var shouldReturnEmpty = false
    
-   @BeforeEach
+   @Before
    fun setup()
    {
       shouldReturnError = false
@@ -31,7 +31,7 @@ class TestSubscriptionsBusinessRepository@Inject constructor() : SubscriptionsBu
       return if (shouldReturnError)
       {
          Resource.Error("Exception")
-      }  else
+      } else
          Resource.Success(true)
    }
    
@@ -45,5 +45,5 @@ class TestSubscriptionsBusinessRepository@Inject constructor() : SubscriptionsBu
       shouldReturnError = value
    }
    
-  
+   
 }

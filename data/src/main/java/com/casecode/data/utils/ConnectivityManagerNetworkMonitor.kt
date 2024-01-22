@@ -69,17 +69,6 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
             channel.trySend(networks.isNotEmpty())
          }
          
-         override fun onCapabilitiesChanged(
-              network: Network,
-              networkCapabilities: NetworkCapabilities,
-                                           )
-         {
-            super.onCapabilitiesChanged(network, networkCapabilities)
-            val unmetered =
-               networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-            Timber.tag(NetworkConnection.TAG).d("onCapabilitiesChanged = $unmetered")
-            
-         }
       }
       
       val request = Builder()

@@ -1,38 +1,47 @@
 plugins {
-    alias(libs.plugins.pos.android.library)
+   alias(libs.plugins.pos.android.library)
 }
-
 android {
-    namespace = "com.casecode.pos.data"
-
-    @Suppress("UnstableApiUsage")
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-            this.all {
-                it.useJUnitPlatform()
-            }
-        }
-    }
-
+   namespace = "com.casecode.pos.data"
+   
+   @Suppress("UnstableApiUsage")
+   testOptions {
+      unitTests {
+         isReturnDefaultValues = true
+      }
+   }
+   packaging {
+      
+      resources {
+         excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+         excludes.add("/META-INF/NOTICE.md")
+         excludes.add ("/META-INF/licenses/**")
+         excludes.add ("META-INF/LICENSE.md")
+         excludes.add ("META-INF/LICENSE-notice.md")
+         excludes.add("META-INF/DEPENDENCIES")
+         excludes.add("DebugProbesKt.bin")
+      }
+   }
 }
 
 dependencies {
-    implementation(projects.domain)
-    testImplementation(projects.domain)
+   
+   api(projects.domain)
+   testApi(projects.domain)
+   testApi(projects.testing)
+   
+   //Coroutines
+   implementation(libs.kotlinx.coroutines.services)
+   api(libs.kotlinx.coroutines.android)
+   
+   api(libs.hilt.android)
 
-    // coroutines
-    api(libs.kotlinx.coroutines.android)
-    // hilt
-    api(libs.hilt.android)
-    // firebase-auth
-    implementation(libs.firebase.auth.ktx)
-
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testImplementation(libs.mockito.junit5)
-    testImplementation(libs.test.mockk)
-    testApi(libs.test.hamcrest)
-    testApi(libs.test.hamcrest.library)
-    testApi(libs.coroutines.test)
-    testApi(libs.hilt.android.testing)
+   testImplementation(libs.test.mockk)
+   
+   testApi(libs.coroutines.test)
+   testApi(libs.hilt.android.testing)
+   
+   
+   
+   
 }

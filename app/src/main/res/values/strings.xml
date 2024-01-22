@@ -120,6 +120,7 @@
 
     <string name="add_employee_password_error">Password must be at least 6 characters. </string>
 
+    <string name="add_employees_success">Employees Added success, Go on.</string>
     <string name="add_employee_success">Employee Added success.</string>
     <string name="add_employee_fail">Employee Added failed.</string>
     <string name="update_employee_success">Employee updated success.</string>

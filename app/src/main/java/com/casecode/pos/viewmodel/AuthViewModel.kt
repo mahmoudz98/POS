@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-
+//https://firebase.blog/posts/2022/10/using-coroutines-flows-with-firebase-on-android/
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val signInRepository: SignInRepository) :
     ViewModel() {

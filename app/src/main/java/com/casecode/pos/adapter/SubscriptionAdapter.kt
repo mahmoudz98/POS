@@ -11,7 +11,7 @@ import timber.log.Timber
 
 class SubscriptionAdapter(
      
-     val itemClick: (Subscription) -> Unit,
+     private val itemClick: (Subscription) -> Unit,
                          ) :
    RecyclerView.Adapter<SubscriptionViewHolder>()
 {
@@ -46,7 +46,6 @@ class SubscriptionAdapter(
    {
       return subscriptionItems.size
    }
-   
    
 }
 

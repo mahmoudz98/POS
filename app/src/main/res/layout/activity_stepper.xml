@@ -31,7 +31,7 @@
             app:stepperFleetDuration="@integer/material_motion_duration_long_2"
             app:stepperType="tab_numbered" />
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/frame_stepper"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="0dp"

@@ -8,30 +8,27 @@ import com.casecode.domain.utils.Resource
 import com.casecode.testing.util.EspressoIdlingResource
 import com.casecode.testing.util.MainDispatcherRule
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
+import org.junit.Before
 import org.junit.Rule
-import org.junit.jupiter.api.BeforeEach
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepository
 {
    @get:Rule
    val mainDispatcherRule = MainDispatcherRule()
    
    
-   private var subscriptions: List<Subscription> = mutableListOf()
+   private var subscriptions: List<Subscription> = subscriptionsFake()
    
    
    private var shouldReturnError = false
    private var shouldReturnEmpty = false
    
    
-   @BeforeEach
+   @Before
    fun setup()
    {
       shouldReturnError = false
@@ -44,7 +41,9 @@ class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepositor
     * @return A Flow of plans.
     */
    override fun getSubscriptions(): Flow<SubscriptionsResource> = callbackFlow {
-      EspressoIdlingResource.wrapEspressoIdlingResource {
+      println("TestSubscriptionsRepository")
+      
+         
          // Return a Flow of fake plans, depending on the edge case
          if (shouldReturnError)
          {
@@ -54,10 +53,11 @@ class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepositor
             trySend(Resource.empty(EmptyType.DATA, "Empty"))
          } else
          {
+            println("Success")
             trySend(Resource.success(subscriptions))
          }
          close()
-      }
+      
    }.flowOn(Dispatchers.IO)
    
    fun sendSubscriptions(subscriptions: List<Subscription>)
@@ -74,7 +74,8 @@ class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepositor
    {
       shouldReturnEmpty = value
    }
-   fun subscriptionsFake(): List<Subscription>
+   
+   private fun subscriptionsFake(): List<Subscription>
    {
       return listOf(Subscription(duration = 30,
          cost = 0, type = "basic", permissions = listOf("write", "read", "admin")),
