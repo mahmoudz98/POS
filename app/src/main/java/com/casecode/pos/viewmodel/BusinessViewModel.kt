@@ -7,12 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.casecode.data.mapper.asSubscriptionBusiness
+import com.casecode.data.mapper.toStoreType
 import com.casecode.data.utils.NetworkMonitor
 import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.model.users.Employee
-import com.casecode.domain.model.users.StoreType
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.AddEmployees
 import com.casecode.domain.repository.AddSubscriptionBusiness
@@ -258,7 +258,7 @@ class BusinessViewModel @Inject constructor(
    fun addBusiness(): Business
    {
       return Business(
-         storeType = StoreType.toStoreType(_storeType.value.toString()),
+         storeType = _storeType.value.toString().toStoreType(),
          email = emailBusiness.value,
          phone = phoneBusiness.value,
          branches = _branches.value?.toList() ?: listOf()
@@ -272,11 +272,12 @@ class BusinessViewModel @Inject constructor(
          val uid = currentUid.value ?: ""
          
          isAddBusiness.value = setBusinessUseCase(addBusiness(), uid)
+         observerIsAddBusiness()
+         
       } else
       {
          showSnackbarMessage(R.string.network_error)
       }
-      observerIsAddBusiness()
    }
    
    private fun observerIsAddBusiness()
@@ -422,56 +423,56 @@ class BusinessViewModel @Inject constructor(
    
    fun checkNetworkThenSetEmployees()
    {
-         
-         if (isOnline.value == true)
-         {
-            setEmployeesBusiness()
-         } else
-         {
-            showSnackbarMessage(R.string.network_error)
-         }
+      
+      if (isOnline.value == true)
+      {
+         setEmployeesBusiness()
+      } else
+      {
+         showSnackbarMessage(R.string.network_error)
+      }
       
    }
    
    private fun setEmployeesBusiness() = viewModelScope.launch {
-         
-         val uid = currentUid.value ?: ""
-         val employeesList = _employees.value ?: mutableListOf()
-         
-         _isAddEmployees.value = setEmployeesBusinessUseCase(employeesList, uid)
-         
-         checkIsAddEmployees()
+      
+      val uid = currentUid.value ?: ""
+      val employeesList = _employees.value ?: mutableListOf()
+      
+      _isAddEmployees.value = setEmployeesBusinessUseCase(employeesList, uid)
+      
+      checkIsAddEmployees()
    }
    
    private fun checkIsAddEmployees()
    {
-         
-         when (val isAddEmployeesResource = isAddEmployees.value)
+      
+      when (val isAddEmployeesResource = isAddEmployees.value)
+      {
+         is Resource.Success ->
          {
-            is Resource.Success ->
+            if (isAddEmployeesResource.data)
             {
-               if (isAddEmployeesResource.data)
-               {
-                  showSnackbarMessage(R.string.add_employees_success)
-                  completedSteps()
-               }
-            }
-            
-            is Resource.Error, is Resource.Empty ->
-            {
-               val messageRes = (isAddEmployeesResource as? Resource.Empty)?.message
-                  ?: (isAddEmployeesResource as? Resource.Error)?.message
-               
-               showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
-               
-            }
-            
-            else ->
-            {
-               showSnackbarMessage(R.string.all_error_save)
-               
+               showSnackbarMessage(R.string.add_employees_success)
+               completedSteps()
             }
          }
+         
+         is Resource.Error, is Resource.Empty ->
+         {
+            val messageRes = (isAddEmployeesResource as? Resource.Empty)?.message
+               ?: (isAddEmployeesResource as? Resource.Error)?.message
+            
+            showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
+            
+         }
+         
+         else ->
+         {
+            showSnackbarMessage(R.string.all_error_save)
+            
+         }
+      }
       
    }
    

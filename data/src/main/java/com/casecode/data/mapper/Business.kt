@@ -1,6 +1,7 @@
 package com.casecode.data.mapper
 
 import com.casecode.domain.model.users.Business
+import com.casecode.domain.model.users.StoreType
 import com.casecode.domain.utils.BRANCHES_CODE_FIELD
 import com.casecode.domain.utils.BRANCHES_COLLECTION_PATH
 import com.casecode.domain.utils.BRANCHES_NAME_FIELD
@@ -32,4 +33,11 @@ fun Business.toBusinessRequest(): HashMap<String, HashMap<String, Any?>>
          BRANCHES_COLLECTION_PATH to branchesRequest
                                  )
                    )
+}
+
+fun String.toStoreType(): StoreType?
+{
+   return StoreType.entries.find{ type ->
+      type.arabicName == this || type.englishName.lowercase() == this.lowercase()
+   }
 }

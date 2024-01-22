@@ -28,12 +28,15 @@ abstract class BaseTest
    @Rule
    @JvmField
    val instantTaskExecutorRule = InstantTaskExecutorRule()
+   
+   // Repo
    lateinit var testNetworkMonitor: TestNetworkMonitor
    private lateinit var testBusinessRepository: TestBusinessRepository
    lateinit var testSubscriptionsRepository: TestSubscriptionsRepository
    private lateinit var testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
    private lateinit var testEmployeesBusinessRepository: TestEmployeesBusinessRepository
    
+   // Use cases
    private lateinit var getBusinessUseCase: GetBusinessUseCase
    lateinit var setBusinessUseCase: SetBusinessUseCase
    lateinit var getSubscriptionsUseCase: GetSubscriptionsUseCase
