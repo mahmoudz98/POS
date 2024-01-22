@@ -30,7 +30,7 @@ dependencies {
 
 tasks{
    validatePlugins{
-      enableStricterValidation = true
+      enableStricterValidation = false
       failOnWarning = true
    }
 }

@@ -178,7 +178,7 @@ dependencies {
    testImplementation(libs.test.hamcrest.library)
    
    // mockito with kotlin
-   // testImplementation(libs.test.mockk)
+    testImplementation(libs.test.mockk)
    
    // coroutines unit test
    testImplementation(libs.coroutines.test)

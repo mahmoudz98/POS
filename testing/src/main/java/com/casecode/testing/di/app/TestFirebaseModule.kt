@@ -10,7 +10,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
-import io.mockk.mockk
 import javax.inject.Singleton
 
 @Module
@@ -23,7 +22,7 @@ object TestFirebaseModule
    private const val HOST = "127.0.0.1"
    private const val AUTH_PORT = 9099
    private const val FIRESTORE_PORT = 8080
- 
+   
    
    @Singleton
    @Provides
@@ -32,6 +31,7 @@ object TestFirebaseModule
    
    @Singleton
    @Provides
-   fun provideFirebaseFirestoreMockk(): FirebaseFirestore = Firebase.firestore.also { it.useEmulator(HOST, FIRESTORE_PORT) }
+   fun provideFirebaseFirestoreMockk(): FirebaseFirestore =
+      Firebase.firestore.also { it.useEmulator(HOST, FIRESTORE_PORT) }
    
 }

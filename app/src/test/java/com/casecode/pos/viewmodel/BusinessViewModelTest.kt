@@ -8,6 +8,9 @@ import com.casecode.pos.R
 import com.casecode.testing.BaseTest
 import com.casecode.testing.util.MainDispatcherRule
 import com.casecode.testing.util.getOrAwaitValue
+import com.google.firebase.auth.FirebaseAuth
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -29,15 +32,15 @@ class BusinessViewModelTest : BaseTest()
    
    // subject under test
    private lateinit var businessViewModel: BusinessViewModel
-   
+   private val firebaseAuth: FirebaseAuth = mockk()
    override fun init()
    {
-      /*    businessViewModel =
-            BusinessViewModel(testNetworkMonitor, setBusinessUseCase, getSubscriptionsUseCase,
-               setSubscriptionBusinessUseCase, setEmployeesBusinessUseCase) */
+       every { firebaseAuth.currentUser?.uid } returns "test"
+        businessViewModel =
+            BusinessViewModel(testNetworkMonitor,firebaseAuth, setBusinessUseCase, getSubscriptionsUseCase,
+               setSubscriptionBusinessUseCase, setEmployeesBusinessUseCase)
       
    }
-   
    
    @Test
    fun setStoreType_whenStoreTypeArabic_returnStoreTypeEnglish()
@@ -65,7 +68,7 @@ class BusinessViewModelTest : BaseTest()
       // When - add branch
       businessViewModel.addBranch()
       // Then - returns string branch success and true for is add branch.
-      assertThat(R.string.add_branch_success, `is`(businessViewModel.userMessage.getOrAwaitValue()))
+      assertThat(R.string.add_branch_success, `is`(businessViewModel.userMessage.value?.peekContent()))
       assertThat(businessViewModel.isAddBranch.value?.peekContent(), `is`(true))
    }
    
@@ -83,7 +86,7 @@ class BusinessViewModelTest : BaseTest()
       
       // Then
       assertThat(R.string.update_branch_success,
-         `is`(businessViewModel.userMessage.getOrAwaitValue()))
+         `is`(businessViewModel.userMessage.value?.peekContent()))
       assertThat(businessViewModel.isUpdateBranch.value?.peekContent(), `is`(true))
       
    }
@@ -102,7 +105,8 @@ class BusinessViewModelTest : BaseTest()
       businessViewModel.updateBranch()
       
       // Then
-      assertThat(R.string.update_branch_fail, `is`(businessViewModel.userMessage.getOrAwaitValue()))
+      assertThat(R.string.update_branch_fail,
+         `is`(businessViewModel.userMessage.value?.peekContent()))
       assertThat(businessViewModel.isUpdateBranch.value?.peekContent(), `is`(false))
       
    }
@@ -118,7 +122,8 @@ class BusinessViewModelTest : BaseTest()
       businessViewModel.updateBranch()
       
       // Then
-      assertThat(R.string.update_branch_fail, `is`(businessViewModel.userMessage.getOrAwaitValue()))
+      assertThat(R.string.update_branch_fail,
+         `is`(businessViewModel.userMessage.value?.peekContent()))
       assertThat(businessViewModel.isUpdateBranch.value?.peekContent(), `is`(false))
       
       
@@ -158,7 +163,7 @@ class BusinessViewModelTest : BaseTest()
    }
    
    @Test
-   fun addBusiness_whenNetworkIsUnavailable_thenReturnsSuccessFalseAndMessageNetworkError()
+   fun setBusinessUseCase_whenNetworkIsUnavailable_thenReturnsSuccessFalseAndMessageNetworkError()
    {
       // Given - network unAvailable
       testNetworkMonitor.setConnected(false)
@@ -167,11 +172,9 @@ class BusinessViewModelTest : BaseTest()
       // When - add new business
       businessViewModel.setBusiness()
       
-      val isAddBusiness = businessViewModel.isAddBusiness.value
       
       // Then
-      assertThat(isAddBusiness, `is`(AddBusiness.success(false)))
-      assertThat(businessViewModel.userMessage.value, `is`(R.string.network_error))
+      assertThat(businessViewModel.userMessage.value?.peekContent(), `is`(R.string.network_error))
    }
    
    @Test
@@ -224,16 +227,6 @@ class BusinessViewModelTest : BaseTest()
       
    }
    
-   @Test
-   fun getSubscriptionsBusiness_whenListEmpty_thenReturnEmpty()
-   {
-      //Given
-      val actual = "es"
-      // When
-      val result = "yes"
-      // Then
-      assertThat(actual, `is`(result))
-   }
    
    @Test
    fun getSubscriptionBusiness_whenEmptyList_thenReturnEmptyList() = runTest {

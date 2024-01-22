@@ -139,5 +139,15 @@
     <string name="price">Price</string>
     <string name="quantity">Quantity</string>
     <string name="add_a_branches">Add a product</string>
+    <string name="google_sign_in_failed">Google sign in failed %1$s</string>
+    <string name="user_exists">User exists</string>
+    <string name="user_does_not_exist">User does not exist</string>
+    <string name="employee_id">Employee Id</string>
+    <string name="employee_login">Employee login</string>
+    <string name="login">Login</string>
+    <string name="keep_an_eye_on_your_sales_and_inventory_at_all_times_and_stay_on_top_of_your_operations">Keep an eye on your sales and inventory at all times and stay on top of your operations.</string>
+    <string name="point_of_sale">Point of sale</string>
+    <string name="pos">pos</string>
+    <string name="or_employee_login">or Employee login</string>
 
 </resources>

@@ -43,7 +43,6 @@ class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepositor
    override fun getSubscriptions(): Flow<SubscriptionsResource> = callbackFlow {
       println("TestSubscriptionsRepository")
       
-      EspressoIdlingResource.wrapEspressoIdlingResource {
          
          // Return a Flow of fake plans, depending on the edge case
          if (shouldReturnError)
@@ -58,7 +57,7 @@ class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepositor
             trySend(Resource.success(subscriptions))
          }
          close()
-      }
+      
    }.flowOn(Dispatchers.IO)
    
    fun sendSubscriptions(subscriptions: List<Subscription>)

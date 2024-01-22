@@ -15,24 +15,23 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule
-{
-   @Provides
-   @Singleton
-   fun provideNetworkConnection(
+object AppModule {
+    @Provides
+    @Singleton
+    fun provideNetworkConnection(
         @ApplicationContext context: Context,
         @ApplicationScope coroutineScope: CoroutineScope,
-                               ): NetworkConnection
-   {
-      return NetworkConnection(context, coroutineScope)
-   }
-   @Provides
-   @Singleton
-   fun provideConnectivityManagerNetworkMonitor(
+    ): NetworkConnection {
+        return NetworkConnection(context, coroutineScope)
+    }
+
+    @Provides
+    @Singleton
+    fun provideConnectivityManagerNetworkMonitor(
         @ApplicationContext context: Context,
         @ApplicationScope coroutineScope: CoroutineScope,
-                               ): NetworkMonitor
-   {
-      return ConnectivityManagerNetworkMonitor(context, coroutineScope)
-   }
+    ): NetworkMonitor {
+        return ConnectivityManagerNetworkMonitor(context, coroutineScope)
+    }
+
 }
