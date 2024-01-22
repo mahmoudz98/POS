@@ -20,7 +20,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Keep an eye on your sales and inventory at all times and stay on top of your operations."
+            android:text="@string/keep_an_eye_on_your_sales_and_inventory_at_all_times_and_stay_on_top_of_your_operations"
             android:textAlignment="center"
             android:textColor="@android:color/tertiary_text_light"
             app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
@@ -34,7 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_mono"
-            android:text="Point of sale"
+            android:text="@string/point_of_sale"
             android:textAlignment="center"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/textView3"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_mono"
-            android:text="pos"
+            android:text="@string/pos"
             android:textAllCaps="true"
             android:textSize="60sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,8 +57,8 @@
             android:id="@+id/sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/text_employee_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -67,11 +67,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
+            android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="@+id/textView3"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/baseline_point_of_sale_100"
-            android:importantForAccessibility="no" />
+            app:srcCompat="@drawable/baseline_point_of_sale_100" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/text_employee_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="@string/or_employee_login"
+            android:textAlignment="center"
+            android:textColor="@color/cornflower_blue"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/sign_in_button"
+            app:layout_constraintStart_toStartOf="@+id/sign_in_button" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

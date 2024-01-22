@@ -2,6 +2,7 @@
 # AGP and tools should be updated together
 agp = "8.2.0"
 androidTools = "31.2.0"
+codeScanner = "2.1.0"
 kotlin = "1.9.21"
 kotlinKover = "0.7.4"
 androidDesugarJdkLibs = "2.0.4"
@@ -105,6 +106,7 @@ android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs
 
 # AndroidX
 activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
+code-scanner = { module = "com.budiyev.android:code-scanner", version.ref = "codeScanner" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }

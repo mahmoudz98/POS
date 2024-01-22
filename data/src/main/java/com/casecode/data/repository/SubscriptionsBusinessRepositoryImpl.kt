@@ -17,46 +17,44 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class SubscriptionsBusinessRepositoryImpl @Inject constructor(private val fireStore: FirebaseFirestore,
-   @Dispatcher(IO)private val ioDispatcher: CoroutineDispatcher):SubscriptionsBusinessRepository
-{
-   override suspend fun setSubscriptionBusiness(
+class SubscriptionsBusinessRepositoryImpl @Inject constructor(
+    private val fireStore: FirebaseFirestore,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher
+) : SubscriptionsBusinessRepository {
+    override suspend fun setSubscriptionBusiness(
         subscriptionBusiness: SubscriptionBusiness,
         uid: String,
-                                               ): AddSubscriptionBusiness
-   {
-      if (uid.isBlank())
-      {
-         return Resource.error("can't find uid")
-      }
-      
-      return withContext(ioDispatcher) {
-         try
-         {
-            val resultAddSubscription = suspendCoroutine<AddSubscriptionBusiness> { continuation ->
-               val addSubscriptionBusinessRequest = subscriptionBusiness.asSubscriptionRequest()
-               fireStore.collection(USERS_COLLECTION_PATH).document(uid)
-                  .update(addSubscriptionBusinessRequest).addOnSuccessListener {
-                     Timber.d("Subscription business is added successfully")
-                     continuation.resume(Resource.Success(true))
-                  }.addOnFailureListener {
-                     continuation.resume(Resource.error(it.message!!))
-                     
-                     Timber.e("Subscription Business Failure: $it")
-                  }
+    ): AddSubscriptionBusiness {
+        if (uid.isBlank()) {
+            return Resource.error("can't find uid")
+        }
+
+        return withContext(ioDispatcher) {
+            try {
+                val resultAddSubscription =
+                    suspendCoroutine<AddSubscriptionBusiness> { continuation ->
+                        val addSubscriptionBusinessRequest =
+                            subscriptionBusiness.asSubscriptionRequest()
+                        fireStore.collection(USERS_COLLECTION_PATH).document(uid)
+                            .update(addSubscriptionBusinessRequest).addOnSuccessListener {
+                                Timber.d("Subscription business is added successfully")
+                                continuation.resume(Resource.Success(true))
+                            }.addOnFailureListener {
+                                continuation.resume(Resource.error(it.message!!))
+
+                                Timber.e("Subscription Business Failure: $it")
+                            }
+                    }
+                resultAddSubscription
+
+            } catch (e: Exception) {
+                Timber.e("Exception while adding business: $e")
+                Resource.error(e.message!!)
             }
-            resultAddSubscription
-            
-         } catch (e: Exception)
-         {
-            Timber.e("Exception while adding business: $e")
-            Resource.error(e.message!!)
-         }
-      }
-   }
-   
-   override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>>
-   {
-      TODO("Not yet implemented")
-   }
+        }
+    }
+
+    override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> {
+        TODO("Not yet implemented")
+    }
 }

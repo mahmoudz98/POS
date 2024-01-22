@@ -15,4 +15,7 @@ class SignInUseCase @Inject constructor(private val signInRepository: SignInRepo
         signInRepository.signOut()
     }
 
+    suspend fun employeeLogin(uid: String, employeeId: String, password: String) =
+        signInRepository.employeeLogin(uid, employeeId, password)
+
 }

@@ -43,6 +43,11 @@ class SignInActivity : AppCompatActivity() {
 
         configureGoogleSignIn()
         setupSignInButton()
+
+        binding.textEmployeeLogin.setOnClickListener {
+            showLoginDialog()
+        }
+
     }
 
     private fun configureGoogleSignIn() {
@@ -160,6 +165,11 @@ class SignInActivity : AppCompatActivity() {
             putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
             putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString())
         }
+    }
+
+    private fun showLoginDialog() {
+        val loginDialogFragment = LoginDialogFragment()
+        loginDialogFragment.show(supportFragmentManager, "LoginDialogFragment")
     }
 
     companion object {
