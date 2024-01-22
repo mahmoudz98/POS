@@ -123,3 +123,5 @@ j
 :app/src/androidTest/java/com/casecode/pos/utils/HiltExt.kt,1\d\1dc8a151c4e40b1d637cf20ff2930362bb68259d
 }
 Mdata/src/test/java/com/casecode/data/repository/BusinessRepositoryImplTest.kt,3\3\336cc3cf4da81afe9a3a8c062804ce6d2ebcc4ff
+g
+7data/src/main/java/com/casecode/data/mapper/Business.kt,9\0\9007c72e58b77e9103b094de46b1753e53f46dde
