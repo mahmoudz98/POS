@@ -10,10 +10,11 @@ import javax.inject.Singleton
 @Singleton
 interface SignInRepository {
     suspend fun checkRegistration(email: String): Resource<List<String>>
+    // Issue: Functions returning "Flow" or "Channel" should not be suspending.
     suspend fun signInWithCredential(credential: AuthCredential): Flow<FirebaseAuthResult>
     fun signOut()
 
-    suspend fun employeeLogin(
+     fun employeeLogin(
         uid: String,
         employeeId: String,
         password: String

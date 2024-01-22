@@ -13,12 +13,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement
+/* import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
+import com.budiyev.android.codescanner.ScanMode */
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.databinding.FragmentLoginDialogBinding
 import com.casecode.pos.viewmodel.AuthViewModel
@@ -38,7 +38,7 @@ class LoginDialogFragment : DialogFragment() {
     private var _binding: FragmentLoginDialogBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var codeScanner: CodeScanner
+   // private lateinit var codeScanner: CodeScanner
     
     /**
      *  TODO: Add barcode scanner, It's very easy to use.
@@ -64,7 +64,10 @@ class LoginDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         requestCameraPermissionOrStartScanning()
-
+        //Issue: Bad way to declare variable  to pointer view in xml, use two data binding way,
+        // 1. use binding.viewId
+        // 2. don't use this way because it's not good practice, use binding.viewId
+        // 3. Why, Its declared in ViewBinding class , and now its point to viewId in ViewBinding class, takes more space in memory, and this is shallow copy of view object.
         // Initialize views using binding
         val progressBar: ProgressBar = binding.progressBar
         val tilEmployeeId: TextInputLayout = binding.tilEmployeeId
@@ -170,7 +173,7 @@ class LoginDialogFragment : DialogFragment() {
     }
 
     private fun startScanning() {
-        codeScanner = CodeScanner(requireContext(), binding.codeScannerView)
+     /*    codeScanner = CodeScanner(requireContext(), binding.codeScannerView)
         codeScanner.apply {
             camera = CodeScanner.CAMERA_BACK
             formats = CodeScanner.ALL_FORMATS
@@ -208,7 +211,7 @@ class LoginDialogFragment : DialogFragment() {
 
         binding.codeScannerView.setOnClickListener {
             codeScanner.startPreview()
-        }
+        } */
     }
 
     companion object {

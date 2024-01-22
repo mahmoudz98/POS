@@ -129,3 +129,11 @@ s
 Capp/src/main/java/com/casecode/pos/ui/signIn/LoginDialogFragment.kt,c\7\c750e3565cb0c7b4df564aa65b792c1b84438105
 P
  app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
+w
+Gdata/src/main/java/com/casecode/data/repository/SignInRepositoryImpl.kt,f\7\f74830d295fbf84ff21521ef57d211e972d55357
+w
+Gdomain/src/main/java/com/casecode/domain/repository/SignInRepository.kt,1\8\18e45dd974a44eb981b5d7395a6fd7b234f7afab
+o
+?data/src/main/java/com/casecode/data/utils/NetworkConnection.kt,d\4\d482247d6e8af7414eea9d8620a4ff1911f18f10
+n
+>app/src/main/java/com/casecode/pos/ui/signIn/SignInActivity.kt,a\9\a990e83bb39bfc902120561425a821c05acd66d7

@@ -15,11 +15,13 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
-
+// Issue: visit website how to use firebase with coroutines. and firebase team built app with coroutines.
+//https://firebase.blog/posts/2022/10/using-coroutines-flows-with-firebase-on-android/
 class SignInRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
@@ -60,33 +62,35 @@ class SignInRepositoryImpl @Inject constructor(
         // Sign out from Firebase Authentication
         auth.signOut()
     }
-
-    override suspend fun employeeLogin(
-        uid: String,
-        employeeId: String,
-        password: String
-    ): Flow<Resource<ArrayList<Employee>>> = flow {
-        try {
+    
+    override fun employeeLogin(
+         uid: String,
+         employeeId: String,
+         password: String): Flow<Resource<ArrayList<Employee>>> = callbackFlow {
+        
             val employeeDocumentSnapshot =
-                firestore.collection(USERS_COLLECTION_PATH).document(uid).get().await()
-
-            if (employeeDocumentSnapshot.exists()) {
-                val employeeDataMap = employeeDocumentSnapshot.data
-                Timber.i("employeeDataMap: $employeeDataMap" )
-                if (employeeDataMap != null) {
-                    val employeeList = employeeDataMap.values.map { it as Employee }
-                    val arrayList = ArrayList(employeeList)
-                    emit(Resource.Success(arrayList))
-                } else {
-                    emit(Resource.Error("Failed to parse employee data"))
+                firestore.collection(USERS_COLLECTION_PATH).document(uid).get()
+            
+            employeeDocumentSnapshot
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        val employeeDataMap = documentSnapshot.data
+                        val employeeList = employeeDataMap?.values?.mapNotNull { it as? Employee }
+                        val arrayList = ArrayList(employeeList)
+                        trySend(Resource.Success(arrayList))
+                        Timber.i("Employee data fetched successfully. UID: $uid")
+                    } else {
+                        trySend(Resource.Error("Employee document does not exist. UID: $uid"))
+                        Timber.e("Employee document does not exist. UID: $uid")
+                    }
                 }
-            } else {
-                emit(Resource.Error("Employee data not found"))
-            }
-        } catch (e: Exception) {
-            Timber.e("Exception while getting employee data: $e")
-            emit(Resource.Error(e.message ?: "Failed to get employee data"))
-        }
-    }
-
+                .addOnFailureListener { exception ->
+                    trySend(Resource.Error("Failed to fetch employee data"))
+                    Timber.e("Failed to fetch employee data. UID: $uid, Error: $exception")
+                }
+            
+        
+    }.flowOn(ioDispatcher)
+    
+    
 }
