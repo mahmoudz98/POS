@@ -125,3 +125,7 @@ j
 Mdata/src/test/java/com/casecode/data/repository/BusinessRepositoryImplTest.kt,3\3\336cc3cf4da81afe9a3a8c062804ce6d2ebcc4ff
 g
 7data/src/main/java/com/casecode/data/mapper/Business.kt,9\0\9007c72e58b77e9103b094de46b1753e53f46dde
+s
+Capp/src/main/java/com/casecode/pos/ui/signIn/LoginDialogFragment.kt,c\7\c750e3565cb0c7b4df564aa65b792c1b84438105
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e

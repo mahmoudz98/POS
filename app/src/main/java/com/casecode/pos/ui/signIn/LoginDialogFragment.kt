@@ -25,6 +25,7 @@ import com.casecode.pos.viewmodel.AuthViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.mlkit.vision.barcode.BarcodeScanner
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -38,7 +39,19 @@ class LoginDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var codeScanner: CodeScanner
-
+    
+    /**
+     *  TODO: Add barcode scanner, It's very easy to use.
+     * TODO: use barcode scanner with ml scanner in ml sdk kit.
+     * // Example:
+     *  https://github.com/googlesamples/mlkit/blob/master/android/vision-quickstart/app/src/main/java/com/google/mlkit/vision/demo/kotlin/barcodescanner/BarcodeScannerProcessor.kt
+     *  // visit website to learn how to use :
+     *  https://developers.google.com/ml-kit/vision/barcode-scanning/android
+     *
+     */
+    private lateinit var barcodeScanner: BarcodeScanner
+    
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

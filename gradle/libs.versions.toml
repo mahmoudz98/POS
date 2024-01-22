@@ -2,6 +2,7 @@
 # AGP and tools should be updated together
 agp = "8.2.1"
 androidTools = "31.2.1"
+barcodeScanning = "17.2.0"
 kotlin = "1.9.22"
 kotlinKover = "0.7.4"
 androidDesugarJdkLibs = "2.0.4"
@@ -172,6 +173,7 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase-auth" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
 
 
 

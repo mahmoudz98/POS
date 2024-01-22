@@ -154,6 +154,7 @@ dependencies {
    implementation(libs.navigation.fragment)
    implementation(libs.navigation.ui)
    
+   implementation (libs.barcode.scanning)
    
    // coroutines
    implementation(libs.kotlinx.coroutines.android)
