@@ -268,7 +268,7 @@ class AddEmployeeDialogFragment : DialogFragment()
    
    private fun dismissDialog()
    {
-      val isCompact = businessViewModel.isCompact.value?.peekContent()
+      val isCompact = businessViewModel.isCompact.value
       if (isCompact == true)
       {
          dismiss()

@@ -21,9 +21,7 @@
         android:theme="@style/Theme.POS"
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
-        <profileable
-            android:shell="true"
-            tools:targetApi="29" />
+
 
         <activity
             android:name="com.casecode.pos.ui.stepper.StepperActivity"
@@ -38,7 +36,7 @@
         <activity
             android:name="com.casecode.pos.ui.signIn.SignInActivity"
             android:exported="true"
-            android:label="Google Sign In"></activity>
+            android:label="Google Sign In" />
 
         <meta-data
             android:name="preloaded_fonts"

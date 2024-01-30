@@ -2,15 +2,40 @@ package com.casecode.pos.base
 
 import android.text.Editable
 import android.text.TextWatcher
-import timber.log.Timber
+import android.view.View
+import android.widget.EditText
 
 abstract class BaseTextWatcher : TextWatcher {
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        Timber.i("beforeTextChanged: ${p0?.isEmpty()}")
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-    }
+    override fun afterTextChanged(p0: Editable?) {}
+}
 
-    override fun afterTextChanged(p0: Editable?) {
-        Timber.i("afterTextChanged: ${p0?.isEmpty()}")
+inline fun EditText.doAfterTextChangedListener(
+     crossinline afterTextChanged: (text: Editable?) -> Unit
+                                              ) {
+    
+    val textWatcher = object : BaseTextWatcher()
+    {
+        override fun afterTextChanged(s: Editable?) {
+            afterTextChanged.invoke(s)
+        }
+        
+        override fun beforeTextChanged(text: CharSequence?, start: Int,
+                                       count: Int, after: Int) {
+        }
+        
+        override fun onTextChanged(text: CharSequence?, start: Int, before:
+        Int, count: Int) {
+        }
     }
+    
+    onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+        if (hasFocus) {
+            addTextChangedListener(textWatcher)
+        } else {
+            removeTextChangedListener(textWatcher)
+        }
+    }
+    
 }
