@@ -5,132 +5,141 @@
     <data>
 
         <import type="android.text.TextUtils" />
+
         <import type="java.util.List" />
+
         <variable
             name="branches"
             type="List&lt;com.casecode.domain.model.users.Branch>" />
+
         <variable
             name="employee"
             type="com.casecode.domain.model.users.Employee" />
     </data>
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/normal_spacing">
+        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatTextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@{employee.name != null ? @string/update_employee: @string/add_employee}" />
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_add_employee_name"
-            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_spacing"
-            android:hint="@string/employee_name"
-            app:startIconDrawable="@drawable/ic_code">
+            android:orientation="vertical"
+            android:padding="@dimen/normal_spacing">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_add_employee_name"
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text="@{employee.name  ?? null}" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_gravity="center"
+                android:text="@{employee.name != null ? @string/update_employee: @string/add_employee}" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_add_employee_phone"
-            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_spacing"
-            android:hint="@string/phone_number"
-            app:startIconDrawable="@drawable/ic_call">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_add_employee_phone"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_add_employee_name"
+                style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:text="@{employee.phoneNumber ?? null}" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/small_spacing"
+                android:hint="@string/employee_name"
+                app:startIconDrawable="@drawable/ic_code">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_add_employee_password"
-            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_spacing"
-            android:hint="@string/password"
-            app:startIconDrawable="@drawable/ic_call">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_add_employee_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="@{employee.name  ?? null}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_add_employee_password"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_add_employee_phone"
+                style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:imeOptions="actionDone"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:hint="@string/phone_number"
+                app:startIconDrawable="@drawable/ic_call">
 
-                android:text="@{employee.password ?? null}" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_employee_branch"
-            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/employee_branch_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
-            app:startIconDrawable="@drawable/ic_store">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_add_employee_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:text="@{employee.phoneNumber ?? null}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/actv_employee_branch"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_add_employee_password"
+                style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"
-                android:cursorVisible="false"
-                app:textSelected="@{employee.branchName ?? null}"
-                app:itemsBranch="@{branches}" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/small_spacing"
+                android:hint="@string/password"
+                app:startIconDrawable="@drawable/ic_call">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_add_employee_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_employee_permission"
-            style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/employee_permissions"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
-            app:startIconDrawable="@drawable/ic_permission">
+                    android:text="@{employee.password ?? null}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/actv_employee_permission"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_employee_branch"
+                style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"
-                android:cursorVisible="false"
-                app:textSelected="@{employee.permission ?? null}"
-                app:items="@{@stringArray/employee_permissions}" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/employee_branch_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
+                app:startIconDrawable="@drawable/ic_store">
 
-        <Button
-            android:id="@+id/btn_employee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small_spacing"
-            android:text="@{employee.name != null ? @string/update : @string/add}" />
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/actv_employee_branch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:focusableInTouchMode="false"
+                    app:itemsBranch="@{branches}"
+                    app:textSelected="@{employee.branchName ?? null}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-    </LinearLayout>
-</ScrollView>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_employee_permission"
+                style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/employee_permissions"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
+                app:startIconDrawable="@drawable/ic_permission">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/actv_employee_permission"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:cursorVisible="false"
+                    android:focusableInTouchMode="false"
+                    app:items="@{@stringArray/employee_permissions}"
+                    app:textSelected="@{employee.permission ?? null}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/btn_employee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:text="@{employee.name != null ? @string/update : @string/add}" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
 </layout>

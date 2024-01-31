@@ -11,11 +11,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/csl_employees_root">
-        <include
-            android:id="@+id/l_employees"
-            layout="@layout/layout_employees"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                >
+            <include
+                android:id="@+id/l_employees"
+                layout="@layout/layout_employees"
+
+                />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fcv_employees_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/normal_spacing"
+                android:layout_gravity="end"
+
+                tools:layout="@layout/dialog_add_employee" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
         <Button
             android:id="@+id/btn_employees_done"

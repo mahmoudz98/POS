@@ -136,7 +136,6 @@ class AddBranchesDialogFragment : DialogFragment()
       
    }
    
-   
    private fun initAddAndUpdateBranch()
    {
       binding.etAddBranchesPhone.setOnEditorActionListener { _, actionId, _ ->
@@ -169,7 +168,6 @@ class AddBranchesDialogFragment : DialogFragment()
    
    private fun isValidBranchInput(): Boolean
    {
-      
       val name = binding.etAddBranchesName.text.toString()
       val phone = binding.etAddBranchesPhone.text.toString()
       // Check login and pass are empty

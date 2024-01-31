@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.casecode.pos.R
 import com.casecode.pos.adapter.EmployeeAdapter
 import com.casecode.pos.databinding.FragmentEmployeesBinding
+import com.casecode.pos.ui.branch.AddBranchesDialogFragment
+import com.casecode.pos.utils.EventObserver
+import com.casecode.pos.utils.compactScreen
 import com.casecode.pos.utils.setupSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -48,6 +52,26 @@ class EmployeesFragment : Fragment()
       setupSnackbar()
       initAdapter()
       initClick()
+      setupWithTwoPane()
+   }
+   
+   private fun setupWithTwoPane()
+   {
+      val isCompact = requireActivity().compactScreen()
+      businessViewModel.setCompact(isCompact)
+      if (! isCompact)
+      {
+         binding.fcvEmployeesDialog.visibility = View.VISIBLE
+         binding.lEmployees.btnEmployeesAdd.visibility = View.GONE
+         parentFragmentManager.beginTransaction().replace(binding.fcvEmployeesDialog.id,
+            AddEmployeeDialogFragment.newInstance(),
+            AddEmployeeDialogFragment.ADD_EMPLOYEE_TAG).commit()
+         // When Update employee rest ui to add employee in tablet.
+         observerUpdateEmployeeInTablet()
+      }else{
+         binding.fcvEmployeesDialog.visibility = View.GONE
+         binding.lEmployees.btnEmployeesAdd.visibility = View.VISIBLE
+      }
    }
    
    private fun initViewModel()
@@ -68,9 +92,16 @@ class EmployeesFragment : Fragment()
       val employeeAdapter: EmployeeAdapter by lazy {
          EmployeeAdapter {
             businessViewModel.setEmployeeSelected(it)
-            val employeeDialog = AddEmployeeDialogFragment()
-            employeeDialog.show(parentFragmentManager,
-               AddEmployeeDialogFragment.UPDATE_EMPLOYEE_TAG)
+            if (businessViewModel.isCompact.value == true)
+            {
+               val employeeDialog = AddEmployeeDialogFragment()
+               employeeDialog.show(parentFragmentManager,
+                  AddEmployeeDialogFragment.UPDATE_EMPLOYEE_TAG)
+            }else{
+               parentFragmentManager.beginTransaction().replace(binding.fcvEmployeesDialog.id,
+                  AddEmployeeDialogFragment.newInstance(),
+                  AddEmployeeDialogFragment.UPDATE_EMPLOYEE_TAG).commit()
+            }
          }
       }
       binding.lEmployees.rvEmployees.adapter = employeeAdapter
@@ -92,6 +123,20 @@ class EmployeesFragment : Fragment()
          }
       }
       
+   }
+   private fun observerUpdateEmployeeInTablet()
+   {
+      if (businessViewModel.isCompact.value == false)
+      {
+         businessViewModel.isUpdateEmployee.observe(viewLifecycleOwner, EventObserver {
+            // Clear previous update employee dialog.
+            parentFragmentManager.beginTransaction().replace(binding.fcvEmployeesDialog.id,
+               AddEmployeeDialogFragment.newInstance(),
+               AddEmployeeDialogFragment.ADD_EMPLOYEE_TAG).commit()
+            
+         })
+         
+      }
    }
    
    

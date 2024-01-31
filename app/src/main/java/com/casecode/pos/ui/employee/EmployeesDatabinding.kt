@@ -13,7 +13,7 @@ import timber.log.Timber
 fun AppCompatAutoCompleteTextView.setItemsBranch(branches: List<Branch>?)
 {
    Timber.i("items $branches")
-   val items = branches?.map{it.branchName}
+   val items = branches?.map { it.branchName }
    if (items != null)
    {
       val adapter = AutoCompleteAdapter(
@@ -34,11 +34,20 @@ fun AppCompatAutoCompleteTextView.setSelected(itemSelected: String?)
 {
    if (itemSelected.isNullOrBlank()) return
    val adapter = (adapter as AutoCompleteAdapter)
-   val position = adapter.getPosition(itemSelected)
-   adapter.setSelectedItem(position)
-   setText(adapter.getItem(position), false)
+   adapter.runCatching {
+      val position = getPosition(itemSelected)
+      setSelectedItem(position)
+      setText(adapter.getItem(position), false)
+   }.onFailure {
+      setText(itemSelected, false)
+      
+   }
+   //val position = adapter.getPosition(itemSelected)
+   //adapter.setSelectedItem(position)
+   
    
 }
+
 @BindingAdapter("bindListEmployee")
 fun RecyclerView.bindListEmployee(items: MutableList<Employee>?)
 {

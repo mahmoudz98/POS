@@ -105,6 +105,7 @@ class BusinessViewModel @Inject constructor(
    private val _isAddEmployee: MutableLiveData<Event<Boolean>> = MutableLiveData()
    
    private val _isUpdateEmployee: MutableLiveData<Event<Boolean>> = MutableLiveData()
+   val isUpdateEmployee get() = _isUpdateEmployee
    
    private val _employeeSelected: MutableLiveData<Employee> = MutableLiveData()
    val employeeSelected get() = _employeeSelected
