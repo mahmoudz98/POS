@@ -5,19 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.adapter.BranchesAdapter
 import com.casecode.pos.databinding.FragmentBranchesBinding
-import com.casecode.pos.utils.asInt
+import com.casecode.pos.utils.EventObserver
 import com.casecode.pos.utils.compactScreen
 import com.casecode.pos.utils.setupSnackbar
-import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -35,18 +31,8 @@ class BranchesFragment : Fragment()
    private var _binding: FragmentBranchesBinding? = null
    private val binding get() = _binding !!
    
-   
    // Shared ViewModel associated with the hosting activity
    internal val businessViewModel by activityViewModels<BusinessViewModel>()
-   
-   // Lazy initialization of BranchesAdapter
-   private val branchAdapter: BranchesAdapter by lazy {
-      BranchesAdapter {
-         businessViewModel.setBranchSelected(it)
-         val dialog = AddBranchesDialogFragment.newInstance()
-         dialog.show(parentFragmentManager, AddBranchesDialogFragment.UPDATE_BRANCH_TAG)
-      }
-   }
    
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +62,8 @@ class BranchesFragment : Fragment()
       initClicked()
       setupSnackbar()
       setupWithTwoPane()
+      observerUpdateBranchInTablet()
+      
    }
    
    private fun setupWithTwoPane()
@@ -85,20 +73,22 @@ class BranchesFragment : Fragment()
       Timber.e("setupTwoPane:  isCompact = %s", isCompact)
       if (! isCompact)
       {
-         /*  requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-             BranchesOnBackPressedCallback(binding.splBranches))
-          binding.splBranches.isOpen */
-         val ft: FragmentTransaction = childFragmentManager.beginTransaction()
-         val dialog = AddBranchesDialogFragment.newInstance()
-         ft.add(binding.fcvAddBranch.id, dialog)
-         ft.commit()
-         //   binding.splBranches.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
+         binding.fcvAddBranch.visibility = View.VISIBLE
+         binding.branches.btnBranchesAdd.visibility = View.GONE
+         
+         parentFragmentManager.beginTransaction()
+            .replace(R.id.fcv_add_branch,
+               AddBranchesDialogFragment.newInstance(),
+               AddBranchesDialogFragment.ADD_BRANCH_TAG).commit()
+         
       } else
       {
-         // binding.splBranches.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
+         binding.branches.btnBranchesAdd.visibility = View.VISIBLE
+         binding.fcvAddBranch.visibility = View.GONE
       }
       
    }
+   
    /**
     * Initializes the ViewModel associated with the layout.
     */
@@ -111,6 +101,23 @@ class BranchesFragment : Fragment()
    
    private fun initAdapter()
    {
+      // Lazy initialization of BranchesAdapter
+      val branchAdapter: BranchesAdapter by lazy {
+         BranchesAdapter {
+            businessViewModel.setBranchSelected(it)
+            if (businessViewModel.isCompact.value == true)
+            {
+               val dialog = AddBranchesDialogFragment.newInstance()
+               dialog.show(parentFragmentManager, AddBranchesDialogFragment.UPDATE_BRANCH_TAG)
+            } else
+            {
+               parentFragmentManager.beginTransaction()
+                  .replace(R.id.fcv_add_branch,
+                     AddBranchesDialogFragment.newInstance(),
+                     AddBranchesDialogFragment.UPDATE_BRANCH_TAG).commit()
+            }
+         }
+      }
       binding.branches.rvBranches.adapter = branchAdapter
    }
    
@@ -127,36 +134,48 @@ class BranchesFragment : Fragment()
          branches.btnBranchesAdd.setOnClickListener {
             val dialog = AddBranchesDialogFragment.newInstance()
             dialog.show(parentFragmentManager, AddBranchesDialogFragment.ADD_BRANCH_TAG)
+         }
+      }
+   }
+   
+   private fun observerUpdateBranchInTablet()
+   {
+      if (businessViewModel.isCompact.value == false)
+      {
+         businessViewModel.isUpdateBranch.observe(viewLifecycleOwner, EventObserver {
+            // Clear previous update branch dialog.
+            parentFragmentManager.beginTransaction()
+               .replace(R.id.fcv_add_branch,
+                  AddBranchesDialogFragment.newInstance(),
+                  AddBranchesDialogFragment.ADD_BRANCH_TAG).commit()
             
+         })
+         
+      }
+   }
+      
+      /**
+       * Initializes the subscription to check network availability before adding a business.
+       */
+      private fun initClickSubscription()
+      {
+         binding.btnBranchesSubscription.setOnClickListener {
+            businessViewModel.setBusiness()
          }
       }
       
-   }
-   
-   /**
-    * Initializes the subscription to check network availability before adding a business.
-    */
-   private fun initClickSubscription()
-   {
-      binding.btnBranchesSubscription.setOnClickListener {
-         businessViewModel.setBusiness()
+      private fun setupSnackbar()
+      {
+         binding.root.setupSnackbar(viewLifecycleOwner,
+            businessViewModel.userMessage,
+            BaseTransientBottomBar.LENGTH_SHORT)
+         
+      }
+      
+      override fun onDestroyView()
+      {
+         super.onDestroyView()
+         
+         _binding = null
       }
    }
-   
-   
-  
-   
-  
-   private fun setupSnackbar()
-   {
-      binding.root.setupSnackbar(viewLifecycleOwner, businessViewModel.userMessage, BaseTransientBottomBar.LENGTH_SHORT)
-      
-   }
-   
-   override fun onDestroyView()
-   {
-      super.onDestroyView()
-      
-      _binding = null
-   }
-}

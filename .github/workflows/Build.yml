@@ -42,6 +42,9 @@ jobs:
       - name: Check build-logic
         run: ./gradlew check -p build-logic
 
+      - name: Check spotless
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
         with:

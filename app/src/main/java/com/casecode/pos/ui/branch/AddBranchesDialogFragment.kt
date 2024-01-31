@@ -7,11 +7,12 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.casecode.pos.R
-import com.casecode.pos.base.BaseTextWatcher
+import com.casecode.pos.base.doAfterTextChangedListener
 import com.casecode.pos.databinding.DialogAddBranchBinding
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -38,30 +39,48 @@ class AddBranchesDialogFragment : DialogFragment()
       get() = _binding !!
    private val businessViewModel by activityViewModels<BusinessViewModel>()
    
+   
    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
    {
-      val builder = MaterialAlertDialogBuilder(requireContext())
-       _binding = DialogAddBranchBinding.inflate(layoutInflater)
       
-      builder.setView(binding.root)
+      if(businessViewModel.isCompact.value == true){
+         val builder =
+            MaterialAlertDialogBuilder(requireContext())
+         _binding = DialogAddBranchBinding.inflate(layoutInflater)
+         
+         builder.setView(_binding?.root)
+         return builder.create()
+      }else{
       
-      return builder.create()
+       val dialog = super.onCreateDialog(savedInstanceState)
+      
+      dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+      return dialog
+      }
+      
    }
    
+ 
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
                             ): View?
    {
       // Inflate the layout for this fragment
-    //  _binding = DialogAddBranchBinding.inflate(layoutInflater)
-      
+      if(businessViewModel.isCompact.value == false)
+      {
+         _binding = DialogAddBranchBinding.inflate(layoutInflater, container, false)
+      }
       return _binding?.root
    }
+ 
+   
    
    override fun onViewCreated(view: View, savedInstanceState: Bundle?)
    {
       super.onViewCreated(view, savedInstanceState)
+      binding.lifecycleOwner = this.viewLifecycleOwner
+      
       init()
    }
    
@@ -75,58 +94,45 @@ class AddBranchesDialogFragment : DialogFragment()
       }
    }
    
-
    
    private fun validateAddBranch()
    {
+      binding.etAddBranchesName.doAfterTextChangedListener{ branchNameEditText ->
+         
+         if (TextUtils.isEmpty(branchNameEditText))
+         {
+            binding.tilAddBranchesName.boxStrokeErrorColor
+            binding.tilAddBranchesName.error =
+               getString(R.string.add_branch_name_empty)
+            
+         } else
+         {
+            binding.tilAddBranchesName.boxStrokeColor =
+               resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
+            binding.tilAddBranchesName.error = null
+         }
+      }
       
-      binding.etAddBranchesName.addTextChangedListener(object : BaseTextWatcher()
+   binding.etAddBranchesPhone.doAfterTextChangedListener { PhoneEditText ->
+      if (TextUtils.isEmpty(PhoneEditText))
       {
-         override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int)
-         {
-            
-            if (TextUtils.isEmpty(s))
-            {
-               binding.tilAddBranchesName.boxStrokeErrorColor
-               binding.tilAddBranchesName.error =
-                  getString(R.string.add_branch_name_empty)
-               
-            } else
-            {
-               binding.tilAddBranchesName.boxStrokeColor =
-                  resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-               binding.tilAddBranchesName.error = null
-            }
-            
-         }
+         binding.tilAddBranchesPhone.boxStrokeErrorColor
+         binding.tilAddBranchesPhone.error =
+            getString(R.string.all_phone_empty)
          
-      })
-      binding.etAddBranchesPhone.addTextChangedListener(object : BaseTextWatcher()
+      } else if (! PhoneEditText.toString().trim { it <= ' ' }
+            .matches(Patterns.PHONE.toString().toRegex()))
       {
-         override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int)
-         {
-            
-            if (TextUtils.isEmpty(s))
-            {
-               binding.tilAddBranchesPhone.boxStrokeErrorColor
-               binding.tilAddBranchesPhone.error =
-                  getString(R.string.all_phone_empty)
-               
-            } else if (! s.toString().trim { it <= ' ' }
-                  .matches(Patterns.PHONE.toString().toRegex()))
-            {
-               binding.tilAddBranchesPhone.error =
-                  getString(R.string.all_phone_invalid)
-            } else
-            {
-               binding.tilAddBranchesPhone.boxStrokeColor =
-                  resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-               binding.tilAddBranchesPhone.error = null
-            }
-            
-         }
-         
-      })
+         binding.tilAddBranchesPhone.error =
+            getString(R.string.all_phone_invalid)
+      } else
+      {
+         binding.tilAddBranchesPhone.boxStrokeColor =
+            resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
+         binding.tilAddBranchesPhone.error = null
+      }
+      
+   }
       
    }
    
@@ -153,13 +159,12 @@ class AddBranchesDialogFragment : DialogFragment()
                businessViewModel.updateBranch()
             }
             
-            dismissDialog()
+            dismissDialogOrClearContext()
          }
          
       }
    }
    
-
    
    private fun isValidBranchInput(): Boolean
    {
@@ -199,19 +204,22 @@ class AddBranchesDialogFragment : DialogFragment()
       return true
       
    }
-   private fun dismissDialog()
+   
+   private fun dismissDialogOrClearContext()
    {
-      val isCompact = businessViewModel.isCompact.value?.peekContent()
+      val isCompact = businessViewModel.isCompact.value
       if (isCompact == true)
       {
          dismiss()
          
       } else
       {
-         // binding.etAddBranchesName.text = null
-         // binding.etAddBranchesPhone.text = null
+         
+         binding.etAddBranchesName.text = null
+         binding.etAddBranchesPhone.text = null
       }
    }
+   
    private fun observerViewModel()
    {
       businessViewModel.branchSelected.observe(viewLifecycleOwner) {

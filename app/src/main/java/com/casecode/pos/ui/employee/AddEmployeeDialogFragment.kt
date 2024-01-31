@@ -7,10 +7,12 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.casecode.pos.R
 import com.casecode.pos.base.BaseTextWatcher
+import com.casecode.pos.base.doAfterTextChangedListener
 import com.casecode.pos.databinding.DialogAddEmployeeBinding
 import com.casecode.pos.viewmodel.BusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,10 +38,17 @@ class AddEmployeeDialogFragment : DialogFragment()
    
    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
    {
-      val builder = MaterialAlertDialogBuilder(requireContext())
-      _binding = DialogAddEmployeeBinding.inflate(layoutInflater)
-      builder.setView(binding.root)
-      return builder.create()
+      if(businessViewModel.isCompact.value == true){
+         val builder = MaterialAlertDialogBuilder(requireContext())
+         _binding = DialogAddEmployeeBinding.inflate(layoutInflater)
+         builder.setView(binding.root)
+         return builder.create()
+      }else
+      {
+         val dialog = super.onCreateDialog(savedInstanceState)
+         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+         return dialog
+      }
    }
    
    override fun onCreateView(
@@ -47,6 +56,10 @@ class AddEmployeeDialogFragment : DialogFragment()
         savedInstanceState: Bundle?,
                             ): View
    {
+      if(businessViewModel.isCompact.value == false){
+         _binding = DialogAddEmployeeBinding.inflate(layoutInflater, container, false)
+         
+      }
       return binding.root
    }
    
@@ -88,84 +101,69 @@ class AddEmployeeDialogFragment : DialogFragment()
    
    private fun validateNameEmployeeInput()
    {
-      binding.etAddEmployeeName.addTextChangedListener(object : BaseTextWatcher()
-      {
-         override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int)
+      binding.etAddEmployeeName.doAfterTextChangedListener {nameEditText ->
+         if (TextUtils.isEmpty(nameEditText))
          {
+            binding.tilAddEmployeeName.boxStrokeErrorColor
+            binding.tilAddEmployeeName.error =
+               getString(R.string.add_employee_name_empty)
             
-            if (TextUtils.isEmpty(s))
-            {
-               binding.tilAddEmployeeName.boxStrokeErrorColor
-               binding.tilAddEmployeeName.error =
-                  getString(R.string.add_employee_name_empty)
-               
-            } else
-            {
-               binding.tilAddEmployeeName.boxStrokeColor =
-                  resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-               binding.tilAddEmployeeName.error = null
-            }
-            
+         } else
+         {
+            binding.tilAddEmployeeName.boxStrokeColor =
+               resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
+            binding.tilAddEmployeeName.error = null
          }
-         
-      })
+      }
+      
    }
    
    private fun validatePhoneEmployeeInput()
    {
-      binding.etAddEmployeePhone.addTextChangedListener(object : BaseTextWatcher()
-      {
-         override fun onTextChanged(s: CharSequence?, start: Int, count: Int, after: Int)
+      binding.etAddEmployeePhone.doAfterTextChangedListener { phoneEditText ->
+         if (TextUtils.isEmpty(phoneEditText))
          {
+            binding.tilAddEmployeePhone.boxStrokeErrorColor
+            binding.tilAddEmployeePhone.error =
+               getString(R.string.all_phone_empty)
             
-            if (TextUtils.isEmpty(s))
-            {
-               binding.tilAddEmployeePhone.boxStrokeErrorColor
-               binding.tilAddEmployeePhone.error =
-                  getString(R.string.all_phone_empty)
-               
-            } else if (! s.toString().trim { it <= ' ' }
-                  .matches(Patterns.PHONE.toString().toRegex()))
-            {
-               binding.tilAddEmployeePhone.error =
-                  getString(R.string.all_phone_invalid)
-            } else
-            {
-               binding.tilAddEmployeePhone.boxStrokeColor =
-                  resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-               binding.tilAddEmployeePhone.error = null
-            }
-            
+         } else if (! phoneEditText.toString().trim { it <= ' ' }
+               .matches(Patterns.PHONE.toString().toRegex()))
+         {
+            binding.tilAddEmployeePhone.error =
+               getString(R.string.all_phone_invalid)
+         } else
+         {
+            binding.tilAddEmployeePhone.boxStrokeColor =
+               resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
+            binding.tilAddEmployeePhone.error = null
          }
-         
-      })
+      }
+     
    }
    
    private fun validatePasswordEmployeeInput()
    {
-      binding.etAddEmployeePassword.addTextChangedListener(object : BaseTextWatcher()
-      {
-         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int)
-         {
-            if (TextUtils.isEmpty(s))
-            {
-               binding.tilAddEmployeePassword.boxStrokeErrorColor
-               binding.tilAddEmployeePassword.error =
-                  getString(R.string.add_employee_password_empty)
-               
-            } else if (s.toString().length < 6)
-            {
-               binding.tilAddEmployeePassword.error =
-                  getString(R.string.add_employee_password_error)
-            } else
-            {
-               binding.tilAddEmployeePassword.boxStrokeColor =
-                  resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-               binding.tilAddEmployeePassword.error = null
-            }
-         }
+      binding.etAddEmployeePassword.doAfterTextChangedListener {passwordEditText ->
          
-      })
+         if (TextUtils.isEmpty(passwordEditText))
+         {
+            binding.tilAddEmployeePassword.boxStrokeErrorColor
+            binding.tilAddEmployeePassword.error =
+               getString(R.string.add_employee_password_empty)
+            
+         } else if (passwordEditText.toString().length < 6)
+         {
+            binding.tilAddEmployeePassword.error =
+               getString(R.string.add_employee_password_error)
+         } else
+         {
+            binding.tilAddEmployeePassword.boxStrokeColor =
+               resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
+            binding.tilAddEmployeePassword.error = null
+         }
+      }
+    
    }
    
    private fun initAddEmployee()
@@ -268,15 +266,18 @@ class AddEmployeeDialogFragment : DialogFragment()
    
    private fun dismissDialog()
    {
-      val isCompact = businessViewModel.isCompact.value?.peekContent()
+      val isCompact = businessViewModel.isCompact.value
       if (isCompact == true)
       {
          dismiss()
       } else
       {
-         // TODO: handle dialog with tablet
+         binding.etAddEmployeeName.text = null
+         binding.etAddEmployeePhone.text = null
+         binding.etAddEmployeePassword.text = null
+         binding.actvEmployeeBranch.text = null
+         binding.actvEmployeePermission.text = null
       }
-      
    }
    
    private fun observerEmployeeSelected()

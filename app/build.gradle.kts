@@ -29,6 +29,8 @@ android {
       debug {
          //   isPseudoLocalesEnabled = true
          isDebuggable = true
+         isMinifyEnabled = false
+         
          // enableAndroidTestCoverage = true
       }
     
@@ -87,7 +89,7 @@ android {
          excludes.add ("/META-INF/licenses/**")
          excludes.add ("META-INF/LICENSE.md")
          excludes.add ("META-INF/LICENSE-notice.md")
-         excludes.add("DebugProbesKt.bin")
+        // excludes.add("DebugProbesKt.bin")
       }
    }
    
@@ -117,16 +119,13 @@ dependencies {
    implementation(projects.data)
    implementation(projects.domain)
    implementation(projects.di)
-   // implementation(projects.testing)
    
    testImplementation(projects.domain)
    testImplementation(projects.data)
    testImplementation(projects.di)
    testImplementation(projects.testing)
    
-   // androidTestImplementation(projects.data)
    androidTestImplementation(projects.domain)
-   // androidTestImplementation(projects.di)
    androidTestImplementation(projects.testing)
    
    // AndroidX
@@ -135,6 +134,7 @@ dependencies {
    
    implementation(libs.appcompat)
    implementation(libs.lifecycle.viewmodel)
+   implementation(libs.lifecycle.livedata)
    implementation(libs.recyclerview)
    implementation(libs.slidingpanelayout)
    implementation(libs.window)

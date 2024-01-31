@@ -15,17 +15,14 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:layout_weight="0"
-
+            android:layout_weight="1"
             >
-
             <include
                 android:id="@+id/branches"
                 layout="@layout/layout_branches"
-
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -33,15 +30,12 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fcv_add_branch"
-                android:name="com.casecode.pos.ui.branch.AddBranchesDialogFragment"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_margin="@dimen/normal_spacing"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_gravity="end"
 
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:layout="@layout/dialog_add_branch" />
 
 

@@ -105,6 +105,7 @@ class BusinessViewModel @Inject constructor(
    private val _isAddEmployee: MutableLiveData<Event<Boolean>> = MutableLiveData()
    
    private val _isUpdateEmployee: MutableLiveData<Event<Boolean>> = MutableLiveData()
+   val isUpdateEmployee get() = _isUpdateEmployee
    
    private val _employeeSelected: MutableLiveData<Employee> = MutableLiveData()
    val employeeSelected get() = _employeeSelected
@@ -125,7 +126,7 @@ class BusinessViewModel @Inject constructor(
    private val _buttonCompletedSteps: MutableLiveData<Event<Unit>> = MutableLiveData()
    val buttonCompletedSteps get() = _buttonCompletedSteps
    
-   private var _isCompact: MutableLiveData<Event<Boolean>> = MutableLiveData(Event(true))
+   private var _isCompact: MutableLiveData<Boolean> = MutableLiveData(true)
    val isCompact get() = _isCompact
    
    init
@@ -585,7 +586,7 @@ class BusinessViewModel @Inject constructor(
    
    fun setCompact(isCompact: Boolean)
    {
-      _isCompact.value = Event(isCompact)
+      _isCompact.value = (isCompact)
    }
    
 }

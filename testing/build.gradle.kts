@@ -27,6 +27,7 @@ dependencies {
    api(projects.di)
    
    // use for testing live data
+   implementation(libs.firebase.auth.ktx)
    
    api(libs.core.testing)
    api(libs.coroutines.test)
