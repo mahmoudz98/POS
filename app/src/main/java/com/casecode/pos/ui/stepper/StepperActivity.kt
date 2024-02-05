@@ -62,7 +62,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener
       businessViewModel.currentUid.observe(this) {
          if (it.isBlank())
          {
-           // startLoginActivity()
+            startLoginActivity()
             Timber.e("uid is blank")
          } else
          {

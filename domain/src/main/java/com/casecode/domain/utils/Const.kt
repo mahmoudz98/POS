@@ -17,6 +17,7 @@ const val CUSTOMER_NAME_FIELD = "name"
 
 // business
 const val BUSINESS_STORE_TYPE_FIELD = "storeType"
+const val BUSINESS_IS_COMPLETED_STEP_FIELD = "isCompletedStep"
 const val BUSINESS_EMAIL_FIELD = "email"
 const val BUSINESS_PHONE_NUMBER_FIELD = "phoneNumber"
 

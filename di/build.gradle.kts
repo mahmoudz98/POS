@@ -12,6 +12,7 @@ dependencies {
    api(projects.domain)
    api(libs.firebase.firestore.ktx)
    api(libs.firebase.auth.ktx)
+   implementation(libs.play.services.auth)
 
    
    

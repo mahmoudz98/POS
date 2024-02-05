@@ -13,32 +13,33 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-/* import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode */
+import com.budiyev.android.codescanner.ScanMode
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.databinding.FragmentLoginDialogBinding
 import com.casecode.pos.viewmodel.AuthViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.mlkit.vision.barcode.BarcodeScanner
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @AndroidEntryPoint
 class LoginDialogFragment : DialogFragment() {
+    
+    companion object {
+        private const val CAMERA_PERMISSION_REQUEST_CODE = 123
+    }
 
     private val authViewModel: AuthViewModel by viewModels()
 
     private var _binding: FragmentLoginDialogBinding? = null
     private val binding get() = _binding!!
 
-   // private lateinit var codeScanner: CodeScanner
     
     /**
      *  TODO: Add barcode scanner, It's very easy to use.
@@ -49,7 +50,7 @@ class LoginDialogFragment : DialogFragment() {
      *  https://developers.google.com/ml-kit/vision/barcode-scanning/android
      *
      */
-    private lateinit var barcodeScanner: BarcodeScanner
+    private lateinit var codeScanner: CodeScanner
     
     
     override fun onCreateView(
@@ -125,10 +126,7 @@ class LoginDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+   
 
     @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION")
@@ -173,7 +171,7 @@ class LoginDialogFragment : DialogFragment() {
     }
 
     private fun startScanning() {
-     /*    codeScanner = CodeScanner(requireContext(), binding.codeScannerView)
+        codeScanner = CodeScanner(requireContext(), binding.codeScannerView)
         codeScanner.apply {
             camera = CodeScanner.CAMERA_BACK
             formats = CodeScanner.ALL_FORMATS
@@ -188,33 +186,35 @@ class LoginDialogFragment : DialogFragment() {
                     // Process the scanned result using coroutines if needed
 //                    viewModel.processScannedResult(it.text)
                     // Show a toast (or any other UI update)
-                    UiThreadStatement.runOnUiThread {
+                    
+                  //  UiThreadStatement.runOnUiThread {
                         Toast.makeText(
                             requireContext(),
                             "Scan result: ${it.text}",
                             Toast.LENGTH_SHORT
                         ).show()
-                    }
+                    
                 }
             }
 
             errorCallback = ErrorCallback {
-                UiThreadStatement.runOnUiThread {
+               // UiThreadStatement.runOnUiThread {
                     Toast.makeText(
                         requireContext(),
                         "Camera initialization error: ${it.message}",
                         Toast.LENGTH_SHORT
                     ).show()
-                }
+                
             }
         }
 
         binding.codeScannerView.setOnClickListener {
             codeScanner.startPreview()
-        } */
+        }
     }
-
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 123
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

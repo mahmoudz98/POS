@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "578787836284-thkplg1cilb1o4980kub2snnshcekm3g.apps.googleusercontent.com",
+          "client_id": "578787836284-khe5qr3f930jmdr8odhlr41bgddhbc18.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.casecode.pos",
-            "certificate_hash": "f25b0fb6f5ff2583f987b7cf214745a4b6ff5951"
+            "certificate_hash": "2c732c050f1c89d44f64e166450b31fec155c310"
           }
         },
         {
@@ -36,7 +36,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "578787836284-1ha2u4nugqtbj3qkvnaioqfbei14trji.apps.googleusercontent.com",
+              "client_id": "116939853704121386927",
               "client_type": 3
             }
           ]

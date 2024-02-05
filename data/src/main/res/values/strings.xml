@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="default_web_client_id" translatable="false">578787836284-1ha2u4nugqtbj3qkvnaioqfbei14trji.apps.googleusercontent.com</string>
+
     // Business
     <string name="add_business_failure">Add  Business failure,</string>
     <string name="add_business_network">Failure when add business, Check internet connection</string>

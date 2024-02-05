@@ -2,6 +2,7 @@
 
 package com.casecode.pos
 
+
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
@@ -83,7 +84,6 @@ abstract class CheckBadgingTask : DefaultTask() {
     
     @TaskAction
     fun taskAction() {
-        
         assertWithMessage(
             "Generated badging is different from golden badging! " +
                  "If this change is intended, run ./gradlew ${updateBadgingTaskName.get()}",

@@ -13,20 +13,20 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project>
       with(target) {
          with(pluginManager) {
             apply("com.google.gms.google-services")
-              apply("com.google.firebase.firebase-perf")
-             apply("com.google.firebase.crashlytics")
+            apply("com.google.firebase.firebase-perf")
+            apply("com.google.firebase.crashlytics")
          }
          
          dependencies {
-               val bom = libs.findLibrary("firebase-bom").get()
-             add("implementation", platform(bom))
+            val bom = libs.findLibrary("firebase-bom").get()
+            add("implementation", platform(bom))
             "implementation"(libs.findLibrary("play.services.auth").get())
-            "implementation"(libs.findLibrary("firebase.auth.ktx").get())
-            "implementation"(libs.findLibrary("firebase.firestore.ktx").get())
-            "implementation"(libs.findLibrary("firebase.messaging").get())
+            "implementation"(libs.findLibrary("firebase.auth").get())
+            "implementation"(libs.findLibrary("firebase.firestore").get())
+            "implementation"(libs.findLibrary("firebase.performance").get())
             
+            //  "implementation"(libs.findLibrary("firebase.messaging").get())
             //"implementation"(libs.findLibrary("firebase.analytics").get())
-                "implementation"(libs.findLibrary("firebase.performance").get())
             //  "implementation"(libs.findLibrary("firebase.crashlytics").get())
          }
          
@@ -36,9 +36,9 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project>
                // Disable the Crashlytics mapping file upload. This feature should only be
                // enabled if a Firebase backend is available and configured in
                // google-services.json.
-            /*    configure<CrashlyticsExtension> {
-                  mappingFileUploadEnabled = false
-               } */
+               /*    configure<CrashlyticsExtension> {
+                     mappingFileUploadEnabled = false
+                  } */
             }
          }
       }

@@ -1,6 +1,7 @@
 package com.casecode.pos
 
 import android.app.Application
+import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -12,7 +13,7 @@ class POSApp : Application()
    {
       super.onCreate()
       Timber.plant(DebugTree())
-      
+      FirebaseApp.initializeApp(this)
       
    }
    

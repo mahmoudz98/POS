@@ -23,6 +23,7 @@ dependencies {
    implementation(libs.kotlinx.coroutines.services)
    api(libs.kotlinx.coroutines.android)
    api(libs.firebase.auth.ktx)
+   implementation(libs.play.services.auth)
    api(libs.hilt.android)
 
    testImplementation(libs.test.mockk)

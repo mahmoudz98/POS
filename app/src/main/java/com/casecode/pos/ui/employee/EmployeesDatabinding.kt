@@ -40,12 +40,7 @@ fun AppCompatAutoCompleteTextView.setSelected(itemSelected: String?)
       setText(adapter.getItem(position), false)
    }.onFailure {
       setText(itemSelected, false)
-      
    }
-   //val position = adapter.getPosition(itemSelected)
-   //adapter.setSelectedItem(position)
-   
-   
 }
 
 @BindingAdapter("bindListEmployee")

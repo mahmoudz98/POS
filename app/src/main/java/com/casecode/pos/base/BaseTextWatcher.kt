@@ -17,17 +17,15 @@ inline fun EditText.doAfterTextChangedListener(
     
     val textWatcher = object : BaseTextWatcher()
     {
-        override fun afterTextChanged(s: Editable?) {
-            afterTextChanged.invoke(s)
+        override fun afterTextChanged(p0: Editable?) {
+            afterTextChanged.invoke(p0)
         }
         
-        override fun beforeTextChanged(text: CharSequence?, start: Int,
-                                       count: Int, after: Int) {
-        }
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int,
+                                       p2: Int, p3: Int) {}
         
         override fun onTextChanged(text: CharSequence?, start: Int, before:
-        Int, count: Int) {
-        }
+        Int, count: Int) {}
     }
     
     onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->

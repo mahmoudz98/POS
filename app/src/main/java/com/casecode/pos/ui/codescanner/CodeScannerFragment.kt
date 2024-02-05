@@ -9,19 +9,22 @@ import androidx.fragment.app.viewModels
 import com.casecode.pos.databinding.FragmentCodeScannerBinding
 import com.casecode.pos.viewmodel.CodeScannerViewModel
 
-class CodeScannerFragment : Fragment() {
-
-    private lateinit var binding: FragmentCodeScannerBinding
-
-    private val viewModel: CodeScannerViewModel by viewModels()
-
-    override fun onCreateView(
+class CodeScannerFragment : Fragment()
+{
+   // TODO:  Generate barcode from zxing library.
+   //https://www.brightec.co.uk/blog/barcode-creation-in-kotlin-android
+   private lateinit var binding: FragmentCodeScannerBinding
+   
+   private val viewModel: CodeScannerViewModel by viewModels()
+   
+   override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCodeScannerBinding.inflate(inflater, container, false)
-
-        return binding.root
-    }
-
+        savedInstanceState: Bundle?,
+                            ): View
+   {
+      binding = FragmentCodeScannerBinding.inflate(inflater, container, false)
+      
+      return binding.root
+   }
+   
 }

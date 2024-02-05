@@ -4,8 +4,8 @@ import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
 plugins {
    alias(libs.plugins.pos.android.application)
-   alias(libs.plugins.pos.android.hilt)
    alias(libs.plugins.kotlin.kapt)
+   alias(libs.plugins.pos.android.hilt)
    alias(libs.plugins.pos.android.firebase)
    
 }
@@ -18,8 +18,6 @@ android {
       versionName = com.casecode.pos.Configuration.versionName
       
       resourceConfigurations.addAll(listOf("en", "ar"))
-      
-      // add the AndroidJUnitRunner, then connect JUnit 5 to the runner
       testInstrumentationRunner = "com.casecode.testing.PosTestRunner"
       
    }
@@ -28,10 +26,10 @@ android {
    buildTypes {
       debug {
          //   isPseudoLocalesEnabled = true
+         // enableAndroidTestCoverage = true
          isDebuggable = true
          isMinifyEnabled = false
          
-         // enableAndroidTestCoverage = true
       }
     
       val release by getting {
@@ -78,7 +76,7 @@ android {
       buildConfig = true
    }
    lint {
-      abortOnError = false
+      abortOnError = true
    }
    
    packaging {
@@ -89,7 +87,7 @@ android {
          excludes.add ("/META-INF/licenses/**")
          excludes.add ("META-INF/LICENSE.md")
          excludes.add ("META-INF/LICENSE-notice.md")
-        // excludes.add("DebugProbesKt.bin")
+         // excludes.add("DebugProbesKt.bin")
       }
    }
    
@@ -131,13 +129,13 @@ dependencies {
    // AndroidX
    implementation(libs.core)
    implementation(libs.activity)
-   
+   implementation(libs.fragment.ktx)
    implementation(libs.appcompat)
-   implementation(libs.lifecycle.viewmodel)
-   implementation(libs.lifecycle.livedata)
    implementation(libs.recyclerview)
    implementation(libs.slidingpanelayout)
    implementation(libs.window)
+   implementation(libs.lifecycle.viewmodel)
+   implementation(libs.lifecycle.livedata)
    
    
    // UI tools
@@ -154,7 +152,9 @@ dependencies {
    implementation(libs.navigation.fragment)
    implementation(libs.navigation.ui)
    
-   implementation (libs.barcode.scanning)
+   
+   // service
+   implementation (libs.budiyev.barcode)
    
    // coroutines
    implementation(libs.kotlinx.coroutines.android)
@@ -188,7 +188,6 @@ dependencies {
    
    // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
    debugImplementation(libs.fragment.testing)
-   implementation(libs.fragment.ktx)
    /*    implementation(libs.test.core)
       implementation(libs.test.ext.junit) */
    
@@ -199,7 +198,7 @@ dependencies {
    androidTestImplementation(libs.window.testing)
    
    // Resolve conflicts between main and test APK:
-   androidTestImplementation(libs.appcompat)
+  // androidTestImplementation(libs.appcompat)
    androidTestImplementation(libs.material)
    androidTestImplementation(libs.androidx.annotation)
    

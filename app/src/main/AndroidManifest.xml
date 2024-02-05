@@ -30,17 +30,19 @@
         <activity
             android:name="com.casecode.pos.ui.stepper.StepperActivity"
             android:exported="true">
+
+        </activity>
+        <activity android:name="com.casecode.pos.ui.main.MainActivity" />
+        <activity
+            android:name="com.casecode.pos.ui.signIn.SignInActivity"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.casecode.pos.ui.main.MainActivity" />
-        <activity
-            android:name="com.casecode.pos.ui.signIn.SignInActivity"
-            android:exported="true"
-            android:label="Google Sign In" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -58,16 +58,18 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLength="30"
                 android:textAppearance="@style/TextAppearance.pos.BodyLarge"
                 app:layout_constraintStart_toEndOf="@+id/iv_photo"
                 app:layout_constraintTop_toTopOf="@+id/iv_photo"
-                tools:text="Abdelaziz Daoud" />
+                tools:text="Abdelaziz Daoudddddddddddddddddddddddddddd" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:maxLength="30"
                 android:textAppearance="@style/TextAppearance.pos.LabelMedium"
                 app:layout_constraintStart_toStartOf="@+id/tv_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
