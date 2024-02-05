@@ -81,7 +81,7 @@ class SignInActivity : ComponentActivity()
    
    private fun updateUI()
    {
-      if(auth.currentUser != null)
+      if (auth.currentUser != null)
       {
          viewModel.checkIfRegistrationAndBusinessCompleted()
          observerCheckRegistrationAndCompletedStep()
@@ -131,10 +131,10 @@ class SignInActivity : ComponentActivity()
             {
                if (result.data)
                {
-                  moveToStepperActivity()
+                  moveToMainActivity()
                } else
                {
-                  moveToMainActivity()
+                  moveToStepperActivity()
                }
             }
             
@@ -152,23 +152,12 @@ class SignInActivity : ComponentActivity()
       val intent = Intent(this, MainActivity::class.java)
       intent.flags =
          Intent.FLAG_ACTIVITY_CLEAR_TOP // used to clean activity and al activities above it will be removed.
-      
-      /*   intent.putExtra(getString(R.string.extra_uid), currentUser?.uid)
-        intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
-        intent.putExtra(getString(R.string.extra_email), currentUser?.email)
-        intent.putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
-        intent.putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString()) */
       startActivity(intent)
    }
    
    private fun moveToStepperActivity()
    {
       val intent = Intent(this, StepperActivity::class.java)
-      /*   intent.putExtra(getString(R.string.extra_uid), currentUser?.uid)
-        intent.putExtra(getString(R.string.extra_display_name), currentUser?.displayName)
-        intent.putExtra(getString(R.string.extra_email), currentUser?.email)
-        intent.putExtra(getString(R.string.extra_phone_number), currentUser?.phoneNumber)
-        intent.putExtra(getString(R.string.extra_photo_url), currentUser?.photoUrl.toString()) */
       startActivity(intent)
    }
    
