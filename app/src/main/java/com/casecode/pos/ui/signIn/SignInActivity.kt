@@ -32,7 +32,6 @@ class SignInActivity : AppCompatActivity()
    private lateinit var binding: ActivitySignInBinding
    private lateinit var launcher: ActivityResultLauncher<IntentSenderRequest>
    
-   
    private val viewModel: AuthViewModel by viewModels()
    
    
