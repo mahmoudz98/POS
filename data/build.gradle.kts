@@ -10,7 +10,7 @@ android {
          isReturnDefaultValues = true
       }
    }
- 
+   
 }
 
 dependencies {
@@ -25,13 +25,13 @@ dependencies {
    api(libs.firebase.auth.ktx)
    implementation(libs.play.services.auth)
    api(libs.hilt.android)
-
+   implementation(libs.zxing.generate.barcode)
+   
+   
    testImplementation(libs.test.mockk)
    
    testApi(libs.coroutines.test)
    testApi(libs.hilt.android.testing)
-   
-   
    
    
 }

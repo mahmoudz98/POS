@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.casecode.domain.utils.FirebaseAuthResult
 import com.casecode.domain.utils.Resource
@@ -26,7 +27,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SignInActivity : ComponentActivity()
+class SignInActivity : AppCompatActivity()
 {
    
    private lateinit var binding: ActivitySignInBinding
@@ -52,9 +53,8 @@ class SignInActivity : ComponentActivity()
             if (result.resultCode == Activity.RESULT_OK)
             {
                lifecycleScope.launch {
-                  val signInResult = viewModel.signInWithIntent(
+                   viewModel.signInWithIntent(
                      intent = result.data ?: return@launch)
-                  viewModel.onSignInResult(signInResult)
                }
             }
          }
@@ -68,6 +68,10 @@ class SignInActivity : ComponentActivity()
          }
          observerSignInResult()
          
+      }
+      binding.textEmployeeLogin.setOnClickListener{
+         val employeeLogin = LoginDialogFragment()
+         employeeLogin.show(supportFragmentManager, "Login")
       }
    }
    
@@ -146,7 +150,6 @@ class SignInActivity : ComponentActivity()
       }
    }
    
-   
    private fun moveToMainActivity()
    {
       val intent = Intent(this, MainActivity::class.java)
@@ -158,6 +161,7 @@ class SignInActivity : ComponentActivity()
    private fun moveToStepperActivity()
    {
       val intent = Intent(this, StepperActivity::class.java)
+      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
       startActivity(intent)
    }
    

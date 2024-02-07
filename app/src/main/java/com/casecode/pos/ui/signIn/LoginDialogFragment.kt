@@ -1,13 +1,14 @@
 package com.casecode.pos.ui.signIn
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
@@ -19,202 +20,308 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.casecode.domain.utils.Resource
+import com.casecode.pos.R
+import com.casecode.pos.base.PositiveDialogListener
+import com.casecode.pos.base.doAfterTextChangedListener
 import com.casecode.pos.databinding.FragmentLoginDialogBinding
+import com.casecode.pos.ui.main.MainActivity
+import com.casecode.pos.ui.permissions.PermissionRequestCameraDialog
+import com.casecode.pos.utils.setupSnackbar
+import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.AuthViewModel
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @AndroidEntryPoint
-class LoginDialogFragment : DialogFragment() {
-    
-    companion object {
-        private const val CAMERA_PERMISSION_REQUEST_CODE = 123
-    }
-
-    private val authViewModel: AuthViewModel by viewModels()
-
-    private var _binding: FragmentLoginDialogBinding? = null
-    private val binding get() = _binding!!
-
-    
-    /**
-     *  TODO: Add barcode scanner, It's very easy to use.
-     * TODO: use barcode scanner with ml scanner in ml sdk kit.
-     * // Example:
-     *  https://github.com/googlesamples/mlkit/blob/master/android/vision-quickstart/app/src/main/java/com/google/mlkit/vision/demo/kotlin/barcodescanner/BarcodeScannerProcessor.kt
-     *  // visit website to learn how to use :
-     *  https://developers.google.com/ml-kit/vision/barcode-scanning/android
-     *
-     */
-    private lateinit var codeScanner: CodeScanner
-    
-    
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentLoginDialogBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        requestCameraPermissionOrStartScanning()
-        //Issue: Bad way to declare variable  to pointer view in xml, use two data binding way,
-        // 1. use binding.viewId
-        // 2. don't use this way because it's not good practice, use binding.viewId
-        // 3. Why, Its declared in ViewBinding class , and now its point to viewId in ViewBinding class, takes more space in memory, and this is shallow copy of view object.
-        // Initialize views using binding
-        val progressBar: ProgressBar = binding.progressBar
-        val tilEmployeeId: TextInputLayout = binding.tilEmployeeId
-        val tilPassword: TextInputLayout = binding.tilPassword
-        val editTextEmail: TextInputEditText = binding.etEmployeeId
-        val editTextPassword: TextInputEditText = binding.etPassword
-        val buttonLogin: MaterialButton = binding.buttonLogin
-
-        buttonLogin.setOnClickListener {
-            val employeeId = editTextEmail.text.toString()
-            val password = editTextPassword.text.toString()
-
-            // Show the progress bar
-            progressBar.visibility = View.VISIBLE
-
-            // Call the login function in your ViewModel
-            // Pass employeeId and password as needed
-            // Perform the employee login
-
-            val uid = "5nIv3yXInpfJIhXMqjQKI9YSTN63"
-            authViewModel.performEmployeeLogin(uid, employeeId, password)
-
-            // Dismiss the dialog
-            dismiss()
-        }
-
-        // Observe the login result
-        lifecycleScope.launch {
-            authViewModel.employeeLoginResult.collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        // Handle success, you can access the employee data using result.data
-                        // Dismiss the dialog or navigate to the next screen
-
-                        val data = result.data
-                        for (employee in data) {
-                            Timber.i("employee name: ${employee.name}")
-                        }
-//                        dismiss()
-                    }
-
-                    is Resource.Error -> {
-                        // Handle error, you can access the error message using result.message
-                        // Display an error message to the user
-                    }
-
-                    is Resource.Loading -> {
-                        // Handle loading state
-                        // You might want to show a loading indicator
-                    }
-
-                    else -> {}
-                }
-            }
-        }
-    }
-
+class LoginDialogFragment : DialogFragment(), PositiveDialogListener
+{
    
-
-    @Deprecated("Deprecated in Java")
-    @Suppress("DEPRECATION")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            handleCameraPermissionResult(grantResults)
-        }
-    }
-
-    private fun requestCameraPermissionOrStartScanning() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) ==
-            PackageManager.PERMISSION_DENIED
-        ) {
+   
+   private val authViewModel: AuthViewModel by viewModels()
+   
+   private var _binding: FragmentLoginDialogBinding? = null
+   private val binding get() = _binding !!
+   private lateinit var codeScanner: CodeScanner
+   
+   private val requestCameraPermission = registerForActivityResult(
+      ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+      if (isGranted)
+      {
+         // Permission granted, proceed with camera operations
+         handleCameraPermissionGranted()
+      } else
+      {
+         // Permission denied, handle the denial
+         handleCameraPermissionDenied()
+      }
+   }
+   
+   
+   override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
+                            ): View
+   {
+      _binding = FragmentLoginDialogBinding.inflate(layoutInflater)
+      
+      return binding.root
+   }
+   
+   override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+   {
+      super.onViewCreated(view, savedInstanceState)
+      
+      requestCameraPermissionOrStartScanning()
+      validateLoginEmployeeInput()
+      binding.btnLogin.setOnClickListener {
+         // Show the progress bar
+         if (isValidEmployeeInput())
+         {
+            binding.pgbLogin.visibility = View.VISIBLE
+            authViewModel.performEmployeeLogin()
+         }
+      }
+      setupSnackbar()
+      observerIsEmployeeLoginSuccess()
+   }
+   
+   private fun handleCameraPermissionGranted()
+   {
+      startScanning()
+   }
+   
+   private fun requestCameraPermissionOrStartScanning()
+   {
+      when
+      {
+         ContextCompat.checkSelfPermission(requireContext(),
+            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED ->
+         {
+            startScanning()
+         }
+         
+         ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+            Manifest.permission.CAMERA) ->
+         {
+            handleCameraPermissionDenied()
+         }
+         
+         else ->
+         {
             requestCameraPermission()
-        } else {
-            startScanning()
-        }
-    }
-
-    private fun requestCameraPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(Manifest.permission.CAMERA),
-            CAMERA_PERMISSION_REQUEST_CODE
-        )
-    }
-
-    private fun handleCameraPermissionResult(grantResults: IntArray) {
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            // Camera permission granted
-            Toast.makeText(requireContext(), "Camera permission granted", Toast.LENGTH_SHORT).show()
-            startScanning()
-        } else {
-            // Camera permission denied
-            Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun startScanning() {
-        codeScanner = CodeScanner(requireContext(), binding.codeScannerView)
-        codeScanner.apply {
-            camera = CodeScanner.CAMERA_BACK
-            formats = CodeScanner.ALL_FORMATS
-
-            autoFocusMode = AutoFocusMode.SAFE
-            scanMode = ScanMode.SINGLE
-            isAutoFocusEnabled = true
-            isFlashEnabled = false
-
-            decodeCallback = DecodeCallback {
-                lifecycleScope.launch {
-                    // Process the scanned result using coroutines if needed
-//                    viewModel.processScannedResult(it.text)
-                    // Show a toast (or any other UI update)
-                    
-                  //  UiThreadStatement.runOnUiThread {
-                        Toast.makeText(
-                            requireContext(),
-                            "Scan result: ${it.text}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    
-                }
+         }
+      }
+      
+   }
+   
+   private fun startScanning()
+   {
+      codeScanner = CodeScanner(requireActivity(), binding.codeScannerLogin)
+      codeScanner.apply {
+         camera = CodeScanner.CAMERA_BACK
+         formats = CodeScanner.ALL_FORMATS
+         
+         autoFocusMode = AutoFocusMode.SAFE
+         scanMode = ScanMode.SINGLE
+         isAutoFocusEnabled = true
+         isFlashEnabled = false
+         
+               decodeCallback = DecodeCallback {
+                  lifecycleScope.launch {
+                  // Process the scanned result using coroutines if needed
+                  authViewModel.processScannedResult(it.text)
+                  
+                  binding.root.showSnackbar(getString(R.string.message_scan_complete),
+                     Snackbar.LENGTH_SHORT)
+                  
+               }
+               
             }
-
-            errorCallback = ErrorCallback {
-               // UiThreadStatement.runOnUiThread {
-                    Toast.makeText(
-                        requireContext(),
-                        "Camera initialization error: ${it.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                
+         errorCallback = ErrorCallback { it ->
+         
+         binding.root.showSnackbar("${getString(R.string.message_scan_error)} ${it.message}",
+               Snackbar.LENGTH_SHORT)
+         }
+      }
+      
+      binding.codeScannerLogin.setOnClickListener {
+         codeScanner.startPreview()
+      }
+   }
+   
+   private fun handleCameraPermissionDenied()
+   {
+      val permissionDialog = PermissionRequestCameraDialog()
+      permissionDialog.listener = this
+      permissionDialog.show(childFragmentManager, "PermissionRequestCameraDialog")
+      
+      dialog?.setCanceledOnTouchOutside(false)
+      permissionDialog.dialog?.setOnDismissListener {
+         dialog?.setCanceledOnTouchOutside(true)
+      }
+   }
+   
+   private fun requestCameraPermission()
+   {
+      requestCameraPermission.launch(Manifest.permission.CAMERA)
+   }
+   
+   private fun validateLoginEmployeeInput()
+   {
+      binding.etLoginName.doAfterTextChangedListener { nameEditText ->
+         if (TextUtils.isEmpty(nameEditText))
+         {
+            binding.tilLoginName.boxStrokeErrorColor
+            binding.tilLoginName.error =
+               getString(R.string.add_employee_name_empty)
+            
+         } else
+         {
+            binding.tilLoginName.boxStrokeColor =
+               resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
+            binding.tilLoginName.error = null
+         }
+      }
+      binding.etLoginPassword.doAfterTextChangedListener { passwordEditText ->
+         
+         if (TextUtils.isEmpty(passwordEditText))
+         {
+            binding.tilLoginPassword.boxStrokeErrorColor
+            binding.tilLoginPassword.error =
+               getString(R.string.add_employee_password_empty)
+            
+         } else if (passwordEditText.toString().length < 6)
+         {
+            binding.tilLoginPassword.error =
+               getString(R.string.add_employee_password_error)
+         } else
+         {
+            binding.tilLoginPassword.boxStrokeColor =
+               resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
+            binding.tilLoginPassword.error = null
+         }
+      }
+      
+   }
+   
+   private fun observerIsEmployeeLoginSuccess()
+   {
+      authViewModel.isEmployeeLoginSuccess.observe(viewLifecycleOwner) {
+         when (it)
+         {
+            is Resource.Loading ->
+            {
+               binding.pgbLogin.visibility = View.VISIBLE
             }
-        }
-
-        binding.codeScannerView.setOnClickListener {
-            codeScanner.startPreview()
-        }
-    }
-    
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+            
+            is Resource.Empty ->
+            {
+               binding.pgbLogin.visibility = View.INVISIBLE
+            }
+            
+            is Resource.Error ->
+            {
+               binding.pgbLogin.visibility = View.INVISIBLE
+               binding.root.showSnackbar(getString(R.string.login_employee_error),
+                  Snackbar.LENGTH_SHORT)
+               
+            }
+            
+            is Resource.Success ->
+            {
+               binding.pgbLogin.visibility = View.INVISIBLE
+               if (it.data)
+               {
+                  dismiss()
+                  moveToMainActivity()
+               } else
+               {
+                  binding.root.showSnackbar(getString(R.string.login_employee_incorrect),
+                     Snackbar.LENGTH_SHORT)
+               }
+            }
+         }
+      }
+   }
+   
+   private fun moveToMainActivity()
+   {
+      val intent = Intent(requireActivity(), MainActivity::class.java)
+      intent.flags =
+           Intent.FLAG_ACTIVITY_CLEAR_TOP // used to clean activity and al activities above it will be removed.
+      startActivity(intent)
+   }
+   private fun isValidEmployeeInput(): Boolean
+   {
+      val name = binding.etLoginName.text.toString()
+      val password = binding.etLoginPassword.text.toString()
+      // Check login and pass are empty
+      if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password) || password.length < 6)
+      {
+         
+         if (TextUtils.isEmpty(name))
+         {
+            binding.tilLoginName.error =
+               getString(R.string.add_employee_name_empty)
+         }
+         if (TextUtils.isEmpty(password))
+         {
+            binding.tilLoginPassword.error =
+               getString(R.string.add_employee_password_empty)
+         }
+         
+         if (password.length < 6)
+         {
+            binding.tilLoginPassword.error = getString(R.string.add_employee_password_error)
+            return false
+         }
+         return false
+      }
+      
+      authViewModel.setEmployeeLogin(name, password)
+      return true
+   }
+   
+   private fun setupSnackbar()
+   {
+      binding.root.setupSnackbar(viewLifecycleOwner,
+         authViewModel.userMessage,
+         BaseTransientBottomBar.LENGTH_SHORT)
+      
+   }
+   
+   override fun onDialogPositiveClick()
+   {
+      requestCameraPermission()
+   }
+   
+   
+   override fun onResume()
+   {
+      super.onResume()
+      if (::codeScanner.isInitialized)
+      {
+         codeScanner.startPreview()
+      }
+   }
+   
+   override fun onPause()
+   {
+      if (::codeScanner.isInitialized)
+      {
+         codeScanner.releaseResources()
+      }
+      super.onPause()
+      
+   }
+   
+   override fun onDestroyView()
+   {
+      super.onDestroyView()
+      _binding = null
+   }
+   
+   
 }

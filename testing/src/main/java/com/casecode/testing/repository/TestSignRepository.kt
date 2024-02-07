@@ -41,11 +41,11 @@ class TestSignRepository @Inject constructor()  : SignRepository
       TODO("Not yet implemented")
    }
    
-   override fun employeeLogin(
+   override suspend fun employeeLogin(
         uid: String,
         employeeId: String,
         password: String,
-                             ): Flow<Resource<ArrayList<Employee>>>
+                                     ): Resource<Boolean>
    {
       TODO("Not yet implemented")
    }

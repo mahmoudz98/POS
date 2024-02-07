@@ -2,65 +2,53 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-    </data>
-
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/normal_spacing">
 
-        <TextView
-            android:id="@+id/text_title"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/small_spacing"
             android:text="@string/employee_login"
-            android:textAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title" />
+            android:textAppearance="@style/TextAppearance.pos.TitleMedium" />
 
         <com.budiyev.android.codescanner.CodeScannerView
-            android:id="@+id/code_scanner_view"
+            android:id="@+id/code_scanner_login"
             android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="16dp" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="invisible" />
+            android:layout_marginBottom="@dimen/small_spacing" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_employee_id"
+            android:id="@+id/til_login_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:enabled="false"
+            android:layout_marginBottom="@dimen/small_spacing"
             app:startIconDrawable="@drawable/ic_profile">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_employee_id"
+                android:id="@+id/et_login_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/employee_id" />
+                android:inputType="textPersonName"
+                android:hint="@string/employee_name" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_password"
+            android:id="@+id/til_login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:enabled="false"
+            android:layout_marginBottom="@dimen/small_spacing"
             app:startIconDrawable="@drawable/password_24px">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_password"
+                android:id="@+id/et_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
@@ -68,12 +56,19 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/pgb_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate= "true"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:visibility="invisible" />
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_login"
+            android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="true"
             android:text="@string/login" />
 
-    </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

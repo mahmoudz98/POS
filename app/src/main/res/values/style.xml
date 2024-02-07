@@ -158,6 +158,24 @@
     <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
         <item name="colorPrimary">@color/md_theme_light_primaryContainer</item>
     </style>
+    <style name="Widget.pos.LinearProgressIndicator" parent="Widget.Material3.LinearProgressIndicator">
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+
+    </style>
+    <style name="DialogFragmentTheme" parent="ThemeOverlay.Material3.Dialog">
+        <!-- Customize your DialogFragment theme here -->
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.dialog</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
 
     <style name="ThemeOverlay.pos.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="alertDialogStyle">@style/MaterialAlertDialog.App</item>
@@ -177,7 +195,7 @@
         <item name="shapeAppearanceOverlay">@null</item>
     </style>
     <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">12dp</item>
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
     </style>
 </resources>

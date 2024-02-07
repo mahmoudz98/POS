@@ -17,6 +17,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import coil.load
 import com.casecode.pos.R
+import com.casecode.pos.base.PositiveDialogListener
 import com.casecode.pos.databinding.ActivityMainBinding
 import com.casecode.pos.ui.signIn.SignInActivity
 import com.casecode.pos.ui.signout.SignOutDialog
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SignOutDialog.SignOutDialogListener
+class MainActivity : AppCompatActivity(), PositiveDialogListener
 {
    
    private lateinit var binding: ActivityMainBinding
@@ -197,8 +198,9 @@ class MainActivity : AppCompatActivity(), SignOutDialog.SignOutDialogListener
       return super.onPrepareOptionsMenu(menu)
    }
    
-   override fun onSignOut()
+   override fun onDialogPositiveClick()
    {
+      
          mainViewModel.signOut()
          // Redirect the user to the login screen or perform any other necessary actions
          

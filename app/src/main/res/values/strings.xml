@@ -117,9 +117,7 @@
     <string name="add_employee_password_empty">Password employee is empty</string>
     <string name="add_employee_branch_empty">Branch employee is empty</string>
     <string name="add_employee_permission_empty">Permission employee is empty</string>
-
     <string name="add_employee_password_error">Password must be at least 6 characters. </string>
-
     <string name="add_employees_success">Employees Added success, Go on.</string>
     <string name="add_employee_success">Employee Added success.</string>
     <string name="add_employee_fail">Employee Added failed.</string>
@@ -149,5 +147,17 @@
     <string name="point_of_sale">Point of sale</string>
     <string name="pos">pos</string>
     <string name="or_employee_login">or Employee login</string>
+
+
+    <string name="cancel">Cancel</string>
+    <string name="title_permission_dialog">Camera Permission Needed</string>
+    <string name="message_permission_dialog">The app needs camera access to…</string>
+    <string name="positive_text_dialog">Request Permission</string>
+    // Login Employee
+    <string name="message_scan_complete">Scan result Completed..</string>
+    <string name="message_scan_error">Scan error: </string>
+    <string name="scan_result_empty">Scan result is empty.</string>
+    <string name="login_employee_incorrect">Employee name or password are incorrect</string>
+    <string name="login_employee_error">Error when Login Employee</string>
 
 </resources>

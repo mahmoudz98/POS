@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import coil.load
 import coil.request.ImageRequest
 import com.casecode.pos.R
+import com.casecode.pos.base.PositiveDialogListener
 import com.casecode.pos.databinding.DialogSignOutBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -26,21 +27,21 @@ class SignOutDialog : DialogFragment()
    @Inject
    lateinit var auth: FirebaseAuth
    
-   interface SignOutDialogListener
-   {
-      fun onSignOut()
-   }
+   internal lateinit var listener: PositiveDialogListener
    
-   private var listener: SignOutDialogListener? = null
    
-   override fun onAttach(context: Context)
-   {
+   override fun onAttach(context: Context) {
       super.onAttach(context)
-      if (context is SignOutDialogListener)
-      {
-         listener = context
+      
+      try{
+         listener = context as PositiveDialogListener
+         
+      }catch (e : ClassCastException){
+         throw ClassCastException(context.toString() + " must implment PositiveDialogListener")
       }
    }
+   
+  
    
    override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,7 +77,7 @@ class SignOutDialog : DialogFragment()
          }
          
          btnSignOut.setOnClickListener {
-            listener?.onSignOut()
+            listener.onDialogPositiveClick()
             dismiss()
          }
       }

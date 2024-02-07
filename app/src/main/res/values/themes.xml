@@ -30,6 +30,9 @@
 
 
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.pos.MaterialAlertDialog</item>
+        <item name="alertDialogTheme">@style/ThemeOverlay.pos.MaterialAlertDialog</item>
+        <item name="android:dialogTheme">@style/DialogFragmentTheme</item>
+
 
         <item name="android:statusBarColor">
             @color/md_theme_light_background
@@ -40,10 +43,13 @@
             @color/md_theme_light_background
         </item>
 
-        <item name="circularProgressIndicatorStyle">@style/Widget.pos.CircularProgressIndicator</item>
+        <item name="circularProgressIndicatorStyle">@style/Widget.pos.CircularProgressIndicator
+        </item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.pos.LinearProgressIndicator</item>
 
     </style>
 
+    <style name="PermissionDialogStyle" parent="@style/ThemeOverlay.pos.MaterialAlertDialog" />
 
 
     <style name="Theme.POS.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

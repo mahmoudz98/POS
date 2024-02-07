@@ -4,10 +4,10 @@ import android.content.Intent
 import android.content.IntentSender
 import com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.Dispatcher
-import com.casecode.domain.model.users.Employee
 import com.casecode.domain.repository.SignRepository
 import com.casecode.domain.utils.BUSINESS_FIELD
 import com.casecode.domain.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
+import com.casecode.domain.utils.EMPLOYEES_FIELD
 import com.casecode.domain.utils.FirebaseAuthResult
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
@@ -28,8 +28,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-// Issue: visit website how to use firebase with coroutines. and firebase team built app with coroutines.
-//https://firebase.blog/posts/2022/10/using-coroutines-flows-with-firebase-on-android/
 class SignRepositoryImpl @Inject constructor(
      private val auth: FirebaseAuth,
      private val firestore: FirebaseFirestore,
@@ -45,8 +43,7 @@ class SignRepositoryImpl @Inject constructor(
       
       val result = try
       {
-         oneTapClient.beginSignIn(
-            beginSignInRequest).await()
+         oneTapClient.beginSignIn(beginSignInRequest).await()
       } catch (e: Exception)
       {
          e.printStackTrace()
@@ -61,32 +58,31 @@ class SignRepositoryImpl @Inject constructor(
    {
       val credential = oneTapClient.getSignInCredentialFromIntent(intent)
       val googleIdToken = credential.googleIdToken
-      val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
+      val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken,null)
       
       return callbackFlow {
          try
          {
-            val callback =
-               auth.signInWithCredential(googleCredentials).addOnCompleteListener { task ->
-                  if (task.isSuccessful)
+            val callback = auth.signInWithCredential(googleCredentials).addOnCompleteListener { task->
+               if (task.isSuccessful)
+               {
+                  val user = auth.currentUser
+                  if (user != null)
                   {
-                     val user = auth.currentUser
-                     if (user != null)
-                     {
-                        
-                        trySend(FirebaseAuthResult.SignInSuccess(user)).isSuccess
-                        Timber.e("Success sign: $user")
-                     } else
-                     {
-                        trySend(FirebaseAuthResult.SignInFails(null))
-                     }
+                     
+                     trySend(FirebaseAuthResult.SignInSuccess(user)).isClosed
+                     Timber.e("Success sign: $user")
                   } else
                   {
-                     Timber.e("exception sign: ${task.exception}")
-                     trySend(FirebaseAuthResult.SignInFails(task.exception)).isSuccess
-                     
+                     trySend(FirebaseAuthResult.SignInFails(null))
                   }
+               } else
+               {
+                  Timber.e("exception sign: ${task.exception}")
+                  trySend(FirebaseAuthResult.SignInFails(task.exception)).isSuccess
+                  
                }
+            }
             awaitClose { callback.isComplete }
             
          } catch (e: Exception)
@@ -103,22 +99,23 @@ class SignRepositoryImpl @Inject constructor(
       return withContext(ioDispatcher) {
          try
          {
-           if(isFirstTimeSignIn())
-           {
-              Resource.success(false)
-              
-           }else{
-              if (!isUserCompletedStep())
-              {
-                 Timber.e("first Time sign in")
-                 Resource.success(false)
-              } else
-              {
-                 Timber.e("second Time sign in")
-                 
-                 Resource.success(true)
-              }
-           }
+            if (isFirstTimeSignIn())
+            {
+               Resource.success(false)
+               
+            } else
+            {
+               if (! isUserCompletedStep())
+               {
+                  Timber.e("first Time sign in")
+                  Resource.success(false)
+               } else
+               {
+                  Timber.e("second Time sign in")
+                  
+                  Resource.success(true)
+               }
+            }
             
          } catch (e: Exception)
          {
@@ -126,6 +123,7 @@ class SignRepositoryImpl @Inject constructor(
          }
       }
    }
+   
    private fun isFirstTimeSignIn(): Boolean
    {
       // if user empty return false
@@ -156,8 +154,7 @@ class SignRepositoryImpl @Inject constructor(
    {
       
       val id = auth.currentUser?.uid ?: return false
-      val docRef = firestore.collection(USERS_COLLECTION_PATH).document(id).collection(
-         BUSINESS_FIELD).whereEqualTo(BUSINESS_IS_COMPLETED_STEP_FIELD, true)
+      val docRef = firestore.collection(USERS_COLLECTION_PATH).document(id).collection(BUSINESS_FIELD).whereEqualTo(BUSINESS_IS_COMPLETED_STEP_FIELD,true)
       
       return try
       {
@@ -169,6 +166,7 @@ class SignRepositoryImpl @Inject constructor(
       }
       
    }
+   
    override suspend fun checkRegistration(email: String): Resource<Boolean>
    {
       return withContext(ioDispatcher) {
@@ -176,8 +174,7 @@ class SignRepositoryImpl @Inject constructor(
          {
             
             // Create a temporary user with a generic password
-            
-            auth.createUserWithEmailAndPassword(email, "temporary_password")
+            auth.createUserWithEmailAndPassword(email,"temporary_password")
             // Account creation succeeded, email is available
             Timber.i("checkRegistration: email is created before :true")
             Resource.Success(true)
@@ -195,7 +192,6 @@ class SignRepositoryImpl @Inject constructor(
       }
    }
    
-
    
    override suspend fun signOut()
    {
@@ -210,36 +206,22 @@ class SignRepositoryImpl @Inject constructor(
       }
    }
    
-   override fun employeeLogin(
-        uid: String,
-        employeeId: String,
-        password: String,): Flow<Resource<ArrayList<Employee>>> = callbackFlow {
+   override suspend fun employeeLogin(uid: String,employeeId: String,password: String): Resource<Boolean> = withContext(ioDispatcher) {
+      try
+      {
+         val document = firestore.collection(USERS_COLLECTION_PATH).document(uid).get().await()
+         val employees = document.get(EMPLOYEES_FIELD) as List<Map<String,Any>>
+         val employee = employees.find { it["name"] == employeeId && it["password"] == password }
+         Resource.success(employee != null)
+         
+      } catch (e: Exception)
+      {
+         Timber.e("exception = $e")
+         Resource.error(e.message)
+         
+      }
       
-      val employeeDocumentSnapshot =
-         firestore.collection(USERS_COLLECTION_PATH).document(uid).get()
-      
-      employeeDocumentSnapshot
-         .addOnSuccessListener { documentSnapshot ->
-            if (documentSnapshot != null && documentSnapshot.exists())
-            {
-               val employeeDataMap = documentSnapshot.data
-               val employeeList = employeeDataMap?.values?.mapNotNull { it as? Employee }
-               val arrayList = ArrayList(employeeList)
-               trySend(Resource.Success(arrayList))
-               Timber.i("Employee data fetched successfully. UID: $uid")
-            } else
-            {
-               trySend(Resource.Error("Employee document does not exist. UID: $uid"))
-               Timber.e("Employee document does not exist. UID: $uid")
-            }
-         }
-         .addOnFailureListener { exception ->
-            trySend(Resource.Error("Failed to fetch employee data"))
-            Timber.e("Failed to fetch employee data. UID: $uid, Error: $exception")
-         }
-      
-      
-   }.flowOn(ioDispatcher)
+   }
    
    
 }

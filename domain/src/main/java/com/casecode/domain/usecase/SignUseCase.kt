@@ -18,7 +18,7 @@ class SignInUseCase @Inject constructor(private val signInRepository: SignReposi
       signInRepository.isRegistrationAndBusinessCompleted()
    
    suspend fun checkRegistration(email: String) = signInRepository.checkRegistration(email)
-   fun employeeLogin(uid: String, employeeId: String, password: String) =
+  suspend fun employeeLogin(uid: String, employeeId: String, password: String) =
       signInRepository.employeeLogin(uid, employeeId, password)
    
 }
