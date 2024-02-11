@@ -8,12 +8,11 @@ import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(private val signInRepository: SignRepository)
 {
+   fun currentUser() = signInRepository.currentUser
    
-   suspend fun signIn(): IntentSender? = signInRepository.signIn()
-   
+   suspend fun signIn(): Resource<IntentSender> = signInRepository.signIn()
    fun signInWithIntent(intent: Intent) =
       signInRepository.signInWithIntent(intent)
-   
    suspend fun isRegistrationAndBusinessCompleted(): Resource<Boolean> =
       signInRepository.isRegistrationAndBusinessCompleted()
    

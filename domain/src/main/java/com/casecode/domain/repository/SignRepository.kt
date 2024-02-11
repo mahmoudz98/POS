@@ -4,11 +4,15 @@ import android.content.Intent
 import android.content.IntentSender
 import com.casecode.domain.utils.FirebaseAuthResult
 import com.casecode.domain.utils.Resource
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
 interface SignRepository
 {
-   suspend fun signIn(): IntentSender?
+   val currentUserId: String
+   
+   val currentUser : Flow<FirebaseUser?>
+   suspend fun signIn(): Resource<IntentSender>
    
    fun signInWithIntent(intent: Intent): Flow<FirebaseAuthResult>
    suspend fun isRegistrationAndBusinessCompleted(): Resource<Boolean>
@@ -17,7 +21,7 @@ interface SignRepository
    
    suspend fun signOut()
    
-   suspend fun employeeLogin(uid: String, employeeId: String, password: String): Resource<Boolean>
+   suspend fun employeeLogin(uid: String,employeeId: String,password: String): Resource<Boolean>
 }
 
 

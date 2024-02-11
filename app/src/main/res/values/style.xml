@@ -188,7 +188,7 @@
 
         <item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.pos.TitleMedium</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.pos.button</item>
-        <item name="buttonBarNegativeButtonStyle">@style/Widget.pos.button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.pos.tertiaryButton</item>
     </style>
     <style name="MaterialAlertDialog.App" parent="MaterialAlertDialog.Material3">
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>

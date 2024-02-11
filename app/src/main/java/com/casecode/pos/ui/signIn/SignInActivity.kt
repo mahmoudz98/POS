@@ -1,6 +1,5 @@
 package com.casecode.pos.ui.signIn
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
@@ -8,6 +7,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import com.casecode.domain.utils.FirebaseAuthResult
 import com.casecode.domain.utils.Resource
@@ -19,55 +19,92 @@ import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.AuthViewModel
 import com.google.android.gms.common.SignInButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInActivity : AppCompatActivity()
 {
-   
-   private lateinit var binding: ActivitySignInBinding
+   private var _binding: ActivitySignInBinding? = null
+   val binding get() = _binding !!
    private lateinit var launcher: ActivityResultLauncher<IntentSenderRequest>
-   
    private val viewModel: AuthViewModel by viewModels()
-   
-   
-   @Inject
-   lateinit var auth: FirebaseAuth
-   
    
    override fun onCreate(savedInstanceState: Bundle?)
    {
       super.onCreate(savedInstanceState)
-      binding = ActivitySignInBinding.inflate(layoutInflater)
+      _binding = ActivitySignInBinding.inflate(layoutInflater)
       setContentView(binding.root)
       
-      
-      launcher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result->
-         if (result.resultCode == Activity.RESULT_OK)
-         {
-            viewModel.signInWithIntent(result.data ?: return@registerForActivityResult)
-            
-            
-         }
-      }
-      
+      setupLauncherActivity()
+      viewModel.setNetworkMonitor()
       binding.signInButton.setSize(SignInButton.SIZE_STANDARD)
-      binding.signInButton.setOnClickListener {
-         lifecycleScope.launch {
-            val signInIntentSender = viewModel.signIn()
-            launcher.launch(IntentSenderRequest.Builder(signInIntentSender
-                                                             ?: return@launch).build())
+      clickedButtons()
+      observerSignInIntentSender()
+   }
+   
+   private fun setupLauncherActivity()
+   {
+      launcher =
+         registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result->
+            
+            if (result.resultCode == RESULT_OK)
+            {
+               Timber.e("result is ok =  $RESULT_OK")
+               // Issue: when this launcher is ok is ok every time in
+               viewModel.signInWithIntent(result.data ?: return@registerForActivityResult)
+               observerSignInResult()
+               
+            }
          }
-         observerSignInResult()
-         
+   }
+   
+   private fun clickedButtons()
+   {
+      binding.signInButton.setOnClickListener {
+         if (viewModel.isOnline.value == true)
+         {
+            viewModel.signIn()
+         } else
+         {
+            binding.root.showSnackbar(getString(R.string.network_error),Snackbar.LENGTH_SHORT)
+         }
       }
       binding.textEmployeeLogin.setOnClickListener {
          val employeeLogin = LoginDialogFragment()
          employeeLogin.show(supportFragmentManager,"Login")
+      }
+   }
+   
+   private fun observerSignInIntentSender()
+   {
+      viewModel.signInIntentSender.observe(this) {
+         when (it)
+         {
+            is Resource.Loading ->
+            {
+            
+            }
+            
+            is Resource.Error ->
+            {
+               binding.root.showSnackbar("${it.message}",Snackbar.LENGTH_SHORT)
+            }
+            
+            is Resource.Empty ->
+            {
+               binding.root.showSnackbar(getString(R.string.all_error_save),Snackbar.LENGTH_SHORT)
+            }
+            
+            is Resource.Success ->
+            {
+               
+               launcher.launch(
+                  IntentSenderRequest.Builder(it.data).build()
+                              )
+            }
+         }
       }
    }
    
@@ -81,11 +118,20 @@ class SignInActivity : AppCompatActivity()
    
    private fun updateUI()
    {
-      if (auth.currentUser != null)
-      {
-         viewModel.checkIfRegistrationAndBusinessCompleted()
-         observerCheckRegistrationAndCompletedStep()
+      Timber.e("Update UI")
+      lifecycleScope.launch {
+         viewModel.currentUserUID.collect{uid ->
+            Timber.e("update ui, UID = $uid")
+            if(uid.isNotBlank())
+            {
+               viewModel.checkIfRegistrationAndBusinessCompleted()
+               observerCheckRegistrationAndCompletedStep()
+            }
+         }
       }
+
+      
+      
    }
    
    private fun observerSignInResult()
@@ -109,8 +155,12 @@ class SignInActivity : AppCompatActivity()
             {
                Timber.i("SignInSuccess")
                updateUI()
+               viewModel.clearSignInResult()
                
-               
+            }
+            
+            null ->
+            {
             }
          }
       }
@@ -134,6 +184,19 @@ class SignInActivity : AppCompatActivity()
                {
                   moveToStepperActivity()
                }
+               viewModel.clearCheckRegistration()
+            }
+            
+            is Resource.Empty ->
+            {
+               
+               binding.root.showSnackbar(
+                  getString(com.casecode.pos.domain.R.string.uid_empty),Snackbar.LENGTH_SHORT
+                                        )
+            }
+            
+            is Resource.Loading ->
+            {
             }
             
             else ->
@@ -147,15 +210,49 @@ class SignInActivity : AppCompatActivity()
    private fun moveToMainActivity()
    {
       val intent = Intent(this,MainActivity::class.java)
-      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // used to clean activity and al activities above it will be removed.
+      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
+      
       startActivity(intent)
+      finish()
    }
    
    private fun moveToStepperActivity()
    {
       val intent = Intent(this,StepperActivity::class.java)
-      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+      intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
       startActivity(intent)
+      finish()
+   }
+   
+   override fun onStop()
+   {
+      super.onStop()
+      Timber.e("onStop")
+      
+   }
+   
+   override fun onDestroy()
+   {
+      Timber.e("onDestroy")
+      super.onDestroy()
+      removeObservers()
+      
+      
+   }
+   
+   private fun removeObservers()
+   {
+      for (field in viewModel.javaClass.declaredFields)
+      {
+         
+         field.isAccessible = true
+         val fieldValue = field.get(viewModel)
+         if (fieldValue is LiveData<*>)
+         {
+            fieldValue.removeObservers(this)
+         }
+      }
+      
    }
    
 }

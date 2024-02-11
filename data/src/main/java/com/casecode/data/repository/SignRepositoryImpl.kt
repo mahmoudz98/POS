@@ -2,23 +2,30 @@ package com.casecode.data.repository
 
 import android.content.Intent
 import android.content.IntentSender
+import com.casecode.data.mapper.fromBusinessResponse
 import com.casecode.data.utils.AppDispatchers.IO
+import com.casecode.data.utils.AppDispatchers.MAIN
 import com.casecode.data.utils.Dispatcher
 import com.casecode.domain.repository.SignRepository
-import com.casecode.domain.utils.BUSINESS_FIELD
-import com.casecode.domain.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
 import com.casecode.domain.utils.EMPLOYEES_FIELD
 import com.casecode.domain.utils.FirebaseAuthResult
+
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
@@ -27,75 +34,148 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
-
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 class SignRepositoryImpl @Inject constructor(
-     private val auth: FirebaseAuth,
-     private val firestore: FirebaseFirestore,
-     private val beginSignInRequest: BeginSignInRequest,
-     private val oneTapClient: SignInClient,
-     
-     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+   private val auth: FirebaseAuth,
+   private val firestore: FirebaseFirestore,
+   private val beginSignInRequest: BeginSignInRequest,
+   private val oneTapClient: SignInClient,
+   
+   @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+   @Dispatcher(MAIN) private val mainDispatcher: CoroutineDispatcher,
                                             ) : SignRepository
 {
+   override val currentUserId: String
+      get() = auth.currentUser?.uid.orEmpty()
+   override val currentUser: Flow<FirebaseUser?>
+      get() = callbackFlow {
+         val listener = FirebaseAuth.AuthStateListener { auth->
+            this.trySend(auth.currentUser)
+         }
+         auth.addAuthStateListener(listener)
+         awaitClose { auth.removeAuthStateListener(listener) }
+      }.flowOn(ioDispatcher)
    
-   override suspend fun signIn(): IntentSender?
+   override suspend fun signIn(): Resource<IntentSender>
    {
-      
-      val result = try
-      {
-         oneTapClient.beginSignIn(beginSignInRequest).await()
-      } catch (e: Exception)
-      {
-         e.printStackTrace()
-         if (e is CancellationException) throw e
-         null
+      return withContext(mainDispatcher) {
+         try
+         {
+            val result = suspendCoroutine<Resource<IntentSender>> { continuation->
+               oneTapClient.beginSignIn(beginSignInRequest)
+                  .addOnSuccessListener { beginSignInRequest->
+                     continuation.resume(
+                        Resource.success(
+                           beginSignInRequest.pendingIntent.intentSender
+                                        )
+                                        )
+                     
+                  }.addOnFailureListener {
+                     continuation.resume(Resource.error("sign in field"))
+                  }
+            }
+            result
+         } catch (e: ApiException)
+         {
+            when (e.statusCode)
+            {
+               CommonStatusCodes.CANCELED ->
+               {
+                  Resource.error("One-tap dialog was closed.")
+                  
+               }
+               
+               CommonStatusCodes.NETWORK_ERROR ->
+               {
+                  Timber.d("One-tap encountered a network error.")
+                  Resource.error("One-tap encountered a network error..")
+                  
+                  
+               }
+               
+               else ->
+               {
+                  Timber.d("Couldn't get credential from result. ${e.localizedMessage}")
+                  Resource.error("Couldn't get credential from result. ${e.localizedMessage}")
+                  
+               }
+            }
+            
+         } catch (e: Exception)
+         {
+            e.printStackTrace()
+            Resource.error(e.message)
+         }
       }
-      return result?.pendingIntent?.intentSender
+      
    }
    
    
    override fun signInWithIntent(intent: Intent): Flow<FirebaseAuthResult>
    {
-      val credential = oneTapClient.getSignInCredentialFromIntent(intent)
-      val googleIdToken = credential.googleIdToken
-      val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken,null)
-      
       return callbackFlow {
-         try
-         {
-            val callback = auth.signInWithCredential(googleCredentials).addOnCompleteListener { task->
-               if (task.isSuccessful)
-               {
-                  val user = auth.currentUser
-                  if (user != null)
-                  {
-                     
-                     trySend(FirebaseAuthResult.SignInSuccess(user)).isClosed
-                     Timber.e("Success sign: $user")
-                  } else
-                  {
-                     trySend(FirebaseAuthResult.SignInFails(null))
-                  }
-               } else
-               {
-                  Timber.e("exception sign: ${task.exception}")
-                  trySend(FirebaseAuthResult.SignInFails(task.exception)).isSuccess
-                  
-               }
-            }
-            awaitClose { callback.isComplete }
-            
-         } catch (e: Exception)
-         {
-            Timber.e("exception sign: $e")
-            trySend(FirebaseAuthResult.Failure(e))
+         
+         val listener = FirebaseAuth.AuthStateListener { firebaseAuth->
+            signInListenerWithIntent(intent,firebaseAuth)
          }
+         auth.addAuthStateListener(listener)
+         awaitClose { auth.removeAuthStateListener(listener) }
          
       }.flowOn(ioDispatcher)
    }
    
+   private fun ProducerScope<FirebaseAuthResult>.signInListenerWithIntent(
+      intent: Intent,firebaseAuth: FirebaseAuth
+                                                                         )
+   {
+      try
+      {
+         val credential = oneTapClient.getSignInCredentialFromIntent(intent)
+         val googleIdToken = credential.googleIdToken
+         val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken,null)
+         
+         firebaseAuth.signInWithCredential(googleCredentials).addOnCompleteListener { task->
+            if (task.isSuccessful)
+            {
+               val user = firebaseAuth.currentUser
+               if (user != null)
+               {
+                  channel.trySend(FirebaseAuthResult.SignInSuccess(user)).isSuccess
+                  Timber.d("Sign-in successful: $user")
+               } else
+               {
+                  channel.trySend(FirebaseAuthResult.SignInFails(null))
+                  Timber.w("User not found after sign-in")
+               }
+            } else
+            {
+               val exception = task.exception
+               if (exception is FirebaseAuthException)
+               {
+                  channel.trySend(FirebaseAuthResult.SignInFails(exception))
+                  Timber.e("Sign-in failed with FirebaseUserException: ${exception.message}")
+               } else
+               {
+                  channel.trySend(FirebaseAuthResult.SignInFails(exception))
+                  Timber.e(
+                     "Sign-in failed with unexpected exception: ${
+                        exception?.message
+                     }"
+                          )
+               }
+            }
+         }
+      } catch (e: Exception)
+      {
+         channel.trySend(FirebaseAuthResult.Failure(e))
+         Timber.e("Error during sign-in: ${e.message}")
+      }
+   }
+   
    override suspend fun isRegistrationAndBusinessCompleted(): Resource<Boolean>
    {
+      
       return withContext(ioDispatcher) {
          try
          {
@@ -134,7 +214,7 @@ class SignRepositoryImpl @Inject constructor(
       val currentTime = System.currentTimeMillis()
       val timeDifference = currentTime - creationTime !!
       
-      // Adjust the threshold as needed (e.g., 5 minutes)
+      // Adjust the threshold as needed (e.g., 2 minutes)
       return if (timeDifference < 5 * 60 * 1000)
       {
          // First-time sign-in
@@ -152,19 +232,30 @@ class SignRepositoryImpl @Inject constructor(
     */
    private suspend fun isUserCompletedStep(): Boolean
    {
-      
-      val id = auth.currentUser?.uid ?: return false
-      val docRef = firestore.collection(USERS_COLLECTION_PATH).document(id).collection(BUSINESS_FIELD).whereEqualTo(BUSINESS_IS_COMPLETED_STEP_FIELD,true)
-      
-      return try
-      {
-         val querySnapshot = docRef.get().await()
-         querySnapshot.documents.isNotEmpty()
-      } catch (e: Exception)
-      {
-         false
+      return withContext(ioDispatcher) {
+         
+         try
+         {
+            val id = auth.currentUser?.uid ?: return@withContext false
+            Timber.e("id = $id")
+            val docRef = firestore.collection(USERS_COLLECTION_PATH).document(id).get().await()
+            if (docRef.exists())
+            {
+               val data = docRef.data !!
+               val businessResponse = data as Map<String,Any>
+               val business = businessResponse.fromBusinessResponse()
+               Timber.e("isUserCompletedStep = $business")
+               (business.isCompletedStep ?: false)
+               
+            } else false
+            
+            
+         } catch (e: Exception)
+         {
+            Timber.e(e)
+            false
+         }
       }
-      
    }
    
    override suspend fun checkRegistration(email: String): Resource<Boolean>
@@ -199,14 +290,27 @@ class SignRepositoryImpl @Inject constructor(
       {
          oneTapClient.signOut().await()
          auth.signOut()
+         
+         delay(200L)
+         
+         Timber.e("SignOut Done")
+         Timber.e("SignOut Done id = ${auth.currentUser?.uid}")
       } catch (e: Exception)
       {
+         Timber.e("SignOut exception: $e")
          e.printStackTrace()
-         if (e is CancellationException) throw e
+         if (e is CancellationException)
+         {
+            Timber.e("SignOut Cancellation: $e")
+            
+            throw e
+         }
       }
    }
    
-   override suspend fun employeeLogin(uid: String,employeeId: String,password: String): Resource<Boolean> = withContext(ioDispatcher) {
+   override suspend fun employeeLogin(
+      uid: String,employeeId: String,password: String
+                                     ): Resource<Boolean> = withContext(ioDispatcher) {
       try
       {
          val document = firestore.collection(USERS_COLLECTION_PATH).document(uid).get().await()

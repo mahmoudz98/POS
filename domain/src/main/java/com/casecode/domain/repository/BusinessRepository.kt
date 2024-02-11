@@ -5,10 +5,12 @@ import com.casecode.domain.utils.Resource
 import javax.inject.Singleton
 
 typealias AddBusiness = Resource<Boolean>
+typealias CompleteBusiness = Resource<Boolean>
 
 interface BusinessRepository
 {
    
    suspend fun getBusiness(uid: String): Business
    suspend fun setBusiness(business: Business, uid: String): AddBusiness
+   suspend fun completeBusinessSetup(uid: String):CompleteBusiness
 }

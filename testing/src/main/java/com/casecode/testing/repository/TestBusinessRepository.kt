@@ -3,6 +3,7 @@ package com.casecode.testing.repository
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
+import com.casecode.domain.repository.CompleteBusiness
 import com.casecode.domain.utils.Resource
 import javax.inject.Inject
 
@@ -23,6 +24,11 @@ class TestBusinessRepository @Inject constructor() : BusinessRepository
       
       return Resource.Success(true)
       
+   }
+   
+   override suspend fun completeBusinessSetup(uid: String): CompleteBusiness
+   {
+      TODO("Not yet implemented")
    }
    
    fun sendAddBusiness(business: Business)

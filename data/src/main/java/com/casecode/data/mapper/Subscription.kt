@@ -20,7 +20,7 @@ fun MutableList<Subscription>.asEntitySubscriptions(
    val duration = document[SUBSCRIPTION_DURATION_FIELD] as Long
    val cost = document[SUBSCRIPTION_COST_FIELD] as Long
       
-      val permissions = document.get(SUBSCRIPTION_PERMISSIONS_FIELD, List::class.java) as List<String>
+      val permissions = document[SUBSCRIPTION_PERMISSIONS_FIELD] as List<String>
       add(Subscription(cost, duration, permissions, type))
    
    

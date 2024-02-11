@@ -61,7 +61,6 @@ class SignOutDialog : DialogFragment()
          val email = auth.currentUser?.email
          tvEmail.text = email
          
-         
          val photoUrl = auth.currentUser?.photoUrl
         
          Timber.e("photoUrl = $photoUrl")

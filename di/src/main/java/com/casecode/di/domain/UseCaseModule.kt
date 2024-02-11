@@ -6,6 +6,7 @@ import com.casecode.domain.repository.SignRepository
 import com.casecode.domain.repository.StoreRepository
 import com.casecode.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.domain.repository.SubscriptionsRepository
+import com.casecode.domain.usecase.CompleteBusinessUseCase
 import com.casecode.domain.usecase.GetStoreUseCase
 import com.casecode.domain.usecase.GetSubscriptionBusinessUseCase
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
@@ -24,12 +25,26 @@ import dagger.hilt.components.SingletonComponent
 object UseCaseModule
 {
    @Provides
-   fun provideSignInUseCase(signInRepository: SignRepository): SignInUseCase{
+   fun provideSignInUseCase(signInRepository: SignRepository): SignInUseCase
+   {
       return SignInUseCase(signInRepository)
    }
+   
    @Provides
-   fun provideSignOutUseCase(signInRepository: SignRepository): SignOutUseCase{
+   fun provideSignOutUseCase(signInRepository: SignRepository): SignOutUseCase
+   {
       return SignOutUseCase(signInRepository)
+   }
+   @Provides
+   fun provideSetBusinessUseCase(businessRepository: BusinessRepository): SetBusinessUseCase
+   {
+      return SetBusinessUseCase(businessRepository)
+   }
+   
+   @Provides
+   fun provideCompleteBusinessUseCase(businessRepository: BusinessRepository): CompleteBusinessUseCase
+   {
+      return CompleteBusinessUseCase(businessRepository)
    }
    
    @Provides
@@ -44,11 +59,7 @@ object UseCaseModule
       return GetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
    }
    
-   @Provides
-   fun provideSetBusinessUseCase(storeRep: BusinessRepository): SetBusinessUseCase
-   {
-      return SetBusinessUseCase(storeRep)
-   }
+   
    
    @Provides
    fun provideGetSubscriptionsUseCase(subscriptionsRepository: SubscriptionsRepository): GetSubscriptionsUseCase
@@ -67,5 +78,5 @@ object UseCaseModule
    {
       return GetStoreUseCase(storeRep)
    }
-
+   
 }

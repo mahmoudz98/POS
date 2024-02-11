@@ -16,11 +16,14 @@ import com.casecode.domain.model.users.Employee
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.AddEmployees
 import com.casecode.domain.repository.AddSubscriptionBusiness
+import com.casecode.domain.repository.CompleteBusiness
 import com.casecode.domain.repository.SubscriptionsResource
+import com.casecode.domain.usecase.CompleteBusinessUseCase
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.domain.usecase.SetBusinessUseCase
 import com.casecode.domain.usecase.SetEmployeesBusinessUseCase
 import com.casecode.domain.usecase.SetSubscriptionBusinessUseCase
+import com.casecode.domain.usecase.SignOutUseCase
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.base.BaseViewModel
@@ -38,12 +41,14 @@ import javax.inject.Inject
 @HiltViewModel
 class BusinessViewModel @Inject constructor(
    //   private val getStoreUseCase: GetStoreUseCase,
-     private val networkMonitor: NetworkMonitor,
-     private val firebaseAuth: FirebaseAuth,
-     private val setBusinessUseCase: SetBusinessUseCase,
-     private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
-     private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
-     private val setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase,
+   private val networkMonitor: NetworkMonitor,
+   private val firebaseAuth: FirebaseAuth,
+   private val signOutUseCase: SignOutUseCase,
+   private val setBusinessUseCase: SetBusinessUseCase,
+   private val completeBusinessUseCase: CompleteBusinessUseCase,
+   private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
+   private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
+   private val setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase,
                                            ) : BaseViewModel()
 {
    
@@ -95,8 +100,7 @@ class BusinessViewModel @Inject constructor(
    
    private var _subscriptionSelected: MutableLiveData<Subscription> = MutableLiveData()
    
-   private var _employees: MutableLiveData<MutableList<Employee>> =
-      MutableLiveData()
+   private var _employees: MutableLiveData<MutableList<Employee>> = MutableLiveData()
    val employees get() = _employees
    
    private var _employee: Employee = Employee()
@@ -116,6 +120,8 @@ class BusinessViewModel @Inject constructor(
    
    private val _isAddEmployees: MutableLiveData<AddEmployees?> = MutableLiveData()
    private val isAddEmployees get() = _isAddEmployees
+   
+   private val _isCompletedBusinessStep = MutableLiveData<CompleteBusiness>()
    
    private val _buttonNextStep: MutableLiveData<Event<Unit>> = MutableLiveData()
    val buttonNextStep: LiveData<Event<Unit>> get() = _buttonNextStep
@@ -141,9 +147,11 @@ class BusinessViewModel @Inject constructor(
       networkMonitor.isOnline.collect {
          setConnected(it)
       }
-      
-      
    }
+   
+    fun signOut() = viewModelScope.launch {   signOutUseCase()}
+   
+   
    
    fun setConnected(isOnline: Boolean)
    {
@@ -187,7 +195,7 @@ class BusinessViewModel @Inject constructor(
    {
       
       incrementBranchCode()
-      val branch = Branch(_branchCode.value, _branchName.value, _branchPhone.value)
+      val branch = Branch(_branchCode.value,_branchName.value,_branchPhone.value)
       
       val branchesValue = branches.value ?: ArrayList()
       val oldBranchesSize = _branches.value?.size ?: 0
@@ -222,7 +230,7 @@ class BusinessViewModel @Inject constructor(
          val index = branchesValue.indexOf(_branchSelected.value)
          val currentBranch = branchesValue[index]
          val updateBranch =
-            Branch(branchSelected.value?.branchCode, _branchName.value, _branchPhone.value)
+            Branch(branchSelected.value?.branchCode,_branchName.value,_branchPhone.value)
          
          if (currentBranch != updateBranch)
          {
@@ -272,7 +280,7 @@ class BusinessViewModel @Inject constructor(
          // COMPLETE: when no uid move  to sign in screen.
          val uid = currentUid.value ?: ""
          
-         isAddBusiness.value = setBusinessUseCase(addBusiness(), uid)
+         isAddBusiness.value = setBusinessUseCase(addBusiness(),uid)
          observerIsAddBusiness()
          
       } else
@@ -297,7 +305,7 @@ class BusinessViewModel @Inject constructor(
             
          }
          
-         is Resource.Empty, is Resource.Error ->
+         is Resource.Empty,is Resource.Error ->
          {
             val messageRes = (isAddBusinessResource as? Resource.Empty)?.message
                ?: (isAddBusinessResource as? Resource.Error)?.message
@@ -318,7 +326,7 @@ class BusinessViewModel @Inject constructor(
       if (_subscriptions.value?.isEmpty() == false || ! _subscriptions.isInitialized)
       {
          showProgress()
-         getSubscriptionsUseCase().collect { subscriptionsResource ->
+         getSubscriptionsUseCase().collect { subscriptionsResource->
             println("getSubscriptionsBusiness, empty = true")
             handleSubscriptionsResource(subscriptionsResource)
          }
@@ -378,7 +386,7 @@ class BusinessViewModel @Inject constructor(
       val uid = currentUid.value ?: ""
       val subscription = _subscriptionSelected.value
       _isAddSubscriptionBusiness.value =
-         subscription?.asSubscriptionBusiness()?.let { setSubscriptionsBusinessUseCase(it, uid) }
+         subscription?.asSubscriptionBusiness()?.let { setSubscriptionsBusinessUseCase(it,uid) }
       
       isAddSubscriptionBusiness()
    }
@@ -403,15 +411,13 @@ class BusinessViewModel @Inject constructor(
             }
          }
          
-         
-         is Resource.Error, is Resource.Empty ->
+         is Resource.Error,is Resource.Empty ->
          {
             hideProgress()
             val messageRes = (resourceIsAddSubscription as? Resource.Empty)?.message
                ?: (resourceIsAddSubscription as? Resource.Error)?.message
             
             showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
-            
          }
          
          else ->
@@ -440,14 +446,13 @@ class BusinessViewModel @Inject constructor(
       val uid = currentUid.value ?: ""
       val employeesList = _employees.value ?: mutableListOf()
       
-      _isAddEmployees.value = setEmployeesBusinessUseCase(employeesList, uid)
-      
+      _isAddEmployees.value = setEmployeesBusinessUseCase(employeesList,uid)
       checkIsAddEmployees()
    }
    
+   
    private fun checkIsAddEmployees()
    {
-      
       when (val isAddEmployeesResource = isAddEmployees.value)
       {
          is Resource.Success ->
@@ -455,26 +460,54 @@ class BusinessViewModel @Inject constructor(
             if (isAddEmployeesResource.data)
             {
                showSnackbarMessage(R.string.add_employees_success)
-               completedSteps()
+               // Then, go on business complete step.
+               setCompletedBusinessStep()
+
             }
          }
          
-         is Resource.Error, is Resource.Empty ->
+         is Resource.Error,is Resource.Empty ->
          {
             val messageRes = (isAddEmployeesResource as? Resource.Empty)?.message
                ?: (isAddEmployeesResource as? Resource.Error)?.message
             
             showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
-            
          }
          
          else ->
          {
             showSnackbarMessage(R.string.all_error_save)
-            
          }
       }
-      
+   }
+   
+   fun setCompletedBusinessStep()
+   {
+      viewModelScope.launch {
+         val uid = currentUid.value ?: ""
+       _isCompletedBusinessStep.value =   completeBusinessUseCase(uid)
+         checkIsCompleteBusinessStep()
+      }
+   }
+   private fun checkIsCompleteBusinessStep(){
+      when(val isCompleteBusinessStep = _isCompletedBusinessStep.value){
+         is Resource.Success ->{
+            showSnackbarMessage(R.string.complete_business_step_success)
+            completedSteps()
+            
+         }
+         is Resource.Empty, is Resource.Error ->{
+            val messageRes = (isCompleteBusinessStep as? Resource.Empty)?.message
+               ?: (isCompleteBusinessStep as? Resource.Error)?.message
+            
+            showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
+         }
+         
+         is Resource.Loading ->{}
+         null -> {
+            showSnackbarMessage( R.string.all_error_save)
+         }
+      }
    }
    
    fun addDefaultEmployee()
@@ -493,24 +526,26 @@ class BusinessViewModel @Inject constructor(
       val name = firebaseAuth.currentUser?.displayName ?: "Admin"
       val phoneNumber = firebaseAuth.currentUser?.phoneNumber ?: phoneBusiness.value
       val branchName = _branches.value?.get(0)?.branchName ?: ""
-      return Employee(name = name,
+      return Employee(
+         name = name,
          phoneNumber = phoneNumber ?: "",
          password = "123456",
          branchName = branchName,
-         permission = "Admin")
+         permission = "Admin"
+                     )
    }
    
    fun newEmployee(
-        name: String,
-        phone: String,
-        password: String,
-        branchName: String,
-        permission: String,
+      name: String,
+      phone: String,
+      password: String,
+      branchName: String,
+      permission: String,
                   )
    {
       
       
-      _employee = Employee(name, phone, password, branchName, permission)
+      _employee = Employee(name,phone,password,branchName,permission)
       
    }
    
@@ -579,7 +614,7 @@ class BusinessViewModel @Inject constructor(
       _buttonPreviousStep.value = Event(Unit)
    }
    
-   fun completedSteps()
+   private fun completedSteps()
    {
       _buttonCompletedSteps.value = Event(Unit)
    }

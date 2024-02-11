@@ -57,6 +57,10 @@
     <string name="done">Done</string>
     <string name="document_successfully_deleted">Document successfully deleted, %1$s</string>
 
+    // Stepper
+    <string name="title_close_stepper_dialog">Exit confirmation</string>
+    <string name="message_close_stepper_dialog">Are you exit setup business step and log out</string>
+    <string name="positive_close_stepper_dialog">Yes</string>
 
     // business
     <string name="add_business_empty">Please add your data correctly</string>
@@ -67,6 +71,7 @@
     <string name="add_business_phone_invalid">Enter valid phone number</string>
     <string name="add_business_failed">Failure when add new business, please try again</string>
     <string name="add_business_success">Business added is Successfully.</string>
+    <string name="complete_business_step_success">Complete business step, Go on.</string>
 
     // types of store
     <string name="store_type_clothes">Clothes</string>
