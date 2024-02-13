@@ -2,6 +2,12 @@
 <resources>
     <string name="default_web_client_id" translatable="false">578787836284-1ha2u4nugqtbj3qkvnaioqfbei14trji.apps.googleusercontent.com</string>
 
+    // Sign in
+    <string name="sign_in_failure">Sign in field.</string>
+    <string name="sign_in_cancel">One-tap dialog was closed..</string>
+    <string name="sign_in_network_error">One-tap encountered a network error..</string>
+    <string name="sign_in_api_exception">Couldn\'t get credential from result.</string>
+    <string name="sign_in_exception">Something error in one-tap.</string>
     // Business
     <string name="add_business_failure">Add  Business failure,</string>
     <string name="add_business_network">Failure when add business, Check internet connection</string>

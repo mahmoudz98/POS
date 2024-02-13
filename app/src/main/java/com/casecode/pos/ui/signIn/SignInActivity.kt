@@ -129,9 +129,6 @@ class SignInActivity : AppCompatActivity()
             }
          }
       }
-
-      
-      
    }
    
    private fun observerSignInResult()

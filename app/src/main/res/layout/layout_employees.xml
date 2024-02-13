@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.casecode.pos.viewmodel.BusinessViewModel" />
+            type="com.casecode.pos.viewmodel.StepperBusinessViewModel" />
 
     </data>
     <merge tools:showIn="@layout/fragment_employees">

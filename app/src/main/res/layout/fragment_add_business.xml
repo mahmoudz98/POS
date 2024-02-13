@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.casecode.pos.viewmodel.BusinessViewModel" />
+            type="com.casecode.pos.viewmodel.StepperBusinessViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

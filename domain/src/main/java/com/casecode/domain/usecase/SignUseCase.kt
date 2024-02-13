@@ -11,12 +11,13 @@ class SignInUseCase @Inject constructor(private val signInRepository: SignReposi
    fun currentUser() = signInRepository.currentUser
    
    suspend fun signIn(): Resource<IntentSender> = signInRepository.signIn()
+
    fun signInWithIntent(intent: Intent) =
       signInRepository.signInWithIntent(intent)
+
    suspend fun isRegistrationAndBusinessCompleted(): Resource<Boolean> =
       signInRepository.isRegistrationAndBusinessCompleted()
    
-   suspend fun checkRegistration(email: String) = signInRepository.checkRegistration(email)
   suspend fun employeeLogin(uid: String, employeeId: String, password: String) =
       signInRepository.employeeLogin(uid, employeeId, password)
    

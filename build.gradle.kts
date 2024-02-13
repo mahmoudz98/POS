@@ -26,7 +26,12 @@ plugins {
    
 }
 
-
+tasks.withType<Test>().configureEach {
+   maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+}
+tasks.withType<Test>().configureEach {
+   forkEvery = 100
+}
 
 // TODo: use gradle profile https://developer.android.com/build/profile-your-build#getting_started
 //TODO: Add Dependency graph let visualize dependencies in a graph.

@@ -1,6 +1,8 @@
 package com.casecode.testing.di.app
 
 import com.casecode.di.app.FirebaseModule
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -10,6 +12,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import io.mockk.mockk
 import javax.inject.Singleton
 
 @Module
@@ -23,15 +26,23 @@ object TestFirebaseModule
    private const val AUTH_PORT = 9099
    private const val FIRESTORE_PORT = 8080
    
-   
    @Singleton
    @Provides
    fun provideFirebaseAuthMockk(): FirebaseAuth =
-      Firebase.auth.also { it.useEmulator(HOST, AUTH_PORT) }
+      Firebase.auth.also { it.useEmulator(HOST,AUTH_PORT) }
    
    @Singleton
    @Provides
    fun provideFirebaseFirestoreMockk(): FirebaseFirestore =
-      Firebase.firestore.also { it.useEmulator(HOST, FIRESTORE_PORT) }
+      Firebase.firestore.also { it.useEmulator(HOST,FIRESTORE_PORT) }
    
+   @Provides
+   @Singleton
+   fun provideSignInClient() = mockk<SignInClient>()
+   
+   @Provides
+   fun provideSignInRequest(): BeginSignInRequest
+   {
+      return mockk<BeginSignInRequest>()
+   }
 }

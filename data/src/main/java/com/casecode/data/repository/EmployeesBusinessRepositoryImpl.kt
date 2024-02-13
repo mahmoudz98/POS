@@ -53,14 +53,14 @@ class EmployeesBusinessRepositoryImpl @Inject constructor(
             
          }
          resultAddEmployee
-      }catch (e: Exception){
-         Timber.e("Exception while adding employees: $e")
-         Resource.error(R.string.add_employees_business_failure)
       }
       catch (e: UnknownHostException)
       {
          Resource.error(R.string.add_employees_business_network)
          
+      } catch (e: Exception){
+         Timber.e("Exception while adding employees: $e")
+         Resource.error(R.string.add_employees_business_failure)
       }
    }
    

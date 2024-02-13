@@ -28,7 +28,7 @@ class TestBusinessRepository @Inject constructor() : BusinessRepository
    
    override suspend fun completeBusinessSetup(uid: String): CompleteBusiness
    {
-      TODO("Not yet implemented")
+    return  Resource.success(true)
    }
    
    fun sendAddBusiness(business: Business)

@@ -37,6 +37,7 @@ dependencies {
    
    implementation(libs.hilt.android.testing)
    implementation(libs.test.espresso.idlingResource)
+   implementation(libs.play.services.auth)
    
    
 }

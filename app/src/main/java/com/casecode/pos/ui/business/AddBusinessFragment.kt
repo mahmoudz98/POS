@@ -13,7 +13,7 @@ import com.casecode.pos.R
 import com.casecode.pos.base.BaseTextWatcher
 import com.casecode.pos.databinding.FragmentAddBusinessBinding
 import com.casecode.pos.utils.showSnackbar
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -28,7 +28,7 @@ class AddBusinessFragment : Fragment()
    val binding get() = _binding !!
    
    @get:OpenForTesting
-   val businessViewModel by activityViewModels<BusinessViewModel>()
+   val businessViewModel by activityViewModels<StepperBusinessViewModel>()
    
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

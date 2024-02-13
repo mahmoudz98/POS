@@ -9,15 +9,7 @@ import com.casecode.domain.utils.Resource
 import com.casecode.pos.domain.R
 import javax.inject.Inject
 
-class CompleteBusinessUseCase @Inject constructor(private val businessRepo: BusinessRepository){
-   suspend operator fun invoke(uid: String): CompleteBusiness
-   {
-      if(uid.isEmpty()){
-         return Resource.empty( EmptyType.DATA, R.string.uid_empty)
-      }
-      return businessRepo.completeBusinessSetup(uid)
-   }
-}
+
 class SetBusinessUseCase @Inject constructor(private val businessRep: BusinessRepository)
 {
    suspend operator fun invoke(business: Business, uid: String) : AddBusiness{
@@ -39,4 +31,18 @@ class SetBusinessUseCase @Inject constructor(private val businessRep: BusinessRe
       }
      return businessRep.setBusiness(business, uid)
    }
+}
+class CompleteBusinessUseCase @Inject constructor(private val businessRepo: BusinessRepository){
+   suspend operator fun invoke(uid: String): CompleteBusiness
+   {
+      if(uid.isEmpty()){
+         return Resource.empty( EmptyType.DATA, R.string.uid_empty)
+      }
+      return businessRepo.completeBusinessSetup(uid)
+   }
+}
+
+class GetBusinessUseCase @Inject constructor(private val businessRep: BusinessRepository) {
+
+   suspend operator fun invoke(uid: String) = businessRep.getBusiness(uid)
 }

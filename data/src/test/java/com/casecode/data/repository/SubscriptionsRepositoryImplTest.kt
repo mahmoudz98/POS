@@ -46,27 +46,11 @@ class SubscriptionsRepositoryImplTest
     * A test  SubscriptionsRepository implementation that can be used for testing.
     */
    private val repository = TestSubscriptionsRepository()
-   private lateinit var subscriptionRepository: SubscriptionsRepositoryImpl
+
+
+
    
-   // Capture the success and failure listeners
-   private val successListenerSlot = slot<OnSuccessListener<Void>>()
-   private val failureListenerSlot = slot<OnFailureListener>()
-   private val onSuccessListenerSlot = slot<OnSuccessListener<QuerySnapshot>>()
-   
-   @Before
-   fun setup()
-   {
-      subscriptionRepository =
-         SubscriptionsRepositoryImpl(firestore, testDispatcher)
-      
-   }
-   
-   @After
-   fun tearDown()
-   {
-      unmockkAll()
-   }
-   
+
    
    /**
     * A test that verifies that the getSubscriptions() method returns a list of plans when successful.
@@ -127,36 +111,6 @@ class SubscriptionsRepositoryImplTest
             cost = 60, type = "premium", permissions = listOf("write", "read", "admin")))
    }
    
-   @Test
-   fun getSubscriptions_WhenSuccessful_returnsSubscriptions() = testScope.runTest {
-      // Arrange
-     /*  mockFirestoreUpdateSuccess()
-      
-      // Act
-      val flow = subscriptionRepository.getSubscriptions()
-      advanceUntilIdle()
-      // Verify Success State
-      val resultSuccess = flow.last()
-      coVerify {
-         firestore.collection(SUBSCRIPTIONS_COLLECTION_PATH).orderBy(SUBSCRIPTION_COST_FIELD).get()
-      }
-      assertThat(resultSuccess, `is`(Resource.Success(emptyList())))
-       */
-      
-   }
-   
-   private fun mockFirestoreUpdateSuccess()
-   {
-      val task: QuerySnapshot = mockk(relaxed = true)
-      every {
-         firestore.collection(SUBSCRIPTIONS_COLLECTION_PATH).orderBy(SUBSCRIPTION_COST_FIELD).get()
-            .addOnSuccessListener(capture(onSuccessListenerSlot))
-      } answers {
-         val listener = arg<com.google.android.gms.tasks.OnSuccessListener<QuerySnapshot>>(0)
-         listener.onSuccess(task)
-         mockk()
-         // Return a mock Task
-      }
-      
-   }
+
+
 }

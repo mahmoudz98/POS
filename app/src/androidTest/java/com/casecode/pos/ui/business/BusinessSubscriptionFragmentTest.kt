@@ -13,7 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.casecode.domain.repository.AddSubscriptionBusiness
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.`is`
@@ -35,7 +35,7 @@ class BusinessSubscriptionFragmentTest
    var instantTaskExecutorRule = InstantTaskExecutorRule()
    
    
-   private lateinit var businessViewModel: BusinessViewModel
+   private lateinit var businessViewModel: StepperBusinessViewModel
    
    
    @Before

@@ -26,44 +26,13 @@ import kotlin.coroutines.suspendCoroutine
  */
 class BusinessRepositoryImpl @Inject constructor(
    private val firestore: FirebaseFirestore,
-   @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
-                                                ) : BusinessRepository
+   @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher, ) : BusinessRepository
 {
    override suspend fun getBusiness(uid: String): Business
    {
       TODO("Not yet implemented")
    }
-   
-   override suspend fun completeBusinessSetup(uid: String): CompleteBusiness
-   {
-      return withContext(ioDispatcher) {
-         try
-         {
-            
-            val resultCompleteBusinessStep = suspendCoroutine<CompleteBusiness> { continuation->
-               firestore.collection(USERS_COLLECTION_PATH).document(uid).update(
-                  
-                  "$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD",true)
-                  .addOnSuccessListener {
-                     
-                     continuation.resume(CompleteBusiness.success(true))
-                  }.addOnFailureListener {
-                     continuation.resume(CompleteBusiness.error(R.string.complete_business_failure))
-                     
-                  }
-            }
-            resultCompleteBusinessStep
-         } catch (e: FirebaseFirestoreException)
-         {
-            CompleteBusiness.error(R.string.complete_business_failure)
-         } catch (e: Exception)
-         {
-            CompleteBusiness.error(R.string.complete_business_failure)
-            
-         }
-      }
-   }
-   
+
    override suspend fun setBusiness(business: Business,uid: String): AddBusiness
    {
       return withContext(ioDispatcher) {
@@ -81,25 +50,48 @@ class BusinessRepositoryImpl @Inject constructor(
                      continuation.resume(AddBusiness.error(R.string.add_subscription_business_failure))
                   }
             }
-            
             resultAddBusiness
-            
          } catch (e: FirebaseFirestoreException)
          {
-            Timber.e("Firebase error while adding business: ${e.message}")
             AddBusiness.error(R.string.add_business_failure)
-         } catch (e: Exception)
-         {
-            Timber.e("Exception while adding business: ${e.message}")
-            AddBusiness.error(R.string.add_business_failure)
-         } catch (e: UnknownHostException)
+         }  catch (e: UnknownHostException)
          {
             AddBusiness.error(R.string.add_business_network)
+         }catch (e: Exception)
+         {
+            AddBusiness.error(R.string.add_business_failure)
+         }
+      }
+   }
+   
+   override suspend fun completeBusinessSetup(uid: String): CompleteBusiness
+   {
+      return withContext(ioDispatcher) {
+         try
+         {
+            
+            val resultCompleteBusinessStep = suspendCoroutine<CompleteBusiness> { continuation->
+               firestore.collection(USERS_COLLECTION_PATH).document(uid).update(
+                  
+                  "$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD",true)
+                  .addOnSuccessListener {
+                     
+                     continuation.resume(CompleteBusiness.success(true))
+                  }.addOnFailureListener {
+                     continuation.resume(CompleteBusiness.error(R.string.complete_business_failure))
+                  }
+            }
+            resultCompleteBusinessStep
+         } catch (e: FirebaseFirestoreException)
+         {
+            CompleteBusiness.error(R.string.complete_business_failure)
+         } catch (e: Exception)
+         {
+            CompleteBusiness.error(R.string.complete_business_failure)
             
          }
-         
       }
-      
    }
+   
    
 }

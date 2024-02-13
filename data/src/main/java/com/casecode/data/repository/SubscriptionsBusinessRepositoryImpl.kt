@@ -46,15 +46,16 @@ class SubscriptionsBusinessRepositoryImpl @Inject constructor(
                   }
             }
             resultAddSubscription
-            
-         } catch (e: Exception)
+
+         }catch (e: UnknownHostException)
+         {
+            AddSubscriptionBusiness.error(R.string.add_subscription_business_network)
+
+         }
+         catch (e: Exception)
          {
             Timber.e("Exception while adding business: $e")
             AddSubscriptionBusiness.error(R.string.add_subscription_business_failure)
-         } catch (e: UnknownHostException)
-         {
-            AddSubscriptionBusiness.error(R.string.add_subscription_business_network)
-            
          }
       }
    }

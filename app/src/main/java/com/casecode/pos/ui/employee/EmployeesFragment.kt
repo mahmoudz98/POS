@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.casecode.pos.R
 import com.casecode.pos.adapter.EmployeeAdapter
 import com.casecode.pos.databinding.FragmentEmployeesBinding
-import com.casecode.pos.ui.branch.AddBranchesDialogFragment
 import com.casecode.pos.utils.EventObserver
 import com.casecode.pos.utils.compactScreen
 import com.casecode.pos.utils.setupSnackbar
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +24,7 @@ class EmployeesFragment : Fragment()
    val binding get() = _binding !!
    
    
-   internal val businessViewModel by activityViewModels<BusinessViewModel>()
+   internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
    
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

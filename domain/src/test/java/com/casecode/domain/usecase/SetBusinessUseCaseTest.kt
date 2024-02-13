@@ -22,7 +22,7 @@ class SetBusinessUseCaseTest
    val mainDispatcherRule = MainDispatcherRule()
    
    // Given business and uid
-   private val business = Business(StoreType.Clothes, "mahmoud@gmail.com", "1234",
+   private val business = Business(StoreType.Clothes, "mahmoud@gmail.com", "1234",false,
       listOf(Branch(1, "22", "2323")))
    private val uid = "test-uid"
    
@@ -67,7 +67,7 @@ class SetBusinessUseCaseTest
    fun `invoke with empty phone should return Resource with PHONE_BUSINESS_EMPTY error`() = runTest {
       
       // When add business and phone is empty
-      val businessWithEmptyPhone = Business(StoreType.Clothes, "mahmoud@gmail.com", "", listOf(Branch()))
+      val businessWithEmptyPhone = Business(StoreType.Clothes, "mahmoud@gmail.com", "",false, listOf(Branch()))
       
       // Then check if the result is empty phone,
       val isAddBusiness: AddBusiness = setBusinessUseCase(businessWithEmptyPhone, uid)
@@ -78,7 +78,7 @@ class SetBusinessUseCaseTest
    fun `invoke with empty email should return Resource with EMAIL_BUSINESS_EMPTY error`() = runTest {
       
       // When add business and email is empty
-      val businessWithEmptyEmail = Business(StoreType.Clothes, "", "1234", listOf(Branch()))
+      val businessWithEmptyEmail = Business(StoreType.Clothes, "", "1234",false, listOf(Branch()))
       
       // Then check if the result is empty email,
       val isAddBusiness: AddBusiness = setBusinessUseCase(businessWithEmptyEmail, uid)

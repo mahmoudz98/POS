@@ -12,7 +12,7 @@ import com.casecode.pos.databinding.FragmentBranchesBinding
 import com.casecode.pos.utils.EventObserver
 import com.casecode.pos.utils.compactScreen
 import com.casecode.pos.utils.setupSnackbar
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -32,7 +32,7 @@ class BranchesFragment : Fragment()
    private val binding get() = _binding !!
    
    // Shared ViewModel associated with the hosting activity
-   internal val businessViewModel by activityViewModels<BusinessViewModel>()
+   internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
    
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

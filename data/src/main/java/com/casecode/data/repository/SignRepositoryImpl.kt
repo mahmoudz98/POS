@@ -12,6 +12,7 @@ import com.casecode.domain.utils.FirebaseAuthResult
 
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
+import com.casecode.pos.data.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
@@ -41,9 +42,7 @@ class SignRepositoryImpl @Inject constructor(
    private val firestore: FirebaseFirestore,
    private val beginSignInRequest: BeginSignInRequest,
    private val oneTapClient: SignInClient,
-   
    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-   @Dispatcher(MAIN) private val mainDispatcher: CoroutineDispatcher,
                                             ) : SignRepository
 {
    override val currentUserId: String
@@ -59,7 +58,7 @@ class SignRepositoryImpl @Inject constructor(
    
    override suspend fun signIn(): Resource<IntentSender>
    {
-      return withContext(mainDispatcher) {
+      return withContext(ioDispatcher) {
          try
          {
             val result = suspendCoroutine<Resource<IntentSender>> { continuation->
@@ -72,7 +71,7 @@ class SignRepositoryImpl @Inject constructor(
                                         )
                      
                   }.addOnFailureListener {
-                     continuation.resume(Resource.error("sign in field"))
+                     continuation.resume(Resource.error(R.string.sign_in_failure))
                   }
             }
             result
@@ -82,30 +81,24 @@ class SignRepositoryImpl @Inject constructor(
             {
                CommonStatusCodes.CANCELED ->
                {
-                  Resource.error("One-tap dialog was closed.")
-                  
+                  Resource.error(R.string.sign_in_cancel)
                }
                
                CommonStatusCodes.NETWORK_ERROR ->
                {
-                  Timber.d("One-tap encountered a network error.")
-                  Resource.error("One-tap encountered a network error..")
-                  
-                  
+                  Resource.error(R.string.sign_in_network_error)
                }
-               
                else ->
                {
-                  Timber.d("Couldn't get credential from result. ${e.localizedMessage}")
-                  Resource.error("Couldn't get credential from result. ${e.localizedMessage}")
-                  
+                  Resource.error(R.string.sign_in_api_exception)
                }
             }
             
          } catch (e: Exception)
          {
+            // TODO: add firebase crach to track error in signIn.
             e.printStackTrace()
-            Resource.error(e.message)
+            Resource.error(R.string.sign_in_exception)
          }
       }
       
@@ -126,8 +119,7 @@ class SignRepositoryImpl @Inject constructor(
    }
    
    private fun ProducerScope<FirebaseAuthResult>.signInListenerWithIntent(
-      intent: Intent,firebaseAuth: FirebaseAuth
-                                                                         )
+      intent: Intent,firebaseAuth: FirebaseAuth)
    {
       try
       {

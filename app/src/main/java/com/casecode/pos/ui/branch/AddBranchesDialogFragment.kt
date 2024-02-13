@@ -14,7 +14,7 @@ import androidx.fragment.app.activityViewModels
 import com.casecode.pos.R
 import com.casecode.pos.base.doAfterTextChangedListener
 import com.casecode.pos.databinding.DialogAddBranchBinding
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
@@ -37,7 +37,7 @@ class AddBranchesDialogFragment : DialogFragment()
    private var _binding: DialogAddBranchBinding? = null
    private val binding: DialogAddBranchBinding
       get() = _binding !!
-   private val businessViewModel by activityViewModels<BusinessViewModel>()
+   private val businessViewModel by activityViewModels<StepperBusinessViewModel>()
    
    
    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog

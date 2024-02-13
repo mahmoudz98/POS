@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import com.casecode.pos.adapter.SubscriptionAdapter
 import com.casecode.pos.databinding.FragmentBusinessSubscriptionBinding
 import com.casecode.pos.utils.setupSnackbar
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -25,7 +25,7 @@ class BusinessSubscriptionFragment : Fragment()
    
    private var _binding: FragmentBusinessSubscriptionBinding? = null
    private val binding get() = _binding !!
-   internal val businessViewModel by activityViewModels<BusinessViewModel>()
+   internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
    
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -10,10 +10,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.casecode.domain.model.users.Branch
-import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.`is`
@@ -39,7 +38,7 @@ class BranchesFragmentTest
    @get:Rule(order = 1)
    var instantTaskExecutorRule = InstantTaskExecutorRule()
    
-   private lateinit var businessViewModel: BusinessViewModel
+   private lateinit var businessViewModel: StepperBusinessViewModel
    
    @Before
    fun init()

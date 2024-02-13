@@ -13,14 +13,12 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.casecode.di.data.RepositoryModule
 import com.casecode.pos.R
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.utils.withHint
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import dagger.hilt.android.testing.UninstallModules
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Rule
@@ -43,7 +41,7 @@ class AddBranchesDialogFragmentTest
    var hiltRule = HiltAndroidRule(this)
    
    
-   private lateinit var businessViewModel: BusinessViewModel
+   private lateinit var businessViewModel: StepperBusinessViewModel
    private lateinit var context: Context
    
    @Before

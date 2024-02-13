@@ -13,7 +13,7 @@ import com.casecode.pos.utils.DataBindingIdlingRes
 import com.casecode.pos.utils.EspressoIdlingResource
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.utils.monitorFragment
-import com.casecode.pos.viewmodel.BusinessViewModel
+import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.Matchers.`is`
@@ -36,7 +36,7 @@ class EmployeesFragmentTest
    @get:Rule(order = 1)
    var instantTaskExecutorRule = InstantTaskExecutorRule()
    
-   private lateinit var businessViewModel: BusinessViewModel
+   private lateinit var businessViewModel: StepperBusinessViewModel
    
    // An idling resource that waits for Data Binding to have no pending bindings.
    private val dataBindingIdlingResource = DataBindingIdlingRes()
