@@ -75,7 +75,7 @@ class AddEmployeeDialogFragment : DialogFragment()
    {
       initViewModel()
       validateInputEmployee()
-      initAddEmployee()
+      initAddOrUpdateEmployee()
       if (tag == UPDATE_EMPLOYEE_TAG)
       {
          observerEmployeeSelected()
@@ -165,14 +165,11 @@ class AddEmployeeDialogFragment : DialogFragment()
     
    }
    
-   private fun initAddEmployee()
+   private fun initAddOrUpdateEmployee()
    {
       binding.btnEmployee.setOnClickListener {
          if (isValidEmployeeInput())
          {
-            if (tag == ADD_EMPLOYEE_TAG) businessViewModel.addEmployee()
-            else businessViewModel.updateEmployee()
-            
             dismissDialog()
          }
       }
@@ -194,8 +191,13 @@ class AddEmployeeDialogFragment : DialogFragment()
       {
          return false
       }
-      
-      businessViewModel.newEmployee(name, phone, password, branchName, permission)
+      if (tag == ADD_EMPLOYEE_TAG){
+         businessViewModel.addEmployee(name, phone, password, branchName, permission)
+
+      }else {
+         businessViewModel.updateEmployee(name, phone, password, branchName, permission)
+
+      }
       return true
    }
    

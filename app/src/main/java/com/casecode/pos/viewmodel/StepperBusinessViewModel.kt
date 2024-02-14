@@ -108,6 +108,7 @@ class StepperBusinessViewModel @Inject constructor(
     val employee get() = _employee
 
     private val _isAddEmployee: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val isAddEmployee get() = _isAddEmployee
 
     private val _isUpdateEmployee: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isUpdateEmployee get() = _isUpdateEmployee
@@ -122,7 +123,7 @@ class StepperBusinessViewModel @Inject constructor(
 
     // Employees business data
     private val _isAddEmployees: MutableLiveData<AddEmployees?> = MutableLiveData()
-    private val isAddEmployees get() = _isAddEmployees
+     val isAddEmployees get() = _isAddEmployees
 
     // Business completion data
     private val _isCompletedBusinessStep = MutableLiveData<CompleteBusiness>()
@@ -388,6 +389,128 @@ class StepperBusinessViewModel @Inject constructor(
         }
     }
 
+    fun addDefaultEmployee() {
+        val employeesValue = _employees.value ?: ArrayList()
+        if (employeesValue.isEmpty() && _branches.value?.isNotEmpty() == true) {
+            employeesValue.add(defaultEmployee())
+            _employees.value = employeesValue
+        }
+
+    }
+
+    private fun defaultEmployee(): Employee {
+        val name = firebaseAuth.currentUser?.displayName ?: "Admin"
+        val phoneNumber = firebaseAuth.currentUser?.phoneNumber ?: phoneBusiness.value
+        val branchName = _branches.value?.get(0)?.branchName ?: ""
+        return Employee(
+            name = name,
+            phoneNumber = phoneNumber ?: "",
+            password = "123456",
+            branchName = branchName,
+            permission = "Admin"
+        )
+    }
+
+    fun addEmployee(
+        name: String,
+        phone: String,
+        password: String,
+        branchName: String,
+        permission: String,
+    ) {
+        _employee = Employee(name, phone, password, branchName, permission)
+        addEmployee()
+    }
+
+    private fun addEmployee() {
+
+        val currentEmployees = _employees.value ?: emptyList()
+
+        if (isEmployeeNameDuplicate(currentEmployees)) return
+        val newEmployees = currentEmployees.toMutableList().apply { add(_employee) }
+        if (currentEmployees.size < newEmployees.size) {
+            _employees.value = newEmployees
+            _isAddEmployee.value = Event(true)
+            showSnackbarMessage(R.string.add_employee_success)
+        } else {
+            _isAddEmployee.value = Event(false)
+            showSnackbarMessage(R.string.add_employee_fail)
+        }
+    }
+
+    private fun isEmployeeNameDuplicate(currentEmployees: List<Employee>): Boolean {
+        currentEmployees.forEach {
+            if (it.name == _employee.name) {
+                _isAddEmployee.value = Event(false)
+                showSnackbarMessage(R.string.add_employee_duplicate)
+                return true
+            }
+        }
+        return false
+    }
+
+    fun setEmployeeSelected(employeeSelect: Employee) {
+        _employeeSelected.value = employeeSelect
+    }
+
+    fun updateEmployee(
+        name: String,
+        phone: String,
+        password: String,
+        branchName: String,
+        permission: String,
+    ) {
+        _employee = Employee(name, phone, password, branchName, permission)
+        updateEmployee()
+    }
+
+    private fun updateEmployee() {
+
+        val employeesValue = _employees.value ?: ArrayList()
+        val index = employeesValue.indexOf(_employeeSelected.value)
+        if (isOutOfIndex(index)) return
+
+        val currentEmployee = employeesValue[index]
+        val updateEmployee = _employee
+        if (isUpdateEmployeeNameDuplicate(employeesValue)) return
+
+        if (currentEmployee != updateEmployee) {
+            employeesValue[index] = updateEmployee
+            _employees.value = employeesValue
+            _isUpdateEmployee.value = Event(true)
+            showSnackbarMessage(R.string.update_employee_success)
+
+        } else {
+            _isUpdateEmployee.value = Event(false)
+            showSnackbarMessage(R.string.update_employee_fail)
+        }
+
+
+    }
+
+    private fun isOutOfIndex(index: Int): Boolean {
+        if (index == -1) {
+            _isUpdateBranch.value = Event(false)
+            showSnackbarMessage(R.string.update_employee_fail)
+            return true
+        }
+        return false
+    }
+
+    private fun isUpdateEmployeeNameDuplicate(currentEmployees: List<Employee>): Boolean {
+
+        currentEmployees.forEach {
+
+            if (it.name == _employee.name && it != employeeSelected.value) {
+
+                _isUpdateEmployee.value = Event(false)
+                showSnackbarMessage(R.string.add_employee_duplicate)
+                return true
+            }
+        }
+        return false
+    }
+
     fun checkNetworkThenSetEmployees() {
 
         if (isOnline.value == true) {
@@ -406,7 +529,6 @@ class StepperBusinessViewModel @Inject constructor(
         _isAddEmployees.value = setEmployeesBusinessUseCase(employeesList, uid)
         checkIsAddEmployees()
     }
-
 
     private fun checkIsAddEmployees() {
         when (val isAddEmployeesResource = isAddEmployees.value) {
@@ -432,7 +554,8 @@ class StepperBusinessViewModel @Inject constructor(
         }
     }
 
-    fun setCompletedBusinessStep() {
+
+    private fun setCompletedBusinessStep() {
         viewModelScope.launch {
             val uid = currentUid.value ?: ""
             _isCompletedBusinessStep.value = completeBusinessUseCase(uid)
@@ -462,86 +585,6 @@ class StepperBusinessViewModel @Inject constructor(
         }
     }
 
-    fun addDefaultEmployee() {
-        val employeesValue = _employees.value ?: ArrayList()
-        if (employeesValue.isEmpty() && _branches.value?.isNotEmpty() == true) {
-            employeesValue.add(defaultEmployee())
-            _employees.value = employeesValue
-        }
-
-    }
-
-    private fun defaultEmployee(): Employee {
-        val name = firebaseAuth.currentUser?.displayName ?: "Admin"
-        val phoneNumber = firebaseAuth.currentUser?.phoneNumber ?: phoneBusiness.value
-        val branchName = _branches.value?.get(0)?.branchName ?: ""
-        return Employee(
-            name = name,
-            phoneNumber = phoneNumber ?: "",
-            password = "123456",
-            branchName = branchName,
-            permission = "Admin"
-        )
-    }
-
-    fun newEmployee(
-        name: String,
-        phone: String,
-        password: String,
-        branchName: String,
-        permission: String,
-    ) {
-
-
-        _employee = Employee(name, phone, password, branchName, permission)
-
-    }
-
-    fun addEmployee() {
-
-        val employeesValue = _employees.value ?: ArrayList()
-        val oldBranchesSize = _employees.value?.size ?: 0
-        employeesValue.add(employee)
-
-        if (oldBranchesSize < employeesValue.size) {
-            _employees.value = employeesValue
-            _isAddEmployee.value = Event(true)
-            showSnackbarMessage(R.string.add_employee_success)
-        } else {
-            _isAddEmployee.value = Event(false)
-            showSnackbarMessage(R.string.add_employee_fail)
-        }
-    }
-
-    fun setEmployeeSelected(item: Employee) {
-        _employeeSelected.value = item
-    }
-
-    fun updateEmployee() {
-        try {
-            val employeesValue = _employees.value ?: ArrayList()
-
-            val index = employeesValue.indexOf(_employeeSelected.value)
-            val currentEmployee = employeesValue[index]
-            val updateEmployee = employee
-
-            if (currentEmployee != updateEmployee) {
-                employeesValue[index] = updateEmployee
-                _employees.value = employeesValue
-                _isUpdateEmployee.value = Event(true)
-                showSnackbarMessage(R.string.update_employee_success)
-
-            } else {
-                _isUpdateEmployee.value = Event(false)
-                showSnackbarMessage(R.string.update_employee_fail)
-            }
-
-        } catch (e: IndexOutOfBoundsException) {
-            _isUpdateBranch.value = Event(false)
-            showSnackbarMessage(R.string.update_branch_fail)
-        }
-
-    }
 
     fun moveToNextStep() {
         _buttonNextStep.value = Event(Unit)

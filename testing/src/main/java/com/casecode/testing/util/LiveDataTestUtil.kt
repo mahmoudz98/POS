@@ -62,6 +62,8 @@ fun <T> LiveData<T>.getOrAwaitValue(
    }
    delay(timeout)
    
-   if (result == null) throw TimeoutException(BaseTest.ERROR_MESSAGE_LIVEDATA_NULL)
+   if (result == null) throw TimeoutException(ERROR_MESSAGE_LIVEDATA_NULL)
    else return result !!
 }
+
+    const val ERROR_MESSAGE_LIVEDATA_NULL = "LiveData has null value"

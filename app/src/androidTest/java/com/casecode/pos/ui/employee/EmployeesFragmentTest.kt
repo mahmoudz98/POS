@@ -44,8 +44,8 @@ class EmployeesFragmentTest
    @Before
    fun init()
    {
+
       hiltRule.inject()
-      
       launchFragmentInHiltContainer<EmployeesFragment> {
          this@EmployeesFragmentTest.businessViewModel = businessViewModel
          dataBindingIdlingResource.monitorFragment(this)
@@ -76,8 +76,7 @@ class EmployeesFragmentTest
    fun selectorDone_whenEmployeesAddedSuccess_showsMessageEmployeesSuccess()
    {
       // Given - add new employee
-      businessViewModel.newEmployee("name", "2123123", "123445", "branch", "admin")
-      businessViewModel.addEmployee()
+      businessViewModel.addEmployee("name", "2123123", "123445", "branch", "admin")
       businessViewModel.setConnected(true)
       // When - click on the employees done button
       Thread.sleep(2000)

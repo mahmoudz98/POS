@@ -126,8 +126,10 @@
     <string name="add_employees_success">Employees Added success, Go on.</string>
     <string name="add_employee_success">Employee Added success.</string>
     <string name="add_employee_fail">Employee Added failed.</string>
+    <string name="add_employee_duplicate">Employee\'s name duplicate and failed.</string>
     <string name="update_employee_success">Employee updated success.</string>
     <string name="update_employee_fail">Employee updated failed.</string>
+
 
     // Permission
     <string name="permission_admin">Admin</string>
