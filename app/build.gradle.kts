@@ -1,5 +1,6 @@
 ﻿import com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask
 import org.gradle.configurationcache.extensions.capitalized
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree.Companion.test
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
 plugins {
@@ -25,11 +26,10 @@ android {
 
     buildTypes {
         debug {
-            //   isPseudoLocalesEnabled = true
-            // enableAndroidTestCoverage = true
+            isPseudoLocalesEnabled = true
+            enableAndroidTestCoverage = false
             isDebuggable = true
             isMinifyEnabled = false
-
         }
 
         val release by getting {
@@ -40,18 +40,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-
         }
-
     }
 
 
-    /*     if (project.hasProperty("debug"))
-       {
-          splits.abi.isEnable = false
-          splits.density.isEnable = false
-          aaptOptions.cruncherEnabled = false
-       } */
+    if (project.hasProperty("debug")) {
+        splits.abi.isEnable = false
+        splits.density.isEnable = false
+        aaptOptions.cruncherEnabled = false
+    }
 
 
     @Suppress("UnstableApiUsage")
@@ -87,7 +84,7 @@ android {
             excludes.add("/META-INF/licenses/**")
             excludes.add("META-INF/LICENSE.md")
             excludes.add("META-INF/LICENSE-notice.md")
-            // excludes.add("DebugProbesKt.bin")
+            excludes.add("DebugProbesKt.bin")
         }
     }
 
@@ -203,11 +200,11 @@ dependencies {
     androidTestImplementation(libs.androidx.annotation)
 
 
-
     androidTestImplementation(libs.test.core)
+    androidTestImplementation(libs.test.core.ktx)
+    androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.ext.junit.ktx)
-    androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.test.monitor)
     androidTestImplementation(libs.test.orchestrator)
     androidTestImplementation(libs.test.rules)
@@ -218,8 +215,8 @@ dependencies {
 
     androidTestImplementation(libs.mockk.android)
     // androidTestImplementation(libs.test.mockk)
-
     androidTestImplementation(libs.navigation.testing)
+
     androidTestImplementation(libs.test.espresso.core)
     androidTestImplementation(libs.test.espresso.idlingResource)
     androidTestImplementation(libs.test.espresso.idling.concurrent)
@@ -239,4 +236,8 @@ dependencies {
     //  androidTestImplementation(kotlin("reflect"))
 
 
+}
+
+tasks.withType<Test>().configureEach {
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
 }

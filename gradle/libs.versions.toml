@@ -29,7 +29,7 @@ androidStepper = "0.3.0"
 material = "1.11.0"
 
 # Multithreading
-kotlinx-coroutines = "1.7.3"
+kotlinx-coroutines = "1.8.0"
 
 # Network & Serialization
 kotlinx-serialization = "1.6.0"
@@ -208,9 +208,9 @@ androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchm
 
 
 
+test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "testespresso" }
 test-espresso-accessibility = { module = "androidx.test.espresso:espresso-accessibility", version.ref = "testespresso" }
 test-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "testespresso" }
-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "testespresso" }
 test-espresso-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "testespresso" }
 test-espresso-idling-concurrent = { module = "androidx.test.espresso.idling:idling-concurrent", version.ref = "testespresso" }
 test-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "testespresso" }
