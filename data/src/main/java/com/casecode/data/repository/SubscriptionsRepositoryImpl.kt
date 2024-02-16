@@ -39,8 +39,8 @@ class SubscriptionsRepositoryImpl @Inject constructor(
     * @return A Flow of [Resource<List<Subscription>>] objects.
     */
    override fun getSubscriptions(): Flow<Resource<List<Subscription>>> =
-      callbackFlow<Resource<List<Subscription>>> {
-         trySend(Resource.Loading())
+      callbackFlow {
+         trySend(Resource.Loading)
          
          val query =
             db.collection(SUBSCRIPTIONS_COLLECTION_PATH).orderBy(SUBSCRIPTION_COST_FIELD).get()
