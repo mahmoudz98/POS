@@ -48,7 +48,6 @@
     <string name="update_branch">Update a branch</string>
 
 
-
     <!-- collection -->
     <string name="COLLECTION_CUSTOMER" translatable="false">Customer</string>
     <string name="COLLECTION_BRANCHES" translatable="false">Branches</string>
@@ -79,8 +78,6 @@
     <string name="store_type_coffee">Coffee</string>
 
 
-
-
     //Branch
     <string name="branches_title">Branches</string>
     <string name="add_branch_success">Branch Added success.</string>
@@ -103,7 +100,6 @@
     // Network labels
     <string name="network_error">Check your internet connection Please</string>
     <string name="network_available">back online</string>
-
 
 
     // Employees
@@ -155,6 +151,11 @@
     <string name="pos">pos</string>
     <string name="or_employee_login">or Employee login</string>
 
+    <string name="google_play_services_required">Google Play Services Required</string>
+    <string name="google_play_services_message">
+    This app requires Google Play services to function. Please download and install it from the Play Store.
+</string>
+    <string name="download">Download</string>
 
     <string name="cancel">Cancel</string>
     <string name="title_permission_dialog">Camera Permission Needed</string>

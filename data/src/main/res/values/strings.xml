@@ -4,6 +4,7 @@
 
     // Sign in
     <string name="sign_in_failure">Sign in field.</string>
+    <string name="unsupported_api_call">Sign in unsupported, please check google play service.</string>
     <string name="sign_in_cancel">One-tap dialog was closed..</string>
     <string name="sign_in_network_error">One-tap encountered a network error..</string>
     <string name="sign_in_api_exception">Couldn\'t get credential from result.</string>
