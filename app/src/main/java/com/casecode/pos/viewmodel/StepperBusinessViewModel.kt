@@ -99,6 +99,8 @@ class StepperBusinessViewModel @Inject constructor(
     val subscriptions: LiveData<List<Subscription>> get() = _subscriptions
 
     private var _subscriptionSelected: MutableLiveData<Subscription> = MutableLiveData()
+    private val _isSubscriptionsError = MutableLiveData<Boolean>()
+    val isSubscriptionsError get() = _isSubscriptionsError
 
     // Employees data
     private var _employees: MutableLiveData<MutableList<Employee>> = MutableLiveData()
@@ -123,7 +125,7 @@ class StepperBusinessViewModel @Inject constructor(
 
     // Employees business data
     private val _isAddEmployees: MutableLiveData<AddEmployees?> = MutableLiveData()
-     val isAddEmployees get() = _isAddEmployees
+    val isAddEmployees get() = _isAddEmployees
 
     // Business completion data
     private val _isCompletedBusinessStep = MutableLiveData<CompleteBusiness>()
@@ -262,7 +264,7 @@ class StepperBusinessViewModel @Inject constructor(
             storeType = _storeType.value.toString().toStoreType(),
             email = emailBusiness.value,
             phone = phoneBusiness.value,
-            branches = _branches.value?.toList() ?: listOf()
+            branches = _branches.value?.toList() ?: listOf(),
         )
     }
 
@@ -315,6 +317,7 @@ class StepperBusinessViewModel @Inject constructor(
 
             is Resource.Loading -> {
                 showProgress()
+                _isSubscriptionsError.value = false
             }
 
             is Resource.Success -> {
@@ -324,11 +327,14 @@ class StepperBusinessViewModel @Inject constructor(
 
                 _subscriptions.value = subscriptionsResource.data
                 Timber.i("getSubscriptions:Success:data, ${subscriptionsResource.data}")
+                _isSubscriptionsError.value = false
 
                 hideProgress()
             }
 
             else -> {
+                _isSubscriptionsError.value = true
+
                 hideProgress()
                 _subscriptions.value = emptyList()
             }
@@ -407,7 +413,7 @@ class StepperBusinessViewModel @Inject constructor(
             phoneNumber = phoneNumber ?: "",
             password = "123456",
             branchName = branchName,
-            permission = "Admin"
+            permission = "Admin",
         )
     }
 
