@@ -20,8 +20,8 @@ plugins {
 
     alias(libs.plugins.gms.google.services) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.gradle.cache.fix) apply false
-
+    alias(libs.plugins.secrets)
+   // alias(libs.plugins.gradle.cache.fix) apply false
 
 }
 
