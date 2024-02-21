@@ -8,6 +8,13 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <dist:module dist:instant="true" />
+    <!-- For versions below Android 10 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+
+    <!-- For Android 10 and above -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -15,6 +22,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+
         android:name="com.casecode.pos.POSApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -25,8 +33,6 @@
         android:theme="@style/Theme.POS"
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
-
-
         <activity
             android:name="com.casecode.pos.ui.stepper.StepperActivity"
             android:exported="true">
