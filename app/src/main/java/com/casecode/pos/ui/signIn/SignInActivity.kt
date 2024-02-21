@@ -143,7 +143,7 @@ class SignInActivity : AppCompatActivity() {
                 is Resource.Loading -> {// TODO: Support loading when intent is loading.
                 }
 
-                is Resource.Error -> {
+                is Resource.Error-> {
                     val messageRes = it.message as? Int ?: R.string.all_error_save
                     if(messageRes == com.casecode.pos.data.R.string.unsupported_api_call){
                         showAlternativeSignInDialog()
@@ -151,7 +151,7 @@ class SignInActivity : AppCompatActivity() {
                     binding.root.showSnackbar(getString(messageRes), Snackbar.LENGTH_SHORT)
                 }
 
-                is Resource.Empty -> {
+                is Resource.Empty,  null  -> {
                     binding.root.showSnackbar(
                         getString(R.string.all_error_save),
                         Snackbar.LENGTH_SHORT

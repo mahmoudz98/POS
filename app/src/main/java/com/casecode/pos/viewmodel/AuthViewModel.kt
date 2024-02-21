@@ -3,7 +3,6 @@ package com.casecode.pos.viewmodel
 import android.content.Intent
 import android.content.IntentSender
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,7 +30,7 @@ class AuthViewModel @Inject constructor(
     val currentUserUID = signInUseCase.currentUser().map { it?.uid ?: "" }
     val userMessage get() = _userMessage
 
-    private val _signInIntentSender = MutableLiveData<Resource<IntentSender>>()
+    private val _signInIntentSender = MutableLiveData<Resource<IntentSender>?>()
     val signInIntentSender get() = _signInIntentSender
     private val _signInResult = MutableLiveData<FirebaseAuthResult?>()
 
@@ -62,6 +61,7 @@ class AuthViewModel @Inject constructor(
         _isOnline.value = isOnline
 
     }
+
     fun signIn() {
 
         viewModelScope.launch {
