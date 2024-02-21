@@ -1,6 +1,5 @@
 ﻿import com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask
 import org.gradle.configurationcache.extensions.capitalized
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree.Companion.test
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
 plugins {
@@ -20,7 +19,6 @@ android {
 
         resourceConfigurations.addAll(listOf("en", "ar"))
         testInstrumentationRunner = "com.casecode.testing.PosTestRunner"
-
     }
 
 
@@ -31,7 +29,6 @@ android {
             isDebuggable = true
             isMinifyEnabled = false
         }
-
         val release by getting {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
@@ -55,7 +52,11 @@ android {
     testOptions {
 
         animationsDisabled = true
-
+        packaging {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
         unitTests {
 
             isIncludeAndroidResources = true
@@ -133,23 +134,14 @@ dependencies {
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.livedata)
     implementation(libs.lifecycle.runtime)
-
-
     // UI tools
     implementation(libs.material)
     implementation(libs.android.stepper)
     implementation(libs.coil)
-
     testImplementation(libs.coil.test)
-
     testImplementation(libs.fragment.testing)
-
-
-
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-
-
     // service
     implementation(libs.budiyev.barcode)
 
@@ -157,13 +149,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     debugCompileOnly(libs.kotlinx.coroutines.debug)
-
-
     // Debug tools
     // debugImplementation(libs.leakcanary)
     implementation(libs.timber)
-
-
     // ******* UNIT TESTING ******************************************************
     // use for testing live data
     testImplementation(libs.core.testing)
@@ -181,14 +169,10 @@ dependencies {
     // coroutines unit test
     testImplementation(libs.coroutines.test)
     testImplementation(libs.coroutines.android.test)
-
-
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
     debugImplementation(libs.fragment.testing)
     /*    implementation(libs.test.core)
        implementation(libs.test.ext.junit) */
-
-
     // ******* ANDROID TESTING ***************************************************
     implementation(libs.test.espresso.idlingResource)
 
@@ -197,9 +181,8 @@ dependencies {
     // Resolve conflicts between main and test APK:
     // androidTestImplementation(libs.appcompat)
     androidTestImplementation(libs.material)
-    androidTestImplementation(libs.androidx.annotation)
-
-
+    //  androidTestImplementation(libs.androidx.annotation)
+    androidTestImplementation(libs.firebase.testlab)
     androidTestImplementation(libs.test.core)
     androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.test.runner)
@@ -214,6 +197,7 @@ dependencies {
     androidTestImplementation(libs.test.hamcrest.library)
 
     androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockk.agent)
     // androidTestImplementation(libs.test.mockk)
     androidTestImplementation(libs.navigation.testing)
 
