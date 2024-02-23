@@ -22,18 +22,22 @@
         android:name="com.casecode.pos.ui.invoices.InvoicesFragment"
         android:label="@string/menu_invoices"
         tools:layout="@layout/fragment_invoices" />
+
     <fragment
-        android:id="@+id/nav_products"
-        android:name="com.casecode.pos.ui.product.ProductsFragment"
-        android:label="ProductFragment" />
+        android:id="@+id/nav_items"
+        android:name="com.casecode.pos.ui.item.ItemsFragment"
+        android:label="@string/items_title" />
+
     <fragment
         android:id="@+id/nav_code_scanner"
         android:name="com.casecode.pos.ui.codescanner.CodeScannerFragment"
         android:label="CodeScannerFragment" />
+
     <fragment
         android:id="@+id/nav_setting"
         android:name="com.casecode.pos.ui.settings.SettingsFragment"
         android:label="SettingFragment" />
+
     <fragment
         android:id="@+id/nav_users"
         android:name="com.casecode.pos.ui.employee.EmployeesFragment"
@@ -42,14 +46,11 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.casecode.pos.ui.profile.ProfileFragment"
-        tools:layout="@layout/fragment_profile"
-        android:label="@string/profile_title" />
-    <dialog
+        android:label="@string/profile_title"
+        tools:layout="@layout/fragment_profile" />
 
+    <dialog
         android:id="@+id/nav_sign_out"
         android:name="com.casecode.pos.ui.signout.SignOutDialog"
-        tools:layout="@layout/dialog_sign_out"
-
-
-        />
+        tools:layout="@layout/dialog_sign_out" />
 </navigation>

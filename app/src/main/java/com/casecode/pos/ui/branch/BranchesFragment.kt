@@ -26,156 +26,147 @@ import timber.log.Timber
  * @constructor Creates a new instance of BranchesFragment.
  */
 @AndroidEntryPoint
-class BranchesFragment : Fragment()
-{
-   private var _binding: FragmentBranchesBinding? = null
-   private val binding get() = _binding !!
-   
-   // Shared ViewModel associated with the hosting activity
-   internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
-   
-   override fun onCreateView(
+class BranchesFragment : Fragment() {
+    private var _binding: FragmentBranchesBinding? = null
+    private val binding get() = _binding!!
+
+    // Shared ViewModel associated with the hosting activity
+    internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
+
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-                            ): View
-   {
-      _binding = FragmentBranchesBinding.inflate(inflater, container, false)
-      
-      return binding.root
-   }
-   
-   override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-   {
-      super.onViewCreated(view, savedInstanceState)
-      _binding ?: return // Return early if the binding is null
-      init()
-      
-   }
-   
-   /**
-    * Initializes the ViewModel, Adapter, and click events for the fragment.
-    */
-   private fun init()
-   {
-      initViewModel()
-      initAdapter()
-      initClicked()
-      setupSnackbar()
-      setupWithTwoPane()
-      observerUpdateBranchInTablet()
-      
-   }
-   
-   private fun setupWithTwoPane()
-   {
-      val isCompact = requireActivity().compactScreen()
-      businessViewModel.setCompact(isCompact)
-      Timber.e("setupTwoPane:  isCompact = %s", isCompact)
-      if (! isCompact)
-      {
-         binding.fcvAddBranch.visibility = View.VISIBLE
-         binding.branches.btnBranchesAdd.visibility = View.GONE
-         
-         parentFragmentManager.beginTransaction()
-            .replace(R.id.fcv_add_branch,
-               AddBranchesDialogFragment.newInstance(),
-               AddBranchesDialogFragment.ADD_BRANCH_TAG).commit()
-         
-      } else
-      {
-         binding.branches.btnBranchesAdd.visibility = View.VISIBLE
-         binding.fcvAddBranch.visibility = View.GONE
-      }
-      
-   }
-   
-   /**
-    * Initializes the ViewModel associated with the layout.
-    */
-   private fun initViewModel()
-   {
-      binding.branches.lifecycleOwner = this.viewLifecycleOwner
-      binding.branches.viewModel = businessViewModel
-   }
-   
-   
-   private fun initAdapter()
-   {
-      // Lazy initialization of BranchesAdapter
-      val branchAdapter: BranchesAdapter by lazy {
-         BranchesAdapter {
-            businessViewModel.setBranchSelected(it)
-            if (businessViewModel.isCompact.value == true)
-            {
-               val dialog = AddBranchesDialogFragment.newInstance()
-               dialog.show(parentFragmentManager, AddBranchesDialogFragment.UPDATE_BRANCH_TAG)
-            } else
-            {
-               parentFragmentManager.beginTransaction()
-                  .replace(R.id.fcv_add_branch,
-                     AddBranchesDialogFragment.newInstance(),
-                     AddBranchesDialogFragment.UPDATE_BRANCH_TAG).commit()
-            }
-         }
-      }
-      binding.branches.rvBranches.adapter = branchAdapter
-   }
-   
-   /**
-    * Initializes click events for buttons and subscription for network availability.
-    */
-   private fun initClicked()
-   {
-      initClickSubscription()
-      binding.apply {
-         btnBranchesInfo.setOnClickListener {
-            businessViewModel.moveToPreviousStep()
-         }
-         branches.btnBranchesAdd.setOnClickListener {
-            val dialog = AddBranchesDialogFragment.newInstance()
-            dialog.show(parentFragmentManager, AddBranchesDialogFragment.ADD_BRANCH_TAG)
-         }
-      }
-   }
-   
-   private fun observerUpdateBranchInTablet()
-   {
-      if (businessViewModel.isCompact.value == false)
-      {
-         businessViewModel.isUpdateBranch.observe(viewLifecycleOwner, EventObserver {
-            // Clear previous update branch dialog.
+    ): View {
+        _binding = FragmentBranchesBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _binding ?: return // Return early if the binding is null
+        init()
+
+    }
+
+    /**
+     * Initializes the ViewModel, Adapter, and click events for the fragment.
+     */
+    private fun init() {
+        initViewModel()
+        initAdapter()
+        initClicked()
+        setupSnackbar()
+        setupWithTwoPane()
+        observerUpdateBranchInTablet()
+
+    }
+
+    private fun setupWithTwoPane() {
+        val isCompact = requireActivity().compactScreen()
+        businessViewModel.setCompact(isCompact)
+        Timber.e("setupTwoPane:  isCompact = %s", isCompact)
+        if (!isCompact) {
+            binding.fcvAddBranch.visibility = View.VISIBLE
+            binding.branches.btnBranchesAdd.visibility = View.GONE
+
             parentFragmentManager.beginTransaction()
-               .replace(R.id.fcv_add_branch,
-                  AddBranchesDialogFragment.newInstance(),
-                  AddBranchesDialogFragment.ADD_BRANCH_TAG).commit()
-            
-         })
-         
-      }
-   }
-      
-      /**
-       * Initializes the subscription to check network availability before adding a business.
-       */
-      private fun initClickSubscription()
-      {
-         binding.btnBranchesSubscription.setOnClickListener {
+                .replace(
+                    R.id.fcv_add_branch,
+                    AddBranchesDialogFragment.newInstance(),
+                    AddBranchesDialogFragment.ADD_BRANCH_TAG
+                ).commit()
+
+        } else {
+            binding.branches.btnBranchesAdd.visibility = View.VISIBLE
+            binding.fcvAddBranch.visibility = View.GONE
+        }
+
+    }
+
+    /**
+     * Initializes the ViewModel associated with the layout.
+     */
+    private fun initViewModel() {
+        binding.branches.lifecycleOwner = this.viewLifecycleOwner
+        binding.branches.viewModel = businessViewModel
+    }
+
+
+    private fun initAdapter() {
+        // Lazy initialization of BranchesAdapter
+        val branchAdapter: BranchesAdapter by lazy {
+            BranchesAdapter {
+                businessViewModel.setBranchSelected(it)
+                if (businessViewModel.isCompact.value == true) {
+                    val dialog = AddBranchesDialogFragment.newInstance()
+                    dialog.show(parentFragmentManager, AddBranchesDialogFragment.UPDATE_BRANCH_TAG)
+                } else {
+                    parentFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.fcv_add_branch,
+                            AddBranchesDialogFragment.newInstance(),
+                            AddBranchesDialogFragment.UPDATE_BRANCH_TAG
+                        ).commit()
+                }
+            }
+        }
+        binding.branches.rvBranches.adapter = branchAdapter
+    }
+
+    /**
+     * Initializes click events for buttons and subscription for network availability.
+     */
+    private fun initClicked() {
+        initClickSubscription()
+        binding.apply {
+            btnBranchesInfo.setOnClickListener {
+                businessViewModel.moveToPreviousStep()
+            }
+            branches.btnBranchesAdd.setOnClickListener {
+                val dialog = AddBranchesDialogFragment.newInstance()
+                dialog.show(parentFragmentManager, AddBranchesDialogFragment.ADD_BRANCH_TAG)
+            }
+        }
+    }
+
+    private fun observerUpdateBranchInTablet() {
+        if (businessViewModel.isCompact.value == false) {
+            businessViewModel.isUpdateBranch.observe(viewLifecycleOwner, EventObserver {
+                // Clear previous update branch dialog.
+                parentFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.fcv_add_branch,
+                        AddBranchesDialogFragment.newInstance(),
+                        AddBranchesDialogFragment.ADD_BRANCH_TAG
+                    ).commit()
+
+            })
+
+        }
+    }
+
+    /**
+     * Initializes the subscription to check network availability before adding a business.
+     */
+    private fun initClickSubscription() {
+        binding.btnBranchesSubscription.setOnClickListener {
             businessViewModel.setBusiness()
-         }
-      }
-      
-      private fun setupSnackbar()
-      {
-         binding.root.setupSnackbar(viewLifecycleOwner,
+        }
+    }
+
+    private fun setupSnackbar() {
+        binding.root.setupSnackbar(
+            viewLifecycleOwner,
             businessViewModel.userMessage,
-            BaseTransientBottomBar.LENGTH_SHORT)
-         
-      }
-      
-      override fun onDestroyView()
-      {
-         super.onDestroyView()
-         
-         _binding = null
-      }
-   }
+            BaseTransientBottomBar.LENGTH_SHORT
+        )
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
+    }
+}

@@ -1,6 +1,5 @@
 package com.casecode.pos.ui.main
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,7 +8,6 @@ import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -24,7 +22,6 @@ import com.casecode.pos.ui.signout.SignOutDialog
 import com.casecode.pos.viewmodel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -70,7 +67,7 @@ class MainActivity : AppCompatActivity(), PositiveDialogListener
             R.id.nav_statistics,
             R.id.nav_pos,
             R.id.nav_invoices,
-            R.id.nav_products,
+            R.id.nav_items,
             R.id.nav_code_scanner,
             R.id.nav_users,
             R.id.nav_setting
