@@ -28,13 +28,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="s">
 
-
         <activity
             android:name="com.casecode.pos.ui.stepper.StepperActivity"
             android:exported="true">
-
         </activity>
+
         <activity android:name="com.casecode.pos.ui.main.MainActivity" />
+
         <activity
             android:name="com.casecode.pos.ui.signIn.SignInActivity"
             android:exported="true">
@@ -44,6 +44,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".utils.CaptureCustomActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme" />
 
         <meta-data
             android:name="preloaded_fonts"

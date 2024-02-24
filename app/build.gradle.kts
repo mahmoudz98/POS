@@ -235,8 +235,9 @@ dependencies {
     kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
 
-    //implementation(kotlin("reflect"))
-    //  androidTestImplementation(kotlin("reflect"))
-
+    // scan barcode in Android using ZXing
+    implementation (libs.zxing.android.embedded)
+    coreLibraryDesugaring (libs.desugar.jdk.libs.v202)
+    implementation (libs.androidx.multidex)
 
 }

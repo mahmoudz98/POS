@@ -10,6 +10,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -17,8 +18,11 @@ import coil.load
 import com.casecode.domain.model.users.Item
 import com.casecode.pos.R
 import com.casecode.pos.databinding.DialogItemBinding
+import com.casecode.pos.utils.CaptureCustomActivity
 import com.casecode.pos.viewmodel.ItemsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 
 /**
  * A dialog fragment for adding or updating an item.
@@ -98,6 +102,9 @@ class ItemDialogFragment(
 
         // Set click listener for image view to capture image
         binding.imvItem.setOnClickListener { captureImageFromCameraOrGallery() }
+
+        // Set click listener for image view to scan barcode
+        binding.imageButtonScanBarcode.setOnClickListener { scanCode() }
 
         // Set click listener for item button to add or update item
         binding.buttonItem.setOnClickListener {
@@ -239,6 +246,26 @@ class ItemDialogFragment(
 
         // Reset ViewModel data
         viewModel.clearData()
+    }
+
+    private fun scanCode() {
+        val options = ScanOptions().apply {
+            setPrompt("Scan a barcode")
+            setBeepEnabled(false)
+            setOrientationLocked(true)
+            captureActivity = CaptureCustomActivity::class.java
+        }
+        barLauncher.launch(options)
+    }
+
+    private val barLauncher = registerForActivityResult(ScanContract()) { result ->
+        result.contents?.let {
+            // Handle the scanned barcode result
+            // For example, set it to a text input field
+            binding.tilBarcode.editText?.setText(it)
+            // Simulate pressing "Done"
+            binding.tilBarcode.editText?.onEditorAction(EditorInfo.IME_ACTION_DONE)
+        }
     }
 
     /**

@@ -180,5 +180,6 @@
     <string name="barcode_is_required">Barcode is required</string>
     <string name="no_camera_or_gallery_apps_found">No camera or gallery apps found</string>
     <string name="select_image">Select Image</string>
+    <string name="scan_barcode">Scan barcode</string>
 
 </resources>

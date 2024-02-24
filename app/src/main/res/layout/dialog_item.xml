@@ -123,5 +123,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_price" />
+
+        <ImageButton
+            android:id="@+id/image_button_scan_barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/scan_barcode"
+            app:layout_constraintBottom_toBottomOf="@+id/til_barcode"
+            app:layout_constraintEnd_toEndOf="@+id/til_barcode"
+            app:layout_constraintTop_toTopOf="@+id/til_barcode"
+            app:srcCompat="@drawable/baseline_qr_code_scanner_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
