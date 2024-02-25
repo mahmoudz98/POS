@@ -32,9 +32,9 @@ class ItemsFragment : Fragment() {
 
     // Adapter for the item list RecyclerView
     private val itemInteractionAdapter = ItemInteractionAdapter(
-        onItemClick = { item -> onItemClicked(item) },
+        onItemClick = { item -> onItemClick(item) },
         onItemLongClick = { item -> onDeleteItem(item) },
-        onPrintButtonClick = { item -> onPrint(item) }
+        onPrintButtonClick = { item -> onPrintButtonClick(item) }
     )
 
     /**
@@ -74,25 +74,12 @@ class ItemsFragment : Fragment() {
     private fun observeItems() {
         // Observe items LiveData
         viewModel.items.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Resource.Empty -> showMessage("Items is empty data!.")
-                is Resource.Error -> showMessage(result.message.toString())
-                is Resource.Loading -> showLoading()
-                is Resource.Success -> {
-                    itemInteractionAdapter.submitList(result.data.toMutableList())
-                    hideLoading()
-                }
-            }
+            handleItemsLiveData(result)
         }
 
         // Observe itemActionState LiveData
         viewModel.itemActionState.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is Resource.Empty -> showMessage("Item action state is empty data!.")
-                is Resource.Error -> showMessage(state.message.toString())
-                is Resource.Loading -> showLoading()
-                is Resource.Success -> showMessage(state.data)
-            }
+            handleItemActionState(state)
         }
     }
 
@@ -112,7 +99,7 @@ class ItemsFragment : Fragment() {
      *
      * @param item The clicked item.
      */
-    private fun onItemClicked(item: Item) {
+    private fun onItemClick(item: Item) {
         showItemDialog(isUpdate = true, item = item)
     }
 
@@ -150,12 +137,6 @@ class ItemsFragment : Fragment() {
         hideLoading()
     }
 
-    /**
-     * Displays the loading indicator.
-     */
-    private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
 
     /**
      * Hides the loading indicator.
@@ -164,7 +145,7 @@ class ItemsFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
     }
 
-    private fun onPrint(item: Item) {
+    private fun onPrintButtonClick(item: Item) {
         showQRCodeDialog(item)
     }
 
@@ -176,5 +157,60 @@ class ItemsFragment : Fragment() {
         }
         dialogFragment.arguments = args
         dialogFragment.show(childFragmentManager, "QRCodeDialog")
+    }
+
+    private fun handleItemsLiveData(result: Resource<List<Item>>) {
+        when (result) {
+            is Resource.Empty -> {
+                showEmptyView()
+                showMessage("Items is empty data!.")
+            }
+
+            is Resource.Error -> {
+                hideAllViews()
+                showMessage(result.message.toString())
+            }
+
+            is Resource.Loading -> showLoading()
+
+            is Resource.Success -> {
+                showRecyclerView()
+                itemInteractionAdapter.submitList(result.data.toMutableList())
+                hideLoading()
+            }
+        }
+    }
+
+    private fun handleItemActionState(state: Resource<Any>) {
+        when (state) {
+            is Resource.Empty -> showMessage("Item action state is empty data!.")
+            is Resource.Error -> showMessage(state.message.toString())
+            is Resource.Loading -> showLoading()
+            is Resource.Success -> showMessage(state.data.toString())
+        }
+    }
+
+    private fun showEmptyView() {
+        binding.emptyView.root.visibility = View.VISIBLE
+        binding.recyclerItems.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showRecyclerView() {
+        binding.emptyView.root.visibility = View.GONE
+        binding.recyclerItems.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showLoading() {
+        binding.emptyView.root.visibility = View.GONE
+        binding.recyclerItems.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideAllViews() {
+        binding.emptyView.root.visibility = View.GONE
+        binding.recyclerItems.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 }
