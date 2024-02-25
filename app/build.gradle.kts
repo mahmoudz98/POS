@@ -237,7 +237,4 @@ dependencies {
 
     // scan barcode in Android using ZXing
     implementation (libs.zxing.android.embedded)
-    coreLibraryDesugaring (libs.desugar.jdk.libs.v202)
-    implementation (libs.androidx.multidex)
-
 }

@@ -11,9 +11,10 @@ import com.casecode.pos.base.BaseAdapter
 import com.casecode.pos.base.BaseViewHolder
 import com.casecode.pos.databinding.ItemItemBinding
 
-class ItemAdapter(
-    val itemClick: (Item) -> Unit,
-    val itemLongClick: (Item) -> Unit,
+class ItemInteractionAdapter(
+    val onItemClick: (Item) -> Unit,
+    val onItemLongClick: (Item) -> Unit,
+    val onPrintButtonClick: (Item) -> Unit
 ) : BaseAdapter<Item>(DiffCallback) {
 
     /**
@@ -30,16 +31,20 @@ class ItemAdapter(
         }
     }
 
-    inner class ItemViewHolder(binding: ItemItemBinding) :
+    inner class ItemInteractionViewHolder(binding: ItemItemBinding) :
         BaseViewHolder<ItemItemBinding, Item>(binding) {
 
         init {
-            binding.root.setOnClickListener { binding.item?.let { itemClick(it) } }
+            binding.root.setOnClickListener { binding.item?.let { onItemClick(it) } }
 
             // Handle long-click events
             binding.root.setOnLongClickListener {
-                binding.item?.let { item -> onItemLongClicked(item) }
+                binding.item?.let { item -> handleItemLongClick(item) }
                 true // Return true to consume the long-click event
+            }
+
+            binding.imageButtonPrintQrCode.setOnClickListener {
+                binding.item?.let { item -> onPrintButtonClick(item) }
             }
         }
 
@@ -57,7 +62,7 @@ class ItemAdapter(
             binding.textName.text = element.name
             binding.textQuantity.text = context.getString(R.string.qty, element.quantity.toString())
             binding.textPrice.text = context.getString(R.string.egp, element.price.toString())
-            // Bind other data as needed
+            binding.imageButtonPrintQrCode.setOnClickListener { onPrintButtonClick(element) }
         }
     }
 
@@ -65,7 +70,7 @@ class ItemAdapter(
         parent: ViewGroup,
         viewType: Int,
     ): BaseViewHolder<out ViewDataBinding, Item> {
-        return ItemViewHolder(
+        return ItemInteractionViewHolder(
             ItemItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
@@ -82,9 +87,9 @@ class ItemAdapter(
     }
 
     // Define a function to handle long-click events
-    private fun onItemLongClicked(item: Item): Boolean {
+    private fun handleItemLongClick(item: Item): Boolean {
         // Invoke the long-click listener with the clicked item
-        itemLongClick.invoke(item)
+        onItemLongClick.invoke(item)
         return true // Return true to consume the long-click event
     }
 }

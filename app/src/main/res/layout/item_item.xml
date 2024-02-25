@@ -72,11 +72,25 @@
                 android:layout_marginBottom="8dp"
                 android:text="@{item.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/image_button_print_qr_code"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/text_quantity"
                 app:layout_constraintTop_toBottomOf="@+id/text_quantity"
                 app:layout_constraintVertical_bias="0.5"
                 tools:text="Herfan Lanolin Cream" />
+
+            <ImageButton
+                android:id="@+id/image_button_print_qr_code"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/print_qr_code"
+                android:foreground="@drawable/ripple_effect"
+                app:layout_constraintBottom_toBottomOf="@+id/text_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/text_price"
+                app:srcCompat="@drawable/outline_print_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

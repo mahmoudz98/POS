@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.casecode.domain.model.users.Item
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
-import com.casecode.pos.adapter.ItemAdapter
+import com.casecode.pos.adapter.ItemInteractionAdapter
 import com.casecode.pos.databinding.FragmentItemsBinding
 import com.casecode.pos.utils.showToast
 import com.casecode.pos.viewmodel.ItemsViewModel
@@ -31,9 +31,10 @@ class ItemsFragment : Fragment() {
     private val viewModel: ItemsViewModel by activityViewModels()
 
     // Adapter for the item list RecyclerView
-    private val itemAdapter = ItemAdapter(
-        itemClick = { item -> onItemClicked(item) },
-        itemLongClick = { item -> onDeleteItem(item) }
+    private val itemInteractionAdapter = ItemInteractionAdapter(
+        onItemClick = { item -> onItemClicked(item) },
+        onItemLongClick = { item -> onDeleteItem(item) },
+        onPrintButtonClick = { item -> onPrint(item) }
     )
 
     /**
@@ -48,7 +49,7 @@ class ItemsFragment : Fragment() {
         // Set up RecyclerView
         binding.recyclerItems.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = itemAdapter
+            adapter = itemInteractionAdapter
         }
 
         return binding.root
@@ -78,7 +79,7 @@ class ItemsFragment : Fragment() {
                 is Resource.Error -> showMessage(result.message.toString())
                 is Resource.Loading -> showLoading()
                 is Resource.Success -> {
-                    itemAdapter.submitList(result.data.toMutableList())
+                    itemInteractionAdapter.submitList(result.data.toMutableList())
                     hideLoading()
                 }
             }
@@ -161,5 +162,19 @@ class ItemsFragment : Fragment() {
      */
     private fun hideLoading() {
         binding.progressBar.visibility = View.GONE
+    }
+
+    private fun onPrint(item: Item) {
+        showQRCodeDialog(item)
+    }
+
+    private fun showQRCodeDialog(item: Item) {
+        val dialogFragment = QRCodeDialogFragment()
+        val args = Bundle().apply {
+            putString("barcode", item.sku)
+            putString("name", item.name)
+        }
+        dialogFragment.arguments = args
+        dialogFragment.show(childFragmentManager, "QRCodeDialog")
     }
 }
