@@ -187,6 +187,8 @@
     <string name="empty_items_title">No items to display</string>
     <string name="empty_items_message">There are currently no items available.</string>
     <string name="item_action_state_empty">Item action state is empty data!.</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search items</string>
 
 
 </resources>

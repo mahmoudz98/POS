@@ -2,8 +2,11 @@ package com.casecode.pos.ui.item
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,6 +35,11 @@ class ItemsFragment : Fragment() {
         onPrintButtonClick = { item -> showQRCodeDialog(item = item) }
     )
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +53,28 @@ class ItemsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.floatingAddItem.setOnClickListener { showItemDialog() }
         observeItems()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_items_fragment, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.queryHint = getString(R.string.search_hint)
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { itemInteractionAdapter.filterItems(it) }
+                return true
+            }
+        })
+
+        // Hide the action_main_profile menu item
+        val profileMenuItem = menu.findItem(R.id.action_main_profile)
+        profileMenuItem.isVisible = false
     }
 
     private fun setupRecyclerView() {
@@ -146,7 +176,7 @@ class ItemsFragment : Fragment() {
     private fun showLoading() {
         with(binding) {
             emptyView.root.visibility = View.GONE
-            recyclerItems.visibility = View.GONE
+            recyclerItems.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
         }
     }

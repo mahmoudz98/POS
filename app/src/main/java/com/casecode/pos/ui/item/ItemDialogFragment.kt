@@ -93,6 +93,7 @@ class ItemDialogFragment(
                     error(R.drawable.outline_hide_image_24)
                 }
                 tilBarcode.isEnabled = false
+                imageButtonScanBarcode.visibility = View.GONE
                 tilBarcode.editText?.setText(item.sku)
                 tilName.editText?.setText(item.name)
                 tilPrice.editText?.setText(item.price.toString())

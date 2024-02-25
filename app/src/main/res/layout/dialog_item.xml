@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:hint="@string/barcode"
             app:layout_constraintEnd_toStartOf="@+id/image_button_scan_barcode"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,10 +62,12 @@
             android:id="@+id/til_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:hint="@string/name"
-            app:layout_constraintEnd_toEndOf="@+id/image_button_scan_barcode"
-            app:layout_constraintStart_toStartOf="@+id/til_barcode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_barcode"
             app:startIconDrawable="@drawable/outline_inventory_2_24">
 
