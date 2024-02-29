@@ -25,14 +25,13 @@ import org.junit.runner.Description
 /**
  * A JUnit rule that registers an idling resource for all fragment views that use data binding.
  */
-class DataBindingIdlingResourceRule<F : Fragment>() : TestWatcher() {
+class DataBindingIdlingResourceRule<F : Fragment> : TestWatcher() {
     private val idlingResource = DataBindingIdlingResource<F>()
-    
+
     fun monitorFragment(fragmentScenario: FragmentScenario<F>) {
         idlingResource.monitorFragment(fragmentScenario)
-        
     }
-    
+
     /**
      * Unregister your Idling Resource so it can be garbage collected and does not leak any memory.
      */
@@ -40,7 +39,7 @@ class DataBindingIdlingResourceRule<F : Fragment>() : TestWatcher() {
         IdlingRegistry.getInstance().unregister(idlingResource)
         super.finished(description)
     }
-    
+
     /**
      * Idling resources tell Espresso that the app is idle or busy. This is needed when operations
      * are not scheduled in the main Looper (for example when executed on a different thread).
@@ -49,5 +48,4 @@ class DataBindingIdlingResourceRule<F : Fragment>() : TestWatcher() {
         IdlingRegistry.getInstance().register(idlingResource)
         super.starting(description)
     }
-
 }
