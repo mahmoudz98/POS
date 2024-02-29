@@ -4,9 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="java.util.List" />
+
         <variable
-            name="viewModel"
-            type="com.casecode.pos.viewmodel.StepperBusinessViewModel" />
+            name="employees"
+            type="List&lt;com.casecode.domain.model.users.Employee>" />
 
     </data>
     <merge tools:showIn="@layout/fragment_employees">
@@ -64,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/smaller_spacing"
-            app:bindListEmployee="@{viewModel.employees}"
+            app:bindListEmployee="@{employees}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/btn_employees_info"
             app:layout_constraintEnd_toEndOf="parent"
