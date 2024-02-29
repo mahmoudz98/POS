@@ -77,7 +77,7 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [26, 30]
+        api-level: [ 26, 30 ]
 
     steps:
       - name: Enable KVM group perms
