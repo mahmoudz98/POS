@@ -16,6 +16,10 @@
             type="Boolean" />
 
         <variable
+            name="isErrorSubscriptions"
+            type="Boolean" />
+
+        <variable
             name="subscriptions"
             type="List&lt;Subscription>" />
 
@@ -57,7 +61,7 @@
             android:layout_height="0dp"
             android:contentDescription="@null"
             android:src="@drawable/ic_error"
-            android:visibility="@{subscriptions.size() == 0 &amp; !isLoading ? View.VISIBLE: View.GONE}"
+            android:visibility="@{isErrorSubscriptions ? View.VISIBLE: View.INVISIBLE}"
             app:layout_constraintBottom_toTopOf="@+id/btn_business_subscription_branches"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{isLoading ? View.VISIBLE : View.INVISIBLE}"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
