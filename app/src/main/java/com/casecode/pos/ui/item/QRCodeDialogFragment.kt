@@ -2,12 +2,13 @@ package com.casecode.pos.ui.item
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.DialogFragment
-import com.casecode.data.utils.encodeAsBitmap
+import com.casecode.domain.model.users.Item
 import com.casecode.pos.databinding.DialogQrCodeBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class QRCodeDialogFragment : DialogFragment() {
+class QRCodeDialogFragment(private val item: Item) : DialogFragment() {
 
     private var _binding: DialogQrCodeBinding? = null
     private val binding: DialogQrCodeBinding
@@ -15,20 +16,9 @@ class QRCodeDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogQrCodeBinding.inflate(layoutInflater)
-        val view = binding.root
-
-        // Get barcode and name from arguments
-        val barcode = arguments?.getString("barcode") ?: ""
-        val name = arguments?.getString("name") ?: ""
-
-        val qrCodeBitmap = barcode.encodeAsBitmap()
-
-        binding.imageViewQrCode.setImageBitmap(qrCodeBitmap)
-        binding.itemNameTextView.text = name
-        binding.textViewBarcode.text = barcode
 
         val builder = MaterialAlertDialogBuilder(requireActivity())
-        builder.setView(view)
+        builder.setView(binding.root)
             .setTitle("Print QR code")
             .setNegativeButton("Decline") { dialog, which ->
                 // Respond to negative button press
@@ -38,6 +28,13 @@ class QRCodeDialogFragment : DialogFragment() {
             }
 
         return builder.create()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        binding.item = item
     }
 
     override fun onDestroyView() {

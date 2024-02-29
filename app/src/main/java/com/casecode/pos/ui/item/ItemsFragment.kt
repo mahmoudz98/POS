@@ -45,12 +45,16 @@ class ItemsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentItemsBinding.inflate(inflater, container, false)
-        setupRecyclerView()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.lifecycleOwner = this.viewLifecycleOwner
+
+        setupRecyclerView()
+
         binding.floatingAddItem.setOnClickListener { showItemDialog() }
         observeItems()
     }
@@ -86,7 +90,7 @@ class ItemsFragment : Fragment() {
 
     private fun observeItems() {
         viewModel.items.observe(viewLifecycleOwner) { result ->
-            handleItemsLiveData(result)
+            handleItems(result)
         }
         viewModel.itemActionState.observe(viewLifecycleOwner) { state ->
             handleItemActionState(state)
@@ -116,28 +120,23 @@ class ItemsFragment : Fragment() {
     }
 
     private fun showMessage(message: String) {
-        with(binding) {
+        binding.apply {
             root.showToast(message, Toast.LENGTH_SHORT)
             progressBar.visibility = View.GONE
         }
     }
 
     private fun showQRCodeDialog(item: Item) {
-        val dialogFragment = QRCodeDialogFragment()
-        val args = Bundle().apply {
-            putString("barcode", item.sku)
-            putString("name", item.name)
-        }
-        dialogFragment.arguments = args
+        val dialogFragment = QRCodeDialogFragment(item)
         dialogFragment.show(childFragmentManager, "QRCodeDialog")
     }
 
-    private fun handleItemsLiveData(result: Resource<List<Item>>) {
+    private fun handleItems(result: Resource<List<Item>>) {
         when (result) {
             is Resource.Empty -> showEmptyView()
             is Resource.Error -> {
-                hideAllViews()
                 showMessage(result.message.toString())
+                binding.emptyView.root.visibility = View.VISIBLE
             }
 
             is Resource.Loading -> showLoading()
@@ -158,7 +157,7 @@ class ItemsFragment : Fragment() {
     }
 
     private fun showEmptyView() {
-        with(binding) {
+        binding.apply {
             emptyView.root.visibility = View.VISIBLE
             recyclerItems.visibility = View.GONE
             progressBar.visibility = View.GONE
@@ -166,7 +165,7 @@ class ItemsFragment : Fragment() {
     }
 
     private fun showRecyclerView() {
-        with(binding) {
+        binding.apply {
             emptyView.root.visibility = View.GONE
             recyclerItems.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
@@ -174,18 +173,11 @@ class ItemsFragment : Fragment() {
     }
 
     private fun showLoading() {
-        with(binding) {
+        binding.apply {
             emptyView.root.visibility = View.GONE
             recyclerItems.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
         }
     }
 
-    private fun hideAllViews() {
-        with(binding) {
-            emptyView.root.visibility = View.GONE
-            recyclerItems.visibility = View.GONE
-            progressBar.visibility = View.GONE
-        }
-    }
 }

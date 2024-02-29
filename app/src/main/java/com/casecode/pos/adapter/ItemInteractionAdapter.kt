@@ -59,15 +59,6 @@ class ItemInteractionAdapter(
 
             binding.item = element
 
-            binding.imvItem.load(element.imageUrl) {
-                placeholder(R.drawable.outline_image_24)
-                error(R.drawable.outline_hide_image_24)
-            }
-
-            // Bind other data to TextViews
-            binding.textName.text = element.name
-            binding.textQuantity.text = context.getString(R.string.qty, element.quantity.toString())
-            binding.textPrice.text = context.getString(R.string.egp, element.price.toString())
             binding.imageButtonPrintQrCode.setOnClickListener { onPrintButtonClick(element) }
         }
     }
@@ -109,7 +100,7 @@ class ItemInteractionAdapter(
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val queryString = constraint?.toString()?.toLowerCase(Locale.getDefault())
+                val queryString = constraint?.toString()?.lowercase(Locale.getDefault())
                 val filterResults = FilterResults()
                 if (queryString.isNullOrBlank()) {
                     filterResults.values = originalItems

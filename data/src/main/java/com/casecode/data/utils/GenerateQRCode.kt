@@ -7,26 +7,9 @@ import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 
+const val WIDTH = 300
+const val HEIGHT = 300
 
-/**
- * Author: Mahmoud Abdalhafeez
- * Created: 1/5/2024
- * Description:
- */
-
-const val WIDTH = 512
-const val HEIGHT = 512
-
-/**
- * Example:
- *       try {
- *             Bitmap bitmap = encodeAsBitmap(STR);
- *             imageView.setImageBitmap(bitmap);
- *         } catch (WriterException ex) {
- *             ex.printStackTrace();
- *         }
- *     }
- */
 @Throws(WriterException::class)
 fun String.encodeAsBitmap(): Bitmap {
     val writer = QRCodeWriter()
