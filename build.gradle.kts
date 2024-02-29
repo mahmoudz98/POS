@@ -22,7 +22,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.secrets)
     alias(libs.plugins.gradle.cache.fix) apply false
-
 }
 
 tasks.withType<Test>().configureEach {
@@ -33,12 +32,4 @@ tasks.withType<Test>().configureEach {
 }
 
 // TODo: use gradle profile https://developer.android.com/build/profile-your-build#getting_started
-//TODO: Add Dependency graph let visualize dependencies in a graph.
-
-
-
-
-
-
-
-
+// TODO: Add Dependency graph let visualize dependencies in a graph.
