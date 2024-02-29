@@ -11,9 +11,7 @@ import com.casecode.pos.adapter.BranchesAdapter
 import com.casecode.pos.databinding.FragmentBranchesBinding
 import com.casecode.pos.utils.EventObserver
 import com.casecode.pos.utils.compactScreen
-import com.casecode.pos.utils.setupSnackbar
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -34,7 +32,8 @@ class BranchesFragment : Fragment() {
     internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentBranchesBinding.inflate(inflater, container, false)
@@ -42,11 +41,13 @@ class BranchesFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         _binding ?: return // Return early if the binding is null
         init()
-
     }
 
     /**
@@ -56,10 +57,8 @@ class BranchesFragment : Fragment() {
         initViewModel()
         initAdapter()
         initClicked()
-        setupSnackbar()
         setupWithTwoPane()
         observerUpdateBranchInTablet()
-
     }
 
     private fun setupWithTwoPane() {
@@ -74,14 +73,12 @@ class BranchesFragment : Fragment() {
                 .replace(
                     R.id.fcv_add_branch,
                     AddBranchesDialogFragment.newInstance(),
-                    AddBranchesDialogFragment.ADD_BRANCH_TAG
+                    AddBranchesDialogFragment.ADD_BRANCH_TAG,
                 ).commit()
-
         } else {
             binding.branches.btnBranchesAdd.visibility = View.VISIBLE
             binding.fcvAddBranch.visibility = View.GONE
         }
-
     }
 
     /**
@@ -91,7 +88,6 @@ class BranchesFragment : Fragment() {
         binding.branches.lifecycleOwner = this.viewLifecycleOwner
         binding.branches.viewModel = businessViewModel
     }
-
 
     private fun initAdapter() {
         // Lazy initialization of BranchesAdapter
@@ -106,7 +102,7 @@ class BranchesFragment : Fragment() {
                         .replace(
                             R.id.fcv_add_branch,
                             AddBranchesDialogFragment.newInstance(),
-                            AddBranchesDialogFragment.UPDATE_BRANCH_TAG
+                            AddBranchesDialogFragment.UPDATE_BRANCH_TAG,
                         ).commit()
                 }
             }
@@ -132,17 +128,18 @@ class BranchesFragment : Fragment() {
 
     private fun observerUpdateBranchInTablet() {
         if (businessViewModel.isCompact.value == false) {
-            businessViewModel.isUpdateBranch.observe(viewLifecycleOwner, EventObserver {
-                // Clear previous update branch dialog.
-                parentFragmentManager.beginTransaction()
-                    .replace(
-                        R.id.fcv_add_branch,
-                        AddBranchesDialogFragment.newInstance(),
-                        AddBranchesDialogFragment.ADD_BRANCH_TAG
-                    ).commit()
-
-            })
-
+            businessViewModel.isUpdateBranch.observe(
+                viewLifecycleOwner,
+                EventObserver {
+                    // Clear previous update branch dialog.
+                    parentFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.fcv_add_branch,
+                            AddBranchesDialogFragment.newInstance(),
+                            AddBranchesDialogFragment.ADD_BRANCH_TAG,
+                        ).commit()
+                },
+            )
         }
     }
 
@@ -153,15 +150,6 @@ class BranchesFragment : Fragment() {
         binding.btnBranchesSubscription.setOnClickListener {
             businessViewModel.setBusiness()
         }
-    }
-
-    private fun setupSnackbar() {
-        binding.root.setupSnackbar(
-            viewLifecycleOwner,
-            businessViewModel.userMessage,
-            BaseTransientBottomBar.LENGTH_SHORT
-        )
-
     }
 
     override fun onDestroyView() {
