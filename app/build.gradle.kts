@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.pos.android.hilt)
     alias(libs.plugins.pos.android.firebase)
-
 }
 
 android {
@@ -20,7 +19,6 @@ android {
         resourceConfigurations.addAll(listOf("en", "ar"))
         testInstrumentationRunner = "com.casecode.testing.PosTestRunner"
     }
-
 
     buildTypes {
         debug {
@@ -40,13 +38,11 @@ android {
         }
     }
 
-
     if (project.hasProperty("debug")) {
         splits.abi.isEnable = false
         splits.density.isEnable = false
         aaptOptions.cruncherEnabled = false
     }
-
 
     @Suppress("UnstableApiUsage")
     testOptions {
@@ -92,7 +88,6 @@ android {
     namespace = "com.casecode.pos"
 }
 
-
 androidComponents {
 
     onVariants(selector().all()) { variant ->
@@ -107,7 +102,6 @@ androidComponents {
         }
     }
 }
-
 
 dependencies {
 
@@ -125,8 +119,8 @@ dependencies {
 
     // AndroidX
     implementation(libs.core)
-    implementation(libs.activity)
-    implementation(libs.fragment.ktx)
+    // implementation(libs.activity)
+    // implementation(libs.fragment.ktx)
     implementation(libs.appcompat)
     implementation(libs.recyclerview)
     implementation(libs.slidingpanelayout)
@@ -138,8 +132,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.android.stepper)
     implementation(libs.coil)
-    testImplementation(libs.coil.test)
-    testImplementation(libs.fragment.testing)
+
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     // service
@@ -147,7 +140,6 @@ dependencies {
 
     // coroutines
     implementation(libs.kotlinx.coroutines.android)
-
     debugCompileOnly(libs.kotlinx.coroutines.debug)
     // Debug tools
     // debugImplementation(libs.leakcanary)
@@ -201,12 +193,13 @@ dependencies {
     // androidTestImplementation(libs.test.mockk)
     androidTestImplementation(libs.navigation.testing)
 
+    androidTestImplementation(libs.coil.test)
+    //  testImplementation(libs.fragment.testing)
     androidTestImplementation(libs.test.espresso.core)
     androidTestImplementation(libs.test.espresso.idlingResource)
     androidTestImplementation(libs.test.espresso.idling.concurrent)
     androidTestImplementation(libs.test.espresso.accessibility) {
         exclude(module = "protobuf-lite")
-
     }
     androidTestImplementation(libs.test.espresso.contrib) {
         exclude(module = "protobuf-lite")
@@ -216,10 +209,8 @@ dependencies {
     kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
 
-    //implementation(kotlin("reflect"))
+    // implementation(kotlin("reflect"))
     //  androidTestImplementation(kotlin("reflect"))
-
-
 }
 
 tasks.withType<Test>().configureEach {
