@@ -28,7 +28,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class StepperActivity : AppCompatActivity(), StepperNavListener {
-
     private var _binding: ActivityStepperBinding? = null
     private val binding: ActivityStepperBinding get() = _binding!!
 
@@ -42,7 +41,6 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
         super.onCreate(savedInstanceState)
         _binding = ActivityStepperBinding.inflate(layoutInflater)
         setContentView(_binding?.root)
-
         onSupportBackPressed()
         setupStepper()
         setupSnackbar()
@@ -60,7 +58,6 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
     }
 
     private fun setupSnackbar() {
-
         binding.root.setupSnackbar(
             this,
             businessViewModel.userMessage,
@@ -75,11 +72,8 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
                 Timber.e("uid is blank")
             } else {
                 Timber.e("uid  = $it")
-
             }
         }
-
-
     }
 
     private fun startLoginActivity() {
@@ -94,7 +88,6 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
         observerPreviousStep()
         observerCompleteStep()
     }
-
 
     private fun observerNextStep() {
         businessViewModel.buttonNextStep.observe(
@@ -131,15 +124,11 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
         viewModel.isOnline.observe(this) {
             binding.isAvailable = it
             Timber.i("IsAvailable = $it")
-
         }
-
     }
-
 
     override fun onCompleted() {
         binding.stepper.showSnackbar("Step Changed", Snackbar.LENGTH_SHORT)
-
     }
 
     override fun onStepChanged(step: Int) {
@@ -149,7 +138,6 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
     override fun onSupportNavigateUp(): Boolean = findNavController(R.id.frame_stepper).navigateUp()
 
     private fun onSupportBackPressed() {
-
         onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -181,14 +169,12 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         removeObservers()
         _binding = null
-
     }
 
     private fun removeObservers() {
@@ -199,6 +185,5 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
                 fieldValue.removeObservers(this)
             }
         }
-
     }
 }
