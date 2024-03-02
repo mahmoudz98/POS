@@ -38,6 +38,7 @@ local.properties
 # Gradle cache
 .gradle
 
+
 # Sandbox stuff
 _sandbox
 
@@ -45,4 +46,4 @@ _sandbox
 captures/
 
 # Ignore the secrets.defaults.properties file
-secrets.defaults.properties/
+secrets.defaults.properties
