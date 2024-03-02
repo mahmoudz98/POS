@@ -44,5 +44,5 @@ _sandbox
 # Android Studio captures folder
 captures/
 
-# Secrets Key: google client
-secrets.defaults.properties
+# Ignore the secrets.defaults.properties file
+secrets.defaults.properties/
