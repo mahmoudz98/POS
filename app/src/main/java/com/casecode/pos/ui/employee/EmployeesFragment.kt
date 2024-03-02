@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class EmployeesFragment : Fragment() {
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: FragmentEmployeesBinding? = null
     val binding get() = _binding!!
 

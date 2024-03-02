@@ -28,6 +28,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class StepperActivity : AppCompatActivity(), StepperNavListener {
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: ActivityStepperBinding? = null
     private val binding: ActivityStepperBinding get() = _binding!!
 

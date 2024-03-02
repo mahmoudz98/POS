@@ -30,24 +30,25 @@ class AddBranchesDialogFragment : DialogFragment() {
         }
     }
 
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: DialogAddBranchBinding? = null
     private val binding: DialogAddBranchBinding
         get() = _binding!!
     private val businessViewModel by activityViewModels<StepperBusinessViewModel>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        if (businessViewModel.isCompact.value == true) {
+        return if (businessViewModel.isCompact.value == true) {
             val builder =
                 MaterialAlertDialogBuilder(requireContext())
             _binding = DialogAddBranchBinding.inflate(layoutInflater)
 
             builder.setView(_binding?.root)
-            return builder.create()
+            builder.create()
         } else {
             val dialog = super.onCreateDialog(savedInstanceState)
 
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            return dialog
+            dialog
         }
     }
 
@@ -95,12 +96,12 @@ class AddBranchesDialogFragment : DialogFragment() {
             }
         }
 
-        binding.etAddBranchesPhone.doAfterTextChangedListener { PhoneEditText ->
-            if (TextUtils.isEmpty(PhoneEditText)) {
+        binding.etAddBranchesPhone.doAfterTextChangedListener { phoneEditText ->
+            if (TextUtils.isEmpty(phoneEditText)) {
                 binding.tilAddBranchesPhone.boxStrokeErrorColor
                 binding.tilAddBranchesPhone.error =
                     getString(R.string.all_phone_empty)
-            } else if (!PhoneEditText.toString().trim { it <= ' ' }
+            } else if (!phoneEditText.toString().trim { it <= ' ' }
                     .matches(Patterns.PHONE.toString().toRegex())
             ) {
                 binding.tilAddBranchesPhone.error =

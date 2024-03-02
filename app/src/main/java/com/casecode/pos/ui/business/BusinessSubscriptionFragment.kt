@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class BusinessSubscriptionFragment : Fragment() {
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: FragmentBusinessSubscriptionBinding? = null
     private val binding get() = _binding!!
     internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()

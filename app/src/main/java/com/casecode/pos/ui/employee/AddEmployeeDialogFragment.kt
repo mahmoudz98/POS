@@ -29,20 +29,21 @@ class AddEmployeeDialogFragment : DialogFragment() {
         }
     }
 
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: DialogAddEmployeeBinding? = null
     val binding get() = _binding!!
     private val businessViewModel by activityViewModels<StepperBusinessViewModel>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        if (businessViewModel.isCompact.value == true) {
+        return if (businessViewModel.isCompact.value == true) {
             val builder = MaterialAlertDialogBuilder(requireContext())
             _binding = DialogAddEmployeeBinding.inflate(layoutInflater)
             builder.setView(binding.root)
-            return builder.create()
+            builder.create()
         } else {
             val dialog = super.onCreateDialog(savedInstanceState)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            return dialog
+            dialog
         }
     }
 

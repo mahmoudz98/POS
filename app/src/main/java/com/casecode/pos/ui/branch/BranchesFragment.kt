@@ -25,6 +25,7 @@ import timber.log.Timber
  */
 @AndroidEntryPoint
 class BranchesFragment : Fragment() {
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: FragmentBranchesBinding? = null
     private val binding get() = _binding!!
 
