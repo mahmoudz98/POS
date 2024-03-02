@@ -6,7 +6,8 @@ on:
       - master
       - develop
   pull_request:
-    - develop
+    branches:
+      - develop
 
 concurrency:
   group: build-${{ github.ref }}
