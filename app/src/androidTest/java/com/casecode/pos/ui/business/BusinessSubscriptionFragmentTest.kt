@@ -22,6 +22,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Integration test for the Subscription screen.
+ */
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
 class BusinessSubscriptionFragmentTest {

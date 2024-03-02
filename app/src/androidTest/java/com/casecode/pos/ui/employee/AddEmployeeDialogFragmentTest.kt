@@ -21,6 +21,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * Integration test for the  add Employee screen.
+ */
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest

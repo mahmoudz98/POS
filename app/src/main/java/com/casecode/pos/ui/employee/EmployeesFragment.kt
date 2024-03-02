@@ -13,11 +13,17 @@ import com.casecode.pos.utils.compactScreen
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * A fragment that displays a list of employees.
+ */
 @AndroidEntryPoint
 class EmployeesFragment : Fragment() {
     private var _binding: FragmentEmployeesBinding? = null
     val binding get() = _binding!!
 
+    /**
+     * The view model for this fragment.
+     */
     internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
 
     override fun onCreateView(
@@ -46,6 +52,9 @@ class EmployeesFragment : Fragment() {
         setupWithTwoPane()
     }
 
+    /**
+     * Sets up the fragment for two-pane mode.
+     */
     private fun setupWithTwoPane() {
         val isCompact = requireActivity().compactScreen()
         businessViewModel.setCompact(isCompact)
@@ -65,6 +74,9 @@ class EmployeesFragment : Fragment() {
         }
     }
 
+    /**
+     * Initializes the view model.
+     */
     private fun initViewModel() {
         businessViewModel.employees.observe(viewLifecycleOwner) {
             binding.lEmployees.employees = it
@@ -72,6 +84,9 @@ class EmployeesFragment : Fragment() {
         businessViewModel.addDefaultEmployee()
     }
 
+    /**
+     * Initializes the adapter for the list of employees.
+     */
     private fun initAdapter() {
         val employeeAdapter: EmployeeAdapter by lazy {
             EmployeeAdapter {
@@ -94,6 +109,9 @@ class EmployeesFragment : Fragment() {
         binding.lEmployees.rvEmployees.adapter = employeeAdapter
     }
 
+    /**
+     * Initializes the click listeners for the buttons.
+     */
     private fun initClick() {
         binding.apply {
             lEmployees.btnEmployeesAdd.setOnClickListener {
@@ -112,6 +130,9 @@ class EmployeesFragment : Fragment() {
         }
     }
 
+    /**
+     * Observes the update employee event in tablet mode.
+     */
     private fun observerUpdateEmployeeInTablet() {
         if (businessViewModel.isCompact.value == false) {
             businessViewModel.isUpdateEmployee.observe(
