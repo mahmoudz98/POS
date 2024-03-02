@@ -64,9 +64,9 @@ class StepperBusinessViewModel
         val storeType: LiveData<String>
             get() = _storeType
 
-        private val _email: MutableLiveData<String> = MutableLiveData()
+        private val email: MutableLiveData<String> = MutableLiveData()
         val emailBusiness: LiveData<String>
-            get() = _email
+            get() = email
 
         private val _phoneBusiness: MutableLiveData<String> = MutableLiveData()
         val phoneBusiness: LiveData<String>
@@ -79,11 +79,12 @@ class StepperBusinessViewModel
 
         private val branch: MutableLiveData<Branch> = MutableLiveData()
 
-        private val _branchCode: MutableLiveData<Int> = MutableLiveData(0)
+        private val
+        branchCode: MutableLiveData<Int> = MutableLiveData(0)
 
-        private var _branchName: MutableLiveData<String> = MutableLiveData()
+        private var branchName: MutableLiveData<String> = MutableLiveData()
 
-        private var _branchPhone: MutableLiveData<String> = MutableLiveData()
+        private var branchPhone: MutableLiveData<String> = MutableLiveData()
 
         private val _branchSelected: MutableLiveData<Branch> = MutableLiveData()
         val branchSelected: LiveData<Branch>
@@ -98,7 +99,7 @@ class StepperBusinessViewModel
         private val _subscriptions: MutableLiveData<List<Subscription>> = MutableLiveData()
         val subscriptions: LiveData<List<Subscription>> get() = _subscriptions
 
-        private var _subscriptionSelected: MutableLiveData<Subscription> = MutableLiveData()
+        private var subscriptionSelected: MutableLiveData<Subscription> = MutableLiveData()
         private val _isSubscriptionsError = MutableLiveData<Boolean>()
         val isSubscriptionsError get() = _isSubscriptionsError
 
@@ -128,7 +129,7 @@ class StepperBusinessViewModel
         val isAddEmployees get() = _isAddEmployees
 
         // Business completion data
-        private val _isCompletedBusinessStep = MutableLiveData<CompleteBusiness>()
+        private val isCompletedBusinessStep = MutableLiveData<CompleteBusiness>()
 
         // Navigation events
         private val _buttonNextStep: MutableLiveData<Event<Unit>> = MutableLiveData()
@@ -180,7 +181,7 @@ class StepperBusinessViewModel
         }
 
         fun setEmail(email: String) {
-            _email.value = email
+            this.email.value = email
         }
 
         fun setPhoneBusiness(phone: String) {
@@ -188,16 +189,16 @@ class StepperBusinessViewModel
         }
 
         fun setBranchName(name: String) {
-            _branchName.value = name
+            branchName.value = name
         }
 
         fun setBranchPhone(phone: String) {
-            _branchPhone.value = phone
+            branchPhone.value = phone
         }
 
         fun addBranch() {
             incrementBranchCode()
-            val branch = Branch(_branchCode.value, _branchName.value, _branchPhone.value)
+            val branch = Branch(branchCode.value, branchName.value, branchPhone.value)
 
             val branchesValue = branches.value ?: ArrayList()
             val oldBranchesSize = _branches.value?.size ?: 0
@@ -226,7 +227,7 @@ class StepperBusinessViewModel
                 val index = branchesValue.indexOf(_branchSelected.value)
                 val currentBranch = branchesValue[index]
                 val updateBranch =
-                    Branch(branchSelected.value?.branchCode, _branchName.value, _branchPhone.value)
+                    Branch(branchSelected.value?.branchCode, branchName.value, branchPhone.value)
 
                 if (currentBranch != updateBranch) {
                     branchesValue[index] = updateBranch
@@ -244,7 +245,7 @@ class StepperBusinessViewModel
         }
 
         private fun incrementBranchCode() {
-            _branchCode.value = _branchCode.value?.plus(1)
+            branchCode.value = branchCode.value?.plus(1)
         }
 
         fun setBranchSelected(branch: Branch) {
@@ -339,7 +340,7 @@ class StepperBusinessViewModel
         }
 
         fun addSubscriptionBusinessSelected(subscription: Subscription) {
-            _subscriptionSelected.value = subscription
+            subscriptionSelected.value = subscription
         }
 
         fun checkNetworkThenSetSubscriptionBusinessSelected() {
@@ -354,7 +355,7 @@ class StepperBusinessViewModel
             viewModelScope.launch {
                 showProgress()
                 val uid = currentUid.value ?: ""
-                val subscription = _subscriptionSelected.value
+                val subscription = subscriptionSelected.value
                 _isAddSubscriptionBusiness.value =
                     subscription?.asSubscriptionBusiness()
                         ?.let { setSubscriptionsBusinessUseCase(it, uid) }
@@ -549,13 +550,13 @@ class StepperBusinessViewModel
         private fun setCompletedBusinessStep() {
             viewModelScope.launch {
                 val uid = currentUid.value ?: ""
-                _isCompletedBusinessStep.value = completeBusinessUseCase(uid)
+                isCompletedBusinessStep.value = completeBusinessUseCase(uid)
                 checkIsCompleteBusinessStep()
             }
         }
 
         private fun checkIsCompleteBusinessStep() {
-            when (val isCompleteBusinessStep = _isCompletedBusinessStep.value) {
+            when (val isCompleteBusinessStep = isCompletedBusinessStep.value) {
                 is Resource.Success -> {
                     showSnackbarMessage(R.string.complete_business_step_success)
                     completedSteps()
@@ -569,7 +570,9 @@ class StepperBusinessViewModel
                     showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
                 }
 
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    TODO()
+                }
                 null -> {
                     showSnackbarMessage(R.string.all_error_save)
                 }
