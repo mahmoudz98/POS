@@ -75,7 +75,5 @@ abstract class BaseTest {
     abstract fun init()
 
 
-    companion object {
-        const val ERROR_MESSAGE_LIVEDATA_NULL = "LiveData has null value"
-    }
+
 }

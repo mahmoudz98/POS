@@ -2,23 +2,19 @@
 # AGP and tools should be updated together
 agp = "8.2.2"
 androidTools = "31.2.2"
-compiler = "4.16.0"
-desugar_jdk_libs = "2.0.2"
-glide = "4.16.0"
 kotlin = "1.9.22"
 androidDesugarJdkLibs = "2.0.4"
+secrets = "2.0.1"
 
 
 # Androidx
 activity = "1.8.2"
 appcompat = "1.6.1"
 core-splashscreen = "1.0.1"
-annotation ="1.7.0"
 core = "1.12.0"
 constraintlayout = "2.1.4"
 fragment = "1.6.2"
 lifecycle = "2.7.0"
-multidex = "2.0.1"
 slidingpanelayout = "1.2.0"
 swiperefreshlayout = "1.1.0"
 windowVersion = "1.2.0"
@@ -33,7 +29,7 @@ androidStepper = "0.3.0"
 material = "1.11.0"
 
 # Multithreading
-kotlinx-coroutines = "1.7.3"
+kotlinx-coroutines = "1.8.0"
 
 # Network & Serialization
 kotlinx-serialization = "1.6.0"
@@ -60,12 +56,13 @@ ksp = "1.9.22-1.0.16"
 
 #  Services
 # https://firebase.google.com/support/release-notes/android
-firebaseBom = "32.7.1"
+firebaseBom = "32.7.2"
 firebase-auth = "22.3.1"
-firebaseFirestoreKtx = "24.10.1"
-firebaseMessaging = "23.4.0"
-google-services = "4.4.0"
-play-services-auth = "20.7.0"
+firebaseFirestoreKtx = "24.10.2"
+testlab = "0.2"
+firebaseMessaging = "23.4.1"
+google-services = "4.4.1"
+play-services-auth = "21.0.0"
 firebaseCrashlyticsPlugin = "2.9.9"
 firebasePerfPlugin = "1.4.2"
 googleOssPlugin = "0.10.6"
@@ -86,7 +83,7 @@ testrunner = "1.5.2"
 testrules = "1.5.0"
 testhamcrest = "2.2"
 
-mockk-andrdoid ="1.13.8"
+mockk-andrdoid = "1.13.9"
 
 # Gradle plugins
 ktlint-plugin = "10.3.0"
@@ -94,24 +91,17 @@ spotless = "6.22.0"
 junitVersion = "1.1.5"
 org-jetbrains-kotlin-jvm = "1.9.22"
 uiautomator = "2.2.0"
-benchmarkMacroJunit4 = "1.2.2"
-firebaseStorageKtx = "20.3.0"
-zxingAndroidEmbedded = "4.3.0"
+benchmarkMacroJunit4 = "1.2.3"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 # AndroidX
-androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
-androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
-desugar_jdk_libs-v202 = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
 fragment-testing = { module = "androidx.fragment:fragment-testing", version.ref = "fragment" }
-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 slidingpanelayout = { module = "androidx.slidingpanelayout:slidingpanelayout", version.ref = "slidingpanelayout" }
 window = { module = "androidx.window:window", version.ref = "windowVersion" }
 window-testing = { module = "androidx.window:window-testing", version.ref = "windowVersion" }
@@ -182,11 +172,11 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging", versio
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
+firebase-testlab = { module = "com.google.firebase:testlab-instr-lib", version.ref = "testlab" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase-auth" }
 mlkit-barcode = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit-barcode" }
 budiyev-barcode = { group = "com.github.yuriy-budiyev", name = "code-scanner", version.ref = "budiyev-barcode" }
-zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 zxing-generate-barcode = { module = "com.google.zxing:core", version.ref = "zxing-core" }
 
 
@@ -219,9 +209,9 @@ androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchm
 
 
 
+test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "testespresso" }
 test-espresso-accessibility = { module = "androidx.test.espresso:espresso-accessibility", version.ref = "testespresso" }
 test-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "testespresso" }
-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "testespresso" }
 test-espresso-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "testespresso" }
 test-espresso-idling-concurrent = { module = "androidx.test.espresso.idling:idling-concurrent", version.ref = "testespresso" }
 test-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "testespresso" }
@@ -236,18 +226,18 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
-firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark"}
+baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark" }
 
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 gradle-cache-fix = { id = "org.gradle.android.cache-fix", version = "3.0" }
+secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
@@ -272,7 +262,7 @@ autonomousapps-analysis = { id = "com.autonomousapps.dependency-analysis", versi
 # Plugins defined by this project
 pos-android-application = { id = "pos.android.application", version = "unspecified" }
 pos-android-library = { id = "pos.android.library", version = "unspecified" }
-pos-android-hilt = { id = "pos.android.hilt", version = "unspecified"}
+pos-android-hilt = { id = "pos.android.hilt", version = "unspecified" }
 pos-android-firebase = { id = "pos.android.firebase", version = "unspecified" }
 pos-android-test = { id = "pos.android.test", version = "unspecified" }
 pos-android-test4 = { id = "pos.android.test4", version = "unspecified" }

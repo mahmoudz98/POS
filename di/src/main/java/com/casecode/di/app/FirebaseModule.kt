@@ -1,11 +1,11 @@
 package com.casecode.di.app
 
 import android.content.Context
+import com.casecode.pos.di.BuildConfig
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,22 +24,20 @@ object FirebaseModule {
     fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
 
     @Provides
-    fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
-
-    @Provides
     @Singleton
     fun provideSignInClient(@ApplicationContext context: Context) =
         Identity.getSignInClient(context)
 
     @Provides
-    fun provideSignInRequest(@ApplicationContext context: Context): BeginSignInRequest {
+    fun provideSignInRequest(): BeginSignInRequest {
+        val webClient = BuildConfig.web_client_id
         return BeginSignInRequest.Builder()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
                     .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(context.getString(com.casecode.pos.data.R.string.default_web_client_id))
-                    .build()
+                    .setServerClientId(webClient)
+                    .build(),
             )
             .setAutoSelectEnabled(true)
             .build()
