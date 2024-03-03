@@ -137,6 +137,7 @@ dependencies {
     implementation(libs.navigation.ui)
     // service
     implementation(libs.budiyev.barcode)
+    implementation(libs.zxing.android.embedded)
 
     // coroutines
     implementation(libs.kotlinx.coroutines.android)
