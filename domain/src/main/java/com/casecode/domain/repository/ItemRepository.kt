@@ -18,7 +18,7 @@ interface ItemRepository {
      * @param uid The user ID for which items are to be retrieved.
      * @return A [GetItem] resource containing the retrieved items.
      */
-    suspend fun getItems(uid: String): GetItem
+    suspend fun getItems(): GetItem
 
     /**
      * Adds a new item to the repository.
