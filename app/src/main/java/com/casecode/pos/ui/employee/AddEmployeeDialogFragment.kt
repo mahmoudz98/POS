@@ -23,11 +23,13 @@ class AddEmployeeDialogFragment : DialogFragment() {
     companion object {
         const val ADD_EMPLOYEE_TAG = "AddEmployeeDialogFragment"
         const val UPDATE_EMPLOYEE_TAG = "UpdateEmployeeDialogFragment"
+
         fun newInstance(): AddEmployeeDialogFragment {
             return AddEmployeeDialogFragment()
         }
     }
 
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: DialogAddEmployeeBinding? = null
     val binding get() = _binding!!
     private val businessViewModel by activityViewModels<StepperBusinessViewModel>()
@@ -46,7 +48,8 @@ class AddEmployeeDialogFragment : DialogFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         if (businessViewModel.isCompact.value == false) {
@@ -55,7 +58,10 @@ class AddEmployeeDialogFragment : DialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
         init()
@@ -64,10 +70,9 @@ class AddEmployeeDialogFragment : DialogFragment() {
     private fun init() {
         initViewModel()
         validateInputEmployee()
-        initAddEmployee()
+        initAddOrUpdateEmployee()
         if (tag == UPDATE_EMPLOYEE_TAG) {
             observerEmployeeSelected()
-
         }
     }
 
@@ -82,7 +87,6 @@ class AddEmployeeDialogFragment : DialogFragment() {
         validateNameEmployeeInput()
         validatePhoneEmployeeInput()
         validatePasswordEmployeeInput()
-
     }
 
     private fun validateNameEmployeeInput() {
@@ -91,25 +95,24 @@ class AddEmployeeDialogFragment : DialogFragment() {
                 binding.tilAddEmployeeName.boxStrokeErrorColor
                 binding.tilAddEmployeeName.error =
                     getString(R.string.add_employee_name_empty)
-
             } else {
                 binding.tilAddEmployeeName.boxStrokeColor =
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
                 binding.tilAddEmployeeName.error = null
             }
         }
-
     }
 
     private fun validatePhoneEmployeeInput() {
         binding.etAddEmployeePhone.doAfterTextChangedListener { phoneEditText ->
+
             if (TextUtils.isEmpty(phoneEditText)) {
                 binding.tilAddEmployeePhone.boxStrokeErrorColor
                 binding.tilAddEmployeePhone.error =
                     getString(R.string.all_phone_empty)
-
             } else if (!phoneEditText.toString().trim { it <= ' ' }
-                    .matches(Patterns.PHONE.toString().toRegex())) {
+                    .matches(Patterns.PHONE.toString().toRegex())
+            ) {
                 binding.tilAddEmployeePhone.error =
                     getString(R.string.all_phone_invalid)
             } else {
@@ -118,7 +121,6 @@ class AddEmployeeDialogFragment : DialogFragment() {
                 binding.tilAddEmployeePhone.error = null
             }
         }
-
     }
 
     private fun validatePasswordEmployeeInput() {
@@ -128,7 +130,6 @@ class AddEmployeeDialogFragment : DialogFragment() {
                 binding.tilAddEmployeePassword.boxStrokeErrorColor
                 binding.tilAddEmployeePassword.error =
                     getString(R.string.add_employee_password_empty)
-
             } else if (passwordEditText.toString().length < 6) {
                 binding.tilAddEmployeePassword.error =
                     getString(R.string.add_employee_password_error)
@@ -138,15 +139,11 @@ class AddEmployeeDialogFragment : DialogFragment() {
                 binding.tilAddEmployeePassword.error = null
             }
         }
-
     }
 
-    private fun initAddEmployee() {
+    private fun initAddOrUpdateEmployee() {
         binding.btnEmployee.setOnClickListener {
             if (isValidEmployeeInput()) {
-                if (tag == ADD_EMPLOYEE_TAG) businessViewModel.addEmployee()
-                else businessViewModel.updateEmployee()
-
                 dismissDialog()
             }
         }
@@ -159,69 +156,55 @@ class AddEmployeeDialogFragment : DialogFragment() {
         val branchName = binding.actvEmployeeBranch.text.toString()
         val permission = binding.actvEmployeePermission.text.toString()
 
-        if (!isNameValid(name) ||
-            !isPhoneValid(phone) ||
-            !isPasswordValid(password) ||
-            !isBranchNameValid(branchName) ||
-            !isPermissionValid(permission)
+        if (checkIsValidEmployee(name, phone, password, branchName, permission)) return false
+
+        if (tag == ADD_EMPLOYEE_TAG) {
+            businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        } else {
+            businessViewModel.updateEmployee(name, phone, password, branchName, permission)
+        }
+        return true
+    }
+
+    private fun checkIsValidEmployee(
+        name: String,
+        phone: String,
+        password: String,
+        branchName: String,
+        permission: String,
+    ): Boolean {
+        if (name.isBlank() || phone.isBlank() || !phone.matches(Patterns.PHONE.toRegex()) ||
+            password.isBlank() || password.length < 6 || branchName.isBlank() ||
+            permission.isBlank()
         ) {
-            return false
+            if (name.isBlank()) {
+                binding.tilAddEmployeeName.error = getString(R.string.add_employee_name_empty)
+            }
+            if (phone.isBlank()) {
+                binding.tilAddEmployeePhone.error = getString(R.string.all_phone_empty)
+            } else if (!phone.matches(Patterns.PHONE.toRegex())) {
+                binding.tilAddEmployeePhone.error = getString(R.string.all_phone_invalid)
+            }
+
+            if (password.isBlank()) {
+                binding.tilAddEmployeePassword.error =
+                    getString(R.string.add_employee_password_empty)
+            } else if (password.length < 6) {
+                binding.tilAddEmployeePassword.error =
+                    getString(R.string.add_employee_password_error)
+            }
+
+            if (branchName.isBlank()) {
+                binding.tilAddEmployeeBranch.error = getString(R.string.add_employee_branch_empty)
+            }
+            if (permission.isBlank()) {
+                binding.tilAddEmployeePermission.error =
+                    getString(R.string.add_employee_permission_empty)
+            }
+
+            return true
         }
-
-        businessViewModel.newEmployee(name, phone, password, branchName, permission)
-        return true
-    }
-
-    private fun isNameValid(name: String): Boolean {
-        if (TextUtils.isEmpty(name)) {
-            binding.tilAddEmployeeName.error = getString(R.string.add_employee_name_empty)
-            return false
-        }
-        return true
-    }
-
-    private fun isPhoneValid(phone: String): Boolean {
-        if (TextUtils.isEmpty(phone)) {
-            binding.tilAddEmployeePhone.error = getString(R.string.all_phone_empty)
-            return false
-        }
-
-        if (!phone.trim { it <= ' ' }.matches(Patterns.PHONE.toString().toRegex())) {
-            binding.tilAddEmployeePhone.error = getString(R.string.all_phone_invalid)
-            return false
-        }
-
-        return true
-    }
-
-    private fun isPasswordValid(password: String): Boolean {
-        if (TextUtils.isEmpty(password)) {
-            binding.tilAddEmployeePassword.error = getString(R.string.add_employee_password_empty)
-            return false
-        }
-
-        if (password.length < 6) {
-            binding.tilAddEmployeePassword.error = getString(R.string.add_employee_password_error)
-            return false
-        }
-
-        return true
-    }
-
-    private fun isBranchNameValid(branchName: String): Boolean {
-        if (TextUtils.isEmpty(branchName)) {
-            binding.tilEmployeeBranch.error = getString(R.string.add_employee_branch_empty)
-            return false
-        }
-        return true
-    }
-
-    private fun isPermissionValid(permission: String): Boolean {
-        if (TextUtils.isEmpty(permission)) {
-            binding.tilEmployeePermission.error = getString(R.string.add_employee_permission_empty)
-            return false
-        }
-        return true
+        return false
     }
 
     private fun dismissDialog() {

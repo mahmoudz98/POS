@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">POS</string>
-    <string name="default_web_client_id" translatable="false">578787836284-1ha2u4nugqtbj3qkvnaioqfbei14trji.apps.googleusercontent.com</string>
     <string name="extra_uid">EXTRA_UID</string>
     <string name="extra_display_name">EXTRA_DISPLAY_NAME</string>
     <string name="extra_email">EXTRA_EMAIL</string>
@@ -122,8 +121,10 @@
     <string name="add_employees_success">Employees Added success, Go on.</string>
     <string name="add_employee_success">Employee Added success.</string>
     <string name="add_employee_fail">Employee Added failed.</string>
+    <string name="add_employee_duplicate">Employee\'s name duplicate and failed.</string>
     <string name="update_employee_success">Employee updated success.</string>
     <string name="update_employee_fail">Employee updated failed.</string>
+
 
     // Permission
     <string name="permission_admin">Admin</string>
@@ -149,6 +150,11 @@
     <string name="pos">pos</string>
     <string name="or_employee_login">or Employee login</string>
 
+    <string name="google_play_services_required">Google Play Services Required</string>
+    <string name="google_play_services_message">
+    This app requires Google Play services to function. Please download and install it from the Play Store.
+</string>
+    <string name="download">Download</string>
 
     <string name="cancel">Cancel</string>
     <string name="title_permission_dialog">Camera Permission Needed</string>

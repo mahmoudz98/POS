@@ -8,7 +8,6 @@ import android.widget.CheckedTextView
 
 class AutoCompleteAdapter(context: Context, items: List<String?>) :
     ArrayAdapter<String?>(context, android.R.layout.simple_list_item_single_choice, items) {
-
     private var selectedItemPosition = -1
 
     fun setSelectedItem(position: Int) {

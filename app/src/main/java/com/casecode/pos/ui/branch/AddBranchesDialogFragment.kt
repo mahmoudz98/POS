@@ -17,7 +17,6 @@ import com.casecode.pos.databinding.DialogAddBranchBinding
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-
 /**
  * A Dialog fragment that displays the Add branch in branches fragment.
  */
@@ -25,38 +24,37 @@ class AddBranchesDialogFragment : DialogFragment() {
     companion object {
         const val ADD_BRANCH_TAG = "AddBranchesDialogFragment"
         const val UPDATE_BRANCH_TAG = "updateBranchesDialogFragment"
+
         fun newInstance(): AddBranchesDialogFragment {
             return AddBranchesDialogFragment()
         }
     }
 
+    @Suppress("ktlint:standard:property-naming")
     private var _binding: DialogAddBranchBinding? = null
     private val binding: DialogAddBranchBinding
         get() = _binding!!
     private val businessViewModel by activityViewModels<StepperBusinessViewModel>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
-        if (businessViewModel.isCompact.value == true) {
+        return if (businessViewModel.isCompact.value == true) {
             val builder =
                 MaterialAlertDialogBuilder(requireContext())
             _binding = DialogAddBranchBinding.inflate(layoutInflater)
 
             builder.setView(_binding?.root)
-            return builder.create()
+            builder.create()
         } else {
-
             val dialog = super.onCreateDialog(savedInstanceState)
 
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-            return dialog
+            dialog
         }
-
     }
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
@@ -66,8 +64,10 @@ class AddBranchesDialogFragment : DialogFragment() {
         return _binding?.root
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
@@ -82,7 +82,6 @@ class AddBranchesDialogFragment : DialogFragment() {
         }
     }
 
-
     private fun validateAddBranch() {
         binding.etAddBranchesName.doAfterTextChangedListener { branchNameEditText ->
 
@@ -90,7 +89,6 @@ class AddBranchesDialogFragment : DialogFragment() {
                 binding.tilAddBranchesName.boxStrokeErrorColor
                 binding.tilAddBranchesName.error =
                     getString(R.string.add_branch_name_empty)
-
             } else {
                 binding.tilAddBranchesName.boxStrokeColor =
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
@@ -98,14 +96,14 @@ class AddBranchesDialogFragment : DialogFragment() {
             }
         }
 
-        binding.etAddBranchesPhone.doAfterTextChangedListener { PhoneEditText ->
-            if (TextUtils.isEmpty(PhoneEditText)) {
+        binding.etAddBranchesPhone.doAfterTextChangedListener { phoneEditText ->
+            if (TextUtils.isEmpty(phoneEditText)) {
                 binding.tilAddBranchesPhone.boxStrokeErrorColor
                 binding.tilAddBranchesPhone.error =
                     getString(R.string.all_phone_empty)
-
-            } else if (!PhoneEditText.toString().trim { it <= ' ' }
-                    .matches(Patterns.PHONE.toString().toRegex())) {
+            } else if (!phoneEditText.toString().trim { it <= ' ' }
+                    .matches(Patterns.PHONE.toString().toRegex())
+            ) {
                 binding.tilAddBranchesPhone.error =
                     getString(R.string.all_phone_invalid)
             } else {
@@ -113,9 +111,7 @@ class AddBranchesDialogFragment : DialogFragment() {
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
                 binding.tilAddBranchesPhone.error = null
             }
-
         }
-
     }
 
     private fun initAddAndUpdateBranch() {
@@ -128,7 +124,6 @@ class AddBranchesDialogFragment : DialogFragment() {
         }
 
         binding.btnBranch.setOnClickListener {
-
             if (isValidBranchInput()) {
                 if (tag == ADD_BRANCH_TAG) {
                     businessViewModel.addBranch()
@@ -138,21 +133,17 @@ class AddBranchesDialogFragment : DialogFragment() {
 
                 dismissDialogOrClearContext()
             }
-
         }
     }
-
 
     private fun isValidBranchInput(): Boolean {
         val name = binding.etAddBranchesName.text.toString()
         val phone = binding.etAddBranchesPhone.text.toString()
         // Check login and pass are empty
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone)
-            ||
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) ||
             !phone.trim { it <= ' ' }
                 .matches(Patterns.PHONE.toString().toRegex())
         ) {
-
             if (TextUtils.isEmpty(name)) {
                 binding.tilAddBranchesName.error =
                     getString(R.string.add_branch_name_empty)
@@ -163,7 +154,8 @@ class AddBranchesDialogFragment : DialogFragment() {
             }
 
             if (!phone.trim { it <= ' ' }
-                    .matches(Patterns.PHONE.toString().toRegex())) {
+                    .matches(Patterns.PHONE.toString().toRegex())
+            ) {
                 binding.tilAddBranchesPhone.error =
                     getString(R.string.all_phone_invalid)
             }
@@ -180,9 +172,7 @@ class AddBranchesDialogFragment : DialogFragment() {
         val isCompact = businessViewModel.isCompact.value
         if (isCompact == true) {
             dismiss()
-
         } else {
-
             binding.etAddBranchesName.text = null
             binding.etAddBranchesPhone.text = null
         }
@@ -199,5 +189,3 @@ class AddBranchesDialogFragment : DialogFragment() {
         _binding = null
     }
 }
-
-

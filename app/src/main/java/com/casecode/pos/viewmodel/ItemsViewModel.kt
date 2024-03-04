@@ -22,302 +22,308 @@ import javax.inject.Inject
  * @constructor Creates an [ItemsViewModel] with the provided [itemUseCase] and [imageUseCase].
  */
 @HiltViewModel
-class ItemsViewModel @Inject constructor(
-    private val itemUseCase: ItemUseCase,
-    private val imageUseCase: ImageUseCase
-) : ViewModel() {
+class ItemsViewModel
+    @Inject
+    constructor(
+        private val itemUseCase: ItemUseCase,
+        private val imageUseCase: ImageUseCase,
+    ) : ViewModel() {
+        // LiveData for items
+        private val _items = MutableLiveData<Resource<List<Item>>>()
+        val items: LiveData<Resource<List<Item>>> = _items
 
-    // LiveData for items
-    private val _items = MutableLiveData<Resource<List<Item>>>()
-    val items: LiveData<Resource<List<Item>>> = _items
+        // LiveData for item action state
+        private val _itemActionState = MutableLiveData<Resource<String>>()
+        val itemActionState: LiveData<Resource<String>> = _itemActionState
 
-    // LiveData for item action state
-    private val _itemActionState = MutableLiveData<Resource<String>>()
-    val itemActionState: LiveData<Resource<String>> = _itemActionState
+        // LiveData for individual item
+        private val _item = MutableLiveData<Item?>()
+        val item: LiveData<Item?> = _item
 
-    // LiveData for individual item
-    private val _item = MutableLiveData<Item?>()
-    val item: LiveData<Item?> = _item
+        // LiveData for bitmap image
+        private val _bitmap = MutableLiveData<Bitmap?>()
+        val bitmap: LiveData<Bitmap?> = _bitmap
 
-    // LiveData for bitmap image
-    private val _bitmap = MutableLiveData<Bitmap?>()
-    val bitmap: LiveData<Bitmap?> = _bitmap
+        /**
+         * Uploads an image and adds an item.
+         *
+         * @param bitmap The bitmap image to upload.
+         * @param item The item to add.
+         */
+        fun uploadImageAndAddItem(
+            bitmap: Bitmap,
+            item: Item,
+        ) {
+            viewModelScope.launch {
+                _itemActionState.value = Resource.loading()
 
-    /**
-     * Uploads an image and adds an item.
-     *
-     * @param bitmap The bitmap image to upload.
-     * @param item The item to add.
-     */
-    fun uploadImageAndAddItem(bitmap: Bitmap, item: Item) {
-        viewModelScope.launch {
-            _itemActionState.value = Resource.Loading("Uploading image...")
+                when (val result = imageUseCase.uploadImage(bitmap = bitmap, imageName = item.sku)) {
+                    is Resource.Empty -> TODO()
+                    is Resource.Error -> {
+                        // Handle error case
+                        Timber.e("Error uploading image: ${result.data}")
+                        _itemActionState.value =
+                            Resource.Error(result.message ?: "Unknown error occurred")
+                    }
 
-            when (val result = imageUseCase.uploadImage(bitmap = bitmap, imageName = item.sku)) {
-                is Resource.Empty -> TODO()
-                is Resource.Error -> {
-                    // Handle error case
-                    Timber.e("Error uploading image: ${result.data}")
-                    _itemActionState.value =
-                        Resource.Error(result.message ?: "Unknown error occurred")
-                }
+                    is Resource.Loading -> {
+                        // Handle loading state if necessary
+                    }
 
-                is Resource.Loading -> {
-                    // Handle loading state if necessary
-                }
+                    is Resource.Success -> {
+                        // Handle success case
+                        val imageUrl = result.data
+                        // Now you can use the imageUrl as needed, e.g., updating the item object
+                        item.imageUrl = imageUrl
 
-                is Resource.Success -> {
-                    // Handle success case
-                    val imageUrl = result.data
-                    // Now you can use the imageUrl as needed, e.g., updating the item object
-                    item.imageUrl = imageUrl
-
-                    // Now you can add the item
-                    addItem(item)
-                }
-            }
-        }
-    }
-
-    /**
-     * Uploads an image and updates an item.
-     *
-     * @param bitmap The bitmap image to upload.
-     * @param item The item to update.
-     */
-    fun uploadImageAndUpdateItem(bitmap: Bitmap, item: Item) {
-        viewModelScope.launch {
-            _itemActionState.value = Resource.Loading("Uploading image...")
-
-            when (val result = imageUseCase.uploadImage(bitmap = bitmap, imageName = item.sku)) {
-                is Resource.Empty -> TODO()
-                is Resource.Error -> {
-                    // Handle error case
-                    Timber.e("Error uploading image: ${result.data}")
-                    _itemActionState.value =
-                        Resource.Error(result.message ?: "Unknown error occurred")
-                }
-
-                is Resource.Loading -> {
-                    // Handle loading state if necessary
-                }
-
-                is Resource.Success -> {
-                    // Handle success case
-                    val imageUrl = result.data
-                    // Now you can use the imageUrl as needed, e.g., updating the item object
-                    item.imageUrl = imageUrl
-
-                    // Now you can add the item
-                    updateItem(item)
+                        // Now you can add the item
+                        addItem(item)
+                    }
                 }
             }
         }
-    }
 
-    /**
-     * Deletes an image and deletes an item.
-     *
-     * @param item The item to delete.
-     */
-    fun deleteImageAndDeleteItem(item: Item) {
-        viewModelScope.launch {
-            _itemActionState.value = Resource.Loading("Deleting image...")
+        /**
+         * Uploads an image and updates an item.
+         *
+         * @param bitmap The bitmap image to upload.
+         * @param item The item to update.
+         */
+        fun uploadImageAndUpdateItem(
+            bitmap: Bitmap,
+            item: Item,
+        ) {
+            viewModelScope.launch {
+                _itemActionState.value = Resource.loading()
 
-            when (val result = imageUseCase.deleteImage(imageUrl = item.imageUrl.toString())) {
-                is Resource.Empty -> TODO()
-                is Resource.Error -> {
-                    // Handle error case
-                    _itemActionState.value =
-                        Resource.Error(result.message ?: "Unknown error occurred")
-                }
+                when (val result = imageUseCase.uploadImage(bitmap = bitmap, imageName = item.sku)) {
+                    is Resource.Empty -> TODO()
+                    is Resource.Error -> {
+                        // Handle error case
+                        Timber.e("Error uploading image: ${result.data}")
+                        _itemActionState.value =
+                            Resource.Error(result.message ?: "Unknown error occurred")
+                    }
 
-                is Resource.Loading -> {
-                    // Handle loading state if necessary
-                    TODO()
-                }
+                    is Resource.Loading -> {
+                        // Handle loading state if necessary
+                    }
 
-                is Resource.Success -> {
-                    // Handle success case
-                    Timber.e(result.data)
-                    // Image deleted successfully, now delete the item
-                    deleteItem(item)
-                }
-            }
-        }
-    }
+                    is Resource.Success -> {
+                        // Handle success case
+                        val imageUrl = result.data
+                        // Now you can use the imageUrl as needed, e.g., updating the item object
+                        item.imageUrl = imageUrl
 
-    /**
-     * Adds an item.
-     *
-     * @param item The item to add.
-     */
-    fun addItem(item: Item) {
-        viewModelScope.launch {
-            when (val result = itemUseCase.addItem(item)) {
-                is Resource.Empty -> TODO()
-                is Resource.Error -> {
-                    // Handle error case
-                    Timber.e(result.message.toString())
-                    _itemActionState.value =
-                        Resource.Error(result.message ?: "Unknown error occurred")
-                }
-
-                is Resource.Loading -> {
-                    // Handle loading state if necessary
-                }
-
-                is Resource.Success -> {
-                    // Handle success case
-                    // Item added successfully
-                    Timber.i(message = result.data)
-                    _itemActionState.value = Resource.Success(result.data)
-
-                    // Fetch items again to refresh the list
-                    fetchItems("nRoH5pcgCsbMIHVa6tmN3wkEPFL2")
+                        // Now you can add the item
+                        updateItem(item)
+                    }
                 }
             }
         }
-    }
 
-    /**
-     * Updates an item.
-     *
-     * @param item The item to update.
-     */
-    fun updateItem(item: Item) {
-        viewModelScope.launch {
-            when (val result = itemUseCase.updateItem(item)) {
-                is Resource.Empty -> TODO()
-                is Resource.Error -> {
-                    // Handle error case
-                    Timber.e(result.message.toString())
-                    _itemActionState.value =
-                        Resource.Error(result.message ?: "Unknown error occurred")
-                }
+        /**
+         * Deletes an image and deletes an item.
+         *
+         * @param item The item to delete.
+         */
+        fun deleteImageAndDeleteItem(item: Item) {
+            viewModelScope.launch {
+                _itemActionState.value = Resource.loading()
 
-                is Resource.Loading -> {
-                    // Handle loading state if necessary
-                    TODO()
-                }
+                when (val result = imageUseCase.deleteImage(imageUrl = item.imageUrl.toString())) {
+                    is Resource.Empty -> TODO()
+                    is Resource.Error -> {
+                        // Handle error case
+                        _itemActionState.value =
+                            Resource.Error(result.message ?: "Unknown error occurred")
+                    }
 
-                is Resource.Success -> {
-                    // Handle success case
-                    // Item updated successfully
-                    Timber.i(message = result.data)
-                    _itemActionState.value = Resource.Success(result.data)
+                    is Resource.Loading -> {
+                        // Handle loading state if necessary
+                        TODO()
+                    }
 
-                    // Fetch items again to refresh the list
-                    fetchItems("nRoH5pcgCsbMIHVa6tmN3wkEPFL2")
+                    is Resource.Success -> {
+                        // Handle success case
+                        Timber.e(result.data)
+                        // Image deleted successfully, now delete the item
+                        deleteItem(item)
+                    }
                 }
             }
         }
-    }
 
-    /**
-     * Deletes an item.
-     *
-     * @param item The item to delete.
-     */
-    fun deleteItem(item: Item) {
-        viewModelScope.launch {
-            when (val result = itemUseCase.deleteItem(item)) {
-                is Resource.Empty -> TODO()
-                is Resource.Error -> {
-                    // Handle error case
-                    Timber.e(result.message.toString())
-                    _itemActionState.value =
-                        Resource.Error(result.message ?: "Unknown error occurred")
-                }
+        /**
+         * Adds an item.
+         *
+         * @param item The item to add.
+         */
+        fun addItem(item: Item) {
+            viewModelScope.launch {
+                when (val result = itemUseCase.addItem(item)) {
+                    is Resource.Empty -> TODO()
+                    is Resource.Error -> {
+                        // Handle error case
+                        Timber.e(result.message.toString())
+                        _itemActionState.value =
+                            Resource.Error(result.message ?: "Unknown error occurred")
+                    }
 
-                is Resource.Loading -> {
-                    // Handle loading state if necessary
-                }
+                    is Resource.Loading -> {
+                        // Handle loading state if necessary
+                    }
 
-                is Resource.Success -> {
-                    // Handle success case
-                    // Item deleted successfully
-                    Timber.i(result.data)
-                    _itemActionState.value = Resource.Success(result.data)
+                    is Resource.Success -> {
+                        // Handle success case
+                        // Item added successfully
+                        Timber.i(message = result.data)
+                        _itemActionState.value = Resource.Success(result.data)
 
-                    fetchItems("nRoH5pcgCsbMIHVa6tmN3wkEPFL2")
-                }
-            }
-        }
-    }
-
-    init {
-        fetchItems("nRoH5pcgCsbMIHVa6tmN3wkEPFL2")
-    }
-
-    /**
-     * Fetches items for the specified user ID.
-     *
-     * @param uid The user ID.
-     */
-    private fun fetchItems(uid: String) {
-        viewModelScope.launch {
-            when (val result = itemUseCase.getItems(uid)) {
-                is Resource.Empty -> {
-                    Timber.e("fetch items is empty data!.")
-                    _items.value = Resource.Empty()
-                }
-
-                is Resource.Error -> {
-                    Timber.e(result.message.toString())
-                    _items.value = Resource.Error(result.message)
-                }
-
-                is Resource.Loading -> {
-                    // Handle loading state if necessary
-                }
-
-                is Resource.Success -> {
-                    Timber.i(result.data.toString())
-                    _items.value = Resource.Success(result.data)
+                        // Fetch items again to refresh the list
+                        fetchItems()
+                    }
                 }
             }
         }
+
+        /**
+         * Updates an item.
+         *
+         * @param item The item to update.
+         */
+        fun updateItem(item: Item) {
+            viewModelScope.launch {
+                when (val result = itemUseCase.updateItem(item)) {
+                    is Resource.Empty -> TODO()
+                    is Resource.Error -> {
+                        // Handle error case
+                        Timber.e(result.message.toString())
+                        _itemActionState.value =
+                            Resource.Error(result.message ?: "Unknown error occurred")
+                    }
+
+                    is Resource.Loading -> {
+                        // Handle loading state if necessary
+                        TODO()
+                    }
+
+                    is Resource.Success -> {
+                        // Handle success case
+                        // Item updated successfully
+                        Timber.i(message = result.data)
+                        _itemActionState.value = Resource.Success(result.data)
+
+                        // Fetch items again to refresh the list
+                        fetchItems()
+                    }
+                }
+            }
+        }
+
+        /**
+         * Deletes an item.
+         *
+         * @param item The item to delete.
+         */
+        fun deleteItem(item: Item) {
+            viewModelScope.launch {
+                when (val result = itemUseCase.deleteItem(item)) {
+                    is Resource.Empty -> TODO()
+                    is Resource.Error -> {
+                        // Handle error case
+                        Timber.e(result.message.toString())
+                        _itemActionState.value =
+                            Resource.Error(result.message ?: "Unknown error occurred")
+                    }
+
+                    is Resource.Loading -> {
+                        // Handle loading state if necessary
+                    }
+
+                    is Resource.Success -> {
+                        // Handle success case
+                        // Item deleted successfully
+                        Timber.i(result.data)
+                        _itemActionState.value = Resource.Success(result.data)
+
+                        fetchItems()
+                    }
+                }
+            }
+        }
+
+        init {
+            fetchItems()
+        }
+
+        /**
+         * Fetches items for the specified user ID.
+         *
+         * @param uid The user ID.
+         */
+        private fun fetchItems() {
+            viewModelScope.launch {
+                when (val result = itemUseCase.getItems()) {
+                    is Resource.Empty -> {
+                        Timber.e("fetch items is empty data!.")
+                        _items.value = Resource.Empty()
+                    }
+
+                    is Resource.Error -> {
+                        Timber.e(result.message.toString())
+                        _items.value = Resource.Error(result.message)
+                    }
+
+                    is Resource.Loading -> {
+                        // Handle loading state if necessary
+                    }
+
+                    is Resource.Success -> {
+                        Timber.i(result.data.toString())
+                        _items.value = Resource.Success(result.data)
+                    }
+                }
+            }
+        }
+
+        /**
+         * Sets the currently selected item.
+         *
+         * @param item The item to set.
+         */
+        fun setItem(item: Item) {
+            _item.value = item
+        }
+
+        /**
+         * Sets the bitmap image.
+         *
+         * @param bitmap The bitmap image to set.
+         */
+        fun setBitmap(bitmap: Bitmap) {
+            _bitmap.value = bitmap
+        }
+
+        /**
+         * Retrieves the currently selected item.
+         *
+         * @return The currently selected item.
+         */
+        fun getItem() = item.value
+
+        /**
+         * Retrieves the bitmap image.
+         *
+         * @return The bitmap image.
+         */
+        fun getBitmap() = bitmap.value
+
+        /**
+         * Define clearData method to reset ViewModel data
+         */
+        fun clearData() {
+            _item.value = null
+            _bitmap.value = null
+        }
     }
-
-    /**
-     * Sets the currently selected item.
-     *
-     * @param item The item to set.
-     */
-    fun setItem(item: Item) {
-        _item.value = item
-    }
-
-    /**
-     * Sets the bitmap image.
-     *
-     * @param bitmap The bitmap image to set.
-     */
-    fun setBitmap(bitmap: Bitmap) {
-        _bitmap.value = bitmap
-    }
-
-    /**
-     * Retrieves the currently selected item.
-     *
-     * @return The currently selected item.
-     */
-    fun getItem() = item.value
-
-    /**
-     * Retrieves the bitmap image.
-     *
-     * @return The bitmap image.
-     */
-    fun getBitmap() = bitmap.value
-
-    /**
-     * Define clearData method to reset ViewModel data
-     */
-    fun clearData() {
-        _item.value = null
-        _bitmap.value = null
-    }
-
-}

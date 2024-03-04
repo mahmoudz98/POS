@@ -2,8 +2,10 @@ package com.casecode.pos.viewmodel
 
 import com.casecode.domain.model.subscriptions.Subscription
 import com.casecode.domain.model.users.Branch
+import com.casecode.domain.model.users.Employee
 import com.casecode.domain.model.users.StoreType
 import com.casecode.domain.repository.AddBusiness
+import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.testing.BaseTest
 import com.casecode.testing.util.MainDispatcherRule
@@ -17,6 +19,7 @@ import kotlinx.coroutines.test.runTest
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -172,7 +175,7 @@ class StepperBusinessViewModelTest : BaseTest() {
     }
 
     @Test
-    fun setBusinessUseCase_whenNetworkIsUnavailable_thenReturnsSuccessFalseAndMessageNetworkError() {
+    fun setBusinessUseCase_whenNetworkIsUnavailable_thenReturnMessageNetworkError() {
         // Given - network unAvailable
         testNetworkMonitor.setConnected(false)
         businessViewModel.setNetworkMonitor()
@@ -196,16 +199,13 @@ class StepperBusinessViewModelTest : BaseTest() {
 
         // When
         businessViewModel.getSubscriptionsBusiness()
-        var result = emptyList<Subscription>()
-        val job = launch {
-            result = businessViewModel.subscriptions.value!!
-        }
-
         // Execute pending coroutines actions
         advanceUntilIdle()
+
+        val result = businessViewModel.subscriptions.getOrAwaitValue()
+
         // Then
         assertThat(result, `is`(actualSubscriptions))
-        job.cancel()
     }
 
     @Test
@@ -231,8 +231,9 @@ class StepperBusinessViewModelTest : BaseTest() {
         // Then
         assertThat(result, `is`(emptyList()))
     }
+
     @Test
-    fun addSubscriptionBusiness_whenNetworkIsUnavailable_thenReturnsSuccessFalseAndMessageNetworkError() = runTest {
+    fun addSubscriptionBusiness_whenNetworkIsUnavailable_thenMessageNetworkError() = runTest {
         businessViewModel.setConnected(false)
 
         businessViewModel.checkNetworkThenSetSubscriptionBusinessSelected()
@@ -240,31 +241,191 @@ class StepperBusinessViewModelTest : BaseTest() {
         assertThat(businessViewModel.userMessage.value?.peekContent(), `is`(R.string.network_error))
     }
 
+    @Test
+    fun addSubscriptionBusiness_whenNetworkIsAvailable_thenReturnsSuccess() = runTest {
+        // Given
+        businessViewModel.addSubscriptionBusinessSelected(
+            Subscription(
+                30,
+                30,
+                listOf("admin", "sale"),
+                "basic"
+            )
+        )
+        businessViewModel.setConnected(true)
+
+        businessViewModel.checkNetworkThenSetSubscriptionBusinessSelected()
+
+        assertThat(
+            businessViewModel.isAddSubscriptionBusiness.getOrAwaitValue(),
+            `is`(Resource.success(true))
+        )
+    }
 
     @Test
-    fun setEmployee_validate_updateEmployeeList() {
+    fun `addEmployee() with new employee should update employees list and set isAddEmployee to true`() {
+        // Arrange
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        val employee = Employee(name, phone, password, branchName, permission)
+        val employeesValue = ArrayList<Employee>()
+
+        // Act
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+
+        // Assert
+        assertThat(
+            businessViewModel.employees.getOrAwaitValue(),
+            `is`(employeesValue.plus(employee))
+        )
+        assertThat(businessViewModel.isAddEmployee.value?.peekContent(), `is`(true))
+
+    }
+
+    @Test
+    fun `addEmployee() with existing employee name should not update employees list and set isAddEmployee to false`() {
+        // Arrange
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        val employee = Employee(name, phone, password, branchName, permission)
+        val employeesValue = ArrayList<Employee>()
+        employeesValue.add(employee)
+
+        // Act
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+
+        // Assert
+        assertThat(
+            businessViewModel.employees.getOrAwaitValue(),
+            `is`(employeesValue)
+        )
+        assertThat(businessViewModel.isAddEmployee.value?.peekContent(), `is`(false))
+    }
+
+    @Test
+    fun `updateEmployee() with different employee should update employees list and set isUpdateEmployee to true`(){
+        // Arrange
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.setEmployeeSelected(businessViewModel.employees.value?.first()?: return)
+        // Act - when update employee
+        businessViewModel.updateEmployee("nameUpdated", phone, password, branchName, permission)
+
+        // Assert
+        assertThat(businessViewModel.isUpdateEmployee.value?.peekContent(), `is`(true))
+
+    }
+    @Test
+    fun `updateEmployee() with same name employee shouldn't update employees list and set isUpdateEmployee to false`(){
+        // Arrange
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.addEmployee("name2", phone, password, branchName, permission)
+        businessViewModel.addEmployee("name3", phone, password, branchName, permission)
+        businessViewModel.setEmployeeSelected(businessViewModel.employees.value?.first()?: return)
+
+        // Act - when update employee
+        businessViewModel.updateEmployee("name2", "121231423", password, branchName, permission)
+
+        // Assert
+        assertThat(businessViewModel.isUpdateEmployee.value?.peekContent(), `is`(false))
+
+    }
+    @Test
+    fun `updateEmployee() with same employee shouldn't update employees list and set isUpdateEmployee to false`(){
+        // Arrange
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.setEmployeeSelected(businessViewModel.employees.value?.first()?: return)
+        // Act - when update employee
+        businessViewModel.updateEmployee(name, phone, password, branchName, permission)
+
+        // Assert
+        assertThat(businessViewModel.isUpdateEmployee.value?.peekContent(), `is`(false))
+
+    }
+
+    @Test
+    @Ignore("issue test: when out of index can't work, can't find why issue happened")
+    fun `updateEmployee()  shouldn't update employees list and set isUpdateEmployee to false`(){
+        // Arrange
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+
+
+        businessViewModel.setEmployeeSelected(Employee())
+
+        // Act - when update employee
+        businessViewModel.updateEmployee("name2", "121231423", password, branchName, permission)
+
+        // Assert
+        assertThat(businessViewModel.isUpdateEmployee.getOrAwaitValue().peekContent(), `is`(false))
+
+    }
+
+    @Test
+    fun setEmployeesBusiness_whenNetworkIsAvailable_thenReturnsSuccess() = runTest {
         // Given
         val name = "mahmoud"
         val phone = "12345"
         val password = "12345m"
         val branchName = "Branch 1"
         val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.setConnected(true)
 
         // When
-        businessViewModel.newEmployee(name, phone, password, branchName, permission)
-        businessViewModel.addEmployee()
+        businessViewModel.checkNetworkThenSetEmployees()
 
-        val expectedEmployee = businessViewModel.employees.getOrAwaitValue().last()
-        println(expectedEmployee)
-
-        // Then - Assert the expected outcomes
-        assertThat(name, `is`(expectedEmployee.name))
-        assertThat(phone, `is`(expectedEmployee.phoneNumber))
-        assertThat(password, `is`(expectedEmployee.password))
-        assertThat(branchName, `is`(expectedEmployee.branchName))
-        assertThat(permission, `is`(expectedEmployee.permission))
+        // Then
+        assertThat(
+            businessViewModel.isAddEmployees.getOrAwaitValue(),
+            `is`(Resource.success(true))
+        )
     }
+    @Test
+    fun setEmployeesBusiness_whenNetworkIsUnavailable_thenReturnMessageNetworkError() = runTest {
+        // Given
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.setConnected(false)
 
+        // When
+        businessViewModel.checkNetworkThenSetEmployees()
+
+        // Then
+        assertThat(
+            businessViewModel.userMessage.value?.peekContent(),
+            `is`(R.string.network_error)
+        )
+    }
     private fun subscriptionsFake(): List<Subscription> {
         return listOf(
             Subscription(

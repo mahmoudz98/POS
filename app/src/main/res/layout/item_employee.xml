@@ -16,7 +16,7 @@
 
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_employee_permission"
+            android:id="@+id/tv_employee_permission_branch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.pos.TitleSmall"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.pos.BodyLarge"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_employee_permission"
+            app:layout_constraintTop_toBottomOf="@+id/tv_employee_permission_branch"
             android:text="@{employee.name}"
 
             tools:text="bracnh: 1" />
