@@ -2,8 +2,9 @@ package com.casecode.domain.repository
 
 import com.casecode.domain.model.users.Item
 import com.casecode.domain.utils.Resource
+import kotlinx.coroutines.flow.Flow
 
-typealias GetItem = Resource<List<Item>>
+typealias Items = Resource<List<Item>>
 typealias AddItem = Resource<String>
 typealias UpdateItem = Resource<String>
 typealias DeleteItem = Resource<String>
@@ -15,10 +16,9 @@ interface ItemRepository {
     /**
      * Retrieves items associated with the specified user ID [uid].
      *
-     * @param uid The user ID for which items are to be retrieved.
-     * @return A [GetItem] resource containing the retrieved items.
+     * @return A [Items] resource containing the retrieved items.
      */
-    suspend fun getItems(): GetItem
+    fun getItems(): Flow<Items>
 
     /**
      * Adds a new item to the repository.

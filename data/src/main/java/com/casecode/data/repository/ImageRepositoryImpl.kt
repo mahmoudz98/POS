@@ -8,6 +8,7 @@ import com.casecode.domain.repository.ImageRepository
 import com.casecode.domain.repository.ReplaceImage
 import com.casecode.domain.repository.UploadImage
 import com.casecode.domain.utils.Resource
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
@@ -22,9 +23,13 @@ import javax.inject.Inject
  * @property ioDispatcher CoroutineDispatcher for performing operations in the background.
  */
 class ImageRepositoryImpl @Inject constructor(
+    private val auth: FirebaseAuth,
     private val firebaseStorage: FirebaseStorage,
     @Dispatcher(AppDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
 ) : ImageRepository {
+
+    private val currentUserId: String
+        get() = auth.currentUser?.uid.orEmpty()
 
     /**
      * Uploads an image to Firebase Storage.
@@ -37,7 +42,8 @@ class ImageRepositoryImpl @Inject constructor(
         return withContext(ioDispatcher) {
             try {
                 // Get a reference to the Firebase Storage location
-                val storageRef = firebaseStorage.getReference("images/$imageName")
+                val storageRef =
+                    firebaseStorage.getReference("item/images/$currentUserId/$imageName")
 
                 // Convert bitmap to byte array
                 val baos = ByteArrayOutputStream()
