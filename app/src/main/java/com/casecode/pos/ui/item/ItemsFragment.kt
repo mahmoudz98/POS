@@ -7,17 +7,14 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.casecode.domain.model.users.Item
-import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.adapter.ItemInteractionAdapter
 import com.casecode.pos.databinding.FragmentItemsBinding
 import com.casecode.pos.utils.setupToast
-import com.casecode.pos.utils.showToast
 import com.casecode.pos.viewmodel.ItemsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -59,6 +56,7 @@ class ItemsFragment : Fragment() {
         initObserve()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_items_fragment, menu)
         val searchItem = menu.findItem(R.id.action_search)

@@ -14,7 +14,7 @@ typealias DeleteItem = Resource<Int>
  */
 interface ItemRepository {
     /**
-     * Retrieves items associated with the specified user ID [uid].
+     * Retrieves items associated with the specified user ID.
      *
      * @return A [Items] resource containing the retrieved items.
      */
