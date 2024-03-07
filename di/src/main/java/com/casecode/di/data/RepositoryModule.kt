@@ -43,7 +43,7 @@ abstract class RepositoryModule {
     internal abstract fun bindSubscriptionsRepo(subscriptionsRepositoryImpl: SubscriptionsRepositoryImpl): SubscriptionsRepository
 
     @Binds
-    internal abstract fun bindProductRepo(productRepositoryImpl: ItemRepositoryImpl): ItemRepository
+    internal abstract fun bindItemRepo(itemRepositoryImpl: ItemRepositoryImpl): ItemRepository
 
     @Binds
     internal abstract fun bindImageRepo(productRepositoryImpl: ImageRepositoryImpl): ImageRepository

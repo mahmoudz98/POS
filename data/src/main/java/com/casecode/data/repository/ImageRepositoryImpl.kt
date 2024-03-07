@@ -181,7 +181,7 @@ class ImageRepositoryImpl @Inject constructor(
     }
 
     companion object {
-        private val TAG = ItemRepositoryImpl::class.java.simpleName
+        private val TAG = ImageRepositoryImpl::class.java.simpleName
     }
 
 }

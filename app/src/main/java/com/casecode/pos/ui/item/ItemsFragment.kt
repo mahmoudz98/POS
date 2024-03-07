@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.casecode.domain.model.users.Item
 import com.casecode.pos.R
@@ -150,8 +151,8 @@ class ItemsFragment : Fragment() {
     }
 
     private fun showQRCodeDialog(item: Item) {
-        val dialogFragment = QRCodeDialogFragment(item)
-        dialogFragment.show(childFragmentManager, "QRCodeDialog")
+        val action = ItemsFragmentDirections.actionItemsFragmentToQRCodeDialogFragment(item)
+        findNavController().navigate(action)
     }
 
     private fun setupToast() {
@@ -180,6 +181,10 @@ class ItemsFragment : Fragment() {
 
     private fun hideEmptyView() {
         binding.emptyView.root.visibility = View.GONE
+    }
+
+    companion object {
+        private val TAG = ItemsFragment::class.java.simpleName
     }
 
 }

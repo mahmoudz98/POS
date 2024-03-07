@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.pos.android.hilt)
     alias(libs.plugins.pos.android.firebase)
+    alias(libs.plugins.navigation.safeargs.kotlin)
 }
 
 android {

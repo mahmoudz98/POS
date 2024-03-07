@@ -1,5 +1,9 @@
 package com.casecode.domain.model.users
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
 /**
  * Represents an item in inventory or a product.
  *
@@ -11,14 +15,15 @@ package com.casecode.domain.model.users
  * @property imageUrl The URL of the image associated with the item. Default is null.
  * @constructor Creates an item with default values for name, price, quantity, and imageUrl.
  */
+@Parcelize
 data class Item(
     val name: String,
     val price: Double = 0.0,
     val quantity: Double = 0.0,
     val sku: String,
     var unitOfMeasurement: String?,
-    var imageUrl: String? = null
-) {
+    var imageUrl: String? = null,
+) : Parcelable {
     /**
      * Secondary constructor to create an empty item.
      */
