@@ -40,3 +40,15 @@ fun View.setupSnackbar(
 fun View.showToast(toastText: String, duration: Int) {
     Toast.makeText(context, toastText, duration).show()
 }
+
+fun View.setupToast(
+    lifecycleOwner: LifecycleOwner,
+    toastEvent: LiveData<Event<Int>>,
+    duration: Int,
+) {
+    toastEvent.observe(lifecycleOwner) { event ->
+        event.getContentIfNotHandled()?.let {
+            showToast(context.getString(it), duration)
+        }
+    }
+}

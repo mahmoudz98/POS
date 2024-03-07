@@ -5,7 +5,7 @@ import com.casecode.domain.utils.Resource
 
 typealias UploadImage = Resource<String>
 typealias ReplaceImage = Resource<String>
-typealias DeleteImage = Resource<String>
+typealias DeleteImage = Resource<Int>
 
 /**
  * An interface defining methods for image operations such as uploading, replacing, and deleting images.

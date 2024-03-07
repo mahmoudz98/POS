@@ -5,9 +5,9 @@ import com.casecode.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 typealias Items = Resource<List<Item>>
-typealias AddItem = Resource<String>
-typealias UpdateItem = Resource<String>
-typealias DeleteItem = Resource<String>
+typealias AddItem = Resource<Int>
+typealias UpdateItem = Resource<Int>
+typealias DeleteItem = Resource<Int>
 
 /**
  * An interface defining methods for CRUD operations on items.

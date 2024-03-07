@@ -16,9 +16,11 @@ import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.adapter.ItemInteractionAdapter
 import com.casecode.pos.databinding.FragmentItemsBinding
+import com.casecode.pos.utils.setupToast
 import com.casecode.pos.utils.showToast
 import com.casecode.pos.viewmodel.ItemsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -32,7 +34,7 @@ class ItemsFragment : Fragment() {
     private val itemInteractionAdapter = ItemInteractionAdapter(
         onItemClick = { item -> showItemDialog(isUpdate = true, item = item) },
         onItemLongClick = { item -> deleteItem(item = item) },
-        onPrintButtonClick = { item -> showQRCodeDialog(item = item) }
+        onPrintButtonClick = { item -> showQRCodeDialog(item = item) },
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +44,7 @@ class ItemsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentItemsBinding.inflate(inflater, container, false)
         return binding.root
@@ -50,13 +52,11 @@ class ItemsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setupRecyclerView()
-
         binding.floatingAddItem.setOnClickListener { showItemDialog() }
-        observeItems()
+        initObserve()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -65,16 +65,18 @@ class ItemsFragment : Fragment() {
         val searchView = searchItem.actionView as SearchView
         searchView.queryHint = getString(R.string.search_hint)
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+        searchView.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { itemInteractionAdapter.filterItems(it) }
-                return true
-            }
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let { itemInteractionAdapter.filterItems(it) }
+                    return true
+                }
+            },
+        )
 
         // Hide the action_main_profile menu item
         val profileMenuItem = menu.findItem(R.id.action_main_profile)
@@ -88,12 +90,42 @@ class ItemsFragment : Fragment() {
         }
     }
 
-    private fun observeItems() {
-        viewModel.items.observe(viewLifecycleOwner) { result ->
-            handleItems(result)
+    private fun initObserve() {
+        // is loading
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) showLoading() else hideLoading()
         }
-        viewModel.itemActionState.observe(viewLifecycleOwner) { state ->
-            handleItemActionState(state)
+
+        // show message for user
+        setupToast()
+
+        observeFetchItems()
+    }
+
+    private fun observeFetchItems() {
+        // is success
+        viewModel.items.observe(viewLifecycleOwner) { result ->
+            itemInteractionAdapter.submitList(result.toMutableList())
+        }
+        // is empty
+        viewModel.isEmptyFetchItems.observe(viewLifecycleOwner) { isEmpty ->
+            if (isEmpty) {
+                showEmptyView()
+                hideRecyclerView()
+            } else {
+                hideEmptyView()
+                showRecyclerView()
+            }
+        }
+        // is error
+        viewModel.isErrorFetchItems.observe(viewLifecycleOwner) { isError ->
+            if (isError) {
+                showEmptyView()
+                hideRecyclerView()
+            } else {
+                hideEmptyView()
+                showRecyclerView()
+            }
         }
     }
 
@@ -119,65 +151,37 @@ class ItemsFragment : Fragment() {
         builder.create().show()
     }
 
-    private fun showMessage(message: String) {
-        binding.apply {
-            root.showToast(message, Toast.LENGTH_SHORT)
-            progressBar.visibility = View.GONE
-        }
-    }
-
     private fun showQRCodeDialog(item: Item) {
         val dialogFragment = QRCodeDialogFragment(item)
         dialogFragment.show(childFragmentManager, "QRCodeDialog")
     }
 
-    private fun handleItems(result: Resource<List<Item>>) {
-        when (result) {
-            is Resource.Empty -> showEmptyView()
-            is Resource.Error -> {
-                showMessage(result.message.toString())
-                binding.emptyView.root.visibility = View.VISIBLE
-            }
-
-            is Resource.Loading -> showLoading()
-            is Resource.Success -> {
-                showRecyclerView()
-                itemInteractionAdapter.submitList(result.data.toMutableList())
-            }
-        }
-    }
-
-    private fun handleItemActionState(state: Resource<Any>) {
-        when (state) {
-            is Resource.Empty -> showMessage(getString(R.string.item_action_state_empty))
-            is Resource.Error -> showMessage(state.message.toString())
-            is Resource.Loading -> showLoading()
-            is Resource.Success -> showMessage(state.data.toString())
-        }
-    }
-
-    private fun showEmptyView() {
-        binding.apply {
-            emptyView.root.visibility = View.VISIBLE
-            recyclerItems.visibility = View.GONE
-            progressBar.visibility = View.GONE
-        }
+    private fun setupToast() {
+        binding.root.setupToast(viewLifecycleOwner, viewModel.userMessage, Snackbar.LENGTH_LONG)
     }
 
     private fun showRecyclerView() {
-        binding.apply {
-            emptyView.root.visibility = View.GONE
-            recyclerItems.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
-        }
+        binding.recyclerItems.visibility = View.VISIBLE
+    }
+
+    private fun hideRecyclerView() {
+        binding.recyclerItems.visibility = View.GONE
     }
 
     private fun showLoading() {
-        binding.apply {
-            emptyView.root.visibility = View.GONE
-            recyclerItems.visibility = View.VISIBLE
-            progressBar.visibility = View.VISIBLE
-        }
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.GONE
+    }
+
+    private fun showEmptyView() {
+        binding.emptyView.root.visibility = View.VISIBLE
+    }
+
+    private fun hideEmptyView() {
+        binding.emptyView.root.visibility = View.GONE
     }
 
 }

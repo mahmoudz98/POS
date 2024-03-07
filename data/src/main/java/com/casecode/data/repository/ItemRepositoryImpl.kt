@@ -12,6 +12,7 @@ import com.casecode.domain.repository.UpdateItem
 import com.casecode.domain.utils.ITEMS_COLLECTION_PATH
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
+import com.casecode.pos.data.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.net.UnknownHostException
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -50,7 +52,6 @@ class ItemRepositoryImpl @Inject constructor(
             awaitClose { auth.removeAuthStateListener(listener) }
         }.flowOn(ioDispatcher)
 
-
     /**
      * Retrieves items associated with the specified user ID.
      *
@@ -64,30 +65,31 @@ class ItemRepositoryImpl @Inject constructor(
 
             // Query Firestore to retrieve all items for the given UID
             val itemQuerySnapshot =
-                firestore.collection(USERS_COLLECTION_PATH).document(currentUserId)
-                    .collection(ITEMS_COLLECTION_PATH).get().addOnSuccessListener { result ->
-                        // Loop through the query results and convert each document to an Item object
-                        for (document in result.documents) {
-                            val item = document.toObject(Item::class.java)
-                            item?.let {
-                                // Retrieve the imageUrl from the document data
-                                val imageUrl = document.getString("image_url")
-                                val unitOfMeasurement = document.getString("unit_of_measurement")
-                                // Set the retrieved (imageUrl, unitOfMeasurement) to the Item object
-                                it.imageUrl = imageUrl
-                                it.unitOfMeasurement = unitOfMeasurement
-                                itemMutableList.add(it)
-                            }
+                getItemCollectionRef(currentUserId).get().addOnSuccessListener { result ->
+                    // Loop through the query results and convert each document to an Item object
+                    for (document in result.documents) {
+                        val item = document.toObject(Item::class.java)
+                        item?.let {
+                            // Retrieve the imageUrl from the document data
+                            val imageUrl = document.getString("image_url")
+                            val unitOfMeasurement = document.getString("unit_of_measurement")
+                            // Set the retrieved (imageUrl, unitOfMeasurement) to the Item object
+                            it.imageUrl = imageUrl
+                            it.unitOfMeasurement = unitOfMeasurement
+                            itemMutableList.add(it)
                         }
-
-                        if (itemMutableList.isEmpty()) {
-                            trySend(Resource.empty())
-                        } else {
-                            trySend(Resource.success(itemMutableList))
-                        }
-                    }.addOnFailureListener { failure ->
-                        trySend(Resource.error(failure.message ?: "Failure"))
                     }
+
+                    if (itemMutableList.isEmpty()) {
+                        trySend(Resource.empty())
+                    } else {
+                        trySend(Resource.success(itemMutableList))
+                    }
+                }.addOnFailureListener { failure ->
+                    // Log the error
+                    Timber.tag(TAG).e(failure)
+                    trySend(Resource.error(R.string.error_fetching_items))
+                }
 
             awaitClose { itemQuerySnapshot.isSuccessful }
         }.flowOn(ioDispatcher)
@@ -101,6 +103,9 @@ class ItemRepositoryImpl @Inject constructor(
     override suspend fun addItem(item: Item): AddItem {
         return withContext(ioDispatcher) {
             try {
+                // Loading state before starting the deletion operation
+                Resource.Loading
+
                 suspendCoroutine { continuation ->
                     val itemMap =
                         mapOf(
@@ -115,15 +120,20 @@ class ItemRepositoryImpl @Inject constructor(
                     val sku = item.sku
                     getItemDocumentRef(uid = currentUserId, sku = sku).set(itemMap as Map<*, *>)
                         .addOnSuccessListener {
-                            continuation.resume(Resource.Success(data = "Item added successfully"))
-                        }.addOnFailureListener {
-                            continuation.resume(Resource.error("Add item failure, $it"))
+                            continuation.resume(Resource.Success(data = R.string.item_added_successfully))
+                        }.addOnFailureListener { failure ->
+                            Timber.tag(TAG).e(failure)
+
+                            val errorMessage = when (failure) {
+                                is UnknownHostException -> R.string.add_item_failure_network
+                                else -> R.string.add_item_failure_generic
+                            }
+                            continuation.resume(Resource.error(errorMessage))
                         }
                 }
-            } catch (e: UnknownHostException) {
-                Resource.error("Add item failure, ${e.message}")
             } catch (e: Exception) {
-                Resource.error("Add item failure, ${e.message}")
+                Timber.tag(TAG).e(e)
+                Resource.error(R.string.add_item_failure_generic)
             }
         }
     }
@@ -137,6 +147,9 @@ class ItemRepositoryImpl @Inject constructor(
     override suspend fun updateItem(item: Item): UpdateItem {
         return withContext(ioDispatcher) {
             try {
+                // Loading state before starting the update operation
+                Resource.Loading
+
                 suspendCoroutine { continuation ->
                     val itemMap =
                         mapOf(
@@ -151,15 +164,20 @@ class ItemRepositoryImpl @Inject constructor(
                     val sku = item.sku
                     getItemDocumentRef(uid = currentUserId, sku = sku).set(itemMap as Map<*, *>)
                         .addOnSuccessListener {
-                            continuation.resume(Resource.Success(data = "Item updated successfully"))
-                        }.addOnFailureListener {
-                            continuation.resume(Resource.error("Update item failure, $it"))
+                            continuation.resume(Resource.Success(data = R.string.item_updated_successfully))
+                        }.addOnFailureListener { failure ->
+                            Timber.tag(TAG).e(failure)
+
+                            val errorMessage = when (failure) {
+                                is UnknownHostException -> R.string.update_item_failure_network
+                                else -> R.string.update_item_failure_generic
+                            }
+                            continuation.resume(Resource.error(errorMessage))
                         }
                 }
-            } catch (e: UnknownHostException) {
-                Resource.error("Update item failure, ${e.message}")
             } catch (e: Exception) {
-                Resource.error("Update item failure, ${e.message}")
+                Timber.tag(TAG).e(e)
+                Resource.error(R.string.update_item_failure_generic)
             }
         }
     }
@@ -173,19 +191,26 @@ class ItemRepositoryImpl @Inject constructor(
     override suspend fun deleteItem(item: Item): DeleteItem {
         return withContext(ioDispatcher) {
             try {
+                // Loading state before starting the deletion operation
+                Resource.Loading
+
                 suspendCoroutine { continuation ->
-                    val sku = item.sku
-                    getItemDocumentRef(uid = currentUserId, sku = sku).delete()
+                    getItemDocumentRef(uid = currentUserId, sku = item.sku).delete()
                         .addOnSuccessListener {
-                            continuation.resume(Resource.Success("Item deleted successfully"))
-                        }.addOnFailureListener {
-                            continuation.resume(Resource.error("Item deleted failure, $it"))
+                            continuation.resume(Resource.success(R.string.item_deleted_successfully))
+                        }.addOnFailureListener { failure ->
+                            Timber.tag(TAG).e(failure)
+
+                            val errorMessage = when (failure) {
+                                is UnknownHostException -> R.string.delete_item_failure_network
+                                else -> R.string.delete_item_failure_generic
+                            }
+                            continuation.resume(Resource.error(errorMessage))
                         }
                 }
-            } catch (e: UnknownHostException) {
-                Resource.error("Item deleted failure, ${e.message}")
             } catch (e: Exception) {
-                Resource.error("Item deleted failure, ${e.message}")
+                Timber.tag(TAG).e(e)
+                Resource.error(R.string.delete_item_failure_generic)
             }
         }
     }
@@ -217,4 +242,8 @@ class ItemRepositoryImpl @Inject constructor(
     private fun getItemCollectionRef(uid: String): CollectionReference =
         firestore.collection(USERS_COLLECTION_PATH).document(uid)
             .collection(ITEMS_COLLECTION_PATH)
+
+    companion object {
+        private val TAG = ItemRepositoryImpl::class.java.simpleName
+    }
 }
