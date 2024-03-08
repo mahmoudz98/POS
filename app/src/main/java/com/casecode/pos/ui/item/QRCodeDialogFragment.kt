@@ -24,7 +24,7 @@ class QRCodeDialogFragment : DialogFragment() {
         val builder = MaterialAlertDialogBuilder(requireActivity())
         builder.setView(binding.root)
             .setTitle("Print QR code")
-            .setNegativeButton("Decline") { dialog, which ->
+            .setNegativeButton("Cancel") { dialog, which ->
                 // Respond to negative button press
             }
             .setPositiveButton("Print") { dialog, which ->

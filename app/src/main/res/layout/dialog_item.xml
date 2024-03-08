@@ -45,7 +45,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:hint="@string/barcode"
-            app:layout_constraintEnd_toStartOf="@+id/image_button_scan_barcode"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imv_item"
             app:startIconDrawable="@drawable/ic_code">
@@ -128,15 +128,19 @@
 
         <ImageButton
             android:id="@+id/image_button_scan_barcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/scan_barcode"
             android:foreground="@drawable/ripple_effect"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/til_barcode"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/til_barcode"
             app:layout_constraintTop_toTopOf="@+id/til_barcode"
-            app:srcCompat="@drawable/baseline_qr_code_scanner_48" />
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/enter_barcode" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
