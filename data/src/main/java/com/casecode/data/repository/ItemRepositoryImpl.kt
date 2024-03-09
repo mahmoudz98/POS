@@ -63,35 +63,45 @@ class ItemRepositoryImpl @Inject constructor(
 
             val itemMutableList = mutableListOf<Item>()
 
-            // Query Firestore to retrieve all items for the given UID
-            val itemQuerySnapshot =
-                getItemCollectionRef(currentUserId).get().addOnSuccessListener { result ->
-                    // Loop through the query results and convert each document to an Item object
-                    for (document in result.documents) {
-                        val item = document.toObject(Item::class.java)
-                        item?.let {
-                            // Retrieve the imageUrl from the document data
-                            val imageUrl = document.getString("image_url")
-                            val unitOfMeasurement = document.getString("unit_of_measurement")
-                            // Set the retrieved (imageUrl, unitOfMeasurement) to the Item object
-                            it.imageUrl = imageUrl
-                            it.unitOfMeasurement = unitOfMeasurement
-                            itemMutableList.add(it)
-                        }
-                    }
+            // Create a Firestore query to retrieve all items for the given UID
+            val query = getItemCollectionRef(currentUserId)
 
-                    if (itemMutableList.isEmpty()) {
-                        trySend(Resource.empty())
-                    } else {
-                        trySend(Resource.success(itemMutableList))
-                    }
-                }.addOnFailureListener { failure ->
-                    // Log the error
-                    Timber.tag(TAG).e(failure)
+
+            // Query Firestore to retrieve all items for the given UID
+            val listenerRegistration = query.addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    // Handle the error
+                    Timber.tag(TAG).e(error)
                     trySend(Resource.error(R.string.error_fetching_items))
+                    return@addSnapshotListener
                 }
 
-            awaitClose { itemQuerySnapshot.isSuccessful }
+                // Clear the list before updating it with new data
+                itemMutableList.clear()
+
+                // Loop through the query results and convert each document to an Item object
+                for (document in snapshot?.documents ?: emptyList()) {
+                    val item = document.toObject(Item::class.java)
+                    item?.let {
+                        // Retrieve the imageUrl from the document data
+                        val imageUrl = document.getString("image_url")
+                        val unitOfMeasurement = document.getString("unit_of_measurement")
+                        // Set the retrieved (imageUrl, unitOfMeasurement) to the Item object
+                        it.imageUrl = imageUrl
+                        it.unitOfMeasurement = unitOfMeasurement
+                        itemMutableList.add(it)
+                    }
+                }
+
+                if (itemMutableList.isEmpty()) {
+                    trySend(Resource.empty())
+                } else {
+                    trySend(Resource.success(itemMutableList))
+                }
+            }
+
+            // Close the listener when the flow is cancelled
+            awaitClose { listenerRegistration.remove() }
         }.flowOn(ioDispatcher)
 
     /**

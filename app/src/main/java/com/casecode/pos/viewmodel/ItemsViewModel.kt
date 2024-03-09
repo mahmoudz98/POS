@@ -118,48 +118,15 @@ constructor(
     }
 
     fun addItem(item: Item) {
-        viewModelScope.launch {
-            when (val result = itemUseCase.addItem(item)) {
-                is Resource.Success -> {
-                    val updatedList = _items.value.orEmpty().toMutableList()
-                    updatedList.add(item)
-                    _items.value = updatedList
-                    handleResponse(result)
-                }
-                else -> handleResponse(result)
-            }
-        }
+        viewModelScope.launch { handleResponse(itemUseCase.addItem(item)) }
     }
 
     fun updateItem(item: Item) {
-        viewModelScope.launch {
-            when (val result = itemUseCase.updateItem(item)) {
-                is Resource.Success -> {
-                    val updatedList = _items.value.orEmpty().toMutableList()
-                    val index = updatedList.indexOfFirst { it.sku == item.sku }
-                    if (index != -1) {
-                        updatedList[index] = item
-                        _items.value = updatedList
-                    }
-                    handleResponse(result)
-                }
-                else -> handleResponse(result)
-            }
-        }
+        viewModelScope.launch { handleResponse(itemUseCase.updateItem(item)) }
     }
 
     fun deleteItem(item: Item) {
-        viewModelScope.launch {
-            when (val result = itemUseCase.deleteItem(item)) {
-                is Resource.Success -> {
-                    val updatedList = _items.value.orEmpty().toMutableList()
-                    updatedList.removeAll { it.sku == item.sku }
-                    _items.value = updatedList
-                    handleResponse(result)
-                }
-                else -> handleResponse(result)
-            }
-        }
+        viewModelScope.launch { handleResponse(itemUseCase.deleteItem(item)) }
     }
 
     private fun handleResponse(result: Resource<Any>) {
@@ -169,10 +136,12 @@ constructor(
                 hideProgress()
                 showSnackbarMessage(result.message as Int)
             }
+
             is Resource.Success -> {
                 hideProgress()
                 showSnackbarMessage(result.data as Int)
             }
+
             else -> {}
         }
     }
