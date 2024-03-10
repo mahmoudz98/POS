@@ -42,5 +42,5 @@ interface ItemRepository {
      * @param item The item to be deleted.
      * @return A [DeleteItem] resource indicating the success or failure of the deletion operation.
      */
-    suspend fun deleteItem(item: Item): Flow<DeleteItem>
+    suspend fun deleteItem(item: Item): DeleteItem
 }

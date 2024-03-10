@@ -2,11 +2,10 @@ package com.casecode.domain.repository
 
 import android.graphics.Bitmap
 import com.casecode.domain.utils.Resource
-import kotlinx.coroutines.flow.Flow
 
 typealias UploadImage = Resource<String>
 typealias ReplaceImage = Resource<String>
-typealias DeleteImage = Resource<Int>
+typealias DeleteImage = Resource<Boolean>
 
 /**
  * An interface defining methods for image operations such as uploading, replacing, and deleting images.
@@ -19,7 +18,7 @@ interface ImageRepository {
      * @param imageName The name to be assigned to the uploaded image.
      * @return A [UploadImage] resource containing the URL of the uploaded image.
      */
-    suspend fun uploadImage(bitmap: Bitmap, imageName: String): Flow<UploadImage>
+    suspend fun uploadImage(bitmap: Bitmap, imageName: String): UploadImage
 
     /**
      * Replaces an existing image with the image represented by [bitmap].
@@ -28,7 +27,7 @@ interface ImageRepository {
      * @param imageUrl The URL of the existing image to be replaced.
      * @return A [ReplaceImage] resource containing the URL of the replaced image.
      */
-    suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): Flow<ReplaceImage>
+    suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): ReplaceImage
 
     /**
      * Deletes the image associated with the given [imageUrl].
@@ -36,5 +35,5 @@ interface ImageRepository {
      * @param imageUrl The URL of the image to be deleted.
      * @return A [DeleteImage] resource indicating the success or failure of the deletion operation.
      */
-    suspend fun deleteImage(imageUrl: String): Flow<DeleteImage>
+    suspend fun deleteImage(imageUrl: String): DeleteImage
 }

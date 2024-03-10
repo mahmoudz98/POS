@@ -54,75 +54,71 @@ constructor(
 
     fun uploadImageAndAddItem(bitmap: Bitmap, item: Item) {
         viewModelScope.launch {
-            imageUseCase.uploadImage(bitmap = bitmap, imageName = item.sku)
-                .collect { uploadImageState ->
-                    when (uploadImageState) {
-                        is Resource.Loading -> showProgress()
-                        is Resource.Error -> {
-                            hideProgress()
-                            showSnackbarMessage(uploadImageState.message as Int)
-                        }
-
-                        is Resource.Success -> {
-                            val imageUrl = uploadImageState.data
-                            // Now you can use the imageUrl as needed, e.g., updating the item object
-                            item.imageUrl = imageUrl
-
-                            // Now you can add the item
-                            addItem(item)
-                        }
-
-                        else -> {}
-                    }
+            when (val uploadImage = imageUseCase.uploadImage(
+                bitmap = bitmap,
+                imageName =
+                item.sku,
+            )) {
+                is Resource.Loading -> showProgress()
+                is Resource.Error -> {
+                    hideProgress()
+                    showSnackbarMessage(uploadImage.message as Int)
                 }
+
+                is Resource.Success -> {
+                    val imageUrl = uploadImage.data
+                    // Now you can use the imageUrl as needed, e.g., updating the item object
+                    item.imageUrl = imageUrl
+
+                    // Now you can add the item
+                    addItem(item)
+                }
+
+                else -> {}
+            }
         }
     }
 
     fun uploadImageAndUpdateItem(bitmap: Bitmap, item: Item) {
         viewModelScope.launch {
-            imageUseCase.uploadImage(bitmap = bitmap, imageName = item.sku)
-                .collect { uploadImageState ->
-                    when (uploadImageState) {
-                        is Resource.Loading -> showProgress()
-                        is Resource.Error -> {
-                            hideProgress()
-                            showSnackbarMessage(uploadImageState.message as Int)
-                        }
-
-                        is Resource.Success -> {
-                            val imageUrl = uploadImageState.data
-                            // Now you can use the imageUrl as needed, e.g., updating the item object
-                            item.imageUrl = imageUrl
-
-                            // Now you can add the item
-                            updateItem(item)
-                        }
-
-                        else -> {}
-                    }
+            when (val uploadImage =
+                imageUseCase.uploadImage(bitmap = bitmap, imageName = item.sku)) {
+                is Resource.Loading -> showProgress()
+                is Resource.Error -> {
+                    hideProgress()
+                    showSnackbarMessage(uploadImage.message as Int)
                 }
+
+                is Resource.Success -> {
+                    val imageUrl = uploadImage.data
+                    // Now you can use the imageUrl as needed, e.g., updating the item object
+                    item.imageUrl = imageUrl
+
+                    // Now you can add the item
+                    updateItem(item)
+                }
+
+                else -> {}
+            }
         }
     }
 
     fun deleteImageAndDeleteItem(item: Item) {
         viewModelScope.launch {
-            imageUseCase.deleteImage(imageUrl = item.imageUrl.toString())
-                .collect { deleteImageState ->
-                    when (deleteImageState) {
-                        is Resource.Loading -> showProgress()
-                        is Resource.Error -> {
-                            hideProgress()
-                            showSnackbarMessage(deleteImageState.message as Int)
-                        }
-
-                        is Resource.Success -> {
-                            // Image deleted successfully, now delete the item
-                            deleteItem(item)
-                        }
-
-                        else -> {}
-                    }
+            when (val deleteImage = imageUseCase.deleteImage(imageUrl = item.imageUrl.toString())) {
+                is Resource.Loading -> showProgress()
+                is Resource.Error -> {
+                    hideProgress()
+                    showSnackbarMessage(deleteImage.message as Int)
                 }
+
+                is Resource.Success -> {
+                    // Image deleted successfully, now delete the item
+                    deleteItem(item)
+                }
+
+                else -> {}
+            }
         }
     }
 
@@ -135,10 +131,7 @@ constructor(
     }
 
     fun deleteItem(item: Item) {
-        viewModelScope.launch {
-            itemUseCase.deleteItem(item)
-                .collect { deleteItemState -> handleResponse(deleteItemState) }
-        }
+        viewModelScope.launch { handleResponse(itemUseCase.deleteItem(item)) }
     }
 
     private fun handleResponse(result: Resource<Any>) {
