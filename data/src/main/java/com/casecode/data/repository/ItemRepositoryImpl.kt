@@ -5,7 +5,6 @@ import com.casecode.data.utils.Dispatcher
 import com.casecode.domain.model.users.Item
 import com.casecode.domain.repository.AddItem
 import com.casecode.domain.repository.AuthService
-import com.casecode.domain.repository.DeleteItem
 import com.casecode.domain.repository.ItemRepository
 import com.casecode.domain.repository.Items
 import com.casecode.domain.repository.UpdateItem
@@ -22,7 +21,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.UnknownHostException
@@ -52,11 +53,6 @@ class ItemRepositoryImpl @Inject constructor(
             awaitClose { auth.removeAuthStateListener(listener) }
         }.flowOn(ioDispatcher)
 
-    /**
-     * Retrieves items associated with the specified user ID.
-     *
-     * @return A [Resource] containing a list of retrieved items, or an error if the operation fails.
-     */
     override fun getItems(): Flow<Items> =
         callbackFlow<Resource<List<Item>>> {
             trySend(Resource.Loading)
@@ -104,12 +100,6 @@ class ItemRepositoryImpl @Inject constructor(
             awaitClose { listenerRegistration.remove() }
         }.flowOn(ioDispatcher)
 
-    /**
-     * Adds a new item to the repository.
-     *
-     * @param item The item to be added.
-     * @return An [AddItem] resource indicating the success or failure of the addition operation.
-     */
     override suspend fun addItem(item: Item): AddItem {
         return withContext(ioDispatcher) {
             try {
@@ -148,12 +138,6 @@ class ItemRepositoryImpl @Inject constructor(
         }
     }
 
-    /**
-     * Updates an existing item in the repository.
-     *
-     * @param item The updated item.
-     * @return An [UpdateItem] resource indicating the success or failure of the update operation.
-     */
     override suspend fun updateItem(item: Item): UpdateItem {
         return withContext(ioDispatcher) {
             try {
@@ -192,38 +176,26 @@ class ItemRepositoryImpl @Inject constructor(
         }
     }
 
-    /**
-     * Deletes an existing item from the repository.
-     *
-     * @param item The item to be deleted.
-     * @return A [DeleteItem] resource indicating the success or failure of the deletion operation.
-     */
-    override suspend fun deleteItem(item: Item): DeleteItem {
-        return withContext(ioDispatcher) {
-            try {
-                // Loading state before starting the deletion operation
-                Resource.Loading
+    override suspend fun deleteItem(item: Item) = flow {
+        try {
+            // Emit loading state
+            emit(Resource.loading())
 
-                suspendCoroutine { continuation ->
-                    getItemDocumentRef(uid = currentUserId, sku = item.sku).delete()
-                        .addOnSuccessListener {
-                            continuation.resume(Resource.success(R.string.item_deleted_successfully))
-                        }.addOnFailureListener { failure ->
-                            Timber.tag(TAG).e(failure)
+            val documentRef = getItemDocumentRef(uid = currentUserId, sku = item.sku)
+            documentRef.delete().await()
 
-                            val errorMessage = when (failure) {
-                                is UnknownHostException -> R.string.delete_item_failure_network
-                                else -> R.string.delete_item_failure_generic
-                            }
-                            continuation.resume(Resource.error(errorMessage))
-                        }
-                }
-            } catch (e: Exception) {
-                Timber.tag(TAG).e(e)
-                Resource.error(R.string.delete_item_failure_generic)
+            // Deletion successful, emit success state
+            emit(Resource.success(R.string.item_deleted_successfully))
+        } catch (e: Exception) {
+            Timber.tag(TAG).e(e)
+            // Deletion failed, emit error state
+            val errorMessage = when (e) {
+                is UnknownHostException -> R.string.delete_item_failure_network
+                else -> R.string.delete_item_failure_generic
             }
+            emit(Resource.error(errorMessage))
         }
-    }
+    }.flowOn(ioDispatcher)
 
     /**
      * Retrieves a reference to the Firestore document corresponding to the given user ID and SKU.
