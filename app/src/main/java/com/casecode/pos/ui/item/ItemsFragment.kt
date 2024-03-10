@@ -138,11 +138,7 @@ class ItemsFragment : Fragment() {
             .setTitle(R.string.delete_item_title)
             .setMessage(R.string.delete_item_message)
             .setPositiveButton(R.string.delete) { _, _ ->
-                if (item.imageUrl == null) {
-                    viewModel.deleteItem(item)
-                } else {
-                    viewModel.deleteImageAndDeleteItem(item)
-                }
+                viewModel.deleteImageAndDeleteItem(item)
             }
             .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()

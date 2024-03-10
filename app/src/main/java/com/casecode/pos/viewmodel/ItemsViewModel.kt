@@ -105,19 +105,21 @@ constructor(
 
     fun deleteImageAndDeleteItem(item: Item) {
         viewModelScope.launch {
-            when (val deleteImage = imageUseCase.deleteImage(imageUrl = item.imageUrl.toString())) {
-                is Resource.Loading -> showProgress()
-                is Resource.Error -> {
-                    hideProgress()
-                    showSnackbarMessage(deleteImage.message as Int)
-                }
+            imageUseCase.deleteImage(imageUrl = item.imageUrl.toString()).collect { deleteImage ->
+                when (deleteImage) {
+                    is Resource.Loading -> showProgress()
+                    is Resource.Error -> {
+                        hideProgress()
+                        showSnackbarMessage(deleteImage.message as Int)
+                    }
 
-                is Resource.Success -> {
-                    // Image deleted successfully, now delete the item
-                    deleteItem(item)
-                }
+                    is Resource.Success -> {
+                        // Image deleted successfully, now delete the item
+                        deleteItem(item)
+                    }
 
-                else -> {}
+                    else -> {}
+                }
             }
         }
     }

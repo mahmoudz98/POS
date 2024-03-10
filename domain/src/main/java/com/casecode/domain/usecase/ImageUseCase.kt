@@ -1,7 +1,9 @@
 package com.casecode.domain.usecase
 
 import android.graphics.Bitmap
+import com.casecode.domain.repository.DeleteImage
 import com.casecode.domain.repository.ImageRepository
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 /**
@@ -37,5 +39,16 @@ class ImageUseCase @Inject constructor(private val imageRepository: ImageReposit
      * @param imageUrl The URL of the image to be deleted.
      * @return A [DeleteImage] resource indicating the success or failure of the deletion operation.
      */
-    suspend fun deleteImage(imageUrl: String) = imageRepository.deleteImage(imageUrl)
+    suspend fun deleteImage(imageUrl: String) = flow {
+        emit(DeleteImage.loading())
+
+        val resource = if (imageUrl.isEmpty()) {
+            DeleteImage.empty()
+        } else {
+            imageRepository.deleteImage(imageUrl)
+        }
+
+        emit(resource)
+    }
+
 }
