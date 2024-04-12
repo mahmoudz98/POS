@@ -1,15 +1,19 @@
-package com.casecode.testing
+package com.casecode.testing.base
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.casecode.domain.usecase.CompleteBusinessUseCase
 import com.casecode.domain.usecase.GetBusinessUseCase
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
+import com.casecode.domain.usecase.ImageUseCase
+import com.casecode.domain.usecase.ItemUseCase
 import com.casecode.domain.usecase.SetBusinessUseCase
 import com.casecode.domain.usecase.SetEmployeesBusinessUseCase
 import com.casecode.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.domain.usecase.SignOutUseCase
 import com.casecode.testing.repository.TestBusinessRepository
 import com.casecode.testing.repository.TestEmployeesBusinessRepository
+import com.casecode.testing.repository.TestItemImageRepository
+import com.casecode.testing.repository.TestItemRepository
 import com.casecode.testing.repository.TestSignRepository
 import com.casecode.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.testing.repository.TestSubscriptionsRepository
@@ -21,8 +25,6 @@ import org.junit.Rule
 
 @ExperimentalCoroutinesApi
 abstract class BaseTest {
-
-
     // Set the main coroutines dispatcher for unit testing.
     @get:Rule
     var mainCoroutineRule = CoroutinesTestRule()
@@ -33,12 +35,13 @@ abstract class BaseTest {
 
     // Repo
     lateinit var testNetworkMonitor: TestNetworkMonitor
-    private lateinit var testSignRepository: TestSignRepository
-    private lateinit var testBusinessRepository: TestBusinessRepository
+    lateinit var testSignRepository: TestSignRepository
+    lateinit var testBusinessRepository: TestBusinessRepository
     lateinit var testSubscriptionsRepository: TestSubscriptionsRepository
-    private lateinit var testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
-    private lateinit var testEmployeesBusinessRepository: TestEmployeesBusinessRepository
-
+    lateinit var testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
+    lateinit var testEmployeesBusinessRepository: TestEmployeesBusinessRepository
+    lateinit var testItemRepository: TestItemRepository
+    lateinit var testImageRepository: TestItemImageRepository
 
     // Use cases
     lateinit var signOutUseCase: SignOutUseCase
@@ -48,6 +51,8 @@ abstract class BaseTest {
     lateinit var getSubscriptionsUseCase: GetSubscriptionsUseCase
     lateinit var setSubscriptionBusinessUseCase: SetSubscriptionBusinessUseCase
     lateinit var setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase
+    lateinit var imageUseCase: ImageUseCase
+    lateinit var itemUseCase: ItemUseCase
 
     @Before
     fun setup() {
@@ -57,6 +62,10 @@ abstract class BaseTest {
         testSubscriptionsRepository = TestSubscriptionsRepository()
         testSubscriptionsBusinessRepository = TestSubscriptionsBusinessRepository()
         testEmployeesBusinessRepository = TestEmployeesBusinessRepository()
+
+        // Items repo
+        testItemRepository = TestItemRepository()
+        testImageRepository = TestItemImageRepository()
 
 
         // use cases
@@ -69,11 +78,12 @@ abstract class BaseTest {
             SetSubscriptionBusinessUseCase(testSubscriptionsBusinessRepository)
         setEmployeesBusinessUseCase = SetEmployeesBusinessUseCase(testEmployeesBusinessRepository)
 
+        // Items use cases
+        imageUseCase = ImageUseCase(testImageRepository)
+        itemUseCase = ItemUseCase(testItemRepository)
+
         init()
     }
 
     abstract fun init()
-
-
-
 }
