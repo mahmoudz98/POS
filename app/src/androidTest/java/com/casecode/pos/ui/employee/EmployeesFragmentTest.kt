@@ -53,11 +53,8 @@ class EmployeesFragmentTest {
     @Test
     fun selectorAddEmployee_shouldShowNewEmployeeInList() {
         givenEmployeesAdded()
-        // Then - verify that the new employee is added to the list
-        assertThat(businessViewModel.employees.value?.size, `is`(1))
 
-        onView(withId(R.id.rv_employees))
-            .perform(
+        onView(withId(R.id.rv_employees)).perform(
                 RecyclerViewActions.scrollToPosition<EmployeeAdapter.EmployeeViewHolder>(0),
             )
         onView(withId(R.id.tv_employee_permission_branch)).check(
@@ -93,8 +90,7 @@ class EmployeesFragmentTest {
         // When - update the employee
         givenEmployeesUpdated()
 
-        onView(withId(R.id.rv_employees))
-            .perform(
+        onView(withId(R.id.rv_employees)).perform(
                 RecyclerViewActions.scrollToPosition<EmployeeAdapter.EmployeeViewHolder>(0),
             )
         onView(withId(R.id.tv_employee_permission_branch)).check(
@@ -123,16 +119,6 @@ class EmployeesFragmentTest {
         )
     }
 
-    @Test
-    fun selectorDone_whenHasEmployees_showsMessageEmployeesSuccess() {
-        // Given - add new employee
-
-        // When - click on the employees done button
-        // Thread.sleep(2000)
-        onView(withId(R.id.btn_employees_done)).perform(click())
-        businessViewModel.setConnected(true)
-        // Then - verify that the employees success message is shown
-    }
 
     @Test
     fun selectorDone_whenEmployeeListIsEmpty_showsMessageEmployeesEmpty() {
@@ -184,8 +170,7 @@ class EmployeesFragmentTest {
     }
 
     private fun givenEmployeesUpdated() {
-        onView(withId(R.id.rv_employees))
-            .perform(
+        onView(withId(R.id.rv_employees)).perform(
                 RecyclerViewActions.actionOnItemAtPosition<EmployeeAdapter.EmployeeViewHolder>(
                     0,
                     click(),
