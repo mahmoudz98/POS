@@ -11,8 +11,7 @@ const val SUBSCRIPTIONS_COLLECTION_PATH = "subscriptions"
 const val STORES_COLLECTION_PATH = "stores"
 const val BASICITEMS_COLLECTION_PATH = "basicItems"
 
-
-//Fields in customers:
+// Fields in customers:
 const val CUSTOMER_CODE_FIELD = "customerCode"
 const val CUSTOMER_NAME_FIELD = "name"
 
@@ -22,7 +21,7 @@ const val BUSINESS_IS_COMPLETED_STEP_FIELD = "isCompletedStep"
 const val BUSINESS_EMAIL_FIELD = "email"
 const val BUSINESS_PHONE_NUMBER_FIELD = "phoneNumber"
 
-//branches
+// branches
 const val BRANCHES_CODE_FIELD = "branchCode"
 const val BRANCHES_NAME_FIELD = "branchName"
 const val BRANCHES_PHONE_NUMBER_FIELD = "phoneNumber"
@@ -47,21 +46,15 @@ const val PLAN_CODE_FIELD = "planCode"
 const val PLAN_NAME_FIELD = "planName"
 const val PLAN_PRICE_FIELD = "price"
 
-
-
-
 //  fields in Store
 const val STORECODE_FIELD = "storeCode"
 const val STORETYPE_FIELD = "storeType"
 
-// fields in basicItems.
+// fields in items.
 const val IMAGE_FIELDS = "image"
-const val BASIC_ITEM_NAME_FIELD = "name"
-const val SKU_FIELD = "sku"
-const val UNITOFMEASUREMENT_FIELD = "unitOfMeasurement"
+const val ITEM_NAME_FIELD = "name"
+const val ITEM_SKU_FIELD = "sku"
+const val ITEM_UNITOFMEASUREMENT_FIELD = "unitOfMeasurement"
 
-
-
-
-
-
+const val ITEM_PATH_FIELD = "item"
+const val IMAGES_PATH_FIELD = "images"
