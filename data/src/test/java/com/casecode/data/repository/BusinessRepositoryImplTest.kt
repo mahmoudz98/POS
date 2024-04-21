@@ -1,13 +1,11 @@
 package com.casecode.data.repository
 
-
 import com.casecode.data.mapper.toBusinessRequest
 import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.model.users.StoreType
 import com.casecode.domain.utils.BUSINESS_FIELD
 import com.casecode.domain.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
-import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
 import com.casecode.pos.data.R
@@ -32,7 +30,6 @@ import org.junit.Before
 import org.junit.Test
 import java.net.UnknownHostException
 
-
 /**
  * A JUnit test class for the [BusinessRepositoryImpl] class.
  * This class use [MockKExtension] that ensure mockk work with junit 4.
@@ -40,7 +37,6 @@ import java.net.UnknownHostException
  * Created by Mahmoud Abdalhafeez on 12/13/2023
  */
 class BusinessRepositoryImplTest {
-
     private var firestore: FirebaseFirestore = mockk<FirebaseFirestore>()
 
     private val testDispatcher = StandardTestDispatcher()
@@ -67,135 +63,134 @@ class BusinessRepositoryImplTest {
     }
 
     @Test
-    fun setBusiness_withCompleteData_shouldReturnSuccess() = testScope.runTest {
+    fun setBusiness_withCompleteData_shouldReturnSuccess() =
+        testScope.runTest {
+            // Arrange
+            val businessComplete = createValidBusiness()
 
-        // Arrange
-        val businessComplete = createValidBusiness()
+            // Mock firestore behavior
+            mockFirestoreUpdateSuccess()
 
-        // Mock firestore behavior
-        mockFirestoreUpdateSuccess()
+            // Act
+            val result = businessRepository.setBusiness(businessComplete, uid)
 
-        // Act
-        val result = businessRepository.setBusiness(businessComplete, uid)
+            // verify
+            verifyFirestoreUpdateCalled()
 
-        // verify
-        verifyFirestoreUpdateCalled()
-
-        // Assert
-        val expectedResult = Resource.success(true)
-        assertThat(result, `is`(expectedResult))
-    }
-
-    @Test
-    fun `setBusiness should handle when fail`() = testScope.runTest {
-        // Mock Firestore behavior for network error
-        mockFirestoreUpdateFailure()
-
-        val result = businessRepository.setBusiness(createValidBusiness(), "test_network_error")
-
-        assertThat(result, `is`(Resource.error(R.string.add_business_failure)))
-    }
-
-    @Test
-    fun `setBusiness should handle when Firestore exception`() = testScope.runTest {
-        // Mock Firestore behavior for network error
-        mockFirestoreException()
-
-        // Call the method you want to test
-        val result = businessRepository.setBusiness(createValidBusiness(), uid)
-
-
-        assertThat(result, `is`(Resource.error(R.string.add_business_failure)))
-
-    }
-
-    @Test
-    fun `setBusiness should return network error`() = testScope.runTest {
-        // Mock Firestore behavior for network error
-        every {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                .set(createValidBusiness().toBusinessRequest() as Map<String, Any>)
-                .addOnSuccessListener(capture(successListenerSlot))
-                .addOnFailureListener(capture(failureListenerSlot))
-        } answers {
-            throw UnknownHostException()
-
+            // Assert
+            val expectedResult = Resource.success(true)
+            assertThat(result, `is`(expectedResult))
         }
-        // When, call the method you want to test
-        val result = businessRepository.setBusiness(createValidBusiness(), uid)
-
-        // Then - assert that the result is an error
-        assertThat(result, `is`(Resource.error(R.string.add_business_network)))
-
-    }
 
     @Test
-    fun `completeBusinessSetup should return Success`() = testScope.runTest {
-        // Arrange
-        every {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
-                .addOnSuccessListener(capture(successListenerSlot))
-                .addOnFailureListener(capture(failureListenerSlot))
-        } answers {
-            // Simulate a successful operation by invoking the success listener with null
-            successListenerSlot.captured.onSuccess(null)
-            // Return a mock Task
-            mockk<Task<Void>>()
-        }
-        // Act
-        val result = businessRepository.completeBusinessSetup(uid)
-        // Verify
-        coVerify {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
-                .addOnSuccessListener(capture(successListenerSlot))
-                .addOnFailureListener(capture(failureListenerSlot))
-        }
-        // Assert
-        assertThat(result, `is`(Resource.success(true)))
+    fun `setBusiness should handle when fail`() =
+        testScope.runTest {
+            // Mock Firestore behavior for network error
+            mockFirestoreUpdateFailure()
 
-    }
+            val result = businessRepository.setBusiness(createValidBusiness(), "test_network_error")
+
+            assertThat(result, `is`(Resource.error(R.string.add_business_failure)))
+        }
 
     @Test
-    fun `completeBusinessSetup should return firebaseFirestoreException`() = testScope.runTest {
-        // Arrange
-        every {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
-                .addOnSuccessListener(capture(successListenerSlot))
-                .addOnFailureListener(capture(failureListenerSlot))
-        } answers {
-            throw FirebaseFirestoreException(
-                "Failed to update business. Please try again later.",
-                FirebaseFirestoreException.Code.INTERNAL
-            )
+    fun `setBusiness should handle when Firestore exception`() =
+        testScope.runTest {
+            // Mock Firestore behavior for network error
+            mockFirestoreException()
+
+            // Call the method you want to test
+            val result = businessRepository.setBusiness(createValidBusiness(), uid)
+
+            assertThat(result, `is`(Resource.error(R.string.add_business_failure)))
         }
-        // Act
-        val result = businessRepository.completeBusinessSetup(uid)
-        // Assert
-        assertThat(result, `is`(Resource.error(R.string.complete_business_failure)))
-    }
 
     @Test
-    fun `completeBusinessSetup should return failure`() = testScope.runTest {
-        // Arrange
-        every {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
-                .addOnSuccessListener(capture(successListenerSlot))
-                .addOnFailureListener(capture(failureListenerSlot))
-        } answers {
-            failureListenerSlot.captured.onFailure(Exception())
-            mockk<Task<Void>>()
+    fun `setBusiness should return network error`() =
+        testScope.runTest {
+            // Mock Firestore behavior for network error
+            every {
+                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                    .set(createValidBusiness().toBusinessRequest() as Map<String, Any>)
+                    .addOnSuccessListener(capture(successListenerSlot))
+                    .addOnFailureListener(capture(failureListenerSlot))
+            } answers {
+                throw UnknownHostException()
+            }
+            // When, call the method you want to test
+            val result = businessRepository.setBusiness(createValidBusiness(), uid)
 
+            // Then - assert that the result is an error
+            assertThat(result, `is`(Resource.error(R.string.add_business_network)))
         }
-        // Act
-        val result = businessRepository.completeBusinessSetup(uid)
-        // Assert
-        assertThat(result, `is`(Resource.error(R.string.complete_business_failure)))
-    }
 
+    @Test
+    fun `completeBusinessSetup should return Success`() =
+        testScope.runTest {
+            // Arrange
+            every {
+                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                    .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
+                    .addOnSuccessListener(capture(successListenerSlot))
+                    .addOnFailureListener(capture(failureListenerSlot))
+            } answers {
+                // Simulate a successful operation by invoking the success listener with null
+                successListenerSlot.captured.onSuccess(null)
+                // Return a mock Task
+                mockk<Task<Void>>()
+            }
+            // Act
+            val result = businessRepository.completeBusinessSetup(uid)
+            // Verify
+            coVerify {
+                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                    .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
+                    .addOnSuccessListener(capture(successListenerSlot))
+                    .addOnFailureListener(capture(failureListenerSlot))
+            }
+            // Assert
+            assertThat(result, `is`(Resource.success(true)))
+        }
+
+    @Test
+    fun `completeBusinessSetup should return firebaseFirestoreException`() =
+        testScope.runTest {
+            // Arrange
+            every {
+                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                    .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
+                    .addOnSuccessListener(capture(successListenerSlot))
+                    .addOnFailureListener(capture(failureListenerSlot))
+            } answers {
+                throw FirebaseFirestoreException(
+                    "Failed to update business. Please try again later.",
+                    FirebaseFirestoreException.Code.INTERNAL,
+                )
+            }
+            // Act
+            val result = businessRepository.completeBusinessSetup(uid)
+            // Assert
+            assertThat(result, `is`(Resource.error(R.string.complete_business_failure)))
+        }
+
+    @Test
+    fun `completeBusinessSetup should return failure`() =
+        testScope.runTest {
+            // Arrange
+            every {
+                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                    .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
+                    .addOnSuccessListener(capture(successListenerSlot))
+                    .addOnFailureListener(capture(failureListenerSlot))
+            } answers {
+                failureListenerSlot.captured.onFailure(Exception())
+                mockk<Task<Void>>()
+            }
+            // Act
+            val result = businessRepository.completeBusinessSetup(uid)
+            // Assert
+            assertThat(result, `is`(Resource.error(R.string.complete_business_failure)))
+        }
 
     private fun mockFirestoreUpdateSuccess() {
         every {
@@ -231,7 +226,7 @@ class BusinessRepositoryImplTest {
         } answers {
             throw FirebaseFirestoreException(
                 "Failed to update business. Please try again later.",
-                FirebaseFirestoreException.Code.INTERNAL
+                FirebaseFirestoreException.Code.INTERNAL,
             )
         }
     }
@@ -254,9 +249,6 @@ class BusinessRepositoryImplTest {
             "info@mybusiness.com",
             false,
             listOf(Branch()),
-
-            )
+        )
     }
-
-
 }
