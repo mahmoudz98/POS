@@ -25,79 +25,72 @@ import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
-class StoreRepositoryImpl @Inject constructor(
-    private val firestore: FirebaseFirestore,
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-) : StoreRepository {
+class StoreRepositoryImpl
+    @Inject
+    constructor(
+        private val firestore: FirebaseFirestore,
+        @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    ) : StoreRepository {
+        override fun getStores(): Flow<StoresResponse> =
+            callbackFlow<StoresResponse> {
+                trySend(Resource.loading())
+                val callback =
+                    firestore.collection(STORES_COLLECTION_PATH).get().addOnCompleteListener { tasks ->
+                        if (tasks.isSuccessful) {
+                            getStoresAndBasicItems(tasks)
+                        } else {
+                            Timber.e("getStores: ${tasks.exception}")
+                            trySend(Resource.error(tasks.exception?.message!!))
+                            close()
+                        }
+                    }
+                awaitClose {
+                    Timber.e("awitClose = ${callback.isComplete}")
 
-
-    override fun getStores(): Flow<StoresResponse> = callbackFlow<StoresResponse> {
-        trySend(Resource.loading())
-        val callback =
-            firestore.collection(STORES_COLLECTION_PATH).get().addOnCompleteListener { tasks ->
-                if (tasks.isSuccessful) {
-                    getStoresAndBasicItems(tasks)
-
-                } else {
-                    Timber.e("getStores: ${tasks.exception}")
-                    trySend(Resource.error(tasks.exception?.message!!))
-                    close()
+                    callback.isCanceled
                 }
-            }
-        awaitClose {
-            Timber.e("awitClose = ${callback.isComplete}")
+            }.flowOn(ioDispatcher)
 
-            callback.isCanceled
-        }
+        private fun ProducerScope<StoresResponse>.getStoresAndBasicItems(tasks: Task<QuerySnapshot>) {
+            val documents = tasks.result.documents
+            val stores = mutableListOf<Store>()
+            val remainingDocuments =
+                AtomicInteger(documents.size) // Use AtomicInteger to track remaining documents
 
-    }.flowOn(ioDispatcher)
-
-    private fun ProducerScope<StoresResponse>.getStoresAndBasicItems(
-        tasks: Task<QuerySnapshot>,
-    ) {
-        val documents = tasks.result.documents
-        val stores = mutableListOf<Store>()
-        val remainingDocuments =
-            AtomicInteger(documents.size) // Use AtomicInteger to track remaining documents
-
-        documents.forEach { document ->
-            val basicItems = mutableListOf<Item>()
-            document.reference.collection(BASICITEMS_COLLECTION_PATH).get()
-                .addOnSuccessListener { collections ->
-                    collections.documents.forEach {
-                        try {
-                            // TODO: when document is not have any object to convert, error in runtime
-                            val basicItem = it.toObject(Item::class.java)
-                            if (basicItem != null) {
-                                basicItems.add(basicItem)
+            documents.forEach { document ->
+                val basicItems = mutableListOf<Item>()
+                document.reference.collection(BASICITEMS_COLLECTION_PATH).get()
+                    .addOnSuccessListener { collections ->
+                        collections.documents.forEach {
+                            try {
+                                // TODO: when document is not have any object to convert, error in runtime
+                                val basicItem = it.toObject(Item::class.java)
+                                if (basicItem != null) {
+                                    basicItems.add(basicItem)
+                                }
+                            } catch (e: RuntimeException) {
+                                Timber.e(e)
                             }
-                        } catch (e: RuntimeException) {
-                            Timber.e(e)
                         }
 
+                        // Add the Store object to the list
+                        val storeCode = document.get(STORECODE_FIELD) as Long?
+                        val storeType = document.get(STORETYPE_FIELD) as String?
+                        stores.add(
+                            Store(
+                                basicItems = basicItems,
+                                storeCode = storeCode,
+                                storeType = storeType,
+                            ),
+                        )
+
+                        if (remainingDocuments.decrementAndGet() == 0) {
+                            // All subCollection data has been fetched
+                            trySendBlocking(Resource.Success(stores))
+                            Timber.e("store = $stores")
+                            close()
+                        }
                     }
-
-                    // Add the Store object to the list
-                    val storeCode = document.get(STORECODE_FIELD) as Long?
-                    val storeType = document.get(STORETYPE_FIELD) as String?
-                    stores.add(
-                        Store(
-                            basicItems = basicItems,
-                            storeCode = storeCode,
-                            storeType = storeType,
-                        ),
-                    )
-
-                    if (remainingDocuments.decrementAndGet() == 0) {
-                        // All subCollection data has been fetched
-                        trySendBlocking(Resource.Success(stores))
-                        Timber.e("store = $stores")
-                        close()
-                    }
-                }
-
+            }
         }
     }
-
-
-}

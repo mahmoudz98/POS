@@ -175,6 +175,7 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
     override fun onDestroy() {
         super.onDestroy()
         removeObservers()
+        viewModelStore.clear()
         _binding = null
     }
 

@@ -26,10 +26,6 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.UnsupportedApiCallException
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -61,7 +57,6 @@ class SignInActivity : AppCompatActivity() {
                     // Issue: when this launcher is ok is ok every time in
                     viewModel.signInWithIntent(result.data ?: return@registerForActivityResult)
                     observerSignInResult()
-
                 }
             }
     }
@@ -87,14 +82,12 @@ class SignInActivity : AppCompatActivity() {
                 viewModel.signIn()
             } catch (e: UnsupportedApiCallException) {
                 showAlternativeSignInDialog()
-
             }
         } else {
             // Google Play services are not available
             showAlternativeSignInDialog()
         }
     }
-
 
     private fun isGooglePlayServicesAvailable(): Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
@@ -120,53 +113,54 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun openGooglePlayStore() {
-        val playStoreIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms")
-        )
+        val playStoreIntent =
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
+            )
         try {
             startActivity(playStoreIntent)
         } catch (e: ActivityNotFoundException) {
             // Handle the case where the Play Store app is not installed
-            val webIntent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms")
-            )
+            val webIntent =
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
+                )
             startActivity(webIntent)
         }
     }
 
     private fun observerSignInIntentSender() {
-
         viewModel.signInIntentSender.observe(this) {
             when (it) {
-                is Resource.Loading -> {// TODO: Support loading when intent is loading.
+                is Resource.Loading -> { // TODO: Support loading when intent is loading.
                 }
 
-                is Resource.Error-> {
-                    val messageRes = it.message as? Int ?: R.string.all_error_save
-                    if(messageRes == com.casecode.pos.data.R.string.unsupported_api_call){
-                        showAlternativeSignInDialog()
-                    }
+                is Resource.Error -> {
+                    val messageRes = it.message as? Int ?: R.string.all_error_unknown
+                    if (messageRes == com.casecode.pos.data.R.string.unsupported_api_call)
+                        {
+                            showAlternativeSignInDialog()
+                        }
                     binding.root.showSnackbar(getString(messageRes), Snackbar.LENGTH_SHORT)
                 }
 
-                is Resource.Empty,  null  -> {
+                is Resource.Empty, null -> {
                     binding.root.showSnackbar(
-                        getString(R.string.all_error_save),
-                        Snackbar.LENGTH_SHORT
+                        getString(R.string.all_error_unknown),
+                        Snackbar.LENGTH_SHORT,
                     )
                 }
 
                 is Resource.Success -> {
                     launcher.launch(
-                        IntentSenderRequest.Builder(it.data).build()
+                        IntentSenderRequest.Builder(it.data).build(),
                     )
                 }
             }
         }
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -192,17 +186,16 @@ class SignInActivity : AppCompatActivity() {
             when (it) {
                 is FirebaseAuthResult.Failure -> {
                     binding.root.showSnackbar(
-                        getString(R.string.all_error_save),
-                        Snackbar.LENGTH_SHORT
+                        getString(R.string.all_error_unknown),
+                        Snackbar.LENGTH_SHORT,
                     )
-
                 }
 
                 is FirebaseAuthResult.SignInFails -> {
                     Timber.e("SignInFails")
                     binding.root.showSnackbar(
-                        getString(R.string.all_error_save),
-                        Snackbar.LENGTH_SHORT
+                        getString(R.string.all_error_unknown),
+                        Snackbar.LENGTH_SHORT,
                     )
                 }
 
@@ -210,7 +203,6 @@ class SignInActivity : AppCompatActivity() {
                     Timber.i("SignInSuccess")
                     updateUI()
                     viewModel.clearSignInResult()
-
                 }
 
                 null -> {
@@ -225,7 +217,6 @@ class SignInActivity : AppCompatActivity() {
     private fun observerCheckRegistrationAndCompletedStep() {
         viewModel.checkRegistration.observe(this) {
             when (val result = it) {
-
                 is Resource.Success -> {
                     if (result.data) {
                         moveToMainActivity()
@@ -236,9 +227,9 @@ class SignInActivity : AppCompatActivity() {
                 }
 
                 is Resource.Empty -> {
-
                     binding.root.showSnackbar(
-                        getString(com.casecode.pos.domain.R.string.uid_empty), Snackbar.LENGTH_SHORT
+                        getString(com.casecode.pos.domain.R.string.uid_empty),
+                        Snackbar.LENGTH_SHORT,
                     )
                 }
 
@@ -247,8 +238,8 @@ class SignInActivity : AppCompatActivity() {
 
                 else -> {
                     binding.root.showSnackbar(
-                        getString(R.string.all_error_save),
-                        Snackbar.LENGTH_SHORT
+                        getString(R.string.all_error_unknown),
+                        Snackbar.LENGTH_SHORT,
                     )
                 }
             }
@@ -273,27 +264,21 @@ class SignInActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         Timber.e("onStop")
-
     }
 
     override fun onDestroy() {
         Timber.e("onDestroy")
         super.onDestroy()
         removeObservers()
-
-
     }
 
     private fun removeObservers() {
         for (field in viewModel.javaClass.declaredFields) {
-
             field.isAccessible = true
             val fieldValue = field.get(viewModel)
             if (fieldValue is LiveData<*>) {
                 fieldValue.removeObservers(this)
             }
         }
-
     }
-
 }
