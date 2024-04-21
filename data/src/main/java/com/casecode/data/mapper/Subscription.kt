@@ -12,21 +12,15 @@ import com.google.firebase.firestore.DocumentSnapshot
  * Created by Mahmoud Abdalhafeez
  */
 @SuppressWarnings("Unchecked cast")
-fun MutableList<Subscription>.asEntitySubscriptions(
-     document: DocumentSnapshot)
-{
-   
-   val type = document[SUBSCRIPTION_TYPE_FIELD] as String
-   val duration = document[SUBSCRIPTION_DURATION_FIELD] as Long
-   val cost = document[SUBSCRIPTION_COST_FIELD] as Long
-      
-      val permissions = document[SUBSCRIPTION_PERMISSIONS_FIELD] as List<String>
-      add(Subscription(cost, duration, permissions, type))
-   
-   
+fun MutableList<Subscription>.asEntitySubscriptions(document: DocumentSnapshot) {
+    val type = document[SUBSCRIPTION_TYPE_FIELD] as String
+    val duration = document[SUBSCRIPTION_DURATION_FIELD] as Long
+    val cost = document[SUBSCRIPTION_COST_FIELD] as Long
+
+    val permissions = document[SUBSCRIPTION_PERMISSIONS_FIELD] as List<String>
+    add(Subscription(cost, duration, permissions, type))
 }
 
-fun Subscription.asSubscriptionBusiness(): SubscriptionBusiness
-{
-   return SubscriptionBusiness(type, cost, duration, permissions)
+fun Subscription.asSubscriptionBusiness(): SubscriptionBusiness {
+    return SubscriptionBusiness(type, cost, duration, permissions)
 }
