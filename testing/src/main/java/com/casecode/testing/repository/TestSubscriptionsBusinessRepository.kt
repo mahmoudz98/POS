@@ -7,9 +7,7 @@ import com.casecode.domain.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import org.junit.Before
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class TestSubscriptionsBusinessRepository @Inject constructor() : SubscriptionsBusinessRepository
 {
    

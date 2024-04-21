@@ -19,49 +19,44 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class SubscriptionsBusinessRepositoryImpl @Inject constructor(
-     private val fireStore: FirebaseFirestore,
-     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-                                                             ) : SubscriptionsBusinessRepository
-{
-   override suspend fun setSubscriptionBusiness(
-        subscriptionBusiness: SubscriptionBusiness,
-        uid: String,
-                                               ): AddSubscriptionBusiness
-   {
-      
-      return withContext(ioDispatcher) {
-         try
-         {
-            val resultAddSubscription = suspendCoroutine<AddSubscriptionBusiness> { continuation ->
-               val addSubscriptionBusinessRequest = subscriptionBusiness.asSubscriptionRequest()
-               fireStore.collection(USERS_COLLECTION_PATH).document(uid)
-                  .update(addSubscriptionBusinessRequest).addOnSuccessListener {
-                     Timber.d("Subscription business is added successfully")
-                     continuation.resume(AddSubscriptionBusiness.success(true))
-                  }.addOnFailureListener {
-                     continuation.resume(AddSubscriptionBusiness.error(R.string.add_subscription_business_failure))
-                     
-                     Timber.e("Add Subscription Business failure: $it")
-                  }
+class SubscriptionsBusinessRepositoryImpl
+    @Inject
+    constructor(
+        private val fireStore: FirebaseFirestore,
+        @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    ) : SubscriptionsBusinessRepository {
+        override suspend fun setSubscriptionBusiness(
+            subscriptionBusiness: SubscriptionBusiness,
+            uid: String,
+        ): AddSubscriptionBusiness {
+            return withContext(ioDispatcher) {
+                try {
+                    val resultAddSubscription =
+                        suspendCoroutine<AddSubscriptionBusiness> { continuation ->
+
+                            val addSubscriptionBusinessRequest =
+                                subscriptionBusiness.asSubscriptionRequest()
+                            fireStore.collection(USERS_COLLECTION_PATH).document(uid)
+                                .update(addSubscriptionBusinessRequest).addOnSuccessListener {
+                                    Timber.d("Subscription business is added successfully")
+                                    continuation.resume(AddSubscriptionBusiness.success(true))
+                                }.addOnFailureListener {
+                                    continuation.resume(AddSubscriptionBusiness.error(R.string.add_subscription_business_failure))
+
+                                    Timber.e("Add Subscription Business failure: $it")
+                                }
+                        }
+                    resultAddSubscription
+                } catch (e: UnknownHostException) {
+                    AddSubscriptionBusiness.error(R.string.add_subscription_business_network)
+                } catch (e: Exception) {
+                    Timber.e("Exception while adding business: $e")
+                    AddSubscriptionBusiness.error(R.string.add_subscription_business_failure)
+                }
             }
-            resultAddSubscription
+        }
 
-         }catch (e: UnknownHostException)
-         {
-            AddSubscriptionBusiness.error(R.string.add_subscription_business_network)
-
-         }
-         catch (e: Exception)
-         {
-            Timber.e("Exception while adding business: $e")
-            AddSubscriptionBusiness.error(R.string.add_subscription_business_failure)
-         }
-      }
-   }
-   
-   override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>>
-   {
-      TODO("Not yet implemented")
-   }
-}
+        override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> {
+            TODO("Not yet implemented")
+        }
+    }
