@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.casecode.domain.usecase.CompleteBusinessUseCase
 import com.casecode.domain.usecase.GetBusinessUseCase
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
-import com.casecode.domain.usecase.ImageUseCase
+import com.casecode.domain.usecase.ItemImageUseCase
 import com.casecode.domain.usecase.ItemUseCase
 import com.casecode.domain.usecase.SetBusinessUseCase
 import com.casecode.domain.usecase.SetEmployeesBusinessUseCase
@@ -51,7 +51,7 @@ abstract class BaseTest {
     lateinit var getSubscriptionsUseCase: GetSubscriptionsUseCase
     lateinit var setSubscriptionBusinessUseCase: SetSubscriptionBusinessUseCase
     lateinit var setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase
-    lateinit var imageUseCase: ImageUseCase
+    lateinit var imageUseCase: ItemImageUseCase
     lateinit var itemUseCase: ItemUseCase
 
     @Before
@@ -79,7 +79,7 @@ abstract class BaseTest {
         setEmployeesBusinessUseCase = SetEmployeesBusinessUseCase(testEmployeesBusinessRepository)
 
         // Items use cases
-        imageUseCase = ImageUseCase(testImageRepository)
+        imageUseCase = ItemImageUseCase(testImageRepository)
         itemUseCase = ItemUseCase(testItemRepository)
 
         init()
