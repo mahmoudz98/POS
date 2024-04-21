@@ -14,7 +14,7 @@ abstract class BaseViewHolder<VB: ViewDataBinding, E : Any>(protected open val b
        return absoluteAdapterPosition
     }
 
-    lateinit var element:E
+    private lateinit var element:E
     open fun bind(element: E){
         this.element = element
         binding.executePendingBindings()
