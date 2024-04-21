@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">POS</string>
+    <string name="pos">pos</string>
     <string name="extra_uid">EXTRA_UID</string>
     <string name="extra_display_name">EXTRA_DISPLAY_NAME</string>
     <string name="extra_email">EXTRA_EMAIL</string>
@@ -131,7 +132,7 @@
     <string name="permission_sales">Sales</string>
     <string name="permission_non">Non</string>
 
-    <string name="all_error_save">Something went wrong!</string>
+    <string name="all_error_unknown">Something went wrong!</string>
 
     // add item
     <string name="barcode">Barcode</string>
@@ -147,8 +148,8 @@
     <string name="login">Login</string>
     <string name="keep_an_eye_on_your_sales_and_inventory_at_all_times_and_stay_on_top_of_your_operations">Keep an eye on your sales and inventory at all times and stay on top of your operations.</string>
     <string name="point_of_sale">Point of sale</string>
-    <string name="pos">pos</string>
     <string name="or_employee_login">or Employee login</string>
+    <string name="item_no_image_selected">No Image selected</string>
 
     <string name="google_play_services_required">Google Play Services Required</string>
     <string name="google_play_services_message">
@@ -166,9 +167,12 @@
     <string name="scan_result_empty">Scan result is empty.</string>
     <string name="login_employee_incorrect">Employee name or password are incorrect</string>
     <string name="login_employee_error">Error when Login Employee</string>
+
     <string name="add_item">Add item</string>
     <string name="items_title">Items</string>
     <string name="update_item">Update item</string>
+    <string name="update_item_fail">Item updated failed.</string>
+
     <string name="qty">Qty. %1$s</string>
     <string name="egp">%1$s EGP</string>
     <string name="delete_item_title">Delete item</string>
@@ -195,6 +199,8 @@
     <string name="item_action_state_empty">Item action state is empty data!.</string>
     <string name="search">Search</string>
     <string name="search_hint">Search items</string>
+    <string name="print_qr_code_title">Print QR code</string>
+    <string name="pictures_folder">sd</string>
 
 
 </resources>

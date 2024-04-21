@@ -4,18 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.viewModels
 import com.casecode.domain.model.users.Item
 import com.casecode.pos.R
-import com.casecode.pos.adapter.ItemInteractionAdapter
+import com.casecode.pos.adapter.ItemsAdapter
 import com.casecode.pos.databinding.FragmentItemsBinding
-import com.casecode.pos.utils.setupToast
+import com.casecode.pos.utils.setupSnackbar
 import com.casecode.pos.viewmodel.ItemsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -26,161 +26,131 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 @AndroidEntryPoint
 class ItemsFragment : Fragment() {
-
-    private lateinit var binding: FragmentItemsBinding
-    private val viewModel: ItemsViewModel by activityViewModels()
-    private val itemInteractionAdapter = ItemInteractionAdapter(
-        onItemClick = { item -> showItemDialog(isUpdate = true, item = item) },
+    private var _binding: FragmentItemsBinding? = null
+    private val binding: FragmentItemsBinding get() = _binding!!
+    private val viewModel: ItemsViewModel by viewModels()
+    private val itemAdapter = ItemsAdapter(
+        onItemClick = { item ->
+            viewModel.setItemSelected(item)
+            showItemDialog(ItemDialogFragment.ITEM_UPDATE_FRAGMENT) },
         onItemLongClick = { item -> deleteItem(item = item) },
-        onPrintButtonClick = { item -> showQRCodeDialog(item = item) },
-    )
+        onPrintButtonClick = { item ->
+            viewModel.setItemSelected(item)
+            showQRCodeDialog() },)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private var menuProvider: MenuProvider? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentItemsBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        _binding = FragmentItemsBinding.inflate(inflater, container, false)
+        return _binding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
-
-        setupRecyclerView()
-        binding.floatingAddItem.setOnClickListener { showItemDialog() }
-        initObserve()
+        setup()
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_items_fragment, menu)
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView
-        searchView.queryHint = getString(R.string.search_hint)
+    private fun setup() {
+        setupMenu()
+        setupRecyclerView()
+        binding.floatingBtnItems.setOnClickListener { showItemDialog(ItemDialogFragment.ITEM_ADD_FRAGMENT) }
+        setupObserver()
+        setupSnackbar()
+    }
 
-        searchView.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
+    private fun setupMenu() {
+        menuProvider = object : MenuProvider {
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater, ) {
+                menuInflater.inflate(R.menu.menu_items_fragment, menu)
+                val searchItem = menu.findItem(R.id.action_search)
+                val searchView = searchItem.actionView as SearchView
+                searchView.queryHint = getString(R.string.search_hint)
+
+                searchView.setOnQueryTextListener(
+                    object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            return false
+                        }
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            newText?.let { itemAdapter.filterItems(it) }
+                            return true
+                        }
+                    },
+                )
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_search -> {
+                        true
+                    }
+                    else -> false
                 }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    newText?.let { itemInteractionAdapter.filterItems(it) }
-                    return true
-                }
-            },
-        )
-
-        // Hide the action_main_profile menu item
-        val profileMenuItem = menu.findItem(R.id.action_main_profile)
-        profileMenuItem.isVisible = false
+            }
+        }
+        requireActivity().addMenuProvider(menuProvider!!)
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerItems.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = itemInteractionAdapter
-        }
+        binding.recyclerItems.adapter = itemAdapter
     }
 
-    private fun initObserve() {
+    private fun setupObserver() {
+        viewModel.fetchItems()
         // is loading
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) showLoading() else hideLoading()
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.isLoading = it
         }
-
-        // show message for user
-        setupToast()
-
-        observeFetchItems()
-    }
-
-    private fun observeFetchItems() {
-        // is success
-        viewModel.items.observe(viewLifecycleOwner) { result ->
-            itemInteractionAdapter.submitList(result.toMutableList())
+        viewModel.items.observe(viewLifecycleOwner) { items ->
+            binding.items = items
         }
-        // is empty
-        viewModel.isEmptyFetchItems.observe(viewLifecycleOwner) { isEmpty ->
-            if (isEmpty) {
-                showEmptyView()
-                hideRecyclerView()
-            } else {
-                hideEmptyView()
-                showRecyclerView()
-            }
-        }
-        // is error
-        viewModel.isErrorFetchItems.observe(viewLifecycleOwner) { isError ->
-            if (isError) {
-                showEmptyView()
-                hideRecyclerView()
-            } else {
-                hideEmptyView()
-                showRecyclerView()
-            }
+        viewModel.isEmptyItems.observe(viewLifecycleOwner) {
+            binding.isEmpty = it
         }
     }
 
-    private fun showItemDialog(isUpdate: Boolean = false, item: Item? = null) {
-        val newInstance = ItemDialogFragment.newInstance(isUpdate, item)
-        newInstance.show(childFragmentManager, ItemDialogFragment.ITEM_DIALOG_FRAGMENT)
+    private fun showItemDialog(tag: String) {
+         ItemDialogFragment.newInstance().show(childFragmentManager, tag)
     }
 
     private fun deleteItem(item: Item) {
-        val builder = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.delete_item_title)
-            .setMessage(R.string.delete_item_message)
-            .setPositiveButton(R.string.delete) { _, _ ->
-                viewModel.deleteImageAndDeleteItem(item)
-            }
-            .setNegativeButton(R.string.cancel) { dialog, _ ->
-                dialog.dismiss()
-            }
+        val builder =
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.delete_item_title)
+                .setMessage(R.string.delete_item_message)
+                .setPositiveButton(R.string.delete) { _, _ ->
+                    viewModel.checkNetworkAndDeleteItem(item)
+                }.setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
         builder.create().show()
     }
 
-    private fun showQRCodeDialog(item: Item) {
-        val action = ItemsFragmentDirections.actionItemsFragmentToQRCodeDialogFragment(item)
-        findNavController().navigate(action)
+    private fun showQRCodeDialog() {
+        QRCodeDialogFragment.newInstance().show(childFragmentManager, null)
     }
 
-    private fun setupToast() {
-        binding.root.setupToast(viewLifecycleOwner, viewModel.userMessage, Snackbar.LENGTH_LONG)
+    private fun setupSnackbar() {
+        binding.root.setupSnackbar(viewLifecycleOwner, viewModel.userMessage, Snackbar.LENGTH_LONG)
     }
 
-    private fun showRecyclerView() {
-        binding.recyclerItems.visibility = View.VISIBLE
+    override fun onDestroyView() {
+        super.onDestroyView()
+        menuProvider?.let { requireActivity().removeMenuProvider(it) }
+        _binding = null
+        viewModelStore.clear()
+
+
     }
 
-    private fun hideRecyclerView() {
-        binding.recyclerItems.visibility = View.GONE
-    }
-
-    private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun hideLoading() {
-        binding.progressBar.visibility = View.GONE
-    }
-
-    private fun showEmptyView() {
-        binding.emptyView.root.visibility = View.VISIBLE
-    }
-
-    private fun hideEmptyView() {
-        binding.emptyView.root.visibility = View.GONE
-    }
-
-    companion object {
-        private val TAG = ItemsFragment::class.java.simpleName
-    }
 
 }

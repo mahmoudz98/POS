@@ -43,13 +43,13 @@
     <string name="add_item_failure_generic">فشل إضافة العنصر. يرجى المحاولة مرة أخرى لاحقًا.</string>
 
     <string name="upload_image_failure_network">فشل تحميل الصورة بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
-    <string name="upload_image_failure_generic">فشل تحميل الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
+    <string name="upload_image_failure">فشل تحميل الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
 
     <string name="replace_image_failure_network">فشل استبدال الصورة بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
-    <string name="replace_image_failure_generic">فشل استبدال الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
+    <string name="replace_image_failure">فشل استبدال الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
 
     <string name="download_url_failure_network">فشل استرداد عنوان URL التنزيل بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
-    <string name="download_url_failure_generic">فشل استرداد عنوان URL التنزيل. يرجى المحاولة مرة أخرى لاحقًا.</string>
+    <string name="download_url_failure">فشل استرداد عنوان URL التنزيل. يرجى المحاولة مرة أخرى لاحقًا.</string>
 
     <string name="image_deleted_successfully">تم حذف الصورة بنجاح</string>
     <string name="delete_image_failure_network">فشل حذف الصورة بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>

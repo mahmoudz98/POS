@@ -13,7 +13,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_margin="@dimen/small_spacing">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -21,26 +21,26 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imv_item"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_width="@dimen/size_image_item"
+                android:layout_height="@dimen/size_image_item"
+                android:layout_marginStart="@dimen/small_spacing"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:layout_marginBottom="@dimen/small_spacing"
                 android:scaleType="centerCrop"
                 app:error="@{@drawable/outline_hide_image_24}"
                 app:imageUrl="@{item.imageUrl}"
+                app:placeholder="@{@drawable/outline_image_24}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:placeholder="@{@drawable/outline_image_24}"
                 app:shapeAppearanceOverlay="@style/circleImageView" />
 
             <TextView
                 android:id="@+id/text_quantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/small_spacing"
+                android:layout_marginTop="@dimen/small_spacing"
                 app:layout_constraintBottom_toTopOf="@+id/text_name"
                 app:layout_constraintStart_toEndOf="@+id/imv_item"
                 app:layout_constraintTop_toTopOf="parent"
@@ -48,12 +48,13 @@
                 app:quantityText="@{item.quantity}"
                 tools:text="Qty. 3" />
 
-            <View
+            <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/divider"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:background="?android:attr/listDivider"
+                app:dividerInsetStart="@dimen/normal_spacing"
+                app:dividerInsetEnd="@dimen/normal_spacing"
+                android:layout_marginStart="@dimen/small_spacing"
                 app:layout_constraintBottom_toBottomOf="@+id/text_quantity"
                 app:layout_constraintStart_toEndOf="@+id/text_quantity"
                 app:layout_constraintTop_toTopOf="@+id/text_quantity" />
@@ -62,7 +63,7 @@
                 android:id="@+id/text_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/small_spacing"
                 app:layout_constraintBottom_toBottomOf="@+id/divider"
                 app:layout_constraintStart_toEndOf="@+id/divider"
                 app:layout_constraintTop_toTopOf="@+id/divider"
@@ -73,8 +74,8 @@
                 android:id="@+id/text_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="@dimen/small_spacing"
+                android:layout_marginBottom="@dimen/small_spacing"
                 android:text="@{item.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/image_button_print_qr_code"
@@ -86,9 +87,9 @@
 
             <ImageButton
                 android:id="@+id/image_button_print_qr_code"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="@dimen/size_image_button"
+                android:layout_height="@dimen/size_image_button"
+                android:layout_marginEnd="@dimen/small_spacing"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/print_qr_code"
                 android:foreground="@drawable/ripple_effect"

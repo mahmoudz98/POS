@@ -5,6 +5,24 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="java.util.List" />
+
+        <import type="com.casecode.domain.model.users.Item" />
+
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <variable
+            name="isEmpty"
+            type="Boolean" />
+
+        <variable
+            name="items"
+            type="List&lt;Item>" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +34,9 @@
             android:id="@+id/recycler_items"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="@{isEmpty?View.GONE: View.VISIBLE}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:bindListItems="@{items}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,25 +46,25 @@
         <include
             android:id="@+id/empty_view"
             layout="@layout/empty_items_view_layout"
-            android:visibility="gone"
+            android:visibility="@{isEmpty?View.VISIBLE: View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpb_items"
+            android:indeterminate="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="@{isLoading ? View.VISIBLE: View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/recycler_items"
             app:layout_constraintEnd_toEndOf="@+id/recycler_items"
             app:layout_constraintStart_toStartOf="@+id/recycler_items"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_add_item"
+            android:id="@+id/floating_btn_items"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"

@@ -57,19 +57,7 @@
         android:name="com.casecode.pos.ui.item.ItemsFragment"
         android:label="@string/items_title"
         tools:layout="@layout/fragment_items">
-        <action
-            android:id="@+id/action_itemsFragment_to_QRCodeDialogFragment"
-            app:destination="@id/nav_qr_code" />
+
     </fragment>
 
-    <dialog
-        android:id="@+id/nav_qr_code"
-        android:name="com.casecode.pos.ui.item.QRCodeDialogFragment"
-        android:label="QRCodeDialogFragment"
-        tools:layout="@layout/dialog_qr_code">
-
-        <argument
-            android:name="item"
-            app:argType="com.casecode.domain.model.users.Item" />
-    </dialog>
 </navigation>

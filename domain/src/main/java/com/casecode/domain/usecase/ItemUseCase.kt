@@ -15,10 +15,9 @@ class ItemUseCase @Inject constructor(private val itemRepository: ItemRepository
     /**
      * Retrieves items associated with the specified user ID [uid].
      *
-     * @param uid The user ID for which items are to be retrieved.
-     * @return A [GetItem] resource containing the retrieved items.
+     * @return A flow of resource containing the retrieved items.
      */
-    suspend fun getItems() = itemRepository.getItems()
+     fun getItems() = itemRepository.getItems()
 
     /**
      * Adds a new item to the repository.

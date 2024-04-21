@@ -1,11 +1,9 @@
 package com.casecode.testing.di.data
 
-import com.casecode.data.repository.ImageRepositoryImpl
-import com.casecode.data.repository.ItemRepositoryImpl
 import com.casecode.di.data.RepositoryModule
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.repository.EmployeesBusinessRepository
-import com.casecode.domain.repository.ImageRepository
+import com.casecode.domain.repository.ItemImageRepository
 import com.casecode.domain.repository.ItemRepository
 import com.casecode.domain.repository.SignRepository
 import com.casecode.domain.repository.StoreRepository
@@ -13,6 +11,8 @@ import com.casecode.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.domain.repository.SubscriptionsRepository
 import com.casecode.testing.repository.TestBusinessRepository
 import com.casecode.testing.repository.TestEmployeesBusinessRepository
+import com.casecode.testing.repository.TestItemImageRepository
+import com.casecode.testing.repository.TestItemRepository
 import com.casecode.testing.repository.TestSignRepository
 import com.casecode.testing.repository.TestStoreRepository
 import com.casecode.testing.repository.TestSubscriptionsBusinessRepository
@@ -55,11 +55,10 @@ interface TestRepositoryModule {
 
     @Singleton
     @Binds
-    fun bindItemRepo(itemRepositoryImpl: ItemRepositoryImpl): ItemRepository
+    fun bindItemRepo(itemRepositoryImpl: TestItemRepository): ItemRepository
 
     @Singleton
     @Binds
-    fun bindImageRepo(productRepositoryImpl: ImageRepositoryImpl): ImageRepository
+    fun bindImageRepo(testItemImageRepository: TestItemImageRepository): ItemImageRepository
 
 }
-

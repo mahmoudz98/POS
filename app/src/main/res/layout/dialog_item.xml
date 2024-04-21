@@ -3,21 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.text.TextUtils" />
+        <import type="android.view.View" />
 
+        <variable
+            name="item"
+            type="com.casecode.domain.model.users.Item" />
+        <variable
+            name="isLoading"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        >
 
         <TextView
             android:id="@+id/text_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="32dp"
-            android:text="@string/add_a_item"
+            android:layout_marginTop="@dimen/larger_spacing"
+            android:text="@{item == null ? @string/add_item : @string/update_item}"
             android:textAppearance="@android:style/TextAppearance.Material.Widget.Toolbar.Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,15 +33,17 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imv_item"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="10dp"
+            android:layout_width="@dimen/size_image_item"
+            android:layout_height="@dimen/size_image_item"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/larger_spacing"
             android:scaleType="centerCrop"
+            app:error="@{@drawable/outline_hide_image_24}"
+            app:imageUrl="@{item.imageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_item_title"
+            app:placeholder="@{@drawable/outline_image_24}"
             app:shapeAppearanceOverlay="@style/circleImageView"
             app:srcCompat="@drawable/outline_image_24" />
 
@@ -41,9 +51,10 @@
             android:id="@+id/til_barcode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/normal_spacing"
+            android:layout_marginTop="@dimen/large_spacing"
+            android:layout_marginEnd="@dimen/normal_spacing"
+            android:enabled="@{item == null ? true : false}"
             android:hint="@string/barcode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -55,34 +66,53 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:maxLength="13"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:text="@{item == null ? null : item.sku}" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/image_button_scan_barcode"
+            android:layout_width="@dimen/size_image_button"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/normal_spacing"
+            android:layout_marginEnd="@dimen/normal_spacing"
+            android:layout_marginBottom="@dimen/normal_spacing"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/scan_barcode"
+            android:foreground="@drawable/ripple_effect"
+            android:scaleType="fitXY"
+            android:visibility="@{item == null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/til_barcode"
+            app:layout_constraintEnd_toEndOf="@+id/til_barcode"
+            app:layout_constraintTop_toTopOf="@+id/til_barcode"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/enter_barcode" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="@dimen/small_spacing"
             android:hint="@string/name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/til_barcode"
+            app:layout_constraintStart_toStartOf="@+id/til_barcode"
             app:layout_constraintTop_toBottomOf="@+id/til_barcode"
             app:startIconDrawable="@drawable/outline_inventory_2_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="text"
+
+                android:text="@{item == null ? null : item.name}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
             android:hint="@string/price"
             app:layout_constraintEnd_toStartOf="@+id/til_quantity"
             app:layout_constraintStart_toStartOf="@+id/til_name"
@@ -92,14 +122,16 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number|numberDecimal" />
+                android:inputType="number|numberDecimal"
+
+                android:text="@{item == null ? null : String.valueOf(item.price)}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_quantity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/small_spacing"
             android:hint="@string/quantity"
             app:layout_constraintEnd_toEndOf="@+id/til_name"
             app:layout_constraintStart_toEndOf="@+id/til_price"
@@ -109,38 +141,39 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number|numberDecimal" />
+                android:inputType="number|numberDecimal"
+                android:text="@{item == null ? null : String.valueOf(item.quantity)}" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/button_item"
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/lpi_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:text="@string/add"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/normal_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
+            android:indeterminate="true"
+            android:visibility="@{isLoading ? View.VISIBLE: View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_price" />
+            app:layout_constraintTop_toTopOf="@+id/til_price" />
 
-        <ImageButton
-            android:id="@+id/image_button_scan_barcode"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+        <Button
+            android:id="@+id/btn_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
             android:layout_marginBottom="16dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/scan_barcode"
-            android:foreground="@drawable/ripple_effect"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/til_barcode"
-            app:layout_constraintEnd_toEndOf="@+id/til_barcode"
-            app:layout_constraintTop_toTopOf="@+id/til_barcode"
-            app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/enter_barcode" />
+            android:enabled="@{!isLoading}"
+            android:text="@{item == null ? @string/add_item : @string/update_item}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lpi_item" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,7 +2,7 @@ package com.casecode.di.domain
 
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.repository.EmployeesBusinessRepository
-import com.casecode.domain.repository.ImageRepository
+import com.casecode.domain.repository.ItemImageRepository
 import com.casecode.domain.repository.ItemRepository
 import com.casecode.domain.repository.SignRepository
 import com.casecode.domain.repository.StoreRepository
@@ -12,7 +12,7 @@ import com.casecode.domain.usecase.CompleteBusinessUseCase
 import com.casecode.domain.usecase.GetStoreUseCase
 import com.casecode.domain.usecase.GetSubscriptionBusinessUseCase
 import com.casecode.domain.usecase.GetSubscriptionsUseCase
-import com.casecode.domain.usecase.ImageUseCase
+import com.casecode.domain.usecase.ItemImageUseCase
 import com.casecode.domain.usecase.ItemUseCase
 import com.casecode.domain.usecase.SetBusinessUseCase
 import com.casecode.domain.usecase.SetEmployeesBusinessUseCase
@@ -68,6 +68,6 @@ object UseCaseModule {
         ItemUseCase(itemRepository)
 
     @Provides
-    fun provideImageUseCase(imageRepository: ImageRepository) =
-        ImageUseCase(imageRepository)
+    fun provideImageUseCase(imageRepository: ItemImageRepository) =
+        ItemImageUseCase(imageRepository)
 }

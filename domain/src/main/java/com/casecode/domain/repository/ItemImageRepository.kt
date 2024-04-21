@@ -10,7 +10,7 @@ typealias DeleteImage = Resource<Boolean>
 /**
  * An interface defining methods for image operations such as uploading, replacing, and deleting images.
  */
-interface ImageRepository {
+interface ItemImageRepository {
     /**
      * Uploads an image represented by [bitmap] with the given [imageName].
      *

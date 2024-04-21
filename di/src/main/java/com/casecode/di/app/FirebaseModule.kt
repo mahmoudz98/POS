@@ -6,6 +6,9 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestoreSettings
+import com.google.firebase.firestore.memoryCacheSettings
+import com.google.firebase.firestore.persistentCacheSettings
 import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
@@ -17,12 +20,34 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object FirebaseModule {
+
+    /**
+     * Configures the Firestore settings.
+     */
+    private val setting = firestoreSettings {
+        // Use memory cache
+        setLocalCacheSettings(memoryCacheSettings {})
+        // Use persistent disk cache (default)
+        setLocalCacheSettings(persistentCacheSettings { })
+    }
+    /**
+     * Provides an instance of FirebaseAuth.
+     */
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
+
+    /**
+     * Provides an instance of FirebaseFirestore.
+     *
+     * @return A FirebaseFirestore instance.
+     */
     @Provides
-    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+    @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance().apply {
+        firestoreSettings = setting
+    }
 
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()

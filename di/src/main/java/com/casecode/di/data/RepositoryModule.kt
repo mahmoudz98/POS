@@ -2,7 +2,7 @@ package com.casecode.di.data
 
 import com.casecode.data.repository.BusinessRepositoryImpl
 import com.casecode.data.repository.EmployeesBusinessRepositoryImpl
-import com.casecode.data.repository.ImageRepositoryImpl
+import com.casecode.data.repository.ItemImageRepositoryImpl
 import com.casecode.data.repository.ItemRepositoryImpl
 import com.casecode.data.repository.SignRepositoryImpl
 import com.casecode.data.repository.StoreRepositoryImpl
@@ -10,7 +10,7 @@ import com.casecode.data.repository.SubscriptionsBusinessRepositoryImpl
 import com.casecode.data.repository.SubscriptionsRepositoryImpl
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.repository.EmployeesBusinessRepository
-import com.casecode.domain.repository.ImageRepository
+import com.casecode.domain.repository.ItemImageRepository
 import com.casecode.domain.repository.ItemRepository
 import com.casecode.domain.repository.SignRepository
 import com.casecode.domain.repository.StoreRepository
@@ -46,5 +46,5 @@ abstract class RepositoryModule {
     internal abstract fun bindItemRepo(itemRepositoryImpl: ItemRepositoryImpl): ItemRepository
 
     @Binds
-    internal abstract fun bindImageRepo(productRepositoryImpl: ImageRepositoryImpl): ImageRepository
+    internal abstract fun bindImageRepo(itemImageRepositoryImpl: ItemImageRepositoryImpl): ItemImageRepository
 }

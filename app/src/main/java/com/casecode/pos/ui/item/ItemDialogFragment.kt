@@ -1,46 +1,109 @@
 package com.casecode.pos.ui.item
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
-import coil.load
+import androidx.fragment.app.viewModels
 import com.casecode.domain.model.users.Item
 import com.casecode.pos.R
+import com.casecode.pos.base.PositiveDialogListener
 import com.casecode.pos.databinding.DialogItemBinding
+import com.casecode.pos.ui.permissions.PermissionRequestCameraDialog
 import com.casecode.pos.utils.CaptureCustomActivity
+import com.casecode.pos.utils.EventObserver
+import com.casecode.pos.utils.showSnackbar
 import com.casecode.pos.viewmodel.ItemsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * A dialog fragment for adding or updating an item.
- *
- * @property isUpdate Flag indicating whether the dialog is for updating an existing item.
- * @property item The item to be updated (if any).
  */
-class ItemDialogFragment(
-    private val isUpdate: Boolean = false,
-    private val item: Item? = null
-) : DialogFragment() {
-
+@AndroidEntryPoint
+class ItemDialogFragment : DialogFragment() {
     // View binding for the dialog layout
     private var _binding: DialogItemBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     // ViewModel instance
-    private val viewModel: ItemsViewModel by activityViewModels()
+    private val viewModel: ItemsViewModel by viewModels(
+        ownerProducer = { requireParentFragment() },
+    )
+    private val requestCameraPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (!isGranted) {
+            // Permission denied, handle the denial
+            handleCameraPermissionDenied()
+        }
+    }
+    private lateinit var currentPhotoPath: String
+    private val imageCaptureLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { it ->
+
+            if (it.resultCode == Activity.RESULT_OK) {
+                if (it.data != null && it.data?.data != null) {
+                    val imageUri = it.data?.data
+                    binding.imvItem.setImageURI(imageUri)
+                } else {
+                    FileProvider.getUriForFile(
+                        requireContext(),
+                        requireActivity().applicationContext.packageName + ".fileprovider",
+                        File(currentPhotoPath),
+                    )?.let {url->
+                        binding.imvItem.setImageURI(url)
+                    }
+
+                    Timber.d("RESULT DATA: ${it.data?.data}")
+                }
+                updatedImageItem()
+            } else if (it.resultCode == Activity.RESULT_CANCELED) {
+                binding.root.showSnackbar(
+                    getString(R.string.item_no_image_selected),
+                    Snackbar.LENGTH_SHORT,
+                )
+                Timber.i("result for take image or gallery is null")
+            }
+        }
+
+    private fun updatedImageItem() {
+        if (tag == ITEM_UPDATE_FRAGMENT) viewModel.updateItemImage()
+        Timber.e("updatedImageItem")
+    }
+
+    private val barLauncher = registerForActivityResult(ScanContract()) { result ->
+        result.contents?.let {
+            // Handle the scanned barcode result
+            // For example, set it to a text input field
+            binding.tilBarcode.editText?.setText(it)
+            // Simulate pressing "Done"
+            binding.tilBarcode.editText?.onEditorAction(EditorInfo.IME_ACTION_DONE)
+        }
+    }
 
     /**
      * Creates the dialog with the dialog layout.
@@ -57,7 +120,7 @@ class ItemDialogFragment(
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return binding.root
     }
@@ -65,94 +128,105 @@ class ItemDialogFragment(
     /**
      * Initializes the views and sets up click listeners.
      */
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.lifecycleOwner = this.viewLifecycleOwner
+        setup()
+    }
 
-        setupViews()
+    private fun setup() {
+        observerLoadingItem()
+        setupObserverUpdateItem()
+        setupClick()
+
+    }
+
+    private fun observerLoadingItem() {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            binding.isLoading = it
+        }
+    }
+
+    private fun setupObserverUpdateItem() {
+        if (tag == ITEM_UPDATE_FRAGMENT) {
+            viewModel.itemSelected.observe(viewLifecycleOwner) {
+                binding.item = it
+            }
+        }
     }
 
     /**
      * Sets up the views based on whether it's an add or update operation.
      */
-    private fun setupViews() {
-        // Set title and button text based on add or update operation
-        val titleResId = if (isUpdate) R.string.update_item else R.string.add_item
-        val buttonTextResId = if (isUpdate) R.string.update_item else R.string.add_item
-
-        // Populate item details if it's an update operation
-        item?.let { item ->
-            with(binding) {
-                textItemTitle.text = getString(titleResId)
-                buttonItem.text = getString(buttonTextResId)
-
-                // Load image using Coil
-                imvItem.load(item.imageUrl) {
-                    placeholder(R.drawable.outline_image_24)
-                    error(R.drawable.outline_hide_image_24)
-                }
-                tilBarcode.isEnabled = false
-                imageButtonScanBarcode.visibility = View.GONE
-                tilBarcode.editText?.setText(item.sku)
-                tilName.editText?.setText(item.name)
-                tilPrice.editText?.setText(item.price.toString())
-                tilQuantity.editText?.setText(item.quantity.toString())
-            }
-        }
-
+    private fun setupClick() {
         // Set click listener for image view to capture image
-        binding.imvItem.setOnClickListener { captureImageFromCameraOrGallery() }
-
+        binding.imvItem.setOnClickListener {
+            requestCameraPermissionOrStartCapture()
+        }
         // Set click listener for image view to scan barcode
         binding.imageButtonScanBarcode.setOnClickListener { scanCode() }
 
         // Set click listener for item button to add or update item
-        binding.buttonItem.setOnClickListener {
+        binding.btnItem.setOnClickListener {
             if (isValidItemInput()) {
-                // Get item and bitmap from ViewModel
-                val itemFromDialog = viewModel.getItem()
-                val bitmap = viewModel.getBitmap()
-
-                // Upload image and add or update item based on conditions
-                itemFromDialog?.let { dialogItem ->
-                    if (bitmap != null) {
-                        if (item == null) {
-                            viewModel.uploadImageAndAddItem(bitmap, dialogItem)
-                        } else {
-                            viewModel.uploadImageAndUpdateItem(bitmap, dialogItem)
-                        }
-                    } else {
-                        if (item == null) {
-                            viewModel.addItem(dialogItem)
-                        } else {
-                            viewModel.updateItem(dialogItem)
-                        }
-                    }
+                if (tag == ITEM_ADD_FRAGMENT) {
+                    viewModel.checkNetworkAndAddItem()
+                } else {
+                    viewModel.checkNetworkAndUpdateItem()
                 }
-                dismiss()
+                viewModel.isAddItem.observe(
+                    viewLifecycleOwner,
+                    EventObserver { isAddOrUpdateItem ->
+                        if (isAddOrUpdateItem) {
+                            dismiss()
+                        }
+                    },
+                )
             }
+
         }
     }
 
-    /**
-     * Clears the view binding instance when the view is destroyed.
-     */
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun requestCameraPermissionOrStartCapture() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA,
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            captureImageFromCameraOrGallery()
+        } else {
+            handleCameraPermissionDenied()
+        }
     }
 
-    /**
-     * Handles the result of image capture or selection.
-     */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE_OR_PICK && resultCode == Activity.RESULT_OK) {
-            val imageUri = data?.data
+    private fun handleCameraPermissionDenied() {
+        val permissionDialog = PermissionRequestCameraDialog()
+        permissionDialog.listener = PositiveDialogListener {
+            requestCameraPermission()
+        }
+        permissionDialog.show(childFragmentManager, "PermissionRequestCameraDialog")
 
-            // Set image URI to image view
-            binding.imvItem.setImageURI(imageUri)
+        dialog?.setCanceledOnTouchOutside(false)
+        permissionDialog.dialog?.setOnDismissListener {
+            dialog?.setCanceledOnTouchOutside(true)
+        }
+    }
+
+    private fun requestCameraPermission() {
+        requestCameraPermission.launch(Manifest.permission.CAMERA)
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ROOT).format(Date())
+        val storageDir: File? = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return with(File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)) {
+            currentPhotoPath = absolutePath
+            this
         }
     }
 
@@ -160,30 +234,36 @@ class ItemDialogFragment(
      * Initiates the capture of an image from camera or gallery.
      */
     private fun captureImageFromCameraOrGallery() {
-        // Create intents for capturing image from camera and picking from gallery
-        val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
+                // Create the File where the photo should go
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    Timber.e(ex)
+                    null
+                }
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        requireContext(),
+                        requireActivity().applicationContext.packageName + ".fileprovider",
+                        it,
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                }
+            }
+        }
+
         val pickPhoto = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
-        // Check if there are applications available to handle the camera and gallery intents
-        val packageManager = requireActivity().packageManager
-        val cameraActivities = takePicture.resolveActivity(packageManager)
-        val galleryActivities = pickPhoto.resolveActivity(packageManager)
-
         // Create a chooser intent to let the user select between camera and gallery
-        val chooserIntent = Intent.createChooser(Intent(), getString(R.string.select_image))
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickPhoto))
+        val chooserIntent = Intent.createChooser(pickPhoto, getString(R.string.select_image))
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
+        imageCaptureLauncher.launch(chooserIntent)
 
-        // Start the activity for result if both camera and gallery are available
-        if (cameraActivities != null && galleryActivities != null) {
-            startActivityForResult(chooserIntent, REQUEST_IMAGE_CAPTURE_OR_PICK)
-        } else {
-            // Display a message if no camera or gallery apps are found
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.no_camera_or_gallery_apps_found),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
     }
 
     /**
@@ -214,7 +294,10 @@ class ItemDialogFragment(
             }
             return false
         }
-
+        // Set bitmap to ViewModel if available
+        with(binding.imvItem.drawable as? BitmapDrawable) {
+            viewModel.setBitmap(this?.bitmap)
+        }
         // Create the item object
         val item = Item(
             name = name,
@@ -222,32 +305,18 @@ class ItemDialogFragment(
             quantity = quantity.toDouble(),
             sku = barcode,
             unitOfMeasurement = null,
-            imageUrl = null
+            imageUrl = null,
         )
-
-        // Set bitmap to ViewModel if available
-        val bitmapDrawable = binding.imvItem.drawable as? BitmapDrawable
-        val bitmap = bitmapDrawable?.bitmap
-        if (bitmap != null) {
-            // If bitmap is not null, set it to the item
-            viewModel.setBitmap(bitmap)
-        }
-
         // Set the item to the ViewModel
-        viewModel.setItem(item)
+        if (tag == ITEM_ADD_FRAGMENT) {
+            viewModel.setItemSelected(item)
+        } else {
+            viewModel.setItemUpdated(item)
+        }
 
         return true
     }
 
-    /**
-     * Clears the ViewModel when the dialog is dismissed.
-     */
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        // Reset ViewModel data
-        viewModel.clearData()
-    }
 
     private fun scanCode() {
         val options = ScanOptions().apply {
@@ -259,32 +328,25 @@ class ItemDialogFragment(
         barLauncher.launch(options)
     }
 
-    private val barLauncher = registerForActivityResult(ScanContract()) { result ->
-        result.contents?.let {
-            // Handle the scanned barcode result
-            // For example, set it to a text input field
-            binding.tilBarcode.editText?.setText(it)
-            // Simulate pressing "Done"
-            binding.tilBarcode.editText?.onEditorAction(EditorInfo.IME_ACTION_DONE)
-        }
+    /**
+     * Clears the view binding instance when the view is destroyed.
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        imageCaptureLauncher.unregister()
+        _binding = null
     }
 
     /**
      * Companion object containing constants and a factory method to create instances of [ItemDialogFragment].
      */
     companion object {
-        const val REQUEST_IMAGE_CAPTURE_OR_PICK = 0
-        const val ITEM_DIALOG_FRAGMENT = "itemDialogFragment"
+        const val ITEM_ADD_FRAGMENT = "ITEM_ADD_FRAGMENT"
+        const val ITEM_UPDATE_FRAGMENT = "ITEM_UPDATE_FRAGMENT"
 
-        /**
-         * Factory method to create a new instance of [ItemDialogFragment].
-         *
-         * @param isUpdate Flag indicating whether the dialog is for updating an existing item.
-         * @param item The item to be updated (if any).
-         * @return A new instance of [ItemDialogFragment].
-         */
-        fun newInstance(isUpdate: Boolean = false, item: Item? = null): ItemDialogFragment {
-            return ItemDialogFragment(isUpdate, item)
+        fun newInstance(
+        ): ItemDialogFragment {
+            return ItemDialogFragment()
         }
     }
 }
