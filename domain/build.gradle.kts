@@ -9,11 +9,9 @@ android {
     @Suppress("UnstableApiUsage")
     testOptions {
         unitTests {
-
             isReturnDefaultValues = true
         }
     }
-
 }
 
 dependencies {
@@ -23,5 +21,4 @@ dependencies {
     api(libs.firebase.auth.ktx)
 
     testApi(libs.coroutines.test)
-
 }

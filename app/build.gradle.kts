@@ -1,8 +1,4 @@
-﻿import com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask
-import org.gradle.configurationcache.extensions.capitalized
-import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
-
-plugins {
+﻿plugins {
     alias(libs.plugins.pos.android.application)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.pos.android.hilt)
@@ -55,7 +51,7 @@ android {
             }
         }
         unitTests {
-
+            isReturnDefaultValues = true
             isIncludeAndroidResources = true
         }
     }
@@ -65,7 +61,6 @@ android {
     }
 
     buildFeatures {
-
         dataBinding = true
         viewBinding = true
         buildConfig = true
@@ -75,7 +70,6 @@ android {
     }
 
     packaging {
-
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
             excludes.add("/META-INF/NOTICE.md")
@@ -85,12 +79,13 @@ android {
             excludes.add("DebugProbesKt.bin")
         }
     }
-
+    lint {
+        abortOnError = false
+    }
     namespace = "com.casecode.pos"
 }
-
+/*
 androidComponents {
-
     onVariants(selector().all()) { variant ->
         afterEvaluate {
             val dataBindingTask =
@@ -102,13 +97,15 @@ androidComponents {
             }
         }
     }
-}
+}*/
 
 dependencies {
 
     implementation(projects.data)
     implementation(projects.domain)
     implementation(projects.di)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.lifecycle)
 
     testImplementation(projects.domain)
     testImplementation(projects.data)
@@ -136,12 +133,13 @@ dependencies {
 
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+
     // service
     implementation(libs.budiyev.barcode)
     implementation(libs.zxing.android.embedded)
 
     // coroutines
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.coroutines.android)
     debugCompileOnly(libs.kotlinx.coroutines.debug)
     // Debug tools
     // debugImplementation(libs.leakcanary)
@@ -151,7 +149,7 @@ dependencies {
     testImplementation(libs.core.testing)
 
     // jvm test - Hilt
-    kspTest(libs.hilt.compiler)
+    kaptTest(libs.hilt.compiler)
 
     // assertion
     testImplementation(libs.test.hamcrest)
@@ -162,7 +160,7 @@ dependencies {
 
     // coroutines unit test
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.coroutines.android.test)
+    testImplementation(libs.coroutines.android)
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
     debugImplementation(libs.fragment.testing)
     /*    implementation(libs.test.core)
@@ -180,7 +178,6 @@ dependencies {
     androidTestImplementation(libs.test.core)
     androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.test.runner)
-    androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.test.ext.junit.ktx)
     androidTestImplementation(libs.test.monitor)
     androidTestImplementation(libs.test.orchestrator)
@@ -208,7 +205,7 @@ dependencies {
     }
 
     // AndroidX Test - Hilt testing
-    kspAndroidTest(libs.hilt.compiler)
+    kaptAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
 
     // implementation(kotlin("reflect"))

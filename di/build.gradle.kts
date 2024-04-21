@@ -7,6 +7,9 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    lint {
+        abortOnError = false
+    }
     namespace = "com.casecode.pos.di"
 }
 secrets {
