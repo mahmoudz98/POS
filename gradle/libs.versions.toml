@@ -6,14 +6,14 @@ kotlin = "1.9.23"
 androidDesugarJdkLibs = "2.0.4"
 secrets = "2.0.1"
 dependencyGuard = "0.4.3"
+moduleGraph = "2.5.0"
 
 
 # Androidx
-activity = "1.8.2"
+activity = "1.9.0"
 appcompat = "1.6.1"
 core-splashscreen = "1.0.1"
-core = "1.12.0"
-constraintlayout = "2.1.4"
+core = "1.13.0"
 fragment = "1.6.2"
 lifecycle = "2.7.0"
 slidingpanelayout = "1.2.0"
@@ -25,7 +25,7 @@ navigation = "2.7.7"
 androidxMacroBenchmark = "1.2.3"
 
 # UI Tools
-coil = "2.5.0"
+coil = "2.6.0"
 androidStepper = "0.3.0"
 material = "1.11.0"
 
@@ -33,8 +33,8 @@ material = "1.11.0"
 kotlinx-coroutines = "1.8.0"
 
 # DI
-hilt = "2.50"
-hiltExt = "1.1.0"
+hilt = "2.51"
+hiltExt = "1.2.0"
 hilt-navigation= "1.2.0"
 hiltTesting = "1.1.0"
 
@@ -53,15 +53,15 @@ ksp = "1.9.22-1.0.16"
 
 #  Services
 # https://firebase.google.com/support/release-notes/android
-firebaseBom = "32.7.2"
+firebaseBom = "32.8.1"
 firebase-auth = "22.3.1"
-firebaseFirestoreKtx = "24.10.2"
+firebaseFirestoreKtx = "24.11.1"
 firebaseStorageKtx = "20.3.0"
 
 testlab = "0.2"
 firebaseMessaging = "23.4.1"
 google-services = "4.4.1"
-play-services-auth = "21.0.0"
+play-services-auth = "21.1.0"
 firebaseCrashlyticsPlugin = "2.9.9"
 firebasePerfPlugin = "1.4.2"
 googleOssPlugin = "0.10.6"
@@ -89,8 +89,6 @@ mockk-andrdoid = "1.13.9"
 # Gradle plugins
 ktlint-plugin = "10.3.0"
 spotless = "6.22.0"
-junitVersion = "1.1.5"
-org-jetbrains-kotlin-jvm = "1.9.22"
 uiautomator = "2.2.0"
 benchmarkMacroJunit4 = "1.2.3"
 cameraCore = "1.3.2"
@@ -134,25 +132,21 @@ coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
 
 # Multithreading
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
-coroutines-android-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+coroutines-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinx-coroutines" }
 
 
 # DI
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 degger-android = { module = "com.google.dagger:dagger", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 
 android-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-navigation" }
 hilt-navigation = { module = "androidx.hilt:hilt-navigation", version.ref = "hilt-navigation" }
-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hilt-navigation" }
 
 
 # Debug Tools
@@ -214,7 +208,6 @@ test-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", ve
 test-espresso-idlingResource = { module = "androidx.test.espresso:espresso-idling-resource", version.ref = "testespresso" }
 test-espresso-idling-concurrent = { module = "androidx.test.espresso.idling:idling-concurrent", version.ref = "testespresso" }
 test-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "testespresso" }
-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 
 
 # Dependencies of the included build-logic
@@ -233,13 +226,11 @@ androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycl
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark" }
-
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 gradle-cache-fix = { id = "org.gradle.android.cache-fix", version = "3.0" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
-dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
@@ -254,11 +245,11 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-
 navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigation" }
 navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
-org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
-autonomousapps-analysis = { id = "com.autonomousapps.dependency-analysis", version = "1.28.0" }
+
+module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
+dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 
 
 # Plugins defined by this project
