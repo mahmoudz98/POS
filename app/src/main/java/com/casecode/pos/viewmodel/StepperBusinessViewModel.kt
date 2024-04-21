@@ -1,7 +1,6 @@
 package com.casecode.pos.viewmodel
 
 import androidx.annotation.OpenForTesting
-import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -54,8 +53,7 @@ class StepperBusinessViewModel
         // Observables
         private val _isOnline: MutableLiveData<Boolean> = MutableLiveData(false)
         val isOnline get() = _isOnline
-        private val _userMessage: MutableLiveData<Event<Int>> = MutableLiveData()
-        val userMessage get() = _userMessage
+
         var isAddBusiness: MutableLiveData<AddBusiness?> = MutableLiveData()
             private set
 
@@ -167,13 +165,6 @@ class StepperBusinessViewModel
 
         fun setConnected(isOnline: Boolean) {
             _isOnline.value = isOnline
-        }
-
-        private fun showSnackbarMessage(
-            @StringRes message: Int,
-        ) {
-            Timber.e("message: $message")
-            _userMessage.value = Event(message)
         }
 
         fun setStoreType(store: String) {
@@ -288,11 +279,11 @@ class StepperBusinessViewModel
                     val messageRes =
                         (isAddBusinessResource as? Resource.Empty)?.message
                             ?: (isAddBusinessResource as? Resource.Error)?.message
-                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
+                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_unknown)
                 }
 
                 else -> {
-                    showSnackbarMessage(R.string.all_error_save)
+                    showSnackbarMessage(R.string.all_error_unknown)
                 }
             }
         }
@@ -384,11 +375,11 @@ class StepperBusinessViewModel
                         (resourceIsAddSubscription as? Resource.Empty)?.message
                             ?: (resourceIsAddSubscription as? Resource.Error)?.message
 
-                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
+                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_unknown)
                 }
 
                 else -> {
-                    showSnackbarMessage(R.string.all_error_save)
+                    showSnackbarMessage(R.string.all_error_unknown)
                 }
             }
         }
@@ -538,11 +529,11 @@ class StepperBusinessViewModel
                         (isAddEmployeesResource as? Resource.Empty)?.message
                             ?: (isAddEmployeesResource as? Resource.Error)?.message
 
-                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
+                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_unknown)
                 }
 
                 else -> {
-                    showSnackbarMessage(R.string.all_error_save)
+                    showSnackbarMessage(R.string.all_error_unknown)
                 }
             }
         }
@@ -567,14 +558,14 @@ class StepperBusinessViewModel
                         (isCompleteBusinessStep as? Resource.Empty)?.message
                             ?: (isCompleteBusinessStep as? Resource.Error)?.message
 
-                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_save)
+                    showSnackbarMessage(messageRes as? Int ?: R.string.all_error_unknown)
                 }
 
                 is Resource.Loading -> {
                     TODO()
                 }
                 null -> {
-                    showSnackbarMessage(R.string.all_error_save)
+                    showSnackbarMessage(R.string.all_error_unknown)
                 }
             }
         }
