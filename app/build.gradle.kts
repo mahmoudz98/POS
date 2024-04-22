@@ -117,8 +117,8 @@ dependencies {
 
     // AndroidX
     implementation(libs.core)
-    // implementation(libs.activity)
-    // implementation(libs.fragment.ktx)
+    //implementation(libs.activity)
+     //implementation(libs.fragment.ktx)
     implementation(libs.appcompat)
     implementation(libs.recyclerview)
     implementation(libs.slidingpanelayout)
@@ -134,8 +134,7 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
 
-    // service
-    implementation(libs.budiyev.barcode)
+    // scanner barcode
     implementation(libs.zxing.android.embedded)
 
     // coroutines
