@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".utils.CaptureCustomActivity"
+            android:name=".utils.CaptureScannerActivity"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />

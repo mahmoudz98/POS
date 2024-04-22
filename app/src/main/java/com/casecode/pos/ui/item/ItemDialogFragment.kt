@@ -24,9 +24,9 @@ import com.casecode.pos.R
 import com.casecode.pos.base.PositiveDialogListener
 import com.casecode.pos.databinding.DialogItemBinding
 import com.casecode.pos.ui.permissions.PermissionRequestCameraDialog
-import com.casecode.pos.utils.CaptureCustomActivity
 import com.casecode.pos.utils.EventObserver
 import com.casecode.pos.utils.showSnackbar
+import com.casecode.pos.utils.startScanningBarcode
 import com.casecode.pos.viewmodel.ItemsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +39,7 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 /**
  * A dialog fragment for adding or updating an item.
@@ -74,7 +75,7 @@ class ItemDialogFragment : DialogFragment() {
                         requireContext(),
                         requireActivity().applicationContext.packageName + ".fileprovider",
                         File(currentPhotoPath),
-                    )?.let {url->
+                    )?.let { url ->
                         binding.imvItem.setImageURI(url)
                     }
 
@@ -92,16 +93,21 @@ class ItemDialogFragment : DialogFragment() {
 
     private fun updatedImageItem() {
         if (tag == ITEM_UPDATE_FRAGMENT) viewModel.updateItemImage()
-        Timber.e("updatedImageItem")
     }
 
     private val barLauncher = registerForActivityResult(ScanContract()) { result ->
-        result.contents?.let {
-            // Handle the scanned barcode result
-            // For example, set it to a text input field
-            binding.tilBarcode.editText?.setText(it)
-            // Simulate pressing "Done"
-            binding.tilBarcode.editText?.onEditorAction(EditorInfo.IME_ACTION_DONE)
+        result.contents.let {
+            if (it == null) {
+                binding.root.showSnackbar(
+                    getString(R.string.message_scan_error),
+                    Snackbar.LENGTH_SHORT,
+                )
+            } else {
+                // Handle the scanned barcode result
+                binding.tilBarcode.editText?.setText(it)
+                binding.tilBarcode.editText?.onEditorAction(EditorInfo.IME_ACTION_DONE)
+                // Simulate pressing "Done"
+            }
         }
     }
 
@@ -168,7 +174,7 @@ class ItemDialogFragment : DialogFragment() {
             requestCameraPermissionOrStartCapture()
         }
         // Set click listener for image view to scan barcode
-        binding.imageButtonScanBarcode.setOnClickListener { scanCode() }
+        binding.imageButtonScanBarcode.setOnClickListener { startScanBarcode() }
 
         // Set click listener for item button to add or update item
         binding.btnItem.setOnClickListener {
@@ -317,15 +323,8 @@ class ItemDialogFragment : DialogFragment() {
         return true
     }
 
-
-    private fun scanCode() {
-        val options = ScanOptions().apply {
-            setPrompt("Scan a barcode")
-            setBeepEnabled(false)
-            setOrientationLocked(true)
-            captureActivity = CaptureCustomActivity::class.java
-        }
-        barLauncher.launch(options)
+    private fun startScanBarcode() {
+        barLauncher.launch(ScanOptions().startScanningBarcode(requireContext()),)
     }
 
     /**

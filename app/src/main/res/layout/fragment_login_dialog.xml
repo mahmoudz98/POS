@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -12,23 +12,61 @@
             android:id="@+id/tv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/small_spacing"
-            android:text="@string/employee_login"
-            android:textAppearance="@style/TextAppearance.pos.TitleMedium" />
 
-        <com.budiyev.android.codescanner.CodeScannerView
-            android:id="@+id/code_scanner_login"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/small_spacing" />
+            android:text="@string/employee_login"
+            android:textAppearance="@style/TextAppearance.pos.TitleMedium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_login_scan_uid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/large_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
+            android:enabled="false"
+            android:hint="@string/employee_user_admin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_login"
+            app:startIconDrawable="@drawable/ic_profile">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:id="@+id/btn_login_scan_uid"
+            android:layout_width="@dimen/size_image_button"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/normal_spacing"
+            android:layout_marginEnd="@dimen/normal_spacing"
+            android:layout_marginBottom="@dimen/normal_spacing"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/scan_barcode"
+            android:foreground="@drawable/ripple_effect"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/til_login_scan_uid"
+            app:layout_constraintEnd_toEndOf="@+id/til_login_scan_uid"
+            app:layout_constraintTop_toTopOf="@+id/til_login_scan_uid"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/enter_barcode" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_login_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_spacing"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_login_scan_uid"
             app:startIconDrawable="@drawable/ic_profile">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -44,7 +82,12 @@
             android:id="@+id/til_login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_spacing"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_login_name"
             app:startIconDrawable="@drawable/password_24px">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -61,14 +104,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate= "true"
-            android:layout_marginTop="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/normal_spacing"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_login_password"
             android:visibility="invisible" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="true"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/smaller_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pgb_login"
             android:text="@string/login" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -49,6 +49,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun setupLauncherActivity() {
+
         launcher =
             registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
 
