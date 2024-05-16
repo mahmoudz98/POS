@@ -20,7 +20,10 @@ object TestDispatchersModule {
    @Provides
    @Dispatcher(AppDispatchers.IO)
    fun providesIODispatcherTest(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
-   
+    @Provides
+   @Dispatcher(AppDispatchers.MAIN)
+   fun providesMainDispatcherTest(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
+
    @Provides
    @Dispatcher(AppDispatchers.DEFAULT)
    fun providesDefaultDispatcherTest(

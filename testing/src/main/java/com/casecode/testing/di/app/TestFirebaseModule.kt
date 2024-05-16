@@ -1,8 +1,7 @@
 package com.casecode.testing.di.app
 
 import com.casecode.di.app.FirebaseModule
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -44,11 +43,9 @@ object TestFirebaseModule {
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage.also { mockk() }
 
-    @Provides
-    fun provideSignInClient() = mockk<SignInClient>()
 
     @Provides
-    fun provideSignInRequest(): BeginSignInRequest {
-        return mockk<BeginSignInRequest>()
+    fun provideSignInRequest(): GetGoogleIdOption {
+        return mockk<GetGoogleIdOption>()
     }
 }

@@ -68,13 +68,9 @@ class SignOutDialog : DialogFragment()
             placeholder(R.drawable.ic_google)
             error(R.drawable.ic_google)
          }
-         
-         
-         
          ivClose.setOnClickListener {
             dismiss()
          }
-         
          btnSignOut.setOnClickListener {
             listener.onDialogPositiveClick()
             dismiss()

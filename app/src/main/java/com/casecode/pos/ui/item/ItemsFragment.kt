@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import com.casecode.domain.model.users.Item
 import com.casecode.pos.R
 import com.casecode.pos.adapter.ItemsAdapter
@@ -67,10 +68,12 @@ class ItemsFragment : Fragment() {
     }
 
     private fun setupMenu() {
-        menuProvider = object : MenuProvider {
+       val menuProvider = object : MenuProvider {
+
             override fun onCreateMenu(
                 menu: Menu,
                 menuInflater: MenuInflater, ) {
+                menu.removeItem(R.id.action_main_profile)
                 menuInflater.inflate(R.menu.menu_items_fragment, menu)
                 val searchItem = menu.findItem(R.id.action_search)
                 val searchView = searchItem.actionView as SearchView
@@ -98,7 +101,7 @@ class ItemsFragment : Fragment() {
                 }
             }
         }
-        requireActivity().addMenuProvider(menuProvider!!)
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setupRecyclerView() {
@@ -148,9 +151,5 @@ class ItemsFragment : Fragment() {
         menuProvider?.let { requireActivity().removeMenuProvider(it) }
         _binding = null
         viewModelStore.clear()
-
-
     }
-
-
 }

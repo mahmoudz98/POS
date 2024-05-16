@@ -5,16 +5,19 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.casecode.data.utils.encodeAsBitmap
+import com.casecode.domain.model.users.Invoice
+import com.casecode.domain.model.users.InvoiceGroup
 import com.casecode.domain.model.users.Item
+import com.casecode.pos.adapter.InvoiceAdapter
+import com.casecode.pos.adapter.InvoiceGroupAdapter
 import com.casecode.pos.adapter.ItemsAdapter
+import com.casecode.pos.adapter.SaleAdapter
 import com.google.zxing.WriterException
 import timber.log.Timber
 import java.text.DecimalFormat
 
 @BindingAdapter("bindListItems")
 fun RecyclerView.bindListItems(items: List<Item>?) {
-    Timber.i("size of items in items = ${items?.size}")
-
     items?.let {
         (adapter as ItemsAdapter).submitOriginalList(items.toMutableList())
     }

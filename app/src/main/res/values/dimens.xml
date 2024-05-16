@@ -12,7 +12,9 @@
     <dimen name="largest_spacing">48dp</dimen>
 
 
-    <dimen name="size_image_item">64dp</dimen>
+    <dimen name="size_image">64dp</dimen>
     <dimen name="size_image_button">48dp</dimen>
+    <dimen name="size_image_empty">120dp</dimen>
+
 
 </resources>

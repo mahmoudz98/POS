@@ -19,16 +19,23 @@ android {
 dependencies {
 
     api(projects.domain)
-    implementation(libs.firebase.storage.ktx)
     testApi(projects.domain)
     testApi(projects.testing)
 
     // Coroutines
     implementation(libs.coroutines.services)
     api(libs.coroutines.android)
-    api(libs.firebase.auth.ktx)
-    implementation(libs.play.services.auth)
-    // implementation(libs.firebase.performance)
+
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.auth)
+    api(libs.firebase.storage)
+    api(libs.firebase.performance)
+    api(libs.play.services.auth)
+   // implementation (libs.androidx.credentials)
+    //implementation (libs.androidx.credentials.play.services.auth)
+    api (libs.googleid)
+
+    // hi
     api(libs.hilt.android)
     implementation(libs.zxing.generate.barcode)
 

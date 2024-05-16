@@ -21,8 +21,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imv_item"
-                android:layout_width="@dimen/size_image_item"
-                android:layout_height="@dimen/size_image_item"
+                android:layout_width="@dimen/size_image"
+                android:layout_height="@dimen/size_image"
                 android:layout_marginStart="@dimen/small_spacing"
                 android:layout_marginTop="@dimen/small_spacing"
                 android:layout_marginBottom="@dimen/small_spacing"

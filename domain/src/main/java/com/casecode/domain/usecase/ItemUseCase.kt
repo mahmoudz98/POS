@@ -3,43 +3,25 @@ package com.casecode.domain.usecase
 import com.casecode.domain.model.users.Item
 import com.casecode.domain.repository.DeleteItem
 import com.casecode.domain.repository.ItemRepository
+import com.casecode.domain.repository.UpdateQuantityItems
+import com.casecode.pos.domain.R
 import javax.inject.Inject
 
-/**
- * Use case class for item-related operations.
- *
- * @property itemRepository The repository responsible for handling item operations.
- * @constructor Creates an [ItemUseCase] with the provided [itemRepository].
- */
-class ItemUseCase @Inject constructor(private val itemRepository: ItemRepository) {
-    /**
-     * Retrieves items associated with the specified user ID [uid].
-     *
-     * @return A flow of resource containing the retrieved items.
-     */
-     fun getItems() = itemRepository.getItems()
-
-    /**
-     * Adds a new item to the repository.
-     *
-     * @param item The item to be added.
-     * @return An [AddItem] resource indicating the success or failure of the addition operation.
-     */
-    suspend fun addItem(item: Item) = itemRepository.addItem(item)
-
-    /**
-     * Updates an existing item in the repository.
-     *
-     * @param item The updated item.
-     * @return An [UpdateItem] resource indicating the success or failure of the update operation.
-     */
-    suspend fun updateItem(item: Item) = itemRepository.updateItem(item)
-
-    /**
-     * Deletes an existing item from the repository.
-     *
-     * @param item The item to be deleted.
-     * @return A [DeleteItem] resource indicating the success or failure of the deletion operation.
-     */
-    suspend fun deleteItem(item: Item) = itemRepository.deleteItem(item)
+class GetItemsUseCase @Inject constructor(private val itemRepository: ItemRepository) {
+     operator fun invoke() = itemRepository.getItems()
+}
+class AddItemUseCase @Inject constructor(private val itemRepository: ItemRepository) {
+     suspend operator fun invoke(item: Item) = itemRepository.addItem(item)
+}
+class UpdateItemUseCase @Inject constructor(private val itemRepository: ItemRepository) {
+     suspend operator fun invoke(item: Item) = itemRepository.updateItem(item)
+}
+class UpdateStockInItemsUseCase @Inject constructor(private val itemRepository: ItemRepository) {
+    suspend operator fun invoke(items: List<Item>?):UpdateQuantityItems {
+        if(items.isNullOrEmpty()) return UpdateQuantityItems.empty(message = R.string.invoice_items_empty)
+       return itemRepository.updateQuantityInItems(items)
+    }
+}
+class DeleteItemUseCase @Inject constructor(private val itemRepository: ItemRepository) {
+     suspend operator fun invoke(item: Item) = itemRepository.deleteItem(item)
 }

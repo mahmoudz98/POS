@@ -21,7 +21,8 @@ class ItemsViewModelTest : BaseTest() {
     private lateinit var viewModel: ItemsViewModel
 
     override fun init() {
-        viewModel = ItemsViewModel(testNetworkMonitor, itemUseCase, imageUseCase)
+        viewModel = ItemsViewModel(testNetworkMonitor, getItemsUseCase,addItemsUseCase,
+            updateItemsUseCase,deleteItemUseCase,imageUseCase)
     }
 
     @Test

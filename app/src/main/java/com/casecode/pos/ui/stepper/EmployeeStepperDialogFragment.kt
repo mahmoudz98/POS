@@ -1,4 +1,4 @@
-package com.casecode.pos.ui.employee
+package com.casecode.pos.ui.stepper
 
 import android.app.Dialog
 import android.os.Bundle
@@ -12,32 +12,32 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.casecode.pos.R
 import com.casecode.pos.base.doAfterTextChangedListener
-import com.casecode.pos.databinding.DialogAddEmployeeBinding
+import com.casecode.pos.databinding.DialogEmployeeBinding
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
- * A add Employee Dialog fragment that displays the Add Employee in Users fragment.
+ * A add Employee Dialog fragment that displays the  Employee in Users fragment.
  */
-class AddEmployeeDialogFragment : DialogFragment() {
+class EmployeeStepperDialogFragment : DialogFragment() {
     companion object {
-        const val ADD_EMPLOYEE_TAG = "AddEmployeeDialogFragment"
-        const val UPDATE_EMPLOYEE_TAG = "UpdateEmployeeDialogFragment"
+        const val ADD_EMPLOYEE_STEPPER_TAG = "EmployeesStepperDialogFragment"
+        const val UPDATE_EMPLOYEE_STEPPER_TAG = "UpdateEmployeeStepperDialogFragment"
 
-        fun newInstance(): AddEmployeeDialogFragment {
-            return AddEmployeeDialogFragment()
+        fun newInstance(): EmployeeStepperDialogFragment {
+            return EmployeeStepperDialogFragment()
         }
     }
 
     @Suppress("ktlint:standard:property-naming")
-    private var _binding: DialogAddEmployeeBinding? = null
+    private var _binding: DialogEmployeeBinding? = null
     val binding get() = _binding!!
-    private val businessViewModel by activityViewModels<StepperBusinessViewModel>()
+    private val viewModel by activityViewModels<StepperBusinessViewModel>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return if (businessViewModel.isCompact.value == true) {
+        return if (viewModel.isCompact.value == true) {
             val builder = MaterialAlertDialogBuilder(requireContext())
-            _binding = DialogAddEmployeeBinding.inflate(layoutInflater)
+            _binding = DialogEmployeeBinding.inflate(layoutInflater)
             builder.setView(binding.root)
             builder.create()
         } else {
@@ -52,8 +52,8 @@ class AddEmployeeDialogFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        if (businessViewModel.isCompact.value == false) {
-            _binding = DialogAddEmployeeBinding.inflate(layoutInflater, container, false)
+        if (viewModel.isCompact.value == false) {
+            _binding = DialogEmployeeBinding.inflate(layoutInflater, container, false)
         }
         return binding.root
     }
@@ -70,14 +70,14 @@ class AddEmployeeDialogFragment : DialogFragment() {
     private fun init() {
         initViewModel()
         validateInputEmployee()
-        initAddOrUpdateEmployee()
-        if (tag == UPDATE_EMPLOYEE_TAG) {
+        setupClick()
+        if (tag == UPDATE_EMPLOYEE_STEPPER_TAG) {
             observerEmployeeSelected()
         }
     }
 
     private fun initViewModel() {
-        binding.branches = businessViewModel.branches.value
+        binding.branches = viewModel.branches.value
     }
 
     /**
@@ -90,58 +90,54 @@ class AddEmployeeDialogFragment : DialogFragment() {
     }
 
     private fun validateNameEmployeeInput() {
-        binding.etAddEmployeeName.doAfterTextChangedListener { nameEditText ->
+        binding.etEmployeeName.doAfterTextChangedListener { nameEditText ->
             if (TextUtils.isEmpty(nameEditText)) {
-                binding.tilAddEmployeeName.boxStrokeErrorColor
-                binding.tilAddEmployeeName.error =
-                    getString(R.string.add_employee_name_empty)
+                binding.tilEmployeeName.boxStrokeErrorColor
+                binding.tilEmployeeName.error = getString(R.string.add_employee_name_empty)
             } else {
-                binding.tilAddEmployeeName.boxStrokeColor =
+                binding.tilEmployeeName.boxStrokeColor =
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-                binding.tilAddEmployeeName.error = null
+                binding.tilEmployeeName.error = null
             }
         }
     }
 
     private fun validatePhoneEmployeeInput() {
-        binding.etAddEmployeePhone.doAfterTextChangedListener { phoneEditText ->
+        binding.etEmployeePhone.doAfterTextChangedListener { phoneEditText ->
 
             if (TextUtils.isEmpty(phoneEditText)) {
-                binding.tilAddEmployeePhone.boxStrokeErrorColor
-                binding.tilAddEmployeePhone.error =
-                    getString(R.string.all_phone_empty)
+                binding.tilEmployeePhone.boxStrokeErrorColor
+                binding.tilEmployeePhone.error = getString(R.string.all_phone_empty)
             } else if (!phoneEditText.toString().trim { it <= ' ' }
-                    .matches(Patterns.PHONE.toString().toRegex())
-            ) {
-                binding.tilAddEmployeePhone.error =
-                    getString(R.string.all_phone_invalid)
+                    .matches(Patterns.PHONE.toString().toRegex())) {
+                binding.tilEmployeePhone.error = getString(R.string.all_phone_invalid)
             } else {
-                binding.tilAddEmployeePhone.boxStrokeColor =
+                binding.tilEmployeePhone.boxStrokeColor =
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-                binding.tilAddEmployeePhone.error = null
+                binding.tilEmployeePhone.error = null
             }
         }
     }
 
     private fun validatePasswordEmployeeInput() {
-        binding.etAddEmployeePassword.doAfterTextChangedListener { passwordEditText ->
+        binding.etEmployeePassword.doAfterTextChangedListener { passwordEditText ->
 
             if (TextUtils.isEmpty(passwordEditText)) {
-                binding.tilAddEmployeePassword.boxStrokeErrorColor
-                binding.tilAddEmployeePassword.error =
+                binding.tilEmployeePassword.boxStrokeErrorColor
+                binding.tilEmployeePassword.error =
                     getString(R.string.add_employee_password_empty)
             } else if (passwordEditText.toString().length < 6) {
-                binding.tilAddEmployeePassword.error =
+                binding.tilEmployeePassword.error =
                     getString(R.string.add_employee_password_error)
             } else {
-                binding.tilAddEmployeePassword.boxStrokeColor =
+                binding.tilEmployeePassword.boxStrokeColor =
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
-                binding.tilAddEmployeePassword.error = null
+                binding.tilEmployeePassword.error = null
             }
         }
     }
 
-    private fun initAddOrUpdateEmployee() {
+    private fun setupClick() {
         binding.btnEmployee.setOnClickListener {
             if (isValidEmployeeInput()) {
                 dismissDialog()
@@ -150,18 +146,18 @@ class AddEmployeeDialogFragment : DialogFragment() {
     }
 
     private fun isValidEmployeeInput(): Boolean {
-        val name = binding.etAddEmployeeName.text.toString()
-        val phone = binding.etAddEmployeePhone.text.toString()
-        val password = binding.etAddEmployeePassword.text.toString()
+        val name = binding.etEmployeeName.text.toString()
+        val phone = binding.etEmployeePhone.text.toString()
+        val password = binding.etEmployeePassword.text.toString()
         val branchName = binding.actvEmployeeBranch.text.toString()
         val permission = binding.actvEmployeePermission.text.toString()
 
         if (checkIsValidEmployee(name, phone, password, branchName, permission)) return false
 
-        if (tag == ADD_EMPLOYEE_TAG) {
-            businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        if (tag == ADD_EMPLOYEE_STEPPER_TAG) {
+            viewModel.addEmployee(name, phone, password, branchName, permission)
         } else {
-            businessViewModel.updateEmployee(name, phone, password, branchName, permission)
+            viewModel.updateEmployee(name, phone, password, branchName, permission)
         }
         return true
     }
@@ -173,32 +169,29 @@ class AddEmployeeDialogFragment : DialogFragment() {
         branchName: String,
         permission: String,
     ): Boolean {
-        if (name.isBlank() || phone.isBlank() || !phone.matches(Patterns.PHONE.toRegex()) ||
-            password.isBlank() || password.length < 6 || branchName.isBlank() ||
-            permission.isBlank()
-        ) {
+        if (name.isBlank() || phone.isBlank() || !phone.matches(Patterns.PHONE.toRegex()) || password.isBlank() || password.length < 6 || branchName.isBlank() || permission.isBlank()) {
             if (name.isBlank()) {
-                binding.tilAddEmployeeName.error = getString(R.string.add_employee_name_empty)
+                binding.tilEmployeeName.error = getString(R.string.add_employee_name_empty)
             }
             if (phone.isBlank()) {
-                binding.tilAddEmployeePhone.error = getString(R.string.all_phone_empty)
+                binding.tilEmployeePhone.error = getString(R.string.all_phone_empty)
             } else if (!phone.matches(Patterns.PHONE.toRegex())) {
-                binding.tilAddEmployeePhone.error = getString(R.string.all_phone_invalid)
+                binding.tilEmployeePhone.error = getString(R.string.all_phone_invalid)
             }
 
             if (password.isBlank()) {
-                binding.tilAddEmployeePassword.error =
+                binding.tilEmployeePassword.error =
                     getString(R.string.add_employee_password_empty)
             } else if (password.length < 6) {
-                binding.tilAddEmployeePassword.error =
+                binding.tilEmployeePassword.error =
                     getString(R.string.add_employee_password_error)
             }
 
             if (branchName.isBlank()) {
-                binding.tilAddEmployeeBranch.error = getString(R.string.add_employee_branch_empty)
+                binding.tilEmployeeBranch.error = getString(R.string.add_employee_branch_empty)
             }
             if (permission.isBlank()) {
-                binding.tilAddEmployeePermission.error =
+                binding.tilEmployeePermission.error =
                     getString(R.string.add_employee_permission_empty)
             }
 
@@ -208,20 +201,20 @@ class AddEmployeeDialogFragment : DialogFragment() {
     }
 
     private fun dismissDialog() {
-        val isCompact = businessViewModel.isCompact.value
+        val isCompact = viewModel.isCompact.value
         if (isCompact == true) {
             dismiss()
         } else {
-            binding.etAddEmployeeName.text = null
-            binding.etAddEmployeePhone.text = null
-            binding.etAddEmployeePassword.text = null
+            binding.etEmployeeName.text = null
+            binding.etEmployeePhone.text = null
+            binding.etEmployeePassword.text = null
             binding.actvEmployeeBranch.text = null
             binding.actvEmployeePermission.text = null
         }
     }
 
     private fun observerEmployeeSelected() {
-        businessViewModel.employeeSelected.observe(viewLifecycleOwner) {
+        viewModel.employeeSelected.observe(viewLifecycleOwner) {
             binding.employee = it
         }
     }

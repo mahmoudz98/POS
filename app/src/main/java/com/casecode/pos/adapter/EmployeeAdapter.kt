@@ -71,7 +71,6 @@ class EmployeeAdapter(val itemClick: (Employee) -> Unit) :
     */
    override fun submitList(list: MutableList<Employee>?)
    {
-      Timber.e("list of employee = $list")
       super.submitList(
          list?.let { ArrayList(it) })
    }

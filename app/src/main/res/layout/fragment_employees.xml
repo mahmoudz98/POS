@@ -2,15 +2,22 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <data>
+        <import type="android.view.View" />
+        <import type="java.util.List" />
 
+        <variable
+            name="employees"
+            type="List&lt;com.casecode.domain.model.users.Employee>" />
+
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <variable
+            name="isEmpty"
+            type="Boolean" />
     </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/csl_employees_root">
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -20,13 +27,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
-                android:layout_weight="1"
-                >
-            <include
-                android:id="@+id/l_employees"
-                layout="@layout/layout_employees"
+                android:layout_weight="1">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_employees"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/normal_spacing"
+                    android:layout_marginEnd="@dimen/normal_spacing"
+                    android:layout_marginBottom="@dimen/small_spacing"
 
-                />
+                    app:bindListEmployee="@{employees}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/item_employee" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btn_employees_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/larger_spacing"
+                    android:layout_marginBottom="@dimen/larger_spacing"
+                    android:clickable="true"
+                    android:contentDescription="@string/add_employee"
+                    android:focusable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@drawable/ic_add" />
+                <include
+                    android:id="@+id/empty_view"
+                    layout="@layout/layout_empty_items_view"
+                    android:visibility="@{isEmpty?View.VISIBLE: View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/cpb_employees"
+                    android:indeterminate="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{isLoading ? View.VISIBLE: View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.fragment.app.FragmentContainerView
@@ -37,36 +84,9 @@
                 android:layout_margin="@dimen/normal_spacing"
                 android:layout_gravity="end"
 
-                tools:layout="@layout/dialog_add_employee" />
+                tools:layout="@layout/dialog_employee" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-        <Button
-            android:id="@+id/btn_employees_done"
-            style="@style/Widget.pos.Button.TextButton.icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/normal_spacing"
-            android:text="@string/done"
-            app:icon="@drawable/ic_arrow_left"
-            app:iconGravity="end"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-        <Button
-            android:id="@+id/btn_employees_subscription"
-            style="@style/Widget.pos.Button.TextButton.icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/normal_spacing"
-            android:text="@string/subscription_title"
-            android:textColor="@color/md_theme_light_secondary"
-            app:icon="@drawable/ic_arrow_right"
-            app:iconGravity="start"
-            app:iconTint="@color/md_theme_light_secondary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

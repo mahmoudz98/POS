@@ -4,7 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
 
+        <import type="java.util.List" />
+
+        <import type="com.casecode.domain.model.users.InvoiceGroup" />
+
+        <variable
+            name="isLoading"
+            type="Boolean" />
+
+        <variable
+            name="isEmpty"
+            type="Boolean" />
+        <variable
+            name="invoices"
+            type="List&lt;InvoiceGroup>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,15 +27,39 @@
         android:layout_height="match_parent"
         tools:context=".ui.invoices.InvoicesFragment">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text_slideshow"
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_invoices"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingEnd="@dimen/normal_spacing"
+            android:paddingStart="@dimen/small_spacing"
+            android:paddingTop="@dimen/normal_spacing"
+            android:paddingBottom="@dimen/small_spacing"
+            android:visibility="@{isEmpty ? View.GONE: View.VISIBLE}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:spanCount="3"
+            app:bindListInvoicesGroup="@{invoices}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/item_invoices_group" />
+
+        <include
+            android:id="@+id/empty_view_invoices"
+            layout="@layout/layout_empty_invoice_items_view"
+            android:visibility="@{isEmpty?View.VISIBLE: View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpb_invoices"
+            android:indeterminate="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
+            android:visibility="@{isLoading ? View.VISIBLE: View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

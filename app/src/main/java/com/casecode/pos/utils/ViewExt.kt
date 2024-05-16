@@ -9,8 +9,11 @@ import com.google.android.material.snackbar.Snackbar
 /**
  * Transforms static java function Snackbar.make() to an extension function on View.
  */
-fun View.showSnackbar(snackbarText: String, timeLength: Int) {
+fun View.showSnackbar(snackbarText: String, timeLength: Int, anchorView: View? = null) {
     Snackbar.make(this, snackbarText, timeLength).run {
+        anchorView?.let { anchorView ->
+        setAnchorView(anchorView)
+        }
         addCallback(object : Snackbar.Callback() {
             override fun onShown(sb: Snackbar?) {
             }
@@ -29,10 +32,11 @@ fun View.setupSnackbar(
     lifecycleOwner: LifecycleOwner,
     snackbarEvent: LiveData<Event<Int>>,
     timeLength: Int,
+    anchorView: View? = null
 ) {
     snackbarEvent.observe(lifecycleOwner) { event ->
         event.getContentIfNotHandled()?.let {
-            showSnackbar(context.getString(it), timeLength)
+            showSnackbar(context.getString(it), timeLength,anchorView)
         }
     }
 }

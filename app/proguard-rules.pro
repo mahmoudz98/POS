@@ -48,3 +48,8 @@
 -dontwarn org.hamcrest.**
 # Uncomment this if you use Mockito
 #-dontwarn org.mockito.**
+
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+  *;
+}

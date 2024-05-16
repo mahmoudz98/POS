@@ -16,25 +16,22 @@ import com.casecode.domain.utils.BUSINESS_STORE_TYPE_FIELD
 /**
  * Created by Mahmoud Abdalhafeez
  */
-fun Map<String, Any?>.fromBusinessResponse(): Business {
-    val businessData = this[BUSINESS_FIELD] as Map<*, *>
-    val storeType = businessData[BUSINESS_STORE_TYPE_FIELD] as? String ?: ""
-    val email = businessData[BUSINESS_EMAIL_FIELD] as? String ?: ""
-    val phone = businessData[BUSINESS_PHONE_NUMBER_FIELD] as? String ?: ""
-    val isCompletedStep = businessData[BUSINESS_IS_COMPLETED_STEP_FIELD] as? Boolean ?: false
+fun Map<String, Any>.asEntityBusiness(): Business {
+    val storeType = this[BUSINESS_STORE_TYPE_FIELD] as? String ?: ""
+    val email = this[BUSINESS_EMAIL_FIELD] as? String ?: ""
+    val phone = this[BUSINESS_PHONE_NUMBER_FIELD] as? String ?: ""
+    val isCompletedStep = this[BUSINESS_IS_COMPLETED_STEP_FIELD] as? Boolean ?: false
 
     // Retrieve branches data and apply necessary transformations
     @Suppress("UNCHECKED_CAST")
     val branchesData =
-        businessData[BRANCHES_COLLECTION_PATH] as? List<Map<String, Any?>> ?: emptyList()
+        this[BRANCHES_COLLECTION_PATH] as? List<Map<String, Any>> ?: emptyList()
     val branches = mutableListOf<Branch>()
     for (branchData in branchesData) {
         // Extract and transform branch data
         val branchCode = branchData[BRANCHES_CODE_FIELD] as? Int ?: 0
         val branchName = branchData[BRANCHES_NAME_FIELD] as? String ?: ""
         val phoneNumber = branchData[BRANCHES_PHONE_NUMBER_FIELD] as? String ?: ""
-        // ... (any other branch fields)
-
         val branch = Branch(branchCode, branchName, phoneNumber)
         branches.add(branch)
     }
@@ -42,7 +39,7 @@ fun Map<String, Any?>.fromBusinessResponse(): Business {
     return Business(storeType.toStoreType(), email, phone, isCompletedStep, branches)
 }
 
-fun Business.toBusinessRequest(): HashMap<String, HashMap<String, Any?>> {
+fun Business.asExternalBusiness(): HashMap<String, HashMap<String, Any?>> {
     val branchesRequest = mutableListOf<Map<String, Any?>>()
     for (branch in branches) {
         val branchData =

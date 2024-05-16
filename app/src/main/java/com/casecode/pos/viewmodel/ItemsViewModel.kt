@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.casecode.data.utils.NetworkMonitor
 import com.casecode.domain.model.users.Item
+import com.casecode.domain.usecase.AddItemUseCase
+import com.casecode.domain.usecase.DeleteItemUseCase
+import com.casecode.domain.usecase.GetItemsUseCase
 import com.casecode.domain.usecase.ItemImageUseCase
-import com.casecode.domain.usecase.ItemUseCase
+import com.casecode.domain.usecase.UpdateItemUseCase
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.base.BaseViewModel
@@ -20,7 +23,10 @@ import javax.inject.Inject
 class ItemsViewModel
 @Inject constructor(
     private val networkMonitor: NetworkMonitor,
-    private val itemUseCase: ItemUseCase,
+    private val getItemsUseCase: GetItemsUseCase,
+    private val addItemsUseCase: AddItemUseCase,
+    private val updateItemUseCase: UpdateItemUseCase,
+    private val deleteItemUseCase: DeleteItemUseCase,
     private val imageUseCase: ItemImageUseCase,
 ) : BaseViewModel() {
     private val isOnline: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -55,13 +61,12 @@ class ItemsViewModel
 
     internal fun fetchItems() {
         viewModelScope.launch {
-            itemUseCase.getItems().collect {
+            getItemsUseCase().collect {
                 when (val result = it) {
                     is Resource.Empty -> {
                         _isEmptyItems.value = true
                         hideProgress()
                     }
-
                     is Resource.Error -> {
                         _isEmptyItems.value =
                             _items.value.isNullOrEmpty() // true if empty else false
@@ -121,7 +126,7 @@ class ItemsViewModel
 
     private fun addItem() {
         viewModelScope.launch {
-            handleResponseAddAndUpdateItem(itemUseCase.addItem(_itemSelected.value!!))
+            handleResponseAddAndUpdateItem(addItemsUseCase(_itemSelected.value!!))
         }
     }
 
@@ -181,7 +186,7 @@ class ItemsViewModel
     private fun updateItem() {
         viewModelScope.launch {
             if (itemUpdated.value != _itemSelected.value && itemUpdated.value != null) {
-                handleResponseAddAndUpdateItem(itemUseCase.updateItem(itemUpdated.value!!))
+                handleResponseAddAndUpdateItem(updateItemUseCase(itemUpdated.value!!))
             } else {
                 showSnackbarMessage(R.string.update_item_fail)
                 isAddItemOrUpdate(true)
@@ -239,7 +244,7 @@ class ItemsViewModel
     }
 
     private fun deleteItem(item: Item) {
-        viewModelScope.launch { handleResponseDeleteItem(itemUseCase.deleteItem(item)) }
+        viewModelScope.launch { handleResponseDeleteItem(deleteItemUseCase(item)) }
     }
 
     private fun handleResponseDeleteItem(result: Resource<Int>) {

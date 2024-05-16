@@ -3,11 +3,16 @@ package com.casecode.pos.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.GravityCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
@@ -37,7 +42,7 @@ class MainActivity : AppCompatActivity(), PositiveDialogListener {
     lateinit var auth: FirebaseAuth
 
     // Keep track of the visibility of the menu item
-    private var isMenuItemVisible = true
+   // private var isMenuItemVisible = true
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment).navController
     }
@@ -54,14 +59,14 @@ class MainActivity : AppCompatActivity(), PositiveDialogListener {
     private fun setupNavigationDrawer() {
 
         setupToolbar()
-
+        setupMenu()
         appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = setOf(
                 R.id.nav_statistics,
                 R.id.nav_pos,
                 R.id.nav_invoices,
                 R.id.nav_items,
-                R.id.nav_code_scanner,
+              //  R.id.nav_code_scanner,
                 R.id.nav_users,
                 R.id.nav_setting
 
@@ -112,54 +117,51 @@ class MainActivity : AppCompatActivity(), PositiveDialogListener {
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-
-        setupOnBackDestination()
     }
-
-    private fun setupOnBackDestination() {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            isMenuItemVisible = when (destination.id) {
-                R.id.nav_profile -> false
-                R.id.nav_sign_out -> true
-                R.id.nav_items -> false
-                else -> true
-            }
-
-            // Update the menu to reflect the new state
-            invalidateOptionsMenu()
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
     override fun onSupportNavigateUp() = navController.navigateUp(appBarConfiguration)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            binding.drawerLayout.openDrawer(GravityCompat.START)
-            return true
+    private fun setupMenu() {
+        val menuProvider = object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                super.onPrepareMenu(menu)
+                val menuItem: MenuItem? = menu.findItem(R.id.action_main_profile)
+
+                val actionView = menuItem?.actionView
+                val photoImageView = actionView?.findViewById<ImageView>(R.id.menu_item_photo)
+                val photoUrl = auth.currentUser?.photoUrl.toString()
+                photoImageView?.load(photoUrl)
+                photoImageView?.setOnClickListener {
+                    navController.navigate(R.id.nav_profile)
+                }
+
+            }
+
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater,
+            ) {
+                menuInflater.inflate(R.menu.menu_main, menu)
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.nav_sign_out -> {
+
+                        // Show the dialog when needed, passing the text you want to display in the dialog
+                        val dialog = SignOutDialog()
+                        dialog.show(supportFragmentManager, "SignOut")
+                        false
+                    }
+                    else -> {
+                        NavigationUI.onNavDestinationSelected(menuItem, navController)
+                        binding.drawerLayout.closeDrawers()
+                        true
+                    }
+
+                }
+            }
+
         }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        val menuItem: MenuItem? = menu?.findItem(R.id.action_main_profile)
-        menuItem?.isVisible = isMenuItemVisible
-
-        val actionView = menuItem?.actionView
-        val photoImageView = actionView?.findViewById<ImageView>(R.id.menu_item_photo)
-        val photoUrl = auth.currentUser?.photoUrl.toString()
-        photoImageView?.load(photoUrl)
-
-        photoImageView?.setOnClickListener {
-            navController.navigate(R.id.nav_profile)
-        }
-
-        return super.onPrepareOptionsMenu(menu)
+            addMenuProvider(menuProvider, this, Lifecycle.State.RESUMED)
     }
 
     override fun onDialogPositiveClick() {

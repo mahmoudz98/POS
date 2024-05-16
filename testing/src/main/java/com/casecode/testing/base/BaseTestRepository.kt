@@ -13,13 +13,13 @@ abstract class BaseTestRepository {
         init()
     }
 
-    abstract fun init()
+    abstract  fun init()
 
-    fun setReturnError(value: Boolean) {
+  open infix fun setReturnError(value: Boolean) {
         shouldReturnError = value
     }
 
-    fun setReturnEmpty(value: Boolean) {
+  open infix fun setReturnEmpty(value: Boolean) {
         shouldReturnEmpty = value
     }
 }

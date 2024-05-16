@@ -134,12 +134,8 @@ class ItemDialogFragment : DialogFragment() {
     /**
      * Initializes the views and sets up click listeners.
      */
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onViewCreated(view: View,savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.lifecycleOwner = this.viewLifecycleOwner
         setup()
     }

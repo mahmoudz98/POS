@@ -98,7 +98,6 @@
     </style>
 
     <style name="Widget.pos.TextInputLayout.OutlinedBox.Dense" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
-
         <item name="errorEnabled">true</item>
         <item name="helperTextEnabled">true</item>
         <item name="colorPrimary">@color/md_theme_light_primary</item>

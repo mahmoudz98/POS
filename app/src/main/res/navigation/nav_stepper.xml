@@ -6,8 +6,8 @@
     app:startDestination="@id/nav_business">
     <fragment
         android:id="@+id/nav_employees"
-        android:name="com.casecode.pos.ui.employee.EmployeesFragment"
-        tools:layout="@layout/fragment_employees" />
+        android:name="com.casecode.pos.ui.stepper.EmployeesStepperFragment"
+        tools:layout="@layout/fragment_employees_stepper" />
 
     <fragment
         android:id="@+id/nav_subscription"

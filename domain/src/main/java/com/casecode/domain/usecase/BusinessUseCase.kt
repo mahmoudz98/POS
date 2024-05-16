@@ -7,6 +7,8 @@ import com.casecode.domain.repository.CompleteBusiness
 import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.domain.R
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
@@ -44,5 +46,10 @@ class CompleteBusinessUseCase @Inject constructor(private val businessRepo: Busi
 
 class GetBusinessUseCase @Inject constructor(private val businessRep: BusinessRepository) {
 
-   suspend operator fun invoke(uid: String) = businessRep.getBusiness(uid)
+   suspend operator fun invoke():Flow<Resource<Business>> {
+     return flow {
+         emit(Resource.loading())
+         emit(businessRep.getBusiness())
+     }
+   }
 }

@@ -42,7 +42,7 @@ class SubscriptionAdapter(
     }
 }
 
-class SubscriptionViewHolder(private val binding: ItemSubscriptionBinding) :
+ class SubscriptionViewHolder(private val binding: ItemSubscriptionBinding) :
     RecyclerView.ViewHolder(binding.root) {
     private lateinit var itemClick: (Subscription) -> Unit
 

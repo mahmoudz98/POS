@@ -1,7 +1,5 @@
 package com.casecode.pos.viewmodel
 
-import android.content.Intent
-import android.content.IntentSender
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +11,6 @@ import com.casecode.domain.utils.Resource
 import com.casecode.pos.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -27,16 +24,13 @@ class AuthViewModel
     private val _isOnline: MutableLiveData<Boolean> = MutableLiveData(false)
     val isOnline get() = _isOnline
     private val _userMessage: MutableLiveData<Event<Int>> = MutableLiveData()
-    val currentUserUID = signInUseCase.currentUser().map { it?.uid ?: "" }
     val userMessage get() = _userMessage
 
-    private val _signInIntentSender = MutableLiveData<Resource<IntentSender>?>()
-    val signInIntentSender get() = _signInIntentSender
     private val _signInResult = MutableLiveData<FirebaseAuthResult?>()
 
-    var checkRegistration: MutableLiveData<Resource<Boolean>> = MutableLiveData()
-        private set
     val signInResult get() = _signInResult
+    var isUserRegistration: MutableLiveData<Event<Boolean>> = MutableLiveData()
+        private set
 
     private val uid: MutableLiveData<String> = MutableLiveData("")
     private val name: MutableLiveData<String> = MutableLiveData()
@@ -64,39 +58,43 @@ class AuthViewModel
 
     fun signIn() {
         viewModelScope.launch {
-            _signInIntentSender.value = signInUseCase.signIn()
+            when(val result = signInUseCase()){
+                is Resource.Loading ->{}
+                is Resource.Empty -> showSnackbarMessage(result.message as Int)
+                is Resource.Error -> {
+                showSnackbarMessage(result.message as Int)
+                }
+                is Resource.Success -> {
+                    showSnackbarMessage(result.data)
+                    checkIfRegistrationAndBusinessCompleted()
+                }
+            }
+
         }
     }
 
     fun checkIfRegistrationAndBusinessCompleted() {
         viewModelScope.launch {
             Timber.e("checkIfRegistrationAndBusinessCompleted")
-            checkRegistration.value = signInUseCase.isRegistrationAndBusinessCompleted()
-        }
-    }
+            when( val isRegistrationResource = signInUseCase
+                .isRegistrationAndBusinessCompleted()){
+                is Resource.Empty, is Resource.Loading -> {
+                    Timber.e("isRegistrationAndBusinessEMPTYOLOADING")
+                }
+                is Resource.Error -> {
+                    showSnackbarMessage(isRegistrationResource.message as Int)
+                }
 
-    fun clearCheckRegistration() {
-        checkRegistration.value = Resource.loading()
-    }
-
-    fun signInWithIntent(intent: Intent) {
-        viewModelScope.launch {
-            val result = signInUseCase.signInWithIntent(intent)
-            onSignInResult(result)
-        }
-    }
-
-    private fun onSignInResult(signInResult: Flow<FirebaseAuthResult>) {
-        viewModelScope.launch {
-            signInResult.collect {
-                _signInResult.value = it
+                is Resource.Success -> {
+                    isUserRegistration.value = Event(isRegistrationResource.data)
+                }
             }
         }
     }
 
-    fun clearSignInResult() {
-        _signInResult.value = null
-    }
+
+
+
 
     fun setEmployeeLogin(
         uid: String,

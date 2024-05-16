@@ -1,9 +1,10 @@
 package com.casecode.di.app
 
 import android.content.Context
+import androidx.credentials.CredentialManager
 import com.casecode.pos.di.BuildConfig
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestoreSettings
@@ -15,6 +16,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.security.MessageDigest
+import java.util.UUID
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -30,6 +33,7 @@ object FirebaseModule {
         // Use persistent disk cache (default)
         setLocalCacheSettings(persistentCacheSettings { })
     }
+
     /**
      * Provides an instance of FirebaseAuth.
      */
@@ -53,23 +57,20 @@ object FirebaseModule {
     fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
 
     @Provides
-    @Singleton
-    fun provideSignInClient(
-        @ApplicationContext context: Context,
-    ) = Identity.getSignInClient(context)
-
-    @Provides
-    fun provideSignInRequest(): BeginSignInRequest {
+    fun provideSignInRequest(): GetGoogleIdOption {
+        val hashedNonce = createHashedNonce()
         val webClient = BuildConfig.web_client_id
-        return BeginSignInRequest.Builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setFilterByAuthorizedAccounts(false)
-                    .setServerClientId(webClient)
-                    .build(),
-            )
-            .setAutoSelectEnabled(true)
-            .build()
+        return GetGoogleIdOption.Builder().setFilterByAuthorizedAccounts(false)
+            .setServerClientId(webClient).setAutoSelectEnabled(true).setNonce(hashedNonce).build()
+
+    }
+
+    private fun createHashedNonce(): String {
+        val rawNonce = UUID.randomUUID().toString()
+        val bytes = rawNonce.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        val hashedNonce = digest.fold("") { str, it -> str + "%02x".format(it) }
+        return hashedNonce
     }
 }

@@ -1,6 +1,7 @@
 package com.casecode.pos.utils
 
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.transition.TransitionManager
 import coil.load
 import com.casecode.pos.R
 import timber.log.Timber
+import java.net.URL
 
 
 @BindingAdapter("isAvailable")
@@ -43,6 +45,13 @@ fun setTextWithNetworkAvailable(textView: TextView, isAvailable: Boolean) {
 
 @BindingAdapter("imageUrl", "placeholder", "error")
 fun loadImageUrl(view: ImageView, imageUrl: String?, placeholder: Drawable, error: Drawable) {
+    view.load(imageUrl) {
+        placeholder(placeholder)
+        error(error)
+    }
+}
+@BindingAdapter("imageUrl", "placeholder", "error")
+fun loadImageUrl(view: ImageView, imageUrl: Uri?, placeholder: Drawable, error: Drawable) {
     view.load(imageUrl) {
         placeholder(placeholder)
         error(error)

@@ -45,7 +45,7 @@
 
         <include
             android:id="@+id/empty_view"
-            layout="@layout/empty_items_view_layout"
+            layout="@layout/layout_empty_items_view"
             android:visibility="@{isEmpty?View.VISIBLE: View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,8 +67,8 @@
             android:id="@+id/floating_btn_items"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="@dimen/larger_spacing"
+            android:layout_marginBottom="@dimen/larger_spacing"
             android:clickable="true"
             android:contentDescription="@string/add_item"
             android:focusable="true"

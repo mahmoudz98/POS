@@ -1,4 +1,4 @@
-package com.casecode.pos.ui.employee
+package com.casecode.pos.ui.stepper
 
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -32,7 +32,7 @@ import org.junit.runner.RunWith
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class EmployeesFragmentTest {
+class EmployeesStepperFragmentTest {
     @get:Rule(order = 0)
     var hiltRule = HiltAndroidRule(this)
 
@@ -45,8 +45,8 @@ class EmployeesFragmentTest {
     @Before
     fun init() {
         hiltRule.inject()
-        launchFragmentInHiltContainer<EmployeesFragment> {
-            this@EmployeesFragmentTest.businessViewModel = businessViewModel
+        launchFragmentInHiltContainer<EmployeesStepperFragment> {
+            this@EmployeesStepperFragmentTest.businessViewModel = businessViewModel
         }
     }
 
@@ -124,7 +124,7 @@ class EmployeesFragmentTest {
     fun selectorDone_whenEmployeeListIsEmpty_showsMessageEmployeesEmpty() {
         businessViewModel.setConnected(true)
         // When - click on the employees done button
-        onView(withId(R.id.btn_employees_done)).perform(click())
+        onView(withId(R.id.btn_employees_stepper_done)).perform(click())
 
         // Then - verify that the employees empty message is shown
         assertThat(
@@ -137,7 +137,7 @@ class EmployeesFragmentTest {
     fun selectorDone_whenEmployeesAddedErrorNetwork_showsMessageEmployeesErrorNetwork() {
         // When - click on the employees done button
         businessViewModel.setConnected(false)
-        onView(withId(R.id.btn_employees_done)).perform(click())
+        onView(withId(R.id.btn_employees_stepper_done)).perform(click())
         // Then - verify that the error network message is shown
         assertThat(businessViewModel.userMessage.value?.peekContent(), `is`(R.string.network_error))
     }
@@ -145,15 +145,15 @@ class EmployeesFragmentTest {
     private fun givenEmployeesAdded() {
         onView(withId(R.id.btn_employees_add)).perform(click())
 
-        onView(withId(R.id.et_add_employee_name)).perform(
+        onView(withId(R.id.et_employee_name)).perform(
             ViewActions.replaceText(nameEmployee),
             ViewActions.closeSoftKeyboard(),
         )
-        onView(withId(R.id.et_add_employee_phone)).perform(
+        onView(withId(R.id.et_employee_phone)).perform(
             ViewActions.replaceText(phoneEmployee),
             ViewActions.closeSoftKeyboard(),
         )
-        onView(withId(R.id.et_add_employee_password)).perform(
+        onView(withId(R.id.et_employee_password)).perform(
             ViewActions.replaceText(passwordEmployee),
             ViewActions.closeSoftKeyboard(),
         )
@@ -176,15 +176,15 @@ class EmployeesFragmentTest {
                     click(),
                 ),
             )
-        onView(withId(R.id.et_add_employee_name)).perform(
+        onView(withId(R.id.et_employee_name)).perform(
             ViewActions.replaceText(updateNameEmployee),
             ViewActions.closeSoftKeyboard(),
         )
-        onView(withId(R.id.et_add_employee_phone)).perform(
+        onView(withId(R.id.et_employee_phone)).perform(
             ViewActions.replaceText(updatePhoneEmployee),
             ViewActions.closeSoftKeyboard(),
         )
-        onView(withId(R.id.et_add_employee_password)).perform(
+        onView(withId(R.id.et_employee_password)).perform(
             ViewActions.replaceText(updatePasswordEmployee),
             ViewActions.closeSoftKeyboard(),
         )

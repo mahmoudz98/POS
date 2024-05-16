@@ -37,7 +37,7 @@
                 android:text="@{employee.name != null ? @string/update_employee: @string/add_employee}" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_add_employee_name"
+                android:id="@+id/til_employee_name"
                 style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 app:startIconDrawable="@drawable/ic_code">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_add_employee_name"
+                    android:id="@+id/et_employee_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
@@ -54,7 +54,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_add_employee_phone"
+                android:id="@+id/til_employee_phone"
                 style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 app:startIconDrawable="@drawable/ic_call">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_add_employee_phone"
+                    android:id="@+id/et_employee_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="phone"
@@ -73,7 +73,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_add_employee_password"
+                android:id="@+id/til_employee_password"
                 style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                 app:startIconDrawable="@drawable/password_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_add_employee_password"
+                    android:id="@+id/et_employee_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
@@ -92,14 +92,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_add_employee_branch"
+                android:id="@+id/til_employee_branch"
                 style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/employee_branch_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
                 app:startIconDrawable="@drawable/ic_store">
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView
@@ -114,14 +111,11 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_add_employee_permission"
+                android:id="@+id/til_employee_permission"
                 style="@style/Widget.pos.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/employee_permissions"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/gl_add_business_top"
                 app:startIconDrawable="@drawable/ic_permission">
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView

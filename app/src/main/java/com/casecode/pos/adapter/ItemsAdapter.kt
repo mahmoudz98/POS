@@ -11,6 +11,7 @@ import com.casecode.pos.R
 import com.casecode.pos.base.BaseAdapter
 import com.casecode.pos.base.BaseViewHolder
 import com.casecode.pos.databinding.ItemItemBinding
+import com.casecode.pos.databinding.ItemSubscriptionBinding
 import java.util.Locale
 
 class ItemsAdapter(
@@ -24,7 +25,7 @@ class ItemsAdapter(
      * Allows the RecyclerView to determine which items have changed when the [List] of [Item]
      * has been updated.
      */
-    companion object DiffCallback : DiffUtil.ItemCallback<Item>() {
+    companion object  DiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(
             oldItem: Item,
             newItem: Item,
@@ -38,7 +39,6 @@ class ItemsAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-
     }
 
     inner class ItemViewHolder(binding: ItemItemBinding) :
@@ -77,7 +77,7 @@ class ItemsAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return R.layout.item_item
+            return R.layout.item_item
     }
 
     override fun onBindViewHolder(

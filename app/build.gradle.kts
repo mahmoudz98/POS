@@ -4,6 +4,7 @@
     alias(libs.plugins.pos.android.hilt)
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.navigation.safeargs.kotlin)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -56,18 +57,22 @@ android {
         }
     }
 
-    hilt {
-        enableAggregatingTask = true
-    }
-
     buildFeatures {
         dataBinding = true
         viewBinding = true
         buildConfig = true
+
     }
     lint {
         abortOnError = true
     }
+    kapt {
+        correctErrorTypes = true
+    }
+    hilt {
+        enableAggregatingTask = true
+    }
+
 
     packaging {
         resources {
@@ -79,9 +84,7 @@ android {
             excludes.add("DebugProbesKt.bin")
         }
     }
-    lint {
-        abortOnError = false
-    }
+
     namespace = "com.casecode.pos"
 }
 /*
@@ -104,8 +107,7 @@ dependencies {
     implementation(projects.data)
     implementation(projects.domain)
     implementation(projects.di)
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.lifecycle)
+
 
     testImplementation(projects.domain)
     testImplementation(projects.data)
@@ -117,7 +119,7 @@ dependencies {
 
     // AndroidX
     implementation(libs.core)
-    //implementation(libs.activity)
+//    implementation(libs.activity)
      //implementation(libs.fragment.ktx)
     implementation(libs.appcompat)
     implementation(libs.recyclerview)

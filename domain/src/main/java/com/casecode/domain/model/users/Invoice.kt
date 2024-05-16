@@ -1,13 +1,16 @@
 package com.casecode.domain.model.users
 
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.Date
+
 data class Invoice(
-     val number: Int,
-     val date: String,
-     val createdBy: Int,
-     val customer: Customer,
-     val items: List<Item>,
-                  )
-{
-   // Add a no-argument constructor
-   constructor() : this(0, "", 0, Customer(), emptyList())
+    @DocumentId val invoiceId: String = "",
+    @ServerTimestamp val date: Date = Date(),
+    val createdBy: Int = 0,
+    val customer: Customer? = null,
+    val items: List<Item> = emptyList(),
+) {
+    val total: Double
+        get() = items.sumOf { it.price * it.quantity }
 }

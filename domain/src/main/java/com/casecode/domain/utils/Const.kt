@@ -53,8 +53,19 @@ const val STORETYPE_FIELD = "storeType"
 // fields in items.
 const val IMAGE_FIELDS = "image"
 const val ITEM_NAME_FIELD = "name"
+const val ITEM_PRICE_FIELD = "price"
+const val ITEM_QUANTITY_FIELD = "quantity"
 const val ITEM_SKU_FIELD = "sku"
+const val ITEM_IMAGE_URL_FIELD = "image_url"
 const val ITEM_UNITOFMEASUREMENT_FIELD = "unitOfMeasurement"
+
+// fields in Invoice.
+const val Invoice_FIELD = "invoices"
+const val Invoice_NAME_FIELD = "number"
+const val Invoice_DATE_FIELD = "date"
+const val Invoice_CREATEDBY_FIELD = "createdBy"
+const val Invoice_CUSTOMER_FIELD = "customer"
+const val Invoice_ITEMS_FIELD = "items"
 
 const val ITEM_PATH_FIELD = "item"
 const val IMAGES_PATH_FIELD = "images"

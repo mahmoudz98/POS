@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 typealias ResourceItems = Resource<List<Item>>
 typealias AddItem = Resource<Int>
 typealias UpdateItem = Resource<Int>
+typealias UpdateQuantityItems = Resource<List<Item>>
 typealias DeleteItem = Resource<Int>
 
 /**
@@ -35,6 +36,8 @@ interface ItemRepository {
      * @return An [UpdateItem] resource indicating the success or failure of the update operation.
      */
     suspend fun updateItem(item: Item): UpdateItem
+
+    suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems
 
     /**
      * Deletes an existing item from the repository.

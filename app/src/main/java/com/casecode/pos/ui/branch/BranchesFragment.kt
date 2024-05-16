@@ -10,10 +10,8 @@ import com.casecode.pos.R
 import com.casecode.pos.adapter.BranchesAdapter
 import com.casecode.pos.databinding.FragmentBranchesBinding
 import com.casecode.pos.utils.EventObserver
-import com.casecode.pos.utils.compactScreen
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 /**
  * Fragment responsible for managing and displaying a list of branches in a stepper activity.
@@ -47,7 +45,7 @@ class BranchesFragment : Fragment() {
         savedInstanceState: Bundle?,
     ) {
         super.onViewCreated(view, savedInstanceState)
-        _binding ?: return // Return early if the binding is null
+        _binding ?: return
         init()
     }
 
@@ -55,18 +53,16 @@ class BranchesFragment : Fragment() {
      * Initializes the ViewModel, Adapter, and click events for the fragment.
      */
     private fun init() {
-        initViewModel()
-        initAdapter()
-        initClicked()
+        setupViewModel()
+        setupAdapter()
+        setupClicks()
         setupWithTwoPane()
         observerUpdateBranchInTablet()
     }
 
     private fun setupWithTwoPane() {
-        val isCompact = requireActivity().compactScreen()
-        businessViewModel.setCompact(isCompact)
-        Timber.e("setupTwoPane:  isCompact = %s", isCompact)
-        if (!isCompact) {
+
+        if (businessViewModel.isCompact.value == false) {
             binding.fcvAddBranch.visibility = View.VISIBLE
             binding.branches.btnBranchesAdd.visibility = View.GONE
 
@@ -85,12 +81,12 @@ class BranchesFragment : Fragment() {
     /**
      * Initializes the ViewModel associated with the layout.
      */
-    private fun initViewModel() {
+    private fun setupViewModel() {
         binding.branches.lifecycleOwner = this.viewLifecycleOwner
         binding.branches.viewModel = businessViewModel
     }
 
-    private fun initAdapter() {
+    private fun setupAdapter() {
         // Lazy initialization of BranchesAdapter
         val branchAdapter: BranchesAdapter by lazy {
             BranchesAdapter {
@@ -114,7 +110,7 @@ class BranchesFragment : Fragment() {
     /**
      * Initializes click events for buttons and subscription for network availability.
      */
-    private fun initClicked() {
+    private fun setupClicks() {
         initClickSubscription()
         binding.apply {
             btnBranchesInfo.setOnClickListener {

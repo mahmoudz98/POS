@@ -6,6 +6,7 @@ import com.casecode.domain.repository.DeleteItem
 import com.casecode.domain.repository.ItemRepository
 import com.casecode.domain.repository.ResourceItems
 import com.casecode.domain.repository.UpdateItem
+import com.casecode.domain.repository.UpdateQuantityItems
 import com.casecode.domain.utils.Resource
 import com.casecode.testing.base.BaseTestRepository
 import kotlinx.coroutines.flow.Flow
@@ -15,8 +16,9 @@ import javax.inject.Inject
 class TestItemRepository @Inject constructor(): ItemRepository, BaseTestRepository() {
     var fakeItems =
         arrayListOf(
-            Item("item #1", 1.0, 2.0, "1234567899090", "EA", "www.image1.png"),
-            Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+            Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+            Item("item #2", 3.0, 421312.0, "1555567899090", "EA", "www.image2.png"),
+            Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
         )
 
     override fun init() = Unit
@@ -35,7 +37,7 @@ class TestItemRepository @Inject constructor(): ItemRepository, BaseTestReposito
         return flowOf(ResourceItems.success(fakeItems))
     }
 
-    override suspend fun addItem(item: Item): AddItem {
+  override suspend  fun addItem(item: Item): AddItem {
         fakeItems.add(item)
         return if(shouldReturnError){
             AddItem.error(com.casecode.pos.data.R.string.add_item_failure_generic)
@@ -51,6 +53,14 @@ class TestItemRepository @Inject constructor(): ItemRepository, BaseTestReposito
             return UpdateItem.error(com.casecode.pos.data.R.string.update_item_failure_generic)
         }
        return Resource.Success(com.casecode.pos.data.R.string.item_updated_successfully)
+    }
+
+    override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
+        println(shouldReturnError)
+        if(shouldReturnError) {
+            return UpdateQuantityItems.error(com.casecode.pos.data.R.string.update_item_failure_generic)
+        }
+        return Resource.Success(items)
     }
 
     override suspend fun deleteItem(item: Item): DeleteItem {

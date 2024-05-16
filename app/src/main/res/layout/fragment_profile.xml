@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="com.google.firebase.auth.FirebaseUser"/>
+    <variable
+        name="user"
+        type="FirebaseUser" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/largest_spacing" />
+            app:layout_constraintGuide_begin="@dimen/normal_spacing" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_profile_left"
@@ -34,9 +37,12 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_profile"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="@dimen/size_image"
+            android:layout_height="@dimen/size_image"
             android:scaleType="centerCrop"
+            app:imageUrl="@{user.photoUrl}"
+            app:placeholder="@{@drawable/ic_google}"
+            app:error="@{@drawable/ic_google}"
             app:layout_constraintEnd_toStartOf="@+id/gl_profile_right"
             app:layout_constraintStart_toStartOf="@+id/gl_profile_left"
             app:layout_constraintTop_toTopOf="@+id/gl_profile_top"
@@ -48,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_spacing"
-            android:text="Mahmoud Abd ELhafeez"
+            android:text="@{user.displayName}"
             android:textAppearance="@style/TextAppearance.pos.TitleMedium"
 
             app:layout_constraintEnd_toEndOf="@+id/iv_profile"
@@ -60,8 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_spacing"
-            android:text="mahmoudabdalhafeez98@gmail.com"
-
+            android:text="@{user.email}"
             android:textAppearance="@style/TextAppearance.pos.BodySmall"
             app:layout_constraintEnd_toEndOf="@+id/tv_profile_name"
             app:layout_constraintStart_toStartOf="@+id/tv_profile_name"
@@ -75,17 +80,13 @@
             app:layout_constraintEnd_toStartOf="@+id/gl_profile_right"
             app:layout_constraintStart_toStartOf="@+id/gl_profile_left"
             app:layout_constraintTop_toBottomOf="@+id/tv_profile_email"
-
-
             />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_profile"
-
             android:layout_width="0dp"
             android:layout_height="0dp"
-
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/normal_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/gl_profile_right"
             app:layout_constraintStart_toStartOf="@+id/gl_profile_left"

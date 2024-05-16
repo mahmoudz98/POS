@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.casecode.pos.R
+import com.casecode.pos.ui.stepper.EmployeesStepperFragment
 import com.casecode.pos.utils.launchFragmentInHiltContainer
 import com.casecode.pos.utils.withHint
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -27,7 +28,7 @@ import org.junit.runner.RunWith
 @MediumTest
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class AddEmployeeDialogFragmentTest {
+class EmployeeStepperDialogFragmentTest {
     @JvmField
     @Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -40,19 +41,19 @@ class AddEmployeeDialogFragmentTest {
     fun init() {
         hiltRule.inject()
         // Subject under test
-        launchFragmentInHiltContainer<EmployeesFragment> {}
+        launchFragmentInHiltContainer<EmployeesStepperFragment> {}
         onView(withId(R.id.btn_employees_add)).perform(click())
     }
 
     @Test
     fun whenEmployeeInputEmpty_ShowMessageInputEmpty() {
-        onView(withId(R.id.et_add_employee_name)).perform(replaceText(""), closeSoftKeyboard())
+        onView(withId(R.id.et_employee_name)).perform(replaceText(""), closeSoftKeyboard())
 
-        onView(withId(R.id.et_add_employee_phone)).perform(
+        onView(withId(R.id.et_employee_phone)).perform(
             replaceText(""),
             closeSoftKeyboard(),
         )
-        onView(withId(R.id.et_add_employee_password)).perform(
+        onView(withId(R.id.et_employee_password)).perform(
             replaceText(""),
             closeSoftKeyboard(),
         )
@@ -67,31 +68,31 @@ class AddEmployeeDialogFragmentTest {
 
         onView(withId(R.id.btn_employee)).perform(click())
 
-        onView(withId(R.id.til_add_employee_name)).check(
+        onView(withId(R.id.til_employee_name)).check(
             matches(withHint(context.getString(R.string.add_employee_name_empty))),
         )
-        onView(withId(R.id.til_add_employee_phone)).check(
+        onView(withId(R.id.til_employee_phone)).check(
             matches(withHint(context.getString(R.string.all_phone_empty))),
         )
-        onView(withId(R.id.til_add_employee_password)).check(
+        onView(withId(R.id.til_employee_password)).check(
             matches(withHint(context.getString(R.string.add_employee_password_empty))),
         )
-        onView(withId(R.id.til_add_employee_branch)).check(
+        onView(withId(R.id.til_employee_branch)).check(
             matches(withHint(context.getString(R.string.add_employee_branch_empty))),
         )
-        onView(withId(R.id.til_add_employee_permission)).check(
+        onView(withId(R.id.til_employee_permission)).check(
             matches(withHint(context.getString(R.string.add_employee_permission_empty))),
         )
     }
 
     @Test
     fun whenEmployeeInputValid_ShowMessageSuccess() {
-        onView(withId(R.id.et_add_employee_name)).perform(replaceText("test"), closeSoftKeyboard())
-        onView(withId(R.id.et_add_employee_phone)).perform(
+        onView(withId(R.id.et_employee_name)).perform(replaceText("test"), closeSoftKeyboard())
+        onView(withId(R.id.et_employee_phone)).perform(
             replaceText("08123456789"),
             closeSoftKeyboard(),
         )
-        onView(withId(R.id.et_add_employee_password)).perform(
+        onView(withId(R.id.et_employee_password)).perform(
             replaceText("test232"),
             closeSoftKeyboard(),
         )
@@ -103,6 +104,6 @@ class AddEmployeeDialogFragmentTest {
 
         onView(withId(R.id.btn_employee)).perform(click())
 
-        onView(withId(R.id.btn_employees_done)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_employees_stepper_done)).check(matches(isDisplayed()))
     }
 }

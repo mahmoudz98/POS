@@ -1,10 +1,7 @@
-package com.casecode.pos.adapter
+package com.casecode.pos.ui.profile
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.casecode.pos.ui.profile.ProfileBranchesFragment
-import com.casecode.pos.ui.profile.ProfileBusinessFragment
-import com.casecode.pos.ui.profile.ProfilePlansFragment
 
 class ProfilePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 

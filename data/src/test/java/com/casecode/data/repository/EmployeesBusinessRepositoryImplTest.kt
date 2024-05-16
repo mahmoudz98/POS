@@ -1,6 +1,6 @@
 package com.casecode.data.repository
 
-import com.casecode.data.mapper.toEmployeesRequest
+import com.casecode.data.mapper.asExternalEmployees
 import com.casecode.domain.model.users.Employee
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
@@ -40,7 +40,7 @@ class EmployeesBusinessRepositoryImplTest {
 
     @Before
     fun setup() {
-        employeesBusinessRepositoryImpl = EmployeesBusinessRepositoryImpl(firestore, testDispatcher)
+        //employeesBusinessRepositoryImpl = EmployeesBusinessRepositoryImpl(firestore, testDispatcher)
     }
 
     @After
@@ -57,7 +57,7 @@ class EmployeesBusinessRepositoryImplTest {
             // mock firestore behavior
             every {
                 firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                    .update(employees.toEmployeesRequest() as Map<String, Any>)
+                    .update(employees.asExternalEmployees() as Map<String, Any>)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
             } answers {
@@ -82,7 +82,7 @@ class EmployeesBusinessRepositoryImplTest {
             // Mock firestore behavior
             every {
                 firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                    .update(employees.toEmployeesRequest() as Map<String, Any>)
+                    .update(employees.asExternalEmployees() as Map<String, Any>)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
             } answers {
@@ -106,7 +106,7 @@ class EmployeesBusinessRepositoryImplTest {
             // Mock firestore behavior
             every {
                 firestore.collection(USERS_COLLECTION_PATH).document(uid)
-                    .update(employees.toEmployeesRequest() as Map<String, Any>)
+                    .update(employees.asExternalEmployees() as Map<String, Any>)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
             } answers {

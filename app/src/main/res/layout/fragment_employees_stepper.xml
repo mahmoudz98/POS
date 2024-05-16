@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="java.util.List" />
+
+        <variable
+            name="employees"
+            type="List&lt;com.casecode.domain.model.users.Employee>" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/csl_employees_stepper_root">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                >
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/csl_employees_storage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/md_theme_light_inverseOnSurface"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/iv_employees"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/normal_spacing"
+                        android:baselineAlignBottom="true"
+                        android:contentDescription="@null"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5"
+                        app:srcCompat="@drawable/ic_storage" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_employees"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/small_spacing"
+
+                        android:text="@string/employees"
+                        android:textAppearance="@style/TextAppearance.pos.BodyLarge"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/iv_employees"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <Button
+                        android:id="@+id/btn_employees_add"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/small_spacing"
+                        app:icon="@drawable/ic_add"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_employees"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/normal_spacing"
+                    android:layout_marginEnd="@dimen/normal_spacing"
+                    app:bindListEmployee="@{employees}"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/csl_employees_storage"
+                    tools:listitem="@layout/item_employee" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fcv_employees_stepper_dialog"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/normal_spacing"
+                android:layout_gravity="end"
+
+                tools:layout="@layout/dialog_employee" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        <Button
+            android:id="@+id/btn_employees_stepper_done"
+            style="@style/Widget.pos.Button.TextButton.icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/normal_spacing"
+            android:text="@string/done"
+            app:icon="@drawable/ic_arrow_left"
+            app:iconGravity="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <Button
+            android:id="@+id/btn_employees_stepper_subscription"
+            style="@style/Widget.pos.Button.TextButton.icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/normal_spacing"
+            android:text="@string/subscription_title"
+            android:textColor="@color/md_theme_light_secondary"
+            app:icon="@drawable/ic_arrow_right"
+            app:iconGravity="start"
+            app:iconTint="@color/md_theme_light_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

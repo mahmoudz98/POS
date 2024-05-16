@@ -7,9 +7,12 @@
     <string name="sign_in_network_error">One-tap encountered a network error..</string>
     <string name="sign_in_api_exception">Couldn\'t get credential from result.</string>
     <string name="sign_in_exception">Something error in one-tap.</string>
+    <string name="sign_in_success">Sign in success.</string>
 
     <!-- business -->
-    <string name="add_business_failure">Add  Business failure,</string>
+    <string name="add_business_failure">Add Business failure,</string>
+    <string name="get_business_failure">Get Business failure,</string>
+    <string name="get_business_failure_network">Get Business failure,Check internet connection</string>
     <string name="add_business_network">Failure when add business, Check internet connection</string>
 
     <string name="add_subscription_business_failure">Add Subscription Business failure,</string>
@@ -17,7 +20,11 @@
     <string name="complete_business_failure">Complete Subscription Business failure,</string>
 
     <string name="add_employees_business_failure">Add employees Business failure,</string>
+    <string name="employee_add_business_failure">Add employee Business failure,</string>
+    <string name="employee_update_business_failure">Update employees Business failure,</string>
     <string name="add_employees_business_network">Failure when add Employees, Check internet connection</string>
+    <string name="employee_add_business_network">Failure when add Employee, Check internet connection</string>
+    <string name="employee_update_business_network">Failure when update Employee, Check internet connection</string>
 
     <string name="add_product_network">Failure when add product, Check internet connection</string>
 
@@ -62,5 +69,15 @@
         Please check your internet connection and try again.</string>
     <string name="delete_image_failure_generic">Delete image failed, Please try again later.</string>
     <!-- ======================================================================================= -->
+
+    // Invoice
+    <string name="add_invoice_failure_network">Unable to add invoice. Please check your internet
+        connection.</string>
+    <string name="add_invoice_successfully">Invoice Added successfully</string>
+    <string name="add_invoice_failure">Invoice Added failed, Please try again later.</string>
+    <string name="get_invoice_failure">fetch Invoice failed, Please try again later.</string>
+    <string name="get_invoice_failure_network">Unable to fetch invoices. Please check your internet
+        connection.</string>
+
 
 </resources>

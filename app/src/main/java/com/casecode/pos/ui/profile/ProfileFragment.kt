@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.casecode.pos.R
-import com.casecode.pos.adapter.ProfilePagerAdapter
 import com.casecode.pos.databinding.FragmentProfileBinding
 import com.casecode.pos.viewmodel.ProfileViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
 
@@ -37,8 +38,21 @@ class ProfileFragment : Fragment() {
                 when (position) {
                     0 -> getString(R.string.business_info_title)
                     1 -> getString(R.string.branches)
-                    else -> getString(R.string.business_plans_title)
+                    else -> getString(R.string.subscription_title)
                 }
         }.attach()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        viewModel.currentUser.observe(viewLifecycleOwner){
+            binding.user = it
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModelStore.clear()
     }
 }

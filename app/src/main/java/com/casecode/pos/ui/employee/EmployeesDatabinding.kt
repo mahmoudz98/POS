@@ -33,12 +33,12 @@ fun AppCompatAutoCompleteTextView.setItemsBranch(branches: List<Branch>?)
 fun AppCompatAutoCompleteTextView.setSelected(itemSelected: String?)
 {
    if (itemSelected.isNullOrBlank()) return
-   val adapter = (adapter as AutoCompleteAdapter)
-   adapter.runCatching {
+   val adapter = (adapter as? AutoCompleteAdapter)
+   adapter?.runCatching {
       val position = getPosition(itemSelected)
       setSelectedItem(position)
       setText(adapter.getItem(position), false)
-   }.onFailure {
+   }?.onFailure {
       setText(itemSelected, false)
    }
 }

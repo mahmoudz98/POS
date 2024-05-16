@@ -20,7 +20,6 @@ class AutoCompleteAdapter(context: Context, items: List<String?>) :
         val itemText = getItem(position)
         val textView = view.findViewById<CheckedTextView>(android.R.id.text1)
 
-        // Check if the item is selected
         if (position == selectedItemPosition) {
             textView.isChecked = true
         } else {

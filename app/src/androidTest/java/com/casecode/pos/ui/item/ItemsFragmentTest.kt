@@ -32,7 +32,7 @@ class ItemsFragmentTest {
     }
     @Test
     fun selectorAddItem_shouldShowNewItemInList(){
-        onView(withId(R.id.floating_btn_items)).perform(click())
+        onView(withId(R.id.btn_sale)).perform(click())
 
 
     }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="java.util.List" />
+        <import type="com.casecode.domain.model.users.Invoice" />
+
+        <variable
+        name="dateInvoiceGroup"
+        type="String" />
+        <variable
+            name="totalGroup"
+            type="String" />
+        <variable
+            name="invoices"
+            type="List&lt;Invoice>" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/small_spacing"
+
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_invoice_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{dateInvoiceGroup  + @string/invoice_group_total(totalGroup)}"
+        android:paddingStart="@dimen/small_spacing"
+        android:paddingEnd="@dimen/small_spacing"
+        android:paddingBottom="@dimen/smaller_spacing"
+        android:textColor="@color/md_theme_light_primary"
+        android:textAppearance="@style/TextAppearance.pos.BodyLarge"
+        tools:text="2021-01-01 | 500 EGP" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_invoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            app:bindListInvoices="@{invoices}"
+            tools:listitem="@layout/item_invoice" />
+    </LinearLayout>
+</layout>

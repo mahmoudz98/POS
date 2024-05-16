@@ -15,13 +15,17 @@
         android:id="@+id/nav_pos"
         android:name="com.casecode.pos.ui.pos.PointOfSaleFragment"
         android:label="@string/menu_pos"
-        tools:layout="@layout/fragment_point_of_sale" />
+        tools:layout="@layout/fragment_sale" />
 
     <fragment
         android:id="@+id/nav_invoices"
         android:name="com.casecode.pos.ui.invoices.InvoicesFragment"
         android:label="@string/menu_invoices"
-        tools:layout="@layout/fragment_invoices" />
+        tools:layout="@layout/fragment_invoices" >
+        <action
+            android:id="@+id/action_nav_invoices_to_invoiceDetailsFragment"
+            app:destination="@id/nav_invoice_details" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_code_scanner"
@@ -38,7 +42,7 @@
     <fragment
         android:id="@+id/nav_users"
         android:name="com.casecode.pos.ui.employee.EmployeesFragment"
-        android:label="UsersFragment"
+        android:label="Employees"
         tools:layout="@layout/fragment_employees" />
 
     <fragment
@@ -59,5 +63,11 @@
         tools:layout="@layout/fragment_items">
 
     </fragment>
+    <fragment
+        android:id="@+id/nav_invoice_details"
+        android:name="com.casecode.pos.ui.invoices.InvoiceDetailsFragment"
+        android:label="@string/title_invoice_details"
+        tools:layout="@layout/fragment_invoice_details"
+        />
 
 </navigation>

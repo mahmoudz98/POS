@@ -1,6 +1,10 @@
-package com.casecode.data.service
+package com.casecode.data.utils
 
+import com.casecode.domain.utils.USERS_COLLECTION_PATH
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.channels.awaitClose
@@ -20,6 +24,7 @@ fun <T> Query.snapshotFlow(): Flow<QuerySnapshot> = callbackFlow {
     }
     awaitClose { listener.remove() }
 }
+
 fun <T> Query.documentChangesFlow(): Flow<List<DocumentChange>> = callbackFlow {
     val listener = addSnapshotListener { value, error ->
         if (error != null) {
@@ -32,3 +37,21 @@ fun <T> Query.documentChangesFlow(): Flow<List<DocumentChange>> = callbackFlow {
     }
     awaitClose { listener.remove() }
 }
+
+fun FirebaseFirestore.getDocumentFromUser(uid: String, collection: String): DocumentReference {
+    return this.collection(USERS_COLLECTION_PATH).document(uid).collection(collection).document()
+}
+
+fun FirebaseFirestore.getDocumentFromUser(
+    uid: String,
+    collection: String,
+    nameDocument: String,
+): DocumentReference = this.collection(USERS_COLLECTION_PATH).document(uid).collection(collection)
+    .document(nameDocument)
+
+
+fun FirebaseFirestore.getCollectionRefFromUser(
+    uid: String,
+    nameCollection: String,
+): CollectionReference =
+    this.collection(USERS_COLLECTION_PATH).document(uid).collection(nameCollection)

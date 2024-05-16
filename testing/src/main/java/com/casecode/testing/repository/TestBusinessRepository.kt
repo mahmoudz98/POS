@@ -5,36 +5,37 @@ import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.repository.CompleteBusiness
 import com.casecode.domain.utils.Resource
+import com.casecode.testing.base.BaseTestRepository
 import javax.inject.Inject
 
-class TestBusinessRepository @Inject constructor() : BusinessRepository
-{
-   
-   private var business: Business = Business()
-   
-   
-   override suspend fun getBusiness(uid: String): Business
-   {
-      
-      return business
-   }
-   
-   override suspend fun setBusiness(business: Business, uid: String): AddBusiness
-   {
-      
-      return Resource.Success(true)
-      
-   }
-   
-   override suspend fun completeBusinessSetup(uid: String): CompleteBusiness
-   {
-    return  Resource.success(true)
-   }
-   
-   fun sendAddBusiness(business: Business)
-   {
-      
-      this.business = business
-   }
-   
+class TestBusinessRepository @Inject constructor() : BusinessRepository, BaseTestRepository() {
+
+    private var business: Business = Business()
+
+
+    override suspend fun getBusiness(): Resource<Business> {
+       if(shouldReturnError) return Resource.error("s")
+        return Resource.success(business)
+        // return business
+    }
+
+    override suspend fun setBusiness(business: Business, uid: String): AddBusiness {
+
+        return Resource.Success(true)
+
+    }
+
+    override suspend fun completeBusinessSetup(uid: String): CompleteBusiness {
+        return Resource.success(true)
+    }
+
+    fun sendAddBusiness(business: Business) {
+
+        this.business = business
+    }
+
+    override fun init() {
+
+    }
+
 }

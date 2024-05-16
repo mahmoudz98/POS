@@ -122,7 +122,7 @@
     <string name="add_employees_success">Employees Added success, Go on.</string>
     <string name="add_employee_success">Employee Added success.</string>
     <string name="add_employee_fail">Employee Added failed.</string>
-    <string name="add_employee_duplicate">Employee\'s name duplicate and failed.</string>
+    <string name="employee_name_duplicate">Employee\'s name duplicate and failed.</string>
     <string name="update_employee_success">Employee updated success.</string>
     <string name="update_employee_fail">Employee updated failed.</string>
 
@@ -166,8 +166,6 @@
     <string name="google_sign_in_failed">Google sign in failed %1$s</string>
 
 
-
-
     // item
     <string name="barcode">Barcode</string>
     <string name="name">name</string>
@@ -205,5 +203,35 @@
     <string name="print_qr_code_title">Print QR code</string>
     <string name="pictures_folder">sd</string>
 
+    // Sale
+    <string name="sale_search_hint">Search by name item and barcode</string>
+    <string name="search_qr_cant_find_item">Can\'t find item by QR code.</string>
+    <string name="sale_item_out_of_stock">Out of stock item.</string>
+    <string name="empty_invoice_items_title">No invoice items to display</string>
+    <string name="empty_invoice_items_message">There are currently no items selected, Select item to sale.</string>
+    <string name="delete_item_invoice_title">Delete item from invoice</string>
+    <string name="quantity_item_invoice_title">Change the quantity</string>
+    <string name="quantity_item_invoice_error">You must select quantity less than  </string>>
+    <string name="quantity_item_invoice_error_zero">You must select quantity greater than 0</string>
+    >
+    <string name="add_item_invoice_fail">Add item selected in invoice fail.</string>>
+    <string name="quantity_item_invoice_update_fail">Quantity item selected update fail.</string>>
+    <string name="quantity_item_invoice_update_success">Quantity item selected update success.</string>
+    <string name="text_sale">Sale</string>>
+    <string name="text_sale_total_hint">Total price:&#32;</string>
+    <string name="text_sale_rest_of_amount">, rest:&#32;</string>
+    <string name="hint_sale_amount">Enter amount</string>>
+
+    // Invoice
+    <string name="invoice_items_empty">Invoice items are empty.</string>>
+    <string name="invoice_group_total">\u0020| $%s</string>
+    <string name="invoice_item_total">Total:&#32; $%s</string>
+    <string name="action_title_date_picker">Select date</string>
+    <string name="action_title_clear_date_picker">Clear date filter</string>
+    <string name="action_title_invoice_print">Print invoice</string>
+    <string name="title_invoice_details">Details invoice</string>
+
+    <string name="employees_empty_title">No employees to display</string>
+    <string name="employees_empty_message">There are currently no employees available.</string>
 
 </resources>

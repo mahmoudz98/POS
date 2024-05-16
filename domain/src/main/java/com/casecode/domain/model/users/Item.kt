@@ -16,7 +16,7 @@ import com.google.firebase.firestore.PropertyName
 data class Item(
     val name: String = "",
     val price: Double = 0.0,
-    val quantity: Double = 0.0,
+    var quantity: Double = 0.0,
     val sku: String = "",
     @set:PropertyName("unit_of_measurement") @get:PropertyName("unit_of_measurement") var unitOfMeasurement: String? = "",
     @set:PropertyName("image_url") @get:PropertyName("image_url") var imageUrl: String? = "",

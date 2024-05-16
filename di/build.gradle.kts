@@ -18,9 +18,11 @@ secrets {
 dependencies {
     api(projects.data)
     api(projects.domain)
-    api(libs.firebase.firestore.ktx)
-    api(libs.firebase.auth.ktx)
-    api(libs.firebase.storage.ktx)
 
-    implementation(libs.play.services.auth)
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.auth)
+    api(libs.firebase.storage)
+    api(libs.play.services.auth)
+    api(libs.googleid)
+
 }

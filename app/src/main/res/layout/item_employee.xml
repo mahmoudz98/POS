@@ -8,31 +8,38 @@
             name="employee"
             type="com.casecode.domain.model.users.Employee" />
     </data>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
+        android:layout_marginTop="@dimen/small_spacing">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/smaller_spacing">
-
+        >
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_employee_permission_branch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:text="@{employee.permission +' ' + '/' + ' '+ employee.branchName}"
             android:textAppearance="@style/TextAppearance.pos.TitleSmall"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{employee.permission + '/' + employee.branchName}"
             tools:text="Admin: 1 / branchName" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_employee_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.pos.BodyLarge"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_employee_permission_branch"
             android:text="@{employee.name}"
+            android:layout_marginTop="@dimen/small_spacing"
+
+            android:textAppearance="@style/TextAppearance.pos.BodyMedium"
+            app:layout_constraintStart_toStartOf="@+id/tv_employee_permission_branch"
+            app:layout_constraintTop_toBottomOf="@+id/tv_employee_permission_branch"
 
             tools:text="bracnh: 1" />
 
@@ -41,12 +48,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="22342222222342"
-            android:layout_marginTop="@dimen/smaller_spacing"
+            android:layout_marginTop="@dimen/small_spacing"
             android:layout_marginBottom="@dimen/small_spacing"
             android:text="@{employee.phoneNumber}"
-            android:textAppearance="@style/TextAppearance.pos.BodyMedium"
+            android:textAppearance="@style/TextAppearance.pos.LabelMedium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_employee_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_employee_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

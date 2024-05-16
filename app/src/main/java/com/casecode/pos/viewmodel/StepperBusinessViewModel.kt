@@ -74,9 +74,6 @@ class StepperBusinessViewModel
         private val _branches: MutableLiveData<ArrayList<Branch>> = MutableLiveData(ArrayList())
         val branches
             get() = _branches
-
-        private val branch: MutableLiveData<Branch> = MutableLiveData()
-
         private val
         branchCode: MutableLiveData<Int> = MutableLiveData(0)
 
@@ -435,7 +432,7 @@ class StepperBusinessViewModel
             currentEmployees.forEach {
                 if (it.name == _employee.name) {
                     _isAddEmployee.value = Event(false)
-                    showSnackbarMessage(R.string.add_employee_duplicate)
+                    showSnackbarMessage(R.string.employee_name_duplicate)
                     return true
                 }
             }
@@ -464,7 +461,7 @@ class StepperBusinessViewModel
 
             val currentEmployee = employeesValue[index]
             val updateEmployee = _employee
-            if (isUpdateEmployeeNameDuplicate(employeesValue)) return
+            if (employeesValue.isUpdateEmployeeNameDuplicate(updateEmployee)) return
 
             if (currentEmployee != updateEmployee) {
                 employeesValue[index] = updateEmployee
@@ -486,11 +483,11 @@ class StepperBusinessViewModel
             return false
         }
 
-        private fun isUpdateEmployeeNameDuplicate(currentEmployees: List<Employee>): Boolean {
-            currentEmployees.forEach {
-                if (it.name == _employee.name && it != employeeSelected.value) {
+        private  fun List<Employee>.isUpdateEmployeeNameDuplicate(employee: Employee): Boolean {
+            this.forEach {
+                if (it.name == employee.name && it != employeeSelected.value) {
                     _isUpdateEmployee.value = Event(false)
-                    showSnackbarMessage(R.string.add_employee_duplicate)
+                    showSnackbarMessage(R.string.employee_name_duplicate)
                     return true
                 }
             }

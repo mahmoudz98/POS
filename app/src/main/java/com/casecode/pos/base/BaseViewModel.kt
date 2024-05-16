@@ -4,9 +4,12 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.casecode.data.utils.NetworkMonitor
 import com.casecode.pos.utils.Event
+import javax.inject.Inject
 
 abstract class BaseViewModel : ViewModel() {
+
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
     private val _userMessage: MutableLiveData<Event<Int>> = MutableLiveData()

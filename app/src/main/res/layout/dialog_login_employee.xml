@@ -21,14 +21,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_login_scan_uid"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small_spacing"
-            android:layout_marginTop="@dimen/large_spacing"
             android:layout_marginEnd="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/large_spacing"
             android:enabled="false"
             android:hint="@string/employee_user_admin"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_login_scan_uid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_login"
             app:startIconDrawable="@drawable/ic_profile">
@@ -40,21 +40,17 @@
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
         <ImageButton
             android:id="@+id/btn_login_scan_uid"
             android:layout_width="@dimen/size_image_button"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/normal_spacing"
-            android:layout_marginEnd="@dimen/normal_spacing"
-            android:layout_marginBottom="@dimen/normal_spacing"
+            android:layout_height="@dimen/size_image_button"
             android:background="@android:color/transparent"
             android:contentDescription="@string/scan_barcode"
             android:foreground="@drawable/ripple_effect"
-            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/til_login_scan_uid"
-            app:layout_constraintEnd_toEndOf="@+id/til_login_scan_uid"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/til_login_scan_uid"
-            app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/enter_barcode" />
 
         <com.google.android.material.textfield.TextInputLayout
