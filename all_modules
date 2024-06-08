@@ -1,0 +1,11 @@
+digraph G {
+":app" -> ":data"
+":app" -> ":domain"
+":app" -> ":di"
+":data" -> ":domain" [color=red style=bold]
+":di" -> ":data" [color=red style=bold]
+":di" -> ":domain"
+":testing" -> ":domain"
+":testing" -> ":data"
+":testing" -> ":di" [color=red style=bold]
+}
