@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.adapter
 
 import android.content.Context
@@ -88,4 +89,4 @@ class SearchItemSaleAdapter(context: Context, private var items: MutableList<Ite
         items.addAll(newItems)
         notifyDataSetChanged()
     }
-}
+}*/

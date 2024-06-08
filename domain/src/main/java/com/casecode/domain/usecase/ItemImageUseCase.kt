@@ -25,7 +25,7 @@ class ItemImageUseCase
      * @param imageName The name to be assigned to the uploaded image.
      * @return A [UploadImage] resource containing the URL of the uploaded image.
      */
-     fun uploadImage(bitmap: Bitmap?,imageName: String?,) = flow {
+     fun uploadImage(bitmap: Bitmap?,imageName: String?) = flow {
         emit(UploadImage.loading())
         emit(
             if (bitmap != null && imageName != null) imageRepository.uploadImage(bitmap, imageName)

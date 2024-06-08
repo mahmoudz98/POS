@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.adapter
 
 import android.view.LayoutInflater
@@ -66,12 +67,14 @@ class EmployeeAdapter(val itemClick: (Employee) -> Unit) :
       return R.layout.item_employee
    }
    
-   /**
+   */
+/**
     *  parent list is immutable and override here to use mutableList.
-    */
+    *//*
+
    override fun submitList(list: MutableList<Employee>?)
    {
       super.submitList(
          list?.let { ArrayList(it) })
    }
-}
+}*/

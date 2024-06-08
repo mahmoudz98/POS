@@ -43,8 +43,8 @@ class SubscriptionsBusinessRepositoryImplTest {
 
     @Before
     fun setup() {
-        subscriptionRepository =
-            SubscriptionsBusinessRepositoryImpl(firestore, testDispatcher)
+      /*  subscriptionRepository =
+            SubscriptionsBusinessRepositoryImpl(firestore, testDispatcher)*/
     }
 
     @After

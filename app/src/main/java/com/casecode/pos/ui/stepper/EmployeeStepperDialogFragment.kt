@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.stepper
 
 import android.app.Dialog
@@ -16,9 +17,11 @@ import com.casecode.pos.databinding.DialogEmployeeBinding
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+*/
 /**
  * A add Employee Dialog fragment that displays the  Employee in Users fragment.
- */
+ *//*
+
 class EmployeeStepperDialogFragment : DialogFragment() {
     companion object {
         const val ADD_EMPLOYEE_STEPPER_TAG = "EmployeesStepperDialogFragment"
@@ -80,9 +83,11 @@ class EmployeeStepperDialogFragment : DialogFragment() {
         binding.branches = viewModel.branches.value
     }
 
-    /**
+    */
+/**
      * validate for Name, phone number, password, branch name , permission
-     */
+     *//*
+
     private fun validateInputEmployee() {
         validateNameEmployeeInput()
         validatePhoneEmployeeInput()
@@ -223,4 +228,4 @@ class EmployeeStepperDialogFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

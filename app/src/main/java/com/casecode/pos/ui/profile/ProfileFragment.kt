@@ -1,11 +1,19 @@
+/*
 package com.casecode.pos.ui.profile
 
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import com.casecode.pos.R
 import com.casecode.pos.databinding.FragmentProfileBinding
 import com.casecode.pos.viewmodel.ProfileViewModel
@@ -49,10 +57,29 @@ class ProfileFragment : Fragment() {
         viewModel.currentUser.observe(viewLifecycleOwner){
             binding.user = it
         }
+        setupRemoveMenuProfile()
     }
+
+    private fun setupRemoveMenuProfile() {
+        val menuProvider = object : MenuProvider {
+
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater,
+            ) {
+                menu.removeItem(R.id.action_main_profile)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return false
+            }
+        }
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
         viewModelStore.clear()
     }
-}
+}*/

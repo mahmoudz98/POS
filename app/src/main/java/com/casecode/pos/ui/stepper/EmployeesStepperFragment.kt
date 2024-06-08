@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.stepper
 
 import android.os.Bundle
@@ -13,18 +14,22 @@ import com.casecode.pos.utils.compactScreen
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+*/
 /**
  * A fragment that displays a list of employees.
- */
+ *//*
+
 @AndroidEntryPoint
 class EmployeesStepperFragment : Fragment() {
     @Suppress("ktlint:standard:property-naming")
     private var _binding: FragmentEmployeesStepperBinding? = null
     val binding get() = _binding!!
 
-    /**
+    */
+/**
      * The view model for this fragment.
-     */
+     *//*
+
     internal val businessViewModel by activityViewModels<StepperBusinessViewModel>()
 
     override fun onCreateView(
@@ -53,9 +58,11 @@ class EmployeesStepperFragment : Fragment() {
         initClick()
     }
 
-    /**
+    */
+/**
      * Sets up the fragment for two-pane mode.
-     */
+     *//*
+
     private fun setupWithTwoPane() {
         val isCompact = requireActivity().compactScreen()
         businessViewModel.setCompact(isCompact)
@@ -74,18 +81,22 @@ class EmployeesStepperFragment : Fragment() {
             binding.btnEmployeesAdd.visibility = View.VISIBLE
         }
     }
-    /**
+    */
+/**
      * Initializes the view model.
-     */
+     *//*
+
     private fun initViewModel() {
         businessViewModel.employees.observe(viewLifecycleOwner) {
             binding.employees = it
         }
         businessViewModel.addDefaultEmployee()
     }
-    /**
+    */
+/**
      * Initializes the adapter for the list of employees.
-     */
+     *//*
+
     private fun initAdapter() {
         val employeeAdapter: EmployeeAdapter by lazy {
             EmployeeAdapter {
@@ -108,9 +119,11 @@ class EmployeesStepperFragment : Fragment() {
         binding.rvEmployees.adapter = employeeAdapter
     }
 
-    /**
+    */
+/**
      * Initializes the click listeners for the buttons.
-     */
+     *//*
+
     private fun initClick() {
         binding.apply {
             btnEmployeesAdd.setOnClickListener {
@@ -129,9 +142,11 @@ class EmployeesStepperFragment : Fragment() {
         }
     }
 
-    /**
+    */
+/**
      * Observes the update employee event in tablet mode.
-     */
+     *//*
+
     private fun observerUpdateEmployeeInTablet() {
         if (businessViewModel.isCompact.value == false) {
             businessViewModel.isUpdateEmployee.observe(
@@ -152,4 +167,4 @@ class EmployeesStepperFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

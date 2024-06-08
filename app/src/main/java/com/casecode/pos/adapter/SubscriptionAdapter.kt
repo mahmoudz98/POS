@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.adapter
 
 import android.annotation.SuppressLint
@@ -11,6 +12,7 @@ import timber.log.Timber
 
 class SubscriptionAdapter(
     private val itemClick: (Subscription) -> Unit,
+    private val currentSubscriptionType : String? = null
 ) :
     RecyclerView.Adapter<SubscriptionViewHolder>() {
     private var subscriptionItems: List<Subscription> = emptyList()
@@ -80,4 +82,4 @@ class SubscriptionAdapter(
             return SubscriptionViewHolder(binding)
         }
     }
-}
+}*/

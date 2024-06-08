@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.employee
 
 import android.app.Dialog
@@ -93,9 +94,11 @@ class EmployeeDialogFragment : DialogFragment() {
         }
     }
 
-    /**
+    */
+/**
      * validate for Name, phone number, password, branch name , permission
-     */
+     *//*
+
     private fun validateInputEmployee() {
         validateNameEmployeeInput()
         validatePhoneEmployeeInput()
@@ -211,4 +214,4 @@ class EmployeeDialogFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

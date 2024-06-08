@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.pos
 
 import android.app.Dialog
@@ -22,18 +23,22 @@ class QuantityItemInvoiceDialog : DialogFragment() {
         ownerProducer = { requireParentFragment() },
     )
 
-    /**
+    */
+/**
      * Creates the dialog with the dialog layout.
-     */
+     *//*
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
         _binding = DialogQuantityItemInvoiceBinding.inflate(layoutInflater)
         return builder.setView(binding.root).create()
     }
 
-    /**
+    */
+/**
      * Inflates the dialog layout.
-     */
+     *//*
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -126,4 +131,4 @@ class QuantityItemInvoiceDialog : DialogFragment() {
             return QuantityItemInvoiceDialog()
         }
     }
-}
+}*/

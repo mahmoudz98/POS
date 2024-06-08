@@ -23,11 +23,7 @@ class AndroidTest4ConventionPlugin : Plugin<Project>
             defaultConfig.targetSdk = 34
             configureGradleManagedDevices(this)
          }
-         
-         dependencies {
-            
-         
-         }
+
       }
     
       }

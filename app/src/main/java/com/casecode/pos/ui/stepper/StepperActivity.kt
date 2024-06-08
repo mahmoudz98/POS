@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.stepper
 
 import android.content.Intent
@@ -188,4 +189,4 @@ class StepperActivity : AppCompatActivity(), StepperNavListener {
             }
         }
     }
-}
+}*/

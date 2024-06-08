@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.statistics
 
 import android.os.Bundle
@@ -29,4 +30,4 @@ class StatisticsFragment : Fragment() {
         return binding.root
     }
 
-}
+}*/

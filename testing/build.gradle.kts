@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "com.casecode.pos.testing"
 
-    packaging {
+/*    packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
             excludes.add("/META-INF/NOTICE.md")
@@ -16,7 +16,9 @@ android {
             excludes.add("META-INF/DEPENDENCIES")
             excludes.add("DebugProbesKt.bin")
         }
-    }
+    }*/
+
+ */
 }
 
 dependencies {
@@ -26,15 +28,15 @@ dependencies {
     api(projects.di)
 
     // use for testing live data
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.storage.ktx)
+/*    api(platform(libs.firebase.bom))
+    api(libs.firebase.auth)
+    api(libs.firebase.storage)*/
 
-    api(libs.core.testing)
-    api(libs.coroutines.test)
+    implementation(libs.core.testing)
+    implementation(libs.coroutines.test)
     implementation(libs.test.mockk)
-    api(libs.test.runner)
+    implementation(libs.test.runner)
 
     implementation(libs.hilt.android.testing)
-    implementation(libs.test.espresso.idlingResource)
     implementation(libs.play.services.auth)
 }

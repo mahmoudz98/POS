@@ -18,6 +18,7 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("play.services.auth").get())
                 "implementation"(libs.findLibrary("firebase.auth").get())
                 "implementation"(libs.findLibrary("firebase.firestore").get())
+                "implementation"(libs.findLibrary("firebase.storage").get())
                 "implementation"(libs.findLibrary("firebase.performance").get())
 
                 //  "implementation"(libs.findLibrary("firebase.messaging").get())

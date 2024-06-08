@@ -6,6 +6,7 @@ abstract class BaseTestRepository {
     protected var shouldReturnError = false
     protected var shouldReturnEmpty = false
 
+
     @Before
     fun setup() {
         shouldReturnError = false

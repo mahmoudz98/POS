@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.business
 
 import android.os.Bundle
@@ -180,4 +181,4 @@ class AddBusinessFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

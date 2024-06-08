@@ -9,12 +9,16 @@ import com.casecode.domain.repository.UpdateItem
 import com.casecode.domain.repository.UpdateQuantityItems
 import com.casecode.domain.utils.Resource
 import com.casecode.testing.base.BaseTestRepository
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class TestItemRepository @Inject constructor(): ItemRepository, BaseTestRepository() {
-    var fakeItems =
+    private val resourcesItemsFlow: MutableSharedFlow<ResourceItems> =
+        MutableSharedFlow(replay = 2, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    var fakeListItems =
         arrayListOf(
             Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
             Item("item #2", 3.0, 421312.0, "1555567899090", "EA", "www.image2.png"),
@@ -22,27 +26,36 @@ class TestItemRepository @Inject constructor(): ItemRepository, BaseTestReposito
         )
 
     override fun init() = Unit
+    fun sendItems(){
+        resourcesItemsFlow.tryEmit(Resource.success(fakeListItems))
 
-    fun setItemFakeList(itemsArrayList: ArrayList<Item>) {
-        fakeItems.addAll(itemsArrayList)
+    }
+    fun sendItems(itemsArrayList: ArrayList<Item>) {
+        fakeListItems.addAll(itemsArrayList)
+        sendItems()
+    }
+
+    override fun setReturnEmpty(value: Boolean) {
+        super.setReturnEmpty(value)
+        resourcesItemsFlow.tryEmit(Resource.empty())
+    }
+
+    override fun setReturnError(value: Boolean) {
+        super.setReturnError(value)
+        resourcesItemsFlow.tryEmit(Resource.error(com.casecode.pos.data.R.string.error_fetching_items))
     }
 
     override fun getItems(): Flow<ResourceItems> {
-        if (shouldReturnError) {
-            return flowOf(Resource.error(com.casecode.pos.data.R.string.error_fetching_items))
-        }
-        if (shouldReturnEmpty) {
-            return flowOf(Resource.empty())
-        }
-        return flowOf(ResourceItems.success(fakeItems))
+
+        return resourcesItemsFlow
     }
 
   override suspend  fun addItem(item: Item): AddItem {
-        fakeItems.add(item)
         return if(shouldReturnError){
             AddItem.error(com.casecode.pos.data.R.string.add_item_failure_generic)
         } else{
-            fakeItems.add(item)
+            fakeListItems.add(item)
+            resourcesItemsFlow.tryEmit(Resource.success(fakeListItems))
             Resource.Success( com.casecode.pos.data.R.string.item_added_successfully)
 
         }
@@ -67,7 +80,7 @@ class TestItemRepository @Inject constructor(): ItemRepository, BaseTestReposito
         if(shouldReturnError){
             return DeleteItem.error(com.casecode.pos.data.R.string.delete_item_failure_generic)
         }
-        fakeItems.remove(item)
+        fakeListItems.remove(item)
         return Resource.success(com.casecode.pos.data.R.string.item_deleted_successfully)
     }
 }

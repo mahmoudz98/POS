@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.signIn
 
 import android.content.Intent
@@ -11,7 +12,7 @@ import androidx.fragment.app.viewModels
 import com.casecode.domain.utils.Resource
 import com.casecode.pos.R
 import com.casecode.pos.base.doAfterTextChangedListener
-import com.casecode.pos.databinding.FragmentLoginDialogBinding
+import com.casecode.pos.databinding.DialogLoginEmployeeBinding
 import com.casecode.pos.ui.main.MainActivity
 import com.casecode.pos.utils.setupSnackbar
 import com.casecode.pos.utils.showSnackbar
@@ -29,7 +30,7 @@ class LoginDialogFragment : DialogFragment() {
     private val authViewModel: AuthViewModel by viewModels()
 
     @Suppress("ktlint:standard:property-naming")
-    private var _binding: FragmentLoginDialogBinding? = null
+    private var _binding: DialogLoginEmployeeBinding? = null
     private val binding get() = _binding!!
     private val barLauncher = registerForActivityResult(ScanContract()) { result ->
         result.contents.let {
@@ -44,12 +45,13 @@ class LoginDialogFragment : DialogFragment() {
             }
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentLoginDialogBinding.inflate(layoutInflater)
+        _binding = DialogLoginEmployeeBinding.inflate(layoutInflater)
 
         return binding.root
     }
@@ -193,4 +195,4 @@ class LoginDialogFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

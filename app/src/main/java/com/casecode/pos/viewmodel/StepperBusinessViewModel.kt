@@ -167,27 +167,21 @@ class StepperBusinessViewModel
         fun setStoreType(store: String) {
             _storeType.value = store
         }
-
         fun setEmail(email: String) {
             this.email.value = email
         }
-
         fun setPhoneBusiness(phone: String) {
             _phoneBusiness.value = phone
         }
-
         fun setBranchName(name: String) {
             branchName.value = name
         }
-
         fun setBranchPhone(phone: String) {
             branchPhone.value = phone
         }
-
         fun addBranch() {
             incrementBranchCode()
             val branch = Branch(branchCode.value, branchName.value, branchPhone.value)
-
             val branchesValue = branches.value ?: ArrayList()
             val oldBranchesSize = _branches.value?.size ?: 0
             branchesValue.add(branch)
@@ -231,15 +225,12 @@ class StepperBusinessViewModel
                 showSnackbarMessage(R.string.update_branch_fail)
             }
         }
-
         private fun incrementBranchCode() {
             branchCode.value = branchCode.value?.plus(1)
         }
-
         fun setBranchSelected(branch: Branch) {
             _branchSelected.value = branch
         }
-
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         fun addBusiness(): Business {
             return Business(
@@ -249,13 +240,11 @@ class StepperBusinessViewModel
                 branches = _branches.value?.toList() ?: listOf(),
             )
         }
-
         fun setBusiness() =
             viewModelScope.launch {
                 if (isOnline.value == true) {
                     // COMPLETE: when no uid move  to sign in screen.
                     val uid = currentUid.value ?: ""
-
                     isAddBusiness.value = setBusinessUseCase(addBusiness(), uid)
                     observerIsAddBusiness()
                 } else {
@@ -453,7 +442,6 @@ class StepperBusinessViewModel
             _employee = Employee(name, phone, password, branchName, permission)
             updateEmployee()
         }
-
         private fun updateEmployee() {
             val employeesValue = _employees.value ?: ArrayList()
             val index = employeesValue.indexOf(_employeeSelected.value)
@@ -557,10 +545,7 @@ class StepperBusinessViewModel
 
                     showSnackbarMessage(messageRes as? Int ?: R.string.all_error_unknown)
                 }
-
-                is Resource.Loading -> {
-                    TODO()
-                }
+                is Resource.Loading -> {}
                 null -> {
                     showSnackbarMessage(R.string.all_error_unknown)
                 }

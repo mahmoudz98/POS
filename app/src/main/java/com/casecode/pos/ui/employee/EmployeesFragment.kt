@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.employee
 
 import android.os.Bundle
@@ -124,4 +125,4 @@ class EmployeesFragment : Fragment() {
     }
 
 
-}
+}*/

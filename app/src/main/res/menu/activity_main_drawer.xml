@@ -9,12 +9,11 @@
     <item android:title="@string/sales_services">
         <menu>
             <item
-                android:id="@+id/nav_statistics"
+                android:id="@+id/nav_reports"
                 android:icon="@drawable/baseline_trending_up_24"
                 android:checkable="true"
                 app:showAsAction="ifRoom"
-
-                android:title="@string/menu_statistics" />
+                android:title="@string/reports_title" />
             <item
                 android:id="@+id/nav_pos"
                 android:checkable="true"
@@ -26,7 +25,7 @@
                 android:checkable="true"
 
                 android:icon="@drawable/baseline_receipt_long_24"
-                android:title="@string/menu_invoices" />
+                android:title="@string/invoices_title" />
         </menu>
     </item>
 
@@ -38,13 +37,8 @@
                 android:checkable="true"
 
                 android:icon="@drawable/baseline_view_module_24"
-                android:title="@string/menu_items" />
-            <item
-                android:id="@+id/nav_code_scanner"
-                android:checkable="true"
+                android:title="@string/title_items" />
 
-                android:icon="@drawable/baseline_qr_code_scanner_24"
-                android:title="@string/menu_code_scanner" />
         </menu>
     </item>
 
@@ -62,13 +56,13 @@
                 android:checkable="true"
 
                 android:icon="@drawable/baseline_settings_24"
-                android:title="@string/menu_settings" />
+                android:title="@string/settings_title" />
             <item
                 android:id="@+id/nav_sign_out"
                 android:checkable="true"
 
                 android:icon="@drawable/ic_sign_out"
-                android:title="@string/menu_sign_out" />
+                android:title="@string/sign_out_title" />
         </menu>
     </item>
 </menu>

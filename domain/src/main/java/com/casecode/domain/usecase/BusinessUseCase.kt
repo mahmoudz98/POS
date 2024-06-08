@@ -1,5 +1,6 @@
 package com.casecode.domain.usecase
 
+import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
@@ -52,4 +53,8 @@ class GetBusinessUseCase @Inject constructor(private val businessRep: BusinessRe
          emit(businessRep.getBusiness())
      }
    }
+}
+class AddBranchBusinessUseCase @Inject constructor(private val businessRep: BusinessRepository) {
+   suspend operator fun invoke(branch:Branch) = businessRep.addBranch(branch)
+
 }

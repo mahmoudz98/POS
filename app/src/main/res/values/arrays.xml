@@ -11,5 +11,14 @@
         <item>@string/permission_sales</item>
         <item>@string/permission_non</item>
     </string-array>
+    <string-array name="employee_roles">
+        <item>admin</item>
+        <item>sales</item>
+        <item>non</item>
+    </string-array>
+    <string-array name="setting_language">
+        <item>@string/en</item>
+        <item>@string/ar</item>
+    </string-array>
 
 </resources>

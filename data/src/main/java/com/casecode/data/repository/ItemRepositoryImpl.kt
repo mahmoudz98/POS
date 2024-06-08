@@ -27,6 +27,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.SnapshotListenOptions
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
@@ -50,7 +51,7 @@ class ItemRepositoryImpl
     private val authService: AuthService,
     @Dispatcher(AppDispatchers.IO) val ioDispatcher: CoroutineDispatcher,
 ) : ItemRepository {
-    // ISSUE: improve minimize cost of use server with use offline cache to get document from
+    // TODO: improve minimize cost of use server with use offline cache to get document from
     private val optionsCache by lazy {
         SnapshotListenOptions.Builder().setMetadataChanges(MetadataChanges.INCLUDE)
             .setSource(ListenSource.CACHE).build()
@@ -58,7 +59,7 @@ class ItemRepositoryImpl
 
     override fun getItems(): Flow<ResourceItems> = callbackFlow<Resource<List<Item>>> {
         trySend(Resource.Loading)
-
+        delay(500)
         val listenerRegistration =
             firestore.getCollectionRefFromUser(authService.currentUserId, ITEMS_COLLECTION_PATH)
                 .orderBy(ITEM_NAME_FIELD)
@@ -105,10 +106,10 @@ class ItemRepositoryImpl
             try {
                 suspendCoroutine { continuation ->
                     val itemMap = item.asExternalModel()
-                    if (!authService.hasUser) {
+                   /* if (!authService.hasUser) {
                         continuation.resume(Resource.error(com.casecode.pos.domain.R.string.uid_empty))
                         return@suspendCoroutine
-                    }
+                    }*/
                     val sku = item.sku
                     firestore.getDocumentFromUser(
                         authService.currentUserId,

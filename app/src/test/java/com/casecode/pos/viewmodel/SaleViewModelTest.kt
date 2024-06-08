@@ -32,7 +32,7 @@ class SaleViewModelTest : BaseTest() {
         // When
         val items = viewModel.items.value
         // Then
-        assertThat(items, `is`(testItemRepository.fakeItems))
+        assertThat(items, `is`(testItemRepository.fakeListItems))
     }
 
     @Test
@@ -51,9 +51,9 @@ class SaleViewModelTest : BaseTest() {
     fun scanItem_whenSKUFound_returnItem() {
 
         // When
-        viewModel.scanItem(testItemRepository.fakeItems[0].sku)
+        viewModel.scanItem(testItemRepository.fakeListItems[0].sku)
         val expectedItem = viewModel.itemsInvoice.value?.elementAt(0)!!
-        val actualItem = testItemRepository.fakeItems[0]
+        val actualItem = testItemRepository.fakeListItems[0]
         // Then - check item added to invoice and check quantity is start by one
         assertThat(expectedItem.sku, `is`(actualItem.sku))
         assertThat(expectedItem.quantity, `is`(1.0))
@@ -92,7 +92,7 @@ class SaleViewModelTest : BaseTest() {
     @Test
     fun addItemInvoice_whenItemOutOfStock_returnMessageItemOfStock() {
         // When - added item and out of stock
-        val actual = testItemRepository.fakeItems[2]
+        val actual = testItemRepository.fakeListItems[2]
         viewModel.addItemInvoice(actual)
         // Then
         assertThat(
@@ -105,13 +105,13 @@ class SaleViewModelTest : BaseTest() {
     fun deleteItemInvoice_shouldResetQuantityItemInStock() = runTest {
         // Given - add item and then selected item
         viewModel.addItemInvoice(viewModel.items.value?.get(0)!!)
-        viewModel.itemInvoiceSelected(testItemRepository.fakeItems[0].copy(quantity = 1.0))
+        viewModel.itemInvoiceSelected(testItemRepository.fakeListItems[0].copy(quantity = 1.0))
         // When delete item
         viewModel.deleteItemInvoice(viewModel.items.value?.get(0)!!)
         // Then - check quantity item in stock
         assertThat(
             viewModel.items.value?.get(0)!!.quantity,
-            `is`(testItemRepository.fakeItems[0].quantity),
+            `is`(testItemRepository.fakeListItems[0].quantity),
         )
     }
 
@@ -119,9 +119,9 @@ class SaleViewModelTest : BaseTest() {
     @Test
     fun updateQuantityItem_shouldUpdateQuantityItemInStockAndInItemInvoice() = runTest {
         // Given - Add Items to Invoice
-        viewModel.addItemInvoice(testItemRepository.fakeItems[0])
+        viewModel.addItemInvoice(testItemRepository.fakeListItems[0])
         // When - Update the quantity
-        viewModel.itemInvoiceSelected(testItemRepository.fakeItems[0].copy(quantity = 1.0))
+        viewModel.itemInvoiceSelected(testItemRepository.fakeListItems[0].copy(quantity = 1.0))
         viewModel.updateQuantityItemInvoice(23.0)
         // Then update item in stock and in items invoice
         assertThat(viewModel.items.value?.get(0)?.quantity, `is`(0.0))
@@ -131,7 +131,7 @@ class SaleViewModelTest : BaseTest() {
     @Test
     fun updateQuantityItem_whenItemsSelectedIsNull_ShouldShowMessageUpdateFail() {
         // Given - Add Items to Invoice
-        viewModel.addItemInvoice(testItemRepository.fakeItems[0])
+        viewModel.addItemInvoice(testItemRepository.fakeListItems[0])
         // When - Update the quantity
         viewModel.updateQuantityItemInvoice(23.0)
         // Then - show message fail to update quantity item
@@ -144,9 +144,9 @@ class SaleViewModelTest : BaseTest() {
     @Test
     fun updateQuantityItem_whenQuantityNotChange_ShouldShowMessageUpdateFail() {
         // Given - Add Items to Invoice
-        viewModel.addItemInvoice(testItemRepository.fakeItems[0])
+        viewModel.addItemInvoice(testItemRepository.fakeListItems[0])
         // When - Update the quantity and not change
-        viewModel.itemInvoiceSelected(testItemRepository.fakeItems[0].copy(quantity = 1.0))
+        viewModel.itemInvoiceSelected(testItemRepository.fakeListItems[0].copy(quantity = 1.0))
         viewModel.updateQuantityItemInvoice(1.0)
         // Then
         assertThat(
@@ -158,7 +158,7 @@ class SaleViewModelTest : BaseTest() {
     @Test
     fun updateQuantityItem_whenItemsInvoiceIsEmpty_shouldShowMessageUpdateFail() {
         // Given - Add Items to Invoice
-        viewModel.itemInvoiceSelected(testItemRepository.fakeItems[0])
+        viewModel.itemInvoiceSelected(testItemRepository.fakeListItems[0])
         // When - Update the quantity
         viewModel.updateQuantityItemInvoice(23.0)
         // Then

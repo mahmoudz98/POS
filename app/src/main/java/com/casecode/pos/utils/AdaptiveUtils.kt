@@ -15,9 +15,6 @@ fun Activity.compactScreen(): Boolean
 {
    val screenMetrics: WindowMetrics = WindowMetricsCalculator.getOrCreate()
       .computeMaximumWindowMetrics(this)
-   val shortSide: Int = Math.min(screenMetrics.bounds.width(),
-      screenMetrics.bounds.height())
+   val shortSide: Int = screenMetrics.bounds.width().coerceAtMost(screenMetrics.bounds.height())
    return shortSide / this.resources.displayMetrics.density < MEDIUM_SCREEN_WIDTH_SIZE
 }
-
-

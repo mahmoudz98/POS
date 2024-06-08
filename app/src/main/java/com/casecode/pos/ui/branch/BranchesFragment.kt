@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.branch
 
 import android.os.Bundle
@@ -13,6 +14,7 @@ import com.casecode.pos.utils.EventObserver
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+*/
 /**
  * Fragment responsible for managing and displaying a list of branches in a stepper activity.
  *
@@ -20,7 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint
  * It includes UI components such as a RecyclerView for displaying branches and buttons for navigation.
  *
  * @constructor Creates a new instance of BranchesFragment.
- */
+ *//*
+
 @AndroidEntryPoint
 class BranchesFragment : Fragment() {
     @Suppress("ktlint:standard:property-naming")
@@ -49,9 +52,11 @@ class BranchesFragment : Fragment() {
         init()
     }
 
-    /**
+    */
+/**
      * Initializes the ViewModel, Adapter, and click events for the fragment.
-     */
+     *//*
+
     private fun init() {
         setupViewModel()
         setupAdapter()
@@ -64,7 +69,7 @@ class BranchesFragment : Fragment() {
 
         if (businessViewModel.isCompact.value == false) {
             binding.fcvAddBranch.visibility = View.VISIBLE
-            binding.branches.btnBranchesAdd.visibility = View.GONE
+            binding.lBranches.btnBranchesAdd.visibility = View.GONE
 
             parentFragmentManager.beginTransaction()
                 .replace(
@@ -73,17 +78,21 @@ class BranchesFragment : Fragment() {
                     AddBranchesDialogFragment.ADD_BRANCH_TAG,
                 ).commit()
         } else {
-            binding.branches.btnBranchesAdd.visibility = View.VISIBLE
+            binding.lBranches.btnBranchesAdd.visibility = View.VISIBLE
             binding.fcvAddBranch.visibility = View.GONE
         }
     }
 
-    /**
+    */
+/**
      * Initializes the ViewModel associated with the layout.
-     */
+     *//*
+
     private fun setupViewModel() {
-        binding.branches.lifecycleOwner = this.viewLifecycleOwner
-        binding.branches.viewModel = businessViewModel
+        binding.lifecycleOwner = this.viewLifecycleOwner
+        businessViewModel.branches.observe(viewLifecycleOwner){
+            binding.lBranches.branches = it
+        }
     }
 
     private fun setupAdapter() {
@@ -104,19 +113,21 @@ class BranchesFragment : Fragment() {
                 }
             }
         }
-        binding.branches.rvBranches.adapter = branchAdapter
+        binding.lBranches.rvBranches.adapter = branchAdapter
     }
 
-    /**
+    */
+/**
      * Initializes click events for buttons and subscription for network availability.
-     */
+     *//*
+
     private fun setupClicks() {
         initClickSubscription()
         binding.apply {
             btnBranchesInfo.setOnClickListener {
                 businessViewModel.moveToPreviousStep()
             }
-            branches.btnBranchesAdd.setOnClickListener {
+            lBranches.btnBranchesAdd.setOnClickListener {
                 val dialog = AddBranchesDialogFragment.newInstance()
                 dialog.show(parentFragmentManager, AddBranchesDialogFragment.ADD_BRANCH_TAG)
             }
@@ -140,9 +151,11 @@ class BranchesFragment : Fragment() {
         }
     }
 
-    /**
+    */
+/**
      * Initializes the subscription to check network availability before adding a business.
-     */
+     *//*
+
     private fun initClickSubscription() {
         binding.btnBranchesSubscription.setOnClickListener {
             businessViewModel.setBusiness()
@@ -154,4 +167,4 @@ class BranchesFragment : Fragment() {
 
         _binding = null
     }
-}
+}*/

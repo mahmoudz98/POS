@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_statistics">
+    app:startDestination="@+id/nav_pos">
 
     <fragment
-        android:id="@+id/nav_statistics"
+        android:id="@+id/nav_reports"
         android:name="com.casecode.pos.ui.statistics.StatisticsFragment"
-        android:label="@string/menu_statistics"
+        android:label="@string/reports_title"
         tools:layout="@layout/fragment_statistics" />
 
     <fragment
@@ -20,7 +20,7 @@
     <fragment
         android:id="@+id/nav_invoices"
         android:name="com.casecode.pos.ui.invoices.InvoicesFragment"
-        android:label="@string/menu_invoices"
+        android:label="@string/invoices_title"
         tools:layout="@layout/fragment_invoices" >
         <action
             android:id="@+id/action_nav_invoices_to_invoiceDetailsFragment"
@@ -36,7 +36,7 @@
     <fragment
         android:id="@+id/nav_setting"
         android:name="com.casecode.pos.ui.settings.SettingsFragment"
-        android:label="SettingFragment"
+        android:label="@string/settings_title"
         tools:layout="@layout/fragment_settings" />
 
     <fragment

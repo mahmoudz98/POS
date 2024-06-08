@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.adapter
 
 import android.view.LayoutInflater
@@ -21,10 +22,12 @@ class ItemsAdapter(
 ) : BaseAdapter<Item>(DiffCallback), Filterable {
     private var originalItems: List<Item> = emptyList()
 
-    /**
+    */
+/**
      * Allows the RecyclerView to determine which items have changed when the [List] of [Item]
      * has been updated.
-     */
+     *//*
+
     companion object  DiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(
             oldItem: Item,
@@ -136,4 +139,4 @@ class ItemsAdapter(
         filterItems("")
 
     }
-}
+}*/

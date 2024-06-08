@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.signout
 
 import android.app.Dialog
@@ -93,4 +94,4 @@ class SignOutDialog : DialogFragment()
       return builder.create()
    }
    
-}
+}*/

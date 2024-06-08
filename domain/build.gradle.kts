@@ -17,8 +17,10 @@ android {
 dependencies {
 
     testApi(projects.testing)
-    api(libs.firebase.firestore.ktx)
-    api(libs.firebase.auth.ktx)
+
+    api(platform(libs.firebase.bom))
+    api(libs.firebase.auth)
+    api(libs.firebase.firestore)
 
     testApi(libs.coroutines.test)
 }

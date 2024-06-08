@@ -13,6 +13,5 @@ fun ScanOptions.startScanningBarcode(context: Context): ScanOptions {
     setOrientationLocked(true)
     captureActivity = CaptureScannerActivity::class.java
     return this
-
 }
 class CaptureScannerActivity : CaptureActivity()

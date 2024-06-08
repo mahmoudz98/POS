@@ -1,9 +1,7 @@
 package com.casecode.pos.viewmodel
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.casecode.data.mapper.addItemToInvoices
 import com.casecode.data.mapper.hasItemOutOfStock
@@ -35,15 +33,13 @@ class SaleViewModel @Inject constructor(
         MutableLiveData<MutableSet<Item>>(mutableSetOf())
     val itemsInvoice get() = _itemsInvoice
 
-    val isEmptyItems: LiveData<Boolean> = _items.map { it.isEmpty() }
-    val isInvoiceEmpty: LiveData<Boolean> = _itemsInvoice.map { it.isEmpty() }
+    // val isEmptyItems: LiveData<Boolean> = _items.map { it.isEmpty() }
+    // val isInvoiceEmpty: LiveData<Boolean> = _itemsInvoice.map { it.isEmpty() }
     private val _itemInvoiceSelected = MutableLiveData<Item>()
     val itemInvoiceSelected get() = _itemInvoiceSelected
-    private val itemSelected = MutableLiveData<Item>()
-    val totalItemsInvoice: LiveData<Double> = itemsInvoice.map { newItems ->
+    private val itemSelected = MutableLiveData<Item>()/* val totalItemsInvoice: LiveData<Double> = itemsInvoice.map { newItems ->
         newItems.sumOf { it.price * it.quantity }
-    }
-
+    }*/
 
 
     init {
@@ -67,13 +63,16 @@ class SaleViewModel @Inject constructor(
                             result.message as? Int ?: R.string.all_error_unknown,
                         )
                     }
+
                     is Resource.Empty -> {
                         hideProgress()
                     }
+
                     is Resource.Success -> {
                         _items.value = result.data
                         hideProgress()
                     }
+
                     is Resource.Loading -> {
                         showProgress()
                     }
@@ -168,14 +167,16 @@ class SaleViewModel @Inject constructor(
         showSnackbarMessage(R.string.quantity_item_invoice_update_success)
 
     }
-    fun setRestOfAmount(amount: Double): Double {
-        val total = totalItemsInvoice.value ?: return 0.0
-        if (amount == total) {
-            return 0.0
-        }
-        return amount.minus(total)
 
+    fun setRestOfAmount(amount: Double): Double {
+        //   val total = totalItemsInvoice.value ?: return 0.0
+        /*     if (amount == total) {
+                 return 0.0
+             }
+             return amount.minus(total)*/
+        return 0.0
     }
+
     fun updateStockAndAddItemInvoice() {
 
         val saleItems = _itemsInvoice.value?.toList()
@@ -188,9 +189,11 @@ class SaleViewModel @Inject constructor(
                 is Resource.Empty -> {
                     showSnackbarMessage(updateItems.message as Int)
                 }
+
                 is Resource.Error -> {
                     showSnackbarMessage(updateItems.message as Int)
                 }
+
                 Resource.Loading -> {}
                 is Resource.Success -> {
                     addInvoice(updateItems.data)

@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.invoices
 
 import android.os.Bundle
@@ -89,4 +90,4 @@ class InvoiceDetailsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

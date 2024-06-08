@@ -8,6 +8,7 @@ import com.casecode.domain.repository.ItemRepository
 import com.casecode.domain.repository.StoreRepository
 import com.casecode.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.domain.repository.SubscriptionsRepository
+import com.casecode.domain.usecase.AddBranchBusinessUseCase
 import com.casecode.domain.usecase.AddEmployeesUseCase
 import com.casecode.domain.usecase.AddInvoiceUseCase
 import com.casecode.domain.usecase.AddItemUseCase
@@ -51,6 +52,10 @@ object UseCaseModule {
     @Provides
     fun provideCompleteBusinessUseCase(businessRepository: BusinessRepository) =
         CompleteBusinessUseCase(businessRepository)
+
+    @Provides
+    fun provideAddBranchBusinessUseCase(businessRepository: BusinessRepository) =
+        AddBranchBusinessUseCase(businessRepository)
 
 
     @Provides

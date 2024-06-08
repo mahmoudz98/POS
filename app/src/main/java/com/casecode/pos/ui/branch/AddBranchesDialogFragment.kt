@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.branch
 
 import android.app.Dialog
@@ -17,9 +18,11 @@ import com.casecode.pos.databinding.DialogAddBranchBinding
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+*/
 /**
  * A Dialog fragment that displays the Add branch in branches fragment.
- */
+ *//*
+
 class AddBranchesDialogFragment : DialogFragment() {
     companion object {
         const val ADD_BRANCH_TAG = "AddBranchesDialogFragment"
@@ -38,8 +41,7 @@ class AddBranchesDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return if (businessViewModel.isCompact.value == true) {
-            val builder =
-                MaterialAlertDialogBuilder(requireContext())
+            val builder = MaterialAlertDialogBuilder(requireContext())
             _binding = DialogAddBranchBinding.inflate(layoutInflater)
 
             builder.setView(_binding?.root)
@@ -87,8 +89,7 @@ class AddBranchesDialogFragment : DialogFragment() {
 
             if (TextUtils.isEmpty(branchNameEditText)) {
                 binding.tilAddBranchesName.boxStrokeErrorColor
-                binding.tilAddBranchesName.error =
-                    getString(R.string.add_branch_name_empty)
+                binding.tilAddBranchesName.error = getString(R.string.add_branch_name_empty)
             } else {
                 binding.tilAddBranchesName.boxStrokeColor =
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
@@ -99,13 +100,10 @@ class AddBranchesDialogFragment : DialogFragment() {
         binding.etAddBranchesPhone.doAfterTextChangedListener { phoneEditText ->
             if (TextUtils.isEmpty(phoneEditText)) {
                 binding.tilAddBranchesPhone.boxStrokeErrorColor
-                binding.tilAddBranchesPhone.error =
-                    getString(R.string.all_phone_empty)
+                binding.tilAddBranchesPhone.error = getString(R.string.all_phone_empty)
             } else if (!phoneEditText.toString().trim { it <= ' ' }
-                    .matches(Patterns.PHONE.toString().toRegex())
-            ) {
-                binding.tilAddBranchesPhone.error =
-                    getString(R.string.all_phone_invalid)
+                    .matches(Patterns.PHONE.toString().toRegex())) {
+                binding.tilAddBranchesPhone.error = getString(R.string.all_phone_invalid)
             } else {
                 binding.tilAddBranchesPhone.boxStrokeColor =
                     resources.getColor(R.color.md_theme_light_primary, requireActivity().theme)
@@ -140,24 +138,17 @@ class AddBranchesDialogFragment : DialogFragment() {
         val name = binding.etAddBranchesName.text.toString()
         val phone = binding.etAddBranchesPhone.text.toString()
         // Check login and pass are empty
-        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) ||
-            !phone.trim { it <= ' ' }
-                .matches(Patterns.PHONE.toString().toRegex())
-        ) {
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(phone) || !phone.trim { it <= ' ' }
+                .matches(Patterns.PHONE.toString().toRegex())) {
             if (TextUtils.isEmpty(name)) {
-                binding.tilAddBranchesName.error =
-                    getString(R.string.add_branch_name_empty)
+                binding.tilAddBranchesName.error = getString(R.string.add_branch_name_empty)
             }
             if (TextUtils.isEmpty(phone)) {
-                binding.tilAddBranchesPhone.error =
-                    getString(R.string.all_phone_empty)
+                binding.tilAddBranchesPhone.error = getString(R.string.all_phone_empty)
             }
 
-            if (!phone.trim { it <= ' ' }
-                    .matches(Patterns.PHONE.toString().toRegex())
-            ) {
-                binding.tilAddBranchesPhone.error =
-                    getString(R.string.all_phone_invalid)
+            if (!phone.trim { it <= ' ' }.matches(Patterns.PHONE.toString().toRegex())) {
+                binding.tilAddBranchesPhone.error = getString(R.string.all_phone_invalid)
             }
 
             return false
@@ -188,4 +179,4 @@ class AddBranchesDialogFragment : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.pos.android.library)
-    // alias(libs.plugins.pos.android.firebase)
+   // alias(libs.plugins.pos.android.firebase)
 }
 android {
     namespace = "com.casecode.pos.data"
@@ -23,19 +23,16 @@ dependencies {
     testApi(projects.testing)
 
     // Coroutines
-    implementation(libs.coroutines.services)
+   // implementation(libs.coroutines.services)
     api(libs.coroutines.android)
 
-    api(platform(libs.firebase.bom))
-    api(libs.firebase.auth)
+   // api(platform(libs.firebase.bom))
+    //api(libs.firebase.auth)
+    api(libs.play.services.auth)
     api(libs.firebase.storage)
     api(libs.firebase.performance)
-    api(libs.play.services.auth)
-   // implementation (libs.androidx.credentials)
-    //implementation (libs.androidx.credentials.play.services.auth)
     api (libs.googleid)
 
-    // hi
     api(libs.hilt.android)
     implementation(libs.zxing.generate.barcode)
 

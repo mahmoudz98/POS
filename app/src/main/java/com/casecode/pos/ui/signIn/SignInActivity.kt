@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.signIn
 
 import android.content.ActivityNotFoundException
@@ -133,9 +134,11 @@ class SignInActivity : AppCompatActivity() {
     }
 
 
-    /**
+    */
+/**
      * Checking if a new user is creating a new user in the database and If completed steps business, otherwise: logging in directly
-     */
+     *//*
+
     private fun observerCheckRegistrationAndCompletedStep() {
         viewModel.isUserRegistration.observe(
             this,
@@ -185,4 +188,4 @@ class SignInActivity : AppCompatActivity() {
             }
         }
     }
-}
+}*/

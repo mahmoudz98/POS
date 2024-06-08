@@ -1,28 +1,30 @@
 package com.casecode.data.repository
 
 import com.casecode.data.mapper.asEntityBusiness
+import com.casecode.data.mapper.asExternalBranch
 import com.casecode.data.mapper.asExternalBusiness
 import com.casecode.data.utils.AppDispatchers.IO
 import com.casecode.data.utils.Dispatcher
+import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
 import com.casecode.domain.repository.CompleteBusiness
+import com.casecode.domain.utils.BRANCHES_FIELD
 import com.casecode.domain.utils.BUSINESS_FIELD
 import com.casecode.domain.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
 import com.casecode.domain.utils.Resource
 import com.casecode.domain.utils.USERS_COLLECTION_PATH
 import com.casecode.pos.data.R
 import com.casecode.service.AuthService
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.UnknownHostException
-import java.util.concurrent.Flow
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -107,4 +109,56 @@ class BusinessRepositoryImpl
             }
         }
     }
+
+    override suspend fun addBranch(branch: Branch): Resource<Boolean> {
+        return withContext(ioDispatcher) {
+            suspendCoroutine { continuation ->
+                firestore.collection(USERS_COLLECTION_PATH).document(auth.currentUserId).update(
+                    "$BUSINESS_FIELD.$BRANCHES_FIELD",
+                    FieldValue.arrayUnion(branch.asExternalBranch()),
+                ).addOnSuccessListener {
+                    continuation.resume(Resource.success(true))
+                }.addOnFailureListener {
+                    when (it) {
+                        is UnknownHostException -> {
+                            continuation.resume(Resource.error(R.string.add_branch_business_network))
+                        }
+                        else -> {
+                            Timber.e("Exception while adding new branch: $it")
+                            continuation.resume(Resource.error(R.string.add_branch_business_failure))
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    /*override suspend fun updateBranch(
+        oldBranch: Branch,
+        NewBranch: Branch,
+    ): Resource<Boolean> {
+        return withContext(ioDispatcher) {
+            suspendCoroutine {continuation->
+                val updatesEmployee = mapOf(
+                    EMPLOYEES_FIELD to FieldValue.arrayRemove(oldBranch.asExternalEmployee()),
+                    EMPLOYEES_FIELD to FieldValue.arrayUnion(newBranch.asExternalEmployee()),
+                )
+                firestore.collection(USERS_COLLECTION_PATH).document(auth.currentUserId)
+                    .update(updatesEmployee).addOnSuccessListener {
+                        continuation.resumeWith(Result.success(Resource.success(true)))
+                    }.addOnFailureListener{ exception ->
+                        when (exception) {
+                            is UnknownHostException -> {
+                                continuation.resume(Resource.error(R.string.employee_update_business_network))
+                            }
+                            else -> {
+                                Timber.e("Exception while adding employees: $exception")
+                                continuation.resume(Resource.error(R.string.employee_update_business_failure))
+                            }
+                        }
+                    }
+            }
+        }
+    }*/
 }

@@ -5,7 +5,6 @@ import com.casecode.domain.repository.SubscriptionsRepository
 import com.casecode.domain.repository.SubscriptionsResource
 import com.casecode.domain.utils.EmptyType
 import com.casecode.domain.utils.Resource
-import com.casecode.testing.util.EspressoIdlingResource
 import com.casecode.testing.util.MainDispatcherRule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

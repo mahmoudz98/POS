@@ -5,6 +5,7 @@
         android:id="@+id/action_main_profile"
         android:contentDescription="@string/profile_title"
         android:title="@string/profile_title"
-        app:actionLayout="@layout/menu_item_with_photo"
         app:showAsAction="ifRoom" />
 </menu>
+<!--
+        app:actionLayout="@layout/menu_item_with_photo"-->

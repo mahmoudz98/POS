@@ -1,6 +1,8 @@
-﻿plugins {
+﻿import com.casecode.pos.PosBuildType
+
+plugins {
     alias(libs.plugins.pos.android.application)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.pos.android.application.compose)
     alias(libs.plugins.pos.android.hilt)
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.navigation.safeargs.kotlin)
@@ -20,14 +22,13 @@ android {
 
     buildTypes {
         debug {
-            isPseudoLocalesEnabled = true
-            enableAndroidTestCoverage = false
-            isDebuggable = true
-            isMinifyEnabled = false
+            applicationIdSuffix = PosBuildType.DEBUG.applicationIdSuffix
+
         }
-        val release by getting {
+        release {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
+            applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -36,15 +37,7 @@ android {
         }
     }
 
-    if (project.hasProperty("debug")) {
-        splits.abi.isEnable = false
-        splits.density.isEnable = false
-        aaptOptions.cruncherEnabled = false
-    }
-
-    @Suppress("UnstableApiUsage")
-    testOptions {
-
+    @Suppress("UnstableApiUsage") testOptions {
         animationsDisabled = true
         packaging {
             jniLibs {
@@ -58,37 +51,19 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
-        viewBinding = true
         buildConfig = true
-
     }
-    lint {
-        abortOnError = true
-    }
-    kapt {
-        correctErrorTypes = true
-    }
-    hilt {
-        enableAggregatingTask = true
-    }
-
 
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-            excludes.add("/META-INF/NOTICE.md")
-            excludes.add("/META-INF/licenses/**")
-            excludes.add("META-INF/LICENSE.md")
-            excludes.add("META-INF/LICENSE-notice.md")
-            excludes.add("DebugProbesKt.bin")
         }
     }
 
     namespace = "com.casecode.pos"
 }
-/*
-androidComponents {
+
+/*androidComponents {
     onVariants(selector().all()) { variant ->
         afterEvaluate {
             val dataBindingTask =
@@ -108,6 +83,34 @@ dependencies {
     implementation(projects.domain)
     implementation(projects.di)
 
+    // AndroidX
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.core)
+    implementation(libs.appcompat)
+    implementation(libs.core.splashscreen)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.foundation.layout)
+
+    implementation(libs.androidx.compose.material.iconsExtended)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.navigationSuite)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.runtime.tracing)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.livedata.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.accompanist.permissions )
+
+    implementation(libs.coil)
+    implementation(libs.coil.kt.compose)
+
 
     testImplementation(projects.domain)
     testImplementation(projects.data)
@@ -116,12 +119,15 @@ dependencies {
 
     androidTestImplementation(projects.domain)
     androidTestImplementation(projects.testing)
+    androidTestImplementation(libs.test.espresso.core)
+    androidTestImplementation(libs.navigation.testing)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.hilt.android.testing)
 
-    // AndroidX
-    implementation(libs.core)
+
 //    implementation(libs.activity)
-     //implementation(libs.fragment.ktx)
-    implementation(libs.appcompat)
+    //implementation(libs.fragment.ktx)
+   /* implementation(libs.appcompat.resources)
     implementation(libs.recyclerview)
     implementation(libs.slidingpanelayout)
     implementation(libs.window)
@@ -131,10 +137,9 @@ dependencies {
     // UI tools
     implementation(libs.material)
     implementation(libs.android.stepper)
-    implementation(libs.coil)
 
     implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
+    implementation(libs.navigation.ui)*/
 
     // scanner barcode
     implementation(libs.zxing.android.embedded)
@@ -150,7 +155,7 @@ dependencies {
     testImplementation(libs.core.testing)
 
     // jvm test - Hilt
-    kaptTest(libs.hilt.compiler)
+    kspTest(libs.hilt.compiler)
 
     // assertion
     testImplementation(libs.test.hamcrest)
@@ -158,32 +163,33 @@ dependencies {
 
     // mockito with kotlin
     testImplementation(libs.test.mockk)
-
+    testImplementation(kotlin("test"))
     // coroutines unit test
     testImplementation(libs.coroutines.test)
     testImplementation(libs.coroutines.android)
     // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
-    debugImplementation(libs.fragment.testing)
+    //debugImplementation(libs.fragment.testing)
     /*    implementation(libs.test.core)
        implementation(libs.test.ext.junit) */
     // ******* ANDROID TESTING ***************************************************
-    implementation(libs.test.espresso.idlingResource)
+    //implementation(libs.test.espresso.idlingResource)
 
-    androidTestImplementation(libs.window.testing)
+   // androidTestImplementation(libs.window.testing)
 
     // Resolve conflicts between main and test APK:
     // androidTestImplementation(libs.appcompat)
-    androidTestImplementation(libs.material)
+    //androidTestImplementation(libs.material)
     //  androidTestImplementation(libs.androidx.annotation)
     androidTestImplementation(libs.firebase.testlab)
-    androidTestImplementation(libs.test.core)
+
+   /* androidTestImplementation(libs.test.core)
     androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.test.ext.junit.ktx)
     androidTestImplementation(libs.test.monitor)
     androidTestImplementation(libs.test.orchestrator)
     androidTestImplementation(libs.test.rules)
-    androidTestImplementation(libs.core.testing)
+    androidTestImplementation(libs.core.testing)*/
 
     androidTestImplementation(libs.test.hamcrest)
     androidTestImplementation(libs.test.hamcrest.library)
@@ -191,23 +197,21 @@ dependencies {
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.mockk.agent)
     // androidTestImplementation(libs.test.mockk)
-    androidTestImplementation(libs.navigation.testing)
 
     androidTestImplementation(libs.coil.test)
     //  testImplementation(libs.fragment.testing)
-    androidTestImplementation(libs.test.espresso.core)
-    androidTestImplementation(libs.test.espresso.idlingResource)
+
+   /* androidTestImplementation(libs.test.espresso.idlingResource)
     androidTestImplementation(libs.test.espresso.idling.concurrent)
     androidTestImplementation(libs.test.espresso.accessibility) {
         exclude(module = "protobuf-lite")
     }
     androidTestImplementation(libs.test.espresso.contrib) {
         exclude(module = "protobuf-lite")
-    }
+    }*/
 
     // AndroidX Test - Hilt testing
-    kaptAndroidTest(libs.hilt.compiler)
-    androidTestImplementation(libs.hilt.android.testing)
+    kspAndroidTest(libs.hilt.compiler)
 
     // implementation(kotlin("reflect"))
     //  androidTestImplementation(kotlin("reflect"))

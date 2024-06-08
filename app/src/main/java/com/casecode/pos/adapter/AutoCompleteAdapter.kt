@@ -1,34 +1,48 @@
+/*
 package com.casecode.pos.adapter
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.CheckedTextView
+import androidx.databinding.DataBindingUtil
+import com.casecode.pos.R
+import com.casecode.pos.databinding.ItemAutoCompleteBinding
 
-class AutoCompleteAdapter(context: Context, items: List<String?>) :
-    ArrayAdapter<String?>(context, android.R.layout.simple_list_item_single_choice, items) {
-    private var selectedItemPosition = -1
+import timber.log.Timber
+
+class AutoCompleteAdapter(context: Context, items: MutableList<String?>) :
+    ArrayAdapter<String?>(context, R.layout.item_auto_complete, items) {
+    private var  selectedItemPosition:Int = -1
 
     fun setSelectedItem(position: Int) {
         selectedItemPosition = position
+
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = super.getView(position, convertView, parent)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding: ItemAutoCompleteBinding = from(convertView, inflater, parent)
 
+        Timber.e("getView")
         val itemText = getItem(position)
-        val textView = view.findViewById<CheckedTextView>(android.R.id.text1)
-
-        if (position == selectedItemPosition) {
-            textView.isChecked = true
-        } else {
-            textView.isChecked = false
-
-        }
-
-        textView.text = itemText
-
-        return view
+        binding.item = itemText
+        binding.text1.isChecked = position == selectedItemPosition
+        return binding.root
     }
-}
+    companion object{
+        private fun from(
+            convertView: View?,
+            inflater: LayoutInflater,
+            parent: ViewGroup,
+        ): ItemAutoCompleteBinding {
+            val binding: ItemAutoCompleteBinding = if (convertView == null) {
+                DataBindingUtil.inflate(inflater, R.layout.item_auto_complete, parent, false)
+            } else {
+                DataBindingUtil.getBinding(convertView)!!
+            }
+            return binding
+        }
+    }
+}*/

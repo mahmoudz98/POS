@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.adapter
 
 import android.view.LayoutInflater
@@ -16,10 +17,12 @@ class SaleAdapter(
     private val onItemLongClick: (Item) -> Unit,
 ) : BaseAdapter<Item>(DiffCallback) {
 
-    /**
+    */
+/**
      * Allows the RecyclerView to determine which items have changed when the [List] of [Item]
      * has been updated.
-     */
+     *//*
+
     companion object DiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(
             oldItem: Item,
@@ -88,4 +91,4 @@ class SaleAdapter(
     override fun submitList(list: MutableList<Item>?) {
         super.submitList(list?.let { ArrayList(it) })
     }
-}
+}*/

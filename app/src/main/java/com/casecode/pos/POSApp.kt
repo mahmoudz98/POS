@@ -6,6 +6,7 @@ import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
+
 @HiltAndroidApp
 class POSApp : Application() {
     override fun onCreate() {
@@ -13,4 +14,5 @@ class POSApp : Application() {
         Timber.plant(DebugTree())
         FirebaseApp.initializeApp(this)
     }
+
 }

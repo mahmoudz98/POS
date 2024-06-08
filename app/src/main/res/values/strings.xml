@@ -1,43 +1,34 @@
 <resources>
-    <string name="app_name">POS</string>
+    <string name="app_name" translatable="false">POS</string>
     <string name="pos">pos</string>
-    <string name="extra_uid">EXTRA_UID</string>
-    <string name="extra_display_name">EXTRA_DISPLAY_NAME</string>
-    <string name="extra_email">EXTRA_EMAIL</string>
-    <string name="extra_phone_number">EXTRA_PHONE_NUMBER</string>
-    <string name="extra_photo_url">EXTRA_PHOTO_URL</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="extra_uid" translatable="false">EXTRA_UID</string>
+    <string name="extra_display_name" translatable="false">EXTRA_DISPLAY_NAME</string>
+    <string name="extra_email" translatable="false">EXTRA_EMAIL</string>
+    <string name="extra_phone_number" translatable="false">EXTRA_PHONE_NUMBER</string>
+    <string name="extra_photo_url" translatable="false">EXTRA_PHOTO_URL</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_statistics">Statistics</string>
+    <string name="reports_title">Reports</string>
     <string name="menu_pos">Point of sale</string>
-    <string name="menu_invoices">Invoices</string>
-    <string name="menu_items">Items</string>
+    <string name="invoices_title">Invoices</string>
+    <string name="title_items">Items</string>
     <string name="menu_code_scanner">Code scanner</string>
-    <string name="menu_users">Users</string>
-    <string name="menu_settings">Settings</string>
+    <string name="settings_title">Settings</string>
 
     <string name="google_sign_in">Google Sign In</string>
     <string name="sales_services">Sales services</string>
     <string name="permissions_and_settings">Permissions and settings</string>
     <string name="items_services">Items services</string>
     <string name="profile_title">Profile</string>
-    <string name="business_plans_title">Business plans</string>
     <string name="business_info_title">Business info</string>
 
     <string name="store_type">Store type</string>
     <string name="work_mail">Work mail</string>
     <string name="work_phone_number">Work phone number</string>
     <string name="pay_title">Pay</string>
-    <string name="storage_and_data">Storage and Data</string>
-    <string name="plans">Plans</string>
-    <string name="used">Used</string>
-    <string name="menu_sign_out">Sign out</string>
+    <string name="sign_out_title">Sign out</string>
     <string name="sign_out">Sign out</string>
     <string name="branches">Branches</string>
     <string name="branch_name">Name:&#32;</string>
@@ -49,12 +40,10 @@
 
 
     <!-- collection -->
-    <string name="COLLECTION_CUSTOMER" translatable="false">Customer</string>
-    <string name="COLLECTION_BRANCHES" translatable="false">Branches</string>
+
     <string name="business_subscription">Subscription</string>
     <string name="business_info">Business info</string>
     <string name="done">Done</string>
-    <string name="document_successfully_deleted">Document successfully deleted, %1$s</string>
 
     // Stepper
     <string name="title_close_stepper_dialog">Exit confirmation</string>
@@ -91,7 +80,6 @@
 
     // Subscription
     <string name="subscription_title">Subscription</string>
-    <string name="plan_trxn">\u0020TRXN</string>
     <string name="subscription_price_currency">EGP</string>
     <string name="subscription_price_month">\u0020month</string>
     <string name="add_subscription_failed">Failure when add new Subscription, please try again</string>
@@ -167,10 +155,10 @@
 
 
     // item
-    <string name="barcode">Barcode</string>
-    <string name="name">name</string>
-    <string name="price">Price</string>
-    <string name="quantity">Quantity</string>
+    <string name="item_barcode">Barcode</string>
+    <string name="item_name">name</string>
+    <string name="item_price">Price</string>
+    <string name="item_quantity">Quantity</string>
     <string name="add_a_item">Add a item</string>
     <string name="add_item">Add item</string>
     <string name="items_title">Items</string>
@@ -178,30 +166,34 @@
     <string name="update_item_fail">Item updated failed.</string>
     <string name="qty">Qty. %1$s</string>
     <string name="egp">%1$s EGP</string>
+    <string name="item_currency_price">EGP</string>
+    <string name="item_quantity_label">Qty:</string>
     <string name="delete_item_title">Delete item</string>
     <string name="delete_item_message">Are you sure you want to delete this item?</string>
     <string name="delete">Delete</string>
-    <string name="empty_list_message">empty list message</string>
-    <string name="empty_list_image_description">empty list image description</string>
-    <string name="name_is_required">Name is required</string>
-    <string name="price_is_required">Price is required</string>
-    <string name="quantity_is_required">Quantity is required</string>
-    <string name="barcode_is_required">Barcode is required</string>
+    <string name="empty_list_message" translatable="false">empty list message</string>
+    <string name="empty_list_image_description" translatable="false">empty list image description</string>
+    <string name="item_name_empty">Name is required</string>
+    <string name="item_price_empty">Price is required</string>
+    <string name="item_quantity_empty">Quantity is required</string>
+    <string name="item_barcode_empty">Barcode is required</string>
     <string name="no_camera_or_gallery_apps_found">No camera or gallery apps found</string>
     <string name="select_image">Select Image</string>
     <string name="scan_barcode">Scan barcode</string>
     <string name="print_qr_code">Print QR code</string>
+    <string name="print_text">Print</string>
     <string name="qr_code">QR code</string>
     <string name="copies">Copies</string>
+    <string name="copies_empty">Please type number of print item</string>
     <!-- empty_items_view_layout -->
-    <string name="empty_items_icon">Empty Items Icon Description</string>
+    <string name="empty_items_icon" translatable="false">Empty Items Icon Description</string>
     <string name="empty_items_title">No items to display</string>
     <string name="empty_items_message">There are currently no items available.</string>
-    <string name="item_action_state_empty">Item action state is empty data!.</string>
+    <string name="item_action_state_empty" translatable="false">Item action state is empty data!.</string>
     <string name="search">Search</string>
     <string name="search_hint">Search items</string>
     <string name="print_qr_code_title">Print QR code</string>
-    <string name="pictures_folder">sd</string>
+    <string name="pictures_folder" translatable="false">sd</string>
 
     // Sale
     <string name="sale_search_hint">Search by name item and barcode</string>
@@ -224,7 +216,7 @@
 
     // Invoice
     <string name="invoice_items_empty">Invoice items are empty.</string>>
-    <string name="invoice_group_total">\u0020| $%s</string>
+    <string name="invoice_group_total" translatable="false">\u0020| $%s</string>
     <string name="invoice_item_total">Total:&#32; $%s</string>
     <string name="action_title_date_picker">Select date</string>
     <string name="action_title_clear_date_picker">Clear date filter</string>
@@ -233,5 +225,15 @@
 
     <string name="employees_empty_title">No employees to display</string>
     <string name="employees_empty_message">There are currently no employees available.</string>
+
+    // Settings
+    <string name="setting_text_language_helper">Current language</string>
+    <string name="menu_users">Employees</string>
+    <string name="en" >English</string>
+    <string name="ar">Arabic</string>
+    <string name="printer_text">Printer</string>
+    <string name="add_printer_text">Add a printer</string>
+    <string name="setting_label_printer_helper">Current printer</string>
+
 
 </resources>

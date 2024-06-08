@@ -41,6 +41,7 @@ class InvoiceRepositoryImpl @Inject constructor(
                 suspendCoroutine { continuation ->
                     if (checkHasUser(continuation)) return@suspendCoroutine
                     val documentRef = db.getDocumentFromUser(auth.currentUserId, Invoice_FIELD)
+
                     val invoiceMap = mapOf(
                         Invoice_NAME_FIELD to documentRef.id,
                         Invoice_DATE_FIELD to invoice.date,

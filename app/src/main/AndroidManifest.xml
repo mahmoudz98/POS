@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools">
-    
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -12,10 +12,11 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
@@ -25,59 +26,69 @@
 
     <application
         android:name=".POSApp"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:localeConfig="@xml/locales_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.POS"
-        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.Pos.Splash"
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="tiramisu">
-        <activity
+       <!-- <activity
             android:name="com.casecode.pos.ui.stepper.StepperActivity"
             android:exported="true">
 
-        </activity>
-        <activity android:name="com.casecode.pos.ui.main.MainActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-
-            android:exported="true">
+        </activity>-->
+        <activity
+            android:name="com.casecode.pos.ui.main.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+          >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+     <!--   <activity
             android:name="com.casecode.pos.ui.signIn.SignInActivity"
             android:exported="true">
 
-        </activity>
+        </activity>-->
         <activity
-            android:name=".utils.CaptureScannerActivity"
-            android:screenOrientation="fullSensor"
-            android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme" />
+            android:name=".utils.CaptureScannerActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
         <!-- Trigger Google Play services to install the backported photo picker module. -->
-        <service android:name="com.google.android.gms.metadata.ModuleDependencies"
+        <service
+            android:name="com.google.android.gms.metadata.ModuleDependencies"
             android:enabled="false"
             android:exported="false"
             tools:ignore="MissingClass">
             <intent-filter>
                 <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
             </intent-filter>
-            <meta-data android:name="photopicker_activity:0:required" android:value="" />
+            <meta-data
+                android:name="photopicker_activity:0:required"
+                android:value="" />
+        </service>
+        <!-- Let AndroidX handle auto-store locales for pre-T devices to hold the user's selected locale -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
         </service>
 
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name=".utils.ComposeFileProvider"
             android:authorities="com.casecode.pos.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.pos
 
 import android.os.Bundle
@@ -178,4 +179,4 @@ class PointOfSaleFragment : Fragment() {
         viewModelStore.clear()
     }
 
-}
+}*/

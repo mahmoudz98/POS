@@ -3,7 +3,6 @@ package com.casecode.pos.viewmodel
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.casecode.domain.model.users.Invoice
 import com.casecode.domain.model.users.InvoiceGroup
@@ -22,10 +21,10 @@ class InvoicesViewModel @Inject constructor(
 
     private val _invoices = MutableLiveData<List<InvoiceGroup>>()
     val invoices get() = _invoices
-    val isInvoiceEmpty: LiveData<Boolean> = _invoices.map { it.isEmpty() }
+   // val isInvoiceEmpty: LiveData<Boolean> = _invoices. { it.isEmpty() }
     private val _dateInvoiceSelected = MutableLiveData<Long?>(null)
     val dateInvoiceSelected get() = _dateInvoiceSelected
-    val hasDateInvoiceFilter: LiveData<Boolean> = _dateInvoiceSelected.map { it != null }
+   // val hasDateInvoiceFilter: LiveData<Boolean> = _dateInvoiceSelected.map { it != null }
     private val _invoiceSelected = MutableLiveData<Invoice>()
 
     val invoiceSelected: LiveData<Invoice>

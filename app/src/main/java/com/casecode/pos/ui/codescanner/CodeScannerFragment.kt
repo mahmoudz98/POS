@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.codescanner
 
 import android.os.Bundle
@@ -27,4 +28,4 @@ class CodeScannerFragment : Fragment()
       return binding.root
    }
    
-}
+}*/

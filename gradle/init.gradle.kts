@@ -8,11 +8,12 @@ initscript {
     }
 
     dependencies {
-        classpath("com.diffplug.spotless:spotless-plugin-gradle:$spotlessVersion")
+        classpath("com.diffplug.spotless:spotless-plugin-gradle:$ktlintVersion")
     }
 }
 
 rootProject {
+
     subprojects {
         apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
         extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {

@@ -13,7 +13,6 @@ import org.gradle.kotlin.dsl.getByType
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
-
         with(target) {
             with(pluginManager) {
                 apply("com.android.application")
@@ -21,7 +20,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("org.gradle.android.cache-fix")
                 apply("pos.android.lint")
             }
-
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Configuration.targetSdk
@@ -31,11 +29,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
                 configureBadgingTasks(extensions.getByType<BaseExtension>(), this)
-
             }
         }
-
     }
-
-
 }

@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.invoices
 
 import android.os.Bundle
@@ -134,4 +135,4 @@ class InvoicesFragment : Fragment() {
         viewModelStore.clear()
     }
 
-}
+}*/

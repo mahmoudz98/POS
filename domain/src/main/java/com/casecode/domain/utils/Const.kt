@@ -5,7 +5,7 @@ const val USERS_COLLECTION_PATH = "users"
 const val ITEMS_COLLECTION_PATH = "items"
 const val CUSTOMERS_COLLECTION_PATH = "customers"
 const val BUSINESS_FIELD = "business"
-const val BRANCHES_COLLECTION_PATH = "branches"
+const val BRANCHES_FIELD = "branches"
 const val SUBSCRIPTIONS_COLLECTION_PATH = "subscriptions"
 
 const val STORES_COLLECTION_PATH = "stores"
@@ -27,6 +27,7 @@ const val BRANCHES_NAME_FIELD = "branchName"
 const val BRANCHES_PHONE_NUMBER_FIELD = "phoneNumber"
 
 // fields in subscriptions
+const val SUBSCRIPTION_BUSINESS_FIELD = "subscriptionsBusiness"
 const val SUBSCRIPTION_COST_FIELD = "cost"
 const val SUBSCRIPTION_TYPE_FIELD = "type"
 const val SUBSCRIPTION_DURATION_FIELD = "duration"
@@ -39,12 +40,6 @@ const val EMPLOYEE_PHONE_NUMBER_FIELD = "phoneNumber"
 const val EMPLOYEE_PASSWORD_FIELD = "password"
 const val EMPLOYEE_BRANCH_NAME_FIELD = "branchName"
 const val EMPLOYEE_PERMISSION_FIELD = "permission"
-
-// fields in planUsed and plan
-const val DURATION_USED_FIELD = "durationUsed"
-const val PLAN_CODE_FIELD = "planCode"
-const val PLAN_NAME_FIELD = "planName"
-const val PLAN_PRICE_FIELD = "price"
 
 //  fields in Store
 const val STORECODE_FIELD = "storeCode"

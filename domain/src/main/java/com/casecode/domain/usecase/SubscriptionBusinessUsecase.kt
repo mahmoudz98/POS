@@ -20,7 +20,7 @@ class SetSubscriptionBusinessUseCase @Inject constructor(private val subscriptio
       if(uid.isEmpty()){
          return Resource.empty( EmptyType.DATA, R.string.uid_empty)
       }
-      if(subscriptionBusiness.type.isEmpty()){
+      if(subscriptionBusiness.type.isNullOrEmpty()){
          return Resource.empty( EmptyType.DATA, R.string.add_subscription_business_empty)
       }
       

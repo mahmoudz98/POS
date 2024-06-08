@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.business
 
 import android.os.Bundle
@@ -11,9 +12,11 @@ import com.casecode.pos.databinding.FragmentBusinessSubscriptionBinding
 import com.casecode.pos.viewmodel.StepperBusinessViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+*/
 /**
  * A fragment that displays the business Subscription.
- */
+ *//*
+
 @AndroidEntryPoint
 class BusinessSubscriptionFragment : Fragment() {
     @Suppress("ktlint:standard:property-naming")
@@ -36,16 +39,16 @@ class BusinessSubscriptionFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
-        init()
+        setup()
     }
 
-    private fun init() {
-        initViewModel()
-        initAdapter()
-        initClickListener()
+    private fun setup() {
+        setupObservers()
+        setupAdapter()
+        setupClickListener()
     }
 
-    private fun initViewModel() {
+    private fun setupObservers() {
         observerNetworkAndGetSubscriptions()
         observerSubscriptions()
         observerDataSubscriptionsIsLoadingOrError()
@@ -65,7 +68,6 @@ class BusinessSubscriptionFragment : Fragment() {
             binding.subscriptions = it
         }
     }
-
     private fun observerNetworkAndGetSubscriptions() {
         businessViewModel.isOnline.observe(viewLifecycleOwner) {
             if (it) {
@@ -75,17 +77,16 @@ class BusinessSubscriptionFragment : Fragment() {
             }
         }
     }
-
-    private fun initAdapter() {
+    private fun setupAdapter() {
         val subscriptionAdapter: SubscriptionAdapter by lazy {
-            SubscriptionAdapter {
+            SubscriptionAdapter(itemClick =  {
                 businessViewModel.addSubscriptionBusinessSelected(it)
-            }
+            })
         }
         binding.rvBusinessSubscription.adapter = subscriptionAdapter
     }
 
-    private fun initClickListener() {
+    private fun setupClickListener() {
         binding.btnBusinessSubscriptionEmployee.setOnClickListener {
             businessViewModel.checkNetworkThenSetSubscriptionBusinessSelected()
         }
@@ -98,4 +99,4 @@ class BusinessSubscriptionFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+}*/

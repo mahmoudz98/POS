@@ -32,7 +32,7 @@ abstract class BaseViewModel : ViewModel() {
     protected  fun hideProgress() {
         _isLoading.value = false
     }
-    protected fun showSnackbarMessage(
+     fun showSnackbarMessage(
         @StringRes message: Int,
     ) {
         _userMessage.value = Event(message)

@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.ui.profile
 
 import androidx.fragment.app.Fragment
@@ -10,7 +11,7 @@ class ProfilePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
             0 -> ProfileBusinessFragment()
                 1 -> ProfileBranchesFragment()
 
-            else -> ProfilePlansFragment()
+            else -> ProfileSubscriptionsFragment()
         }
     }
 
@@ -21,4 +22,4 @@ class ProfilePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     companion object {
         private const val ITEMS_PAGE_SIZE = 3
     }
-}
+}*/

@@ -1,5 +1,6 @@
 package com.casecode.testing.repository
 
+import com.casecode.domain.model.users.Branch
 import com.casecode.domain.model.users.Business
 import com.casecode.domain.repository.AddBusiness
 import com.casecode.domain.repository.BusinessRepository
@@ -27,6 +28,10 @@ class TestBusinessRepository @Inject constructor() : BusinessRepository, BaseTes
 
     override suspend fun completeBusinessSetup(uid: String): CompleteBusiness {
         return Resource.success(true)
+    }
+
+    override suspend fun addBranch(branch: Branch): Resource<Boolean> {
+        TODO("Not yet implemented")
     }
 
     fun sendAddBusiness(business: Business) {

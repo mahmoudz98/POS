@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.adapter
 
 import android.view.LayoutInflater
@@ -164,4 +165,4 @@ class InvoiceAdapter(private val onItemClick: (Invoice) -> Unit) :
             }
         }
     }
-}
+}*/

@@ -27,8 +27,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
          
          extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
-            defaultConfig.targetSdk = Configuration.compileSdk
-            configureGradleManagedDevices(this)
+            defaultConfig.targetSdk = Configuration.CompileSdk
+             configureGradleManagedDevices(this)
          }
         
          extensions.configure<LibraryAndroidComponentsExtension> {

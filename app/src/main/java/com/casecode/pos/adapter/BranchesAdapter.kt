@@ -1,3 +1,4 @@
+/*
 package com.casecode.pos.adapter
 
 import android.view.LayoutInflater
@@ -13,10 +14,12 @@ import timber.log.Timber
 
 class BranchesAdapter(val itemClick: (Branch) -> Unit) : BaseAdapter<Branch>(DiffCallback) {
 
-    /**
+    */
+/**
      * Allows the RecyclerView to determine which items have changed when the [List] of [Branch]
      * has been updated.
-     */
+     *//*
+
     companion object DiffCallback : DiffUtil.ItemCallback<Branch>() {
         override fun areItemsTheSame(oldItem: Branch, newItem: Branch): Boolean {
 
@@ -67,11 +70,13 @@ class BranchesAdapter(val itemClick: (Branch) -> Unit) : BaseAdapter<Branch>(Dif
         return R.layout.item_branch
     }
 
-    /**
+    */
+/**
      *  parent list is immutable and override here to use mutableList.
-     */
+     *//*
+
     override fun submitList(list: MutableList<Branch>?) {
         super.submitList(
             list?.let { ArrayList(it) })
     }
-}
+}*/

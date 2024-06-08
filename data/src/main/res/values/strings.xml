@@ -14,6 +14,8 @@
     <string name="get_business_failure">Get Business failure,</string>
     <string name="get_business_failure_network">Get Business failure,Check internet connection</string>
     <string name="add_business_network">Failure when add business, Check internet connection</string>
+    <string name="add_branch_business_network">Failure when add branch, Check internet connection</string>
+    <string name="add_branch_business_failure">Add branch Business failure,</string>
 
     <string name="add_subscription_business_failure">Add Subscription Business failure,</string>
     <string name="add_subscription_business_network">Failure when add subscription business, Check internet connection</string>
