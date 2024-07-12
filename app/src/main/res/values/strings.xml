@@ -1,239 +1,37 @@
 <resources>
     <string name="app_name" translatable="false">POS</string>
-    <string name="pos">pos</string>
-    <string name="extra_uid" translatable="false">EXTRA_UID</string>
-    <string name="extra_display_name" translatable="false">EXTRA_DISPLAY_NAME</string>
-    <string name="extra_email" translatable="false">EXTRA_EMAIL</string>
-    <string name="extra_phone_number" translatable="false">EXTRA_PHONE_NUMBER</string>
-    <string name="extra_photo_url" translatable="false">EXTRA_PHOTO_URL</string>
-    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="reports_title">Reports</string>
-    <string name="menu_pos">Point of sale</string>
-    <string name="invoices_title">Invoices</string>
-    <string name="title_items">Items</string>
-    <string name="menu_code_scanner">Code scanner</string>
-    <string name="settings_title">Settings</string>
-
-    <string name="google_sign_in">Google Sign In</string>
-    <string name="sales_services">Sales services</string>
-    <string name="permissions_and_settings">Permissions and settings</string>
-    <string name="items_services">Items services</string>
-    <string name="profile_title">Profile</string>
-    <string name="business_info_title">Business info</string>
-
-    <string name="store_type">Store type</string>
-    <string name="work_mail">Work mail</string>
-    <string name="work_phone_number">Work phone number</string>
-    <string name="pay_title">Pay</string>
-    <string name="sign_out_title">Sign out</string>
-    <string name="sign_out">Sign out</string>
-    <string name="branches">Branches</string>
-    <string name="branch_name">Name:&#32;</string>
-    <string name="add">Add</string>
-    <string name="update">Update</string>
-    <string name="phone_number_branch">Phone number branch</string>
-    <string name="add_branch">Add a branch</string>
-    <string name="update_branch">Update a branch</string>
+    <string name="pos" translatable="false">POS</string>
 
 
-    <!-- collection -->
 
-    <string name="business_subscription">Subscription</string>
-    <string name="business_info">Business info</string>
-    <string name="done">Done</string>
-
-    // Stepper
-    <string name="title_close_stepper_dialog">Exit confirmation</string>
-    <string name="message_close_stepper_dialog">Are you exit setup business step and log out</string>
-    <string name="positive_close_stepper_dialog">Yes</string>
-
-    // business
-    <string name="add_business_empty">Please add your data correctly</string>
-    <string name="add_business_store_type_empty">Please add type of your business</string>
-    <string name="add_business_email_invalid">Enter valid email</string>
-    <string name="add_business_email_empty">Email is empty</string>
-    <string name="add_business_phone_empty">Phone is empty</string>
-    <string name="add_business_phone_invalid">Enter valid phone number</string>
-    <string name="add_business_failed">Failure when add new business, please try again</string>
-    <string name="add_business_success">Business added is Successfully.</string>
-    <string name="complete_business_step_success">Complete business step, Go on.</string>
-
-    // types of store
-    <string name="store_type_clothes">Clothes</string>
-    <string name="store_type_hyper">Hyper</string>
-    <string name="store_type_coffee">Coffee</string>
-
-
-    //Branch
-    <string name="branches_title">Branches</string>
-    <string name="add_branch_success">Branch Added success.</string>
-    <string name="add_branch_fail">Branch Added failed.</string>
-    <string name="update_branch_success">Branch updated success.</string>
-    <string name="update_branch_fail">Branch updated failed.</string>
-    <string name="add_branch_empty">Please add your data correctly</string>
-    <string name="add_branch_name_empty">Name branch is empty</string>
-    <string name="all_phone_empty">Phone is empty</string>
-    <string name="all_phone_invalid">Enter valid phone number</string>
-
-    // Subscription
-    <string name="subscription_title">Subscription</string>
-    <string name="subscription_price_currency">EGP</string>
-    <string name="subscription_price_month">\u0020month</string>
-    <string name="add_subscription_failed">Failure when add new Subscription, please try again</string>
-    <string name="add_subscription_success">Subscription added is Successfully.</string>
-
-    // Network labels
-    <string name="network_error">Check your internet connection Please</string>
-    <string name="network_available">back online</string>
-
-
-    // Employees
-    <string name="employees_title">Employees</string>
-    <string name="employees">Employees</string>
-    <string name="add_employee">Add a employee</string>
-    <string name="update_employee">Update a employee</string>
-    <string name="employee_name">Name:&#32;</string>
-    <string name="phone_number">Phone number</string>
-    <string name="employee_branch_name">Branch name</string>
-    <string name="password">Password</string>
-    <string name="employee_permissions">Employee permissions</string>
-
-    // Add Employee
-    <string name="add_employee_name_empty">Name employee is empty</string>
-    <string name="add_employee_password_empty">Password employee is empty</string>
-    <string name="add_employee_branch_empty">Branch employee is empty</string>
-    <string name="add_employee_permission_empty">Permission employee is empty</string>
-    <string name="add_employee_password_error">Password must be at least 6 characters. </string>
-    <string name="add_employees_success">Employees Added success, Go on.</string>
-    <string name="add_employee_success">Employee Added success.</string>
-    <string name="add_employee_fail">Employee Added failed.</string>
-    <string name="employee_name_duplicate">Employee\'s name duplicate and failed.</string>
-    <string name="update_employee_success">Employee updated success.</string>
-    <string name="update_employee_fail">Employee updated failed.</string>
-
-
-    // Permission
-    <string name="permission_admin">Admin</string>
-    <string name="permission_sales">Sales</string>
-    <string name="permission_non">Non</string>
-
-    <string name="all_error_unknown">Something went wrong!</string>
-
-    // Login Employee
-    <string name="message_scan_complete">Scan result Completed..</string>
-    <string name="message_scan_error">Scan error: </string>
-    <string name="scan_result_empty">Scan result is empty.</string>
-    <string name="login_employee_uid_empty">You must scan user id from admin to login in as employee.</string>
-    <string name="login_employee_incorrect">Employee name or password are incorrect</string>
-    <string name="login_employee_error">Error when Login Employee</string>
-    <string name="user_exists">User exists</string>
-    <string name="user_does_not_exist">User does not exist</string>
-    <string name="employee_id">Employee Id</string>
-    <string name="employee_user_admin">Scan user admin id</string>
-    <string name="employee_login">Employee login</string>
-    <string name="login">Login</string>
-
-    <string name="keep_an_eye_on_your_sales_and_inventory_at_all_times_and_stay_on_top_of_your_operations">Keep an eye on your sales and inventory at all times and stay on top of your operations.</string>
-    <string name="point_of_sale">Point of sale</string>
-    <string name="or_employee_login">or Employee login</string>
-    <string name="item_no_image_selected">No Image selected</string>
-
+    <!-- Sign In -->
+    <string name="sign_in_google_title">Sign in with Google</string>
+    <string name="sign_in_hint">Track sales, manage inventory, and stay in control of your business.</string>
+    <string name="sign_in_employee_option">Or, log in as an employee</string>
     <string name="google_play_services_required">Google Play Services Required</string>
-    <string name="google_play_services_message">
-    This app requires Google Play services to function. Please download and install it from the Play Store.
-</string>
-    <string name="download">Download</string>
-
-    <string name="cancel">Cancel</string>
-    <string name="title_permission_dialog">Camera Permission Needed</string>
-    <string name="message_permission_dialog">The app needs camera access to…</string>
-    <string name="positive_text_dialog">Request Permission</string>
-    <string name="google_sign_in_failed">Google sign in failed %1$s</string>
+    <string name="google_play_services_message">This app needs Google Play services to work correctly. Please download and install them from the Play Store.</string>
+    <string name="action_download">Download</string>
+    <string name="error_google_sign_in">Google sign-in failed: %s</string>
 
 
-    // item
-    <string name="item_barcode">Barcode</string>
-    <string name="item_name">name</string>
-    <string name="item_price">Price</string>
-    <string name="item_quantity">Quantity</string>
-    <string name="add_a_item">Add a item</string>
-    <string name="add_item">Add item</string>
-    <string name="items_title">Items</string>
-    <string name="update_item">Update item</string>
-    <string name="update_item_fail">Item updated failed.</string>
-    <string name="qty">Qty. %1$s</string>
-    <string name="egp">%1$s EGP</string>
-    <string name="item_currency_price">EGP</string>
-    <string name="item_quantity_label">Qty:</string>
-    <string name="delete_item_title">Delete item</string>
-    <string name="delete_item_message">Are you sure you want to delete this item?</string>
-    <string name="delete">Delete</string>
-    <string name="empty_list_message" translatable="false">empty list message</string>
-    <string name="empty_list_image_description" translatable="false">empty list image description</string>
-    <string name="item_name_empty">Name is required</string>
-    <string name="item_price_empty">Price is required</string>
-    <string name="item_quantity_empty">Quantity is required</string>
-    <string name="item_barcode_empty">Barcode is required</string>
-    <string name="no_camera_or_gallery_apps_found">No camera or gallery apps found</string>
-    <string name="select_image">Select Image</string>
-    <string name="scan_barcode">Scan barcode</string>
-    <string name="print_qr_code">Print QR code</string>
-    <string name="print_text">Print</string>
-    <string name="qr_code">QR code</string>
-    <string name="copies">Copies</string>
-    <string name="copies_empty">Please type number of print item</string>
-    <!-- empty_items_view_layout -->
-    <string name="empty_items_icon" translatable="false">Empty Items Icon Description</string>
-    <string name="empty_items_title">No items to display</string>
-    <string name="empty_items_message">There are currently no items available.</string>
-    <string name="item_action_state_empty" translatable="false">Item action state is empty data!.</string>
-    <string name="search">Search</string>
-    <string name="search_hint">Search items</string>
-    <string name="print_qr_code_title">Print QR code</string>
-    <string name="pictures_folder" translatable="false">sd</string>
+    <!-- Main Menu -->
 
-    // Sale
-    <string name="sale_search_hint">Search by name item and barcode</string>
-    <string name="search_qr_cant_find_item">Can\'t find item by QR code.</string>
-    <string name="sale_item_out_of_stock">Out of stock item.</string>
-    <string name="empty_invoice_items_title">No invoice items to display</string>
-    <string name="empty_invoice_items_message">There are currently no items selected, Select item to sale.</string>
-    <string name="delete_item_invoice_title">Delete item from invoice</string>
-    <string name="quantity_item_invoice_title">Change the quantity</string>
-    <string name="quantity_item_invoice_error">You must select quantity less than  </string>>
-    <string name="quantity_item_invoice_error_zero">You must select quantity greater than 0</string>
-    >
-    <string name="add_item_invoice_fail">Add item selected in invoice fail.</string>>
-    <string name="quantity_item_invoice_update_fail">Quantity item selected update fail.</string>>
-    <string name="quantity_item_invoice_update_success">Quantity item selected update success.</string>
-    <string name="text_sale">Sale</string>>
-    <string name="text_sale_total_hint">Total price:&#32;</string>
-    <string name="text_sale_rest_of_amount">, rest:&#32;</string>
-    <string name="hint_sale_amount">Enter amount</string>>
+    <string name="menu_reports">Reports</string>
+    <string name="menu_items">Items</string>
+    <string name="menu_code_scanner">Code Scanner</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_sales">Sales</string>
+    <string name="menu_pay">Pay</string>
+    <string name="menu_sign_out">Sign Out</string>
 
-    // Invoice
-    <string name="invoice_items_empty">Invoice items are empty.</string>>
-    <string name="invoice_group_total" translatable="false">\u0020| $%s</string>
-    <string name="invoice_item_total">Total:&#32; $%s</string>
-    <string name="action_title_date_picker">Select date</string>
-    <string name="action_title_clear_date_picker">Clear date filter</string>
-    <string name="action_title_invoice_print">Print invoice</string>
-    <string name="title_invoice_details">Details invoice</string>
+    <!-- Business Info -->
 
-    <string name="employees_empty_title">No employees to display</string>
-    <string name="employees_empty_message">There are currently no employees available.</string>
 
-    // Settings
-    <string name="setting_text_language_helper">Current language</string>
-    <string name="menu_users">Employees</string>
-    <string name="en" >English</string>
-    <string name="ar">Arabic</string>
-    <string name="printer_text">Printer</string>
-    <string name="add_printer_text">Add a printer</string>
-    <string name="setting_label_printer_helper">Current printer</string>
+
+
+    <!-- Invoices -->
+
+
 
 
 </resources>

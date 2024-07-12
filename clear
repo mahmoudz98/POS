@@ -1,0 +1,261 @@
+[33mcommit 3cef632236214ce07facd96f488023164dd2ad11[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m)[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 21:19:01 2024 +0200
+
+    add secrets.defults.properties file
+
+[33mcommit b058845b8fce60c1f9751b3b99ac4d121f9a01f0[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:43:19 2024 +0200
+
+    update name permission
+
+[33mcommit 41c0dea707963d5bf8f534776ef3b017f438a3fc[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:42:19 2024 +0200
+
+    update jvm
+
+[33mcommit 8733ed55532e83de1f5254fe17957e9053b81021[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:41:18 2024 +0200
+
+    update code style
+
+[33mcommit 8f441fb827c568673890c19558690b24a5dcb754[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:39:57 2024 +0200
+
+    update copyright
+
+[33mcommit f714ece2a55810e6230118f644336a1a9ba76d63[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:39:28 2024 +0200
+
+    update naming convention
+
+[33mcommit d6aa2057bcb007abdfa808ef0a7c38e0c58b5da6[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:36:34 2024 +0200
+
+    remove unused files
+
+[33mcommit 719f2fd6061e74f6619b21d723059deb7da46676[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:35:56 2024 +0200
+
+    remove NetworkConnection.kt
+
+[33mcommit ed55cf75557da89234d7a8af9a344e66f0bde2b0[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 20:35:11 2024 +0200
+
+    reformat
+
+[33mcommit 51f64ad22cd34f674105ceb34274a9451f8f43ef[m[33m ([m[1;31morigin/develop[m[33m)[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 13:24:36 2024 +0200
+
+    use secrets for webclient id
+
+[33mcommit 97d1bd79008b8744a160e501eb2bda86118f8920[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 13:14:11 2024 +0200
+
+    disable build features resource
+
+[33mcommit b5b0fd528c5e57b5ac5620d4c4e671c2ee70d453[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 13:12:13 2024 +0200
+
+    reformat
+
+[33mcommit fe197b8861c66f3d3a4cf655b0e9a3be109193e5[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Sat Mar 2 13:11:35 2024 +0200
+
+    Improve ui test
+
+[33mcommit 1cb65e54efb3471e13b3f901546b7bc93094f839[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 20:38:27 2024 +0200
+
+    refactor use list of emplyee
+
+[33mcommit 2665db6fd431e64941ce23c9daeb4d315f42b4df[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 20:37:26 2024 +0200
+
+    reformat
+
+[33mcommit 91ac3d03e3f57bebf0434434c6aed6b77859209c[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 20:32:22 2024 +0200
+
+    refactor
+
+[33mcommit 340a5148eef9e5930ba1d9214bf924fd3ed1958b[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 20:30:53 2024 +0200
+
+    upgrade version ktlint
+
+[33mcommit 2b48b1177d3339c299298505ee214946eba7e131[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 20:28:08 2024 +0200
+
+    refactor error list subscription
+
+[33mcommit b5c01bd96cbe177840e79cdcc8f5363f4b3ab0ad[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 20:26:40 2024 +0200
+
+    reformat
+
+[33mcommit d438a13793fe0472e50bba941f1128c94857a10a[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 20:23:57 2024 +0200
+
+    add function for subscription error
+
+[33mcommit 13bbdfbf87b9359c588c807e345d195dcf8fa273[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:25:40 2024 +0200
+
+    reformat code
+
+[33mcommit 62e1729279128fe5bc7c4c4747c14e38f41fa8ff[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:24:48 2024 +0200
+
+    remove setupSnackbar
+
+[33mcommit 80b7658310505f1e73f3bfb8c13779e88d02eeac[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:24:21 2024 +0200
+
+    refactor naming
+
+[33mcommit 4df2c52c13dee2687dc839ceb8aa0eec570e01b7[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:23:53 2024 +0200
+
+    reformat
+
+[33mcommit 30792271101a343b5f86979f42edfbede5b5ed40[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:23:38 2024 +0200
+
+    refactor code
+
+[33mcommit e683f76c3a9d5d1cdf8cae4a8ea9099166e7ce7c[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:22:41 2024 +0200
+
+    reformat
+
+[33mcommit c4f36ece44b7767d435df5dfe2d068d94ccf5a16[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:22:33 2024 +0200
+
+    reformat
+
+[33mcommit 1d66893c5edb89733e199eddd5d642de2e710153[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:21:53 2024 +0200
+
+    remove unnecessary libraries
+
+[33mcommit 272ed0709746f85c2d0ef0f1059e34536c940405[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:19:52 2024 +0200
+
+    remove setupSnackbar
+
+[33mcommit cc09aacce7ff9179f559ab6e1a3c878911530945[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:19:07 2024 +0200
+
+    reformat
+
+[33mcommit de3e51c366567eda9769d7f73dfc94793a3e70c2[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:18:40 2024 +0200
+
+    reformat
+
+[33mcommit 06b854016864aa260228d49078e4c080c0b29749[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:17:28 2024 +0200
+
+    refactor AddEmployeeDialogFragment
+
+[33mcommit 8304dace5594e245a53abfa79bf30170d8d7b96d[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Thu Feb 29 19:16:58 2024 +0200
+
+    refactor AddEmployeeDialogFragment
+
+[33mcommit 1f71a66cc7a743de11c74758ce27e40bbbe97342[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 23:03:25 2024 +0200
+
+    ignore secrets.defaults.properties
+
+[33mcommit 31878beeab4919ac193be355963d8cc364917c61[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 21:23:03 2024 +0200
+
+    add plugin gradle cache fix
+
+[33mcommit 3e128a08bcc636cf2fc190ba47c73e09fa152dfc[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 21:22:12 2024 +0200
+
+    add function SetupSnackbar
+
+[33mcommit f6bf203be9364c1f059f10de4ee9e1acf99331a2[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 21:19:44 2024 +0200
+
+    support jniLibs
+
+[33mcommit 7a3eb62c3a46bce0b3d3aab64219b365bb9cf967[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 21:18:53 2024 +0200
+
+    add annotation UnstableApiUsage
+
+[33mcommit 9e4065674118bea8ef265e45e2dcdcd5a9d922b9[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 21:15:20 2024 +0200
+
+    Change  logic for inject firebaseAuth to support mock or emulator
+
+[33mcommit 108c7aa0642fe4397782f8d8be33ee9cc041c970[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 21:11:11 2024 +0200
+
+    support screenshot for test
+
+[33mcommit 413a2a51ca54d1e447c6fcbe839e35f305c967a0[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Wed Feb 21 21:09:25 2024 +0200
+
+    fix: when signin and user has not google play service
+
+[33mcommit 326d1fdee3b89f54c9ae06e6d39ea0406f5c13a1[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Tue Feb 20 02:23:04 2024 +0200
+
+    update ktlint and spotless version
+
+[33mcommit a61c123a444a5baf600b36d0955abd36cb4125b1[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Tue Feb 20 02:21:44 2024 +0200
+
+    update copyright
+
+[33mcommit 826c83e02c6af4417ba70b1ffc72a1a4783ed534[m
+Author: mahmoud <30526294+mah99239@users.noreply.github.com>
+Date:   Tue Feb 20 02:10:42 2024 +02

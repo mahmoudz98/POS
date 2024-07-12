@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_item__barcode_hint">الرمز الشريطي</string>
+    <string name="feature_item__name_hint">الاسم</string>
+    <string name="feature_item_price_hint">السعر</string>
+    <string name="feature_item_item_quantity_label">الكمية</string>
+    <string name="feature_item_add_item_action_text">إضافة منتج</string>
+    <string name="feature_item_header_title">المنتجات</string>
+    <string name="feature_item_update_item_button_text">تحديث المنتج</string>
+    <string name="feature_item_error_update_item_message">فشل تحديث المنتج.</string>
+    <string name="feature_item_dialog_delete_item_title">حذف المنتج</string>
+    <string name="feature_item_dialog_delete_item_message">هل أنت متأكد أنك تريد حذف هذا المنتج؟</string>
+    <string name="feature_item_dialog_delete_button_text">حذف</string>
+    <string name="feature_item_empty_list_message">لا توجد منتجات لعرضها.</string>
+    <string name="feature_item_empty_items_image_description">صورة لقائمة المنتجات الفارغة</string>
+    <string name="feature_item_error_item_name_empty">الاسم مطلوب.</string>
+    <string name="feature_item_error_item_price_empty">السعر مطلوب.</string>
+    <string name="feature_item_error_item_quantity_empty">الكمية مطلوبة.</string>
+    <string name="feature_item_error_item_barcode_empty">الرمز الشريطي مطلوب.</string>
+    <string name="feature_item_error_no_camera_gallery_app">لم يتم العثور على تطبيق الكاميرا أو المعرض.</string>
+    <string name="feature_item_dialog_select_image_text">اختيار صورة</string>
+    <string name="feature_item_scan_barcode_text">مسح الرمز الشريطي</string>
+    <string name="feature_item_dialog_print_button_text">طباعة</string>
+    <string name="feature_item_qr_code_text">رمز الاستجابة السريعة</string>
+    <string name="feature_item_copies_text">النسخ</string>
+    <string name="feature_item_error_copies_empty">الرجاء إدخال عدد النسخ للطباعة.</string>
+    <string name="feature_item_empty_items_icon_description">وصف الأيقونة للمنتجات الفارغة</string>
+    <string name="feature_item_empty_items_title">لم يتم العثور على منتجات.</string>
+    <string name="feature_item_empty_items_message">لا توجد منتجات متاحة حاليًا.</string>
+    <string name="feature_item_error_item_action_state_empty">حالة إجراء المنتج لا تحتوي على بيانات.</string>
+    <string name="feature_item_search_action_text">بحث</string>
+    <string name="feature_item_search_items_hint">البحث عن المنتجات…</string>
+    <string name="feature_item_dialog_print_qr_code_title">طباعة رمز الاستجابة السريعة</string>
+    <string name="feature_item_error_no_image_selected">لم يتم اختيار صورة.</string>
+
+</resources>

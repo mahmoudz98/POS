@@ -7,13 +7,13 @@ plugins {
 group = "com.casecode.pos.buildlogic"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
@@ -48,17 +48,33 @@ gradlePlugin {
             id = "pos.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
+        register("androidLibraryCompose") {
+            id = "pos.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
         register("androidLibrary") {
             id = "pos.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidHilt") {
-            id = "pos.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
+        register("androidFeature") {
+            id = "pos.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
+        register("hilt") {
+            id = "pos.hilt"
+            implementationClass = "HiltConventionPlugin"
         }
         register("androidFirebase") {
             id = "pos.android.firebase"
             implementationClass = "AndroidApplicationFirebaseConventionPlugin"
+        }
+        register("androidFirebaseLibrary") {
+            id = "pos.android.firebase.library"
+            implementationClass = "AndroidFirebaseConventionPlugin"
+        }
+        register("androidFlavors") {
+            id = "pos.android.application.flavors"
+            implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
 
         register("androidTest4") {

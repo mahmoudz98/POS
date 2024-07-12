@@ -16,8 +16,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.casecode.data.utils.NetworkMonitor
 import com.casecode.pos.R
+import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.navigation.TopLevelDestination
 import com.casecode.pos.navigation.TopLevelDestination.EMPLOYEES
 import com.casecode.pos.navigation.TopLevelDestination.INVOICES
@@ -25,25 +25,14 @@ import com.casecode.pos.navigation.TopLevelDestination.ITEMS
 import com.casecode.pos.navigation.TopLevelDestination.POS
 import com.casecode.pos.navigation.TopLevelDestination.REPORTS
 import com.casecode.pos.navigation.TopLevelDestination.SETTINGS
-import com.casecode.pos.navigation.TopLevelDestination.SIGN_OUT
-import com.casecode.pos.ui.employee.EMPLOYEES_ROUTE
-import com.casecode.pos.ui.employee.navigateToEmployees
-import com.casecode.pos.ui.invoices.INVOICES_ROUTE
-import com.casecode.pos.ui.invoices.navigateToInvoices
-import com.casecode.pos.ui.item.ITEMS_ROUTE
-import com.casecode.pos.ui.item.ITEM_DIALOG_ROUTE
-import com.casecode.pos.ui.item.ITEM_update_DIALOG_ROUTE
-import com.casecode.pos.ui.item.QR_PRINT_ITEM_DIALOG_ROUTE
-import com.casecode.pos.ui.item.navigateToItemsGraph
-import com.casecode.pos.ui.pos.POS_ROUTE
-import com.casecode.pos.ui.pos.navigateToPos
-import com.casecode.pos.ui.profile.navigateToProfile
-import com.casecode.pos.ui.settings.SETTINGS_ROUTE
-import com.casecode.pos.ui.settings.navigateToSettings
-import com.casecode.pos.ui.signout.SIGN_OUT_ROUTE
-import com.casecode.pos.ui.signout.navigateToSignOut
-import com.casecode.pos.ui.statistics.REPORTS_ROUTE
-import com.casecode.pos.ui.statistics.navigateToReports
+import com.casecode.pos.feature.employee.navigateToEmployees
+import com.casecode.pos.feature.invoice.navigateToInvoices
+import com.casecode.pos.feature.item.navigateToItemsGraph
+import com.casecode.pos.feature.sale.navigateToPos
+import com.casecode.pos.feature.profile.navigateToProfile
+import com.casecode.pos.feature.setting.navigateToSettings
+import com.casecode.pos.feature.statistics.REPORTS_ROUTE
+import com.casecode.pos.feature.statistics.navigateToReports
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -72,13 +61,12 @@ fun rememberMainAppState(
     }
 }
 
-
+@Stable
 class TopAppBarAction(
     val icon: ImageVector = Icons.Default.Person,
-    val actionIconContent: Int = R.string.profile_title,
+    val actionIconContent: Int = com.casecode.pos.feature.profile.R.string.feature_profile_title,
     val onClick: () -> Unit = { Timber.e("onClick") },
-
-    )
+)
 
 
 @Stable
@@ -93,8 +81,8 @@ class MainAppState(
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
     val currentTopAppBarAction: TopAppBarAction?
         @Composable get() = when (currentDestination?.route) {
-            POS_ROUTE, REPORTS_ROUTE, SETTINGS_ROUTE -> TopAppBarAction(
-                icon = Icons.Default.Person, R.string.profile_title,
+            com.casecode.pos.feature.sale.POS_ROUTE, REPORTS_ROUTE, com.casecode.pos.feature.employee.EMPLOYEES_ROUTE, com.casecode.pos.feature.setting.SETTINGS_ROUTE -> TopAppBarAction(
+                icon = Icons.Default.Person, com.casecode.pos.feature.profile.R.string.feature_profile_title,
                 onClick = {
                     navController.navigateToProfile(
                         navOptions {
@@ -104,22 +92,20 @@ class MainAppState(
                     )
                 },
             )
+
             else -> null
         }
 
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            POS_ROUTE -> POS
+            com.casecode.pos.feature.sale.POS_ROUTE -> POS
             REPORTS_ROUTE -> REPORTS
-            INVOICES_ROUTE -> INVOICES
-            ITEMS_ROUTE, ITEM_DIALOG_ROUTE, ITEM_update_DIALOG_ROUTE, QR_PRINT_ITEM_DIALOG_ROUTE -> ITEMS
-            EMPLOYEES_ROUTE -> EMPLOYEES
-            SETTINGS_ROUTE -> SETTINGS
-            SIGN_OUT_ROUTE -> SIGN_OUT
-            else -> {
-                null
-            }
+            com.casecode.pos.feature.invoice.INVOICES_ROUTE -> INVOICES
+            com.casecode.pos.feature.item.ITEMS_ROUTE, com.casecode.pos.feature.item.ITEM_DIALOG_ROUTE, com.casecode.pos.feature.item.ITEM_update_DIALOG_ROUTE, com.casecode.pos.feature.item.QR_PRINT_ITEM_DIALOG_ROUTE -> ITEMS
+            com.casecode.pos.feature.employee.EMPLOYEES_ROUTE -> EMPLOYEES
+            com.casecode.pos.feature.setting.SETTINGS_ROUTE -> SETTINGS
+            else -> null
         }
 
     fun openOrClosed() {
@@ -139,7 +125,7 @@ class MainAppState(
     )
 
     /**
-     * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
+     * Map of top level destinations to be used in the TopBar. The key is the
      * route.
      */
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
@@ -175,7 +161,6 @@ class MainAppState(
             ITEMS -> navController.navigateToItemsGraph(topLevelNavOptions)
             EMPLOYEES -> navController.navigateToEmployees(topLevelNavOptions)
             SETTINGS -> navController.navigateToSettings(topLevelNavOptions)
-            SIGN_OUT -> navController.navigateToSignOut(topLevelNavOptions)
         }
     }
 

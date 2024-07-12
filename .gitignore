@@ -7,7 +7,7 @@
 
 # Java class files
 *.class
-.kotlin
+
 
 # generated files
 bin/
@@ -46,5 +46,6 @@ _sandbox
 # Android Studio captures folder
 captures/
 
+.kotlin
 # Ignore the secrets.defaults.properties file
 secrets.defaults.properties

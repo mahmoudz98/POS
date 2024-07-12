@@ -9,17 +9,10 @@ class AndroidApplicationFirebaseConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.google.gms.google-services")
                 apply("com.google.firebase.firebase-perf")
-                apply("com.google.firebase.crashlytics")
+               // apply("com.google.firebase.crashlytics")
             }
 
             dependencies {
-                val bom = libs.findLibrary("firebase-bom").get()
-                add("implementation", platform(bom))
-                "implementation"(libs.findLibrary("play.services.auth").get())
-                "implementation"(libs.findLibrary("firebase.auth").get())
-                "implementation"(libs.findLibrary("firebase.firestore").get())
-                "implementation"(libs.findLibrary("firebase.storage").get())
-                "implementation"(libs.findLibrary("firebase.performance").get())
 
                 //  "implementation"(libs.findLibrary("firebase.messaging").get())
                 // "implementation"(libs.findLibrary("firebase.analytics").get())

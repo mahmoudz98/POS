@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.casecode.pos.core.datastore";
+option java_multiple_files = true;
+
+message Employee {
+  string name = 1;
+  string phone_number = 2;
+  string password = 3;
+  string branch_name = 4;
+  string permission = 5;
+}

@@ -25,29 +25,31 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.casecode.pos.R
-import com.casecode.pos.design.component.PosBackground
-import com.casecode.pos.design.component.PosGradientBackground
-import com.casecode.pos.design.component.PosNavigationDrawer
-import com.casecode.pos.design.component.PosNavigationDrawerHeader
-import com.casecode.pos.design.component.PosNavigationDrawerItem
-import com.casecode.pos.design.component.PosTopAppBar
-import com.casecode.pos.design.theme.GradientColors
+import com.casecode.pos.core.designsystem.component.PosTopAppBar
+import com.casecode.pos.core.designsystem.component.PosBackground
+import com.casecode.pos.core.designsystem.component.PosGradientBackground
+import com.casecode.pos.core.designsystem.component.PosNavigationDrawer
+import com.casecode.pos.core.designsystem.component.PosNavigationDrawerHeader
+import com.casecode.pos.core.designsystem.component.PosNavigationDrawerItem
+import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.designsystem.theme.GradientColors
 import com.casecode.pos.navigation.PosMainNavHost
 import com.casecode.pos.navigation.TopLevelDestination
-import timber.log.Timber
+import com.casecode.pos.feature.signout.SignOutDialog
+import com.casecode.pos.utils.moveToSignInActivity
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     appState: MainAppState,
@@ -58,7 +60,7 @@ fun MainScreen(
             val snackbarHostState = remember { SnackbarHostState() }
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
-            val notConnectedMessage = stringResource(R.string.network_error)
+            val notConnectedMessage = stringResource(com.casecode.pos.core.ui.R.string.core_ui_error_network)
             LaunchedEffect(isOffline) {
                 if (isOffline) {
                     snackbarHostState.showSnackbar(
@@ -82,6 +84,17 @@ private fun MainApp(
 ) {
     // TODO: Change to use [PosScaffoldNavigation], when have custom layout with custom
     val currentDestination = appState.currentDestination
+    val showSignOutDialog = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    if (showSignOutDialog.value) {
+        SignOutDialog(
+            onSignOut = {
+                moveToSignInActivity(context = context)
+            },
+            onDismiss = { showSignOutDialog.value = false },
+        )
+    }
     PosNavigationDrawer(
         drawerState = appState.drawerState,
         drawerContent = {
@@ -107,6 +120,21 @@ private fun MainApp(
                         modifier = Modifier,
                     )
                 }
+                PosNavigationDrawerItem(
+                    selected = false,
+                    onClick = {
+                        showSignOutDialog.value = true
+                    },
+                    icon = {
+
+                        Icon(
+                            imageVector = PosIcons.SignOut,
+                            contentDescription = null,
+                        )
+                    },
+                    label = { Text(stringResource(R.string.menu_sign_out)) },
+                    modifier = Modifier,
+                )
             }
         },
     ) {
@@ -134,9 +162,7 @@ private fun MainApp(
                     PosTopAppBar(
                         titleRes = destination.titleTextId,
                         navigationIcon = Icons.Default.Menu,
-                        navigationIconContentDescription = stringResource(
-                            id = R.string.menu_pos,
-                        ),
+                        navigationIconContentDescription = "",
                         onActionClick = currentActionBar.onClick,
                         actionIconContentDescription = stringResource(currentActionBar.actionIconContent),
                         actionIcon = currentActionBar.icon,
@@ -146,20 +172,18 @@ private fun MainApp(
                         onNavigationClick = {
                             appState.openOrClosed()
                         },
-                        )
+                    )
                 }
 
                 Box(
                     modifier = Modifier.consumeWindowInsets(
-                        if (currentActionBar!=null) {
+                        if (currentActionBar != null) {
                             WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
                         } else {
                             WindowInsets(0, 0, 0, 0)
-                        })
-                    ,
+                        },
+                    ),
                 ) {
-                    Timber.e("safeDrawing: ${WindowInsets.safeDrawing}")
-
                     PosMainNavHost(
                         appState = appState,
                     )
@@ -171,16 +195,7 @@ private fun MainApp(
 }
 
 
-
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false
-
-
-@Composable
-@Preview(showBackground = true)
-fun PreviewMainScreen() {
-
-    // MainScreen()
-}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="feature_login_employee_title">Employee Login</string>
+    <string name="feature_login_employee_hint_scan_admin_id">Scan admin ID</string>
+
+    <string name="feature_login_employee_login_error_uid_empty">You must scan an admin ID to log in as an employee.</string>
+    <string name="feature_login_employee_login_error_employee_incorrect">Incorrect name or password.</string>
+    <string name="feature_login_employee_login_error_login">An error occurred while logging in. Please try again.</string>
+    <string name="feature_login_employee_login_action_login">Log In</string>
+
+    <string name="feature_login_employee_error_name_empty">Employee name is required.</string>
+    <string name="feature_login_employee_error_password_empty">Password is required.</string>
+
+
+</resources>

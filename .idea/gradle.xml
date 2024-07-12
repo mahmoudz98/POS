@@ -17,6 +17,7 @@
           </compositeBuild>
         </compositeConfiguration>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="F:/.gradle/wrapper/dists/gradle-8.10-20240629001910+0000-bin/ae88jiurp1ginl9evawkxp25l/gradle-8.10-20240629001910+0000" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
@@ -24,10 +25,28 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
-            <option value="$PROJECT_DIR$/data" />
-            <option value="$PROJECT_DIR$/di" />
-            <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/testing" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/common" />
+            <option value="$PROJECT_DIR$/core/data" />
+            <option value="$PROJECT_DIR$/core/datastore" />
+            <option value="$PROJECT_DIR$/core/datastore-test" />
+            <option value="$PROJECT_DIR$/core/datastore_proto" />
+            <option value="$PROJECT_DIR$/core/designsystem" />
+            <option value="$PROJECT_DIR$/core/domain" />
+            <option value="$PROJECT_DIR$/core/model" />
+            <option value="$PROJECT_DIR$/core/testing" />
+            <option value="$PROJECT_DIR$/core/ui" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/employee" />
+            <option value="$PROJECT_DIR$/feature/invoice" />
+            <option value="$PROJECT_DIR$/feature/item" />
+            <option value="$PROJECT_DIR$/feature/login-employee" />
+            <option value="$PROJECT_DIR$/feature/profile" />
+            <option value="$PROJECT_DIR$/feature/sale" />
+            <option value="$PROJECT_DIR$/feature/setting" />
+            <option value="$PROJECT_DIR$/feature/signout" />
+            <option value="$PROJECT_DIR$/feature/statistics" />
+            <option value="$PROJECT_DIR$/feature/stepper" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

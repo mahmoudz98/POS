@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "com.casecode.pos.core.datastore";
+option java_multiple_files = true;
+
+enum AuthState {
+NONE = 0;
+LOGIN_ADMIN = 1;
+NOT_COMPLETE_SETUP_BUSINESS = 2;
+LOGIN_EMPLOYEE = 3;
+
+}

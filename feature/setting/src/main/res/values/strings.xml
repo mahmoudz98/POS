@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings -->
+    <string name="feature_setting_language_title">Language</string>
+    <string name="feature_settings_language_current_hint">Current Language</string>
+    <string name="feature_setting_language_english">English</string>
+    <string name="feature_setting_language_arabic">Arabic</string>
+    <string name="feature_settings_printer_title">Printer</string>
+    <string name="feature_setting_add_printer">Add Printer</string>
+    <string name="feature_setting_current_printer">Current Printer</string>
+
+    <!-- Setting language -->
+    <string-array name="feature_setting_language">
+        <item>@string/feature_setting_language_english</item>
+        <item>@string/feature_setting_language_arabic</item>
+    </string-array>
+
+</resources>

@@ -1,6 +1,7 @@
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.casecode.pos.Configuration
+import com.casecode.pos.configureFlavors
 import com.casecode.pos.configureGradleManagedDevices
 import com.casecode.pos.configureKotlinAndroid
 import com.casecode.pos.configurePrintApksTask
@@ -28,21 +29,26 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
          extensions.configure<LibraryExtension> {
             configureKotlinAndroid(this)
             defaultConfig.targetSdk = Configuration.CompileSdk
+             defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+             testOptions.animationsDisabled = true
+             configureFlavors(this)
              configureGradleManagedDevices(this)
+             resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
+
          }
         
          extensions.configure<LibraryAndroidComponentsExtension> {
             configurePrintApksTask(this)
-            
              disableUnnecessaryAndroidTests(target)
          }
          
          dependencies {
             add("implementation", libs.findLibrary("timber").get())
             add("testImplementation", kotlin("test"))
-            
-           // add("testImplementation", libs.findLibrary("test.hamcrest").get())
-            //add("testImplementation", libs.findLibrary("test.hamcrest.library").get())
+             add("testImplementation", libs.findLibrary("test.hamcrest").get())
+            add("testCompileOnly", libs.findLibrary("test.hamcrest.library").get())
+
          }
       }
    }

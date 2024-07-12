@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_invoice_details_print"
-        android:icon="@drawable/outline_print_24"
-        android:title="@string/action_title_invoice_print"
-        app:showAsAction="ifRoom" />
-</menu>

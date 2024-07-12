@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="business_store_types">
+    <!--<string-array name="business_store_types">
         <item>@string/store_type_clothes</item>
         <item>@string/store_type_hyper</item>
         <item>@string/store_type_coffee</item>
@@ -20,5 +20,5 @@
         <item>@string/en</item>
         <item>@string/ar</item>
     </string-array>
-
+-->
 </resources>

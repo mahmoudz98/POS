@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Employee Login -->
+    <string name="feature_login_employee_title">تسجيل دخول الموظف</string>
+    <string name="feature_login_employee_hint_scan_admin_id">مسح هوية المدير</string>
+
+    <string name="feature_login_employee_login_error_uid_empty">يجب عليك مسح هوية المدير لتسجيل الدخول كموظف.</string>
+    <string name="feature_login_employee_login_error_employee_incorrect">اسم المستخدم أو كلمة المرور غير صحيحة.</string>
+    <string name="feature_login_employee_login_error_login">حدث خطأ أثناء تسجيل الدخول. الرجاء المحاولة مرة أخرى.</string>
+    <string name="feature_login_employee_login_action_login">تسجيل الدخول</string>
+
+    <string name="feature_login_employee_error_name_empty">يجب ادخال اسم الموظف</string>
+    <string name="feature_login_employee_error_password_empty">يجب ادخال كلمه سر للموظف</string>
+</resources>

@@ -1,11 +1,13 @@
 digraph G {
-":app" -> ":data"
-":app" -> ":domain"
-":app" -> ":di"
-":data" -> ":domain" [color=red style=bold]
-":di" -> ":data" [color=red style=bold]
-":di" -> ":domain"
-":testing" -> ":domain"
-":testing" -> ":data"
-":testing" -> ":di" [color=red style=bold]
+":app" -> ":core:data"
+":core:data" -> ":core:domain" [color=red style=bold]
+":core:data" -> ":core:common"
+":core:data" -> ":core:datastore"
+":core:domain" -> ":core:model" [color=red style=bold]
+":core:datastore" -> ":core:model"
+":core:datastore" -> ":core:datastore_proto"
+":core:datastore" -> ":core:common"
+":core:datastore-test" -> ":core:common"
+":core:datastore-test" -> ":core:datastore"
+":core:testing" -> ":core:data" [color=red style=bold]
 }
