@@ -23,7 +23,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
             apply("com.android.library")
             apply("org.jetbrains.kotlin.android")
             apply("pos.android.lint")
-            apply("org.gradle.android.cache-fix")
          }
          
          extensions.configure<LibraryExtension> {
@@ -44,10 +43,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project>
          }
          
          dependencies {
-            add("implementation", libs.findLibrary("timber").get())
-            add("testImplementation", kotlin("test"))
-             add("testImplementation", libs.findLibrary("test.hamcrest").get())
-            add("testCompileOnly", libs.findLibrary("test.hamcrest.library").get())
+             add("implementation", libs.findLibrary("timber").get())
+             add("androidTestImplementation", kotlin("test"))
+             add("testImplementation", kotlin("test"))
 
          }
       }
