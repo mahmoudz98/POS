@@ -110,9 +110,7 @@ fun ItemItem(
     iconModifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onPrintButtonClick: () -> Unit,
-
-    ) {
+    onPrintButtonClick: () -> Unit) {
     ListItem(
         leadingContent = { ItemIcon(itemImageUrl, iconModifier.size(64.dp)) },
         headlineContent = { Text(name) },

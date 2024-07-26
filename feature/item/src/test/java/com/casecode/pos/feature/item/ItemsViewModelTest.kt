@@ -70,7 +70,7 @@ class ItemsViewModelTest : BaseTest() {
 
         assertThat(
             viewModel.uiItemsState.value.resourceItems,
-            equalTo(Resource.error(ResourcesData.error_fetching_items)),
+            equalTo(Resource.error(ResourcesData.core_data_error_fetching_items)),
         )
 
         collectJob.cancel()
@@ -117,7 +117,7 @@ class ItemsViewModelTest : BaseTest() {
             )
             assertThat(
                 viewModel.userMessage.value,
-                `is`(ResourcesData.item_added_successfully),
+                `is`(ResourcesData.core_data_item_added_successfully),
             )
         }
 
@@ -156,7 +156,7 @@ class ItemsViewModelTest : BaseTest() {
             assertThat( items.data.last().imageUrl , `is`("imageTest.com"))
             assertThat(
                 viewModel.userMessage.value,
-                `is`(ResourcesData.item_added_successfully),
+                `is`(ResourcesData.core_data_item_added_successfully),
             )
             collectJob.cancel()
         }
@@ -178,7 +178,7 @@ class ItemsViewModelTest : BaseTest() {
             // Then - assert message updated item.
             assertThat(
                 viewModel.userMessage.value,
-                `is`(ResourcesData.item_updated_successfully),
+                `is`(ResourcesData.core_data_item_updated_successfully),
             )
 
         }
@@ -215,7 +215,7 @@ class ItemsViewModelTest : BaseTest() {
             viewModel.checkNetworkAndDeleteItem()
 
             // Then
-             assertThat(viewModel.userMessage.value, `is`(ResourcesData.item_deleted_successfully))
+             assertThat(viewModel.userMessage.value, `is`(ResourcesData.core_data_item_deleted_successfully))
         }
 
     @Test

@@ -204,7 +204,7 @@ internal fun ItemsScreen(
 
 
 @Composable
-fun ItemsEmptyScreen(modifier: Modifier = Modifier) {
+private fun ItemsEmptyScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

@@ -50,15 +50,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
-
-import com.casecode.pos.core.ui.startScanningBarcode
+import com.casecode.pos.core.ui.scanOptions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanOptions
 import timber.log.Timber
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -88,18 +85,13 @@ fun ItemDialog(
     val quantityError = remember { mutableStateOf(false) }
     val barcodeError = remember { mutableStateOf(false) }
 
-    var isScanLauncher by remember { mutableStateOf(false) }
     var isTakeImageOrPick by remember { mutableStateOf(false) }
     var bitmapImage = remember<Bitmap?> { null }
     val snackState = remember { SnackbarHostState() }
     val userMessage = remember { mutableStateOf<Int?>(null) }
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
-    isScanLauncher = LaunchedScanBarcode(
-        isScanLauncher, cameraPermissionState, context,
-        onFailureScanEmpty = { message -> userMessage.value = message },
-        onResultScan = { barcode.value = it },
-    )
+
 
 
     LaunchedTakePictureOrImage(
@@ -114,7 +106,7 @@ fun ItemDialog(
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
-        onDismissRequest = { onDismiss() },
+        onDismissRequest = onDismiss ,
         title = {
             Text(
                 if (isUpdate) stringResource(R.string.feature_item_update_item_button_text) else stringResource(
@@ -202,7 +194,16 @@ fun ItemDialog(
                             .weight(.5f)
                             .align(Alignment.CenterVertically),
                         onClick = {
-                            isScanLauncher = true
+                            context.scanOptions(
+                                onResult = {
+                                    barcode.value = it
+
+                                },
+                                onFailure = {
+                                    userMessage.value = it
+                                },
+                                onCancel = { userMessage.value = it },
+                            )
 
                         },
                     ) {
@@ -342,58 +343,4 @@ private fun LaunchedTakePictureOrImage(
 
         }
     }
-}
-
-@Composable
-@OptIn(ExperimentalPermissionsApi::class)
-private fun LaunchedScanBarcode(
-    isScanLauncher: Boolean,
-    cameraPermissionState: PermissionState,
-    context: Context,
-    onResultScan: (String) -> Unit,
-    onFailureScanEmpty: (Int) -> Unit,
-): Boolean {
-    var isScanLauncher1 = isScanLauncher
-    val scanBarcodeLauncher = rememberLauncherForActivityResult(
-        contract = ScanContract(),
-        onResult = { result ->
-            result.contents.let {
-                if (it == null) {
-                    onFailureScanEmpty(com.casecode.pos.core.ui.R.string.core_ui_scan_result_empty)
-                } else {
-                    Timber.e("barcodeResult: $it")
-                    onResultScan(it)
-                }
-                isScanLauncher1 = false
-            }
-        },
-    )
-
-    // Launch activity result request within the effect
-    LaunchedEffect(isScanLauncher1, cameraPermissionState.status) {
-        if (isScanLauncher1) {
-            when {
-                cameraPermissionState.status.isGranted -> {
-                    scanBarcodeLauncher.launch(
-                        ScanOptions().startScanningBarcode(
-                            context, R.string.feature_item_scan_barcode_text
-                        ),
-                    )
-                }
-
-                else -> {
-                    if (cameraPermissionState.status.shouldShowRationale) {
-                        isScanLauncher1 = false
-                        cameraPermissionState.launchPermissionRequest()
-
-                    } else {
-                        isScanLauncher1 = false
-                        cameraPermissionState.launchPermissionRequest()
-                    }
-                }
-            }
-
-        }
-    }
-    return isScanLauncher1
 }
