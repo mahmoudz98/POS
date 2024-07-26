@@ -13,7 +13,6 @@ import com.casecode.pos.core.data.R.string as stringData
 class SignInActivityViewModelTest : BaseTest() {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
-
     private lateinit var viewModel: SignInActivityViewModel
 
     override fun init() {
@@ -45,7 +44,7 @@ class SignInActivityViewModelTest : BaseTest() {
 
         viewModel.signIn()
 
-        assertEquals(stringData.sign_in_success, viewModel.signInUiState.value.userMessage)
+        assertEquals(stringData.core_data_sign_in_success, viewModel.signInUiState.value.userMessage)
     }
 
 
