@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import com.casecode.pos.core.data.service.AuthService
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
-
+    @Inject
+    lateinit var authService : AuthService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,10 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val darkTheme = isSystemInDarkTheme()
 
-            // Update the edge to edge configuration to match the theme
-            // This is the same parameters as the default enableEdgeToEdge call, but we manually
-            // resolve whether or not to show dark theme using uiState, since it can be different
-            // than the configuration's dark theme value based on the user preference.
             DisposableEffect(darkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
@@ -45,6 +43,7 @@ class MainActivity : AppCompatActivity() {
             }
             val appState = rememberMainAppState(
                 networkMonitor = networkMonitor,
+                authService = authService
             )
             CompositionLocalProvider {
                 POSTheme {
