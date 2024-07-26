@@ -7,13 +7,13 @@ plugins {
 group = "com.casecode.pos.buildlogic"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+        jvmTarget = JvmTarget.JVM_21
     }
 }
 
@@ -77,9 +77,9 @@ gradlePlugin {
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
 
-        register("androidTest4") {
-            id = "pos.android.test4"
-            implementationClass = "AndroidTest4ConventionPlugin"
+        register("androidTest") {
+            id = "pos.android.test"
+            implementationClass = "AndroidTestConventionPlugin"
         }
 
         register("androidLint") {
