@@ -1,0 +1,3 @@
+# :feature:signout module
+## Dependency graph
+![Dependency graph](../../docs/images/graphs/dep_graph_feature_signout.svg)

@@ -84,7 +84,7 @@ fun SignOutDialog(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = currentUser?.email ?: "mahmoud99239@gmail.com",
+                    text = currentUser?.email ?: "",
                     style = MaterialTheme.typography.labelMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
