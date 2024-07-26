@@ -16,4 +16,6 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(projects.core.testing)
 
+    testImplementation(libs.test.hamcrest)
+    testCompileOnly(libs.test.hamcrest.library)
 }
