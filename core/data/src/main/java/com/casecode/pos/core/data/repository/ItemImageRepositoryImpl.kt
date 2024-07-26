@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.data.service.checkHasUser
+import com.casecode.pos.core.data.service.checkUserNotFound
 import com.casecode.pos.core.data.utils.IMAGES_PATH_FIELD
 import com.casecode.pos.core.data.utils.ITEM_PATH_FIELD
 import com.casecode.pos.core.domain.repository.DeleteImage
@@ -46,7 +46,7 @@ class ItemImageRepositoryImpl @Inject constructor(
     override suspend fun uploadImage(bitmap: Bitmap, imageName: String): UploadImage {
         return withContext(ioDispatcher) {
             try {
-                authService.checkHasUser<String> { return@withContext it }
+                authService.checkUserNotFound<String> { return@withContext it }
                 val currentUserId = authService.currentUserId()
                 // Get a reference to the Firebase Storage location
                 val storageRef =
@@ -64,19 +64,19 @@ class ItemImageRepositoryImpl @Inject constructor(
 
                         }.addOnFailureListener { downloadUrlFailure ->
                             Timber.e(downloadUrlFailure)
-                            continuation.resume(Resource.error(StringResource.download_url_failure))
+                            continuation.resume(Resource.error(StringResource.core_data_download_url_failure))
                         }
                     }.addOnFailureListener { uploadFailure ->
                         Timber.e(uploadFailure)
-                        continuation.resume(Resource.error(StringResource.upload_image_failure))
+                        continuation.resume(Resource.error(StringResource.core_data_upload_image_failure))
                     }
                 }
             } catch (e: UnknownHostException) {
                 Timber.e(e)
-                Resource.error(StringResource.upload_image_failure_network)
+                Resource.error(StringResource.core_data_upload_image_failure_network)
             } catch (e: Exception) {
                 Timber.e(e)
-                Resource.error(StringResource.upload_image_failure)
+                Resource.error(StringResource.core_data_upload_image_failure)
             }
         }
     }
@@ -106,20 +106,20 @@ class ItemImageRepositoryImpl @Inject constructor(
                             continuation.resume(Resource.success(downloadUrl))
                         }.addOnFailureListener { downloadUrlFailure ->
                             Timber.e(downloadUrlFailure)
-                            continuation.resume(Resource.error(StringResource.download_url_failure))
+                            continuation.resume(Resource.error(StringResource.core_data_download_url_failure))
                         }
                     }.addOnFailureListener { replaceFailure ->
                         Timber.e(replaceFailure)
-                        continuation.resume(Resource.error(StringResource.replace_image_failure))
+                        continuation.resume(Resource.error(StringResource.core_data_replace_image_failure))
                     }
                 }
 
             } catch (e: UnknownHostException) {
-                Resource.error(StringResource.replace_image_failure_network)
+                Resource.error(StringResource.core_data_replace_image_failure_network)
 
             } catch (e: Exception) {
                 Timber.e(e)
-                Resource.error(StringResource.replace_image_failure)
+                Resource.error(StringResource.core_data_replace_image_failure)
             }
         }
     }
@@ -145,15 +145,15 @@ class ItemImageRepositoryImpl @Inject constructor(
                         continuation.resume(Resource.success(true))
                     }.addOnFailureListener { deleteFailure ->
                         Timber.e(deleteFailure)
-                        continuation.resume(Resource.error(StringResource.delete_image_failure_generic))
+                        continuation.resume(Resource.error(StringResource.core_data_delete_image_failure_generic))
                     }
                 }
             } catch (e: UnknownHostException) {
-                Resource.error(StringResource.delete_image_failure_network)
+                Resource.error(StringResource.core_data_delete_image_failure_network)
 
             } catch (e: Exception) {
                 Timber.e(e)
-                Resource.error(StringResource.delete_image_failure_generic)
+                Resource.error(StringResource.core_data_delete_image_failure_generic)
             }
         }
     }

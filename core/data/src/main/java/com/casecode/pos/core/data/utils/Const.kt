@@ -3,6 +3,7 @@ package com.casecode.pos.core.data.utils
 // collection path
 const val USERS_COLLECTION_PATH = "users"
 const val ITEMS_COLLECTION_PATH = "items"
+const val PRINTER_INFO_COLLECTION_PATH = "printerINFO"
 const val CUSTOMERS_COLLECTION_PATH = "customers"
 const val BUSINESS_FIELD = "business"
 const val BRANCHES_FIELD = "branches"
@@ -41,9 +42,6 @@ const val EMPLOYEE_PASSWORD_FIELD = "password"
 const val EMPLOYEE_BRANCH_NAME_FIELD = "branchName"
 const val EMPLOYEE_PERMISSION_FIELD = "permission"
 
-//  fields in Store
-const val STORECODE_FIELD = "storeCode"
-const val STORETYPE_FIELD = "storeType"
 
 // fields in items.
 const val IMAGE_FIELDS = "image"
@@ -64,3 +62,12 @@ const val Invoice_ITEMS_FIELD = "items"
 
 const val ITEM_PATH_FIELD = "item"
 const val IMAGES_PATH_FIELD = "images"
+
+
+// Fields in PrinterInfo
+const val PRINTER_INFO_NAME_FIELD ="name"
+const val PRINTER_INFO_CONNECTION_TYPE_FIELD = "connectionType"
+const val PRINTER_INFO_ADDRESS_FIELD = "address"
+const val PRINTER_INFO_PORT_FIELD = "port"
+const val PRINTER_INFO_IS_CURRENT_SELECTED_FIELD = "isCurrentSelected"
+const val PRINTER_INFO_SIZE_FIELD= "size"

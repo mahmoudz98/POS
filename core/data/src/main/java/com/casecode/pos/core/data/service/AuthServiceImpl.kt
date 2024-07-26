@@ -29,6 +29,7 @@ class AuthServiceImpl @Inject constructor(
 ) : AuthService {
     override val loginData: Flow<LoginStateResult> = posPreferencesDataSource.loginData.map {
         LoginStateResult.Loading
+        delay(300L)
         it
     }
 
@@ -36,6 +37,13 @@ class AuthServiceImpl @Inject constructor(
         return withContext(io) {
             async {
                posPreferencesDataSource.currentUid.first()?:""
+            }.await()
+        }
+    }
+    override suspend fun currentNameLogin(): String {
+        return withContext(io){
+            async {
+                posPreferencesDataSource.currentNameLogin.first()?:""
             }.await()
         }
     }

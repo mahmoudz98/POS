@@ -12,7 +12,7 @@ import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.service.checkHasUser
+import com.casecode.pos.core.data.service.checkUserNotFound
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
@@ -39,7 +39,7 @@ constructor(
     ): AddSubscriptionBusiness {
         return withContext(ioDispatcher) {
             try {
-               auth.checkHasUser<Boolean> {
+               auth.checkUserNotFound<Boolean> {
                     return@withContext it
                }
                 val currentUID = auth.currentUserId()
@@ -57,17 +57,17 @@ constructor(
                                 Timber.d("Subscription business is added successfully")
                                 continuation.resume(AddSubscriptionBusiness.success(true))
                             }.addOnFailureListener {
-                                continuation.resume(AddSubscriptionBusiness.error(R.string.add_subscription_business_failure))
+                                continuation.resume(AddSubscriptionBusiness.error(R.string.core_data_add_subscription_business_failure))
 
                                 Timber.e("Add Subscription Business failure: $it")
                             }
                     }
                 resultAddSubscription
             } catch (e: UnknownHostException) {
-                AddSubscriptionBusiness.error(R.string.add_subscription_business_network)
+                AddSubscriptionBusiness.error(R.string.core_data_add_subscription_business_network)
             } catch (e: Exception) {
                 Timber.e("Exception while adding business: $e")
-                AddSubscriptionBusiness.error(R.string.add_subscription_business_failure)
+                AddSubscriptionBusiness.error(R.string.core_data_add_subscription_business_failure)
             }
         }
     }
@@ -75,7 +75,7 @@ constructor(
     override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> {
         return callbackFlow<Resource<List<SubscriptionBusiness>>> {
             trySend(Resource.Loading)
-            auth.checkHasUser<List<SubscriptionBusiness>> {
+            auth.checkUserNotFound<List<SubscriptionBusiness>> {
                 trySend(it)
                 close()
             }
@@ -85,7 +85,7 @@ constructor(
                     .addSnapshotListener { snapshot, error ->
                         if (error != null) {
                             Timber.e(error)
-                            trySend(Resource.error(R.string.add_subscription_business_failure))
+                            trySend(Resource.error(R.string.core_data_add_subscription_business_failure))
                             close()
                         }
                         @Suppress("UNCHECKED_CAST")

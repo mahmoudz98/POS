@@ -17,7 +17,7 @@ import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.service.checkHasUser
+import com.casecode.pos.core.data.service.checkUserNotFound
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -42,7 +42,7 @@ class BusinessRepositoryImpl
     override suspend fun getBusiness(): Resource<Business> {
         return withContext(ioDispatcher) {
             try {
-                auth.checkHasUser<Business> {
+                auth.checkUserNotFound<Business> {
                     return@withContext it
                 }
 
@@ -55,10 +55,10 @@ class BusinessRepositoryImpl
                 return@withContext Resource.success(business)
 
             } catch (e: UnknownHostException) {
-                Resource.error(R.string.get_business_failure_network)
+                Resource.error(R.string.core_data_get_business_failure_network)
             } catch (e: Exception) {
                 Timber.e(e)
-                return@withContext Resource.error(R.string.get_business_failure)
+                return@withContext Resource.error(R.string.core_data_get_business_failure)
             }
         }
     }
@@ -68,7 +68,7 @@ class BusinessRepositoryImpl
     ): AddBusiness {
         return withContext(ioDispatcher) {
             try {
-                auth.checkHasUser<Boolean> {
+                auth.checkUserNotFound<Boolean> {
                     return@withContext it
                 }
 
@@ -82,16 +82,16 @@ class BusinessRepositoryImpl
                         }.addOnFailureListener {
                             val message = it.message ?: "Failure in database, when add new business"
                             Timber.e("Business Failure: $message")
-                            continuation.resume(AddBusiness.error(R.string.add_subscription_business_failure))
+                            continuation.resume(AddBusiness.error(R.string.core_data_add_subscription_business_failure))
                         }
                 }
                 resultAddBusiness
             } catch (e: FirebaseFirestoreException) {
-                AddBusiness.error(R.string.add_business_failure)
+                AddBusiness.error(R.string.core_data_add_business_failure)
             } catch (e: UnknownHostException) {
-                AddBusiness.error(R.string.add_business_network)
+                AddBusiness.error(R.string.core_data_add_business_network)
             } catch (e: Exception) {
-                AddBusiness.error(R.string.add_business_failure)
+                AddBusiness.error(R.string.core_data_add_business_failure)
             }
         }
     }
@@ -100,7 +100,7 @@ class BusinessRepositoryImpl
         return withContext(ioDispatcher) {
             try {
                 if (!auth.hasUser()) {
-                    return@withContext Resource.empty(message = R.string.uid_empty)
+                    return@withContext Resource.empty(message = R.string.core_data_uid_empty)
                 }
                 val currentUID = auth.currentUserId()
 
@@ -113,14 +113,14 @@ class BusinessRepositoryImpl
                             ).addOnSuccessListener {
                             continuation.resume(CompleteBusiness.success(true))
                         }.addOnFailureListener {
-                            continuation.resume(CompleteBusiness.error(R.string.complete_business_failure))
+                            continuation.resume(CompleteBusiness.error(R.string.core_data_complete_business_failure))
                         }
                     }
                 resultCompleteBusinessStep
             } catch (e: FirebaseFirestoreException) {
-                CompleteBusiness.error(R.string.complete_business_failure)
+                CompleteBusiness.error(R.string.core_data_complete_business_failure)
             } catch (e: Exception) {
-                CompleteBusiness.error(R.string.complete_business_failure)
+                CompleteBusiness.error(R.string.core_data_complete_business_failure)
             }
         }
     }
@@ -128,7 +128,7 @@ class BusinessRepositoryImpl
     override suspend fun addBranch(branch: Branch): Resource<Boolean> {
         return withContext(ioDispatcher) {
             if (!auth.hasUser()) {
-                return@withContext Resource.empty(message = R.string.uid_empty)
+                return@withContext Resource.empty(message = R.string.core_data_uid_empty)
             }
             val currentUID = auth.currentUserId()
 
@@ -141,12 +141,12 @@ class BusinessRepositoryImpl
                 }.addOnFailureListener {
                     when (it) {
                         is UnknownHostException -> {
-                            continuation.resume(Resource.error(R.string.add_branch_business_network))
+                            continuation.resume(Resource.error(R.string.core_data_add_branch_business_network))
                         }
 
                         else -> {
                             Timber.e("Exception while adding new branch: $it")
-                            continuation.resume(Resource.error(R.string.add_branch_business_failure))
+                            continuation.resume(Resource.error(R.string.core_data_add_branch_business_failure))
                         }
                     }
                 }

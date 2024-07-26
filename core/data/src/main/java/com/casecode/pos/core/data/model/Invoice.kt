@@ -18,12 +18,12 @@ import java.util.Date
 data class InvoiceDataModel(
     @DocumentId val invoiceId: String = "",
     @ServerTimestamp val date: Date = Date(),
-    val createdBy: Int = 0,
+    val createdBy: String = "",
     val customer: Customer? = null,
     val items: List<Item> = emptyList(),
 )
- fun Invoice.asExternalMapper(documentRef: DocumentReference, ): Map<String, Any?> {
-    val networkInvoice = InvoiceDataModel(documentRef.id, this.date, this.createdBy, this.customer, this.items)
+ fun Invoice.asExternalMapper(documentRef: DocumentReference,createdBy: String ): Map<String, Any?> {
+    val networkInvoice = InvoiceDataModel(documentRef.id, this.date, createdBy, this.customer, this.items)
     val invoiceMap = mapOf(
         Invoice_NAME_FIELD to documentRef.id,
         Invoice_DATE_FIELD to networkInvoice.date,

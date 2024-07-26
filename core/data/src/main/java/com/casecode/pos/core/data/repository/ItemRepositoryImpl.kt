@@ -5,7 +5,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.data.service.checkHasUser
+import com.casecode.pos.core.data.service.checkUserNotFound
 import com.casecode.pos.core.data.service.trace
 import com.casecode.pos.core.data.utils.ITEMS_COLLECTION_PATH
 import com.casecode.pos.core.data.utils.ITEM_NAME_FIELD
@@ -60,18 +60,15 @@ class ItemRepositoryImpl
 
     override fun getItems(): Flow<Resource<List<Item>>> = flow<Resource<List<Item>>> {
         emit(Resource.Loading)
-        delay(400)
+        delay(300)
         val uid = authService.currentUserId()
         Timber.e("uid: $uid")
-        authService.checkHasUser<List<Item>> {
+        authService.checkUserNotFound<List<Item>> {
             emit(it)
-            Timber.e("User not found")
             return@flow
         }
 
-        Timber.e("Go ON items")
-
-        firestore.getCollectionRefFromUser(authService.currentUserId(), ITEMS_COLLECTION_PATH)
+        firestore.getCollectionRefFromUser(uid, ITEMS_COLLECTION_PATH)
             .orderBy(ITEM_NAME_FIELD)
             .snapshots()
             .collect { snapshot ->
@@ -97,14 +94,14 @@ class ItemRepositoryImpl
             }
     }.catch { e ->
         Timber.e(e)
-        emit(Resource.error(R.string.error_fetching_items))
+        emit(Resource.error(R.string.core_data_error_fetching_items))
     }.flowOn(ioDispatcher)
 
 
     override suspend fun addItem(item: Item): AddItem {
         return withContext(ioDispatcher) {
             try {
-                authService.checkHasUser<Int> {
+                authService.checkUserNotFound<Int> {
                     return@withContext it
                 }
                 val currentUserId = authService.currentUserId()
@@ -116,17 +113,17 @@ class ItemRepositoryImpl
                         currentUserId,
                         ITEMS_COLLECTION_PATH, sku,
                     ).set(itemMap).addOnSuccessListener {
-                        continuation.resume(Resource.Success(R.string.item_added_successfully))
+                        continuation.resume(Resource.Success(R.string.core_data_item_added_successfully))
                     }.addOnFailureListener { failure ->
                         Timber.e(failure)
-                        continuation.resume(Resource.error(R.string.add_item_failure_generic))
+                        continuation.resume(Resource.error(R.string.core_data_add_item_failure_generic))
                     }
                 }
             } catch (e: UnknownHostException) {
-                Resource.error(R.string.add_item_failure_network)
+                Resource.error(R.string.core_data_add_item_failure_network)
             } catch (e: Exception) {
                 Timber.e(e)
-                Resource.error(R.string.add_item_failure_generic)
+                Resource.error(R.string.core_data_add_item_failure_generic)
             }
         }
     }
@@ -135,7 +132,7 @@ class ItemRepositoryImpl
         return withContext(ioDispatcher) {
             trace(UPDATE_ITEM_TRACE) {
                 try {
-                    authService.checkHasUser<Int> {
+                    authService.checkUserNotFound<Int> {
                         return@withContext it
                     }
                     val currentUserUid = authService.currentUserId()
@@ -151,18 +148,18 @@ class ItemRepositoryImpl
                             itemMap,
                             SetOptions.merge(),
                         ).addOnSuccessListener {
-                            continuation.resume(Resource.Success(R.string.item_updated_successfully))
+                            continuation.resume(Resource.Success(R.string.core_data_item_updated_successfully))
                         }.addOnFailureListener { failure ->
                             Timber.e(failure)
 
-                            continuation.resume(Resource.error(R.string.update_item_failure_generic))
+                            continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
                         }
                     }
                 } catch (e: UnknownHostException) {
-                    Resource.error(R.string.update_item_failure_network)
+                    Resource.error(R.string.core_data_update_item_failure_network)
                 } catch (e: Exception) {
                     Timber.e(e)
-                    Resource.error(R.string.update_item_failure_generic)
+                    Resource.error(R.string.core_data_update_item_failure_generic)
                 }
             }
         }
@@ -172,7 +169,7 @@ class ItemRepositoryImpl
         return withContext(ioDispatcher) {
             trace(UPDATE_QUANTITY_ITEM_TRACE) {
                 try {
-                    authService.checkHasUser<List<Item>> {
+                    authService.checkUserNotFound<List<Item>> {
                         return@withContext it
                     }
                     val currentUserUid = authService.currentUserId()
@@ -197,15 +194,15 @@ class ItemRepositoryImpl
 
                         }.addOnFailureListener {
                             Timber.e(it)
-                            continuation.resume(Resource.error(R.string.update_item_failure_generic))
+                            continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
                         }
 
                     }
                 } catch (e: UnknownHostException) {
-                    Resource.error(R.string.update_item_failure_network)
+                    Resource.error(R.string.core_data_update_item_failure_network)
                 } catch (e: Exception) {
                     Timber.e(e)
-                    Resource.error(R.string.update_item_failure_generic)
+                    Resource.error(R.string.core_data_update_item_failure_generic)
                 }
             }
         }
@@ -214,7 +211,7 @@ class ItemRepositoryImpl
     override suspend fun deleteItem(item: Item): DeleteItem {
         return withContext(ioDispatcher) {
             try {
-                authService.checkHasUser<Int> {
+                authService.checkUserNotFound<Int> {
                     return@withContext it
                 }
                 val currentUserId = authService.currentUserId()
@@ -225,18 +222,18 @@ class ItemRepositoryImpl
                         ITEMS_COLLECTION_PATH,
                         item.sku,
                     ).delete().addOnSuccessListener {
-                        continuation.resume(Resource.success(R.string.item_deleted_successfully))
+                        continuation.resume(Resource.success(R.string.core_data_item_deleted_successfully))
                     }.addOnFailureListener { failure ->
                         Timber.e(failure)
-                        continuation.resume(Resource.error(R.string.delete_item_failure_generic))
+                        continuation.resume(Resource.error(R.string.core_data_delete_item_failure_generic))
                     }
                 }
 
             } catch (e: UnknownHostException) {
-                Resource.error(R.string.delete_item_failure_network)
+                Resource.error(R.string.core_data_delete_item_failure_network)
             } catch (e: Exception) {
                 Timber.e(e)
-                Resource.error(R.string.delete_item_failure_generic)
+                Resource.error(R.string.core_data_delete_item_failure_generic)
             }
         }
     }

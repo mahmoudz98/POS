@@ -5,6 +5,7 @@ import com.casecode.pos.core.data.repository.EmployeesBusinessRepositoryImpl
 import com.casecode.pos.core.data.repository.InvoiceRepositoryImpl
 import com.casecode.pos.core.data.repository.ItemImageRepositoryImpl
 import com.casecode.pos.core.data.repository.ItemRepositoryImpl
+import com.casecode.pos.core.data.repository.PrinterRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsBusinessRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsRepositoryImpl
 import com.casecode.pos.core.domain.repository.BusinessRepository
@@ -12,6 +13,7 @@ import com.casecode.pos.core.domain.repository.EmployeesBusinessRepository
 import com.casecode.pos.core.domain.repository.InvoiceRepository
 import com.casecode.pos.core.domain.repository.ItemImageRepository
 import com.casecode.pos.core.domain.repository.ItemRepository
+import com.casecode.pos.core.domain.repository.PrinterRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
 import dagger.Binds
@@ -44,5 +46,7 @@ abstract class RepositoryModule {
     @Binds
     internal abstract fun bindInvoiceRepo(invoiceRepositoryImpl: InvoiceRepositoryImpl): InvoiceRepository
 
+    @Binds
+    internal abstract fun bindPrinterRepo(printerRepositoryImpl: PrinterRepositoryImpl): PrinterRepository
 
 }
