@@ -105,7 +105,7 @@ class SubscriptionsBusinessRepositoryImplTest {
                 subscriptionRepository.setSubscriptionBusiness(subscription)
 
             // Assert
-            val expectedResult = Resource.error<Boolean>(R.string.add_subscription_business_network)
+            val expectedResult = Resource.error<Boolean>(R.string.core_data_add_subscription_business_network)
             assertThat(resultAddSubscription, `is`(expectedResult))
         }
 
@@ -132,7 +132,7 @@ class SubscriptionsBusinessRepositoryImplTest {
                 subscriptionRepository.setSubscriptionBusiness(subscription)
 
             // Assert
-            val expectedResult = Resource.error<Boolean>(R.string.add_subscription_business_failure)
+            val expectedResult = Resource.error<Boolean>(R.string.core_data_add_subscription_business_failure)
             assertThat(resultAddSubscription, `is`(expectedResult))
         }
 }

@@ -17,7 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.unmockkAll
@@ -91,7 +90,7 @@ class BusinessRepositoryImplTest {
 
             val result = businessRepository.setBusiness(createValidBusiness())
 
-            assertThat(result, `is`(Resource.error(R.string.add_business_failure)))
+            assertThat(result, `is`(Resource.error(R.string.core_data_add_business_failure)))
         }
 
     @Test
@@ -103,7 +102,7 @@ class BusinessRepositoryImplTest {
             // Call the method you want to test
             val result = businessRepository.setBusiness(createValidBusiness())
 
-            assertThat(result, `is`(Resource.error(R.string.add_business_failure)))
+            assertThat(result, `is`(Resource.error(R.string.core_data_add_business_failure)))
         }
 
     @Test
@@ -122,7 +121,7 @@ class BusinessRepositoryImplTest {
             val result = businessRepository.setBusiness(createValidBusiness())
 
             // Then - assert that the result is an error
-            assertThat(result, `is`(Resource.error(R.string.add_business_network)))
+            assertThat(result, `is`(Resource.error(R.string.core_data_add_business_network)))
         }
 
     @Test
@@ -171,7 +170,7 @@ class BusinessRepositoryImplTest {
             // Act
             val result = businessRepository.completeBusinessSetup()
             // Assert
-            assertThat(result, `is`(Resource.error(R.string.complete_business_failure)))
+            assertThat(result, `is`(Resource.error(R.string.core_data_complete_business_failure)))
         }
 
     @Test
@@ -190,7 +189,7 @@ class BusinessRepositoryImplTest {
             // Act
             val result = businessRepository.completeBusinessSetup()
             // Assert
-            assertThat(result, `is`(Resource.error(R.string.complete_business_failure)))
+            assertThat(result, `is`(Resource.error(R.string.core_data_complete_business_failure)))
         }
 
     private fun mockFirestoreUpdateSuccess() {

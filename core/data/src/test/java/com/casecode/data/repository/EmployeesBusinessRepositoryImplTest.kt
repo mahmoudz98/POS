@@ -96,7 +96,7 @@ class EmployeesBusinessRepositoryImplTest {
             // Act
             val resultEmployees = employeesBusinessRepositoryImpl.setEmployees(employees)
             // Assert
-            val expectedResult = Resource.error<Boolean>(R.string.add_employees_business_failure)
+            val expectedResult = Resource.error<Boolean>(R.string.core_data_add_employees_business_failure)
             assertThat(resultEmployees, `is`(expectedResult))
         }
 
@@ -117,7 +117,7 @@ class EmployeesBusinessRepositoryImplTest {
             // Act
             val resultEmployees = employeesBusinessRepositoryImpl.setEmployees(employees)
             // Assert
-            val expectedResult = Resource.error<Boolean>(R.string.add_employees_business_network)
+            val expectedResult = Resource.error<Boolean>(R.string.core_data_add_employees_business_network)
             assertThat(resultEmployees, `is`(expectedResult))
         }
 
