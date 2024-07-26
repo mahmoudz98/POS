@@ -20,12 +20,24 @@ class PosPreferencesDataSource @Inject constructor(private val loginPreferences:
     val currentUid = loginPreferences.data.map {
         it.uid
     }
+    val currentNameLogin = loginPreferences.data.map {
+        when (it.authState) {
+            AuthState.LOGIN_ADMIN -> {
+                "Login Admin"
+            }
+
+            AuthState.LOGIN_EMPLOYEE -> {
+                it.employee.name
+            }
+
+            else -> ""
+        }
+    }
     val loginData = loginPreferences.data.map {
         when (it.authState) {
             AuthState.LOGIN_ADMIN -> {
                 LoginStateResult.SuccessLoginAdmin(it.uid)
             }
-
             AuthState.LOGIN_EMPLOYEE -> {
                 LoginStateResult.EmployeeLogin(
                     EmployeeLoginData(
