@@ -28,33 +28,21 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
 
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-
-    @Suppress("UnstableApiUsage") testOptions {
-        animationsDisabled = true
-        packaging {
-            jniLibs {
-                useLegacyPackaging = true
-            }
-        }
-        unitTests {
-            isReturnDefaultValues = true
-            isIncludeAndroidResources = true
-        }
-    }
-
-
-
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+
+     testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
 
     namespace = "com.casecode.pos"
 }
@@ -69,7 +57,7 @@ dependencies {
     implementation(projects.feature.sale)
     implementation(projects.feature.setting)
     implementation(projects.feature.signout)
-    implementation(projects.feature.statistics)
+    implementation(projects.feature.reports)
 
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
@@ -94,29 +82,25 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
 
-    // scanner barcode
-    implementation(libs.zxing.android.embedded)
 
-    // coroutines
-   // implementation(libs.coroutines.android)
+
     debugCompileOnly(libs.kotlinx.coroutines.debug)
     // Debug tools
     // debugImplementation(libs.leakcanary)
     implementation(libs.timber)
     // ******* UNIT TESTING ******************************************************
+    debugImplementation(projects.uiTestHiltManifest)
     testImplementation(projects.core.testing)
 
-    // jvm test - Hilt
     kspTest(libs.hilt.compiler)
 
     // assertion
-    testImplementation(libs.test.hamcrest)
-    testImplementation(libs.test.hamcrest.library)
+   // testImplementation(libs.test.hamcrest)
+    //testImplementation(libs.test.hamcrest.library)
 
     // mockito with kotlin
     testImplementation(kotlin("test"))
-    // coroutines unit test
-   // testImplementation(libs.coroutines.test)
+
     testImplementation(libs.coroutines.android)
 
     androidTestImplementation(projects.core.testing)
@@ -130,7 +114,6 @@ dependencies {
     // AndroidX Test - Hilt testing
     kspAndroidTest(libs.hilt.compiler)
 
-    // implementation(kotlin("reflect"))
 }
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
