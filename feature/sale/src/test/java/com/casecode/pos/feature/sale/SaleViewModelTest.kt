@@ -1,5 +1,7 @@
 package com.casecode.pos.feature.sale
 
+import android.icu.text.Collator
+import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.testing.base.BaseTest
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
@@ -7,6 +9,8 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
+import java.util.Locale
+import kotlin.test.assertTrue
 
 
 class SaleViewModelTest : BaseTest() {
@@ -26,6 +30,7 @@ class SaleViewModelTest : BaseTest() {
         )
     }
 
+
     @Test
     fun fetchItems_whenHasItems_returnListOfItems() = runTest {
         // When
@@ -36,7 +41,7 @@ class SaleViewModelTest : BaseTest() {
     }
 
 
-    @Test
+    @kotlin.test.Test
     fun addItemInvoice_ShouldAddItemInInvoiceAndUpdateStock() = runTest {
         // Given
         testItemRepository.sendItems()
@@ -190,6 +195,61 @@ class SaleViewModelTest : BaseTest() {
             viewModel.uiState.value.userMessage,
             `is`(R.string.feature_sale_error_update_invoice_item_quantity),
         )
+    }
+
+    @Test
+    fun checkFilterItemsWithArabicNumber() {
+        val searchQuery = "١٢٣"
+        val collator = java.text.Collator.getInstance(Locale("ar")) // Use the default locale
+        collator.strength = Collator.PRIMARY // Case-insensitive and ignores accents
+        val normalizedQuery = normalizeNumber(searchQuery)
+        val items = listOf(
+            Item(
+                name = "Iphone1",
+                price = 10.0,
+                quantity = 5.0,
+                sku = "123",
+                unitOfMeasurement = null,
+                imageUrl = null,
+            ),
+            Item(
+                name = "Iphone6",
+                price = 10.0,
+                quantity = 5.0,
+                sku = "1234",
+                unitOfMeasurement = null,
+                imageUrl = null,
+            ),
+        )
+        val filter = items.filter {
+            val normalizedSku = normalizeNumber(it.sku)
+            println("normalizedSku: $normalizedSku")
+            println("normilzeQue: $normalizedQuery")
+            collator.compare(normalizedQuery, normalizedSku) == 0 ||
+                    normalizedSku.contains(normalizedQuery)
+
+        }
+        print("filter: $filter")
+        assertTrue(filter.isNotEmpty())
+    }
+
+    private fun normalizeNumber(input: String): String {
+        val arabicNumerals = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+        val englishNumerals = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+
+        val sb = StringBuilder()
+        for (char in input) {
+            when (char) {
+                in englishNumerals -> sb.append(char)
+                in arabicNumerals -> {
+                    val index = arabicNumerals.indexOf(char)
+                    sb.append(englishNumerals[index])
+                }
+
+                else -> sb.append(char) // Append non-numeric characters as is
+            }
+        }
+        return sb.toString()
     }
 
 }

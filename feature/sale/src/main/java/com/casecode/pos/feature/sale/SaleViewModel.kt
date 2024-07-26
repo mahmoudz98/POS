@@ -31,7 +31,7 @@ class SaleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SaleUiState())
     val uiState: StateFlow<SaleUiState> = _uiState.asStateFlow()
 
-    private val isOnline: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         fetchItems()
@@ -47,14 +47,41 @@ class SaleViewModel @Inject constructor(
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun fetchItems() {
         viewModelScope.launch {
+
             getItemsUseCase().collect {
-                if (it is Resource.Success) {
-                    _uiState.update { uiState ->
-                        uiState.copy(
-                            items = it.data,
-                        )
+                when(it){
+                    is Resource.Empty ->
+                        {
+                            _uiState.update { uiState ->
+                                uiState.copy(
+                                    invoiceState = InvoiceState.EmptyItems,
+                                )
+                            }
+                        }
+                    is Resource.Error -> {
+                        _uiState.update { uiState ->
+                            uiState.copy(
+                                invoiceState = InvoiceState.EmptyItems,
+                            )
+                        }
+                    }
+                    Resource.Loading -> {
+                        _uiState.update { uiState ->
+                            uiState.copy(
+                                invoiceState = InvoiceState.Loading,
+                            )
+                        }
+                    }
+                    is Resource.Success -> {
+                        checkTouUpdateInvoiceState()
+                        _uiState.update { uiState ->
+                            uiState.copy(
+                                items = it.data,
+                            )
+                        }
                     }
                 }
+
             }
         }
     }
@@ -79,7 +106,14 @@ class SaleViewModel @Inject constructor(
             )
         }
         updateStockInItem(item, item.quantity.dec())
+       checkTouUpdateInvoiceState()
 
+    }
+
+    private fun checkTouUpdateInvoiceState(){
+        _uiState.update {
+            it.copy(invoiceState = if(it.itemsInvoice.isEmpty()) InvoiceState.EmptyItemInvoice else InvoiceState.HasItems)
+        }
     }
 
     fun updateAmount(amount: String) {
@@ -116,6 +150,7 @@ class SaleViewModel @Inject constructor(
         _uiState.update {
             it.copy(itemsInvoice = newItemsInvoice.toMutableSet())
         }
+        checkTouUpdateInvoiceState()
     }
 
 
@@ -160,7 +195,7 @@ class SaleViewModel @Inject constructor(
 
         val saleItems = uiState.value.itemsInvoice.toList()
 
-        if (isOnline.value == false) {
+        if (!isOnline.value) {
             return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_network)
         }
         viewModelScope.launch {

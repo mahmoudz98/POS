@@ -7,6 +7,7 @@ data class SaleUiState(
     val items: List<Item> = emptyList(),
     val itemsInvoice: Set<Item> = emptySet(),
     val itemInvoiceSelected: Item? = null,
+    val invoiceState: InvoiceState = InvoiceState.Loading,
     val itemSelected: Item? = null,
     val amountInput: String = "",
     val userMessage: Int? = null,
@@ -22,20 +23,12 @@ data class SaleUiState(
             return this.minus(totalItemsInvoice)
         }
 
-    // Add a new property to represent the state
-    val invoiceState: InvoiceState
-        get() =
-            if (items.isEmpty()) {
-                InvoiceState.EmptyItems
-            } else if (itemsInvoice.isEmpty()) {
-                InvoiceState.EmptyItemInvoice
-            } else {
-                InvoiceState.HasItems
-            }
+
 }
 
 // Sealed class to represent the invoice states
 sealed interface InvoiceState {
+    data object Loading: InvoiceState
     data object EmptyItems : InvoiceState
     data object EmptyItemInvoice : InvoiceState
     data object HasItems : InvoiceState
