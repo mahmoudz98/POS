@@ -28,6 +28,11 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
 
+                // TODO: remove and use kotlin text lib
+                add("testImplementation", libs.findLibrary("test.hamcrest").get())
+                add("testCompileOnly", libs.findLibrary("test.hamcrest.library").get())
+
+
                 add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
             }
         }
