@@ -3,9 +3,7 @@ package com.casecode.pos.feature.invoice
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.domain.usecase.GetInvoicesUseCase
-import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Invoice
-import com.casecode.pos.core.model.data.users.InvoiceGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
@@ -14,17 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-data class UiInvoiceState(
-    var resourceInvoiceGroups: Resource<List<InvoiceGroup>> = Resource.loading(),
-    val dateInvoiceSelected: Long? = null,
-)
-
-sealed interface UIInvoiceDetails {
-    data object Loading : UIInvoiceDetails
-    data object Empty : UIInvoiceDetails
-    data class Success(val invoice: Invoice) : UIInvoiceDetails
-}
 
 @HiltViewModel
 class InvoicesViewModel @Inject constructor(

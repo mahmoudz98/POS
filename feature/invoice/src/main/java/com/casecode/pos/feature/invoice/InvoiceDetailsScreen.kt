@@ -249,7 +249,7 @@ fun InvoiceDetailsScreenSuccessPreview() {
             Invoice(
                 invoiceId = "1212",
                 date = Date(),
-                createdBy = 2,
+                createdBy = "2",
                 customer = null,
                 items = listOf(
                     Item(
