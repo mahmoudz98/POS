@@ -19,7 +19,7 @@ class LoginEmployeeViewModelTest : BaseTest() {
         viewModel = LoginEmployeeViewModel(testNetworkMonitor, testAccountService)
     }
 
-    @Test
+    @org.junit.Test
     fun testLoginByEmployee_whenOffline_showsNetworkError() = runTest {
         testNetworkMonitor.setConnected(false)
 

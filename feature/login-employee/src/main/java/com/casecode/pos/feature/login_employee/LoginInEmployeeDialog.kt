@@ -1,7 +1,5 @@
 package com.casecode.pos.feature.login_employee
 
-import android.content.Context
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -46,9 +43,7 @@ import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.ui.startScanningBarcode
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanOptions
+import com.casecode.pos.core.ui.scanOptions
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
@@ -88,22 +83,8 @@ fun LoginInEmployeeDialog(
     val userAdminError = remember { mutableStateOf(false) }
     val nameError = remember { mutableStateOf(false) }
     val passwordError = remember { mutableStateOf(false) }
-    var isScanLauncher by remember { mutableStateOf(false) }
 
     val snackState = remember { SnackbarHostState() }
-
-    LaunchedScanBarcode(
-        isScanLauncher, context,
-        onFailureScanEmpty = { message ->
-            showMessage(message)
-            isScanLauncher = false
-        },
-        onResultScan = {
-            userAdmin.value = it
-            userAdminError.value = it.isBlank()
-            isScanLauncher = false
-        },
-    )
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -154,7 +135,18 @@ fun LoginInEmployeeDialog(
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    isScanLauncher = true
+                                    context.scanOptions(
+                                        onResult = {
+                                            userAdmin.value = it
+                                            userAdminError.value = it.isBlank()
+                                        },
+                                        onFailure = {
+                                            showMessage(it)
+                                        },
+                                        onCancel = {
+                                            showMessage(it)
+                                        },
+                                    )
                                 },
                             ) {
                                 Icon(PosIcons.QrCodeScanner, "")
@@ -261,42 +253,6 @@ fun LoginInEmployeeDialog(
     )
 }
 
-
-@Composable
-private fun LaunchedScanBarcode(
-    isScanLauncher: Boolean,
-    context: Context,
-    onResultScan: (String) -> Unit,
-    onFailureScanEmpty: (Int) -> Unit,
-) {
-    val scanBarcodeLauncher = rememberLauncherForActivityResult(
-        contract = ScanContract(),
-        onResult = { result ->
-            result.contents.let {
-                if (it == null) {
-                    onFailureScanEmpty(com.casecode.pos.core.ui.R.string.core_ui_scan_result_empty)
-                } else {
-                    onResultScan(it)
-                }
-            }
-        },
-    )
-
-    // Launch activity result request within the effect
-    LaunchedEffect(isScanLauncher) {
-        if (isScanLauncher) {
-
-            scanBarcodeLauncher.launch(
-                ScanOptions().startScanningBarcode(
-                    context,
-                    R.string.feature_login_employee_hint_scan_admin_id,
-                ),
-            )
-
-
-        }
-    }
-}
 
 @com.casecode.pos.core.ui.DevicePreviews
 @Composable
