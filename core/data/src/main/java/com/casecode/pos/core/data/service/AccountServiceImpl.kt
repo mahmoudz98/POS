@@ -28,13 +28,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -60,28 +59,28 @@ class AccountServiceImpl @Inject constructor(
                     val authResult = signInWithGoogleCredentials(googleCredentials)
 
                     if (authResult.user != null) {
-                        Resource.success(R.string.sign_in_success)
+                        Resource.success(R.string.core_data_sign_in_success)
                     } else {
-                        Resource.empty(null, R.string.sign_in_failure)
+                        Resource.empty(null, R.string.core_data_sign_in_failure)
                     }
 
                 } catch (e: GetCredentialCancellationException) {
                     Timber.e(e)
-                    Resource.error(R.string.sign_in_cancel)
+                    Resource.error(R.string.core_data_sign_in_cancel)
                 } catch (e: GetCredentialException) {
                     Timber.e(e)
-                    Resource.error(R.string.sign_in_exception)
+                    Resource.error(R.string.core_data_sign_in_exception)
                 } catch (e: UnsupportedApiCallException) {
                     Timber.e("UnsupportedApiCallException: $e")
-                    Resource.error(R.string.unsupported_api_call)
+                    Resource.error(R.string.core_data_unsupported_api_call)
                 } catch (e: FirebaseAuthInvalidCredentialsException) {
                     Resource.error(e.message)
                 } catch (e: FirebaseAuthException) {
                     Timber.e("Sign-in failed with FirebaseUserException: ${e.message}")
-                    Resource.error(R.string.sign_in_api_exception)
+                    Resource.error(R.string.core_data_sign_in_api_exception)
                 } catch (e: Exception) {
                     Timber.e("Sign-in failed with unexpected exception: ${e.message}")
-                    Resource.error(R.string.sign_in_failure)
+                    Resource.error(R.string.core_data_sign_in_failure)
                 }
             }
         }
@@ -110,19 +109,19 @@ class AccountServiceImpl @Inject constructor(
 
             return withContext(ioDispatcher) {
                 try {
-                  val currentUid =  firebaseAuth.currentUser?.uid ?: return@withContext
+                  val currentUser =  firebaseAuth.currentUser ?: return@withContext
 
-                    if (isFirstTimeSignIn()) {
-                        posPreferencesDataSource.setLoginWithAdmin(currentUid, false)
+                    if (isFirstTimeSignIn(currentUser)) {
+                        posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, false)
                         return@withContext
                     }
 
-                    if (isUserCompleteStep(currentUid)) {
-                        posPreferencesDataSource.setLoginWithAdmin(currentUid, true)
+                    if (isUserCompleteStep(currentUser.uid)) {
+                        posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, true)
                         return@withContext
 
                     } else {
-                        posPreferencesDataSource.setLoginWithAdmin(currentUid, false)
+                        posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, false)
                         return@withContext
                     }
 
@@ -135,11 +134,9 @@ class AccountServiceImpl @Inject constructor(
         }
     }
 
-    private fun isFirstTimeSignIn(): Boolean {
-        // if user empty return false
-        val user = firebaseAuth.currentUser ?: return true
+    private fun isFirstTimeSignIn(firebaseUser: FirebaseUser): Boolean {
 
-        val creationTime = user.metadata?.creationTimestamp
+        val creationTime = firebaseUser.metadata?.creationTimestamp
         val currentTime = System.currentTimeMillis()
         val timeDifference = currentTime - creationTime!!
 
