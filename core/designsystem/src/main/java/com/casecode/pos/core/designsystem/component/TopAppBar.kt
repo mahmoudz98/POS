@@ -3,6 +3,7 @@
 package com.casecode.pos.core.designsystem.component
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -28,8 +29,8 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 fun PosTopAppBar(
     modifier: Modifier = Modifier,
     @StringRes titleRes: Int,
-    navigationIcon: ImageVector,
-    navigationIconContentDescription: String,
+    navigationIcon: ImageVector? = null,
+    navigationIconContentDescription: String? = null,
     actionIcon: ImageVector? = null,
     actionIconContentDescription: String? = null,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
@@ -39,12 +40,14 @@ fun PosTopAppBar(
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(id = titleRes)) },
         navigationIcon = {
-            IconButton(onClick = onNavigationClick) {
-                Icon(
-                    imageVector = navigationIcon,
-                    contentDescription = navigationIconContentDescription,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
+            if (navigationIcon != null) {
+                IconButton(onClick = onNavigationClick) {
+                    Icon(
+                        imageVector = navigationIcon,
+                        contentDescription = navigationIconContentDescription,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
         },
         actions = {
@@ -62,6 +65,37 @@ fun PosTopAppBar(
         modifier = modifier.testTag("posTopAppBar"),
     )
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PosTopAppBar(
+    modifier: Modifier = Modifier,
+    @StringRes titleRes: Int,
+    navigationIcon: ImageVector? = null,
+    navigationIconContentDescription: String? = null,
+    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    onNavigationClick: () -> Unit = {},
+    action: @Composable RowScope.() -> Unit = {},
+
+    ) {
+    CenterAlignedTopAppBar(
+        title = { Text(text = stringResource(id = titleRes)) },
+        navigationIcon = {
+            if (navigationIcon != null) {
+                IconButton(onClick = onNavigationClick) {
+                    Icon(
+                        imageVector = navigationIcon,
+                        contentDescription = navigationIconContentDescription,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+        },
+        actions = action,
+        colors = colors,
+        modifier = modifier.testTag("posTopAppBar"),
+    )
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Top App Bar")
