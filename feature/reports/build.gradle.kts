@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.feature.statistics"
+    namespace = "com.casecode.pos.feature.reports"
 
 }
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_reports_today_label">Today</string>
+    <string name="feature_reports_sales_label">Sales: </string>
+    <string name="feature_reports_count_invoices_today_label">Count of invoices: </string>
+</resources>

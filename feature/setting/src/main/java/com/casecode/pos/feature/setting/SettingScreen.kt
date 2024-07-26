@@ -2,10 +2,13 @@ package com.casecode.pos.feature.setting
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,33 +35,80 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.casecode.pos.core.designsystem.component.PosOutlinedButton
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 
 @Composable
-fun SettingRoute(viewModel: SettingsViewModel = hiltViewModel()) {
-    SettingScreen()
+fun SettingRoute(
+    viewModel: SettingsViewModel = hiltViewModel(),
+    onPrinterClick: () -> Unit,
+    onSignOutClick: () -> Unit,
+) {
+    val user by viewModel.userUiState.collectAsStateWithLifecycle()
+    SettingScreen(
+        onPrinterClick = onPrinterClick,
+        onSignOutClick = onSignOutClick,
+        emailUser = user?.email ?: "",
+    )
 }
 
 @Composable
-fun SettingScreen(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(16.dp)) {
-        LocaleDropdownMenu()
-        Spacer(modifier = modifier.height(16.dp))
-        PrinterRow()
-        Spacer(modifier = modifier.height(8.dp))
-        PrinterDropdownMenu()
+fun SettingScreen(
+    modifier: Modifier = Modifier,
+    onPrinterClick: () -> Unit,
+    emailUser: String,
+    onSignOutClick: () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+    ) {
+
+        Column(modifier = Modifier.align(Alignment.TopStart)) {
+            LocaleLanguageDropdownMenu()
+            Spacer(modifier = modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onPrinterClick()},
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    modifier = Modifier.padding(8.dp),
+                    imageVector = PosIcons.Print,
+                    contentDescription = null,
+                )
+                Text(
+                    text = stringResource(R.string.feature_settings_printer_title),
+                )
+            }
+
+        }
+        Column(modifier = Modifier.align(Alignment.BottomStart)) {
+            Text(text = emailUser, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+
+            PosOutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onSignOutClick,
+                text = { Text(stringResource(R.string.feature_setting_sign_out_button_text)) },
+            )
+        }
+
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LocaleDropdownMenu() {
+private fun LocaleLanguageDropdownMenu() {
     val localeOptions = mapOf(
         R.string.feature_setting_language_english to "en",
         R.string.feature_setting_language_arabic to "ar",
@@ -123,7 +173,8 @@ fun LocaleDropdownMenu() {
 
 
 @Composable
-fun PrinterRow() {
+fun PrinterRow(onClick: () -> Unit) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -142,7 +193,7 @@ fun PrinterRow() {
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = stringResource(R.string.feature_settings_printer_title))
         }
-        IconButton(onClick = { /* Handle Add button click */ }) {
+        IconButton(onClick = onClick) {
             Icon(
                 imageVector = PosIcons.Add,
                 contentDescription = stringResource(R.string.feature_setting_add_printer),
@@ -152,59 +203,11 @@ fun PrinterRow() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PrinterDropdownMenu() {
-    val printers = listOf("Printer 1", "Printer 2", "Printer 3")
-    var currentPrinter by remember {
-        mutableStateOf(
-            printers[0],
-        )
-    }
-    var expanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-        OutlinedTextField(
-            modifier = Modifier
-                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                .fillMaxWidth(),
-            label = { Text(stringResource(R.string.feature_setting_current_printer)) },
-            readOnly = true,
-            value = currentPrinter,
-
-            onValueChange = { },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-            },
-        ) {
-            printers.forEach { selectionPrinter ->
-                DropdownMenuItem(
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                    onClick = {
-                        expanded = false
-                        //TODO: selected printer and add to viewmodel to save.
-                        currentPrinter = selectionPrinter
-                    },
-                    text = { Text(selectionPrinter) },
-                )
-            }
-        }
-    }
-
-}
-
 @Preview(showBackground = true)
 @Composable
-fun SettingContentPreview() {
+fun SettingPreview() {
     POSTheme {
-        SettingScreen()
+        SettingScreen(onPrinterClick = {}, onSignOutClick = {}, emailUser = "")
     }
 
 }
