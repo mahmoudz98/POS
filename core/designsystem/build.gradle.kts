@@ -23,8 +23,8 @@ dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.androidx.constraintlayout)
 
-    testImplementation(libs.androidx.compose.ui.test)
-    testImplementation(libs.androidx.compose.ui.testManifest)
+    //testImplementation(libs.androidx.compose.ui.test)
+    //testImplementation(libs.androidx.compose.ui.testManifest)
 
     testImplementation(libs.hilt.android.testing)
 }
