@@ -15,7 +15,8 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
     implementation (libs.libphonenumber)
+    implementation(libs.play.services.code.scanner)
 
-    api(libs.zxing.android.embedded)
+   // api(libs.zxing.android.embedded)
 
 }

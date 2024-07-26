@@ -1,16 +1,25 @@
 package com.casecode.pos.core.ui
 
 import android.content.Context
-import com.journeyapps.barcodescanner.CaptureActivity
-import com.journeyapps.barcodescanner.ScanOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 
-fun ScanOptions.startScanningBarcode(context: Context, messageId:Int  ): ScanOptions {
 
-    setPrompt(context.getString(messageId))
-    setBeepEnabled(false)
-    setBarcodeImageEnabled(true)
-    setOrientationLocked(true)
-    captureActivity = CaptureScannerActivity::class.java
-    return this
+fun Context.scanOptions(
+    onResult: (String) -> Unit,
+    onFailure: (Int) -> Unit,
+    onCancel: (Int) -> Unit,
+) {
+    GmsBarcodeScanning.getClient(this).startScan().addOnSuccessListener { result ->
+        val barcode = result.rawValue
+        if (barcode.isNullOrEmpty()) {
+            onFailure(R.string.core_ui_scan_result_empty)
+        } else {
+            onResult(barcode)
+        }
+    }.addOnCanceledListener {
+        onFailure(R.string.core_ui_scan_result_empty)
+    }.addOnCanceledListener {
+        onCancel(R.string.core_ui_scan_result_empty)
+    }
+
 }
-class CaptureScannerActivity : CaptureActivity()
