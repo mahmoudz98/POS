@@ -31,3 +31,11 @@ class GetInvoicesUseCase @Inject constructor(private val invoiceRepository: Invo
         }
     }
 }
+class GetTodayInvoicesUseCase @Inject constructor(private val invoiceRepository: InvoiceRepository) {
+    operator fun invoke(): Flow<Resource<List<Invoice>>> {
+        return flow {
+            emit(Resource.Loading)
+            emit(invoiceRepository.getTodayInvoices())
+        }
+    }
+}

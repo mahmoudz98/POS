@@ -20,8 +20,7 @@ class SetEmployeesBusinessUseCase @Inject constructor(private val employeesRepo:
 }
 
 class GetEmployeesBusinessUseCase @Inject constructor(private val employeesRepo: EmployeesBusinessRepository) {
-    operator fun invoke(): Flow<Resource<List<Employee>>> =
-        employeesRepo.getEmployees()
+    operator fun invoke(): Flow<Resource<List<Employee>>> = employeesRepo.getEmployees()
 }
 
 class AddEmployeesUseCase @Inject constructor(private val employeesRepo: EmployeesBusinessRepository) {

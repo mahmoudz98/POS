@@ -18,6 +18,7 @@ import com.casecode.pos.core.domain.usecase.GetInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
 import com.casecode.pos.core.domain.usecase.GetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
+import com.casecode.pos.core.domain.usecase.GetTodayInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.ItemImageUseCase
 import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.SetEmployeesBusinessUseCase
@@ -101,4 +102,7 @@ object UseCaseModule {
     fun provideGetInvoicesUseCase(invoiceRepository: InvoiceRepository) =
         GetInvoicesUseCase(invoiceRepository)
 
+    @Provides
+    fun provideGetTodayInvoicesUseCase(invoiceRepository: InvoiceRepository) =
+        GetTodayInvoicesUseCase(invoiceRepository)
 }
