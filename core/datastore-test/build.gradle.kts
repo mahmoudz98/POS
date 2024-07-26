@@ -13,4 +13,6 @@ dependencies {
     implementation(libs.hilt.android.testing)
     implementation(projects.core.common)
     implementation(projects.core.datastore)
+    implementation(libs.androidx.dataStore.core)
+    implementation(projects.core.datastoreProto)
 }
