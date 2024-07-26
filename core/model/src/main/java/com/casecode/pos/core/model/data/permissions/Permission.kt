@@ -12,7 +12,7 @@ enum class Permission(
     val arabicName: String,
 ) {
     ADMIN("Admin", ""),
-    SALE("Sale", ""),
+    SALE("Sales", ""),
     NONE("None", ""),
 }
 fun String.toPermission(): Permission? {

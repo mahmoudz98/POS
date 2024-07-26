@@ -5,7 +5,7 @@ import java.util.Date
 data class Invoice(
     val invoiceId: String = "",
     val date: Date = Date(),
-    val createdBy: Int = 0,
+    val createdBy: String = "",
     val customer: Customer? = null,
     val items: List<Item> = emptyList(),
 ) {
