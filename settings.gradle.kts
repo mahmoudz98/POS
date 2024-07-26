@@ -14,6 +14,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io")
     }
 }
 
@@ -30,6 +31,7 @@ include(":core:datastore-test")
 include(":core:testing")
 include(":core:designsystem")
 include(":core:ui")
+include(":core:printer")
 
 include(":feature:login-employee")
 include(":feature:stepper")
@@ -40,4 +42,5 @@ include(":feature:profile")
 include(":feature:sale")
 include(":feature:setting")
 include(":feature:signout")
-include(":feature:statistics")
+include(":feature:reports")
+include(":ui-test-hilt-manifest")
