@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,35 +20,52 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import com.casecode.pos.R
-import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosGradientBackground
+import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosNavigationDrawer
 import com.casecode.pos.core.designsystem.component.PosNavigationDrawerHeader
 import com.casecode.pos.core.designsystem.component.PosNavigationDrawerItem
-import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.designsystem.component.PosNavigationSuiteScaffold
+import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.theme.GradientColors
-import com.casecode.pos.navigation.PosMainNavHost
-import com.casecode.pos.navigation.TopLevelDestination
+import com.casecode.pos.core.designsystem.theme.LocalGradientColors
 import com.casecode.pos.feature.signout.SignOutDialog
+import com.casecode.pos.navigation.PosMainNavHost
+import com.casecode.pos.navigation.PosSaleNavHost
+import com.casecode.pos.navigation.SaleTopLevelDestination
+import com.casecode.pos.navigation.TopLevelDestination
 import com.casecode.pos.utils.moveToSignInActivity
+import timber.log.Timber
+import com.casecode.pos.core.ui.R.string as uiString
 
 
 @Composable
@@ -55,12 +73,21 @@ fun MainScreen(
     appState: MainAppState,
     modifier: Modifier = Modifier,
 ) {
+    val shouldShowGradientBackground =
+        appState.currentAdminTopLevelDestination == TopLevelDestination.POS ||
+                appState.currentSaleTopLevelDestination == SaleTopLevelDestination.POS
     PosBackground(modifier = modifier) {
-        PosGradientBackground(gradientColors = GradientColors()) {
+        PosGradientBackground(
+            gradientColors = if (shouldShowGradientBackground) {
+                LocalGradientColors.current
+            } else {
+                GradientColors()
+            },
+        ) {
             val snackbarHostState = remember { SnackbarHostState() }
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
-            val notConnectedMessage = stringResource(com.casecode.pos.core.ui.R.string.core_ui_error_network)
+            val notConnectedMessage = stringResource(uiString.core_ui_error_network)
             LaunchedEffect(isOffline) {
                 if (isOffline) {
                     snackbarHostState.showSnackbar(
@@ -69,7 +96,10 @@ fun MainScreen(
                     )
                 }
             }
-            MainApp(appState)
+            MainApp(
+                appState = appState,
+                snackbarHostState = snackbarHostState,
+            )
 
         }
     }
@@ -77,125 +107,234 @@ fun MainScreen(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun MainApp(
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3AdaptiveApi::class,
+)
+internal fun MainApp(
     appState: MainAppState,
+    snackbarHostState: SnackbarHostState,
+    /* showSignOutDialog: Boolean,
+     onSignOutClick: () -> Unit,
+     onSignOutDismissed: () -> Unit,*/
     modifier: Modifier = Modifier,
 ) {
     // TODO: Change to use [PosScaffoldNavigation], when have custom layout with custom
     val currentDestination = appState.currentDestination
-    val showSignOutDialog = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    if (showSignOutDialog.value) {
-        SignOutDialog(
-            onSignOut = {
-                moveToSignInActivity(context = context)
-            },
-            onDismiss = { showSignOutDialog.value = false },
-        )
-    }
-    PosNavigationDrawer(
-        drawerState = appState.drawerState,
-        drawerContent = {
-            ModalDrawerSheet(
-                modifier = Modifier.sizeIn(minWidth = 200.dp, maxWidth = 300.dp),
-            ) {
-                PosNavigationDrawerHeader()
-                appState.topLevelDestinations.forEach { destination ->
-                    val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-                    PosNavigationDrawerItem(
-                        selected = selected,
-                        onClick = {
-                            appState.openOrClosed()
-                            appState.navigateToTopLevelDestination(destination)
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = destination.selectedIcon,
-                                contentDescription = null,
+
+    val mainAuthUiState = appState.mainAuthUiState.collectAsStateWithLifecycle()
+    when (mainAuthUiState.value) {
+        MainAuthUiState.Loading -> {
+            Timber.e("LoadingMainApp")
+            PosLoadingWheel(
+                contentDesc = "LoadingMainApp",
+                modifier = Modifier.wrapContentSize(align = Alignment.Center),
+            )
+        }
+
+        MainAuthUiState.ErrorLogin -> {
+            // TODO: handle when error login to sign out and login again
+            Timber.e("ErrorLogin")
+        }
+
+        MainAuthUiState.LoginByAdmin, MainAuthUiState.LoginByAdminEmployee -> {
+            PosNavigationDrawer(
+                drawerState = appState.drawerState,
+                drawerContent = {
+                    ModalDrawerSheet(
+                        modifier = Modifier.sizeIn(minWidth = 200.dp, maxWidth = 300.dp),
+                    ) {
+                        PosNavigationDrawerHeader(stringResource(R.string.pos))
+                        appState.topLevelDestinations.forEach { destination ->
+                            val selected =
+                                currentDestination.isTopLevelDestinationInHierarchy(destination)
+                            PosNavigationDrawerItem(
+                                selected = selected,
+                                onClick = {
+                                    appState.openOrClosed()
+                                    appState.navigateToTopLevelDestination(destination)
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = destination.selectedIcon,
+                                        contentDescription = null,
+                                    )
+                                },
+                                label = { Text(stringResource(destination.titleTextId)) },
+                                modifier = Modifier,
                             )
-                        },
-                        label = { Text(stringResource(destination.titleTextId)) },
-                        modifier = Modifier,
-                    )
-                }
-                PosNavigationDrawerItem(
-                    selected = false,
-                    onClick = {
-                        showSignOutDialog.value = true
-                    },
-                    icon = {
+                        }
 
-                        Icon(
-                            imageVector = PosIcons.SignOut,
-                            contentDescription = null,
-                        )
-                    },
-                    label = { Text(stringResource(R.string.menu_sign_out)) },
-                    modifier = Modifier,
-                )
-            }
-        },
-    ) {
-        Scaffold(
-            containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.onBackground,
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        ) { padding ->
-            Column(
-                modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal,
-                        ),
-                    ),
+                    }
+                },
             ) {
-                // Show the top app bar on top level destinations.
-                val destination = appState.currentTopLevelDestination
+                Scaffold(
+                    containerColor = Color.Transparent,
+                    contentColor = MaterialTheme.colorScheme.onBackground,
+                    contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
+                ) { padding ->
+                    Column(
+                        modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
+                            .windowInsetsPadding(
+                                WindowInsets.safeDrawing.only(
+                                    WindowInsetsSides.Horizontal,
+                                ),
+                            ),
+                    ) {
+                        // Show the top app bar on top level destinations.
+                        val destination = appState.currentAdminTopLevelDestination
 
-                val currentActionBar = appState.currentTopAppBarAction
-                if (currentActionBar != null && destination != null) {
-                    PosTopAppBar(
-                        titleRes = destination.titleTextId,
-                        navigationIcon = Icons.Default.Menu,
-                        navigationIconContentDescription = "",
-                        onActionClick = currentActionBar.onClick,
-                        actionIconContentDescription = stringResource(currentActionBar.actionIconContent),
-                        actionIcon = currentActionBar.icon,
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            containerColor = Color.Transparent,
-                        ),
-                        onNavigationClick = {
-                            appState.openOrClosed()
-                        },
-                    )
-                }
+                        val currentActionBar = appState.currentTopAppBarAction
+                        if (currentActionBar != null && destination != null) {
+                            PosTopAppBar(
+                                titleRes = destination.titleTextId,
+                                navigationIcon = Icons.Default.Menu,
+                                navigationIconContentDescription = "",
+                                onActionClick = currentActionBar.onClick,
+                                actionIconContentDescription = stringResource(currentActionBar.actionIconContent),
+                                actionIcon = currentActionBar.icon,
+                                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                    containerColor = Color.Transparent,
+                                ),
+                                onNavigationClick = {
+                                    appState.openOrClosed()
+                                },
+                            )
+                        }
 
-                Box(
-                    modifier = Modifier.consumeWindowInsets(
-                        if (currentActionBar != null) {
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                        } else {
-                            WindowInsets(0, 0, 0, 0)
-                        },
-                    ),
-                ) {
-                    PosMainNavHost(
-                        appState = appState,
-                    )
+                        Box(
+                            modifier = Modifier.consumeWindowInsets(
+                                if (currentActionBar != null) {
+                                    WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                                } else {
+                                    WindowInsets(0, 0, 0, 0)
+                                },
+                            ),
+                        ) {
+                            PosMainNavHost(
+                                appState = appState,
+                                onSignOutClick = {
+                                    moveToSignInActivity(context = context)
+                                },
+                            )
+                        }
+                    }
+
                 }
             }
+        }
+
+        MainAuthUiState.LoginBySaleEmployee -> {
+
+            val windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo()
+            PosNavigationSuiteScaffold(
+                navigationSuiteItems = {
+                    appState.saleTopLevelDestinations.forEach { destination ->
+                        val selected = currentDestination
+                            .isSaleTopLevelDestinationInHierarchy(destination)
+                        Timber.e("selected: $selected , currentDestination: $currentDestination")
+                        item(
+                            selected = selected,
+                            onClick = { appState.navigateToSaleTopLevelDestination(destination) },
+                            icon = {
+                                Icon(
+                                    imageVector = destination.unselectedIcon,
+                                    contentDescription = null,
+                                )
+                            },
+                            selectedIcon = {
+                                Icon(
+                                    imageVector = destination.selectedIcon,
+                                    contentDescription = null,
+                                )
+                            },
+                            label = { Text(stringResource(destination.iconTextId)) },
+                            modifier =
+                            Modifier
+                                .testTag("PosNavItem"),
+                        )
+                    }
+                },
+                windowAdaptiveInfo = windowAdaptiveInfo,
+            ) {
+                Scaffold(
+                    modifier = modifier.semantics {
+                        testTagsAsResourceId = true
+                    },
+                    containerColor = Color.Transparent,
+                    contentColor = MaterialTheme.colorScheme.onBackground,
+                    contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
+                ) { padding ->
+                    Column(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .consumeWindowInsets(padding)
+                            .windowInsetsPadding(
+                                WindowInsets.safeDrawing.only(
+                                    WindowInsetsSides.Horizontal,
+                                ),
+                            ),
+                    ) {
+                        // Show the top app bar on top level destinations.
+                        val destination = appState.currentSaleTopLevelDestination
+
+                        if (destination != null) {
+                            PosTopAppBar(
+                                titleRes = appState.currentSaleTopLevelDestination?.titleTextId
+                                    ?: R.string.app_name,
+                                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                    containerColor = Color.Transparent,
+                                ),
+                            )
+                        }
+
+                        Box(
+                            // Workaround for https://issuetracker.google.com/338478720
+                            modifier = Modifier.consumeWindowInsets(
+                                WindowInsets(0, 0, 0, 0),
+                            ),
+                        ) {
+                            PosSaleNavHost(
+                                appState = appState,
+                                onSignOutClick = {
+                                    moveToSignInActivity(context = context)
+                                }
+                            )
+                        }
+
+                        // TODO: We may want to add padding or spacer when the snackbar is shown so that
+                        //  content doesn't display behind it.
+
+                    }
+
+                }
+            }
+        }
+
+        MainAuthUiState.LoginByNoneEmployee -> {
+            Timber.e("LoginByNoneEmployee")
 
         }
     }
+
 }
 
 
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
+    this?.hierarchy?.any {
+        it.route?.contains(destination.name, true) ?: false
+    } ?: false
+
+private fun NavDestination?.isSaleTopLevelDestinationInHierarchy(destination: SaleTopLevelDestination) =
     this?.hierarchy?.any {
         it.route?.contains(destination.name, true) ?: false
     } ?: false

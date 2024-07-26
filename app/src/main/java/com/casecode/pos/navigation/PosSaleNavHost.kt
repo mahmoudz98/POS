@@ -5,11 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.casecode.pos.feature.employee.employeesScreen
-import com.casecode.pos.feature.invoice.invoicesGraph
-import com.casecode.pos.feature.item.itemsGraph
 import com.casecode.pos.feature.item.navigateToItemsGraph
-import com.casecode.pos.feature.profile.profileScreen
 import com.casecode.pos.feature.sale.POS_ROUTE
 import com.casecode.pos.feature.sale.posScreen
 import com.casecode.pos.feature.setting.settingsGraph
@@ -20,12 +16,13 @@ import com.casecode.pos.ui.main.MainAppState
 
 
 @Composable
-fun PosMainNavHost(
+fun PosSaleNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
     startDestination: String = POS_ROUTE,
     onSignOutClick: () -> Unit,
-) {
+
+    ) {
     NavHost(
         navController = appState.navController,
         startDestination = startDestination,
@@ -49,24 +46,15 @@ fun PosMainNavHost(
             )
         }
         statisticsScreen()
-        invoicesGraph(appState.navController, appState::openOrClosed)
-        itemsGraph(appState.navController, appState::openOrClosed)
-        employeesScreen()
         settingsGraph(
             appState.navController,
             onSignOutClick = {
                 appState.navController.navigateToSignOut()
-
             },
         )
         signOutDialog(
-            onSignOut = {
-                onSignOutClick()
-
-            },
-            onDismiss = appState.navController::popBackStack,
-        )
-        profileScreen { appState.navController.popBackStack() }
+            onSignOut = onSignOutClick,
+            onDismiss = appState.navController::popBackStack)
 
     }
 
