@@ -47,7 +47,7 @@ class ItemUseCaseTest {
             items.first(),
             `is`(
                 Resource.error(
-                    stringData.error_fetching_items,
+                    stringData.core_data_error_fetching_items,
                 ),
             ),
         )
@@ -76,7 +76,7 @@ class ItemUseCaseTest {
         // Then
         assertThat(
             result,
-            `is`(Resource.success(stringData.item_added_successfully)),
+            `is`(Resource.success(stringData.core_data_item_added_successfully)),
         )
     }
 
@@ -94,7 +94,7 @@ class ItemUseCaseTest {
             result,
             `is`(
                 Resource.error(
-                    stringData.add_item_failure_generic,
+                    stringData.core_data_add_item_failure_generic,
                 ),
             ),
         )
@@ -112,7 +112,7 @@ class ItemUseCaseTest {
         // Then
         assertThat(
             result,
-            `is`(Resource.success(stringData.item_updated_successfully)),
+            `is`(Resource.success(stringData.core_data_item_updated_successfully)),
         )
     }
 
@@ -157,7 +157,7 @@ class ItemUseCaseTest {
         // When
         testItemRepository setReturnError true
         val resultUpdate = updateStockInItemsUseCase(itemsUpdate)
-        assertThat(resultUpdate, `is`(Resource.error(stringData.update_item_failure_generic)))
+        assertThat(resultUpdate, `is`(Resource.error(stringData.core_data_update_item_failure_generic)))
     }
 
     @Test
@@ -170,7 +170,7 @@ class ItemUseCaseTest {
         val result = updateItemUseCase(newItem)
 
         // Then
-        assertThat(result, `is`(Resource.error(stringData.update_item_failure_generic)))
+        assertThat(result, `is`(Resource.error(stringData.core_data_update_item_failure_generic)))
     }
 
     @Test
@@ -184,7 +184,7 @@ class ItemUseCaseTest {
         // Then
         assertThat(
             result,
-            `is`(Resource.success(stringData.item_deleted_successfully)),
+            `is`(Resource.success(stringData.core_data_item_deleted_successfully)),
         )
     }
 
@@ -202,7 +202,7 @@ class ItemUseCaseTest {
             result,
             `is`(
                 Resource.error(
-                    stringData.delete_item_failure_generic,
+                    stringData.core_data_delete_item_failure_generic,
                 ),
             ),
         )

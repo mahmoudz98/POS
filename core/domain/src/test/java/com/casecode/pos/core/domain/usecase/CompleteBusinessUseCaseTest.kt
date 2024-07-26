@@ -6,9 +6,7 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -34,6 +32,6 @@ class CompleteBusinessUseCaseTest{
         val isCompleteBusiness = completeBusinessUseCase( )
 
         // Then check if result is empty uid ,
-        assertThat(isCompleteBusiness, `is`(Resource.empty(EmptyType.DATA, R.string.uid_empty)))
+        assertThat(isCompleteBusiness, `is`(Resource.empty(EmptyType.DATA, R.string.core_data_uid_empty)))
     }
 }

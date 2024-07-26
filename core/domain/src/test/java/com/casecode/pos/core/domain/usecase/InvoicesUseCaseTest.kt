@@ -33,7 +33,7 @@ class InvoiceUseCaseTest {
         // When
         val result = addInvoiceUseCase(items).last()
         // Then
-        MatcherAssert.assertThat(result, `is`(Resource.success(stringData.add_invoice_successfully)))
+        MatcherAssert.assertThat(result, `is`(Resource.success(stringData.core_data_add_invoice_successfully)))
     }
     @Test
     fun addInvoiceUseCase_InputEmptyItems_returnMessageEmptyItems() = runTest{
@@ -53,7 +53,7 @@ class InvoiceUseCaseTest {
         testInvoiceRepository setReturnError  true
         val result = addInvoiceUseCase(items).last()
         // Then
-        MatcherAssert.assertThat(result, `is`(Resource.error(stringData.add_invoice_failure)))
+        MatcherAssert.assertThat(result, `is`(Resource.error(stringData.core_data_add_invoice_failure)))
     }
     @Test
     fun getInvoiceUseCase_hasInvoices_returnListOfInvoices() = runTest{
@@ -70,7 +70,7 @@ class InvoiceUseCaseTest {
         testInvoiceRepository setReturnError  true
         val result = getInvoicesUseCase().last()
         // Then
-        MatcherAssert.assertThat(result, `is`(Resource.error(stringData.get_invoice_failure)))
+        MatcherAssert.assertThat(result, `is`(Resource.error(stringData.core_data_get_invoice_failure)))
     }
     @Test
     fun getInvoiceUseCase_whenEmptyInvoices_returnEmpty() = runTest{

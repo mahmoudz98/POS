@@ -40,7 +40,7 @@ class SetEmployeesBusinessUseCaseTest{
       
       // Then - return Resource of empty uid.
       assertThat(resultAddEmployeesBusiness,
-         `is`(Resource.empty(EmptyType.DATA,  dataString.uid_empty)))
+         `is`(Resource.empty(EmptyType.DATA,  dataString.core_data_uid_empty)))
       
    }
 
