@@ -26,8 +26,8 @@ internal fun Project.configureKotlinAndroid(
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
             isCoreLibraryDesugaringEnabled = true
         }
     }
@@ -44,8 +44,8 @@ internal fun Project.configureKotlinAndroid(
  */
 internal fun Project.configureKotlinJvm() {
     extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     configureKotlin<KotlinJvmProjectExtension>()
 }
@@ -62,7 +62,7 @@ private inline fun <reified T : KotlinTopLevelExtension> Project.configureKotlin
         is KotlinJvmProjectExtension -> compilerOptions
         else -> TODO("Unsupported project extension $this ${T::class}")
     }.apply {
-        jvmTarget = JvmTarget.JVM_11
+        jvmTarget = JvmTarget.JVM_21
         allWarningsAsErrors = warningsAsErrors.toBoolean()
 
         freeCompilerArgs.add(
