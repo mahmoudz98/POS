@@ -125,7 +125,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.height(64.dp))
             }
             Image(
-                painter = painterResource(id = R.drawable.ic_pos_logo),
+                painter = painterResource(id = R.drawable.ic_point_of_sale_24),
                 contentDescription = null,
                 modifier = Modifier.wrapContentSize(),
             )
@@ -230,7 +230,7 @@ private fun openGooglePlayStore(context: Context) {
     )
     try {
         startActivity(context, playStoreIntent, null)
-    } catch (e: ActivityNotFoundException) {
+    } catch (_: ActivityNotFoundException) {
         // Handle the case where the Play Store app is not installed
         val webIntent = Intent(
             Intent.ACTION_VIEW,
