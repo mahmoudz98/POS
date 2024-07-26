@@ -33,11 +33,15 @@ dependencies {
 
     implementation (libs.googleid)
     implementation(libs.billing.ktx)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth )
 
 
     implementation(libs.hilt.android)
     implementation(libs.zxing.generate.barcode)
 
+    testImplementation(libs.test.hamcrest)
+    testCompileOnly(libs.test.hamcrest.library)
     testImplementation(projects.core.testing)
     testImplementation(libs.coroutines.test)
 }
