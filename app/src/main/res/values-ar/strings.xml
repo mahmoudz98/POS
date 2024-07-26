@@ -16,13 +16,12 @@
 
 
     <!-- Main Menu -->
-    <string name="menu_reports">التقارير</string>
+    <string name="reports_title">التقارير</string>
     <string name="menu_items">المنتجات</string>
     <string name="menu_code_scanner">ماسح الرمز الشريطي</string>
-    <string name="menu_settings">الإعدادات</string>
+    <string name="settings_title">الإعدادات</string>
     <string name="menu_sales">المبيعات</string>
     <string name="menu_pay">الدفع</string>
-    <string name="menu_sign_out">تسجيل الخروج</string>
 
 
     <!-- Items -->
