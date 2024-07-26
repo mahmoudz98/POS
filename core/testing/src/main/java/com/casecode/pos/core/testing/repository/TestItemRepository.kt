@@ -40,7 +40,7 @@ class TestItemRepository @Inject constructor(): ItemRepository, BaseTestReposito
 
     override fun setReturnError(value: Boolean) {
         super.setReturnError(value)
-        resourcesItemsFlow.tryEmit(Resource.error(DataResource.error_fetching_items))
+        resourcesItemsFlow.tryEmit(Resource.error(DataResource.core_data_error_fetching_items))
     }
 
     override fun getItems(): Flow<ResourceItems> {
@@ -50,35 +50,35 @@ class TestItemRepository @Inject constructor(): ItemRepository, BaseTestReposito
 
   override suspend  fun addItem(item: Item): AddItem {
         return if(shouldReturnError){
-            AddItem.error(DataResource.add_item_failure_generic)
+            AddItem.error(DataResource.core_data_add_item_failure_generic)
         } else{
             fakeListItems.add(item)
             resourcesItemsFlow.tryEmit(Resource.success(fakeListItems))
-            Resource.Success( DataResource.item_added_successfully)
+            Resource.Success( DataResource.core_data_item_added_successfully)
 
         }
     }
 
     override suspend fun updateItem(item: Item): UpdateItem {
         if(shouldReturnError){
-            return UpdateItem.error(DataResource.update_item_failure_generic)
+            return UpdateItem.error(DataResource.core_data_update_item_failure_generic)
         }
-       return Resource.Success(DataResource.item_updated_successfully)
+       return Resource.Success(DataResource.core_data_item_updated_successfully)
     }
 
     override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
         println(shouldReturnError)
         if(shouldReturnError) {
-            return UpdateQuantityItems.error(DataResource.update_item_failure_generic)
+            return UpdateQuantityItems.error(DataResource.core_data_update_item_failure_generic)
         }
         return Resource.Success(items)
     }
 
     override suspend fun deleteItem(item: Item): DeleteItem {
         if(shouldReturnError){
-            return DeleteItem.error(DataResource.delete_item_failure_generic)
+            return DeleteItem.error(DataResource.core_data_delete_item_failure_generic)
         }
         fakeListItems.remove(item)
-        return Resource.success(DataResource.item_deleted_successfully)
+        return Resource.success(DataResource.core_data_item_deleted_successfully)
     }
 }

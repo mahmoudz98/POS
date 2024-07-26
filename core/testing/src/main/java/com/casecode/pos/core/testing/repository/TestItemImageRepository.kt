@@ -13,18 +13,18 @@ import javax.inject.Singleton
 @Singleton
 class TestItemImageRepository @Inject constructor() : ItemImageRepository, BaseTestRepository() {
     override suspend fun uploadImage(bitmap: Bitmap, imageName: String): UploadImage {
-        return if (shouldReturnError) UploadImage.error(R.string.download_url_failure)
+        return if (shouldReturnError) UploadImage.error(R.string.core_data_download_url_failure)
         else UploadImage.success("imageTest.com")
 
     }
 
     override suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): ReplaceImage {
-        return if (shouldReturnError) ReplaceImage.error(R.string.replace_image_failure)
+        return if (shouldReturnError) ReplaceImage.error(R.string.core_data_replace_image_failure)
         else ReplaceImage.success("imageTest.com")
     }
 
     override suspend fun deleteImage(imageUrl: String): DeleteImage {
-        return if (shouldReturnError) UploadImage.error(R.string.delete_image_failure_generic)
+        return if (shouldReturnError) UploadImage.error(R.string.core_data_delete_image_failure_generic)
         else DeleteImage.success(true)
     }
 

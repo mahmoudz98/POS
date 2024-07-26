@@ -18,6 +18,10 @@ class TestAuthService @Inject constructor() : AuthService {
         return "uid"
     }
 
+    override suspend fun currentNameLogin(): String {
+        TODO("Not yet implemented")
+    }
+
     override val currentUser: Flow<FirebaseUser?> = flowOf(null)
     override suspend fun hasEmployeeLogin(): Boolean {
         return true

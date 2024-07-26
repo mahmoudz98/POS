@@ -10,6 +10,7 @@ import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
 import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
+import com.casecode.pos.core.domain.usecase.GetTodayInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.ItemImageUseCase
 import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.SetEmployeesBusinessUseCase
@@ -68,6 +69,7 @@ abstract class BaseTest {
     lateinit var addInvoiceUseCase: AddInvoiceUseCase
     lateinit var updateStockInItemsUseCase: UpdateStockInItemsUseCase
     lateinit var getInvoicesUseCase: GetInvoicesUseCase
+    lateinit var getTodayInvoicesUseCase: GetTodayInvoicesUseCase
 
     @Before
     fun setup() {
@@ -111,6 +113,7 @@ abstract class BaseTest {
         // Invoice use cases
         addInvoiceUseCase = AddInvoiceUseCase(testInvoiceRepository)
         getInvoicesUseCase = GetInvoicesUseCase(testInvoiceRepository)
+        getTodayInvoicesUseCase = GetTodayInvoicesUseCase(testInvoiceRepository)
         init()
     }
 

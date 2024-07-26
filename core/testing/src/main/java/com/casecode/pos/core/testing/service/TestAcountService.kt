@@ -2,11 +2,10 @@ package com.casecode.pos.core.testing.service
 
 import com.casecode.pos.core.data.service.AccountService
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.testing.R
 import javax.inject.Inject
 
 class TestAccountService @Inject constructor() : AccountService {
-    var signInResult: Resource<Int> = Resource.Success(com.casecode.pos.core.data.R.string.sign_in_success)
+    var signInResult: Resource<Int> = Resource.Success(com.casecode.pos.core.data.R.string.core_data_sign_in_success)
     var employeeLoginResult: Resource<Boolean> = Resource.Success(true)
 
     override suspend fun signIn(): Resource<Int> {

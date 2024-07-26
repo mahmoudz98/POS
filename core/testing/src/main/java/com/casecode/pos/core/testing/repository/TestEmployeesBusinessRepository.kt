@@ -27,7 +27,7 @@ class TestEmployeesBusinessRepository @Inject constructor() : EmployeesBusinessR
 
     override fun getEmployees(): Flow<Resource<List<Employee>>> {
         return flow<Resource<List<Employee>>> {
-            if (shouldReturnError) return@flow emit(Resource.error(R.string.get_business_failure))
+            if (shouldReturnError) return@flow emit(Resource.error(R.string.core_data_get_business_failure))
             if (shouldReturnEmpty) return@flow emit(Resource.empty())
             emit(Resource.success(fakeEmployees))
         }
@@ -45,7 +45,7 @@ class TestEmployeesBusinessRepository @Inject constructor() : EmployeesBusinessR
     override suspend fun addEmployee(employees: Employee): Resource<Boolean> {
         if (shouldReturnError) {
             print("error")
-            return Resource.error(R.string.add_employees_business_failure)
+            return Resource.error(R.string.core_data_add_employees_business_failure)
         }
         return Resource.success(true)
     }
@@ -54,7 +54,7 @@ class TestEmployeesBusinessRepository @Inject constructor() : EmployeesBusinessR
         employees: Employee,
         oldEmployee: Employee,
     ): Resource<Boolean> {
-        if (shouldReturnError) return Resource.error(R.string.employee_update_business_failure)
+        if (shouldReturnError) return Resource.error(R.string.core_data_employee_update_business_failure)
         return Resource.success(true)
     }
 

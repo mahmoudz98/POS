@@ -10,22 +10,63 @@ import com.casecode.pos.core.testing.base.BaseTestRepository
 import javax.inject.Inject
 
 class TestInvoiceRepository @Inject constructor() : InvoiceRepository, BaseTestRepository() {
+
     override suspend fun addInvoice(invoice: Invoice): Resource<Int> {
         if (shouldReturnError) {
-            return Resource.error(R.string.add_invoice_failure)
+            return Resource.error(R.string.core_data_add_invoice_failure)
         }
-        return Resource.success(R.string.add_invoice_successfully)
+        return Resource.success(R.string.core_data_add_invoice_successfully)
     }
 
     override suspend fun getInvoices(): Resource<List<InvoiceGroup>> {
         if (shouldReturnError) {
-            return Resource.error(R.string.get_invoice_failure)
+            return Resource.error(R.string.core_data_get_invoice_failure)
         }
         if (shouldReturnEmpty) {
             return Resource.empty()
         }
         return Resource.success(fakeInvoiceGroup)
     }
+
+    override suspend fun getTodayInvoices(): Resource<List<Invoice>> {
+        if (shouldReturnError) {
+            return Resource.error(R.string.core_data_get_invoice_failure)
+        }
+        if (shouldReturnEmpty) {
+            return Resource.empty()
+        }
+        return Resource.success(fakeInvoices)
+    }
+    val fakeInvoices = listOf(
+        Invoice(
+            items = arrayListOf(
+                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+            ),
+        ),
+        Invoice(
+            items = arrayListOf(
+                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+            ),
+        ),
+        Invoice(
+            items = arrayListOf(
+                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+            ),
+        ),
+        Invoice(
+            items = arrayListOf(
+                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+            ),
+        )
+    )
 
     val fakeInvoiceGroup =
         listOf(
