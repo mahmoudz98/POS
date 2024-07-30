@@ -1,57 +1,38 @@
 package com.casecode.pos.feature.setting.printer
 
-
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
+import com.casecode.pos.feature.setting.R
 
 
-
-class IpAddressTransformation : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        // Add dots after every three digits (max 3 dots)
-        val transformedText = buildString {
-            var dotCount = 0
-            for (i in text.text.indices) {
-                append(text.text[i])
-                if ((i + 1) % 3 == 0 && dotCount < 3 && i < text.text.length - 1) {
-                    append('.')
-                    dotCount++
-                }
-            }
-        }
-
-        // Calculate cursor position mapping
-        val offsetMapping = object : OffsetMapping {
-            override fun originalToTransformed(offset: Int): Int {
-                return transformedText.length.coerceAtMost(offset + transformedText.count { it == '.' })
-            }
-
-            override fun transformedToOriginal(offset: Int): Int {
-                return offset - (offset / 4).coerceAtMost(3)
-            }
-        }
-
-        return TransformedText(AnnotatedString(transformedText), offsetMapping)
+fun formatIPAddress(input: String): String {
+    val cleanedInput = input.filter { it.isDigit() || it == '.' }
+    val segments = cleanedInput.split('.')
+    val formattedSegments = segments.map { segment ->
+        if (segment.length > 3) segment.take(3) else segment
     }
+
+    return formattedSegments.joinToString(".")
 }
-fun isValidIpAddress(ipAddress: String): Boolean {
-    val segments = ipAddress.split(".")
-    // Check if we have 4 segments (or less while typing)
+
+fun validateIPAddress(ip: String): Int? {
+    val segments = ip.split('.')
     if (segments.size > 4) {
-        return false
+        return R.string.feature_setting_printer_info_error_ethernet_ip_address_invalid
+
     }
 
-    for (segment in segments) {
-        // Allow empty segments for in-progress typing
-        if (segment.isEmpty()) continue
+    segments.forEach { segment ->
+        if (segment.isNotEmpty() && ((segment.toIntOrNull() ?: -1) !in 0..255)) {
+            return R.string.feature_setting_printer_info_error_ethernet_ip_address_invalid_segment
 
-        // Check if the segment is a valid number and in the range 0-255
-        val segmentValue = segment.toIntOrNull() ?: -1
-        if (segmentValue !in 0..255) {
-            return false
         }
     }
-    return true
+
+    return null
+}
+
+fun validatePort(port: String): Int? {
+    val portNumber =
+        port.toIntOrNull() ?: R.string.feature_setting_printer_info_error_ethernet_port_empty
+    return portNumber.takeUnless { it in 1..65535 }
+        ?.let { R.string.feature_setting_printer_info_error_ethernet_port_invalid }
 }

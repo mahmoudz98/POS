@@ -1,5 +1,13 @@
 package com.casecode.pos.feature.setting.printer
 
+import android.Manifest
+import android.app.Activity.RESULT_OK
+import android.bluetooth.BluetoothAdapter
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +24,7 @@ import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,27 +32,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.OffsetMapping
-import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.casecode.pos.core.designsystem.component.PosButton
+import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.model.data.PrinterConnectionInfo
+import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.feature.setting.R
-import kotlin.text.append
-import kotlin.text.forEachIndexed
-import kotlin.text.isDigit
+import com.cassecode.pos.core.printer.BluetoothPrinterConnection
+import com.cassecode.pos.core.printer.PrintContent
+import com.cassecode.pos.core.printer.PrinterConnection
+import com.cassecode.pos.core.printer.TcpPrinterConnection
+import com.cassecode.pos.core.printer.UsbPrinterConnection
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
+import timber.log.Timber
+import com.casecode.pos.core.printer.R as resourcePrinter
 
 @Composable
 internal fun PrinterInfoRoute(
@@ -55,25 +71,43 @@ internal fun PrinterInfoRoute(
         isUpdate = isUpdate,
         onBackClick = onBackClick,
         onSavedClick = {},
+        onTestClick = printerVIewModel::testPrinter
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun PrinterInfoScreen(
     modifier: Modifier = Modifier,
     isUpdate: Boolean,
     onBackClick: () -> Unit,
+    onTestClick: (
+        typePrinterConnection: String,
+        namePrinter: String,
+        ipAddress: String,
+        port: String,
+        macAddress: String,
+        usbDeviceName: String,
+        isCurrentSelected: Boolean,
+        paperWidth: String,
+        context: Context,
+    ) -> Unit,
     onSavedClick: () -> Unit,
 ) {
+    val context = LocalContext.current
+
     var printerName by remember { mutableStateOf("") }
     val printerEthernetDefault =
-        stringResource(R.string.feature_setting_printer_info_connection_ethernet)
-    val paperWidthDefault = stringResource(R.string.feature_setting_printer_info_paper_width_72)
+        stringResource(resourcePrinter.string.core_printer_info_connection_ethernet)
+    val connectionTypeBluetooth =
+        stringResource(resourcePrinter.string.core_printer_info_connection_bluetooth)
+    val connectionTypeUsb = stringResource(resourcePrinter.string.core_printer_info_connection_usb)
+    val paperWidthDefault = stringResource(resourcePrinter.string.core_printer_info_paper_width_72)
     var selectedTypeConnection by remember { mutableStateOf(printerEthernetDefault) }
     var selectedPaperWidth by remember { mutableStateOf(paperWidthDefault) }
 
     var ipAddress by remember { mutableStateOf("") }
+    var port by remember { mutableStateOf("") }
     var nameBluetooth by remember { mutableStateOf("") }
     var nameUsb by remember { mutableStateOf("") }
 
@@ -82,18 +116,40 @@ fun PrinterInfoScreen(
 
     var nameError by remember { mutableStateOf(false) }
     val typeConnectionError by remember { mutableStateOf(false) }
-    var ipAddressError by remember { mutableStateOf(false) }
+    var ipAddressError by remember { mutableStateOf<Int?>(null) }
+    var portError by remember { mutableStateOf<Int?>(null) }
     var nameBluetoothError by remember { mutableStateOf(false) }
     var nameUsbError by remember { mutableStateOf(false) }
     val paperWidthError by remember { mutableStateOf(false) }
+
+    var showBrowseBluetoothDialog by remember { mutableStateOf(false) }
+
+    val enableBluetoothIntent = remember { Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE) }
+    val activityResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            Timber.tag("BrowseBluetoothDeviceDialog").i(":request permission result ok")
+        } else {
+            Timber.tag("BrowseBluetoothDeviceDialog").i(":request permission result canceled / denied")
+            showBrowseBluetoothDialog = false
+        }
+    }
+
+
+
+    if(showBrowseBluetoothDialog){
+        BrowseBluetoothDeviceDialog(onDismiss = {showBrowseBluetoothDialog = false}, onConfirm = {
+
+            showBrowseBluetoothDialog = false
+        })
+    }
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize(),
     ) {
         Column {
             PosTopAppBar(
-                modifier = Modifier,
                 titleRes = R.string.feature_settings_printer_info_title,
                 navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = null,
@@ -107,174 +163,199 @@ fun PrinterInfoScreen(
                 },
                 onNavigationClick = onBackClick,
             )
+            Column(Modifier.padding(16.dp)) {
 
-            PosOutlinedTextField(
-                value = printerName,
-                onValueChange = { printerName = it },
-                label = stringResource(R.string.feature_setting_printer_info_name_label),
-                isError = nameError,
-                supportingText = if (nameError) stringResource(R.string.feature_setting_printer_info_error_name_empty) else null,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-
-            ExposedDropdownMenuBox(
-                expanded = typeConnectionExpanded,
-                onExpandedChange = { typeConnectionExpanded = !typeConnectionExpanded },
-            ) {
                 PosOutlinedTextField(
-                    value = selectedTypeConnection,
-                    onValueChange = {},
-                    readOnly = true,
-                    isError = typeConnectionError,
-                    supportingText =
-                    if (typeConnectionError) stringResource(R.string.feature_setting_printer_info_error_interface_connection_empty) else null,
-
-                    label = stringResource(R.string.feature_setting_printer_info_interface_connection_label),
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = typeConnectionExpanded) },
-                    modifier = Modifier
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth(),
+                    value = printerName,
+                    onValueChange = { printerName = it },
+                    label = stringResource(R.string.feature_setting_printer_info_name_label),
+                    isError = nameError,
+                    supportingText = if (nameError) stringResource(R.string.feature_setting_printer_info_error_name_empty) else null,
+                    modifier = Modifier.fillMaxWidth(),
                 )
-                val connectionType =
-                    stringArrayResource(R.array.feature_setting_printer_info_connection)
 
-                ExposedDropdownMenu(
+                ExposedDropdownMenuBox(
                     expanded = typeConnectionExpanded,
-                    onDismissRequest = { typeConnectionExpanded = false },
+                    onExpandedChange = { typeConnectionExpanded = !typeConnectionExpanded },
                 ) {
-                    connectionType.forEach { type ->
-                        DropdownMenuItem(
-                            text = { Text(type) },
+                    PosOutlinedTextField(
+                        value = selectedTypeConnection,
+                        onValueChange = {},
+                        readOnly = true,
+                        isError = typeConnectionError,
+                        supportingText =
+                        if (typeConnectionError) stringResource(R.string.feature_setting_printer_info_error_interface_connection_empty) else null,
+
+                        label = stringResource(R.string.feature_setting_printer_info_interface_connection_label),
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = typeConnectionExpanded) },
+                        modifier = Modifier
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth(),
+                    )
+                    val connectionType =
+                        stringArrayResource(resourcePrinter.array.core_printer_info_connection)
+
+                    ExposedDropdownMenu(
+                        expanded = typeConnectionExpanded,
+                        onDismissRequest = { typeConnectionExpanded = false },
+                    ) {
+                        connectionType.forEach { type ->
+                            DropdownMenuItem(
+                                text = { Text(type) },
+                                onClick = {
+                                    selectedTypeConnection = type
+                                    typeConnectionExpanded = false
+                                },
+                            )
+                        }
+                    }
+                }
+                if (selectedTypeConnection == printerEthernetDefault) {
+                    PosOutlinedTextField(
+                        value = ipAddress,
+                        onValueChange = { ipInput ->
+                            ipAddress = formatIPAddress(ipInput)
+                            ipAddressError = validateIPAddress(ipInput)
+                        },
+                        label = stringResource(R.string.feature_setting_printer_info_interface_connection_ethernet_ip_address),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next,
+                        ),
+                        isError = ipAddressError != null,
+                        supportingText = ipAddressError?.let { stringResource(it) },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    PosOutlinedTextField(
+                        value = port,
+                        onValueChange = { portInput ->
+                            port = portInput
+                            portError = validatePort(portInput)
+                        },
+                        label = stringResource(R.string.feature_setting_printer_info_interface_connection_ethernet_port),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next,
+                        ),
+                        isError = portError != null,
+                        supportingText = portError?.let { stringResource(it) },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+
+                if (selectedTypeConnection == connectionTypeBluetooth) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        PosOutlinedTextField(
+                            value = nameBluetooth,
+                            onValueChange = { nameBluetooth = it },
+                            label = stringResource(R.string.feature_setting_printer_info_interface_connection_bluetooth_name_label),
+                            isError = nameBluetoothError,
+                            supportingText = if (nameBluetoothError) stringResource(R.string.feature_setting_printer_info_error_bluetooth_name_empty) else null,
+                            modifier = Modifier.weight(0.6f),
+                        )
+                        PosOutlinedButton(
                             onClick = {
-                                selectedTypeConnection = type
-                                typeConnectionExpanded = false
+                                    activityResultLauncher.launch(enableBluetoothIntent)
+                                showBrowseBluetoothDialog = true
+
+
+                                //TODO: open bluetooth dialog
                             },
+                            modifier = Modifier
+                                .weight(0.4f)
+                                .padding(start = 8.dp)
+                                .align(Alignment.CenterVertically),
+                            text = { Text(stringResource(R.string.feature_setting_printer_info_interface_connection_bluetooth_search_button_text)) },
                         )
                     }
                 }
-            }
-            if (selectedTypeConnection == printerEthernetDefault) {
-                PosOutlinedTextField(
-                    value = ipAddress,
-                    onValueChange = {newValue ->
-//                        if(isValidIpAddress(newValue)){
-//
-//                            ipAddress = newValue.filter { it.isDigit() }.take(12)
-//                        }
-                       val cleanInput = newValue.filter { it.isDigit() || it == '.' }
-                        val segments = cleanInput.split(".").filter { it.isNotEmpty() }
-
-                        if (segments.size <= 4) {
-                            val updatedSegments = segments.map { segment ->
-                                segment.take(3).filter { it.isDigit() }
-                            }.joinToString(".")
-
-                            val isValid = updatedSegments.split(".").all { segment ->
-                                segment.toIntOrNull()?.let { num -> num in 0..255 } ?: false
-                            }
-                            if(isValid){
-                                ipAddress = updatedSegments
-
-                            }
-                            //ipAddressError = if (isValid || updatedSegments.isEmpty()) false else true
-                                //"Each segment must be between 0 and 255"
-                        } else {
-                          //  ipAddressError = "Too many segments"
-                        }
-                         },
-                    label = stringResource(R.string.feature_setting_printer_info_interface_connection_ethernet_ip_address),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next,
-                    ),
-                    visualTransformation = IpAddressTransformation(),
-                    isError = ipAddressError,
-                    supportingText = if (ipAddressError) stringResource(R.string.feature_setting_printer_info_error_ethernet_ip_address_empty) else null,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
-            val connectionTypeBluetooth =
-                stringResource(R.string.feature_setting_printer_info_connection_bluetooth)
-            if (selectedTypeConnection == connectionTypeBluetooth) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
+                if (selectedTypeConnection == connectionTypeUsb) {
                     PosOutlinedTextField(
-                        value = nameBluetooth,
-                        onValueChange = { nameBluetooth = it },
-                        label = stringResource(R.string.feature_setting_printer_info_interface_connection_bluetooth_name_label),
-                        isError = nameBluetoothError,
-                        supportingText = if (nameBluetoothError) stringResource(R.string.feature_setting_printer_info_error_bluetooth_name_empty) else null,
-                        modifier = Modifier.weight(0.6f),
-                    )
-                    PosOutlinedButton(
-                        onClick = {
-                            //TODO: open bluetooth dialog
-                        },
-                        modifier = Modifier
-                            .weight(0.4f)
-                            .padding(start = 8.dp)
-                            .align(Alignment.CenterVertically),
-                        text = { Text(stringResource(R.string.feature_setting_printer_info_interface_connection_bluetooth_search_button_text)) },
+                        value = nameUsb,
+                        onValueChange = { nameUsb = it },
+                        label = stringResource(R.string.feature_setting_printer_info_interface_connection_usb_name_label),
+                        isError = nameUsbError,
+                        supportingText = if (nameUsbError) stringResource(R.string.feature_setting_printer_info_error_usb_name_empty) else null,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
-            }
-            if (selectedTypeConnection == stringResource(R.string.feature_setting_printer_info_connection_usb)) {
-                PosOutlinedTextField(
-                    value = nameUsb,
-                    onValueChange = { nameUsb = it },
-                    label = stringResource(R.string.feature_setting_printer_info_interface_connection_usb_name_label),
-                    isError = nameUsbError,
-                    supportingText = if (nameUsbError) stringResource(R.string.feature_setting_printer_info_error_usb_name_empty) else null,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
 
-            ExposedDropdownMenuBox(
-                expanded = paperWidthExpanded,
-                onExpandedChange = { paperWidthExpanded = !paperWidthExpanded },
-            ) {
-                PosOutlinedTextField(
-                    value = selectedPaperWidth,
-                    onValueChange = {},
-                    readOnly = true,
-                    isError = paperWidthError,
-                    supportingText =
-                    if (paperWidthError) stringResource(R.string.feature_setting_printer_info_error_papper_width_empty) else null,
-
-                    label = stringResource(R.string.feature_setting_printer_info_papper_width_label),
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = paperWidthExpanded) },
-                    modifier = Modifier
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth(),
-                )
-                val connectionType =
-                    stringArrayResource(R.array.feature_setting_printer_info_paper_width)
-
-                ExposedDropdownMenu(
+                ExposedDropdownMenuBox(
                     expanded = paperWidthExpanded,
-                    onDismissRequest = { paperWidthExpanded = false },
+                    onExpandedChange = { paperWidthExpanded = !paperWidthExpanded },
                 ) {
-                    connectionType.forEach { type ->
-                        DropdownMenuItem(
-                            text = { Text(type) },
-                            onClick = {
-                                selectedPaperWidth = type
-                                paperWidthExpanded = false
-                            },
-                        )
+                    PosOutlinedTextField(
+                        value = selectedPaperWidth,
+                        onValueChange = {},
+                        readOnly = true,
+                        isError = paperWidthError,
+                        supportingText =
+                        if (paperWidthError) stringResource(R.string.feature_setting_printer_info_error_papper_width_empty) else null,
+
+                        label = stringResource(R.string.feature_setting_printer_info_papper_width_label),
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = paperWidthExpanded) },
+                        modifier = Modifier
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth(),
+                    )
+                    val connectionType =
+                        stringArrayResource(resourcePrinter.array.core_printer_info_paper_width)
+
+                    ExposedDropdownMenu(
+                        expanded = paperWidthExpanded,
+                        onDismissRequest = { paperWidthExpanded = false },
+                    ) {
+                        connectionType.forEach { type ->
+                            DropdownMenuItem(
+                                text = { Text(type) },
+                                onClick = {
+                                    selectedPaperWidth = type
+                                    paperWidthExpanded = false
+                                },
+                            )
+                        }
                     }
                 }
             }
         }
+        PosOutlinedButton(
+            onClick = {
+                onTestClick(
+                    selectedTypeConnection,
+                    printerName,
+                    ipAddress,
+                    port,
+                    nameBluetooth,
+                    nameUsb,
+                    false,
+                    selectedPaperWidth,
+                    context)
 
-        PosButton(
-            onClick = {},
+
+            },
             text = { Text(stringResource(R.string.feature_setting_printer_info_test_button_text)) },
             modifier = Modifier
+                .padding(16.dp)
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
         )
+    }
+}
+
+
+@Preview
+@Composable
+fun PrinterInfoScreenPreview() {
+    POSTheme {
+        PosBackground {
+            PrinterInfoScreen(
+                isUpdate = false,
+                onBackClick = {},
+                onSavedClick = {},
+                onTestClick = {_, _, _, _, _, _, _, _, _ -> }
+            )
+        }
     }
 }

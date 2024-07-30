@@ -41,7 +41,8 @@ import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.ConnectionType
+import com.casecode.pos.core.model.data.PrinterConnectionInfo
+import com.casecode.pos.core.model.data.PrinterConnectionType
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.feature.setting.R
 
@@ -166,8 +167,8 @@ fun PrinterList(
                 item(key = printerName) {
                     PrinterItem(
                         name = printerName,
-                        printerAddress = printer.address,
-                        printerType = printer.connectionType.toString(),
+                        printerAddress = "printer.address",
+                        printerType = "printer.connectionType.toString()",
                         onClick = { onPrinterClick(printer) },
                     )
                 }
@@ -210,17 +211,14 @@ fun PrinterScreenSuccessPreview() {
     PrinterScreen(
         resourcePrinters = Resource.Success(listOf(PrinterInfo(
             name = "Orlando Reed",
-            connectionType = ConnectionType.ETHERNET,
-            address = "ancillae",
-            port = null,
+            connectionTypeInfo = PrinterConnectionInfo.Tcp("",123),
             isCurrentSelected = false,
             size = "tamquam"
         ),
             PrinterInfo(
                 name = "Stefan Cobb",
-                connectionType = ConnectionType.ETHERNET,
-                address = "adipiscing",
-                port = null,
+                connectionTypeInfo = PrinterConnectionInfo.Tcp("",123),
+
                 isCurrentSelected = false,
                 size = "nostra"
             ))),
