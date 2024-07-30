@@ -1,17 +1,13 @@
 package com.casecode.pos.core.model.data
-
+sealed class PrinterConnectionInfo {
+    data class Tcp(val ipAddress: String, val port: Int) : PrinterConnectionInfo()
+    data class Bluetooth(val macAddress: String) : PrinterConnectionInfo()
+    data class Usb(val usbDeviceName: String) : PrinterConnectionInfo()
+}
 
 data class PrinterInfo(
     val name: String,
-    val connectionType: ConnectionType,
-    val address: String, // Address can be IP or MAC address
-    val port: Int? = null,
+    val connectionTypeInfo: PrinterConnectionInfo,
     val isCurrentSelected: Boolean,
     val size: String,
 )
-
-enum class ConnectionType {
-    BLUETOOTH,
-    USB,
-    ETHERNET
-}

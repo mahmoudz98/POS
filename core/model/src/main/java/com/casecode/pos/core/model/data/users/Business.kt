@@ -8,12 +8,3 @@ data class Business(
     val isCompletedStep: Boolean? = false,
     val branches: List<Branch> = listOf(),
 )
-
-enum class StoreType(
-    val englishName: String,
-    val arabicName: String,
-) {
-    Clothes("Clothes", "ملابس"),
-    Coffee("Coffee", "قهوة"),
-    Market("Market", "سوبر ماركت"),
-}
