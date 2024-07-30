@@ -48,4 +48,14 @@ object PrintUtils {
                         "[C]<qrcode size='20'>${item.sku}</qrcode>\n"
                 )
     }
+    fun test(): String {
+        return (
+                "[L]\n" +
+                        "[C]<u><font size='big'>Item 1</font></u>\n" +
+                        "[L]<b>item 1</b>[R]20.00$\n" +
+                        "[L]  + qty : 5.0\n" +
+                        "[L]\n" +
+                        "[C]<qrcode size='20'> 2222112121</qrcode>\n"
+                )
+    }
 }

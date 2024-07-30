@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_printer_info_connection_ethernet">Ethernet</string>
+    <string name="core_printer_info_connection_bluetooth">Bluetooth</string>
+    <string name="core_printer_info_connection_usb">Usb</string>
+
+    <string name="core_printer_info_paper_width_72">72 mm</string>
+    <string name="core_printer_info_paper_width_80">80 mm</string>
+
+
+    <!-- String Arrays -->
+    <string-array name="core_printer_info_connection">
+        <item>@string/core_printer_info_connection_ethernet</item>
+        <item>@string/core_printer_info_connection_bluetooth</item>
+        <item>@string/core_printer_info_connection_usb</item>
+    </string-array>
+
+    <string-array name="core_printer_info_paper_width">
+        <item>@string/core_printer_info_paper_width_72</item>
+        <item>@string/core_printer_info_paper_width_80</item>
+
+    </string-array>
+</resources>

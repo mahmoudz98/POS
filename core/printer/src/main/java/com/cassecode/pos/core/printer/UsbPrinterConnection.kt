@@ -21,7 +21,7 @@ import javax.inject.Inject
 const val ACTION_USB_PERMISSION = "com.casecode.pos.core.printer.USB_PERMISSION"
 class UsbPrinterConnection @Inject constructor() : PrinterConnection {
     private var printerContext: PrintContent? = null
-    override fun print(context: Context, printerInfo: PrinterInfo, printContext: PrintContent) {
+    override fun print(context: Context, printerInfo: PrinterInfo, printContent: PrintContent) {
         val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
         val usbConnection = UsbPrintersConnections.selectFirstConnected(context)
         if (usbConnection != null && usbManager != null) {
@@ -32,7 +32,7 @@ class UsbPrinterConnection @Inject constructor() : PrinterConnection {
                 PendingIntent.FLAG_IMMUTABLE,
             )
             context.registerReceiver(usbReceiver, IntentFilter(ACTION_USB_PERMISSION))
-            this.printerContext = printContext
+            this.printerContext = printContent
             usbManager.requestPermission(usbConnection.device, permissionIntent)
         } else {
             AlertDialog.Builder(context)
@@ -94,6 +94,9 @@ class UsbPrinterConnection @Inject constructor() : PrinterConnection {
 
                 is PrintContent.QrCode -> {
                     PrintUtils.generateBarcode(printContext.item)
+                }
+                is PrintContent.Test ->{
+                    PrintUtils.test()
                 }
             }
 

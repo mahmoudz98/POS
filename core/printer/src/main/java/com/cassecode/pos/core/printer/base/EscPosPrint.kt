@@ -49,9 +49,9 @@ open class EscPosPrint(
 
                 val printer = EscPosPrinter(
                     deviceConnection,
-                    printerData.getPrinterDpi(),
-                    printerData.getPrinterWidthMM(),
-                    printerData.getPrinterNbrCharactersPerLine(),
+                    printerData.printerDpi,
+                    printerData.printerWidthMM,
+                    printerData.printerNbrCharactersPerLine,
                     EscPosCharsetEncoding("windows-1252", 16),
                 )
 
@@ -83,7 +83,7 @@ open class EscPosPrint(
             }
         }
 
-    fun execute(printerData: com.cassecode.pos.core.printer.base.EscPosPrinterService) {
+    fun execute(printerData: EscPosPrinterService) {
         val context = weakContext.get() ?: return
 
         showProgressDialog(context)

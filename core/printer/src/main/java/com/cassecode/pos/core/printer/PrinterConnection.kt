@@ -5,5 +5,5 @@ import com.casecode.pos.core.model.data.PrinterInfo
 
 
 interface PrinterConnection {
-    fun print(context: Context, printerInfo: PrinterInfo, printContext: PrintContent)
+    fun print(context: Context, printerInfo: PrinterInfo, printContent: PrintContent)
 }

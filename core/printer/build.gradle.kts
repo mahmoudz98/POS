@@ -12,7 +12,7 @@ android {
 dependencies {
     implementation(projects.core.model)
     implementation(projects.core.common)
-    implementation ("com.github.DantSu:ESCPOS-ThermalPrinter-Android:3.3.0")
+    api (libs.escpos.thermalprinter.android)
 
 
 }
