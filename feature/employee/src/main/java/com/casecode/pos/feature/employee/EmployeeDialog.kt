@@ -3,7 +3,9 @@ package com.casecode.pos.feature.employee
 import android.util.Patterns
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -26,8 +28,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
-import  com.casecode.pos.core.ui.R.string as uiString
-import  com.casecode.pos.core.ui.R.array as uiArray
+import com.casecode.pos.core.ui.R.array as uiArray
+import com.casecode.pos.core.ui.R.string as uiString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +56,7 @@ fun EmployeeDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(if (isUpdate) uiString.core_ui_update_employee_title else uiString.core_ui_add_employee_title)) },
         text = {
-            Column {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 PosOutlinedTextField(
                     value = name,
                     onValueChange = {
