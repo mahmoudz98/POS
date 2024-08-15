@@ -1,7 +1,7 @@
 package com.casecode.pos.core.model.data
 sealed class PrinterConnectionInfo {
     data class Tcp(val ipAddress: String, val port: Int) : PrinterConnectionInfo()
-    data class Bluetooth(val macAddress: String) : PrinterConnectionInfo()
+    data class Bluetooth(val name:String,val macAddress: String) : PrinterConnectionInfo()
     data class Usb(val usbDeviceName: String) : PrinterConnectionInfo()
 }
 
