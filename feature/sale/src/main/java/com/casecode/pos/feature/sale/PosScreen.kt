@@ -1,7 +1,6 @@
 package com.casecode.pos.feature.sale
 
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -22,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -65,8 +63,6 @@ internal fun PosScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var showUpdateQuantityItem by remember { mutableStateOf(false) }
-
-
     val snackState = remember { SnackbarHostState() }
     SnackbarHost(hostState = snackState, Modifier.zIndex(1f))
     uiState.userMessage?.let { message ->
@@ -116,14 +112,7 @@ internal fun PosScreen(
     }
 }
 
-@Composable
-fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean {
-    return windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
-            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-}
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PosScreen(
     modifier: Modifier = Modifier,
@@ -153,7 +142,7 @@ internal fun PosScreen(
             when (uiState.invoiceState) {
                 InvoiceState.Loading -> {
                     PosLoadingWheel(
-                        contentDesc = "",
+                        contentDesc = "SaleLoading",
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                     )
                 }
@@ -328,6 +317,11 @@ internal fun PosScreen(
 
 }
 
+@Composable
+fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean {
+    return windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
+            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+}
 
 @DevicePreviews
 @Composable

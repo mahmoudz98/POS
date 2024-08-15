@@ -1,7 +1,6 @@
 package com.casecode.pos.feature.sale
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.data.model.isInStock
@@ -49,15 +48,15 @@ class SaleViewModel @Inject constructor(
         viewModelScope.launch {
 
             getItemsUseCase().collect {
-                when(it){
-                    is Resource.Empty ->
-                        {
-                            _uiState.update { uiState ->
-                                uiState.copy(
-                                    invoiceState = InvoiceState.EmptyItems,
-                                )
-                            }
+                when (it) {
+                    is Resource.Empty -> {
+                        _uiState.update { uiState ->
+                            uiState.copy(
+                                invoiceState = InvoiceState.EmptyItems,
+                            )
                         }
+                    }
+
                     is Resource.Error -> {
                         _uiState.update { uiState ->
                             uiState.copy(
@@ -65,6 +64,7 @@ class SaleViewModel @Inject constructor(
                             )
                         }
                     }
+
                     Resource.Loading -> {
                         _uiState.update { uiState ->
                             uiState.copy(
@@ -72,6 +72,7 @@ class SaleViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Resource.Success -> {
                         checkTouUpdateInvoiceState()
                         _uiState.update { uiState ->
@@ -99,20 +100,19 @@ class SaleViewModel @Inject constructor(
         if (!item.isInStock()) {
             return showSnackbarMessage(R.string.feature_sale_item_out_of_stock_message)
         }
-
         _uiState.update {
             it.copy(
                 itemsInvoice = it.itemsInvoice.addItemToInvoices(item),
             )
         }
         updateStockInItem(item, item.quantity.dec())
-       checkTouUpdateInvoiceState()
+        checkTouUpdateInvoiceState()
 
     }
 
-    private fun checkTouUpdateInvoiceState(){
+    private fun checkTouUpdateInvoiceState() {
         _uiState.update {
-            it.copy(invoiceState = if(it.itemsInvoice.isEmpty()) InvoiceState.EmptyItemInvoice else InvoiceState.HasItems)
+            it.copy(invoiceState = if (it.itemsInvoice.isEmpty()) InvoiceState.EmptyItemInvoice else InvoiceState.HasItems)
         }
     }
 
@@ -139,7 +139,8 @@ class SaleViewModel @Inject constructor(
     fun deleteItemInvoice(item: Item) {
 
         val itemInStock =
-            getItem(item.sku) ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
+            getItem(item.sku)
+                ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
 
         updateStockInItem(
             itemInStock,
@@ -218,22 +219,25 @@ class SaleViewModel @Inject constructor(
     }
 
     private suspend fun addInvoice(saleItems: List<Item>) {
-        addInvoiceUseCase(saleItems).collect {
-            when (it) {
+        addInvoiceUseCase(saleItems).collect { resourceAddInvoice ->
+            when (resourceAddInvoice) {
                 is Resource.Empty -> {
-                    showSnackbarMessage(it.message as Int)
+                    showSnackbarMessage(resourceAddInvoice.message as Int)
                 }
 
                 is Resource.Error -> {
-                    showSnackbarMessage(it.message as Int)
+                    showSnackbarMessage(resourceAddInvoice.message as Int)
                 }
 
-                Resource.Loading -> {
-                }
+                Resource.Loading -> {}
 
                 is Resource.Success -> {
-
-                    _uiState.value = _uiState.value.copy(itemsInvoice = mutableSetOf())
+                    _uiState.update {
+                        it.copy(
+                            itemsInvoice = mutableSetOf(),
+                            invoiceState = InvoiceState.EmptyItemInvoice,
+                        )
+                    }
                 }
             }
         }
