@@ -288,8 +288,7 @@ fun PrinterInfoScreen(
                             ipAddressError,
                             port,
                             onPortChange = { port = it },
-                            portError,
-                        )
+                            portError,)
                     }
                 }
 
@@ -340,7 +339,7 @@ fun PrinterInfoScreen(
                     selectedDevice,
                     nameUsb,
                     false,
-                    selectedPaperWidth,
+                    selectedPaperWidth.replace(" mm", ""),
                     context,
                 )
                 showStatePrinterDialog = true

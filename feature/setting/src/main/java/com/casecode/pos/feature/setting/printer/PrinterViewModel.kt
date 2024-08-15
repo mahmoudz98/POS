@@ -38,7 +38,7 @@ class PrinterViewModel @Inject constructor(
 
     private lateinit var printerConnection: EscPosPrint
 
-    var printerState : MutableStateFlow<PrinterState> = MutableStateFlow(PrinterState.None)
+    var printerState: MutableStateFlow<PrinterState> = MutableStateFlow(PrinterState.None)
 
 
     fun addPrinter(printerInfo: PrinterInfo) {
@@ -62,14 +62,14 @@ class PrinterViewModel @Inject constructor(
         when (typePrinterConnection.toConnectionType()) {
             PrinterConnectionType.ETHERNET -> {
                 if (ipAddress != null && port != null) {
-                        testPrinterEthernet(
-                            namePrinter,
-                            ipAddress,
-                            port,
-                            isCurrentSelected,
-                            paperWidth,
-                            context,
-                        )
+                    testPrinterEthernet(
+                        namePrinter,
+                        ipAddress,
+                        port,
+                        isCurrentSelected,
+                        paperWidth,
+                        context,
+                    )
 
                 }
             }
@@ -102,12 +102,11 @@ class PrinterViewModel @Inject constructor(
 
             }
         }
-        viewModelScope.launch{
-          printerConnection.printerState.collect{
-              printerState.value = it
-        }
+        viewModelScope.launch {
+            printerConnection.printerState.collect {
+                printerState.value = it
             }
-
+        }
 
     }
 
