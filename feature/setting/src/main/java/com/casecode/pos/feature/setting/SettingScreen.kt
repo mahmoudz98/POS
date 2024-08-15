@@ -62,8 +62,8 @@ fun SettingRoute(
 
 @Composable
 fun SettingScreen(
-    modifier: Modifier = Modifier,
     onPrinterClick: () -> Unit,
+    modifier: Modifier = Modifier,
     emailUser: String,
     onSignOutClick: () -> Unit,
 ) {

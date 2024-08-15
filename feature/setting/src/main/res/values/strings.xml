@@ -41,6 +41,8 @@
     <string name="feature_setting_printer_info_error_papper_width_empty">Printer width is required.</string>
 
 
+    <string name="feature_setting_printer_dialog_bluetooth_devices_title">Bluetooth devices</string>
+    <string name="feature_setting_printer_dialog_bluetooth_devices_message_empty">No Bluetooth devices found.</string>>
 
 
 </resources>

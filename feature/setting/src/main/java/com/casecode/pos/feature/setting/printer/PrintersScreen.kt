@@ -42,13 +42,12 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.PrinterConnectionInfo
-import com.casecode.pos.core.model.data.PrinterConnectionType
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.feature.setting.R
 
 @Composable
 internal fun PrinterRoute(
-    printerVIewModel: PrinterVIewModel = hiltViewModel(),
+    printerVIewModel: PrinterViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onPrinterInfoClick:()-> Unit,
 ) {
@@ -213,14 +212,14 @@ fun PrinterScreenSuccessPreview() {
             name = "Orlando Reed",
             connectionTypeInfo = PrinterConnectionInfo.Tcp("",123),
             isCurrentSelected = false,
-            size = "tamquam"
+            widthPaper = "tamquam"
         ),
             PrinterInfo(
                 name = "Stefan Cobb",
                 connectionTypeInfo = PrinterConnectionInfo.Tcp("",123),
 
                 isCurrentSelected = false,
-                size = "nostra"
+                widthPaper = "nostra"
             ))),
         onBackClick = {},
         onAddClick = {},

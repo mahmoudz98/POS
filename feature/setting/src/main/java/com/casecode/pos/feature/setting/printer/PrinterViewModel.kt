@@ -1,5 +1,6 @@
 package com.casecode.pos.feature.setting.printer
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.domain.usecase.AddPrinterUseCase
@@ -9,10 +10,13 @@ import com.casecode.pos.core.model.data.PrinterConnectionInfo
 import com.casecode.pos.core.model.data.PrinterConnectionType
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.core.model.data.toConnectionType
-import com.cassecode.pos.core.printer.PrintContent
-import com.cassecode.pos.core.printer.PrinterConnection
-import com.cassecode.pos.core.printer.PrinterConnectionFactory
+import com.casecode.pos.core.printer.PrintContent
+import com.casecode.pos.core.printer.PrinterConnectionFactory
+import com.casecode.pos.core.printer.base.EscPosPrint
+import com.casecode.pos.core.printer.base.PrinterState
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -20,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PrinterVIewModel @Inject constructor(
+class PrinterViewModel @Inject constructor(
     private val addPrinterUseCase: AddPrinterUseCase,
     private val getPrinterUseCase: GetPrinterUseCase,
     private val printerConnectionFactory: PrinterConnectionFactory,
@@ -32,7 +36,10 @@ class PrinterVIewModel @Inject constructor(
             initialValue = Resource.Loading,
         )
 
-    private lateinit var printerConnection: PrinterConnection
+    private lateinit var printerConnection: EscPosPrint
+
+    var printerState : MutableStateFlow<PrinterState> = MutableStateFlow(PrinterState.None)
+
 
     fun addPrinter(printerInfo: PrinterInfo) {
         viewModelScope.launch {
@@ -43,48 +50,63 @@ class PrinterVIewModel @Inject constructor(
     fun testPrinter(
         typePrinterConnection: String,
         namePrinter: String,
-        ipAddress: String,
-        port: String,
-        macAddress: String,
-        usbDeviceName: String,
+        ipAddress: String?,
+        port: String?,
+        bluetoothConnection: BluetoothConnection?,
+        usbDeviceName: String?,
         isCurrentSelected: Boolean,
         paperWidth: String,
         context: android.content.Context,
     ) {
-        val printerType = typePrinterConnection.toConnectionType()
-        when (printerType!!) {
+
+        when (typePrinterConnection.toConnectionType()) {
             PrinterConnectionType.ETHERNET -> {
-                testPrinterEthernet(
-                    namePrinter,
-                    ipAddress,
-                    port,
-                    isCurrentSelected,
-                    paperWidth,
-                    context,
-                )
+                if (ipAddress != null && port != null) {
+                        testPrinterEthernet(
+                            namePrinter,
+                            ipAddress,
+                            port,
+                            isCurrentSelected,
+                            paperWidth,
+                            context,
+                        )
+
+                }
             }
 
             PrinterConnectionType.BLUETOOTH -> {
-                testPrinterBluetooth(
-                    namePrinter,
-                    macAddress,
-                    isCurrentSelected,
-                    paperWidth,
-                    context,
-                )
+                if (bluetoothConnection != null) {
+                    testPrinterBluetooth(
+                        namePrinter,
+                        bluetoothConnection,
+                        isCurrentSelected,
+                        paperWidth,
+                        context,
+                    )
+                }
             }
 
             PrinterConnectionType.USB -> {
-                testPrinterUsb(
-                    namePrinter,
-                    usbDeviceName,
-                    isCurrentSelected,
-                    paperWidth,
-                    context,
-                )
+                if (usbDeviceName != null) {
+                    testPrinterUsb(
+                        namePrinter,
+                        usbDeviceName,
+                        isCurrentSelected,
+                        paperWidth,
+                        context,
+                    )
+                }
             }
 
+            null -> {
+
+            }
         }
+        viewModelScope.launch{
+          printerConnection.printerState.collect{
+              printerState.value = it
+        }
+            }
 
 
     }
@@ -102,15 +124,16 @@ class PrinterVIewModel @Inject constructor(
             name = namePrinter,
             connectionTypeInfo = PrinterConnectionInfo.Tcp(ipAddress, port.toInt()),
             isCurrentSelected = isCurrentSelected,
-            size = paperWidth,
+            widthPaper = paperWidth,
         )
         printerConnection = printerConnectionFactory.create(PrinterConnectionType.ETHERNET)
         printerConnection.print(context, printerInfo, PrintContent.Test)
     }
 
+    @SuppressLint("MissingPermission")
     fun testPrinterBluetooth(
         namePrinter: String,
-        macAddress: String,
+        bluetoothConnection: BluetoothConnection,
         isCurrentSelected: Boolean,
         paperWidth: String,
         context: android.content.Context,
@@ -118,9 +141,12 @@ class PrinterVIewModel @Inject constructor(
 
         val printerInfo = PrinterInfo(
             name = namePrinter,
-            connectionTypeInfo = PrinterConnectionInfo.Bluetooth(macAddress),
+            connectionTypeInfo = PrinterConnectionInfo.Bluetooth(
+                bluetoothConnection.device.name,
+                bluetoothConnection.device.address,
+            ),
             isCurrentSelected = isCurrentSelected,
-            size = paperWidth,
+            widthPaper = paperWidth,
         )
         printerConnection = printerConnectionFactory.create(PrinterConnectionType.BLUETOOTH)
         printerConnection.print(context, printerInfo, PrintContent.Test)
@@ -139,7 +165,7 @@ class PrinterVIewModel @Inject constructor(
             name = namePrinter,
             connectionTypeInfo = PrinterConnectionInfo.Usb(usbDeviceName),
             isCurrentSelected = isCurrentSelected,
-            size = paperWidth,
+            widthPaper = paperWidth,
         )
         printerConnection = printerConnectionFactory.create(PrinterConnectionType.USB)
         printerConnection.print(context, printerInfo, PrintContent.Test)
