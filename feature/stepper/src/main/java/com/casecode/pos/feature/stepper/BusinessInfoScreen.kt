@@ -133,7 +133,7 @@ internal fun BusinessInfoScreen(
                     email = it
                     emailError = validateEmail(it)
                 },
-                label = stringResource(id = uiString.core_ui_work_phone_number_hint),
+                label = stringResource(id = uiString.core_ui_work_email_hint),
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = {
                     Icon(

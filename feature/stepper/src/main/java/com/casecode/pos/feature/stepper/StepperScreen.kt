@@ -48,7 +48,6 @@ fun StepperScreen(
 ) {
     val pagerState = rememberPagerState(pageCount = { 4 })
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
     var showClosingDialog by remember { mutableStateOf(false) }
     val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
     val buttonStepState by viewModel.buttonStepState.collectAsStateWithLifecycle()
