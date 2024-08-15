@@ -10,6 +10,7 @@
     <string name="core_ui_error_unknown">Something went wrong!</string>
     <string name="core_ui_message_scan_complete">Scan completed.</string>
     <string name="core_ui_message_scan_error">Scan error: %s</string>
+    <string name="core_ui_message_scan_error_open">Can\'t open Scan</string>
     <string name="core_ui_scan_result_empty">Scan result is empty.</string>
 
     <string name="core_ui_employee_name_hint">Name</string>
@@ -42,11 +43,10 @@
     <!-- Subscription -->
     <string name="core_ui_subscription_plan_title">Subscription Plan</string>
     <string name="core_ui_subscribe_button_text">Subscribe</string>
-    <string name="core_ui_currency" translatable="false">$ %s</string>
+    <string name="core_ui_currency" translatable="false">$%s</string>
     <string name="core_ui_time_month_label"> month</string>
     <string name="core_ui_error_add_subscription_message">Failed to add subscription. Please try again.</string>
     <string name="core_ui_success_add_subscription_message">Subscription added successfully!</string>
-
 
 
     <!-- Employees -->

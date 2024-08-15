@@ -11,6 +11,8 @@
     <string name="core_ui_error_unknown">حدث خطأ ما!</string>
     <string name="core_ui_message_scan_complete">تم المسح الضوئي.</string>
     <string name="core_ui_message_scan_error">خطأ في المسح الضوئي: %s</string>
+    <string name="core_ui_message_scan_error_open">خطا فى فتح شاشه ماسح الباركود</string>
+
     <string name="core_ui_scan_result_empty">نتيجة المسح الضوئي فارغة.</string>
     <string name="core_ui_employee_name_hint">الاسم</string>
     <string name="core_ui_employee_password_hint">كلمة المرور</string>

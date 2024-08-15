@@ -8,7 +8,7 @@ class TestAccountService @Inject constructor() : AccountService {
     var signInResult: Resource<Int> = Resource.Success(com.casecode.pos.core.data.R.string.core_data_sign_in_success)
     var employeeLoginResult: Resource<Boolean> = Resource.Success(true)
 
-    override suspend fun signIn(): Resource<Int> {
+    override suspend fun signIn(activityContext: android.content.Context): Resource<Int> {
         return signInResult
     }
 
