@@ -8,10 +8,12 @@ import androidx.navigation.navOptions
 import com.casecode.pos.feature.item.navigateToItemsGraph
 import com.casecode.pos.feature.sale.POS_ROUTE
 import com.casecode.pos.feature.sale.posScreen
+import com.casecode.pos.feature.sales_report.navigateToSalesReportDetails
+import com.casecode.pos.feature.sales_report.salesReportGraph
 import com.casecode.pos.feature.setting.settingsGraph
 import com.casecode.pos.feature.signout.navigateToSignOut
 import com.casecode.pos.feature.signout.signOutDialog
-import com.casecode.pos.feature.statistics.statisticsScreen
+import com.casecode.pos.feature.statistics.reportsScreen
 import com.casecode.pos.ui.main.MainAppState
 
 
@@ -45,7 +47,15 @@ fun PosSaleNavHost(
                 },
             )
         }
-        statisticsScreen()
+        //
+        reportsScreen(onSalesReportClick = {}, onInventoryReportClick = {})
+        salesReportGraph(
+            navController = appState.navController,
+            onBackClick = { appState.navController.popBackStack() },
+            onSalesReportDetailsClick = {
+                appState.navController.navigateToSalesReportDetails()
+            },
+        )
         settingsGraph(
             appState.navController,
             onSignOutClick = {
@@ -54,7 +64,8 @@ fun PosSaleNavHost(
         )
         signOutDialog(
             onSignOut = onSignOutClick,
-            onDismiss = appState.navController::popBackStack)
+            onDismiss = appState.navController::popBackStack,
+        )
 
     }
 

@@ -1,5 +1,6 @@
 package com.casecode.pos.ui.signIn
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.R
@@ -57,13 +58,13 @@ class SignInActivityViewModel
         _signInUiState.update { it.copy(isOnline = isOnline) }
     }
 
-    fun signIn() {
+    fun signIn(activity: Context) {
         if (signInUiState.value.isOnline.not()) {
             _signInUiState.update { it.copy(userMessage = com.casecode.pos.core.ui.R.string.core_ui_error_network) }
             return
         }
         viewModelScope.launch {
-            when (val result = accountService.signIn()) {
+            when (val result = accountService.signIn(activity)) {
                 is Resource.Loading -> {}
                 is Resource.Empty -> {
                     _signInUiState.update {

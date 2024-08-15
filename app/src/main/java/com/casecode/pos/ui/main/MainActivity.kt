@@ -18,8 +18,9 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
+
     @Inject
-    lateinit var authService : AuthService
+    lateinit var authService: AuthService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             }
             val appState = rememberMainAppState(
                 networkMonitor = networkMonitor,
-                authService = authService
+                authService = authService,
             )
             CompositionLocalProvider {
                 POSTheme {

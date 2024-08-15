@@ -1,5 +1,6 @@
 package com.casecode.pos.ui.signIn
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -61,7 +62,7 @@ fun SignInScreen(viewModel: SignInActivityViewModel) {
         uiState = uiState,
         onSignInCLick = {
             if (isGooglePlayServicesAvailable(context)) {
-                viewModel.signIn()
+                viewModel.signIn(context as Activity)
             } else {
                 showDownloadGooglePlay = true
             }

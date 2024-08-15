@@ -4,7 +4,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.casecode.pos.R
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.ui.R.string.core_ui_employees_title
-import com.casecode.pos.feature.invoice.R.string.feature_invoice_title
 
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
@@ -14,7 +13,6 @@ enum class TopLevelDestination(
 ) {
     POS(PosIcons.Pos, PosIcons.Pos, R.string.pos),
     REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title),
-    INVOICES(PosIcons.Invoices, PosIcons.Invoices, feature_invoice_title),
 
     ITEMS(PosIcons.Items,PosIcons.Items,
         R.string.menu_items,

@@ -16,8 +16,9 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="jbr-21" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -38,12 +39,12 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/employee" />
-            <option value="$PROJECT_DIR$/feature/invoice" />
             <option value="$PROJECT_DIR$/feature/item" />
             <option value="$PROJECT_DIR$/feature/login-employee" />
             <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/reports" />
             <option value="$PROJECT_DIR$/feature/sale" />
+            <option value="$PROJECT_DIR$/feature/sales-report" />
             <option value="$PROJECT_DIR$/feature/setting" />
             <option value="$PROJECT_DIR$/feature/signout" />
             <option value="$PROJECT_DIR$/feature/stepper" />
@@ -53,6 +54,5 @@
         <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
-    <option name="offlineMode" value="true" />
   </component>
 </project>

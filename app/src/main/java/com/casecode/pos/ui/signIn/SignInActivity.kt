@@ -1,10 +1,8 @@
 package com.casecode.pos.ui.signIn
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnticipateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,9 +21,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.LoginStateResult
 import com.casecode.pos.core.model.data.LoginStateResult.Loading
-import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.utils.moveToMainActivity
 import com.casecode.pos.utils.moveToStepperActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,11 +41,7 @@ class SignInActivity : ComponentActivity() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { authViewModel.checkIfRegistrationAndBusinessCompleted() }
-                launch {
-                    authViewModel.loginStateResult.collect {
-                        authUiState = it
-                    }
-                }
+                launch { authViewModel.loginStateResult.collect { authUiState = it } }
             }
         }
         splashScreen.setKeepOnScreenCondition {
@@ -61,14 +55,14 @@ class SignInActivity : ComponentActivity() {
                 0.0f,
             )
             zoomX.interpolator = OvershootInterpolator()
-            zoomX.duration = 800L
+            zoomX.duration = 400L
             zoomX.doOnEnd { splashScreenView.remove() }
 
             val zoomY = ObjectAnimator.ofFloat(
                 splashScreenView.iconView,
                 View.SCALE_Y,
                 0.4f,
-                0.0f
+                0.0f,
             )
             zoomY.interpolator = OvershootInterpolator()
             zoomY.duration = 400L

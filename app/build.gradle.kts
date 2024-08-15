@@ -51,7 +51,7 @@ dependencies {
     implementation(projects.feature.loginEmployee)
     implementation(projects.feature.stepper)
     implementation(projects.feature.employee)
-    implementation(projects.feature.invoice)
+    implementation(projects.feature.salesReport)
     implementation(projects.feature.item)
     implementation(projects.feature.profile)
     implementation(projects.feature.sale)

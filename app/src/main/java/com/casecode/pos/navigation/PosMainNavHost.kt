@@ -6,16 +6,18 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.casecode.pos.feature.employee.employeesScreen
-import com.casecode.pos.feature.invoice.invoicesGraph
 import com.casecode.pos.feature.item.itemsGraph
 import com.casecode.pos.feature.item.navigateToItemsGraph
 import com.casecode.pos.feature.profile.profileScreen
 import com.casecode.pos.feature.sale.POS_ROUTE
 import com.casecode.pos.feature.sale.posScreen
+import com.casecode.pos.feature.sales_report.navigateToSalesReport
+import com.casecode.pos.feature.sales_report.navigateToSalesReportDetails
+import com.casecode.pos.feature.sales_report.salesReportGraph
 import com.casecode.pos.feature.setting.settingsGraph
 import com.casecode.pos.feature.signout.navigateToSignOut
 import com.casecode.pos.feature.signout.signOutDialog
-import com.casecode.pos.feature.statistics.statisticsScreen
+import com.casecode.pos.feature.statistics.reportsScreen
 import com.casecode.pos.ui.main.MainAppState
 
 
@@ -48,9 +50,21 @@ fun PosMainNavHost(
                 },
             )
         }
-        statisticsScreen()
-        invoicesGraph(appState.navController, appState::openOrClosed)
-        itemsGraph(appState.navController, appState::openOrClosed)
+        // TODO: invoke navigate to inventory report screen
+        reportsScreen(
+            onSalesReportClick = { appState.navController.navigateToSalesReport() },
+            onInventoryReportClick = {},
+        )
+        salesReportGraph(
+            navController = appState.navController,
+            onBackClick = { appState.navController.popBackStack() },
+            onSalesReportDetailsClick = {
+                appState.navController.navigateToSalesReportDetails()
+            },
+
+
+            )
+        itemsGraph(appState.navController)
         employeesScreen()
         settingsGraph(
             appState.navController,

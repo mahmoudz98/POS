@@ -10,8 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.feature.stepper.StepperScreen
+import com.casecode.pos.ui.signIn.SignInActivity
 import com.casecode.pos.utils.moveToMainActivity
 import com.casecode.pos.utils.moveToSignInActivity
+import com.casecode.pos.utils.moveToStepperActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,10 +31,10 @@ class StepperActivity : ComponentActivity() {
                 {
                     StepperScreen(
                         onMoveToMainActivity = {
-                            moveToMainActivity(this)
+                            moveToMainActivity(this@StepperActivity)
                         },
                         onMoveToSignInActivity = {
-                            moveToSignInActivity(this)
+                            moveToSignInActivity(this@StepperActivity)
                         },
                     )
                 }
