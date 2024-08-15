@@ -1,4 +1,4 @@
-package com.casecode.pos.feature.invoice
+package com.casecode.pos.feature.sales_report
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -64,9 +64,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.data.utils.toDateFormatString
 import com.casecode.pos.core.data.utils.toTimeFormatedString
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.Invoice
-import com.casecode.pos.core.model.data.users.InvoiceGroup
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.component.VerticalGrid
@@ -75,25 +72,29 @@ import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableS
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.users.Invoice
+import com.casecode.pos.core.model.data.users.InvoiceGroup
+
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InvoicesRoute(
-    viewModel: InvoicesViewModel = hiltViewModel(),
-    onMenuClick: () -> Unit,
-    onInvoiceDetailsClick: () -> Unit,
+fun SalesReportRoute(
+    viewModel: SalesReportViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+    onSalesReportDetailsClick: () -> Unit,
 ) {
-    val uiState by viewModel.uiInvoiceState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiSalesReportState.collectAsStateWithLifecycle()
     var showDialogDate by remember { mutableStateOf(false) }
 
-    InvoicesScreen(
-        uiInvoiceState = uiState,
+    SalesReportScreen(
+        uiSalesReportState = uiState,
         onInvoiceClick = {
-            onInvoiceDetailsClick()
+            onSalesReportDetailsClick()
             viewModel.setSelectedInvoice(it)
         },
-        onMenuClick = { onMenuClick() },
+        onBackClick =  onBackClick,
         onActionClick = { showDialogDate = true },
         onClearFilterDate = { viewModel.setDateInvoiceSelected(null) },
     )
@@ -111,17 +112,17 @@ fun InvoicesRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InvoicesScreen(
+fun SalesReportScreen(
     modifier: Modifier = Modifier,
-    uiInvoiceState: UiInvoiceState,
+    uiSalesReportState: UiSalesReportState,
     onInvoiceClick: (Invoice) -> Unit,
-    onMenuClick: () -> Unit,
+    onBackClick: () -> Unit,
     onActionClick: () -> Unit,
     onClearFilterDate: () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
-    val isShowingClearFilterDate by remember(uiInvoiceState.dateInvoiceSelected) {
-        derivedStateOf { uiInvoiceState.dateInvoiceSelected != null }
+    val isShowingClearFilterDate by remember(uiSalesReportState.dateInvoiceSelected) {
+        derivedStateOf { uiSalesReportState.dateInvoiceSelected != null }
     }
     Scaffold(
         containerColor = Color.Transparent,
@@ -164,8 +165,8 @@ fun InvoicesScreen(
         ) {
             PosTopAppBar(
                 modifier = modifier,
-                titleRes = R.string.feature_invoice_title,
-                navigationIcon = PosIcons.Menu,
+                titleRes = R.string.feature_sales_report_title,
+                navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = "",
                 onActionClick = { onActionClick() },
                 actionIconContentDescription = null,
@@ -173,10 +174,10 @@ fun InvoicesScreen(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.Transparent,
                 ),
-                onNavigationClick = { onMenuClick() },
+                onNavigationClick = { onBackClick() },
             )
             AnimatedContent(
-                uiInvoiceState.resourceInvoiceGroups,
+                uiSalesReportState.resourceInvoiceGroups,
                 transitionSpec = {
                     fadeIn(
                         animationSpec = tween(3000),
@@ -186,12 +187,12 @@ fun InvoicesScreen(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                 ) {
-                    uiInvoiceState.resourceInvoiceGroups =
-                        when (uiInvoiceState.resourceInvoiceGroups) {
+                    uiSalesReportState.resourceInvoiceGroups =
+                        when (uiSalesReportState.resourceInvoiceGroups) {
                             Resource.Loading -> Resource.Loading
                             is Resource.Empty -> Resource.empty()
-                            is Resource.Error -> uiInvoiceState.resourceInvoiceGroups
-                            is Resource.Success -> uiInvoiceState.resourceInvoiceGroups
+                            is Resource.Error -> uiSalesReportState.resourceInvoiceGroups
+                            is Resource.Success -> uiSalesReportState.resourceInvoiceGroups
                         }
                 },
                 label = "Animated Content",
@@ -207,18 +208,18 @@ fun InvoicesScreen(
                     }
 
                     is Resource.Empty -> {
-                        InvoiceEmptyScreen()
+                        SalesReportEmptyScreen()
                     }
 
                     is Resource.Error -> {
-                        InvoiceEmptyScreen()
+                        SalesReportEmptyScreen()
                     }
 
                     is Resource.Success -> {
                         val filteredItems =
-                            remember(targetState, uiInvoiceState.dateInvoiceSelected) {
-                                if (uiInvoiceState.dateInvoiceSelected != null) {
-                                    val date = Date(uiInvoiceState.dateInvoiceSelected)
+                            remember(targetState, uiSalesReportState.dateInvoiceSelected) {
+                                if (uiSalesReportState.dateInvoiceSelected != null) {
+                                    val date = Date(uiSalesReportState.dateInvoiceSelected)
                                     val dateFormat = date.toDateFormatString()
 
                                     targetState.data.filter {
@@ -228,7 +229,7 @@ fun InvoicesScreen(
                                     targetState.data
                                 }
                             }
-                        InvoiceGroupList(invoiceGroups = filteredItems) {
+                        SalesReportGroupList(invoiceGroups = filteredItems) {
                             onInvoiceClick(it)
                         }
                     }
@@ -244,7 +245,7 @@ fun InvoicesScreen(
 }
 
 @Composable
-fun InvoiceEmptyScreen(modifier: Modifier = Modifier) {
+fun SalesReportEmptyScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -252,17 +253,19 @@ fun InvoiceEmptyScreen(modifier: Modifier = Modifier) {
     ) {
         Image(
             painter = painterResource(id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120),
-            contentDescription = stringResource(id = R.string.feature_invoice_empty_message),
-            modifier = Modifier.size(120.dp))
+            contentDescription = stringResource(id = R.string.feature_sales_report_empty_message),
+            modifier = Modifier.size(120.dp),
+        )
 
         Text(
-            text = stringResource(id = R.string.feature_invoice_empty),
+            text = stringResource(id = R.string.feature_sales_report_empty),
             style = MaterialTheme.typography.titleMedium,
             color = Color.Black,
-            modifier = Modifier.padding(top = 16.dp))
+            modifier = Modifier.padding(top = 16.dp),
+        )
 
         Text(
-            text = stringResource(id = R.string.feature_invoice_empty_message),
+            text = stringResource(id = R.string.feature_sales_report_empty_message),
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.padding(top = 8.dp),
         )
@@ -270,7 +273,7 @@ fun InvoiceEmptyScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun InvoiceGroupList(
+fun SalesReportGroupList(
     invoiceGroups: List<InvoiceGroup>,
     modifier: Modifier = Modifier,
     onItemClick: (Invoice) -> Unit,
@@ -284,7 +287,7 @@ fun InvoiceGroupList(
         ) {
             invoiceGroups.forEach {
                 item {
-                    InvoiceGroupItem(invoiceGroup = it, onItemClick = onItemClick)
+                    SalesReportGroupItem(invoiceGroup = it, onItemClick = onItemClick)
                 }
             }
 
@@ -308,7 +311,7 @@ fun InvoiceGroupList(
 }
 
 @Composable
-fun InvoiceGroupItem(
+fun SalesReportGroupItem(
     invoiceGroup: InvoiceGroup,
     onItemClick: (Invoice) -> Unit,
 ) {
@@ -325,7 +328,10 @@ fun InvoiceGroupItem(
             )
             VerticalDivider(Modifier.padding(horizontal = 4.dp))
             Text(
-                text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_currency, invoiceGroup.totalInvoiceGroup),
+                text = stringResource(
+                    com.casecode.pos.core.ui.R.string.core_ui_currency,
+                    invoiceGroup.totalInvoiceGroup,
+                ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.secondaryContainer,
             )
@@ -362,7 +368,10 @@ fun InvoiceCard(modifier: Modifier = Modifier, invoice: Invoice, onItemClick: (I
             )
             HorizontalDivider(Modifier.padding(vertical = 4.dp))
             Text(
-                text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_currency, invoice.total.toString()),
+                text = stringResource(
+                    com.casecode.pos.core.ui.R.string.core_ui_currency,
+                    invoice.total.toString(),
+                ),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
@@ -373,8 +382,8 @@ fun InvoiceCard(modifier: Modifier = Modifier, invoice: Invoice, onItemClick: (I
 @Preview(device = "spec:width=360dp,height=640dp,dpi=320", showBackground = true)
 @Composable
 fun InvoiceScreenSuccessPreview() {
-    InvoicesScreen(
-        uiInvoiceState = UiInvoiceState(
+    SalesReportScreen(
+        uiSalesReportState = UiSalesReportState(
             resourceInvoiceGroups = Resource.Success(
                 listOf(
                     InvoiceGroup(
@@ -461,29 +470,29 @@ fun InvoiceScreenSuccessPreview() {
             ),
         ),
         onInvoiceClick = {},
-        onMenuClick = {},
+        onBackClick = {},
         onActionClick = {},
     )
 }
 
 @Preview(device = "id:pixel_2", showBackground = true)
 @Composable
-fun InvoiceScreenEmptyPreview() {
-    InvoicesScreen(
-        uiInvoiceState = UiInvoiceState(resourceInvoiceGroups = Resource.empty()),
+fun SalesReportScreenEmptyPreview() {
+    SalesReportScreen(
+        uiSalesReportState = UiSalesReportState(resourceInvoiceGroups = Resource.empty()),
         onInvoiceClick = {},
-        onMenuClick = {},
+        onBackClick = {},
         onActionClick = {},
     )
 }
 
 @Preview(device = "id:pixel_2", showBackground = true)
 @Composable
-fun InvoiceScreenErrorPreview() {
-    InvoicesScreen(
-        uiInvoiceState = UiInvoiceState(resourceInvoiceGroups = Resource.error("")),
+fun SalesReportScreenErrorPreview() {
+    SalesReportScreen(
+        uiSalesReportState = UiSalesReportState(resourceInvoiceGroups = Resource.error("")),
         onInvoiceClick = {},
-        onMenuClick = {},
+        onBackClick = {},
         onActionClick = {},
     )
 }
@@ -491,10 +500,10 @@ fun InvoiceScreenErrorPreview() {
 @Preview(device = "id:pixel_2", showBackground = true)
 @Composable
 fun InvoiceScreenLoadingPreview() {
-    InvoicesScreen(
-        uiInvoiceState = UiInvoiceState(resourceInvoiceGroups = Resource.loading()),
+    SalesReportScreen(
+        uiSalesReportState = UiSalesReportState(resourceInvoiceGroups = Resource.loading()),
         onInvoiceClick = {},
-        onMenuClick = {},
+        onBackClick = {},
         onActionClick = {},
     )
 }
@@ -502,9 +511,9 @@ fun InvoiceScreenLoadingPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun InvoiceGroupItemPreview() {
+fun SalesReportGroupItemPreview() {
     POSTheme {
-        InvoiceGroupItem(
+        SalesReportGroupItem(
             invoiceGroup = InvoiceGroup(
                 "",
                 listOf(

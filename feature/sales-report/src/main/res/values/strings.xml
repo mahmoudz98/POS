@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_sales_report_title">sales reports</string>
+    <string name="feature_sales_report_empty">No sales reports yet.</string>
+    <string name="feature_sales_report_empty_message">Create an sales report by adding items in the Sales section.</string>
+    <string name="feature_sales_report_group_total">Total: $%s</string>
+    <string name="feature_sales_report_price_format">$%s</string>
+    <string name="feature_sales_report_select_date_action_text">Select Date</string>
+    <string name="feature_sales_report_clear_date_filter_action_text">Clear Date Filter</string>
+    <string name="feature_sales_report_print_action_text">Print sales report</string>
+    <string name="feature_sales_report_details_title">sales Details</string>
+
+</resources>

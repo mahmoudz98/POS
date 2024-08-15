@@ -1,4 +1,4 @@
-package com.casecode.pos.feature.invoice
+package com.casecode.pos.feature.sales_report
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,14 +14,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InvoicesViewModel @Inject constructor(
+class SalesReportViewModel @Inject constructor(
     private val getInvoicesUseCase: GetInvoicesUseCase,
 ) : ViewModel() {
 
-    private val _uiInvoiceState = MutableStateFlow<UiInvoiceState>(UiInvoiceState())
-    val uiInvoiceState get() = _uiInvoiceState.asStateFlow()
+    private val _uiSalesReportState = MutableStateFlow(UiSalesReportState())
+    val uiSalesReportState get() = _uiSalesReportState.asStateFlow()
 
-    private val _invoiceSelected = MutableStateFlow<UIInvoiceDetails>(UIInvoiceDetails.Loading)
+    private val _invoiceSelected = MutableStateFlow<UISalesReportDetails>(UISalesReportDetails.Loading)
 
     @OptIn(FlowPreview::class)
     val invoiceSelected get() = _invoiceSelected.asStateFlow().debounce(300)
@@ -34,18 +34,18 @@ class InvoicesViewModel @Inject constructor(
         viewModelScope.launch {
             delay(500)
             getInvoicesUseCase().collect {
-                _uiInvoiceState.value = _uiInvoiceState.value.copy(resourceInvoiceGroups = it)
+                _uiSalesReportState.value = _uiSalesReportState.value.copy(resourceInvoiceGroups = it)
 
             }
         }
     }
 
     fun setDateInvoiceSelected(date: Long?) {
-        _uiInvoiceState.value = _uiInvoiceState.value.copy(dateInvoiceSelected = date)
+        _uiSalesReportState.value = _uiSalesReportState.value.copy(dateInvoiceSelected = date)
     }
 
     fun setSelectedInvoice(invoice: Invoice) {
-        _invoiceSelected.value = UIInvoiceDetails.Success(invoice)
+        _invoiceSelected.value = UISalesReportDetails.Success(invoice)
     }
 
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_sales_report_title">الفواتير</string>
+    <string name="feature_sales_report_empty">لا توجد فواتير بعد.</string>
+    <string name="feature_sales_report_empty_message">قم بإنشاء فاتورة عن طريق إضافة منتجات في قسم المبيعات.</string>
+    <string name="feature_sales_report_group_total">الإجمالي: $%s</string>
+    <string name="feature_sales_report_price_format">$%s</string>
+    <string name="feature_sales_report_select_date_action_text">اختيار التاريخ</string>
+    <string name="feature_sales_report_clear_date_filter_action_text">مسح تصفية التاريخ</string>
+    <string name="feature_sales_report_print_action_text">طباعة الفاتورة</string>
+    <string name="feature_sales_report_details_title">تفاصيل الفاتورة</string>
+
+</resources>

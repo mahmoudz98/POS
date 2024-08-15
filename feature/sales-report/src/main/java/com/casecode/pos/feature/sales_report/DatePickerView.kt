@@ -1,4 +1,4 @@
-package com.casecode.pos.feature.invoice
+package com.casecode.pos.feature.sales_report
 
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -33,6 +33,7 @@ fun DatePickerView(
     )
 
     DatePickerDialog(
+        modifier = Modifier,
         onDismissRequest = { onDismiss() },
         confirmButton = {
             PosTextButton(onClick = { onDataSelected(datePickerState.selectedDateMillis); onDismiss() }) {
@@ -46,7 +47,6 @@ fun DatePickerView(
         ) {
 
         DatePicker(
-            modifier = modifier,
             state = datePickerState,
         )
 

@@ -1,4 +1,4 @@
-package com.casecode.pos.feature.invoice
+package com.casecode.pos.feature.sales_report
 
 import com.casecode.pos.core.testing.base.BaseTest
 import com.casecode.pos.core.testing.util.MainDispatcherRule
@@ -9,9 +9,9 @@ class InvoicesViewModelTest : BaseTest() {
     val mainDispatcherRule = MainDispatcherRule()
 
     // Subject under test
-    private lateinit var viewModel: InvoicesViewModel
+    private lateinit var viewModel: SalesReportViewModel
     override fun init() {
-        viewModel = InvoicesViewModel(getInvoicesUseCase)
+        viewModel = SalesReportViewModel(getInvoicesUseCase)
     }
 
 

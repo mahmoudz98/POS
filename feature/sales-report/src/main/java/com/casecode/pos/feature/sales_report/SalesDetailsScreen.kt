@@ -1,4 +1,4 @@
-package com.casecode.pos.feature.invoice
+package com.casecode.pos.feature.sales_report
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -55,11 +55,11 @@ import java.text.DecimalFormat
 import java.util.Date
 
 @Composable
-fun InvoiceDetailsRoute(viewModel: InvoicesViewModel, onBackClick: () -> Unit) {
-    val uiInvoiceDetails =
-        viewModel.invoiceSelected.collectAsStateWithLifecycle(UIInvoiceDetails.Loading)
-    InvoiceDetailsScreen(
-        uiInvoiceDetails = uiInvoiceDetails.value,
+fun SalesReportDetailsRoute(viewModel: SalesReportViewModel, onBackClick: () -> Unit) {
+    val uiSalesReportDetails =
+        viewModel.invoiceSelected.collectAsStateWithLifecycle(UISalesReportDetails.Loading)
+    SalesReportDetailsScreen(
+        uiSalesReportDetails = uiSalesReportDetails.value,
         onPrintClick = {},
         onBackClick = onBackClick,
     )
@@ -67,9 +67,9 @@ fun InvoiceDetailsRoute(viewModel: InvoicesViewModel, onBackClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InvoiceDetailsScreen(
+fun SalesReportDetailsScreen(
     modifier: Modifier = Modifier,
-    uiInvoiceDetails: UIInvoiceDetails,
+    uiSalesReportDetails: UISalesReportDetails,
     onPrintClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
@@ -80,21 +80,21 @@ fun InvoiceDetailsScreen(
     ) {
         PosTopAppBar(
             modifier = Modifier,
-            titleRes = R.string.feature_invoice_details_title,
+            titleRes = R.string.feature_sales_report_details_title,
             navigationIcon = PosIcons.ArrowBack,
             navigationIconContentDescription = stringResource(
                 id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
             ),
             onActionClick = { onPrintClick() },
-            actionIconContentDescription = stringResource(R.string.feature_invoice_print_invoice_action_text),
+            actionIconContentDescription = stringResource(R.string.feature_sales_report_print_action_text),
             actionIcon = PosIcons.Print,
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                 containerColor = Color.Transparent,
             ),
             onNavigationClick = { onBackClick() },
         )
-        when (uiInvoiceDetails) {
-            is UIInvoiceDetails.Loading -> {
+        when (uiSalesReportDetails) {
+            is UISalesReportDetails.Loading -> {
                 PosLoadingWheel(
                     modifier = modifier
                         .fillMaxSize()
@@ -103,12 +103,12 @@ fun InvoiceDetailsScreen(
                 )
             }
 
-            is UIInvoiceDetails.Empty -> {
-                InvoiceEmptyScreen()
+            is UISalesReportDetails.Empty -> {
+                SalesReportEmptyScreen()
             }
 
-            is UIInvoiceDetails.Success -> {
-                InvoiceDetailsContent(uiInvoiceDetails.invoice)
+            is UISalesReportDetails.Success -> {
+                SalesReportDetailsContent(uiSalesReportDetails.invoice)
             }
         }
     }
@@ -116,7 +116,7 @@ fun InvoiceDetailsScreen(
 
 
 @Composable
-fun InvoiceDetailsContent(invoice: Invoice) {
+fun SalesReportDetailsContent(invoice: Invoice) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Row(
             modifier = Modifier
@@ -137,13 +137,13 @@ fun InvoiceDetailsContent(invoice: Invoice) {
 
         HorizontalDivider(Modifier.padding(16.dp))
 
-        ItemsInvoiceDetailsContent(invoice.items)
+        ItemsSalesReportDetailsContent(invoice.items)
     }
 
 }
 
 @Composable
-fun ItemsInvoiceDetailsContent(
+fun ItemsSalesReportDetailsContent(
     items: List<Item>,
     modifier: Modifier = Modifier,
 ) {
@@ -243,9 +243,9 @@ private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
 
 @Preview(device = "spec:width=360dp,height=640dp,dpi=320", showBackground = true)
 @Composable
-fun InvoiceDetailsScreenSuccessPreview() {
+fun SalesReportDetailsScreenSuccessPreview() {
     POSTheme {
-        InvoiceDetailsContent(
+        SalesReportDetailsContent(
             Invoice(
                 invoiceId = "1212",
                 date = Date(),
