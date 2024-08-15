@@ -18,6 +18,15 @@ data class ItemDataModel(
     @set:PropertyName("image_url") @get:PropertyName("image_url") var imageUrl: String? = "",
 )
 
+fun ItemDataModel.asDomainModel() = Item(
+    name = this.name,
+    price = this.price,
+    quantity = this.quantity,
+    sku = this.sku,
+    unitOfMeasurement = this.unitOfMeasurement,
+    imageUrl = this.imageUrl,
+)
+
 fun Item.asExternalMapper(): Map<String, Any?> {
     val itemNetwork = ItemDataModel(
         this.name,

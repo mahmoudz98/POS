@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.StackedLineChart
 import androidx.compose.material.icons.filled.Store
 import androidx.compose.material.icons.filled.SupervisorAccount
 import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material.icons.outlined.Inventory
 import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.outlined.Upcoming
 import androidx.compose.material.icons.rounded.Add

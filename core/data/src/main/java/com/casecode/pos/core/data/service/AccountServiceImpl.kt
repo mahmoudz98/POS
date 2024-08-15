@@ -50,11 +50,11 @@ class AccountServiceImpl @Inject constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : AccountService {
     private val credentialManager: CredentialManager = CredentialManager.create(context)
-    override suspend fun signIn(): Resource<Int> {
+    override suspend fun signIn(activityContext: Context): Resource<Int> {
         trace(SIGN_IN) {
             return withContext(ioDispatcher) {
                 try {
-                    val googleIdToken = retrieveGoogleIdToken()
+                    val googleIdToken = retrieveGoogleIdToken(activityContext)
                     val googleCredentials = buildGoogleAuthCredential(googleIdToken)
                     val authResult = signInWithGoogleCredentials(googleCredentials)
 
@@ -86,11 +86,11 @@ class AccountServiceImpl @Inject constructor(
         }
     }
 
-    private suspend fun retrieveGoogleIdToken(): String {
+    private suspend fun retrieveGoogleIdToken(activityContext: Context): String {
         val credentialRequest =
             GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
         val credential =
-            credentialManager.getCredential(request = credentialRequest, context = context)
+            credentialManager.getCredential(request = credentialRequest, context = activityContext)
         val googleIdTokenCredentialRequest =
             GoogleIdTokenCredential.createFrom(credential.credential.data)
         return googleIdTokenCredentialRequest.idToken
@@ -106,33 +106,18 @@ class AccountServiceImpl @Inject constructor(
 
     override suspend fun checkUserLogin() {
         trace(IS_REGISTRATION_AND_BUSINESS_COMPLETED) {
-
-            return withContext(ioDispatcher) {
-                try {
-                  val currentUser =  firebaseAuth.currentUser ?: return@withContext
-
-                    if (isFirstTimeSignIn(currentUser)) {
-                        posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, false)
-                        return@withContext
-                    }
-
-                    if (isUserCompleteStep(currentUser.uid)) {
-                        posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, true)
-                        return@withContext
-
-                    } else {
-                        posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, false)
-                        return@withContext
-                    }
-
-                } catch (e: Exception) {
-                    Timber.e("Exception = $e")
-                    return@withContext
-
+            withContext(ioDispatcher) {
+                val currentUser = firebaseAuth.currentUser ?: return@withContext
+                val isAdmin = if (isFirstTimeSignIn(currentUser)) {
+                    false
+                } else {
+                    isUserCompleteStep(currentUser.uid)
                 }
+                posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
             }
         }
     }
+
 
     private fun isFirstTimeSignIn(firebaseUser: FirebaseUser): Boolean {
 
@@ -154,7 +139,7 @@ class AccountServiceImpl @Inject constructor(
      * If user complete step business return true,
      * else false
      */
-    private suspend fun isUserCompleteStep(currentUid:String): Boolean {
+    private suspend fun isUserCompleteStep(currentUid: String): Boolean {
         return withContext(ioDispatcher) {
             try {
 
@@ -207,7 +192,9 @@ class AccountServiceImpl @Inject constructor(
         password: String,
     ): Resource<Boolean> = withContext(ioDispatcher) {
         try {
-            val document = firestore.collection(USERS_COLLECTION_PATH).document("gOGCYjEnHRYqBu9YVub7Be1xUU93").get().await()
+            val document =
+                firestore.collection(USERS_COLLECTION_PATH).document("gOGCYjEnHRYqBu9YVub7Be1xUU93")
+                    .get().await()
 
             @Suppress("UNCHECKED_CAST")
             val employees = document.get(EMPLOYEES_FIELD) as List<Map<String, Any>>?
@@ -219,15 +206,13 @@ class AccountServiceImpl @Inject constructor(
                 Resource.success(true)
             } else Resource.success(false)
 
-        }catch (e: FirebaseException) {
+        } catch (e: FirebaseException) {
             Timber.e("ex: $e")
             Resource.error(e.message)
-        }
-        catch(e: FirebaseFirestoreException){
+        } catch (e: FirebaseFirestoreException) {
             Timber.e("ex: $e")
             Resource.error(e.message)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Timber.e("exception = $e")
             Resource.error(e.message)
         }

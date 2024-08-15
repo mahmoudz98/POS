@@ -3,6 +3,8 @@ package com.casecode.pos.core.data.repository
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
+import com.casecode.pos.core.data.model.ItemDataModel
+import com.casecode.pos.core.data.model.asDomainModel
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.service.AuthService
 import com.casecode.pos.core.data.service.checkUserNotFound
@@ -82,8 +84,8 @@ class ItemRepositoryImpl
 
                 val itemMutableList = mutableListOf<Item>()
                 snapshot.documents.mapNotNull { document ->
-                    Timber.i("Item: ${document.data}")
-                    document.toObject(Item::class.java)?.let { itemMutableList.add(it) }
+                    document.toObject(ItemDataModel::class.java)
+                        ?.let { itemMutableList.add(it.asDomainModel()) }
                 }
 
                 if (itemMutableList.isEmpty()) {

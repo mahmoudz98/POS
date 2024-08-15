@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -183,7 +184,8 @@ fun PosTextButton(
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground,
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
         ),
         content = content,
     )
@@ -288,8 +290,9 @@ fun PosOutlinedButtonPreview() {
 @Composable
 fun PosButtonLeadingIconPreview() {
     POSTheme {
-        PosBackground(modifier = Modifier.size(150.dp, 50.dp)) {
+        PosBackground(modifier = Modifier.size(400.dp, 50.dp)) {
             PosButton(
+                modifier = Modifier.fillMaxWidth(),
                 onClick = {},
                 text = { Text("Test button") },
                 leadingIcon = { Icon(imageVector = PosIcons.Add, contentDescription = null) },

@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DismissibleNavigationDrawer
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -77,7 +77,7 @@ fun RowScope.PosNavigationBarItem(
         colors = NavigationBarItemDefaults.colors(
             selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationSelectedItemColor(),
+            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
             unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
             indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
         ),
@@ -113,10 +113,7 @@ fun PosNavigationBar(
  * @param windowAdaptiveInfo The window adaptive info.
  * @param content The app content inside the scaffold.
  */
-@OptIn(
-    ExperimentalMaterial3AdaptiveNavigationSuiteApi::class,
-    ExperimentalMaterial3AdaptiveApi::class,
-)
+
 @Composable
 fun PosNavigationSuiteScaffold(
     navigationSuiteItems: PosNavigationSuiteScope.() -> Unit,
@@ -128,32 +125,26 @@ fun PosNavigationSuiteScaffold(
     //  drawer
     val layoutType = NavigationSuiteScaffoldDefaults
         .calculateFromAdaptiveInfo(windowAdaptiveInfo)
-    val customNavSuiteType = with(windowAdaptiveInfo) {
-        if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
-            NavigationSuiteType.NavigationBar
-        } else {
-            NavigationSuiteType.NavigationRail
-        }
-    }
+
     val navigationSuiteItemColors = NavigationSuiteItemColors(
         navigationBarItemColors = NavigationBarItemDefaults.colors(
             selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationSelectedItemColor(),
+            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
             unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
             indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
         ),
         navigationRailItemColors = NavigationRailItemDefaults.colors(
             selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationSelectedItemColor(),
+            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
             unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
             indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
         ),
         navigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
             selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationSelectedItemColor(),
+            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
             unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
         ),
     )
@@ -255,7 +246,7 @@ fun PosNavigationDrawer(
     drawerContent: @Composable () -> Unit,
     content: @Composable () -> Unit = {},
 ) {
-    ModalNavigationDrawer(
+    DismissibleNavigationDrawer(
         drawerState = drawerState,
         modifier = modifier,
         drawerContent = drawerContent,
@@ -266,7 +257,7 @@ fun PosNavigationDrawer(
 @ThemePreviews
 @Composable
 fun NiaNavigationBarPreview() {
-    val items = listOf("Sale", "Reports", "statistics")
+    val items = listOf("Sale", "Reports", "Settings")
     val icons = listOf(
         PosIcons.Pos,
         PosIcons.Reports,
@@ -275,7 +266,7 @@ fun NiaNavigationBarPreview() {
     val selectedIcons = listOf(
         PosIcons.Pos,
         PosIcons.Reports,
-        PosIcons.Invoices,
+        PosIcons.Settings,
     )
 
     POSTheme {

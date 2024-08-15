@@ -73,6 +73,46 @@ fun DynamicAsyncImage(
     }
 }
 
+@Composable
+fun DynamicAsyncQrCodeImage(
+    data: Bitmap?,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    placeholder: Painter = painterResource(R.drawable.core_designsystem_ic_placeholder),
+) {
+    val iconTint = LocalTintTheme.current.iconTint
+    var isLoading by remember { mutableStateOf(true) }
+    var isError by remember { mutableStateOf(false) }
+    val imageLoader = rememberAsyncImagePainter(
+        model = data,
+        onState = { state ->
+            isLoading = state is Loading
+            isError = state is Error
+        },
+    )
+    val isLocalInspection = LocalInspectionMode.current
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        if (isLoading && !isLocalInspection) {
+            // Display a progress bar while loading
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(64.dp),
+                color = MaterialTheme.colorScheme.tertiary,
+            )
+        }
+        Image(
+            contentScale = ContentScale.Crop,
+            painter = if (isError.not() && !isLocalInspection) imageLoader else placeholder,
+            contentDescription = contentDescription,
+            colorFilter = if (iconTint != Unspecified) ColorFilter.tint(iconTint) else null,
+        )
+    }
+}
+
 /**
  * A composable function that displays an image asynchronously with a placeholder and a success callback.
  *
@@ -151,7 +191,8 @@ fun DynamicAsyncImage(
 
     val isLocalInspection = LocalInspectionMode.current
     Box(
-        modifier = modifier) {
+        modifier = modifier,
+    ) {
         if (isLoading && !isLocalInspection) {
             // Display a progress bar while loading
             CircularProgressIndicator(
