@@ -1,4 +1,4 @@
-package com.cassecode.pos.core.printer.utils
+package com.casecode.pos.core.printer.utils
 
 import com.casecode.pos.core.model.data.users.Item
 import java.text.SimpleDateFormat
@@ -7,7 +7,7 @@ import java.util.Locale
 
 object PrintUtils {
 
-    fun generatePrintText(invoiceId : String, phone:String, items: List<Item>): String {
+    fun generatePrintText(invoiceId: String, phone: String, items: List<Item>): String {
         val format = SimpleDateFormat("'on' yyyy-MM-dd 'at' HH:mm:ss", Locale.getDefault())
         val currentDate = format.format(Date())
 
@@ -48,10 +48,13 @@ object PrintUtils {
                         "[C]<qrcode size='20'>${item.sku}</qrcode>\n"
                 )
     }
-    fun test(): String {
+
+    fun test(logo: String): String {
         return (
-                "[L]\n" +
-                        "[C]<u><font size='big'>Item 1</font></u>\n" +
+                        "[C]<img>" + logo + "</img>\n" +
+                        "[C]<u><font size='big-4'>POS</font></u>\n" +
+                        "<u></u>" +
+                        "[C]<u><font size='big'>Item test1</font></u>\n" +
                         "[L]<b>item 1</b>[R]20.00$\n" +
                         "[L]  + qty : 5.0\n" +
                         "[L]\n" +

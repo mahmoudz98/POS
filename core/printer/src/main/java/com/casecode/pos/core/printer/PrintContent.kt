@@ -1,4 +1,4 @@
-package com.cassecode.pos.core.printer
+package com.casecode.pos.core.printer
 
 import com.casecode.pos.core.model.data.users.Item
 

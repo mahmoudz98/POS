@@ -1,4 +1,4 @@
-package com.cassecode.pos.core.printer.base
+package com.casecode.pos.core.printer.base
 
 data class PrinterStatus(
     val asyncEscPosPrinterService: EscPosPrinterService?,
