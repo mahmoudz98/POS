@@ -5,16 +5,22 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 
-const val STATISTICS_ROUTE = "statistics_route"
+const val REPORTS_ROUTE = "reports_route"
 
-fun NavGraphBuilder.statisticsScreen() {
+fun NavGraphBuilder.reportsScreen(
+    onSalesReportClick: () -> Unit,
+    onInventoryReportClick: () -> Unit,
+) {
     composable(
-        route = STATISTICS_ROUTE,
+        route = REPORTS_ROUTE,
 
-    ) {
-        ReportsScreen()
+        ) {
+        ReportsScreen(
+            onSalesReportClick = onSalesReportClick,
+            onInventoryReportClick = onInventoryReportClick,
+        )
     }
 }
 
-fun NavController.navigateToStatistics(navOptions: NavOptions) =
-    navigate(STATISTICS_ROUTE, navOptions)
+fun NavController.navigateToReports(navOptions: NavOptions) =
+    navigate(REPORTS_ROUTE, navOptions)

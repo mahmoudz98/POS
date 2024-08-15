@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="feature_reports_sales_button_text">Sales report</string>
+    <string name="feature_reports_inventory_button_text">Inventory report</string>
+
     <string name="feature_reports_today_label">Today</string>
-    <string name="feature_reports_sales_label">Sales: </string>
-    <string name="feature_reports_count_invoices_today_label">Count of invoices: </string>
+    <string name="feature_reports_sales_label">Today sales: \u0020</string>
+    <string name="feature_reports_count_invoices_today_label">Count of sales: \u0020</string>
+    <string name="feature_reports_no_sales_today">No sales today. </string>
 </resources>

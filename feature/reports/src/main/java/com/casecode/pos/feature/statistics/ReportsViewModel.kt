@@ -20,22 +20,33 @@ class ReportsViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(UiReportsState())
     val uiState = _uiState.asStateFlow()
+
+
     fun fetchInvoices() {
         viewModelScope.launch {
             getTodayInvoicesUseCase().collect { resource ->
-                when(resource){
+                when (resource) {
                     is Resource.Empty -> {
-                        _uiState.update {   it.copy(isEmpty = true, isLoading = false)}
+                        _uiState.update { it.copy(isEmpty = true, isLoading = false) }
                     }
+
                     is Resource.Error -> {
-                        _uiState.update {  it.copy(userMessage = resource.message as? Int, isLoading = false)}
+                        _uiState.update {
+                            it.copy(
+                                userMessage = resource.message as? Int,
+                                isEmpty = true,
+                                isLoading = false,
+                            )
+                        }
                     }
+
                     Resource.Loading -> {
-                        _uiState.update {  it.copy( isLoading = true)}
+                        _uiState.update { it.copy(isLoading = true) }
 
                     }
+
                     is Resource.Success -> {
-                        _uiState.update { it.copy(invoices = resource.data) }
+                        _uiState.update { it.copy(invoices = resource.data, isLoading = false) }
                     }
                 }
 

@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="feature_reports_sales_button_text">تقرير المبيعات</string>
+    <string name="feature_reports_inventory_button_text">تقرير المخزون</string>
+
+    <string name="feature_reports_today_label">اليوم</string>
+    <string name="feature_reports_sales_label">مبيعات اليوم:\u0020</string>
+    <string name="feature_reports_count_invoices_today_label">عدد المبيعات:\u0020</string>
+    <string name="feature_reports_no_sales_today">لا توجد مبيعات اليوم.</string>
+</resources>
