@@ -4,14 +4,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -26,11 +28,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
-import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.data.utils.encodeAsBitmap
+import com.casecode.pos.core.designsystem.component.DynamicAsyncQrCodeImage
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.model.data.users.Item
 
 @Composable
 fun QRCodePrintItemDialog(viewModel: ItemsViewModel, onDismiss: () -> Unit) {
@@ -48,7 +51,8 @@ internal fun QRCodePrintItemDialog(
     val name = rememberSaveable { mutableStateOf(itemPrint?.name) }
     val barcode = rememberSaveable { mutableStateOf(itemPrint?.sku) }
     val price = rememberSaveable { mutableStateOf(itemPrint?.price) }
-    var printedItemCount by rememberSaveable { mutableIntStateOf(1) }
+    var printedItemCount by rememberSaveable { mutableStateOf(1) } // Use State for printedItemCount
+
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = Modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
@@ -62,10 +66,16 @@ internal fun QRCodePrintItemDialog(
             )
         },
         text = {
-            Column {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally, // Align all children to center
+            ) {
+
                 PosOutlinedTextField(
                     value = printedItemCount.toString(),
-                    onValueChange = { newValue -> printedItemCount = newValue.toIntOrNull() ?: 1 },
+                    onValueChange = { newValue ->
+                        printedItemCount = newValue.toIntOrNull() ?: 1
+                    },
                     isError = printedItemCount < 1,
                     label = stringResource(R.string.feature_item_copies_text),
                     keyboardOptions = KeyboardOptions(
@@ -76,33 +86,26 @@ internal fun QRCodePrintItemDialog(
                     supportingText = if (printedItemCount < 1) stringResource(R.string.feature_item_error_copies_empty) else null,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                // TODO: add image with barcode with asyncImage in core:designSystem
-                /*   AsyncImage(
-                       modifier = Modifier
-                           .align(Alignment.CenterHorizontally)
-                           .size(120.dp),
-                       model = ImageRequest.Builder(LocalContext.current)
-                           .data(barcode.value?.encodeAsBitmap()).crossfade(true).build(),
-                       placeholder = painterResource(com.casecode.pos.core.ui.R.drawable.core_ui_ic_qr_code_scanner_24),
-                       contentDescription = null,
-                       colorFilter = null,
-                   )*/
-                Text(
-                    text = name.value ?: "",
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
+
+                DynamicAsyncQrCodeImage(
+                    modifier = Modifier.size(120.dp),
+                    data = barcode.value?.encodeAsBitmap(),
+                    contentDescription = null,
                 )
+
+                // Use more descriptive variable names
+                val itemName = name.value ?: ""
+                val itemBarcode = barcode.value.toString()
+                val itemPrice = price.value.toString()
+
+                Text(text = itemName)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = barcode.value.toString(),
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                )
+                Text(text = itemBarcode)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    price.value.toString(),
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                )
+                Text(text = itemPrice)
                 Spacer(modifier = Modifier.height(8.dp))
             }
+
         },
         confirmButton = {
             PosTextButton(

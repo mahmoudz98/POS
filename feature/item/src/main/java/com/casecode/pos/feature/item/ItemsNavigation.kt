@@ -10,14 +10,14 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.navigation
 
 const val ITEMS_GRAPH = "items_graph"
- const val ITEMS_ROUTE = "items_route"
- const val ITEM_DIALOG_ROUTE = "item_dialog_route"
- const val ITEM_update_DIALOG_ROUTE = "item_update_dialog_route"
- const val QR_PRINT_ITEM_DIALOG_ROUTE = "qr_print_item_dialog_route"
+const val ITEMS_ROUTE = "items_route"
+const val ITEM_DIALOG_ROUTE = "item_dialog_route"
+const val ITEM_update_DIALOG_ROUTE = "item_update_dialog_route"
+const val QR_PRINT_ITEM_DIALOG_ROUTE = "qr_print_item_dialog_route"
 
-fun NavGraphBuilder.itemsGraph(navController: NavController,  onMenuClick:()->Unit  ) {
+fun NavGraphBuilder.itemsGraph(navController: NavController) {
     navigation(startDestination = ITEMS_ROUTE, route = ITEMS_GRAPH) {
-        itemsScreen(navController, onMenuClick)
+        itemsScreen(navController)
         itemDialog(navController, onDismiss = { navController.popBackStack() })
         itemUpdateDialog(navController)
         qrCodePrintItemDialog(navController)
@@ -25,7 +25,7 @@ fun NavGraphBuilder.itemsGraph(navController: NavController,  onMenuClick:()->Un
 
 }
 
-fun NavGraphBuilder.itemsScreen(navController: NavController, onMenuClick: () -> Unit) {
+fun NavGraphBuilder.itemsScreen(navController: NavController) {
     composable(route = ITEMS_ROUTE) {
         val parentEntry = remember(it) {
             navController.getBackStackEntry(ITEMS_GRAPH)
@@ -34,7 +34,6 @@ fun NavGraphBuilder.itemsScreen(navController: NavController, onMenuClick: () ->
 
         ItemsRoute(
             viewModel = viewModel,
-            onMenuClick = {onMenuClick()  },
             onAddItemClick = navController::navigateToItemDialog,
             onItemClick = navController::navigateToUpdateItemDialog,
             onPrintItemClick = navController::navigateToQRCodePrintItemDialog,
@@ -51,8 +50,7 @@ private fun NavGraphBuilder.itemDialog(navController: NavController, onDismiss: 
         val parentViewModel: ItemsViewModel = hiltViewModel(parentEntry)
         ItemDialog(
             viewModel = parentViewModel,
-            onDismiss = onDismiss
-            ,
+            onDismiss = onDismiss,
         )
     }
 }
@@ -71,6 +69,7 @@ private fun NavGraphBuilder.itemUpdateDialog(navController: NavController) {
         )
     }
 }
+
 private fun NavGraphBuilder.qrCodePrintItemDialog(navController: NavController) {
     dialog(route = QR_PRINT_ITEM_DIALOG_ROUTE) {
         val parentEntry = remember(it) {

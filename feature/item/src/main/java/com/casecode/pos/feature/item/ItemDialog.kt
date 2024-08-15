@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.AlertDialog
@@ -52,10 +54,8 @@ import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.ui.scanOptions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import timber.log.Timber
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -85,28 +85,28 @@ fun ItemDialog(
     val quantityError = remember { mutableStateOf(false) }
     val barcodeError = remember { mutableStateOf(false) }
 
-    var isTakeImageOrPick by remember { mutableStateOf(false) }
+    var showTakeOrPickImage by remember { mutableStateOf(false) }
     var bitmapImage = remember<Bitmap?> { null }
     val snackState = remember { SnackbarHostState() }
     val userMessage = remember { mutableStateOf<Int?>(null) }
-    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-
-
-
-
     LaunchedTakePictureOrImage(
-        isTakeImageOrPick, cameraPermissionState, context,
+        showTakeOrPickImage,
+        context,
         onSelectedImageUri = {
-            selectedImageUri = it; isTakeImageOrPick = false
+            selectedImageUri = it; showTakeOrPickImage = false
             if (isUpdate) viewModel.updateItemImage()
         },
-        onCancelTakeImage = { if (it != null) userMessage.value = it; isTakeImageOrPick = false },
+        onCancelTakeImage = {
+            if (it != null) userMessage.value = it; showTakeOrPickImage = false
+        },
     )
+
+
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
-        onDismissRequest = onDismiss ,
+        onDismissRequest = onDismiss,
         title = {
             Text(
                 if (isUpdate) stringResource(R.string.feature_item_update_item_button_text) else stringResource(
@@ -119,7 +119,7 @@ fun ItemDialog(
                 )
         },
         text = {
-            Column {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 SnackbarHost(hostState = snackState, Modifier)
                 userMessage.value?.let { message ->
                     val snackbarText = stringResource(message)
@@ -134,7 +134,7 @@ fun ItemDialog(
                         .size(64.dp)
                         .align(Alignment.CenterHorizontally),
                     onClick = {
-                        isTakeImageOrPick = true
+                        showTakeOrPickImage = true
                     },
                 ) {
                     if (selectedImageUri == Uri.EMPTY) {
@@ -283,64 +283,61 @@ fun ItemDialog(
 
 }
 
+
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
-private fun LaunchedTakePictureOrImage(
-    isTakeImageOrPick: Boolean,
-    cameraPermissionState: PermissionState,
+internal fun LaunchedTakePictureOrImage(
+    showTakeOrPickImage: Boolean,
     context: Context,
     onSelectedImageUri: (Uri) -> Unit,
     onCancelTakeImage: (Int?) -> Unit,
 ) {
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var currentPhotoPath by rememberSaveable { mutableStateOf("") }
     val takePictureOrPickPhotoLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                if (result.data != null && result.data?.data != null) {
-                    result.data?.data?.let { onSelectedImageUri(it) }
-                } else {
-                    onSelectedImageUri(currentPhotoPath.toUri())
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { onSelectedImageUri(it) } ?: run {
+                onSelectedImageUri(currentPhotoPath.toUri())
+            }
+        } else if (result.resultCode == Activity.RESULT_CANCELED) {
+            onCancelTakeImage(R.string.feature_item_error_no_image_selected)
+            Timber.i("Image selection canceled")
+        }
+    }
+
+    LaunchedEffect(showTakeOrPickImage, cameraPermissionState.status) {
+        if (showTakeOrPickImage) {
+            when (cameraPermissionState.status) {
+                is PermissionStatus.Denied -> {
+                    cameraPermissionState.launchPermissionRequest()
                 }
 
-            } else if (result.resultCode == Activity.RESULT_CANCELED) {
-                onCancelTakeImage(R.string.feature_item_error_no_image_selected)
-                Timber.i("result for take image or gallery is null")
-            }
-        },
-    )
-
-    LaunchedEffect(isTakeImageOrPick, cameraPermissionState.status) {
-        if (isTakeImageOrPick) {
-            when {
-                cameraPermissionState.status.isGranted -> {
-                    val takePicture =
-                        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                            takePictureIntent.resolveActivity(context.packageManager)?.also {
-                                takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                val uri = PhotoUriManager(context).buildNewUri()
-                                currentPhotoPath = uri.toString()
-                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                            }
+                PermissionStatus.Granted -> {
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                        resolveActivity(context.packageManager)?.also {
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            val uri = PhotoUriManager(context).buildNewUri()
+                            currentPhotoPath = uri.toString()
+                            putExtra(MediaStore.EXTRA_OUTPUT, uri)
                         }
+                    }
 
-                    val pickPhoto =
-                        Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                    // Create a chooser intent to let the user select between camera and gallery
+                    val pickPhoto = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    )
+
                     val chooserIntent = Intent.createChooser(
                         pickPhoto,
                         context.getString(R.string.feature_item_dialog_select_image_text),
-                    )
-                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
+                    ).apply {
+                        putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
+                    }
                     takePictureOrPickPhotoLauncher.launch(chooserIntent)
                 }
-
-                cameraPermissionState.status.shouldShowRationale -> {
-                    cameraPermissionState.launchPermissionRequest()
-                }
             }
-            onCancelTakeImage(null)
-
         }
     }
 }

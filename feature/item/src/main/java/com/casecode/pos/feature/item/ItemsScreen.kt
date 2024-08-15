@@ -31,11 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.users.Item
 import timber.log.Timber
 
 
@@ -43,12 +43,10 @@ import timber.log.Timber
 fun ItemsRoute(
     modifier: Modifier = Modifier,
     viewModel: ItemsViewModel,
-    onMenuClick: () -> Unit,
     onAddItemClick: () -> Unit,
     onItemClick: () -> Unit,
     onPrintItemClick: () -> Unit = {},
 ) {
-
     val uiState by viewModel.uiItemsState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val searchWidgetState by viewModel.searchWidgetState.collectAsStateWithLifecycle()
@@ -65,13 +63,15 @@ fun ItemsRoute(
             showDialogItemDelete = true
             viewModel.setItemSelected(it)
         },
-        onMenuClick = onMenuClick,
         searchWidgetState = searchWidgetState,
         onSearchClicked = viewModel::openSearchWidgetState,
         searchQuery = searchQuery,
         onSearchQueryChanged = viewModel::onSearchQueryChanged,
         onClearRecentSearches = { viewModel.closeSearchWidgetState() },
-        onPrintItemClick = { viewModel.setItemSelected(it);onPrintItemClick() },
+        onPrintItemClick = {
+            viewModel.setItemSelected(it)
+            onPrintItemClick()
+        },
         onAddItemClick = onAddItemClick,
         onShownMessage = viewModel::snackbarMessageShown,
     )
@@ -84,7 +84,6 @@ fun ItemsRoute(
 
 }
 
-
 @Composable
 internal fun ItemsScreen(
     modifier: Modifier = Modifier,
@@ -93,7 +92,6 @@ internal fun ItemsScreen(
     onItemClick: (Item) -> Unit,
     onItemLongClick: (Item) -> Unit,
     onPrintItemClick: (Item) -> Unit,
-    onMenuClick: () -> Unit,
     searchWidgetState: SearchWidgetState,
     onSearchClicked: () -> Unit,
     searchQuery: String = "",
@@ -137,7 +135,6 @@ internal fun ItemsScreen(
         ) {
             ItemTopAppBar(
                 modifier = modifier,
-                onMenuClick = onMenuClick,
                 searchWidgetState = searchWidgetState,
                 searchQuery = searchQuery,
                 onSearchQueryChanged = onSearchQueryChanged,
@@ -245,7 +242,6 @@ private fun ItemScreenSuccessPreview(
             onPrintItemClick = {},
             onAddItemClick = {},
             onShownMessage = {},
-            onMenuClick = {},
             searchWidgetState = SearchWidgetState.CLOSED,
             onSearchClicked = {},
             searchQuery = "",
@@ -267,7 +263,6 @@ private fun ItemScreenSuccessWithSearchPreview(
             onPrintItemClick = {},
             onAddItemClick = {},
             onShownMessage = {},
-            onMenuClick = {},
             searchWidgetState = SearchWidgetState.OPENED,
             onSearchClicked = {},
             searchQuery = "",
@@ -288,7 +283,6 @@ private fun ItemScreenLoadingPreview(
             onPrintItemClick = {},
             onAddItemClick = {},
             onShownMessage = {},
-            onMenuClick = {},
             searchWidgetState = SearchWidgetState.CLOSED,
             onSearchClicked = {},
             searchQuery = "",
@@ -310,7 +304,6 @@ private fun ItemScreenEmptyPreview(
             onPrintItemClick = {},
             onAddItemClick = {},
             onShownMessage = {},
-            onMenuClick = {},
             searchWidgetState = SearchWidgetState.CLOSED,
             onSearchClicked = {},
             searchQuery = "",

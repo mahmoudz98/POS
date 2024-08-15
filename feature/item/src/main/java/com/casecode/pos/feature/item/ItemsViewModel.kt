@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 data class UIItemsState(
@@ -111,7 +112,7 @@ class ItemsViewModel @Inject constructor(
         barcode: String,
         bitmap: Bitmap?,
     ) {
-
+        Timber.e("uploadImageAndAddItem bitmap = $bitmap")
         viewModelScope.launch {
             imageUseCase.uploadImage(bitmap = bitmap, imageName = barcode).collect {
                 when (it) {
@@ -125,6 +126,7 @@ class ItemsViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
+                        Timber.e("uploadImageAndAddItem it.data = ${it.data}")
                         addItem(name, price, quantity, barcode, it.data)
                     }
                 }
@@ -258,7 +260,8 @@ class ItemsViewModel @Inject constructor(
 
     fun checkNetworkAndDeleteItem() {
         if (isOnline.value) {
-            val item = _itemSelected.value ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
+            val item = _itemSelected.value
+                ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
             deleteImageAndDeleteItem(item)
         } else {
             showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_network)

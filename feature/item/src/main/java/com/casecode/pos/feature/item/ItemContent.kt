@@ -37,17 +37,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.model.data.users.Item
 import java.text.DecimalFormat
 
 @Composable
-fun ItemsContent(
+internal fun ItemsContent(
     items: List<Item>,
     onItemClick: (Item) -> Unit,
     onItemLongClick: (Item) -> Unit,
@@ -68,7 +68,7 @@ fun ItemsContent(
                         name = item.name,
                         price = item.price,
                         quantity = item.quantity,
-                        itemImageUrl = item.imageUrl ?: "",
+                        itemImageUrl = item.imageUrl,
                         onClick = { onItemClick(item) },
                         onPrintButtonClick = { onPrintItemClick(item) },
                         onLongClick = { onItemLongClick(item) },
@@ -101,22 +101,24 @@ fun ItemsContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ItemItem(
+private fun ItemItem(
     name: String,
     price: Double,
     quantity: Double,
-    itemImageUrl: String,
+    itemImageUrl: String?,
     modifier: Modifier = Modifier,
     iconModifier: Modifier = Modifier,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onPrintButtonClick: () -> Unit) {
+    onPrintButtonClick: () -> Unit,
+) {
     ListItem(
         leadingContent = { ItemIcon(itemImageUrl, iconModifier.size(64.dp)) },
         headlineContent = { Text(name) },
         supportingContent = {
             Row(modifier = Modifier.height(IntrinsicSize.Min)) {
-                val formattedQuantity = "${stringResource(com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format)} $quantity"
+                val formattedQuantity =
+                    "${stringResource(com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format)} $quantity"
                 Text(formattedQuantity)
                 VerticalDivider(
                     modifier = Modifier.padding(horizontal = 4.dp),
@@ -124,7 +126,12 @@ fun ItemItem(
 
                 val formattedPrice =
                     DecimalFormat("#,###.##").format(price)
-                Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_currency, formattedPrice))
+                Text(
+                    stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_currency,
+                        formattedPrice,
+                    ),
+                )
             }
         },
         trailingContent = {
@@ -147,8 +154,8 @@ fun ItemItem(
 }
 
 @Composable
-private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
-    if (topicImageUrl.isEmpty()) {
+private fun ItemIcon(itemImageUrl: String?, modifier: Modifier = Modifier) {
+    if (itemImageUrl.isNullOrEmpty()) {
         Icon(
             modifier = modifier
                 .background(Color.Transparent)
@@ -159,7 +166,7 @@ private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
         )
     } else {
         DynamicAsyncImage(
-            imageUrl = topicImageUrl,
+            imageUrl = itemImageUrl,
             contentDescription = null,
             modifier = modifier,
         )

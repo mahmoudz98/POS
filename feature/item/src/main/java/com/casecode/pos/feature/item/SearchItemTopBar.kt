@@ -45,7 +45,6 @@ fun ItemTopAppBar(
     modifier: Modifier,
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
-    onMenuClick: () -> Unit,
     onSearchClicked: () -> Unit,
     onCloseClicked: () -> Unit,
 ) {
@@ -54,7 +53,6 @@ fun ItemTopAppBar(
         SearchWidgetState.CLOSED -> {
             DefaultAppBar(
                 modifier = modifier,
-                onMenuClick = onMenuClick,
                 onSearchClicked = onSearchClicked,
             )
         }
@@ -74,21 +72,18 @@ fun ItemTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultAppBar(
-    onMenuClick: () -> Unit, onSearchClicked: () -> Unit,
+    onSearchClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PosTopAppBar(
         modifier = modifier,
         titleRes = R.string.feature_item_header_title,
-        navigationIcon = PosIcons.Menu,
-        navigationIconContentDescription = "",
         onActionClick = { onSearchClicked() },
         actionIconContentDescription = stringResource(R.string.feature_item_search_action_text),
         actionIcon = PosIcons.Search,
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Transparent,
         ),
-        onNavigationClick = { onMenuClick() },
     )
 
 }
@@ -201,7 +196,6 @@ private fun SearchTextField(
 @Composable
 private fun DefaultAppBarPreview() {
     DefaultAppBar(
-        onMenuClick = {},
         onSearchClicked = {},
     )
 }
