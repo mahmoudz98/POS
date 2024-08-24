@@ -41,8 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.data.utils.toFormattedDateTimeString
-import com.casecode.pos.core.model.data.users.Invoice
-import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
@@ -51,11 +49,16 @@ import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableS
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.model.data.users.Invoice
+import com.casecode.pos.core.model.data.users.Item
 import java.text.DecimalFormat
 import java.util.Date
 
 @Composable
-fun SalesReportDetailsRoute(viewModel: SalesReportViewModel, onBackClick: () -> Unit) {
+fun SalesReportDetailsRoute(
+    viewModel: SalesReportViewModel,
+    onBackClick: () -> Unit,
+) {
     val uiSalesReportDetails =
         viewModel.invoiceSelected.collectAsStateWithLifecycle(UISalesReportDetails.Loading)
     SalesReportDetailsScreen(
@@ -73,30 +76,33 @@ fun SalesReportDetailsScreen(
     onPrintClick: () -> Unit,
     onBackClick: () -> Unit,
 ) {
-
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier =
+            Modifier
+                .fillMaxSize(),
     ) {
         PosTopAppBar(
             modifier = Modifier,
             titleRes = R.string.feature_sales_report_details_title,
             navigationIcon = PosIcons.ArrowBack,
-            navigationIconContentDescription = stringResource(
-                id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
-            ),
+            navigationIconContentDescription =
+                stringResource(
+                    id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
+                ),
             onActionClick = { onPrintClick() },
             actionIconContentDescription = stringResource(R.string.feature_sales_report_print_action_text),
             actionIcon = PosIcons.Print,
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-            ),
+            colors =
+                TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
+                ),
             onNavigationClick = { onBackClick() },
         )
         when (uiSalesReportDetails) {
             is UISalesReportDetails.Loading -> {
                 PosLoadingWheel(
-                    modifier = modifier
+                    modifier =
+                    modifier
                         .fillMaxSize()
                         .wrapContentSize(Alignment.Center),
                     contentDesc = "LoadingItems",
@@ -114,12 +120,12 @@ fun SalesReportDetailsScreen(
     }
 }
 
-
 @Composable
 fun SalesReportDetailsContent(invoice: Invoice) {
     Column(modifier = Modifier.padding(top = 16.dp)) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .height(IntrinsicSize.Min)
                 .padding(start = 16.dp),
         ) {
@@ -139,7 +145,6 @@ fun SalesReportDetailsContent(invoice: Invoice) {
 
         ItemsSalesReportDetailsContent(invoice.items)
     }
-
 }
 
 @Composable
@@ -169,20 +174,22 @@ fun ItemsSalesReportDetailsContent(
             item {
                 Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
-
         }
-        val scrollbarState = scrollableState.scrollbarState(
-            itemsAvailable = items.size,
-        )
+        val scrollbarState =
+            scrollableState.scrollbarState(
+                itemsAvailable = items.size,
+            )
         scrollableState.DraggableScrollbar(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxHeight()
                 .windowInsetsPadding(WindowInsets.systemBars)
                 .padding(horizontal = 2.dp)
                 .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            onThumbMoved = scrollableState.rememberDraggableScroller(
+            onThumbMoved =
+            scrollableState.rememberDraggableScroller(
                 itemsAvailable = items.size,
             ),
         )
@@ -214,18 +221,19 @@ fun ItemInvoice(
                 Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_currency, formattedPrice))
             }
         },
-
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-
-
-        )
+    )
 }
 
 @Composable
-private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
+private fun ItemIcon(
+    topicImageUrl: String,
+    modifier: Modifier = Modifier,
+) {
     if (topicImageUrl.isEmpty()) {
         Icon(
-            modifier = modifier
+            modifier =
+            modifier
                 .background(Color.Transparent)
                 .padding(4.dp),
             imageVector = PosIcons.EmptyImage,
@@ -251,7 +259,8 @@ fun SalesReportDetailsScreenSuccessPreview() {
                 date = Date(),
                 createdBy = "2",
                 customer = null,
-                items = listOf(
+                items =
+                listOf(
                     Item(
                         name = "Eloise McCoy",
                         price = 4.5,

@@ -76,7 +76,6 @@ fun EmployeeStepperDialog(
         },
         onDismiss = onDismiss,
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,7 +87,6 @@ fun EmployeeStepperDialog(
     onClick: (String, String, String, String, String) -> Unit,
     onDismiss: () -> Unit,
 ) {
-
     val configuration = LocalConfiguration.current
 
     val employeeUpdate = if (isUpdate) uiState.employeeSelected else null
@@ -106,14 +104,23 @@ fun EmployeeStepperDialog(
     var permissionError by remember { mutableStateOf(false) }
     val onClickTriggered = {
         val validatePhoneNumber = validatePhoneNumber(phone, countryIsoCode)
-        if (name.isEmpty() || validatePhoneNumber != null || password.isEmpty() || password.length < 6 || selectedBranch.isEmpty() || selectedPermission.isEmpty()) {
+        if (name.isEmpty() ||
+            validatePhoneNumber != null ||
+            password.isEmpty() ||
+            password.length < 6 ||
+            selectedBranch.isEmpty() ||
+            selectedPermission.isEmpty()
+        ) {
             nameError = name.isEmpty()
             phoneError = validatePhoneNumber
-            passwordError = if (password.isEmpty()) {
-                uiString.core_ui_error_add_employee_password_empty
-            } else if (password.length < 6) {
-                uiString.core_ui_error_add_employee_password
-            } else null
+            passwordError =
+                if (password.isEmpty()) {
+                    uiString.core_ui_error_add_employee_password_empty
+                } else if (password.length < 6) {
+                    uiString.core_ui_error_add_employee_password
+                } else {
+                    null
+                }
             branchError = selectedBranch.isEmpty()
             permissionError = selectedPermission.isEmpty()
         } else {
@@ -127,7 +134,6 @@ fun EmployeeStepperDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(if (isUpdate) uiString.core_ui_update_employee_title else uiString.core_ui_add_employee_title)) },
         text = {
-
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 PosOutlinedTextField(
                     value = name,
@@ -137,10 +143,11 @@ fun EmployeeStepperDialog(
                     },
                     label = stringResource(uiString.core_ui_employee_name_hint),
                     isError = nameError,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                        ),
                     supportingText = if (nameError) stringResource(uiString.core_ui_error_employee_name_empty) else null,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -153,10 +160,11 @@ fun EmployeeStepperDialog(
                     },
                     label = stringResource(uiString.core_ui_work_phone_number_hint),
                     supportingText = phoneError?.let { stringResource(it) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next,
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next,
+                        ),
                     isError = phoneError != null,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -170,11 +178,12 @@ fun EmployeeStepperDialog(
                                 uiString.core_ui_error_add_employee_password_empty
                             } else if (it.length < 6) {
                                 uiString.core_ui_error_add_employee_password
-                            } else null
+                            } else {
+                                null
+                            }
                     },
                     label = stringResource(uiString.core_ui_employee_password_hint),
                     supportingText = phoneError?.let { stringResource(it) },
-
                     visualTransformation = PasswordVisualTransformation(),
                     isError = passwordError != null,
                     modifier = Modifier.fillMaxWidth(),
@@ -191,12 +200,12 @@ fun EmployeeStepperDialog(
                         readOnly = true,
                         isError = branchError,
                         supportingText = if (branchError) stringResource(uiString.core_ui_error_add_employee_branch_empty) else null,
-
                         label = stringResource(uiString.core_ui_branch_name_hint),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = branchExpanded) },
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                                .fillMaxWidth(),
                     )
                     ExposedDropdownMenu(
                         expanded = branchExpanded,
@@ -221,7 +230,6 @@ fun EmployeeStepperDialog(
                 var permissionExpanded by remember { mutableStateOf(false) }
                 val permissions = stringArrayResource(com.casecode.pos.core.ui.R.array.core_ui_employee_permissions)
                 ExposedDropdownMenuBox(
-
                     expanded = permissionExpanded,
                     onExpandedChange = { permissionExpanded = !permissionExpanded },
                 ) {
@@ -232,8 +240,16 @@ fun EmployeeStepperDialog(
                         isError = permissionError,
                         label = stringResource(uiString.core_ui_permissions_text),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = permissionExpanded) },
-                        supportingText = if (permissionError) stringResource(uiString.core_ui_error_add_employee_permission_empty) else null,
-                        modifier = Modifier
+                        supportingText =
+                        if (permissionError) {
+                            stringResource(
+                                uiString.core_ui_error_add_employee_permission_empty,
+                            )
+                        } else {
+                            null
+                        },
+                        modifier =
+                        Modifier
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                             .fillMaxWidth(),
                     )
@@ -253,20 +269,22 @@ fun EmployeeStepperDialog(
                     }
                 }
             }
-
         },
         confirmButton = {
             Text(
-                text = stringResource(if (isUpdate) uiString.core_ui_update_employee_button_text else uiString.core_ui_add_employee_button_text),
+                text =
+                stringResource(
+                    if (isUpdate) uiString.core_ui_update_employee_button_text else uiString.core_ui_add_employee_button_text,
+                ),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {
+                modifier =
+                Modifier.clickable {
                     onClickTriggered()
                 },
             )
         },
-
-        )
+    )
 }
 
 @com.casecode.pos.core.ui.DevicePreviews

@@ -36,21 +36,33 @@ fun QuantityDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 OutlinedTextField(
                     value = quantity.value,
-                    onValueChange = {quantity.value = it
+                    onValueChange = {
+                        quantity.value = it
 
                         quantityError.value = it.isEmpty() || it.toDouble() > inStock || it.toDouble() <= 0
-                                    },
+                    },
                     isError = quantityError.value,
                     label = { Text(text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format)) },
-                    supportingText ={ Text(if (quantityError.value)
-                    {
-                        when{
-                            quantity.value.toDouble() <= 0.0-> stringResource(R.string.feature_sale_error_quantity_greater_than_zero)
-                            quantity.value.toDouble() > inStock -> stringResource(R.string.feature_sale_error_quantity_less_than) + inStock
-                            else -> ""
-                        }
-                    } else "")},
+                    supportingText = {
+                        Text(
+                            if (quantityError.value) {
+                                when {
+                                    quantity.value.toDouble() <= 0.0 ->
+                                        stringResource(
+                                            R.string.feature_sale_error_quantity_greater_than_zero,
+                                        )
 
+                                    quantity.value.toDouble() > inStock ->
+                                        stringResource(R.string.feature_sale_error_quantity_less_than) +
+                                            inStock
+
+                                    else -> ""
+                                }
+                            } else {
+                                ""
+                            },
+                        )
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
             }
@@ -58,7 +70,7 @@ fun QuantityDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    if(!quantityError.value){
+                    if (!quantityError.value) {
                         onConfirm(quantity.value.toDouble())
                     }
                 },

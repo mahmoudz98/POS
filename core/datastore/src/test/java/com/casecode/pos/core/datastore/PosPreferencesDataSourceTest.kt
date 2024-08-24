@@ -19,7 +19,6 @@ import kotlin.test.assertEquals
 class PosPreferencesDataSourceTest {
     private val testDispatcher = UnconfinedTestDispatcher()
 
-
     private val testScope = TestScope(testDispatcher)
 
     private lateinit var subject: PosPreferencesDataSource
@@ -33,42 +32,53 @@ class PosPreferencesDataSourceTest {
     }
 
     @Test
-    fun shouldGetNotSignInByDefault() = runTest {
-        println(" coroutineContext: $coroutineContext")
-        assertEquals(subject.loginData.first(), LoginStateResult.NotSignIn)
-    }
+    fun shouldGetNotSignInByDefault() =
+        runTest {
+            println(" coroutineContext: $coroutineContext")
+            assertEquals(subject.loginData.first(), LoginStateResult.NotSignIn)
+        }
 
     @Test
-    fun setLoginWithAdmin_shouldUpdateLoginState() = runTest {
-        subject.setLoginWithAdmin("123", true)
-        assertEquals(subject.loginData.first(), LoginStateResult.SuccessLoginAdmin("123"))
-    }
+    fun setLoginWithAdmin_shouldUpdateLoginState() =
+        runTest {
+            subject.setLoginWithAdmin("123", true)
+            assertEquals(subject.loginData.first(), LoginStateResult.SuccessLoginAdmin("123"))
+        }
 
     @Test
-    fun setLoginWthAdmin_andRestLogin_shouldUpdateLoginState() = runTest {
-        subject.setLoginWithAdmin("123", true)
-        subject.restLogin()
+    fun setLoginWthAdmin_andRestLogin_shouldUpdateLoginState() =
+        runTest {
+            subject.setLoginWithAdmin("123", true)
+            subject.restLogin()
 
-        assertEquals(subject.loginData.last(), LoginStateResult.NotSignIn)
-    }
+            assertEquals(subject.loginData.last(), LoginStateResult.NotSignIn)
+        }
 
     @Test
-    fun setLoginByEmployee_shouldUpdateLoginState() = runTest {
-        subject.setLoginByEmployee(Employee(
-            name = "Mahmoud",
-            phoneNumber = "(+20) 586-5192",
-            password = "password",
-            branchName = "branch",
-            permission = "admin"
-        ), "uid")
-        assertEquals(subject.loginData.first(), LoginStateResult.EmployeeLogin(EmployeeLoginData(
-            name = "Mahmoud",
-            uid = "uid",
-            phoneNumber = "(+20) 586-5192",
-            password = "password",
-            branch = "branch",
-            permission = Permission.ADMIN
-        )))
-    }
-
+    fun setLoginByEmployee_shouldUpdateLoginState() =
+        runTest {
+            subject.setLoginByEmployee(
+                Employee(
+                    name = "Mahmoud",
+                    phoneNumber = "(+20) 586-5192",
+                    password = "password",
+                    branchName = "branch",
+                    permission = "admin",
+                ),
+                "uid",
+            )
+            assertEquals(
+                subject.loginData.first(),
+                LoginStateResult.EmployeeLogin(
+                    EmployeeLoginData(
+                        name = "Mahmoud",
+                        uid = "uid",
+                        phoneNumber = "(+20) 586-5192",
+                        password = "password",
+                        branch = "branch",
+                        permission = Permission.ADMIN,
+                    ),
+                ),
+            )
+        }
 }

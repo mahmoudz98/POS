@@ -1,6 +1,5 @@
 package com.casecode.pos.feature.stepper
 
-
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Employee
@@ -35,13 +34,13 @@ class StepperBusinessViewModelTest : BaseTest() {
     override fun init() {
         businessViewModel =
             StepperBusinessViewModel(
-                testNetworkMonitor,
-                testAccountService,
-                setBusinessUseCase,
-                completeBusinessUseCase,
-                getSubscriptionsUseCase,
-                setSubscriptionBusinessUseCase,
-                setEmployeesBusinessUseCase,
+                networkMonitor,
+                accountService,
+                setBusiness,
+                completeBusiness,
+                getSubscriptions,
+                setSubscription,
+                setEmployees,
             )
     }
 
@@ -60,7 +59,6 @@ class StepperBusinessViewModelTest : BaseTest() {
 
     @Test
     fun addBranch_WhenHasBranch_returnAddSuccess() {
-
         // When - add branch
         businessViewModel.addBranch("branch1", "123456")
         // Then - returns string branch success .
@@ -129,9 +127,8 @@ class StepperBusinessViewModelTest : BaseTest() {
 
             businessViewModel.addBranch("Branch 1", "1234567890")
             businessViewModel.addBranch("Branch 2", "1234567890")
-            testNetworkMonitor.setConnected(true)
+            networkMonitor.setConnected(true)
             businessViewModel.networkMonitor()
-
 
             // When - add new business
             businessViewModel.setBusiness()
@@ -153,7 +150,7 @@ class StepperBusinessViewModelTest : BaseTest() {
     @Test
     fun setBusiness_whenNetworkIsUnavailable_thenReturnMessageNetworkError() {
         // Given - network unAvailable
-        testNetworkMonitor.setConnected(false)
+        networkMonitor.setConnected(false)
         businessViewModel.networkMonitor()
 
         // When - add new business
@@ -164,21 +161,22 @@ class StepperBusinessViewModelTest : BaseTest() {
     }
 
     @Test
-    fun getSubscriptionBusiness_WhenHasListOfSubscription_thenReturnSuccess() = runTest {
-        val collectJob = launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
+    fun getSubscriptionBusiness_WhenHasListOfSubscription_thenReturnSuccess() =
+        runTest {
+            val collectJob =
+                launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
 
-        testNetworkMonitor.setConnected(true)
-        businessViewModel.networkMonitor()
+            networkMonitor.setConnected(true)
+            businessViewModel.networkMonitor()
 
-        // When
-        val actualSubscriptions = subscriptionsFake()
-        testSubscriptionsRepository.sendSubscriptions(actualSubscriptions)
-        businessViewModel.getSubscriptionsBusiness()
-        advanceUntilIdle()
-        assertEquals(actualSubscriptions, businessViewModel.uiState.value.subscriptions)
-        collectJob.cancel()
-
-    }
+            // When
+            val actualSubscriptions = subscriptionsFake()
+            subscriptionsRepository.sendSubscriptions(actualSubscriptions)
+            businessViewModel.getSubscriptionsBusiness()
+            advanceUntilIdle()
+            assertEquals(actualSubscriptions, businessViewModel.uiState.value.subscriptions)
+            collectJob.cancel()
+        }
 
     @Test
     fun getSubscriptionsBusiness_whenHasError_thenReturnEmptyList() =
@@ -187,7 +185,7 @@ class StepperBusinessViewModelTest : BaseTest() {
                 launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
 
             // Given
-            testSubscriptionsRepository.setReturnError(true)
+            subscriptionsRepository.setReturnError(true)
 
             // When
             businessViewModel.getSubscriptionsBusiness()
@@ -197,14 +195,13 @@ class StepperBusinessViewModelTest : BaseTest() {
             collectJob.cancel()
         }
 
-
     @Test
     fun getSubscriptionBusiness_whenEmptyList_thenReturnEmptyList() =
         runTest {
             // Given
             val collectJob =
                 launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
-            testSubscriptionsRepository.setReturnEmpty(true)
+            subscriptionsRepository.setReturnEmpty(true)
             // When
             businessViewModel.getSubscriptionsBusiness()
             val result = businessViewModel.uiState.value.subscriptions
@@ -227,28 +224,27 @@ class StepperBusinessViewModelTest : BaseTest() {
             collectJob.cancel()
         }
 
-
     @Test
-    fun addSubscriptionBusiness_whenNetworkIsAvailable_thenNextStepIsTrue() = runTest {
-        // Given
-        val collectJob =
-            launch(UnconfinedTestDispatcher()) { businessViewModel.buttonStepState.collect() }
-        businessViewModel.addSubscriptionBusinessSelected(
-            Subscription(
-                30,
-                30,
-                listOf("admin", "sale"),
-                "basic",
-            ),
-        )
-        businessViewModel.setConnected(true)
+    fun addSubscriptionBusiness_whenNetworkIsAvailable_thenNextStepIsTrue() =
+        runTest {
+            // Given
+            val collectJob =
+                launch(UnconfinedTestDispatcher()) { businessViewModel.buttonStepState.collect() }
+            businessViewModel.addSubscriptionBusinessSelected(
+                Subscription(
+                    30,
+                    30,
+                    listOf("admin", "sale"),
+                    "basic",
+                ),
+            )
+            businessViewModel.setConnected(true)
 
-        businessViewModel.checkNetworkThenSetSubscriptionBusinessSelected()
+            businessViewModel.checkNetworkThenSetSubscriptionBusinessSelected()
 
-        assertTrue(businessViewModel.buttonStepState.value.buttonNextStep)
-        collectJob.cancel()
-    }
-
+            assertTrue(businessViewModel.buttonStepState.value.buttonNextStep)
+            collectJob.cancel()
+        }
 
     @Test
     fun `addEmployee with new employee should update employees list and return message`() =
@@ -275,12 +271,13 @@ class StepperBusinessViewModelTest : BaseTest() {
                 businessViewModel.uiState.value.employees,
                 `is`(employeesValue.plus(employee)),
             )
-            assertThat(businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_success_add_employee_message))
+            assertThat(
+                businessViewModel.userMessage.value,
+                `is`(uiString.core_ui_success_add_employee_message),
+            )
             collectJob.cancel()
             collectJob2.cancel()
         }
-
 
     @Test
     fun `addEmployee() with existing employee name should not update employees list and return message duplicate`() =
@@ -306,10 +303,13 @@ class StepperBusinessViewModelTest : BaseTest() {
 
             // Assert
             assertThat(
-                businessViewModel.uiState.value.employees, `is`(employeesValue),
+                businessViewModel.uiState.value.employees,
+                `is`(employeesValue),
             )
-            assertThat(businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_error_employee_name_duplicate))
+            assertThat(
+                businessViewModel.userMessage.value,
+                `is`(uiString.core_ui_error_employee_name_duplicate),
+            )
             collectJob.cancel()
             collectJob2.cancel()
         }
@@ -329,14 +329,17 @@ class StepperBusinessViewModelTest : BaseTest() {
             val permission = "Admin"
             businessViewModel.addEmployee(name, phone, password, branchName, permission)
             businessViewModel.setEmployeeSelected(
-                businessViewModel.uiState.value.employees.first(),
+                businessViewModel.uiState.value.employees
+                    .first(),
             )
             // Act - when update employee
             businessViewModel.updateEmployee("nameUpdated", phone, password, branchName, permission)
 
             // Assert
-            assertThat(businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_success_update_employee_message))
+            assertThat(
+                businessViewModel.userMessage.value,
+                `is`(uiString.core_ui_success_update_employee_message),
+            )
             collectJob1.cancel()
             collectJob2.cancel()
         }
@@ -357,14 +360,19 @@ class StepperBusinessViewModelTest : BaseTest() {
             businessViewModel.addEmployee(name, phone, password, branchName, permission)
             businessViewModel.addEmployee("name2", phone, password, branchName, permission)
             businessViewModel.addEmployee("name3", phone, password, branchName, permission)
-            businessViewModel.setEmployeeSelected(businessViewModel.uiState.value.employees.first())
+            businessViewModel.setEmployeeSelected(
+                businessViewModel.uiState.value.employees
+                    .first(),
+            )
 
             // Act - when update employee
             businessViewModel.updateEmployee("name2", "121231423", password, branchName, permission)
 
             // Assert
-            assertThat(businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_error_employee_name_duplicate))
+            assertThat(
+                businessViewModel.userMessage.value,
+                `is`(uiString.core_ui_error_employee_name_duplicate),
+            )
             collectJob1.cancel()
             collectJob2.cancel()
         }
@@ -378,13 +386,18 @@ class StepperBusinessViewModelTest : BaseTest() {
         val branchName = "Branch 1"
         val permission = "Admin"
         businessViewModel.addEmployee(name, phone, password, branchName, permission)
-        businessViewModel.setEmployeeSelected(businessViewModel.uiState.value.employees.first())
+        businessViewModel.setEmployeeSelected(
+            businessViewModel.uiState.value.employees
+                .first(),
+        )
         // Act - when update employee
         businessViewModel.updateEmployee(name, phone, password, branchName, permission)
 
         // Assert
-        assertThat(businessViewModel.userMessage.value,
-            `is`(uiString.core_ui_error_update_employee_message))
+        assertThat(
+            businessViewModel.userMessage.value,
+            `is`(uiString.core_ui_error_update_employee_message),
+        )
     }
 
     @Test
@@ -403,10 +416,11 @@ class StepperBusinessViewModelTest : BaseTest() {
         businessViewModel.updateEmployee("name2", "121231423", password, branchName, permission)
 
         // Assert
-        assertThat(businessViewModel.userMessage.value,
-            `is`(uiString.core_ui_error_update_employee_message))
+        assertThat(
+            businessViewModel.userMessage.value,
+            `is`(uiString.core_ui_error_update_employee_message),
+        )
     }
-
 
     @Test
     fun setEmployeesBusiness_whenNetworkIsAvailable_thenReturnsMessageCompleteBusinessStepSuccess() =
@@ -425,8 +439,10 @@ class StepperBusinessViewModelTest : BaseTest() {
             // When
             businessViewModel.checkNetworkThenSetEmployees()
 
-            assertThat(businessViewModel.userMessage.value,
-                `is`(R.string.feature_stepper_success_complete_business_setup_message))
+            assertThat(
+                businessViewModel.userMessage.value,
+                `is`(R.string.feature_stepper_success_complete_business_setup_message),
+            )
 
             collectJob1.cancel()
         }
@@ -450,8 +466,8 @@ class StepperBusinessViewModelTest : BaseTest() {
             assertThat(businessViewModel.userMessage.value, `is`(uiString.core_ui_error_network))
         }
 
-    private fun subscriptionsFake(): List<Subscription> {
-        return listOf(
+    private fun subscriptionsFake(): List<Subscription> =
+        listOf(
             Subscription(
                 duration = 30,
                 cost = 0,
@@ -471,5 +487,4 @@ class StepperBusinessViewModelTest : BaseTest() {
                 permissions = listOf("write", "read", "admin"),
             ),
         )
-    }
 }

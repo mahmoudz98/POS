@@ -5,13 +5,13 @@ plugins {
 
 android {
     namespace = "com.casecode.pos.core.printer"
-
 }
 
 dependencies {
     implementation(projects.core.model)
+    implementation(projects.core.data)
     implementation(projects.core.common)
-    api (libs.escpos.thermalprinter.android)
+    api(libs.escpos.thermalprinter.android)
 
-
+    testImplementation(projects.core.testing)
 }

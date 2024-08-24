@@ -7,6 +7,6 @@ data class EmployeeLoginData(
     val uid: String,
     val phoneNumber: String,
     val password: String,
-    val branch:String,
-    val permission: Permission = Permission.NONE
-    )
+    val branch: String,
+    val permission: Permission = Permission.NONE,
+)

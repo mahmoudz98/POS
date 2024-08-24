@@ -17,7 +17,6 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
@@ -26,7 +25,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemCo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,11 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.designsystem.theme.PosTypography
-
 
 /**
  * Pos navigation bar item with icon and label content slots. Wraps Material 3
@@ -74,12 +70,13 @@ fun RowScope.PosNavigationBarItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
-            unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
-            indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
+        colors =
+            NavigationBarItemDefaults.colors(
+                selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
+                unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
+                selectedTextColor = PosNavigationDefaults.navigationContentColor(),
+                unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
+                indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
         ),
     )
 }
@@ -123,31 +120,36 @@ fun PosNavigationSuiteScaffold(
 ) {
     // TODO: issue when using adaptive navigation drawer in compact, have not custom navigation
     //  drawer
-    val layoutType = NavigationSuiteScaffoldDefaults
-        .calculateFromAdaptiveInfo(windowAdaptiveInfo)
+    val layoutType =
+        NavigationSuiteScaffoldDefaults
+            .calculateFromAdaptiveInfo(windowAdaptiveInfo)
 
-    val navigationSuiteItemColors = NavigationSuiteItemColors(
-        navigationBarItemColors = NavigationBarItemDefaults.colors(
-            selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
-            unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
-            indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
-        ),
-        navigationRailItemColors = NavigationRailItemDefaults.colors(
-            selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
-            unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
-            indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
-        ),
-        navigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
-            selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationContentColor(),
-            unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
-        ),
-    )
+    val navigationSuiteItemColors =
+        NavigationSuiteItemColors(
+            navigationBarItemColors =
+            NavigationBarItemDefaults.colors(
+                selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
+                unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
+                selectedTextColor = PosNavigationDefaults.navigationContentColor(),
+                unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
+                indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
+            ),
+            navigationRailItemColors =
+            NavigationRailItemDefaults.colors(
+                selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
+                unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
+                selectedTextColor = PosNavigationDefaults.navigationContentColor(),
+                unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
+                indicatorColor = PosNavigationDefaults.navigationIndicatorColor(),
+            ),
+            navigationDrawerItemColors =
+            NavigationDrawerItemDefaults.colors(
+                selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
+                unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
+                selectedTextColor = PosNavigationDefaults.navigationContentColor(),
+                unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
+            ),
+        )
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -158,7 +160,8 @@ fun PosNavigationSuiteScaffold(
         },
         layoutType = layoutType,
         containerColor = Color.Transparent,
-        navigationSuiteColors = NavigationSuiteDefaults.colors(
+        navigationSuiteColors =
+        NavigationSuiteDefaults.colors(
             navigationBarContentColor = PosNavigationDefaults.navigationContentColor(),
             navigationRailContainerColor = Color.Transparent,
         ),
@@ -176,7 +179,6 @@ class PosNavigationSuiteScope internal constructor(
     private val navigationSuiteScope: NavigationSuiteScope,
     private val navigationSuiteItemColors: NavigationSuiteItemColors,
 ) {
-
     fun item(
         selected: Boolean,
         onClick: () -> Unit,
@@ -198,14 +200,13 @@ class PosNavigationSuiteScope internal constructor(
         colors = navigationSuiteItemColors,
         modifier = modifier,
     )
-
 }
-
 
 @Composable
 fun PosNavigationDrawerHeader(textHeader: String) {
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(16.dp),
         contentAlignment = Alignment.TopStart,
@@ -213,7 +214,6 @@ fun PosNavigationDrawerHeader(textHeader: String) {
         Text(text = textHeader, style = PosTypography.titleLarge)
     }
 }
-
 
 @Composable
 fun PosNavigationDrawerItem(
@@ -230,7 +230,8 @@ fun PosNavigationDrawerItem(
         onClick = onClick,
         icon = if (selected) selectedIcon else icon,
         modifier = modifier.padding(end = 12.dp),
-        colors = NavigationDrawerItemDefaults.colors(
+        colors =
+        NavigationDrawerItemDefaults.colors(
             selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
             selectedTextColor = PosNavigationDefaults.navigationSelectedItemColor(),
@@ -258,16 +259,18 @@ fun PosNavigationDrawer(
 @Composable
 fun NiaNavigationBarPreview() {
     val items = listOf("Sale", "Reports", "Settings")
-    val icons = listOf(
-        PosIcons.Pos,
-        PosIcons.Reports,
-        PosIcons.Invoices,
-    )
-    val selectedIcons = listOf(
-        PosIcons.Pos,
-        PosIcons.Reports,
-        PosIcons.Settings,
-    )
+    val icons =
+        listOf(
+            PosIcons.Pos,
+            PosIcons.Reports,
+            PosIcons.Invoices,
+        )
+    val selectedIcons =
+        listOf(
+            PosIcons.Pos,
+            PosIcons.Reports,
+            PosIcons.Settings,
+        )
 
     POSTheme {
         PosNavigationBar {
@@ -294,25 +297,22 @@ fun NiaNavigationBarPreview() {
     }
 }
 
-
 @Composable
-fun PosNavigationDrawerHeaderItems(@StringRes title: Int) {
-
+fun PosNavigationDrawerHeaderItems(
+    @StringRes title: Int,
+) {
     Text(
-        text = stringResource(title), style = PosTypography.titleSmall,
-        modifier = Modifier
+        text = stringResource(title),
+        style = PosTypography.titleSmall,
+        modifier =
+        Modifier
             .padding(bottom = 8.dp, start = 16.dp)
             .fillMaxWidth(),
     )
-
 }
 
 @Composable
-fun PosNavigationDrawerContent(
-    onClick: () -> Unit,
-) {
-
-
+fun PosNavigationDrawerContent(onClick: () -> Unit) {
     /*    ModalDrawerSheet(modifier = Modifier) {
             PosNavigationDrawerHeader()
             Spacer(modifier = Modifier.padding(12.dp))

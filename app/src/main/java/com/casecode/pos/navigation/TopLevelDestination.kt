@@ -9,12 +9,13 @@ enum class TopLevelDestination(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val titleTextId: Int,
-
 ) {
     POS(PosIcons.Pos, PosIcons.Pos, R.string.pos),
     REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title),
 
-    ITEMS(PosIcons.Items,PosIcons.Items,
+    ITEMS(
+        PosIcons.Items,
+        PosIcons.Items,
         R.string.menu_items,
     ),
     EMPLOYEES(
@@ -27,5 +28,4 @@ enum class TopLevelDestination(
         PosIcons.Settings,
         R.string.settings_title,
     ),
-
 }

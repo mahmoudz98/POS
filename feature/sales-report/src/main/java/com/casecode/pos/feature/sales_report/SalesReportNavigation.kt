@@ -18,7 +18,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 
-
 const val SALES_REPORT_GRAPH = "sales_report_graph"
 const val SALES_REPORT_ROUTE = "sales_report_route"
 const val SALES_REPORT_DETAILS_ROUTE = "sales_report_details_route"
@@ -32,12 +31,10 @@ fun NavGraphBuilder.salesReportGraph(
         startDestination = SALES_REPORT_ROUTE,
         route = SALES_REPORT_GRAPH,
     ) {
-
         salesReportScreen(navController = navController, onBackClick = onBackClick) {
             onSalesReportDetailsClick()
         }
         salesReportDetailsScreen(navController, onBackClick)
-
     }
 }
 
@@ -64,26 +61,31 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
         route = SALES_REPORT_DETAILS_ROUTE,
         enterTransition = {
             fadeIn(
-                animationSpec = tween(
-                    300, easing = LinearEasing,
-                ),
-            ) + slideIntoContainer(
-                animationSpec = tween(300, easing = EaseIn),
-                towards = AnimatedContentTransitionScope.SlideDirection.Start,
-            )
+                animationSpec =
+                    tween(
+                        300,
+                        easing = LinearEasing,
+                    ),
+            ) +
+                slideIntoContainer(
+                    animationSpec = tween(300, easing = EaseIn),
+                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+                )
         },
         exitTransition = {
             fadeOut(
-                animationSpec = tween(
-                    300, easing = LinearEasing,
-                ),
-            ) + slideOutOfContainer(
-                animationSpec = tween(300, easing = EaseOut),
-                towards = AnimatedContentTransitionScope.SlideDirection.End,
-            )
+                animationSpec =
+                    tween(
+                        300,
+                        easing = LinearEasing,
+                    ),
+            ) +
+                slideOutOfContainer(
+                    animationSpec = tween(300, easing = EaseOut),
+                    towards = AnimatedContentTransitionScope.SlideDirection.End,
+                )
         },
     ) {
-
         val viewModel = it.sharedViewModel<SalesReportViewModel>(navController, SALES_REPORT_GRAPH)
         SalesReportDetailsRoute(
             viewModel,
@@ -97,13 +99,13 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
     navController: NavController,
     route: String,
 ): T {
-    val parentEntry = remember(this) {
-        navController.getBackStackEntry(route)
-    }
+    val parentEntry =
+        remember(this) {
+            navController.getBackStackEntry(route)
+        }
     return hiltViewModel(parentEntry)
 }
 
-fun NavController.navigateToSalesReport(navOptions: NavOptions? = null) =
-    navigate(SALES_REPORT_GRAPH, navOptions)
+fun NavController.navigateToSalesReport(navOptions: NavOptions? = null) = navigate(SALES_REPORT_GRAPH, navOptions)
 
 fun NavController.navigateToSalesReportDetails() = navigate(SALES_REPORT_DETAILS_ROUTE)

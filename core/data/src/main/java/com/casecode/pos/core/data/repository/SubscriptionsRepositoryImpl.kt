@@ -1,11 +1,10 @@
 package com.casecode.pos.core.data.repository
 
-import com.casecode.pos.core.data.model.asEntitySubscriptions
-import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.common.Dispatcher
+import com.casecode.pos.core.data.model.asEntitySubscriptions
 import com.casecode.pos.core.data.utils.SUBSCRIPTIONS_COLLECTION_PATH
 import com.casecode.pos.core.data.utils.SUBSCRIPTION_COST_FIELD
-
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
@@ -28,21 +27,25 @@ import javax.inject.Inject
  * @param ioDispatcher A dispatcher for IO-bound operations.
  */
 class SubscriptionsRepositoryImpl
-@Inject
-constructor(
-    private val db: FirebaseFirestore,
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-) : SubscriptionsRepository {
-    /**
-     * Gets the list of Subscription from the [FirebaseFirestore] database.
-     *
-     * @return A Flow of [Resource<List<Subscription>>] objects.
-     */
-    override fun getSubscriptions(): Flow<Resource<List<Subscription>>> =
-        callbackFlow {
-            trySend(Resource.Loading)
+    @Inject
+    constructor(
+        private val db: FirebaseFirestore,
+        @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    ) : SubscriptionsRepository {
+        /**
+         * Gets the list of Subscription from the [FirebaseFirestore] database.
+         *
+         * @return A Flow of [Resource<List<Subscription>>] objects.
+         */
+        override fun getSubscriptions(): Flow<Resource<List<Subscription>>> =
+            callbackFlow {
+                trySend(Resource.Loading)
 
-            val query = db.collection(SUBSCRIPTIONS_COLLECTION_PATH).orderBy(SUBSCRIPTION_COST_FIELD).get()
+            val query =
+                db
+                    .collection(SUBSCRIPTIONS_COLLECTION_PATH)
+                    .orderBy(SUBSCRIPTION_COST_FIELD)
+                    .get()
                     .addOnSuccessListener { task ->
 
                         mapToSubscriptions(task)
@@ -79,7 +82,5 @@ constructor(
         }
     }
 
-    private fun countDownLatch(count: Int): CountDownLatch {
-        return CountDownLatch(count)
-    }
+    private fun countDownLatch(count: Int): CountDownLatch = CountDownLatch(count)
 }

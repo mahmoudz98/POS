@@ -35,7 +35,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 
-
 @Composable
 fun SignOutDialog(
     authViewModel: SignOutViewModel = hiltViewModel(),
@@ -54,25 +53,26 @@ fun SignOutDialog(
             Image(
                 painter = painterResource(id = R.drawable.ic_logo_google),
                 contentDescription = "Google Logo",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentSize(Alignment.Center),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize(Alignment.Center),
             )
         },
         text = {
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
-                    DynamicAsyncImage(
-                        imageUrl = currentUser?.photoUrl,
-                        placeholder = painterResource(id = R.drawable.ic_google),
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp).clip(CircleShape),
-                    )
+                DynamicAsyncImage(
+                    imageUrl = currentUser?.photoUrl,
+                    placeholder = painterResource(id = R.drawable.ic_google),
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp).clip(CircleShape),
+                )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -96,7 +96,8 @@ fun SignOutDialog(
                 onClick = {
                     isSignOut = true
                 },
-                colors = ButtonDefaults.buttonColors(
+                colors =
+                ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent,
                     contentColor = MaterialTheme.colorScheme.error,
                 ),
@@ -104,14 +105,11 @@ fun SignOutDialog(
                 Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_ok_button_text))
             }
         },
-
-        )
+    )
     LaunchedEffect(isSignOut) {
-        if(isSignOut){
-        authViewModel.signOut().await()
+        if (isSignOut) {
+            authViewModel.signOut().await()
             onSignOut()
-
         }
-
     }
 }

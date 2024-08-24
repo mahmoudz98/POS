@@ -1,8 +1,7 @@
-package com.casecode.data.repository
+package com.casecode.pos.core.data.repository
 
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asSubscriptionRequest
-import com.casecode.pos.core.data.repository.SubscriptionsBusinessRepositoryImpl
 import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
@@ -65,7 +64,9 @@ class SubscriptionsBusinessRepositoryImplTest {
                 )
 
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update(subscription.asSubscriptionRequest())
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -93,7 +94,9 @@ class SubscriptionsBusinessRepositoryImplTest {
                     listOf("admin", "sales"),
                 )
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update(subscription.asSubscriptionRequest())
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -120,7 +123,9 @@ class SubscriptionsBusinessRepositoryImplTest {
                     listOf("admin", "sales"),
                 )
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update(subscription.asSubscriptionRequest())
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))

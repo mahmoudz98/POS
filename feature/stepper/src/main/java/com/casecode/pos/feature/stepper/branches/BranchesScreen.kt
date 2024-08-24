@@ -22,19 +22,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.ui.BranchesHeader
 import com.casecode.pos.feature.stepper.R
 import com.casecode.pos.feature.stepper.StepperBusinessUiState
 import com.casecode.pos.feature.stepper.StepperBusinessViewModel
 
 @Composable
-fun BranchesScreen(
-    viewModel: StepperBusinessViewModel,
-) {
+fun BranchesScreen(viewModel: StepperBusinessViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showAddBranchDialog by remember { mutableStateOf(false) }
     var showUpdateBranchDialog by remember { mutableStateOf(false) }
@@ -75,9 +73,10 @@ internal fun BranchesScreen(
     onPreviousClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(8.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(8.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(modifier = Modifier.weight(1f)) {
@@ -85,9 +84,10 @@ internal fun BranchesScreen(
             BranchesList(branches = uiState.branches, onUpdateClick = onUpdateClick)
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             PosTextButton(
@@ -109,10 +109,10 @@ internal fun BranchesScreen(
                         contentDescription = null,
                     )
                 },
-                modifier = Modifier
-                    .wrapContentSize(),
+                modifier =
+                    Modifier
+                        .wrapContentSize(),
             )
-
         }
     }
 }
@@ -139,8 +139,10 @@ fun BranchesScreenPreview() {
     POSTheme {
         PosBackground {
             BranchesScreen(
-                uiState = StepperBusinessUiState(
-                    branches = arrayListOf(
+                uiState =
+                StepperBusinessUiState(
+                    branches =
+                    arrayListOf(
                         Branch(
                             branchCode = 1,
                             branchName = "branch1",

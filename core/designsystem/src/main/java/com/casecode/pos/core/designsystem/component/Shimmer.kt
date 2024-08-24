@@ -34,8 +34,8 @@ fun Modifier.shimmer(
     isShimmerVisible: Boolean = true,
     backgroundColor: Color? = null,
     shimmerColor: Color? = null,
-): Modifier {
-    return composed {
+): Modifier =
+    composed {
         var targetValue by remember {
             mutableFloatStateOf(0F)
         }
@@ -47,27 +47,29 @@ fun Modifier.shimmer(
         )
 
         this.then(
-            other = Modifier
-                .onSizeChanged {
-                    val newTargetValue = ShimmerConstants.SHIMMER_SIZE_MULTIPLIER * sqrt(
-                        it.height
-                            .toFloat()
-                            .pow(2) + it.width
-                            .toFloat()
-                            .pow(2)
-                    )
-                    if (targetValue != newTargetValue) {
-                        targetValue = newTargetValue
-                    }
-                }
-                .drawBehind {
-                    drawRect(
-                        brush = brush,
-                    )
-                }
+            other =
+                Modifier
+                    .onSizeChanged {
+                        val newTargetValue =
+                            ShimmerConstants.SHIMMER_SIZE_MULTIPLIER *
+                                sqrt(
+                                    it.height
+                                        .toFloat()
+                                        .pow(2) +
+                                        it.width
+                                            .toFloat()
+                                            .pow(2),
+                                )
+                        if (targetValue != newTargetValue) {
+                            targetValue = newTargetValue
+                        }
+                    }.drawBehind {
+                        drawRect(
+                            brush = brush,
+                        )
+                    },
         )
     }
-}
 
 @Composable
 fun rememberShimmerBrush(
@@ -76,52 +78,59 @@ fun rememberShimmerBrush(
     backgroundColor: Color? = MaterialTheme.colorScheme.surfaceVariant,
     shimmerColor: Color? = MaterialTheme.colorScheme.primaryContainer,
 ): State<Brush> {
-    val shimmerColors = listOf(
-        (backgroundColor ?: MaterialTheme.colorScheme.surfaceVariant).copy(
-            alpha = 0.4F,
-        ),
-        (shimmerColor ?: MaterialTheme.colorScheme.primaryContainer).copy(
-            alpha = 0.8F,
-        ),
-        (backgroundColor ?: MaterialTheme.colorScheme.surfaceVariant).copy(
-            alpha = 0.4F,
-        ),
-    )
-    val transition = rememberInfiniteTransition(
-        label = "shimmer_transition",
-    )
-    val translateAnimation = transition.animateFloat(
-        initialValue = 0F,
-        targetValue = targetValue,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = ShimmerConstants.DEFAULT_SHIMMER_DURATION,
-                delayMillis = ShimmerConstants.DEFAULT_SHIMMER_DELAY,
-                easing = LinearEasing,
+    val shimmerColors =
+        listOf(
+            (backgroundColor ?: MaterialTheme.colorScheme.surfaceVariant).copy(
+                alpha = 0.4F,
             ),
-            repeatMode = RepeatMode.Restart,
-        ),
-        label = "shimmer_translation",
-    )
+            (shimmerColor ?: MaterialTheme.colorScheme.primaryContainer).copy(
+                alpha = 0.8F,
+            ),
+            (backgroundColor ?: MaterialTheme.colorScheme.surfaceVariant).copy(
+                alpha = 0.4F,
+            ),
+        )
+    val transition =
+        rememberInfiniteTransition(
+            label = "shimmer_transition",
+        )
+    val translateAnimation =
+        transition.animateFloat(
+            initialValue = 0F,
+            targetValue = targetValue,
+            animationSpec =
+                infiniteRepeatable(
+                    animation =
+                        tween(
+                            durationMillis = ShimmerConstants.DEFAULT_SHIMMER_DURATION,
+                            delayMillis = ShimmerConstants.DEFAULT_SHIMMER_DELAY,
+                            easing = LinearEasing,
+                        ),
+                    repeatMode = RepeatMode.Restart,
+                ),
+            label = "shimmer_translation",
+        )
     return remember {
         derivedStateOf {
             if (isShimmerVisible) {
                 Brush.linearGradient(
                     colors = shimmerColors,
                     start = Offset.Zero,
-                    end = Offset(
-                        x = translateAnimation.value,
-                        y = translateAnimation.value,
-                    )
+                    end =
+                        Offset(
+                            x = translateAnimation.value,
+                            y = translateAnimation.value,
+                    ),
                 )
             } else {
                 Brush.linearGradient(
-                    colors = listOf(
+                    colors =
+                        listOf(
+                            Color.Transparent,
                         Color.Transparent,
-                        Color.Transparent,
-                    ),
+                        ),
                     start = Offset.Zero,
-                    end = Offset.Zero
+                    end = Offset.Zero,
                 )
             }
         }

@@ -30,13 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.ui.R.string as uiString
-import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.feature.stepper.StepperBusinessViewModel
+import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.ui.validatePhoneNumber
+import com.casecode.pos.feature.stepper.StepperBusinessViewModel
+import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun BranchDialog(
@@ -61,7 +61,6 @@ fun BranchDialog(
         },
         onDismissRequest = onDismissRequest,
     )
-
 }
 
 @Composable
@@ -110,35 +109,42 @@ private fun BranchDialog(
             Column {
                 PosOutlinedTextField(
                     value = branchName,
-                    onValueChange = { branchName = it; nameError = it.isEmpty() },
+                    onValueChange = {
+                        branchName = it
+                        nameError = it.isEmpty()
+                    },
                     isError = nameError,
                     label = stringResource(id = uiString.core_ui_branch_name_hint),
-
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                        ),
                     supportingText = if (nameError) stringResource(uiString.core_ui_error_branch_name_empty) else null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 PosOutlinedTextField(
                     value = phoneNumber,
                     onValueChange = {
-                        phoneNumber = it; phoneError = validatePhoneNumber(it, countryIsoCode)
+                        phoneNumber = it
+                        phoneError = validatePhoneNumber(it, countryIsoCode)
                     },
                     isError = phoneError != null,
                     supportingText = phoneError?.let { stringResource(it) },
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onDoneClickTriggered()
-                        },
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Phone,
-                        imeAction = ImeAction.Done,
+                    keyboardActions =
+                        KeyboardActions(
+                            onDone = {
+                                onDoneClickTriggered()
+                            },
+                        ),
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Done,
                     ),
                     label = stringResource(id = uiString.core_ui_hint_phone_number_branch),
                     modifier = Modifier.fillMaxWidth(),
@@ -151,12 +157,15 @@ private fun BranchDialog(
                     onDoneClickTriggered()
                 },
             ) {
-                Text(text = stringResource(if (isUpdate) uiString.core_ui_update_branch_button_text else uiString.core_ui_add_branch_button_text))
+                Text(
+                    text =
+                        stringResource(
+                            if (isUpdate) uiString.core_ui_update_branch_button_text else uiString.core_ui_add_branch_button_text,
+                        ),
+                )
             }
         },
-
-        )
-
+    )
 }
 
 @com.casecode.pos.core.ui.DevicePreviews
@@ -181,10 +190,11 @@ fun BranchUpdateDialogPreview() {
     POSTheme {
         PosBackground {
             BranchDialog(
-                branchSelected = Branch(
-                    branchCode = 1,
-                    branchName = "branch1",
-                    phoneNumber = "0000000000",
+                branchSelected =
+                    Branch(
+                        branchCode = 1,
+                        branchName = "branch1",
+                        phoneNumber = "0000000000",
                 ),
                 countryIsoCode = "",
                 isUpdate = true,

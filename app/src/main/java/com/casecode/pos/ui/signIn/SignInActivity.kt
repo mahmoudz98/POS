@@ -24,11 +24,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.LoginStateResult
 import com.casecode.pos.core.model.data.LoginStateResult.Loading
-import com.casecode.pos.utils.moveToMainActivity
-import com.casecode.pos.utils.moveToStepperActivity
+import com.casecode.pos.core.ui.moveToMainActivity
+import com.casecode.pos.core.ui.moveToStepperActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class SignInActivity : ComponentActivity() {
@@ -48,28 +47,29 @@ class SignInActivity : ComponentActivity() {
             authUiState == Loading
         }
         splashScreen.setOnExitAnimationListener { splashScreenView ->
-            val zoomX = ObjectAnimator.ofFloat(
-                splashScreenView.iconView,
-                View.SCALE_X,
-                0.4f,
-                0.0f,
-            )
+            val zoomX =
+                ObjectAnimator.ofFloat(
+                    splashScreenView.iconView,
+                    View.SCALE_X,
+                    0.4f,
+                    0.0f,
+                )
             zoomX.interpolator = OvershootInterpolator()
             zoomX.duration = 400L
             zoomX.doOnEnd { splashScreenView.remove() }
 
-            val zoomY = ObjectAnimator.ofFloat(
-                splashScreenView.iconView,
-                View.SCALE_Y,
-                0.4f,
-                0.0f,
-            )
+            val zoomY =
+                ObjectAnimator.ofFloat(
+                    splashScreenView.iconView,
+                    View.SCALE_Y,
+                    0.4f,
+                    0.0f,
+                )
             zoomY.interpolator = OvershootInterpolator()
             zoomY.duration = 400L
             zoomY.doOnEnd { splashScreenView.remove() }
             zoomX.start()
             zoomY.start()
-
         }
 
         super.onCreate(savedInstanceState)
@@ -90,7 +90,6 @@ class SignInActivity : ComponentActivity() {
                 }
                 onDispose {}
             }
-
 
             POSTheme {
                 Surface(

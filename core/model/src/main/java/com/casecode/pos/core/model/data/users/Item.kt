@@ -17,5 +17,5 @@ data class Item(
     var quantity: Double = 0.0,
     val sku: String = "",
     var unitOfMeasurement: String? = "",
-     var imageUrl: String? = "",
+    var imageUrl: String? = "",
 )

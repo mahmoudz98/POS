@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.casecode.pos.core.designsystem.theme.POSTheme
 
-
 @Composable
 fun Stepper(
     modifier: Modifier = Modifier,
@@ -40,12 +39,12 @@ fun Stepper(
     selectedColor: Color,
     onSelectedColor: Color,
 ) {
-
     val descriptionList = MutableList(numberOfSteps) { "" }
 
     stepDescriptionList.forEachIndexed { index, element ->
-        if (index < numberOfSteps)
+        if (index < numberOfSteps) {
             descriptionList[index] = element
+        }
     }
 
     Row(
@@ -64,7 +63,6 @@ fun Stepper(
                 selectedColor = selectedColor,
                 onSelectedColor = onSelectedColor,
             )
-
         }
     }
 }
@@ -81,59 +79,57 @@ private fun Step(
     onSelectedColor: Color,
     unSelectedColor: Color,
 ) {
-
     val transition = updateTransition(isCompete, label = "")
-
 
     val innerCircleColor by transition.animateColor(label = "innerCircleColor") {
         if (it) selectedColor else unSelectedColor
     }
-    val textColor by transition.animateColor(label = "txtColor")
-    { if (it || isCurrent) selectedColor else unSelectedColor }
+    val textColor by transition.animateColor(label = "txtColor") { if (it || isCurrent) selectedColor else unSelectedColor }
 
-    val color by transition.animateColor(label = "color")
-    { if (it || isCurrent) selectedColor else Color.Gray }
+    val color by transition.animateColor(label = "color") { if (it || isCurrent) selectedColor else Color.Gray }
 
     val borderStroke = BorderStroke(1.dp, color)
 
     val textSize by remember { mutableStateOf(12.sp) }
 
     ConstraintLayout(modifier = modifier) {
-
         val (circle, txt, line) = createRefs()
 
         Surface(
             shape = CircleShape,
             border = borderStroke,
             color = innerCircleColor,
-            modifier = Modifier
-                .size(30.dp)
-                .constrainAs(circle) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                },
+            modifier =
+                Modifier
+                    .size(30.dp)
+                    .constrainAs(circle) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    },
         ) {
-
             Box(contentAlignment = Alignment.Center) {
-                if (isCompete)
+                if (isCompete) {
                     Icon(
-                        imageVector = Icons.Default.Done, "done",
+                        imageVector = Icons.Default.Done,
+                        "done",
                         modifier = modifier.padding(4.dp),
                         tint = onSelectedColor,
                     )
-                else
+                } else {
                     Text(
                         text = step.toString(),
                         color = color,
                         fontSize = 10.sp,
                     )
+                }
             }
         }
 
         Text(
-            modifier = Modifier.constrainAs(txt) {
+            modifier =
+            Modifier.constrainAs(txt) {
                 top.linkTo(circle.bottom, margin = 3.dp)
                 start.linkTo(circle.start)
                 end.linkTo(circle.end)
@@ -148,7 +144,8 @@ private fun Step(
 
         if (!isComplete) {
             HorizontalDivider(
-                modifier = Modifier.constrainAs(line) {
+                modifier =
+                Modifier.constrainAs(line) {
                     top.linkTo(circle.top)
                     bottom.linkTo(circle.bottom)
                     start.linkTo(circle.end)
@@ -156,7 +153,6 @@ private fun Step(
                 color = innerCircleColor,
                 thickness = 1.dp,
             )
-
         }
     }
 }
@@ -173,7 +169,8 @@ fun StepperPreview() {
                 modifier = Modifier.size(300.dp),
                 numberOfSteps = 4,
                 currentStep = 2,
-                stepDescriptionList = listOf(
+                stepDescriptionList =
+                listOf(
                     "Business info",
                     "Branches",
                     "Subscription",

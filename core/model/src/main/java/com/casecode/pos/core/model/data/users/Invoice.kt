@@ -11,8 +11,8 @@ data class Invoice(
 ) {
     val total: Double
         get() = items.sumOf { it.price * it.quantity }
-
 }
+
 fun Set<Item>.addItemToInvoices(item: Item): Set<Item> {
     val existingItem = find { it.sku == item.sku }
     return if (existingItem != null) {

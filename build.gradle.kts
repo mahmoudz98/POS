@@ -15,8 +15,7 @@ plugins {
     alias(libs.plugins.gradle.cache.fix) apply false
     alias(libs.plugins.dependencyGuard) apply false
     alias(libs.plugins.module.graph) apply true
-   // alias(libs.plugins.dependency.analysis) apply true
-
+    // alias(libs.plugins.dependency.analysis) apply true
 }
 /*moduleGraphAssert {
     maxHeight = 4

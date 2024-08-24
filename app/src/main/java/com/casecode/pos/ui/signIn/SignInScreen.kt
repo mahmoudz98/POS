@@ -110,15 +110,17 @@ fun SignInScreen(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .align(Alignment.Center),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -161,9 +163,10 @@ fun SignInScreen(
                 )
                 Spacer(modifier = modifier.height(16.dp))
                 PosOutlinedButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally),
                     onClick = onSignInCLick,
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -180,9 +183,10 @@ fun SignInScreen(
                 Spacer(modifier = modifier.height(8.dp)) // Space between buttons
 
                 PosTextButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally),
                     onClick = onLoginEmployeeClick,
                 ) {
                     Text(stringResource(id = R.string.sign_in_employee_option))
@@ -201,7 +205,10 @@ private fun isGooglePlayServicesAvailable(context: Context): Boolean {
 }
 
 @Composable
-private fun ShowAlternativeSignInDialog(context: Context, onDismiss: () -> Unit) {
+private fun ShowAlternativeSignInDialog(
+    context: Context,
+    onDismiss: () -> Unit,
+) {
     // Display a dialog or message informing the user about the lack of Google Play services
     // and provide an option to download them from the Play Store.
     AlertDialog(
@@ -210,7 +217,10 @@ private fun ShowAlternativeSignInDialog(context: Context, onDismiss: () -> Unit)
         text = { Text(text = stringResource(R.string.google_play_services_message)) },
         confirmButton = {
             PosTextButton(
-                onClick = { openGooglePlayStore(context); onDismiss() },
+                onClick = {
+                    openGooglePlayStore(context)
+                    onDismiss()
+                },
                 text = { Text(stringResource(R.string.action_download)) },
             )
         },
@@ -221,22 +231,23 @@ private fun ShowAlternativeSignInDialog(context: Context, onDismiss: () -> Unit)
             )
         },
     )
-
 }
 
 private fun openGooglePlayStore(context: Context) {
-    val playStoreIntent = Intent(
-        Intent.ACTION_VIEW,
-        Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
-    )
+    val playStoreIntent =
+        Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
+        )
     try {
         startActivity(context, playStoreIntent, null)
     } catch (_: ActivityNotFoundException) {
         // Handle the case where the Play Store app is not installed
-        val webIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
-        )
+        val webIntent =
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
+            )
         startActivity(context, webIntent, null)
     }
 }

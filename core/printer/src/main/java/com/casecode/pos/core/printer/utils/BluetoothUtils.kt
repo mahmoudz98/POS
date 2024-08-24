@@ -12,28 +12,30 @@ import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
 
 object BluetoothUtils {
-
     private const val PERMISSION_BLUETOOTH_CONNECT = 3
     private const val PERMISSION_BLUETOOTH_SCAN = 4
 
-    fun checkBluetoothPermissions(context: Context, onPermissionsGranted: () -> Unit) {
+    fun checkBluetoothPermissions(
+        context: Context,
+        onPermissionsGranted: () -> Unit,
+    ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.BLUETOOTH_CONNECT
+                    Manifest.permission.BLUETOOTH_CONNECT,
                 ) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.BLUETOOTH_SCAN
+                    Manifest.permission.BLUETOOTH_SCAN,
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     context as Activity,
                     arrayOf(
                         Manifest.permission.BLUETOOTH_CONNECT,
-                        Manifest.permission.BLUETOOTH_SCAN
+                        Manifest.permission.BLUETOOTH_SCAN,
                     ),
-                    PERMISSION_BLUETOOTH_CONNECT
+                    PERMISSION_BLUETOOTH_CONNECT,
                 )
             } else {
                 onPermissionsGranted()
@@ -41,17 +43,17 @@ object BluetoothUtils {
         } else {
             if (ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.BLUETOOTH
+                    Manifest.permission.BLUETOOTH,
                 ) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.BLUETOOTH_ADMIN
+                    Manifest.permission.BLUETOOTH_ADMIN,
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     context as Activity,
                     arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN),
-                    PERMISSION_BLUETOOTH_CONNECT
+                    PERMISSION_BLUETOOTH_CONNECT,
                 )
             } else {
                 onPermissionsGranted()
@@ -59,11 +61,7 @@ object BluetoothUtils {
         }
     }
 
-    fun getAvailableBluetoothPrinters(): List<BluetoothConnection> {
-        return BluetoothPrintersConnections().list?.toList() ?: emptyList()
-    }
+    fun getAvailableBluetoothPrinters(): List<BluetoothConnection> = BluetoothPrintersConnections().list?.toList() ?: emptyList()
 
-    fun connectToBluetoothPrinter(device: BluetoothDevice): BluetoothConnection {
-        return BluetoothConnection(device)
-    }
+    fun connectToBluetoothPrinter(device: BluetoothDevice): BluetoothConnection = BluetoothConnection(device)
 }

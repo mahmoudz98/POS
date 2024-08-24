@@ -13,7 +13,6 @@ import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.model.data.users.StoreType
 
-
 fun Map<String, Any>.asEntityBusiness(): Business {
     val storeType = this[BUSINESS_STORE_TYPE_FIELD] as? String ?: ""
     val email = this[BUSINESS_EMAIL_FIELD] as? String ?: ""
@@ -37,13 +36,12 @@ fun Map<String, Any>.asEntityBusiness(): Business {
     return Business(storeType.toStoreType(), email, phone, isCompletedStep, branches)
 }
 
-fun Branch.asExternalBranch(): Map<String, Any?> {
-    return mapOf(
+fun Branch.asExternalBranch(): Map<String, Any?> =
+    mapOf(
         BRANCHES_CODE_FIELD to branchCode,
         BRANCHES_NAME_FIELD to branchName,
         BRANCHES_PHONE_NUMBER_FIELD to phoneNumber,
     )
-}
 
 fun Business.asExternalBusiness(): HashMap<String, HashMap<String, Any?>> {
     val branchesRequest = mutableListOf<Map<String, Any?>>()
@@ -59,18 +57,17 @@ fun Business.asExternalBusiness(): HashMap<String, HashMap<String, Any?>> {
 
     return hashMapOf(
         BUSINESS_FIELD to
-                hashMapOf(
-                    BUSINESS_STORE_TYPE_FIELD to storeType,
-                    BUSINESS_EMAIL_FIELD to email,
-                    BUSINESS_PHONE_NUMBER_FIELD to phone,
-                    BUSINESS_IS_COMPLETED_STEP_FIELD to false,
-                    BRANCHES_FIELD to branchesRequest,
-                ),
+            hashMapOf(
+                BUSINESS_STORE_TYPE_FIELD to storeType,
+                BUSINESS_EMAIL_FIELD to email,
+                BUSINESS_PHONE_NUMBER_FIELD to phone,
+                BUSINESS_IS_COMPLETED_STEP_FIELD to false,
+                BRANCHES_FIELD to branchesRequest,
+            ),
     )
 }
 
-fun String.toStoreType(): StoreType? {
-    return StoreType.entries.find { type ->
+fun String.toStoreType(): StoreType? =
+    StoreType.entries.find { type ->
         type.arabicName == this || type.englishName.lowercase() == this.lowercase()
     }
-}

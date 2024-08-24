@@ -5,5 +5,6 @@ import com.casecode.pos.core.model.data.PrinterInfo
 
 interface PrinterRepository {
     suspend fun getPrinters(): Resource<List<PrinterInfo>>
+
     suspend fun addPrinter(printerInfo: PrinterInfo): Resource<Int>
 }

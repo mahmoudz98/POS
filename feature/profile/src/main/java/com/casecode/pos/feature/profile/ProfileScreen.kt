@@ -40,8 +40,10 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileRoute(profileViewModel: ProfileViewModel = hiltViewModel(), onBackClick: () -> Unit) {
-
+fun ProfileRoute(
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+) {
     ProfileScreen(profileViewModel = profileViewModel, onBackClick = onBackClick)
 }
 
@@ -55,10 +57,12 @@ fun ProfileScreen(
     val uiState by profileViewModel.uiState.collectAsState()
     val snackState = remember { SnackbarHostState() }
 
-    SnackbarHost(hostState = snackState,
+    SnackbarHost(
+        hostState = snackState,
         Modifier
             .padding(8.dp)
-            .zIndex(1f))
+            .zIndex(1f),
+    )
     uiState.userMessage?.let { message ->
         val snackbarText = stringResource(message)
         LaunchedEffect(snackState, uiState, message, snackbarText) {
@@ -67,31 +71,36 @@ fun ProfileScreen(
         }
     }
 
-    val pagerState = rememberPagerState(
-        pageCount = {
-            3
-        },
-    )
+    val pagerState =
+        rememberPagerState(
+            pageCount = {
+                3
+            },
+        )
     Column(
-        modifier = modifier
-            .padding(8.dp)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(8.dp)
+                .fillMaxSize(),
     ) {
         PosTopAppBar(
             modifier = Modifier,
             titleRes = R.string.feature_profile_title,
             navigationIcon = PosIcons.ArrowBack,
-            navigationIconContentDescription = stringResource(
-                id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
-            ),
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
+            navigationIconContentDescription =
+                stringResource(
+                    id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
+                ),
+            colors =
+                TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
             ),
             onNavigationClick = { onBackClick() },
         )
         if (uiState.isLoading) {
             PosLoadingWheel(
-                modifier = modifier
+                modifier =
+                modifier
                     .fillMaxSize()
                     .wrapContentSize(Alignment.Center),
                 contentDesc = "LoadingProfile",
@@ -140,17 +149,17 @@ fun ProfileScreen(
                 /*
                 TODO:
                                 2 -> SubscriptionTab()
-                */
+                 */
             }
         }
-
     }
 }
 
 @Composable
 fun ProfileHeader(firebaseUser: FirebaseUser?) {
     Column(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -158,9 +167,10 @@ fun ProfileHeader(firebaseUser: FirebaseUser?) {
         Spacer(modifier = Modifier.height(8.dp))
         DynamicAsyncImage(
             imageUrl = firebaseUser?.photoUrl,
-           // placeholder = painterResource(id = R.drawable.ic_google),
+            // placeholder = painterResource(id = R.drawable.ic_google),
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .size(64.dp)
                 .clip(CircleShape),
         )
@@ -168,7 +178,6 @@ fun ProfileHeader(firebaseUser: FirebaseUser?) {
         Text(text = firebaseUser?.email ?: "")
     }
 }
-
 
 @Composable
 fun ProfileTab(

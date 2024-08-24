@@ -1,34 +1,31 @@
-package com.casecode.pos.utils
+package com.casecode.pos.core.ui
 
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
-import com.casecode.pos.ui.main.MainActivity
-import com.casecode.pos.ui.signIn.SignInActivity
-import com.casecode.pos.ui.stepper.StepperActivity
-import timber.log.Timber
 
 fun moveToSignInActivity(context: Context) {
-    val intent = Intent(context, SignInActivity::class.java)
+    val intent = Intent(context, Class.forName("com.casecode.pos.ui.signIn.SignInActivity"))
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
     context.startActivity(intent)
     context.findActivity().finish()
 }
+
 fun moveToMainActivity(context: Context) {
-    val intent = Intent(context, MainActivity::class.java)
+    val intent = Intent(context, Class.forName("com.casecode.pos.ui.main.MainActivity"))
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
     context.startActivity(intent)
     context.findActivity().finish()
 }
- fun moveToStepperActivity(context :Context) {
-    val intent = Intent(context, StepperActivity::class.java)
+
+fun moveToStepperActivity(context: Context) {
+    val intent = Intent(context, Class.forName("com.casecode.pos.feature.stepper.StepperActivity"))
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
-     context.startActivity(intent)
-     context.findActivity().finish()
+    context.startActivity(intent)
+    context.findActivity().finish()
 }
+
 private fun Context.getActivityOrNull(): Activity? {
     var context = this
     while (context is ContextWrapper) {
@@ -38,10 +35,10 @@ private fun Context.getActivityOrNull(): Activity? {
 
     return null
 }
+
 private tailrec fun Context.findActivity(): Activity =
     when (this) {
-        is AppCompatActivity -> this
-        is ComponentActivity -> this
+        is Activity -> this
         is ContextWrapper -> this.baseContext.findActivity()
         else -> throw IllegalArgumentException("Could not find activity!")
     }

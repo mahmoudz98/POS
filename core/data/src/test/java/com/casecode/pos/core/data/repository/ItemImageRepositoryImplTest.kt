@@ -1,6 +1,5 @@
-package com.casecode.data.repository
+package com.casecode.pos.core.data.repository
 
-import com.casecode.pos.core.data.repository.ItemImageRepositoryImpl
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
@@ -15,7 +14,6 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import org.junit.After
 import org.junit.Before
-
 
 class ItemImageRepositoryImplTest {
     private val auth: FirebaseAuth = mockk<FirebaseAuth>()
@@ -35,7 +33,6 @@ class ItemImageRepositoryImplTest {
 
     private lateinit var mockStorageReference: StorageReference
 
-
     @Before
     fun setup() {
         mockkConstructor(ItemImageRepositoryImpl::class)
@@ -46,12 +43,10 @@ class ItemImageRepositoryImplTest {
 /*
         itemImageRepositoryImpl = ItemImageRepositoryImpl(auth, firebaseStorage, testDispatcher)
 */
-
     }
 
     @After
-    fun tearDown() {clearAllMocks() }
-
-
-
+    fun tearDown() {
+        clearAllMocks()
+    }
 }

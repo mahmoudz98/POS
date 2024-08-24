@@ -20,7 +20,6 @@ import javax.inject.Singleton
     replaces = [DataStoreModule::class],
 )
 internal object TestDataStoreModule {
-
     @Provides
     @Singleton
     fun providesLoginPreferencesDataStore(
@@ -43,7 +42,7 @@ fun TemporaryFolder.testLoginPreferencesDataStore(
 ) {
     try {
         newFile("login_preferences_test.pb")
-    }catch (e: Exception){
+    } catch (e: Exception) {
         println("${e.message}")
         throw e
     }

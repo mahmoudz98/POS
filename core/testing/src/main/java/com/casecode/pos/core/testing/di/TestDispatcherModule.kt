@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object TestDispatcherModule {
-   @Provides
-   @Singleton
-   fun providesTestDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
+    @Provides
+    @Singleton
+    fun providesTestDispatcher(): TestDispatcher = UnconfinedTestDispatcher()
 }

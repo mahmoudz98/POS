@@ -1,8 +1,8 @@
-package com.casecode.data.repository
+package com.casecode.pos.core.data.repository
 
-import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import io.mockk.mockk
@@ -79,8 +79,8 @@ class SubscriptionsRepositoryImplTest {
             assertThat(subscriptionsResponse, equalTo(Resource.empty(EmptyType.DATA, "Empty")))
         }
 
-    private fun subscriptionsFake(): List<Subscription> {
-        return listOf(
+    private fun subscriptionsFake(): List<Subscription> =
+        listOf(
             Subscription(
                 duration = 30,
                 cost = 0,
@@ -100,5 +100,4 @@ class SubscriptionsRepositoryImplTest {
                 permissions = listOf("write", "read", "admin"),
             ),
         )
-    }
 }

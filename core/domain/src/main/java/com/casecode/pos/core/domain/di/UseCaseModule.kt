@@ -33,10 +33,8 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
-
     @Provides
-    fun provideSetBusinessUseCase(businessRepository: BusinessRepository) =
-        SetBusinessUseCase(businessRepository)
+    fun provideSetBusinessUseCase(businessRepository: BusinessRepository) = SetBusinessUseCase(businessRepository)
 
     @Provides
     fun provideCompleteBusinessUseCase(businessRepository: BusinessRepository) =
@@ -46,16 +44,13 @@ object UseCaseModule {
     fun provideAddBranchBusinessUseCase(businessRepository: BusinessRepository) =
         AddBranchBusinessUseCase(businessRepository)
 
+    @Provides
+    fun provideSetSubscriptionBusinessUseCase(subscriptionsBusinessRepository: SubscriptionsBusinessRepository) =
+        SetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
 
     @Provides
-    fun provideSetSubscriptionBusinessUseCase(
-        subscriptionsBusinessRepository: SubscriptionsBusinessRepository,
-    ) = SetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
-
-    @Provides
-    fun provideGetSubscriptionBusinessUseCase(
-        subscriptionsBusinessRepository: SubscriptionsBusinessRepository,
-    ) = GetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
+    fun provideGetSubscriptionBusinessUseCase(subscriptionsBusinessRepository: SubscriptionsBusinessRepository) =
+        GetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
 
     @Provides
     fun provideGetSubscriptionsUseCase(subscriptionsRepository: SubscriptionsRepository) =
@@ -76,7 +71,6 @@ object UseCaseModule {
     @Provides
     fun provideGetEmployeesBusinessUseCase(employeesBusRepo: EmployeesBusinessRepository) =
         GetEmployeesBusinessUseCase(employeesBusRepo)
-
 
     @Provides
     fun provideGetItemsUseCase(itemRepository: ItemRepository) = GetItemsUseCase(itemRepository)

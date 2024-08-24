@@ -6,7 +6,10 @@ import androidx.navigation.compose.dialog
 
 const val SIGN_OUT_ROUTE = "sign_out_route"
 
-fun NavGraphBuilder.signOutDialog(onSignOut: () -> Unit, onDismiss: () -> Unit) {
+fun NavGraphBuilder.signOutDialog(
+    onSignOut: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     dialog(route = SIGN_OUT_ROUTE) {
         SignOutDialog(onSignOut = onSignOut, onDismiss = onDismiss)
     }

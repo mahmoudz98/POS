@@ -22,14 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.ui.BranchesHeader
-import com.casecode.pos.core.designsystem.theme.POSTheme
 
 @Composable
-fun BranchesTab(
-    viewModel: ProfileViewModel = hiltViewModel(),
-) {
+fun BranchesTab(viewModel: ProfileViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     var showAddBranchDialog by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
@@ -44,14 +42,13 @@ fun BranchesTab(
     }
 }
 
-
-
 @Composable
 private fun BranchesList(branches: List<Branch>) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
     ) {
         items(branches) { branch ->
             BranchItem(branch = branch)
@@ -63,7 +60,11 @@ private fun BranchesList(branches: List<Branch>) {
 private fun BranchItem(branch: Branch) {
     ElevatedCard(Modifier.padding(bottom = 8.dp)) {
         ListItem(
-            headlineContent = { Text(text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_branch_name_hint) + branch.branchName) },
+            headlineContent = {
+                Text(
+                    text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_branch_name_hint) + branch.branchName,
+                )
+            },
             supportingContent = {
                 Text(
                     text = branch.phoneNumber,
@@ -75,16 +76,15 @@ private fun BranchItem(branch: Branch) {
                     style = MaterialTheme.typography.titleMedium,
                 )
             },
-            colors = ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            colors =
+                ListItemDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
-
-            )
+        )
     }
-
 }
 
 @Preview(showBackground = true)

@@ -18,9 +18,9 @@ class EmployeeViewModelTest: BaseTest() {
     private lateinit var viewModel: EmployeeViewModel
 
     override fun init() {
-        viewModel = EmployeeViewModel(testNetworkMonitor,getEmployeesBusinessUseCase,
-            getBusinessUseCase,
-            addEmployeesUseCase, updateEmployeesUseCase)
+        viewModel = EmployeeViewModel(networkMonitor,getEmployees,
+            getBusiness,
+            addEmployee, updateEmployee)
     }
 
     @Test
@@ -41,7 +41,7 @@ class EmployeeViewModelTest: BaseTest() {
     @Test
     fun addEmployee_error_returnMessageError() {
 
-        testEmployeesBusinessRepository setReturnError true
+        employeesBusinessRepository setReturnError true
         viewModel.addEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
 
         MatcherAssert.assertThat(viewModel.userMessage.value?.peekContent(), `is`(com.casecode.pos.data.R.string.add_employees_business_failure))
@@ -50,7 +50,7 @@ class EmployeeViewModelTest: BaseTest() {
     @Test
     fun updateEmployee_hasChangeOldEmployee_returnMessageUpdateSuccess() {
         // Given
-        viewModel.setEmployeeSelected(testEmployeesBusinessRepository.fakeEmployees[0])
+        viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
         // When
         viewModel.updateEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
 
@@ -59,9 +59,9 @@ class EmployeeViewModelTest: BaseTest() {
     @Test
     fun updateEmployee_nameEmployeeDuplicateEmployee_returnMessageDuplicateName() {
         // Given
-        viewModel.setEmployeeSelected(testEmployeesBusinessRepository.fakeEmployees[0])
+        viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
         // When
-        val nameDuplicate = testEmployeesBusinessRepository.fakeEmployees[1].name
+        val nameDuplicate = employeesBusinessRepository.fakeEmployees[1].name
         viewModel.updateEmployee(nameDuplicate, "131434", "1234", "branch1", "sale")
 
         MatcherAssert.assertThat(viewModel.userMessage.value?.peekContent(), `is`(R.string.employee_name_duplicate))
@@ -69,12 +69,12 @@ class EmployeeViewModelTest: BaseTest() {
     @Test
     fun updateEmployee_hasSameOldEmployee_returnMessageUpdateEmployeeFailed() {
         // Given
-        viewModel.setEmployeeSelected(testEmployeesBusinessRepository.fakeEmployees[0])
-        val name = testEmployeesBusinessRepository.fakeEmployees[0].name
-        val phoneNumber = testEmployeesBusinessRepository.fakeEmployees[0].phoneNumber
-        val password = testEmployeesBusinessRepository.fakeEmployees[0].password!!
-        val branchName = testEmployeesBusinessRepository.fakeEmployees[0].branchName!!
-        val permission = testEmployeesBusinessRepository.fakeEmployees[0].permission
+        viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
+        val name = employeesBusinessRepository.fakeEmployees[0].name
+        val phoneNumber = employeesBusinessRepository.fakeEmployees[0].phoneNumber
+        val password = employeesBusinessRepository.fakeEmployees[0].password!!
+        val branchName = employeesBusinessRepository.fakeEmployees[0].branchName!!
+        val permission = employeesBusinessRepository.fakeEmployees[0].permission
         // When
 
         viewModel.updateEmployee(name, phoneNumber, password, branchName, permission)
@@ -84,8 +84,8 @@ class EmployeeViewModelTest: BaseTest() {
     @Test
     fun updateEmployee_error_returnMessageError() {
 
-        testEmployeesBusinessRepository setReturnError true
-        viewModel.setEmployeeSelected(testEmployeesBusinessRepository.fakeEmployees[0])
+        employeesBusinessRepository setReturnError true
+        viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
         viewModel.updateEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
 
         MatcherAssert.assertThat(viewModel.userMessage.value?.peekContent(), `is`(com.casecode
@@ -94,9 +94,9 @@ class EmployeeViewModelTest: BaseTest() {
     @Test
     fun updateEmployee_network_unavailable_returnMessageError() {
         // Given
-        viewModel.setEmployeeSelected(testEmployeesBusinessRepository.fakeEmployees[0])
+        viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
         // When
-        testNetworkMonitor.setConnected(false)
+        networkMonitor.setConnected(false)
         viewModel.updateEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
         // Then
         MatcherAssert.assertThat(viewModel.userMessage.value?.peekContent(), `is`(R.string.network_error))

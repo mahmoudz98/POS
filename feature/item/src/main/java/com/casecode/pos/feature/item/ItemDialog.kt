@@ -93,15 +93,15 @@ fun ItemDialog(
         showTakeOrPickImage,
         context,
         onSelectedImageUri = {
-            selectedImageUri = it; showTakeOrPickImage = false
+            selectedImageUri = it
+            showTakeOrPickImage = false
             if (isUpdate) viewModel.updateItemImage()
         },
         onCancelTakeImage = {
-            if (it != null) userMessage.value = it; showTakeOrPickImage = false
+            if (it != null) userMessage.value = it
+            showTakeOrPickImage = false
         },
     )
-
-
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -109,14 +109,17 @@ fun ItemDialog(
         onDismissRequest = onDismiss,
         title = {
             Text(
-                if (isUpdate) stringResource(R.string.feature_item_update_item_button_text) else stringResource(
-                    R.string.feature_item_add_item_action_text,
-                ),
+                if (isUpdate) {
+                    stringResource(R.string.feature_item_update_item_button_text)
+                } else {
+                    stringResource(
+                        R.string.feature_item_add_item_action_text,
+                    )
+                },
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-
-                )
+            )
         },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -130,9 +133,10 @@ fun ItemDialog(
                 }
 
                 IconButton(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .size(64.dp)
+                            .align(Alignment.CenterHorizontally),
                     onClick = {
                         showTakeOrPickImage = true
                     },
@@ -156,70 +160,76 @@ fun ItemDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 PosOutlinedTextField(
                     value = name.value,
-                    onValueChange = { name.value = it; nameError.value = it.isEmpty() },
+                    onValueChange = {
+                        name.value = it
+                        nameError.value = it.isEmpty()
+                    },
                     isError = nameError.value,
                     label = stringResource(R.string.feature_item__name_hint),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                        ),
                     modifier = Modifier.fillMaxWidth(),
                     supportingText = if (nameError.value) stringResource(R.string.feature_item_error_item_name_empty) else null,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
-
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     PosOutlinedTextField(
                         enabled = isUpdate.not(),
                         value = barcode.value,
                         onValueChange = {
-                            barcode.value = it; barcodeError.value = it.isEmpty()
+                            barcode.value = it
+                            barcodeError.value = it.isEmpty()
                         },
                         label = stringResource(R.string.feature_item__barcode_hint),
                         isError = barcodeError.value,
                         supportingText = if (barcodeError.value) stringResource(R.string.feature_item_error_item_barcode_empty) else null,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Next,
-                        ),
-
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next,
+                            ),
                         modifier = Modifier.weight(3f),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         enabled = isUpdate.not(),
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .weight(.5f)
                             .align(Alignment.CenterVertically),
                         onClick = {
                             context.scanOptions(
                                 onResult = {
                                     barcode.value = it
-
                                 },
                                 onFailure = {
                                     userMessage.value = it
                                 },
                                 onCancel = { userMessage.value = it },
                             )
-
                         },
                     ) {
                         Icon(PosIcons.QrCodeScanner, "Close")
                     }
-
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
                 PosOutlinedTextField(
                     value = price.value,
-                    onValueChange = { price.value = it; priceError.value = it.isEmpty() },
+                    onValueChange = {
+                        price.value = it
+                        priceError.value = it.isEmpty()
+                    },
                     isError = priceError.value,
                     label = stringResource(R.string.feature_item_price_hint),
                     supportingText = if (priceError.value) stringResource(R.string.feature_item_error_item_price_empty) else null,
-                    keyboardOptions = KeyboardOptions(
+                    keyboardOptions =
+                    KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next,
                     ),
@@ -229,12 +239,14 @@ fun ItemDialog(
                 PosOutlinedTextField(
                     value = quantity.value,
                     onValueChange = {
-                        quantity.value = it; quantityError.value = it.isEmpty()
+                        quantity.value = it
+                        quantityError.value = it.isEmpty()
                     },
                     isError = quantityError.value,
                     label = stringResource(R.string.feature_item_item_quantity_label),
                     supportingText = if (quantityError.value) stringResource(R.string.feature_item_error_item_quantity_empty) else null,
-                    keyboardOptions = KeyboardOptions(
+                    keyboardOptions =
+                    KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Done,
                     ),
@@ -261,7 +273,6 @@ fun ItemDialog(
                                 bitmapImage,
                             )
                         } else {
-
                             viewModel.checkNetworkAndAddItem(
                                 name.value,
                                 price.value.toDouble(),
@@ -271,18 +282,18 @@ fun ItemDialog(
                             )
                         }
                         onDismiss()
-
                     }
-
                 },
             ) {
-                Text(stringResource(if (isUpdate) R.string.feature_item_update_item_button_text else R.string.feature_item_add_item_action_text))
+                Text(
+                    stringResource(
+                        if (isUpdate) R.string.feature_item_update_item_button_text else R.string.feature_item_add_item_action_text,
+                    ),
+                )
             }
         },
     )
-
 }
-
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
@@ -294,18 +305,19 @@ internal fun LaunchedTakePictureOrImage(
 ) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var currentPhotoPath by rememberSaveable { mutableStateOf("") }
-    val takePictureOrPickPhotoLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let { onSelectedImageUri(it) } ?: run {
-                onSelectedImageUri(currentPhotoPath.toUri())
+    val takePictureOrPickPhotoLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { onSelectedImageUri(it) } ?: run {
+                    onSelectedImageUri(currentPhotoPath.toUri())
+                }
+            } else if (result.resultCode == Activity.RESULT_CANCELED) {
+                onCancelTakeImage(R.string.feature_item_error_no_image_selected)
+                Timber.i("Image selection canceled")
             }
-        } else if (result.resultCode == Activity.RESULT_CANCELED) {
-            onCancelTakeImage(R.string.feature_item_error_no_image_selected)
-            Timber.i("Image selection canceled")
         }
-    }
 
     LaunchedEffect(showTakeOrPickImage, cameraPermissionState.status) {
         if (showTakeOrPickImage) {
@@ -315,26 +327,30 @@ internal fun LaunchedTakePictureOrImage(
                 }
 
                 PermissionStatus.Granted -> {
-                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-                        resolveActivity(context.packageManager)?.also {
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            val uri = PhotoUriManager(context).buildNewUri()
-                            currentPhotoPath = uri.toString()
-                            putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                    val takePicture =
+                        Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                            resolveActivity(context.packageManager)?.also {
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                val uri = PhotoUriManager(context).buildNewUri()
+                                currentPhotoPath = uri.toString()
+                                putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                            }
                         }
-                    }
 
-                    val pickPhoto = Intent(
-                        Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    )
+                    val pickPhoto =
+                        Intent(
+                            Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        )
 
-                    val chooserIntent = Intent.createChooser(
-                        pickPhoto,
-                        context.getString(R.string.feature_item_dialog_select_image_text),
-                    ).apply {
-                        putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
-                    }
+                    val chooserIntent =
+                        Intent
+                            .createChooser(
+                                pickPhoto,
+                                context.getString(R.string.feature_item_dialog_select_image_text),
+                            ).apply {
+                                putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
+                            }
                     takePictureOrPickPhotoLauncher.launch(chooserIntent)
                 }
             }

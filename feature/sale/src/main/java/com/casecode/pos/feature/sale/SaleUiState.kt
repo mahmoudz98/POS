@@ -16,25 +16,30 @@ data class SaleUiState(
         get() = itemsInvoice.sumOf { it.price.times(it.quantity) }
 
     val restOfAmount: Double
-        get() = amountInput.toDoubleOrNull().run {
-            if (this == null || this == totalItemsInvoice) {
-                return 0.0
+        get() =
+            amountInput.toDoubleOrNull().run {
+                if (this == null || this == totalItemsInvoice) {
+                    return 0.0
+                }
+                return this.minus(totalItemsInvoice)
             }
-            return this.minus(totalItemsInvoice)
-        }
-
-
 }
 
 // Sealed class to represent the invoice states
 sealed interface InvoiceState {
-    data object Loading: InvoiceState
+    data object Loading : InvoiceState
+
     data object EmptyItems : InvoiceState
+
     data object EmptyItemInvoice : InvoiceState
+
     data object HasItems : InvoiceState
 }
 
 sealed interface SaleItemsInvoiceUiState {
     data object Empty : SaleItemsInvoiceUiState
-    data class Success(val itemsInvoice: Set<Item>) : SaleItemsInvoiceUiState
+
+    data class Success(
+        val itemsInvoice: Set<Item>,
+    ) : SaleItemsInvoiceUiState
 }

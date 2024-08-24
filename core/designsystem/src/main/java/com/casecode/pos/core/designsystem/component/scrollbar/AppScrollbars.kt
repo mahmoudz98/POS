@@ -119,14 +119,14 @@ private fun ScrollableState.DraggableScrollbarThumb(
     orientation: Orientation,
 ) {
     Box(
-        modifier = Modifier
-            .run {
-                when (orientation) {
-                    Vertical -> width(12.dp).fillMaxHeight()
-                    Horizontal -> height(12.dp).fillMaxWidth()
-                }
-            }
-            .scrollThumb(this, interactionSource),
+        modifier =
+            Modifier
+                .run {
+                    when (orientation) {
+                        Vertical -> width(12.dp).fillMaxHeight()
+                        Horizontal -> height(12.dp).fillMaxWidth()
+                    }
+                }.scrollThumb(this, interactionSource),
     )
 }
 
@@ -139,14 +139,14 @@ private fun ScrollableState.DecorativeScrollbarThumb(
     orientation: Orientation,
 ) {
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .run {
                 when (orientation) {
                     Vertical -> width(2.dp).fillMaxHeight()
                     Horizontal -> height(2.dp).fillMaxWidth()
                 }
-            }
-            .scrollThumb(this, interactionSource),
+            }.scrollThumb(this, interactionSource),
     )
 }
 
@@ -162,16 +162,21 @@ private fun Modifier.scrollThumb(
     return this then ScrollThumbElement { colorState.value }
 }
 
-private data class ScrollThumbElement(val colorProducer: ColorProducer) :
-    ModifierNodeElement<ScrollThumbNode>() {
+private data class ScrollThumbElement(
+    val colorProducer: ColorProducer,
+) : ModifierNodeElement<ScrollThumbNode>() {
     override fun create(): ScrollThumbNode = ScrollThumbNode(colorProducer)
+
     override fun update(node: ScrollThumbNode) {
         node.colorProducer = colorProducer
         node.invalidateDraw()
     }
 }
 
-private class ScrollThumbNode(var colorProducer: ColorProducer) : DrawModifierNode, Modifier.Node() {
+private class ScrollThumbNode(
+    var colorProducer: ColorProducer,
+) : Modifier.Node(),
+    DrawModifierNode {
     private val shape = RoundedCornerShape(16.dp)
 
     // naive cache outline calculation if size is the same
@@ -208,28 +213,33 @@ private fun scrollbarThumbColor(
     val pressed by interactionSource.collectIsPressedAsState()
     val hovered by interactionSource.collectIsHoveredAsState()
     val dragged by interactionSource.collectIsDraggedAsState()
-    val active = (scrollableState.canScrollForward || scrollableState.canScrollBackward) &&
-        (pressed || hovered || dragged || scrollableState.isScrollInProgress)
+    val active =
+        (scrollableState.canScrollForward || scrollableState.canScrollBackward) &&
+                (pressed || hovered || dragged || scrollableState.isScrollInProgress)
 
-    val color = animateColorAsState(
-        targetValue = when (state) {
-            Active -> MaterialTheme.colorScheme.onSurface.copy(0.5f)
-            Inactive -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-            Dormant -> Color.Transparent
-        },
-        animationSpec = SpringSpec(
-            stiffness = Spring.StiffnessLow,
-        ),
-        label = "Scrollbar thumb color",
-    )
+    val color =
+        animateColorAsState(
+            targetValue =
+            when (state) {
+                Active -> MaterialTheme.colorScheme.onSurface.copy(0.5f)
+                Inactive -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+                Dormant -> Color.Transparent
+            },
+            animationSpec =
+            SpringSpec(
+                stiffness = Spring.StiffnessLow,
+            ),
+            label = "Scrollbar thumb color",
+        )
     LaunchedEffect(active) {
         when (active) {
             true -> state = Active
-            false -> if (state == Active) {
-                state = Inactive
-                delay(SCROLLBAR_INACTIVE_TO_DORMANT_TIME_IN_MS)
-                state = Dormant
-            }
+            false ->
+                if (state == Active) {
+                    state = Inactive
+                    delay(SCROLLBAR_INACTIVE_TO_DORMANT_TIME_IN_MS)
+                    state = Dormant
+                }
         }
     }
 

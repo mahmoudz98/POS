@@ -53,8 +53,8 @@ fun rememberMainAppState(
     authService: AuthService,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-): MainAppState {
-    return remember(
+): MainAppState =
+    remember(
         navController,
         coroutineScope,
         networkMonitor,
@@ -66,7 +66,6 @@ fun rememberMainAppState(
             authService = authService,
         )
     }
-}
 
 @Stable
 class TopAppBarAction(
@@ -77,10 +76,15 @@ class TopAppBarAction(
 
 sealed interface MainAuthUiState {
     data object Loading : MainAuthUiState
+
     data object LoginByAdmin : MainAuthUiState
+
     data object LoginByAdminEmployee : MainAuthUiState
+
     data object LoginBySaleEmployee : MainAuthUiState
+
     data object LoginByNoneEmployee : MainAuthUiState
+
     data object ErrorLogin : MainAuthUiState
 }
 
@@ -95,68 +99,73 @@ class MainAppState(
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
     val currentTopAppBarAction: TopAppBarAction?
-        @Composable get() = when (currentDestination?.route) {
-            POS_ROUTE, REPORTS_ROUTE, EMPLOYEES_ROUTE, SETTING_ROUTE, SIGN_OUT_ROUTE -> TopAppBarAction(
-                icon = Icons.Default.Person,
-                com.casecode.pos.feature.profile.R.string.feature_profile_title,
-                onClick = {
-                    navController.navigateToProfile(
-                        navOptions {
-                            launchSingleTop = true
-                            restoreState = true
+        @Composable get() =
+            when (currentDestination?.route) {
+                POS_ROUTE, REPORTS_ROUTE, EMPLOYEES_ROUTE, SETTING_ROUTE, SIGN_OUT_ROUTE ->
+                    TopAppBarAction(
+                        icon = Icons.Default.Person,
+                        com.casecode.pos.feature.profile.R.string.feature_profile_title,
+                        onClick = {
+                            navController.navigateToProfile(
+                                navOptions {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                },
+                            )
                         },
                     )
-                },
-            )
 
-            else -> null
-        }
-
-    val currentSaleTopLevelDestination: SaleTopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            POS_ROUTE -> POSSale
-            REPORTS_ROUTE -> ReportsSale
-            SETTING_ROUTE -> SettingSale
-            else -> null
-        }
-
-    val currentAdminTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            POS_ROUTE -> POS
-            REPORTS_ROUTE -> REPORTS
-            ITEMS_ROUTE, ITEM_DIALOG_ROUTE, ITEM_update_DIALOG_ROUTE, QR_PRINT_ITEM_DIALOG_ROUTE -> ITEMS
-            EMPLOYEES_ROUTE -> EMPLOYEES
-            SETTING_ROUTE -> SETTINGS
-            else -> null
-        }
-
-
-    val isOffline = networkMonitor.isOnline.map(Boolean::not).stateIn(
-        scope = coroutineScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = false,
-    )
-    val mainAuthUiState = authService.loginData.map {
-        when (it) {
-            LoginStateResult.Loading -> MainAuthUiState.Loading
-            is LoginStateResult.EmployeeLogin -> {
-                when (it.employee.permission) {
-                    Permission.ADMIN -> MainAuthUiState.LoginByAdminEmployee
-                    Permission.SALE -> MainAuthUiState.LoginBySaleEmployee
-                    Permission.NONE -> MainAuthUiState.LoginByNoneEmployee
-                }
+                else -> null
             }
 
-            LoginStateResult.Error, LoginStateResult.NotSignIn -> MainAuthUiState.ErrorLogin
-            is LoginStateResult.NotCompleteBusiness -> MainAuthUiState.ErrorLogin
-            is LoginStateResult.SuccessLoginAdmin -> MainAuthUiState.LoginByAdmin
-        }
-    }.stateIn(
-        scope = coroutineScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = MainAuthUiState.Loading,
-    )
+    val currentSaleTopLevelDestination: SaleTopLevelDestination?
+        @Composable get() =
+            when (currentDestination?.route) {
+                POS_ROUTE -> POSSale
+                REPORTS_ROUTE -> ReportsSale
+                SETTING_ROUTE -> SettingSale
+                else -> null
+            }
 
+    val currentAdminTopLevelDestination: TopLevelDestination?
+        @Composable get() =
+            when (currentDestination?.route) {
+                POS_ROUTE -> POS
+                REPORTS_ROUTE -> REPORTS
+                ITEMS_ROUTE, ITEM_DIALOG_ROUTE, ITEM_update_DIALOG_ROUTE, QR_PRINT_ITEM_DIALOG_ROUTE -> ITEMS
+                EMPLOYEES_ROUTE -> EMPLOYEES
+                SETTING_ROUTE -> SETTINGS
+                else -> null
+            }
+
+    val isOffline =
+        networkMonitor.isOnline.map(Boolean::not).stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false,
+        )
+    val mainAuthUiState =
+        authService.loginData
+            .map {
+                when (it) {
+                    LoginStateResult.Loading -> MainAuthUiState.Loading
+                    is LoginStateResult.EmployeeLogin -> {
+                        when (it.employee.permission) {
+                            Permission.ADMIN -> MainAuthUiState.LoginByAdminEmployee
+                            Permission.SALE -> MainAuthUiState.LoginBySaleEmployee
+                            Permission.NONE -> MainAuthUiState.LoginByNoneEmployee
+                        }
+                    }
+
+                    LoginStateResult.Error, LoginStateResult.NotSignIn -> MainAuthUiState.ErrorLogin
+                    is LoginStateResult.NotCompleteBusiness -> MainAuthUiState.ErrorLogin
+                    is LoginStateResult.SuccessLoginAdmin -> MainAuthUiState.LoginByAdmin
+                }
+            }.stateIn(
+                scope = coroutineScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = MainAuthUiState.Loading,
+            )
 
     /**
      * Map of top level destinations to be used in the TopBar. The key is the
@@ -170,7 +179,6 @@ class MainAppState(
      */
     val saleTopLevelDestinations: List<SaleTopLevelDestination> = SaleTopLevelDestination.entries
 
-
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
      * only one copy of the destination of the back stack, and save and restore state whenever you
@@ -180,19 +188,20 @@ class MainAppState(
      */
 
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-        val topLevelNavOptions = navOptions {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
+        val topLevelNavOptions =
+            navOptions {
+                // Pop up to the start destination of the graph to
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                // Avoid multiple copies of the same destination when
+                // reselecting the same item
+                launchSingleTop = true
+                // Restore state when reselecting a previously selected item
+                restoreState = true
             }
-            // Avoid multiple copies of the same destination when
-            // reselecting the same item
-            launchSingleTop = true
-            // Restore state when reselecting a previously selected item
-            restoreState = true
-        }
 
         when (topLevelDestination) {
             POS -> navController.navigateToPos(topLevelNavOptions)
@@ -212,19 +221,20 @@ class MainAppState(
      */
 
     fun navigateToSaleTopLevelDestination(saleTopLevelDestination: SaleTopLevelDestination) {
-        val topLevelNavOptions = navOptions {
-            // Pop up to the start destination of the graph to
-            // avoid building up a large stack of destinations
-            // on the back stack as users select items
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
+        val topLevelNavOptions =
+            navOptions {
+                // Pop up to the start destination of the graph to
+                // avoid building up a large stack of destinations
+                // on the back stack as users select items
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                // Avoid multiple copies of the same destination when
+                // reselecting the same item
+                launchSingleTop = true
+                // Restore state when reselecting a previously selected item
+                restoreState = true
             }
-            // Avoid multiple copies of the same destination when
-            // reselecting the same item
-            launchSingleTop = true
-            // Restore state when reselecting a previously selected item
-            restoreState = true
-        }
 
         when (saleTopLevelDestination) {
             POSSale -> navController.navigateToPos(topLevelNavOptions)
@@ -232,5 +242,4 @@ class MainAppState(
             SettingSale -> navController.navigateToSettings(topLevelNavOptions)
         }
     }
-
 }

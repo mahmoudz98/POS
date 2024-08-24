@@ -1,6 +1,5 @@
 package com.casecode.pos.core.common.di
 
-
 import com.casecode.pos.core.common.AppDispatchers.DEFAULT
 import com.casecode.pos.core.common.Dispatcher
 import dagger.Module
@@ -13,7 +12,6 @@ import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
 import javax.inject.Singleton
 import kotlin.annotation.AnnotationRetention.RUNTIME
-
 
 @Retention(RUNTIME)
 @Qualifier

@@ -37,9 +37,10 @@ internal fun EmployeesList(
         val scrollableState = rememberLazyListState()
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 8.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 8.dp),
             state = scrollableState,
         ) {
             employees.forEach { employee ->
@@ -49,27 +50,28 @@ internal fun EmployeesList(
                         onItemClick = { onEmployeeClick(employee) },
                     )
                 }
-
             }
         }
-        val scrollbarState = scrollableState.scrollbarState(
-            itemsAvailable = employees.size,
-        )
+        val scrollbarState =
+            scrollableState.scrollbarState(
+                itemsAvailable = employees.size,
+            )
         scrollableState.DraggableScrollbar(
-            modifier = Modifier
-                .fillMaxHeight()
-                .windowInsetsPadding(WindowInsets.systemBars)
-                .padding(horizontal = 2.dp)
-                .align(Alignment.CenterEnd),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .windowInsetsPadding(WindowInsets.systemBars)
+                    .padding(horizontal = 2.dp)
+                    .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            onThumbMoved = scrollableState.rememberDraggableScroller(
+            onThumbMoved =
+            scrollableState.rememberDraggableScroller(
                 itemsAvailable = employees.size,
             ),
         )
     }
 }
-
 
 @Composable
 private fun EmployeeItem(
@@ -96,7 +98,8 @@ private fun EmployeeItem(
                     text = employee.phoneNumber,
                 )
             },
-            colors = ListItemDefaults.colors(
+            colors =
+            ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -111,7 +114,8 @@ private fun EmployeeItem(
 fun EmployeeListPreview() {
     POSTheme {
         EmployeesList(
-            employees = listOf(
+            employees =
+            listOf(
                 Employee(
                     name = "Henry Harvey",
                     phoneNumber = "(723) 178-3587",

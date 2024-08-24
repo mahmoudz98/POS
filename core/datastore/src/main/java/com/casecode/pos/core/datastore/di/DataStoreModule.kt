@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
-import com.casecode.pos.core.datastore.LoginPreferencesSerializer
 import com.casecode.pos.core.common.AppDispatchers
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.common.di.ApplicationScope
 import com.casecode.pos.core.datastore.LoginPreferences
+import com.casecode.pos.core.datastore.LoginPreferencesSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +21,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
-
     @Provides
     @Singleton
     internal fun providesLoginPreferencesDataStore(
@@ -33,7 +32,6 @@ object DataStoreModule {
         DataStoreFactory.create(
             serializer = loginPreferencesSerializer,
             scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
-
         ) {
             context.dataStoreFile("login_preferences.pb")
         }

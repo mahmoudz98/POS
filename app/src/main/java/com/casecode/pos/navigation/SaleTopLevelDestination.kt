@@ -9,8 +9,7 @@ enum class SaleTopLevelDestination(
     val unselectedIcon: ImageVector,
     val titleTextId: Int,
     val iconTextId: Int,
-
-    ) {
+) {
     POS(
         selectedIcon = PosIcons.Pos,
         unselectedIcon = PosIcons.PosBorder,
@@ -18,15 +17,16 @@ enum class SaleTopLevelDestination(
         iconTextId = R.string.pos,
     ),
     REPORTS(
-        selectedIcon = PosIcons.Reports, unselectedIcon = PosIcons.ReportsBorder,
-       titleTextId = R.string.reports_title,iconTextId = R.string.reports_title,
+        selectedIcon = PosIcons.Reports,
+        unselectedIcon = PosIcons.ReportsBorder,
+        titleTextId = R.string.reports_title,
+        iconTextId = R.string.reports_title,
     ),
 
     SETTING(
-        selectedIcon= PosIcons.Settings,
-        unselectedIcon=PosIcons.SettingsBorder,
-       titleTextId = R.string.settings_title,
+        selectedIcon = PosIcons.Settings,
+        unselectedIcon = PosIcons.SettingsBorder,
+        titleTextId = R.string.settings_title,
         iconTextId = R.string.settings_title,
     ),
-
 }

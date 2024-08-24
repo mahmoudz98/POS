@@ -9,29 +9,30 @@ import com.casecode.pos.core.model.data.users.Item
  */
 class ItemsPreviewParameterProvider : PreviewParameterProvider<List<Item>> {
     override val values: Sequence<List<Item>>
-        get() = sequenceOf(
-            listOf(
-                Item(
-                    name = "Iphone13",
-                    price = 200.0,
-                    quantity = 1.0,
-                    imageUrl = "",
-                    sku = "12345",
+        get() =
+            sequenceOf(
+                listOf(
+                    Item(
+                        name = "Iphone13",
+                        price = 200.0,
+                        quantity = 1.0,
+                        imageUrl = "",
+                        sku = "12345",
+                    ),
+                    Item(
+                        name = "IPhone14",
+                        price = 2000.0,
+                        quantity = 112.0,
+                        imageUrl = "",
+                        sku = "12342256",
+                    ),
+                    Item(
+                        name = "IPhone15",
+                        price = 3000.0,
+                        quantity = 1.0,
+                        imageUrl = "",
+                        sku = "1232456",
+                    ),
                 ),
-                Item(
-                    name = "IPhone14",
-                    price = 2000.0,
-                    quantity = 112.0,
-                    imageUrl = "",
-                    sku = "12342256",
-                ),
-                Item(
-                    name = "IPhone15",
-                    price = 3000.0,
-                    quantity = 1.0,
-                    imageUrl = "",
-                    sku = "1232456",
-                ),
-            ),
-        )
+            )
 }

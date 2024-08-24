@@ -49,7 +49,7 @@ import com.casecode.pos.feature.setting.R
 internal fun PrinterRoute(
     printerVIewModel: PrinterViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    onPrinterInfoClick:()-> Unit,
+    onPrinterInfoClick: () -> Unit,
 ) {
     val uiState = printerVIewModel.printersUiState.collectAsStateWithLifecycle()
     PrinterScreen(
@@ -69,23 +69,27 @@ fun PrinterScreen(
     onAddClick: () -> Unit,
     onPrinterItemClick: (PrinterInfo) -> Unit,
 ) {
-    Box(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Box(modifier = modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
         PosTopAppBar(
             modifier = Modifier,
             titleRes = R.string.feature_settings_printer_title,
             navigationIcon = PosIcons.ArrowBack,
             navigationIconContentDescription = null,
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-            ),
+            colors =
+                TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
+                ),
             onNavigationClick = onBackClick,
         )
         when (resourcePrinters) {
             is Resource.Loading -> {
                 PosLoadingWheel(
-                    modifier = modifier
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center),
+                    modifier =
+                        modifier
+                            .fillMaxSize()
+                            .wrapContentSize(Alignment.Center),
                     contentDesc = "LoadingPrinters",
                 )
             }
@@ -97,7 +101,6 @@ fun PrinterScreen(
             is Resource.Error -> PrintersEmptyScreen()
             is Resource.Success -> {
                 PrinterList(printers = resourcePrinters.data, onPrinterClick = onPrinterItemClick)
-
             }
         }
 
@@ -105,7 +108,8 @@ fun PrinterScreen(
             onClick = {
                 onAddClick()
             },
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
                 .zIndex(1f),
@@ -160,27 +164,27 @@ fun PrinterList(
             contentPadding = PaddingValues(vertical = 8.dp),
             state = scrollableState,
         ) {
-
             printers.forEach { printer ->
                 val printerName = printer.name
                 item(key = printerName) {
                     PrinterItem(
                         name = printerName,
-                        printerAddress = "printer.address",
+                        printerWidth = printer.widthPaper,
                         printerType = "printer.connectionType.toString()",
                         onClick = { onPrinterClick(printer) },
                     )
                 }
             }
-
         }
     }
 }
 
 @Composable
 fun PrinterItem(
-    modifier: Modifier = Modifier, name: String, printerAddress: String,
+    modifier: Modifier = Modifier,
+    name: String,
     printerType: String,
+    printerWidth: String,
     onClick: () -> Unit,
 ) {
     ElevatedCard(modifier.padding(bottom = 8.dp)) {
@@ -188,14 +192,15 @@ fun PrinterItem(
             headlineContent = { Text(name) },
             supportingContent = {
                 Column(modifier = Modifier.height(IntrinsicSize.Min)) {
-                    Text(printerAddress)
+                    Text(printerWidth)
                     HorizontalDivider(
                         modifier = Modifier.padding(vertical = 4.dp),
                     )
                     Text(printerType)
                 }
             },
-            modifier = modifier.clickable {
+            modifier =
+            modifier.clickable {
                 onClick()
             },
         )
@@ -205,26 +210,30 @@ fun PrinterItem(
 @Preview
 @Composable
 fun PrinterScreenSuccessPreview() {
-    POSTheme { 
-        PosBackground { 
-    PrinterScreen(
-        resourcePrinters = Resource.Success(listOf(PrinterInfo(
-            name = "Orlando Reed",
-            connectionTypeInfo = PrinterConnectionInfo.Tcp("",123),
-            isCurrentSelected = false,
-            widthPaper = "tamquam"
-        ),
-            PrinterInfo(
-                name = "Stefan Cobb",
-                connectionTypeInfo = PrinterConnectionInfo.Tcp("",123),
-
-                isCurrentSelected = false,
-                widthPaper = "nostra"
-            ))),
-        onBackClick = {},
-        onAddClick = {},
-        onPrinterItemClick = { },
-    )
+    POSTheme {
+        PosBackground {
+            PrinterScreen(
+                resourcePrinters =
+                Resource.Success(
+                    listOf(
+                        PrinterInfo(
+                            name = "Orlando Reed",
+                            connectionTypeInfo = PrinterConnectionInfo.Tcp("", 123),
+                            isDefaultPrint = false,
+                            widthPaper = "tamquam",
+                        ),
+                        PrinterInfo(
+                            name = "Stefan Cobb",
+                            connectionTypeInfo = PrinterConnectionInfo.Tcp("", 123),
+                            isDefaultPrint = false,
+                            widthPaper = "nostra",
+                        ),
+                    ),
+                ),
+                onBackClick = {},
+                onAddClick = {},
+                onPrinterItemClick = { },
+            )
         }
     }
 }

@@ -22,15 +22,20 @@ data class InvoiceDataModel(
     val customer: Customer? = null,
     val items: List<Item> = emptyList(),
 )
- fun Invoice.asExternalMapper(documentRef: DocumentReference,createdBy: String ): Map<String, Any?> {
+
+fun Invoice.asExternalMapper(
+    documentRef: DocumentReference,
+    createdBy: String,
+): Map<String, Any?> {
     val networkInvoice = InvoiceDataModel(documentRef.id, this.date, createdBy, this.customer, this.items)
-    val invoiceMap = mapOf(
-        Invoice_NAME_FIELD to documentRef.id,
-        Invoice_DATE_FIELD to networkInvoice.date,
-        Invoice_CREATEDBY_FIELD to networkInvoice.createdBy,
-        Invoice_CUSTOMER_FIELD to networkInvoice.customer,
-        Invoice_ITEMS_FIELD to networkInvoice.items,
-    )
+    val invoiceMap =
+        mapOf(
+            Invoice_NAME_FIELD to documentRef.id,
+            Invoice_DATE_FIELD to networkInvoice.date,
+            Invoice_CREATEDBY_FIELD to networkInvoice.createdBy,
+            Invoice_CUSTOMER_FIELD to networkInvoice.customer,
+            Invoice_ITEMS_FIELD to networkInvoice.items,
+        )
     return invoiceMap
 }
 
@@ -43,11 +48,13 @@ fun List<Invoice>.toInvoicesGroup(): List<InvoiceGroup> {
         }
         invoiceMap[formattedDate]?.add(invoice)
     }
-    val invoicesGroup = invoiceMap.map { invoiceGroup ->
-        InvoiceGroup(
-            invoiceGroup.key,
-            invoiceGroup.value,
-        )
-    }.sortedByDescending { invoiceGroup -> invoiceGroup.date }
+    val invoicesGroup =
+        invoiceMap
+            .map { invoiceGroup ->
+                InvoiceGroup(
+                    invoiceGroup.key,
+                    invoiceGroup.value,
+                )
+            }.sortedByDescending { invoiceGroup -> invoiceGroup.date }
     return invoicesGroup
 }

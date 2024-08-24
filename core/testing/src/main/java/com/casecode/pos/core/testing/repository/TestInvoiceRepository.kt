@@ -9,13 +9,16 @@ import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.testing.base.BaseTestRepository
 import javax.inject.Inject
 
-class TestInvoiceRepository @Inject constructor() : InvoiceRepository, BaseTestRepository() {
-
-    override suspend fun addInvoice(invoice: Invoice): Resource<Int> {
-        if (shouldReturnError) {
-            return Resource.error(R.string.core_data_add_invoice_failure)
-        }
-        return Resource.success(R.string.core_data_add_invoice_successfully)
+class TestInvoiceRepository
+    @Inject
+    constructor() :
+    BaseTestRepository(),
+        InvoiceRepository {
+        override suspend fun addInvoice(invoice: Invoice): Resource<Int> {
+            if (shouldReturnError) {
+                return Resource.error(R.string.core_data_add_invoice_failure)
+            }
+            return Resource.success(R.string.core_data_add_invoice_successfully)
     }
 
     override suspend fun getInvoices(): Resource<List<InvoiceGroup>> {
@@ -37,36 +40,42 @@ class TestInvoiceRepository @Inject constructor() : InvoiceRepository, BaseTestR
         }
         return Resource.success(fakeInvoices)
     }
-    val fakeInvoices = listOf(
-        Invoice(
-            items = arrayListOf(
-                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
-                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
-                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+
+    val fakeInvoices =
+        listOf(
+            Invoice(
+                items =
+                arrayListOf(
+                    Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                    Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                    Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+                ),
             ),
-        ),
-        Invoice(
-            items = arrayListOf(
-                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
-                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
-                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+            Invoice(
+                items =
+                arrayListOf(
+                    Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                    Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                    Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+                ),
             ),
-        ),
-        Invoice(
-            items = arrayListOf(
-                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
-                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
-                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+            Invoice(
+                items =
+                arrayListOf(
+                    Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                    Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                    Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+                ),
             ),
-        ),
-        Invoice(
-            items = arrayListOf(
-                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
-                Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
-                Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+            Invoice(
+                items =
+                arrayListOf(
+                    Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
+                    Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
+                    Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
+                ),
             ),
         )
-    )
 
     val fakeInvoiceGroup =
         listOf(
@@ -74,7 +83,8 @@ class TestInvoiceRepository @Inject constructor() : InvoiceRepository, BaseTestR
                 "22-12-2023",
                 listOf(
                     Invoice(
-                        items = arrayListOf(
+                        items =
+                        arrayListOf(
                             Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
                             Item("item #2", 3.0, 4.0, "1555567899090", "EA", "www.image2.png"),
                             Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
@@ -86,7 +96,8 @@ class TestInvoiceRepository @Inject constructor() : InvoiceRepository, BaseTestR
                 "2-11-2023",
                 listOf(
                     Invoice(
-                        items = arrayListOf(
+                        items =
+                        arrayListOf(
                             Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
                             Item("item #2", 3.0, 312.0, "1555567899090", "EA", "www.image2.png"),
                             Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
@@ -98,7 +109,8 @@ class TestInvoiceRepository @Inject constructor() : InvoiceRepository, BaseTestR
                 "2-2-2024",
                 listOf(
                     Invoice(
-                        items = arrayListOf(
+                        items =
+                        arrayListOf(
                             Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
                             Item("item #2", 3.0, 12.0, "1555567899090", "EA", "www.image2.png"),
                             Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),
@@ -110,7 +122,8 @@ class TestInvoiceRepository @Inject constructor() : InvoiceRepository, BaseTestR
                 "22-4-2024",
                 listOf(
                     Invoice(
-                        items = arrayListOf(
+                        items =
+                        arrayListOf(
                             Item("item #1", 1.0, 26.0, "1234567899090", "EA", "www.image1.png"),
                             Item("item #2", 3.0, 12.0, "1555567899090", "EA", "www.image2.png"),
                             Item("item #2", 3.0, 0.0, "1200", "EA", "www.image2.png"),

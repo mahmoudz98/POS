@@ -16,11 +16,11 @@ import com.casecode.pos.core.model.data.users.Business
 
 @Composable
 fun BusinessInfoTab(business: Business) {
-
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
         // TODO: Handle storeType with english and arabic
         OutlinedTextField(
@@ -50,6 +50,5 @@ fun BusinessInfoTab(business: Business) {
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
         )
-
     }
 }

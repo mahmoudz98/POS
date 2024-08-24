@@ -29,9 +29,10 @@ fun PosExposedDropdownMenuBox(
 
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded != expanded }) {
         OutlinedTextField(
-            modifier = Modifier
-                .menuAnchor(menuAnchorType)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .menuAnchor(menuAnchorType)
+                    .fillMaxWidth(),
             label = label,
             readOnly = readOnly,
             value = currentSelectedValue,

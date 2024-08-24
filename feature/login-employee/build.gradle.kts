@@ -5,7 +5,6 @@ plugins {
 
 android {
     namespace = "com.casecode.pos.feature.login_employee"
-
 }
 
 dependencies {

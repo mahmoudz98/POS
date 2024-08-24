@@ -1,13 +1,20 @@
 package com.casecode.pos.core.domain.utils
 
 sealed interface Resource<out T> {
-    data class Success<T>(val data: T) : Resource<T>
+    data class Success<T>(
+        val data: T,
+    ) : Resource<T>
 
-    data class Error<T>(val message: Any?) : Resource<T>
+    data class Error<T>(
+        val message: Any?,
+    ) : Resource<T>
 
     data object Loading : Resource<Nothing>
 
-    data class Empty<T>(val emptyType: EmptyType? = null, val message: Any? = null) : Resource<T> {
+    data class Empty<T>(
+        val emptyType: EmptyType? = null,
+        val message: Any? = null,
+    ) : Resource<T> {
         val data: T? = null
     }
 

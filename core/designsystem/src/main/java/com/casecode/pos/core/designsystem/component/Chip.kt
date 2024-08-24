@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.designsystem.theme.POSTheme
 
 /**
  * Now in Android filter chip with included leading checked icon as well as text content slot.
@@ -45,47 +45,55 @@ fun PosFilterChip(
         },
         modifier = modifier,
         enabled = enabled,
-        leadingIcon = if (selected) {
-            {
-                Icon(
-                    imageVector = PosIcons.Check,
-                    contentDescription = null,
-                )
-            }
-        } else {
-            null
+        leadingIcon =
+            if (selected) {
+                {
+                    Icon(
+                        imageVector = PosIcons.Check,
+                        contentDescription = null,
+                    )
+                }
+            } else {
+                null
         },
         shape = CircleShape,
-        border = FilterChipDefaults.filterChipBorder(
-            enabled = enabled,
-            selected = selected,
-            borderColor = MaterialTheme.colorScheme.onBackground,
-            selectedBorderColor = MaterialTheme.colorScheme.onBackground,
-            disabledBorderColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+        border =
+            FilterChipDefaults.filterChipBorder(
+                enabled = enabled,
+                selected = selected,
+                borderColor = MaterialTheme.colorScheme.onBackground,
+                selectedBorderColor = MaterialTheme.colorScheme.onBackground,
+                disabledBorderColor =
+                    MaterialTheme.colorScheme.onBackground.copy(
+                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+                    ),
+                disabledSelectedBorderColor =
+                    MaterialTheme.colorScheme.onBackground.copy(
+                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+                    ),
+                selectedBorderWidth = POSChipDefaults.ChipBorderWidth,
             ),
-            disabledSelectedBorderColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-            ),
-            selectedBorderWidth = POSChipDefaults.ChipBorderWidth,
-        ),
-        colors = FilterChipDefaults.filterChipColors(
-            labelColor = MaterialTheme.colorScheme.onBackground,
-            iconColor = MaterialTheme.colorScheme.onBackground,
-            disabledContainerColor = if (selected) {
-                MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = POSChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
-                )
-            } else {
-                Color.Transparent
-            },
-            disabledLabelColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-            ),
-            disabledLeadingIconColor = MaterialTheme.colorScheme.onBackground.copy(
-                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-            ),
-            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        colors =
+            FilterChipDefaults.filterChipColors(
+                labelColor = MaterialTheme.colorScheme.onBackground,
+                iconColor = MaterialTheme.colorScheme.onBackground,
+                disabledContainerColor =
+                    if (selected) {
+                        MaterialTheme.colorScheme.onBackground.copy(
+                            alpha = POSChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
+                        )
+                    } else {
+                        Color.Transparent
+                    },
+                disabledLabelColor =
+                    MaterialTheme.colorScheme.onBackground.copy(
+                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+                    ),
+                disabledLeadingIconColor =
+                    MaterialTheme.colorScheme.onBackground.copy(
+                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+                    ),
+                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedLabelColor = MaterialTheme.colorScheme.onBackground,
             selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
         ),
@@ -95,7 +103,7 @@ fun PosFilterChip(
 @ThemePreviews
 @Composable
 fun ChipPreview() {
-    POSTheme  {
+    POSTheme {
         PosBackground(modifier = Modifier.size(80.dp, 20.dp)) {
             PosFilterChip(selected = true, onSelectedChange = {}) {
                 Text("Chip")

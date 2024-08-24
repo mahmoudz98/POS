@@ -12,24 +12,22 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
-    authService: AuthService,
-) :
-    ViewModel() {
-    val userUiState: StateFlow<FirebaseUser?> = authService.currentUser
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = null,
-            started = SharingStarted.WhileSubscribed(1_000),
-        )
-     private val _currentLanguage: MutableLiveData<String> = MutableLiveData()
-    val currentLanguage  get() = _currentLanguage
+class SettingsViewModel
+    @Inject
+    constructor(
+        authService: AuthService,
+    ) : ViewModel() {
+        val userUiState: StateFlow<FirebaseUser?> =
+            authService.currentUser
+                .stateIn(
+                    scope = viewModelScope,
+                    initialValue = null,
+                    started = SharingStarted.WhileSubscribed(1_000),
+                )
+        private val _currentLanguage: MutableLiveData<String> = MutableLiveData()
+        val currentLanguage get() = _currentLanguage
 
-    fun setCurrentLanguage(value: String?) {
-        _currentLanguage.value = value ?: return
-
+        fun setCurrentLanguage(value: String?) {
+            _currentLanguage.value = value ?: return
     }
-
-
-
 }

@@ -51,12 +51,12 @@ private fun BusinessSubscriptionScreen(
     onPreviousClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(8.dp),
         verticalArrangement = Arrangement.SpaceBetween,
-
-        ) {
+    ) {
         if (uiState.isLoading) {
             PosLoadingWheel(
                 "LoadingBusinessSubscription",
@@ -69,12 +69,12 @@ private fun BusinessSubscriptionScreen(
                 uiState.currentSubscription,
                 onSubscriptionClick = onSubscriptionClick,
             )
-
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             PosTextButton(
@@ -96,8 +96,9 @@ private fun BusinessSubscriptionScreen(
                         contentDescription = null,
                     )
                 },
-                modifier = Modifier
-                    .wrapContentSize(),
+                modifier =
+                    Modifier
+                        .wrapContentSize(),
             )
         }
     }
@@ -125,18 +126,19 @@ fun BusinessSubscriptionScreenPreview() {
         PosBackground {
             BusinessSubscriptionScreen(
                 StepperBusinessUiState(
-                    subscriptions = listOf(
-                        Subscription(
-                            cost = 1150,
-                            duration = 6946,
-                            permissions = listOf(),
-                            type = "maecenas",
-                        ),
-                        Subscription(
-                            cost = 6456,
-                            duration = 7802,
-                            permissions = listOf(),
-                            type = "quaerendum",
+                    subscriptions =
+                        listOf(
+                            Subscription(
+                                cost = 1150,
+                                duration = 6946,
+                                permissions = listOf(),
+                                type = "maecenas",
+                            ),
+                            Subscription(
+                                cost = 6456,
+                                duration = 7802,
+                                permissions = listOf(),
+                                type = "quaerendum",
                         ),
                     ),
                     isLoading = false,

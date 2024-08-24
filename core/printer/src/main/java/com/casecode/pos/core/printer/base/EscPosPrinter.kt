@@ -11,30 +11,25 @@ import com.dantsu.escposprinter.connection.DeviceConnection
  * @param printerWidthMM The width of the printer in millimeters.
  * @param printerNbrCharactersPerLine The number of characters that can be printed per line.
  */
-class   EscPosPrinterService(
-    private var printerConnection: DeviceConnection,
+class EscPosPrinter(
+    private var printerConnection: DeviceConnection?,
     printerDpi: Int,
     printerWidthMM: Float,
     printerNbrCharactersPerLine: Int,
 ) : EscPosPrinterSize(printerDpi, printerWidthMM, printerNbrCharactersPerLine) {
-
     private var textsToPrint: MutableList<String> = mutableListOf()
 
-    fun getPrinterConnection(): DeviceConnection {
-        return printerConnection
-    }
+    fun getPrinterConnection(): DeviceConnection? = printerConnection
 
-    fun setTextsToPrint(textsToPrint: Array<String>): EscPosPrinterService {
+    fun setTextsToPrint(textsToPrint: Array<String>): EscPosPrinter {
         this.textsToPrint = textsToPrint.toMutableList()
         return this
     }
 
-    fun addTextToPrint(textToPrint: String): EscPosPrinterService {
+    fun addTextToPrint(textToPrint: String): EscPosPrinter {
         textsToPrint.add(textToPrint)
         return this
     }
 
-    fun getTextsToPrint(): Array<String> {
-        return textsToPrint.toTypedArray()
-    }
+    fun getTextsToPrint(): Array<String> = textsToPrint.toTypedArray()
 }

@@ -28,33 +28,34 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SignInActivityViewModel
-@Inject constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val accountService: AccountService,
-    private val authService: AuthService,
-) : ViewModel() {
+    @Inject
+    constructor(
+        private val networkMonitor: NetworkMonitor,
+        private val accountService: AccountService,
+        private val authService: AuthService,
+    ) : ViewModel() {
+        private val _signInUiState = MutableStateFlow(SignInActivityUiState())
+        val signInUiState = _signInUiState.asStateFlow()
 
-    private val _signInUiState = MutableStateFlow(SignInActivityUiState())
-    val signInUiState = _signInUiState.asStateFlow()
+        val loginStateResult: StateFlow<LoginStateResult> =
+            authService.loginData.stateIn(
+                scope = viewModelScope,
+                initialValue = LoginStateResult.Loading,
+                started = SharingStarted.WhileSubscribed(5_000),
+            )
 
-    val loginStateResult: StateFlow<LoginStateResult> =
-        authService.loginData.stateIn(
-            scope = viewModelScope,
-            initialValue = LoginStateResult.Loading,
-            started = SharingStarted.WhileSubscribed(5_000),
-        )
-
-    init {
-        setNetworkMonitor()
-    }
-
-    private fun setNetworkMonitor() = viewModelScope.launch {
-        networkMonitor.isOnline.collect {
-            setConnected(it)
+        init {
+            setNetworkMonitor()
         }
-    }
 
-    private fun setConnected(isOnline: Boolean) {
+        private fun setNetworkMonitor() =
+            viewModelScope.launch {
+                networkMonitor.isOnline.collect {
+                    setConnected(it)
+                }
+            }
+
+        private fun setConnected(isOnline: Boolean) {
         _signInUiState.update { it.copy(isOnline = isOnline) }
     }
 
@@ -91,19 +92,16 @@ class SignInActivityViewModel
                     checkIfRegistrationAndBusinessCompleted()
                 }
             }
-
         }
     }
+
     fun checkIfRegistrationAndBusinessCompleted() {
         viewModelScope.launch {
             accountService.checkUserLogin()
         }
-
     }
 
     fun snackbarMessageShown() {
         _signInUiState.update { it.copy(userMessage = null) }
     }
-
-
 }

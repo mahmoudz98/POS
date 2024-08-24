@@ -5,7 +5,6 @@ plugins {
 
 android {
     namespace = "com.casecode.pos.core.datastore.test"
-
 }
 
 dependencies {

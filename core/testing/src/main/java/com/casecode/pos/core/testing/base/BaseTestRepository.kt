@@ -6,7 +6,6 @@ abstract class BaseTestRepository {
     protected var shouldReturnError = false
     protected var shouldReturnEmpty = false
 
-
     @Before
     fun setup() {
         shouldReturnError = false
@@ -14,13 +13,13 @@ abstract class BaseTestRepository {
         init()
     }
 
-    abstract  fun init()
+    abstract fun init()
 
-  open infix fun setReturnError(value: Boolean) {
+    open infix fun setReturnError(value: Boolean) {
         shouldReturnError = value
     }
 
-  open infix fun setReturnEmpty(value: Boolean) {
+    open infix fun setReturnEmpty(value: Boolean) {
         shouldReturnEmpty = value
     }
 }

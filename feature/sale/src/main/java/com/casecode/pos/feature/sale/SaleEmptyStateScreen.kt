@@ -22,14 +22,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun SaleItemsEmpty(modifier: Modifier = Modifier, onClick: () -> Unit) {
+internal fun SaleItemsEmpty(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
     Column(
-        modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
-
         Text(
             text = stringResource(id = R.string.feature_sale_items_empty_title),
             style = MaterialTheme.typography.titleMedium,
@@ -50,7 +54,10 @@ internal fun SaleItemsEmpty(modifier: Modifier = Modifier, onClick: () -> Unit) 
 @Composable
 fun SaleItemsInvoiceEmpty(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

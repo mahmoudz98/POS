@@ -20,33 +20,34 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SaleViewModel @Inject constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val getItemsUseCase: GetItemsUseCase,
-    private val addInvoiceUseCase: AddInvoiceUseCase,
-    private val updateStockInItemsUseCase: UpdateStockInItemsUseCase,
-) : ViewModel() {
+class SaleViewModel
+    @Inject
+    constructor(
+        private val networkMonitor: NetworkMonitor,
+        private val getItemsUseCase: GetItemsUseCase,
+        private val addInvoiceUseCase: AddInvoiceUseCase,
+        private val updateStockInItemsUseCase: UpdateStockInItemsUseCase,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(SaleUiState())
+        val uiState: StateFlow<SaleUiState> = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(SaleUiState())
-    val uiState: StateFlow<SaleUiState> = _uiState.asStateFlow()
+        private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
-    private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-    init {
-        fetchItems()
-        setupNetworkMonitor()
-    }
-
-    private fun setupNetworkMonitor() = viewModelScope.launch {
-        networkMonitor.isOnline.collect {
-            isOnline.value = it
+        init {
+            fetchItems()
+            setupNetworkMonitor()
         }
-    }
+
+        private fun setupNetworkMonitor() =
+            viewModelScope.launch {
+                networkMonitor.isOnline.collect {
+                isOnline.value = it
+            }
+        }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun fetchItems() {
         viewModelScope.launch {
-
             getItemsUseCase().collect {
                 when (it) {
                     is Resource.Empty -> {
@@ -82,7 +83,6 @@ class SaleViewModel @Inject constructor(
                         }
                     }
                 }
-
             }
         }
     }
@@ -107,7 +107,6 @@ class SaleViewModel @Inject constructor(
         }
         updateStockInItem(item, item.quantity.dec())
         checkTouUpdateInvoiceState()
-
     }
 
     private fun checkTouUpdateInvoiceState() {
@@ -122,10 +121,14 @@ class SaleViewModel @Inject constructor(
         }
     }
 
-    private fun updateStockInItem(item: Item, quantity: Double) {
+    private fun updateStockInItem(
+        item: Item,
+        quantity: Double,
+    ) {
         _uiState.update { currentState ->
             currentState.copy(
-                items = currentState.items.map {
+                items =
+                currentState.items.map {
                     if (it.sku == item.sku) {
                         it.quantity = quantity
                     }
@@ -133,11 +136,9 @@ class SaleViewModel @Inject constructor(
                 },
             )
         }
-
     }
 
     fun deleteItemInvoice(item: Item) {
-
         val itemInStock =
             getItem(item.sku)
                 ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
@@ -154,7 +155,6 @@ class SaleViewModel @Inject constructor(
         checkTouUpdateInvoiceState()
     }
 
-
     fun itemInvoiceSelected(item: Item) {
         _uiState.update {
             it.copy(itemInvoiceSelected = item)
@@ -170,10 +170,12 @@ class SaleViewModel @Inject constructor(
     private fun getItem(itemSku: String): Item? = uiState.value.items.find { it.sku == itemSku }
 
     fun updateQuantityItemInvoice(newQuantity: Double) {
-        val updateItemInvoice = _uiState.value.itemInvoiceSelected
-            ?: return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
-        val updateItemSelectedInStock = getItem(updateItemInvoice.sku)
-            ?: return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
+        val updateItemInvoice =
+            _uiState.value.itemInvoiceSelected
+                ?: return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
+        val updateItemSelectedInStock =
+            getItem(updateItemInvoice.sku)
+                ?: return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
 
         if (newQuantity == updateItemInvoice.quantity) {
             return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
@@ -185,15 +187,15 @@ class SaleViewModel @Inject constructor(
         showSnackbarMessage(R.string.feature_sale_success_update_invoice_item_quantity)
         _uiState.update {
             it.copy(
-                itemsInvoice = it.itemsInvoice.minus(updateItemInvoice)
+                itemsInvoice =
+                it.itemsInvoice
+                    .minus(updateItemInvoice)
                     .plus(updateItemInvoice.copy(quantity = newQuantity)),
             )
         }
     }
 
-
     fun updateStockAndAddItemInvoice() {
-
         val saleItems = uiState.value.itemsInvoice.toList()
 
         if (!isOnline.value) {
@@ -215,7 +217,6 @@ class SaleViewModel @Inject constructor(
                 }
             }
         }
-
     }
 
     private suspend fun addInvoice(saleItems: List<Item>) {

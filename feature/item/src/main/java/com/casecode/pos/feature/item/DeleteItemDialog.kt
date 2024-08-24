@@ -15,7 +15,10 @@ import androidx.compose.ui.window.DialogProperties
 import com.casecode.pos.core.designsystem.component.PosTextButton
 
 @Composable
-fun DeleteItemDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+fun DeleteItemDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     val configuration = LocalConfiguration.current
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -42,6 +45,8 @@ fun DeleteItemDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
                 Text(stringResource(R.string.feature_item_dialog_delete_button_text))
             }
         },
-        dismissButton = { PosTextButton(onClick = onDismiss) { Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text)) } },
+        dismissButton = {
+            PosTextButton(onClick = onDismiss) { Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text)) }
+        },
     )
 }

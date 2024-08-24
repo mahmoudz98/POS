@@ -8,26 +8,24 @@ import kotlinx.coroutines.flow.Flow
 import org.junit.Before
 import javax.inject.Inject
 
-class TestSubscriptionsBusinessRepository @Inject constructor() : SubscriptionsBusinessRepository {
+class TestSubscriptionsBusinessRepository
+    @Inject
+    constructor() : SubscriptionsBusinessRepository {
+        private var shouldReturnError = false
+        private var shouldReturnEmpty = false
 
-    private var shouldReturnError = false
-    private var shouldReturnEmpty = false
-
-    @Before
-    fun setup() {
-        shouldReturnError = false
-        shouldReturnEmpty = false
+        @Before
+        fun setup() {
+            shouldReturnError = false
+            shouldReturnEmpty = false
     }
 
-    override suspend fun setSubscriptionBusiness(
-        subscriptionBusiness: SubscriptionBusiness,
-
-        ): AddSubscriptionBusiness {
-        return if (shouldReturnError) {
+    override suspend fun setSubscriptionBusiness(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness =
+        if (shouldReturnError) {
             Resource.Error("Exception")
-        } else
+        } else {
             Resource.Success(true)
-    }
+        }
 
     override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> {
         TODO("Not yet implemented")
@@ -36,6 +34,4 @@ class TestSubscriptionsBusinessRepository @Inject constructor() : SubscriptionsB
     fun setReturnError(value: Boolean) {
         shouldReturnError = value
     }
-
-
 }

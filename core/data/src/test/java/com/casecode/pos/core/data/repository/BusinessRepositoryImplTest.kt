@@ -1,8 +1,7 @@
-package com.casecode.data.repository
+package com.casecode.pos.core.data.repository
 
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalBusiness
-import com.casecode.pos.core.data.repository.BusinessRepositoryImpl
 import com.casecode.pos.core.data.utils.BUSINESS_FIELD
 import com.casecode.pos.core.data.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
 import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
@@ -110,7 +109,9 @@ class BusinessRepositoryImplTest {
         testScope.runTest {
             // Mock Firestore behavior for network error
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .set(createValidBusiness().asExternalBusiness() as Map<String, Any>)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -129,7 +130,9 @@ class BusinessRepositoryImplTest {
         testScope.runTest {
             // Arrange
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -143,7 +146,9 @@ class BusinessRepositoryImplTest {
             val result = businessRepository.completeBusinessSetup()
             // Verify
             coVerify {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -157,7 +162,9 @@ class BusinessRepositoryImplTest {
         testScope.runTest {
             // Arrange
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -178,7 +185,9 @@ class BusinessRepositoryImplTest {
         testScope.runTest {
             // Arrange
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD", true)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -194,7 +203,9 @@ class BusinessRepositoryImplTest {
 
     private fun mockFirestoreUpdateSuccess() {
         every {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
+            firestore
+                .collection(USERS_COLLECTION_PATH)
+                .document(uid)
                 .set(createValidBusiness().asExternalBusiness() as Map<String, Any>)
                 .addOnSuccessListener(capture(successListenerSlot))
                 .addOnFailureListener(capture(failureListenerSlot))
@@ -208,7 +219,9 @@ class BusinessRepositoryImplTest {
 
     private fun mockFirestoreUpdateFailure() {
         every {
-            firestore.collection(any()).document(any())
+            firestore
+                .collection(any())
+                .document(any())
                 .set(any() as Map<String, Any>)
                 .addOnSuccessListener(capture(successListenerSlot))
                 .addOnFailureListener(capture(failureListenerSlot))
@@ -219,7 +232,9 @@ class BusinessRepositoryImplTest {
 
     private fun mockFirestoreException() {
         every {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
+            firestore
+                .collection(USERS_COLLECTION_PATH)
+                .document(uid)
                 .set(createValidBusiness().asExternalBusiness() as Map<String, Any>)
                 .addOnSuccessListener(capture(successListenerSlot))
                 .addOnFailureListener(capture(failureListenerSlot))
@@ -233,7 +248,9 @@ class BusinessRepositoryImplTest {
 
     private fun verifyFirestoreUpdateCalled() {
         coVerify {
-            firestore.collection(USERS_COLLECTION_PATH).document(uid)
+            firestore
+                .collection(USERS_COLLECTION_PATH)
+                .document(uid)
                 .set(createValidBusiness().asExternalBusiness() as Map<String, Any>)
                 .addOnSuccessListener(capture(successListenerSlot))
                 .addOnFailureListener(capture(failureListenerSlot))

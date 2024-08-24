@@ -21,37 +21,42 @@ fun DatePickerView(
     onDismiss: () -> Unit,
     currentSelectedDate: Long?,
 ) {
-
-    val datePickerState = rememberDatePickerState(
-        currentSelectedDate,
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis <= System.currentTimeMillis()
-            }
-
-        },
-    )
+    val datePickerState =
+        rememberDatePickerState(
+            currentSelectedDate,
+            selectableDates =
+                object : SelectableDates {
+                    override fun isSelectableDate(utcTimeMillis: Long): Boolean = utcTimeMillis <= System.currentTimeMillis()
+                },
+        )
 
     DatePickerDialog(
         modifier = Modifier,
         onDismissRequest = { onDismiss() },
         confirmButton = {
-            PosTextButton(onClick = { onDataSelected(datePickerState.selectedDateMillis); onDismiss() }) {
+            PosTextButton(
+                onClick = {
+                    onDataSelected(datePickerState.selectedDateMillis)
+                    onDismiss()
+                }
+            ) {
                 Text(
                     text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_ok_button_text),
                 )
             }
         },
-        dismissButton = { PosTextButton(onClick = { onDismiss() }) { Text(text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text)) } },
-
-        ) {
-
+        dismissButton = {
+            PosTextButton(
+                onClick = {
+                    onDismiss()
+                }
+            ) { Text(text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text)) }
+        },
+    ) {
         DatePicker(
             state = datePickerState,
         )
-
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

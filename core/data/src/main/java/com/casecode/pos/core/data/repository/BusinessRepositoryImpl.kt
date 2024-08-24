@@ -1,11 +1,13 @@
 package com.casecode.pos.core.data.repository
 
+import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.common.Dispatcher
+import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asEntityBusiness
 import com.casecode.pos.core.data.model.asExternalBranch
 import com.casecode.pos.core.data.model.asExternalBusiness
 import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.common.Dispatcher
-import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.data.service.checkUserNotFound
 import com.casecode.pos.core.data.utils.BRANCHES_FIELD
 import com.casecode.pos.core.data.utils.BUSINESS_FIELD
 import com.casecode.pos.core.data.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
@@ -16,8 +18,6 @@ import com.casecode.pos.core.domain.repository.CompleteBusiness
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
-import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.service.checkUserNotFound
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -34,26 +34,31 @@ import kotlin.coroutines.suspendCoroutine
  * Created by Mahmoud Abdalhafeez on 12/13/2023
  */
 class BusinessRepositoryImpl
-@Inject constructor(
-    private val firestore: FirebaseFirestore,
-    private val auth: AuthService,
-    @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
-) : BusinessRepository {
-    override suspend fun getBusiness(): Resource<Business> {
-        return withContext(ioDispatcher) {
-            try {
-                auth.checkUserNotFound<Business> {
-                    return@withContext it
+    @Inject
+    constructor(
+        private val firestore: FirebaseFirestore,
+        private val auth: AuthService,
+        @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
+    ) : BusinessRepository {
+        override suspend fun getBusiness(): Resource<Business> {
+            return withContext(ioDispatcher) {
+                try {
+                    auth.checkUserNotFound<Business> {
+                        return@withContext it
                 }
 
                 val document =
-                    firestore.collection(USERS_COLLECTION_PATH).document(auth.currentUserId()).get()
+                    firestore
+                        .collection(USERS_COLLECTION_PATH)
+                        .document(auth.currentUserId())
+                        .get()
                         .await()
-                @Suppress("UNCHECKED_CAST") val businessMap =
+
+                @Suppress("UNCHECKED_CAST")
+                val businessMap =
                     document.get(BUSINESS_FIELD) as Map<String, Any>
                 val business = businessMap.asEntityBusiness()
                 return@withContext Resource.success(business)
-
             } catch (e: UnknownHostException) {
                 Resource.error(R.string.core_data_get_business_failure_network)
             } catch (e: Exception) {
@@ -63,9 +68,7 @@ class BusinessRepositoryImpl
         }
     }
 
-    override suspend fun setBusiness(
-        business: Business,
-    ): AddBusiness {
+    override suspend fun setBusiness(business: Business): AddBusiness {
         return withContext(ioDispatcher) {
             try {
                 auth.checkUserNotFound<Boolean> {
@@ -73,18 +76,22 @@ class BusinessRepositoryImpl
                 }
 
                 val currentUID = auth.currentUserId()
-                val resultAddBusiness = suspendCoroutine<AddBusiness> { continuation ->
+                val resultAddBusiness =
+                    suspendCoroutine<AddBusiness> { continuation ->
 
-                    firestore.collection(USERS_COLLECTION_PATH).document(currentUID)
-                        .set(business.asExternalBusiness() as Map<String, Any>)
-                        .addOnSuccessListener {
-                            continuation.resume(AddBusiness.success(true))
-                        }.addOnFailureListener {
-                            val message = it.message ?: "Failure in database, when add new business"
-                            Timber.e("Business Failure: $message")
-                            continuation.resume(AddBusiness.error(R.string.core_data_add_subscription_business_failure))
-                        }
-                }
+                        firestore
+                            .collection(USERS_COLLECTION_PATH)
+                            .document(currentUID)
+                            .set(business.asExternalBusiness() as Map<String, Any>)
+                            .addOnSuccessListener {
+                                continuation.resume(AddBusiness.success(true))
+                            }.addOnFailureListener {
+                                val message =
+                                    it.message ?: "Failure in database, when add new business"
+                                Timber.e("Business Failure: $message")
+                                continuation.resume(AddBusiness.error(R.string.core_data_add_subscription_business_failure))
+                            }
+                    }
                 resultAddBusiness
             } catch (e: FirebaseFirestoreException) {
                 AddBusiness.error(R.string.core_data_add_business_failure)
@@ -106,15 +113,17 @@ class BusinessRepositoryImpl
 
                 val resultCompleteBusinessStep =
                     suspendCoroutine<CompleteBusiness> { continuation ->
-                        firestore.collection(USERS_COLLECTION_PATH).document(currentUID)
+                        firestore
+                            .collection(USERS_COLLECTION_PATH)
+                            .document(currentUID)
                             .update(
                                 "$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD",
                                 true,
                             ).addOnSuccessListener {
-                            continuation.resume(CompleteBusiness.success(true))
-                        }.addOnFailureListener {
-                            continuation.resume(CompleteBusiness.error(R.string.core_data_complete_business_failure))
-                        }
+                                continuation.resume(CompleteBusiness.success(true))
+                            }.addOnFailureListener {
+                                continuation.resume(CompleteBusiness.error(R.string.core_data_complete_business_failure))
+                            }
                     }
                 resultCompleteBusinessStep
             } catch (e: FirebaseFirestoreException) {
@@ -133,25 +142,27 @@ class BusinessRepositoryImpl
             val currentUID = auth.currentUserId()
 
             suspendCoroutine { continuation ->
-                firestore.collection(USERS_COLLECTION_PATH).document(currentUID).update(
-                    "$BUSINESS_FIELD.$BRANCHES_FIELD",
-                    FieldValue.arrayUnion(branch.asExternalBranch()),
-                ).addOnSuccessListener {
-                    continuation.resume(Resource.success(true))
-                }.addOnFailureListener {
-                    when (it) {
-                        is UnknownHostException -> {
-                            continuation.resume(Resource.error(R.string.core_data_add_branch_business_network))
-                        }
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(currentUID)
+                    .update(
+                        "$BUSINESS_FIELD.$BRANCHES_FIELD",
+                        FieldValue.arrayUnion(branch.asExternalBranch()),
+                    ).addOnSuccessListener {
+                        continuation.resume(Resource.success(true))
+                    }.addOnFailureListener {
+                        when (it) {
+                            is UnknownHostException -> {
+                                continuation.resume(Resource.error(R.string.core_data_add_branch_business_network))
+                            }
 
-                        else -> {
-                            Timber.e("Exception while adding new branch: $it")
-                            continuation.resume(Resource.error(R.string.core_data_add_branch_business_failure))
+                            else -> {
+                                Timber.e("Exception while adding new branch: $it")
+                                continuation.resume(Resource.error(R.string.core_data_add_branch_business_failure))
+                            }
                         }
                     }
-                }
             }
-
         }
     }
 

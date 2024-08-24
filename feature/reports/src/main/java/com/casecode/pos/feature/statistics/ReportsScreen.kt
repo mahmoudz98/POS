@@ -32,7 +32,6 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.feature.reports.R
 
-
 @Composable
 fun ReportsScreen(
     viewModel: ReportsViewModel = hiltViewModel(),
@@ -49,12 +48,12 @@ fun ReportsScreen(
         onSalesReportClick = onSalesReportClick,
         onInventoryReportClick = onInventoryReportClick,
     )
-
 }
 
 @Composable
 internal fun ReportsScreen(
-    uiState: UiReportsState, modifier: Modifier = Modifier,
+    uiState: UiReportsState,
+    modifier: Modifier = Modifier,
     onSalesReportClick: () -> Unit = {},
     onInventoryReportClick: () -> Unit = {},
 ) {
@@ -101,7 +100,6 @@ internal fun ReportsScreen(
             totalSalesToday = uiState.totalInvoiceSalesToday,
             countInvoiceToday = uiState.countOfInvoice,
         )
-
     }
 }
 
@@ -113,18 +111,20 @@ private fun ReportsSalesTodayContent(
     countInvoiceToday: Int,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
     ) {
         when {
             isLoading -> {
                 Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .shimmer(),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                            .shimmer(),
                 )
             }
 
@@ -143,10 +143,12 @@ private fun ReportsSalesTodayContent(
                     )
 
                     Text(
-                        text = stringResource(R.string.feature_reports_sales_label) + stringResource(
-                            com.casecode.pos.core.ui.R.string.core_ui_currency,
-                            totalSalesToday,
-                        ),
+                        text =
+                            stringResource(R.string.feature_reports_sales_label) +
+                                stringResource(
+                                    com.casecode.pos.core.ui.R.string.core_ui_currency,
+                                    totalSalesToday,
+                                ),
                         modifier = Modifier.padding(start = 4.dp),
                     )
                     Text(

@@ -53,12 +53,12 @@ fun LoginInEmployeeDialog(
 ) {
     val uiState by viewModel.loginEmployeeUiState.collectAsStateWithLifecycle()
     LoginInEmployeeDialog(
-        uiState, viewModel::showMessageLoginEmployee,
+        uiState,
+        viewModel::showMessageLoginEmployee,
         viewModel::snackbarMessageShownLoginEmployee,
         viewModel::loginByEmployee,
         onDismiss,
     )
-
 }
 
 @Composable
@@ -70,9 +70,7 @@ fun LoginInEmployeeDialog(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-
-    ) {
-
+) {
     val isCompact = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
@@ -126,12 +124,20 @@ fun LoginInEmployeeDialog(
                         },
                         label = stringResource(R.string.feature_login_employee_hint_scan_admin_id),
                         isError = userAdminError.value,
-                        supportingText = if (userAdminError.value) stringResource(R.string.feature_login_employee_login_error_uid_empty) else null,
+                        supportingText =
+                            if (userAdminError.value) {
+                                stringResource(
+                                    R.string.feature_login_employee_login_error_uid_empty,
+                                )
+                            } else {
+                                null
+                            },
                         visualTransformation = PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Unspecified,
-                            imeAction = ImeAction.Next,
-                        ),
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Unspecified,
+                                imeAction = ImeAction.Next,
+                            ),
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -165,14 +171,23 @@ fun LoginInEmployeeDialog(
                                 },
                                 isError = nameError.value,
                                 label = stringResource(uiString.core_ui_employee_name_hint),
-                                keyboardOptions = KeyboardOptions(
+                                keyboardOptions =
+                                KeyboardOptions(
                                     keyboardType = KeyboardType.Text,
                                     imeAction = ImeAction.Next,
                                 ),
-                                modifier = Modifier
+                                modifier =
+                                Modifier
                                     .weight(1f)
                                     .padding(end = 8.dp),
-                                supportingText = if (nameError.value) stringResource(R.string.feature_login_employee_error_name_empty) else null,
+                                supportingText =
+                                if (nameError.value) {
+                                    stringResource(
+                                        R.string.feature_login_employee_error_name_empty,
+                                    )
+                                } else {
+                                    null
+                                },
                             )
                             PosOutlinedTextField(
                                 value = password.value,
@@ -183,8 +198,16 @@ fun LoginInEmployeeDialog(
                                 isError = passwordError.value,
                                 label = stringResource(uiString.core_ui_employee_password_hint),
                                 visualTransformation = PasswordVisualTransformation(),
-                                supportingText = if (passwordError.value) stringResource(R.string.feature_login_employee_error_password_empty) else null,
-                                keyboardOptions = KeyboardOptions(
+                                supportingText =
+                                if (passwordError.value) {
+                                    stringResource(
+                                        R.string.feature_login_employee_error_password_empty,
+                                    )
+                                } else {
+                                    null
+                                },
+                                keyboardOptions =
+                                KeyboardOptions(
                                     keyboardType = KeyboardType.Text,
                                     imeAction = ImeAction.Done,
                                 ),
@@ -200,12 +223,20 @@ fun LoginInEmployeeDialog(
                             },
                             isError = nameError.value,
                             label = stringResource(uiString.core_ui_employee_name_hint),
-                            keyboardOptions = KeyboardOptions(
+                            keyboardOptions =
+                            KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Next,
                             ),
                             modifier = Modifier.fillMaxWidth(),
-                            supportingText = if (nameError.value) stringResource(R.string.feature_login_employee_error_name_empty) else null,
+                            supportingText =
+                            if (nameError.value) {
+                                stringResource(
+                                    R.string.feature_login_employee_error_name_empty,
+                                )
+                            } else {
+                                null
+                            },
                         )
 
                         PosOutlinedTextField(
@@ -217,8 +248,16 @@ fun LoginInEmployeeDialog(
                             isError = passwordError.value,
                             label = stringResource(uiString.core_ui_employee_password_hint),
                             visualTransformation = PasswordVisualTransformation(),
-                            supportingText = if (passwordError.value) stringResource(R.string.feature_login_employee_error_password_empty) else null,
-                            keyboardOptions = KeyboardOptions(
+                            supportingText =
+                            if (passwordError.value) {
+                                stringResource(
+                                    R.string.feature_login_employee_error_password_empty,
+                                )
+                            } else {
+                                null
+                            },
+                            keyboardOptions =
+                            KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Done,
                             ),
@@ -252,7 +291,6 @@ fun LoginInEmployeeDialog(
         },
     )
 }
-
 
 @com.casecode.pos.core.ui.DevicePreviews
 @Composable

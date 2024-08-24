@@ -23,18 +23,20 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BranchesHeader(onAddClick: () -> Unit) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainer),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = Icons.Filled.Storage,
             contentDescription = null,
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .size(24.dp),
+            modifier =
+                Modifier
+                    .padding(start = 8.dp)
+                    .size(24.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(

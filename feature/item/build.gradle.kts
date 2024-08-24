@@ -5,7 +5,6 @@ plugins {
 
 android {
     namespace = "com.casecode.pos.feature.item"
-
 }
 
 dependencies {

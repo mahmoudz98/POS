@@ -1,15 +1,11 @@
 package com.casecode.pos.feature.employee
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,22 +26,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.ui.EmployeeEmptyScreen
 import com.casecode.pos.core.ui.R.string as uiString
-
 
 @Composable
 fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
@@ -54,10 +47,12 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
     var showUpdateEmployeeDialog by remember { mutableStateOf(false) }
     val snackState = remember { SnackbarHostState() }
 
-    SnackbarHost(hostState = snackState,
+    SnackbarHost(
+        hostState = snackState,
         Modifier
             .padding(8.dp)
-            .zIndex(1f))
+            .zIndex(1f),
+    )
     uiState.userMessage?.let { message ->
         val snackbarText = stringResource(message)
         LaunchedEffect(snackState, uiState, message, snackbarText) {
@@ -68,7 +63,10 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
     EmployeesScreen(
         uiState,
         onAddClick = { showEmployeeDialog = true },
-        onEmployeeClick = { showUpdateEmployeeDialog = true; viewModel.setEmployeeSelected(it) },
+        onEmployeeClick = {
+            showUpdateEmployeeDialog = true
+            viewModel.setEmployeeSelected(it)
+        },
         onItemLongClick = {},
     )
     if (showEmployeeDialog) {
@@ -77,7 +75,8 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
     if (showUpdateEmployeeDialog) {
         EmployeeDialog(
             onDismiss = { showUpdateEmployeeDialog = false },
-            isUpdate = true, viewModel = viewModel,
+            isUpdate = true,
+            viewModel = viewModel,
         )
     }
 }
@@ -91,18 +90,20 @@ fun EmployeesScreen(
     onItemLongClick: (Employee) -> Unit = {},
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
         FloatingActionButton(
             onClick = {
                 onAddClick()
             },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .zIndex(1f),
+            modifier =
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
+                    .zIndex(1f),
         ) {
             Icon(
                 imageVector = PosIcons.Add,
@@ -121,12 +122,12 @@ fun EmployeesScreen(
 
             Resource.Loading -> {
                 PosLoadingWheel(
-                    modifier = modifier
+                    modifier =
+                    modifier
                         .fillMaxSize()
                         .wrapContentSize(Alignment.Center),
                     contentDesc = "LoadingItems",
                 )
-
             }
 
             is Resource.Success -> {
@@ -135,15 +136,10 @@ fun EmployeesScreen(
                     onEmployeeClick = onEmployeeClick,
                     onEmployeeLongClick = onItemLongClick,
                 )
-
             }
         }
-
     }
-
 }
-
-
 
 @Composable
 private fun EmployeesContent(
@@ -164,7 +160,6 @@ private fun EmployeesContent(
     }
 }
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EmployeeItem(
@@ -182,29 +177,27 @@ fun EmployeeItem(
             },
             headlineContent = { Text(employee.permission + " / " + employee.branchName) },
             supportingContent = {
-
                 Text(
                     text = employee.phoneNumber,
                 )
-
             },
-            colors = ListItemDefaults.colors(
+            colors =
+            ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
-            modifier = modifier
+            modifier =
+            modifier
                 .fillMaxWidth()
                 .combinedClickable(
                     onClick = onItemClick,
                     onLongClick = onItemLongClick,
                 ),
-
-            )
+        )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -250,8 +243,10 @@ fun EmployeesScreenErrorPreview() {
 fun EmployeesScreenSuccessPreview() {
     POSTheme {
         EmployeesScreen(
-            uiState = UiEmployeesState(
-                resourceEmployees = Resource.Success(
+            uiState =
+            UiEmployeesState(
+                resourceEmployees =
+                Resource.Success(
                     listOf(
                         Employee(
                             name = "Lillie Humphrey",
@@ -270,8 +265,9 @@ fun EmployeesScreenSuccessPreview() {
                     ),
                 ),
             ),
-
-            onAddClick = {}, onEmployeeClick = {}, onItemLongClick = {},
+            onAddClick = {},
+            onEmployeeClick = {},
+            onItemLongClick = {},
         )
     }
 }
@@ -281,7 +277,8 @@ fun EmployeesScreenSuccessPreview() {
 fun EmployeeItemPreview() {
     POSTheme {
         EmployeeItem(
-            employee = Employee(
+            employee =
+            Employee(
                 name = "John Doe",
                 phoneNumber = "123-456-7890",
                 permission = "Admin",

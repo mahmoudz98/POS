@@ -36,7 +36,10 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
 
 @Composable
-fun QRCodePrintItemDialog(viewModel: ItemsViewModel, onDismiss: () -> Unit) {
+fun QRCodePrintItemDialog(
+    viewModel: ItemsViewModel,
+    onDismiss: () -> Unit,
+) {
     val itemPrint = viewModel.itemSelected.collectAsStateWithLifecycle()
     QRCodePrintItemDialog(itemPrint = itemPrint.value, onDismiss = onDismiss)
 }
@@ -46,7 +49,6 @@ internal fun QRCodePrintItemDialog(
     itemPrint: Item?,
     onDismiss: () -> Unit,
 ) {
-
     val configuration = LocalConfiguration.current
     val name = rememberSaveable { mutableStateOf(itemPrint?.name) }
     val barcode = rememberSaveable { mutableStateOf(itemPrint?.sku) }
@@ -70,7 +72,6 @@ internal fun QRCodePrintItemDialog(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally, // Align all children to center
             ) {
-
                 PosOutlinedTextField(
                     value = printedItemCount.toString(),
                     onValueChange = { newValue ->
@@ -78,10 +79,11 @@ internal fun QRCodePrintItemDialog(
                     },
                     isError = printedItemCount < 1,
                     label = stringResource(R.string.feature_item_copies_text),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done,
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done,
+                        ),
                     modifier = Modifier.fillMaxWidth(),
                     supportingText = if (printedItemCount < 1) stringResource(R.string.feature_item_error_copies_empty) else null,
                 )
@@ -105,12 +107,11 @@ internal fun QRCodePrintItemDialog(
                 Text(text = itemPrice)
                 Spacer(modifier = Modifier.height(8.dp))
             }
-
         },
         confirmButton = {
             PosTextButton(
                 onClick = {
-                    //TODO: handle print item
+                    // TODO: handle print item
                 },
             ) {
                 Text(stringResource(R.string.feature_item_dialog_print_button_text))

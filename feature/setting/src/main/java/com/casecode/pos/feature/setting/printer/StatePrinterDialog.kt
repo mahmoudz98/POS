@@ -14,9 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
-import com.casecode.pos.core.printer.base.PrinterState
+import com.casecode.pos.core.printer.model.PrinterState
 import com.casecode.pos.core.printer.R as printerR
-
 
 @Composable
 fun StatePrinterDialog(
@@ -25,15 +24,17 @@ fun StatePrinterDialog(
 ) {
     var shouldDismiss by remember { mutableStateOf(false) }
     AlertDialog(
-        properties = DialogProperties(
-            dismissOnBackPress = shouldDismiss,
-            dismissOnClickOutside = shouldDismiss,
-        ),
-        onDismissRequest = {shouldDismiss = false
-                           onDismiss()},
+        properties =
+            DialogProperties(
+                dismissOnBackPress = shouldDismiss,
+                dismissOnClickOutside = shouldDismiss,
+            ),
+        onDismissRequest = {
+            shouldDismiss = false
+            onDismiss()
+        },
         title = {
-
-            if(printerState !is PrinterState.Error && printerState !is PrinterState.Finished){
+            if (printerState !is PrinterState.Error && printerState !is PrinterState.Finished) {
                 Text(stringResource(printerR.string.core_printer_state_message_printing_in_progress))
             }
         },
@@ -62,12 +63,10 @@ fun StatePrinterDialog(
                             "LoadingStatePrinter",
                             modifier = Modifier.align(Alignment.CenterHorizontally),
                         )
-
                     }
                 }
             }
         },
         confirmButton = {},
     )
-
 }

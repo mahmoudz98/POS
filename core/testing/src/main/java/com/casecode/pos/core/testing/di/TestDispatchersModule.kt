@@ -10,7 +10,6 @@ import dagger.hilt.testing.TestInstallIn
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 
-
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
@@ -19,13 +18,10 @@ import kotlinx.coroutines.test.TestDispatcher
 object TestDispatchersModule {
     @Provides
     @Dispatcher(IO)
-    fun providesIODispatcherTest(testDispatcher: TestDispatcher): CoroutineDispatcher =
-        testDispatcher
-
+    fun providesIODispatcherTest(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
 
     @Provides
     @Dispatcher(DEFAULT)
-    fun providesDefaultDispatcherTest(
-        testDispatcher: TestDispatcher,
-    ): CoroutineDispatcher = testDispatcher
+    fun providesDefaultDispatcherTest(testDispatcher: TestDispatcher): CoroutineDispatcher =
+        testDispatcher
 }

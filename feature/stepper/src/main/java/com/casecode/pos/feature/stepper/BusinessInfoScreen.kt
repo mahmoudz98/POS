@@ -44,7 +44,6 @@ import com.casecode.pos.core.ui.validateEmail
 import com.casecode.pos.core.ui.validatePhoneNumber
 import com.casecode.pos.core.ui.R.string as uiString
 
-
 @Composable
 fun BusinessInfoScreen(viewModel: StepperBusinessViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -79,17 +78,18 @@ internal fun BusinessInfoScreen(
     var expanded by remember { mutableStateOf(false) }
     val storeTypes = stringArrayResource(R.array.feature_stepper_business_store_types)
 
-
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState()),
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
         ) {
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -97,15 +97,23 @@ internal fun BusinessInfoScreen(
             ) {
                 PosOutlinedTextField(
                     readOnly = true,
-                    modifier = Modifier
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth(),
+                    modifier =
+                        Modifier
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth(),
                     label = stringResource(id = uiString.core_ui_store_type_hint),
                     value = storeType,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     onValueChange = { },
                     isError = storeTypeError,
-                    supportingText = if (storeTypeError) stringResource(id = R.string.feature_stepper_error_add_business_store_type_empty_message) else null,
+                    supportingText =
+                        if (storeTypeError) {
+                            stringResource(
+                                id = R.string.feature_stepper_error_add_business_store_type_empty_message,
+                            )
+                        } else {
+                            null
+                    },
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,
@@ -141,9 +149,10 @@ internal fun BusinessInfoScreen(
                         contentDescription = null,
                     )
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next,
                 ),
                 isError = emailError != null,
                 supportingText = emailError?.let { stringResource(it) },
@@ -154,9 +163,10 @@ internal fun BusinessInfoScreen(
                     phone = it
                     phoneError = validatePhoneNumber(it, countryIsoCode)
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Phone,
-                    imeAction = ImeAction.Done,
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Done,
                 ),
                 label = stringResource(id = uiString.core_ui_work_phone_number_hint),
                 modifier = Modifier.fillMaxWidth(),
@@ -185,7 +195,6 @@ internal fun BusinessInfoScreen(
                     } else {
                         onNextButtonClick(storeType, email, phone)
                     }
-
                 },
                 text = { Text(stringResource(id = R.string.feature_stepper_next_button_text)) },
                 trainingIcon = {
@@ -194,14 +203,12 @@ internal fun BusinessInfoScreen(
                         contentDescription = null,
                     )
                 },
-                modifier = Modifier
+                modifier =
+                Modifier
                     .wrapContentSize(),
             )
         }
-
-
     }
-
 }
 
 @com.casecode.pos.core.ui.DevicePreviews

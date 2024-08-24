@@ -10,13 +10,13 @@ const val EMPLOYEES_ROUTE = "employees_route"
 fun NavGraphBuilder.employeesScreen() {
     composable(
         route = EMPLOYEES_ROUTE,
-
     ) {
         EmployeesRoute()
     }
 }
 
-fun NavController.navigateToEmployees(navOptions: NavOptions) = navigate(
-    EMPLOYEES_ROUTE,
-    navOptions,
-)
+fun NavController.navigateToEmployees(navOptions: NavOptions) =
+    navigate(
+        EMPLOYEES_ROUTE,
+        navOptions,
+    )

@@ -43,9 +43,6 @@ object TestFirebaseModule {
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage.also { mockk() }
 
-
     @Provides
-    fun provideSignInRequest(): GetGoogleIdOption {
-        return mockk<GetGoogleIdOption>()
-    }
+    fun provideSignInRequest(): GetGoogleIdOption = mockk<GetGoogleIdOption>()
 }

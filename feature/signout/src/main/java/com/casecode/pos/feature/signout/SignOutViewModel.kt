@@ -14,20 +14,22 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class SignOutViewModel @Inject constructor(
-    private val accountService: AccountService,
-    authService: AuthService,
-) : ViewModel() {
-    val userUiState: StateFlow<FirebaseUser?> = authService.currentUser
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = null,
-            started = SharingStarted.WhileSubscribed(1_000),
-        )
+class SignOutViewModel
+    @Inject
+    constructor(
+        private val accountService: AccountService,
+        authService: AuthService,
+    ) : ViewModel() {
+        val userUiState: StateFlow<FirebaseUser?> =
+            authService.currentUser
+                .stateIn(
+                    scope = viewModelScope,
+                    initialValue = null,
+                    started = SharingStarted.WhileSubscribed(1_000),
+                )
 
-    suspend fun signOut() : Deferred<Unit> {
-       return viewModelScope.async {
+        suspend fun signOut(): Deferred<Unit> =
+            viewModelScope.async {
             accountService.signOut()
         }
     }
-}

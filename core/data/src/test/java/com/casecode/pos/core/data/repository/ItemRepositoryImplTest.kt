@@ -1,4 +1,4 @@
-package com.casecode.data.repository
+package com.casecode.pos.core.data.repository
 
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.testing.repository.TestItemRepository

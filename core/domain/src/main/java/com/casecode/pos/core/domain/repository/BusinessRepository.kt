@@ -9,7 +9,10 @@ typealias CompleteBusiness = Resource<Boolean>
 
 interface BusinessRepository {
     suspend fun getBusiness(): Resource<Business>
+
     suspend fun setBusiness(business: Business): AddBusiness
+
     suspend fun addBranch(branch: Branch): Resource<Boolean>
+
     suspend fun completeBusinessSetup(): CompleteBusiness
 }

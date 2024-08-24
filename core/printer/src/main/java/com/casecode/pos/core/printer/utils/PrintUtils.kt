@@ -6,8 +6,11 @@ import java.util.Date
 import java.util.Locale
 
 object PrintUtils {
-
-    fun generatePrintText(invoiceId: String, phone: String, items: List<Item>): String {
+    fun generatePrintText(
+        invoiceId: String,
+        phone: String,
+        items: List<Item>,
+    ): String {
         val format = SimpleDateFormat("'on' yyyy-MM-dd 'at' HH:mm:ss", Locale.getDefault())
         val currentDate = format.format(Date())
 
@@ -21,37 +24,36 @@ object PrintUtils {
         }
 
         return (
+            "[L]\n" +
+                "[C]<u><font size='big'>ORDER $invoiceId</font></u>\n" +
                 "[L]\n" +
-                        "[C]<u><font size='big'>ORDER ${invoiceId}</font></u>\n" +
-                        "[L]\n" +
-                        "[C]<u type='double'>$currentDate</u>\n" +
-                        "[C]\n" +
-                        "[C]================================\n" +
-                        "[L]\n" +
-                        itemsText.toString() +
-                        "[C]--------------------------------\n" +
-                        "[R]TOTAL PRICE :[R]${"%.2f".format(totalPrice)}€\n" +
-                        "[L]\n" +
-                        "[C]================================\n" +
-                        "[L]\n" +
-                        "[L]Tel : ${phone}\n"
-                )
+                "[C]<u type='double'>$currentDate</u>\n" +
+                "[C]\n" +
+                "[C]================================\n" +
+                "[L]\n" +
+                itemsText.toString() +
+                "[C]--------------------------------\n" +
+                "[R]TOTAL PRICE :[R]${"%.2f".format(totalPrice)}€\n" +
+                "[L]\n" +
+                "[C]================================\n" +
+                "[L]\n" +
+                "[L]Tel : ${phone}\n"
+        )
     }
 
-    fun generateBarcode(item: Item): String {
-        return (
-                "[L]\n" +
-                        "[C]<u><font size='big'>${item.name}</font></u>\n" +
+    fun generateBarcode(item: Item): String =
+        (
+            "[L]\n" +
+                "[C]<u><font size='big'>${item.name}</font></u>\n" +
                         "[L]<b>${item.name}</b>[R]${item.price}€\n" +
                         "[L]  + qty : ${item.quantity}\n" +
                         "[L]\n" +
                         "[C]<qrcode size='20'>${item.sku}</qrcode>\n"
                 )
-    }
 
-    fun test(logo: String): String {
-        return (
-                        "[C]<img>" + logo + "</img>\n" +
+    fun test(logo: String): String =
+        (
+                "[C]<img>" + logo + "</img>\n" +
                         "[C]<u><font size='big-4'>POS</font></u>\n" +
                         "<u></u>" +
                         "[C]<u><font size='big'>Item test1</font></u>\n" +
@@ -60,5 +62,4 @@ object PrintUtils {
                         "[L]\n" +
                         "[C]<qrcode size='20'> 2222112121</qrcode>\n"
                 )
-    }
 }

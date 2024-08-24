@@ -30,16 +30,18 @@ data class UIItemsState(
 )
 
 @HiltViewModel
-class ItemsViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
-    private val networkMonitor: NetworkMonitor,
-    getItemsUseCase: GetItemsUseCase,
-    private val addItemsUseCase: AddItemUseCase,
-    private val updateItemUseCase: UpdateItemUseCase,
-    private val deleteItemUseCase: DeleteItemUseCase,
-    private val imageUseCase: ItemImageUseCase,
-) : ViewModel() {
-    private val isOnline = MutableStateFlow(false)
+class ItemsViewModel
+    @Inject
+    constructor(
+        private val savedStateHandle: SavedStateHandle,
+        private val networkMonitor: NetworkMonitor,
+        getItemsUseCase: GetItemsUseCase,
+        private val addItemsUseCase: AddItemUseCase,
+        private val updateItemUseCase: UpdateItemUseCase,
+        private val deleteItemUseCase: DeleteItemUseCase,
+        private val imageUseCase: ItemImageUseCase,
+    ) : ViewModel() {
+        private val isOnline = MutableStateFlow(false)
 
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     val userMessage get() = _userMessage
@@ -52,10 +54,11 @@ class ItemsViewModel @Inject constructor(
             initialValue = UIItemsState(Resource.Loading),
         )
     val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
-    val searchWidgetState = savedStateHandle.getStateFlow(
-        key = SEARCH_WIDGET_STATE,
-        initialValue = SearchWidgetState.CLOSED,
-    )
+    val searchWidgetState =
+        savedStateHandle.getStateFlow(
+            key = SEARCH_WIDGET_STATE,
+            initialValue = SearchWidgetState.CLOSED,
+        )
 
     private val _itemSelected = MutableStateFlow<Item?>(null)
     val itemSelected: StateFlow<Item?> = _itemSelected
@@ -77,11 +80,12 @@ class ItemsViewModel @Inject constructor(
         savedStateHandle[SEARCH_QUERY] = query
     }
 
-    private fun setNetworkMonitor() = viewModelScope.launch {
-        networkMonitor.isOnline.collect {
-            isOnline.value = it
+    private fun setNetworkMonitor() =
+        viewModelScope.launch {
+            networkMonitor.isOnline.collect {
+                isOnline.value = it
+            }
         }
-    }
 
     fun snackbarMessageShown() {
         _userMessage.value = null
@@ -168,7 +172,6 @@ class ItemsViewModel @Inject constructor(
         bitmap: Bitmap?,
     ) {
         if (isOnline.value) {
-
             checkItemImageChangeAndItemUpdate(name, price, quantity, barcode, bitmap)
         } else {
             showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_network)
@@ -260,8 +263,9 @@ class ItemsViewModel @Inject constructor(
 
     fun checkNetworkAndDeleteItem() {
         if (isOnline.value) {
-            val item = _itemSelected.value
-                ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
+            val item =
+                _itemSelected.value
+                    ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
             deleteImageAndDeleteItem(item)
         } else {
             showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_network)
@@ -308,7 +312,6 @@ class ItemsViewModel @Inject constructor(
     fun setItemSelected(item: Item) {
         _itemSelected.value = item
     }
-
 }
 
 private const val SEARCH_QUERY = "searchQuery"

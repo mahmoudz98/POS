@@ -22,14 +22,14 @@ fun NavGraphBuilder.itemsGraph(navController: NavController) {
         itemUpdateDialog(navController)
         qrCodePrintItemDialog(navController)
     }
-
 }
 
 fun NavGraphBuilder.itemsScreen(navController: NavController) {
     composable(route = ITEMS_ROUTE) {
-        val parentEntry = remember(it) {
-            navController.getBackStackEntry(ITEMS_GRAPH)
-        }
+        val parentEntry =
+            remember(it) {
+                navController.getBackStackEntry(ITEMS_GRAPH)
+            }
         val viewModel: ItemsViewModel = hiltViewModel(parentEntry)
 
         ItemsRoute(
@@ -41,12 +41,15 @@ fun NavGraphBuilder.itemsScreen(navController: NavController) {
     }
 }
 
-
-private fun NavGraphBuilder.itemDialog(navController: NavController, onDismiss: () -> Unit) {
+private fun NavGraphBuilder.itemDialog(
+    navController: NavController,
+    onDismiss: () -> Unit,
+) {
     dialog(route = ITEM_DIALOG_ROUTE) {
-        val parentEntry = remember(it) {
-            navController.getBackStackEntry(ITEMS_GRAPH)
-        }
+        val parentEntry =
+            remember(it) {
+                navController.getBackStackEntry(ITEMS_GRAPH)
+            }
         val parentViewModel: ItemsViewModel = hiltViewModel(parentEntry)
         ItemDialog(
             viewModel = parentViewModel,
@@ -57,12 +60,14 @@ private fun NavGraphBuilder.itemDialog(navController: NavController, onDismiss: 
 
 private fun NavGraphBuilder.itemUpdateDialog(navController: NavController) {
     dialog(route = ITEM_update_DIALOG_ROUTE) {
-        val parentEntry = remember(it) {
-            navController.getBackStackEntry(ITEMS_GRAPH)
-        }
+        val parentEntry =
+            remember(it) {
+                navController.getBackStackEntry(ITEMS_GRAPH)
+            }
         val parentViewModel: ItemsViewModel = hiltViewModel(parentEntry)
         ItemDialog(
-            viewModel = parentViewModel, isUpdate = true,
+            viewModel = parentViewModel,
+            isUpdate = true,
             onDismiss = {
                 navController.popBackStack()
             },
@@ -72,9 +77,10 @@ private fun NavGraphBuilder.itemUpdateDialog(navController: NavController) {
 
 private fun NavGraphBuilder.qrCodePrintItemDialog(navController: NavController) {
     dialog(route = QR_PRINT_ITEM_DIALOG_ROUTE) {
-        val parentEntry = remember(it) {
-            navController.getBackStackEntry(ITEMS_GRAPH)
-        }
+        val parentEntry =
+            remember(it) {
+                navController.getBackStackEntry(ITEMS_GRAPH)
+            }
         val parentViewModel: ItemsViewModel = hiltViewModel(parentEntry)
         QRCodePrintItemDialog(
             viewModel = parentViewModel,
@@ -86,7 +92,11 @@ private fun NavGraphBuilder.qrCodePrintItemDialog(navController: NavController) 
 }
 
 fun NavController.navigateToItemsGraph(navOptions: NavOptions) = navigate(ITEMS_GRAPH, navOptions)
+
 fun NavController.navigateToItems() = navigate(ITEMS_ROUTE)
+
 private fun NavController.navigateToItemDialog() = navigate(ITEM_DIALOG_ROUTE)
+
 fun NavController.navigateToUpdateItemDialog() = navigate(ITEM_update_DIALOG_ROUTE)
+
 fun NavController.navigateToQRCodePrintItemDialog() = navigate(QR_PRINT_ITEM_DIALOG_ROUTE)

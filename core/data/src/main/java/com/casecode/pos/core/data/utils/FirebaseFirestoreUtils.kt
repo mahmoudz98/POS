@@ -11,46 +11,58 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-fun <T> Query.snapshotFlow(): Flow<QuerySnapshot> = callbackFlow {
-    val listener = addSnapshotListener { value, error ->
-        if (error != null) {
-            close(error)
-            return@addSnapshotListener
-        }
-        if (value != null) {
-            trySendBlocking(value)
-        }
+fun <T> Query.snapshotFlow(): Flow<QuerySnapshot> =
+    callbackFlow {
+        val listener =
+            addSnapshotListener { value, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                if (value != null) {
+                    trySendBlocking(value)
+                }
+            }
+        awaitClose { listener.remove() }
     }
-    awaitClose { listener.remove() }
-}
 
-fun <T> Query.documentChangesFlow(): Flow<List<DocumentChange>> = callbackFlow {
-    val listener = addSnapshotListener { value, error ->
-        if (error != null) {
-            close(error)
-            return@addSnapshotListener
-        }
-        if (value != null) {
-            trySendBlocking(value.documentChanges)
-        }
+fun <T> Query.documentChangesFlow(): Flow<List<DocumentChange>> =
+    callbackFlow {
+        val listener =
+            addSnapshotListener { value, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                if (value != null) {
+                    trySendBlocking(value.documentChanges)
+                }
+            }
+        awaitClose { listener.remove() }
     }
-    awaitClose { listener.remove() }
-}
 
-fun FirebaseFirestore.getDocumentFromUser(uid: String, collection: String): DocumentReference {
-    return this.collection(USERS_COLLECTION_PATH).document(uid).collection(collection).document()
-}
+fun FirebaseFirestore.getDocumentFromUser(
+    uid: String,
+    collection: String,
+): DocumentReference =
+    this
+        .collection(USERS_COLLECTION_PATH)
+        .document(uid)
+        .collection(collection)
+        .document()
 
 fun FirebaseFirestore.getDocumentFromUser(
     uid: String,
     collection: String,
     nameDocument: String,
-): DocumentReference = this.collection(USERS_COLLECTION_PATH).document(uid).collection(collection)
-    .document(nameDocument)
-
+): DocumentReference =
+    this
+        .collection(USERS_COLLECTION_PATH)
+        .document(uid)
+        .collection(collection)
+        .document(nameDocument)
 
 fun FirebaseFirestore.getCollectionRefFromUser(
     uid: String,
     nameCollection: String,
-): CollectionReference =
-    this.collection(USERS_COLLECTION_PATH).document(uid).collection(nameCollection)
+): CollectionReference = this.collection(USERS_COLLECTION_PATH).document(uid).collection(nameCollection)

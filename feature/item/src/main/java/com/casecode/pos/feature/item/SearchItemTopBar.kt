@@ -34,9 +34,9 @@ import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 
-
 enum class SearchWidgetState {
-    OPENED, CLOSED
+    OPENED,
+    CLOSED,
 }
 
 @Composable
@@ -48,7 +48,6 @@ fun ItemTopAppBar(
     onSearchClicked: () -> Unit,
     onCloseClicked: () -> Unit,
 ) {
-
     when (searchWidgetState) {
         SearchWidgetState.CLOSED -> {
             DefaultAppBar(
@@ -68,7 +67,6 @@ fun ItemTopAppBar(
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultAppBar(
@@ -81,11 +79,11 @@ fun DefaultAppBar(
         onActionClick = { onSearchClicked() },
         actionIconContentDescription = stringResource(R.string.feature_item_search_action_text),
         actionIcon = PosIcons.Search,
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent,
-        ),
+        colors =
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.Transparent,
+            ),
     )
-
 }
 
 @Composable
@@ -125,15 +123,17 @@ private fun SearchTextField(
     }
 
     TextField(
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
+        colors =
+            TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
         ),
         leadingIcon = {
             Icon(
                 imageVector = PosIcons.Search,
-                contentDescription = stringResource(
+                contentDescription =
+                stringResource(
                     id = R.string.feature_item_search_action_text,
                 ),
                 tint = MaterialTheme.colorScheme.onSurface,
@@ -155,12 +155,12 @@ private fun SearchTextField(
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
-
         },
         onValueChange = {
             if ("\n" !in it) onSearchQueryChanged(it)
         },
-        modifier = modifier
+        modifier =
+        modifier
             .statusBarsPadding()
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)
@@ -176,10 +176,12 @@ private fun SearchTextField(
             .testTag("searchTextField"),
         shape = RoundedCornerShape(32.dp),
         value = searchQuery,
-        keyboardOptions = KeyboardOptions(
+        keyboardOptions =
+        KeyboardOptions(
             imeAction = ImeAction.Search,
         ),
-        keyboardActions = KeyboardActions(
+        keyboardActions =
+        KeyboardActions(
             onSearch = {
                 onSearchExplicitlyTriggered()
             },
@@ -208,5 +210,4 @@ private fun SearchToolbarPreview() {
         onSearchQueryChanged = {},
         onCloseClicked = {},
     )
-
 }

@@ -16,36 +16,40 @@ class SignInActivityViewModelTest : BaseTest() {
     private lateinit var viewModel: SignInActivityViewModel
 
     override fun init() {
-        viewModel = SignInActivityViewModel(testNetworkMonitor, testAccountService, testAuthService)
+        viewModel = SignInActivityViewModel(networkMonitor, accountService, authService)
     }
 
     @Test
-    fun testSetNetworkMonitor() = runTest {
-        testNetworkMonitor.setConnected(true)
+    fun testSetNetworkMonitor() =
+        runTest {
+            networkMonitor.setConnected(true)
 
-        assertTrue(viewModel.signInUiState.value.isOnline)
-    }
-
-    @Test
-    fun testSignIn_whenOffline_showsNetworkError() = runTest {
-        testNetworkMonitor.setConnected(false)
-
-       // viewModel.signIn()
-
-        assertEquals(
-            com.casecode.pos.core.ui.R.string.core_ui_error_network,
-            viewModel.signInUiState.value.userMessage,
-        )
-    }
+            assertTrue(viewModel.signInUiState.value.isOnline)
+        }
 
     @Test
-    fun testSignIn_whenOnline_showsSuccessMessage() = runTest {
-        testNetworkMonitor.setConnected(true)
+    fun testSignIn_whenOffline_showsNetworkError() =
+        runTest {
+            networkMonitor.setConnected(false)
 
-       // viewModel.signIn()
+            // viewModel.signIn()
 
-        assertEquals(stringData.core_data_sign_in_success, viewModel.signInUiState.value.userMessage)
-    }
+            assertEquals(
+                com.casecode.pos.core.ui.R.string.core_ui_error_network,
+                viewModel.signInUiState.value.userMessage,
+            )
+        }
 
+    @Test
+    fun testSignIn_whenOnline_showsSuccessMessage() =
+        runTest {
+            networkMonitor.setConnected(true)
 
+            // viewModel.signIn()
+
+            assertEquals(
+                stringData.core_data_sign_in_success,
+                viewModel.signInUiState.value.userMessage,
+            )
+        }
 }

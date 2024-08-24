@@ -29,24 +29,25 @@ data class UiEmployeesState(
 )
 
 @HiltViewModel
-class EmployeeViewModel @Inject constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val getEmployeesBusinessUseCase: GetEmployeesBusinessUseCase,
-    private val getBusinessUseCase: GetBusinessUseCase,
-    private val addEmployeesUseCase: AddEmployeesUseCase,
-    private val updateEmployeesUseCase: UpdateEmployeesUseCase,
-) : ViewModel() {
-    private val isOnline: MutableLiveData<Boolean> = MutableLiveData(false)
+class EmployeeViewModel
+    @Inject
+    constructor(
+        private val networkMonitor: NetworkMonitor,
+        private val getEmployeesBusinessUseCase: GetEmployeesBusinessUseCase,
+        private val getBusinessUseCase: GetBusinessUseCase,
+        private val addEmployeesUseCase: AddEmployeesUseCase,
+        private val updateEmployeesUseCase: UpdateEmployeesUseCase,
+    ) : ViewModel() {
+        private val isOnline: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    private val _uiState = MutableStateFlow(UiEmployeesState())
-    val uiState get() = _uiState.asStateFlow()
+        private val _uiState = MutableStateFlow(UiEmployeesState())
+        val uiState get() = _uiState.asStateFlow()
 
-    private val _employeeSelected: MutableStateFlow<Employee?> = MutableStateFlow(null)
-    val employeeSelected = _employeeSelected.asStateFlow()
+        private val _employeeSelected: MutableStateFlow<Employee?> = MutableStateFlow(null)
+        val employeeSelected = _employeeSelected.asStateFlow()
 
     private val _branches: MutableStateFlow<List<Branch>> = MutableStateFlow(emptyList())
     val branches get() = _branches.asStateFlow()
-
 
     init {
         fetchEmployees()
@@ -54,11 +55,12 @@ class EmployeeViewModel @Inject constructor(
         setNetworkMonitor()
     }
 
-    private fun setNetworkMonitor() = viewModelScope.launch {
-        networkMonitor.isOnline.collect {
-            setConnected(it)
+    private fun setNetworkMonitor() =
+        viewModelScope.launch {
+            networkMonitor.isOnline.collect {
+                setConnected(it)
+            }
         }
-    }
 
     private fun setConnected(isConnect: Boolean) {
         isOnline.value = isConnect
@@ -79,7 +81,6 @@ class EmployeeViewModel @Inject constructor(
                                 userMessage = resourceEmployees.message as Int,
                             )
                         }
-
                     }
 
                     Resource.Loading -> _uiState.update { it.copy(resourceEmployees = resourceEmployees) }
@@ -132,23 +133,27 @@ class EmployeeViewModel @Inject constructor(
         viewModelScope.launch {
             val addEmployeeResource = addEmployeesUseCase(employee)
             if (addEmployeeResource is Resource.Error) {
-                val message = addEmployeeResource.message as? Int ?: uiString.core_ui_error_add_employee_message
+                val message = addEmployeeResource.message as? Int
+                    ?: uiString.core_ui_error_add_employee_message
                 showSnackbarMessage(message)
             } else if (addEmployeeResource is Resource.Success) {
                 showSnackbarMessage(uiString.core_ui_success_add_employee_message)
             }
-
         }
     }
 
     fun updateEmployee(
-        name: String, phone: String, password: String, branchName: String,
+        name: String,
+        phone: String,
+        password: String,
+        branchName: String,
         permission: String,
     ) {
         if (isOnline.value == false) return showSnackbarMessage(uiString.core_ui_error_network)
         val newEmployee = Employee(name, phone, password, branchName, permission)
         val oldEmployee =
-            _employeeSelected.value ?: return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
+            _employeeSelected.value
+                ?: return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
 
         val employees = (uiState.value.resourceEmployees as? Resource.Success)?.data
 
@@ -160,7 +165,8 @@ class EmployeeViewModel @Inject constructor(
             val updateEmployeeResource = updateEmployeesUseCase(newEmployee, oldEmployee)
             if (updateEmployeeResource is Resource.Error) {
                 val message =
-                    updateEmployeeResource.message as? Int ?: uiString.core_ui_error_update_employee_message
+                    updateEmployeeResource.message as? Int
+                        ?: uiString.core_ui_error_update_employee_message
                 showSnackbarMessage(message)
                 Timber.e("error: ${updateEmployeeResource.message}")
             } else if (updateEmployeeResource is Resource.Success) {

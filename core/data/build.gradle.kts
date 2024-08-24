@@ -16,8 +16,6 @@ android {
     buildFeatures {
         buildConfig = true
     }
-
-
 }
 secrets {
     defaultPropertiesFileName = "secrets.defaults.properties"
@@ -31,11 +29,10 @@ dependencies {
     // Coroutines
     implementation(libs.coroutines.android)
 
-    implementation (libs.googleid)
+    implementation(libs.googleid)
     implementation(libs.billing.ktx)
     implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth )
-
+    implementation(libs.androidx.credentials.play.services.auth)
 
     implementation(libs.hilt.android)
     implementation(libs.zxing.generate.barcode)

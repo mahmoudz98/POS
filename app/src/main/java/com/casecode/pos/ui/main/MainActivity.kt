@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var authService: AuthService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,30 +32,31 @@ class MainActivity : AppCompatActivity() {
 
             DisposableEffect(darkTheme) {
                 enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.auto(
-                        android.graphics.Color.TRANSPARENT,
-                        android.graphics.Color.TRANSPARENT,
-                    ) { darkTheme },
-                    navigationBarStyle = SystemBarStyle.auto(
-                        lightScrim,
-                        darkScrim,
-                    ) { darkTheme },
+                    statusBarStyle =
+                        SystemBarStyle.auto(
+                            android.graphics.Color.TRANSPARENT,
+                            android.graphics.Color.TRANSPARENT,
+                        ) { darkTheme },
+                    navigationBarStyle =
+                        SystemBarStyle.auto(
+                            lightScrim,
+                            darkScrim,
+                        ) { darkTheme },
                 )
                 onDispose {}
             }
-            val appState = rememberMainAppState(
-                networkMonitor = networkMonitor,
-                authService = authService,
-            )
+            val appState =
+                rememberMainAppState(
+                    networkMonitor = networkMonitor,
+                    authService = authService,
+                )
             CompositionLocalProvider {
                 POSTheme {
                     MainScreen(appState = appState)
                 }
             }
-
         }
     }
-
 
     /**
      * The default light scrim, as defined by androidx and the platform:
@@ -65,6 +67,4 @@ class MainActivity : AppCompatActivity() {
      * The default dark scrim, as defined by androidx and the platform:
      */
     private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
-
-
 }

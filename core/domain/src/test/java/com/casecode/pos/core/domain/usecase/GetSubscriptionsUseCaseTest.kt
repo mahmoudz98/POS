@@ -12,9 +12,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 
-
 class GetSubscriptionsUseCaseTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -22,35 +20,34 @@ class GetSubscriptionsUseCaseTest {
     private val testSubscriptionsRepository = TestSubscriptionsRepository()
     private val getSubscriptionsUseCase = GetSubscriptionsUseCase(testSubscriptionsRepository)
 
+    @Test
+    fun `getSubscriptionsUseCase return resource success of subscriptions`() =
+        runTest {
+            // Given
+            val exceptedResultSuccess = Resource.success(subscriptionsFake())
+            testSubscriptionsRepository.sendSubscriptions(subscriptionsFake())
+
+            // When
+            val result = getSubscriptionsUseCase()
+            val resultValueSuccess = result.first()
+            // Then
+            assertThat(exceptedResultSuccess, `is`(resultValueSuccess))
+        }
 
     @Test
-    fun `getSubscriptionsUseCase return resource success of subscriptions`() = runTest {
-        // Given
-        val exceptedResultSuccess = Resource.success(subscriptionsFake())
-        testSubscriptionsRepository.sendSubscriptions(subscriptionsFake())
+    fun getSubscriptionsUseCaseWhenResourceEmptyReturnEmpty() =
+        runTest {
+            // Given - send empty
+            testSubscriptionsRepository.setReturnEmpty(true)
+            val exceptedResultEmpty = Resource.empty<Boolean>(EmptyType.DATA, "Empty")
 
-        // When
-        val result = getSubscriptionsUseCase()
-        val resultValueSuccess = result.first()
-        // Then
-        assertThat(exceptedResultSuccess, `is`(resultValueSuccess))
+            // when
+            val result = getSubscriptionsUseCase()
+            val resultEmptyValue = result.first()
 
-    }
-
-    @Test
-    fun getSubscriptionsUseCaseWhenResourceEmptyReturnEmpty() = runTest {
-        // Given - send empty
-        testSubscriptionsRepository.setReturnEmpty(true)
-        val exceptedResultEmpty = Resource.empty<Boolean>(EmptyType.DATA, "Empty")
-
-        // when
-        val result = getSubscriptionsUseCase()
-        val resultEmptyValue = result.first()
-
-        // Then
-        assertThat(resultEmptyValue, `is`(exceptedResultEmpty))
-    }
-
+            // Then
+            assertThat(resultEmptyValue, `is`(exceptedResultEmpty))
+        }
 
     private fun subscriptionsFake(): List<Subscription> =
         mutableListOf(
@@ -58,5 +55,4 @@ class GetSubscriptionsUseCaseTest {
             Subscription(20, 30, listOf("admin", "non"), "Pro"),
             Subscription(60, 60, listOf("admin", "non"), "premium"),
         )
-
 }

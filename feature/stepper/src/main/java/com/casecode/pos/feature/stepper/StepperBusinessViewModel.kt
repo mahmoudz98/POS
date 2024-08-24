@@ -1,6 +1,5 @@
 package com.casecode.pos.feature.stepper
 
-import androidx.annotation.OpenForTesting
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,19 +33,18 @@ import com.casecode.pos.core.ui.R.string as uiString
  */
 @HiltViewModel
 class StepperBusinessViewModel
-@Inject
-constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val accountService: AccountService,
-    private val setBusinessUseCase: SetBusinessUseCase,
-    private val completeBusinessUseCase: CompleteBusinessUseCase,
-    private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
-    private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
-    private val setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase,
-) : ViewModel() {
-
-    private val _buttonStepState = MutableStateFlow(ButtonsStepState())
-    val buttonStepState = _buttonStepState.asStateFlow()
+    @Inject
+    constructor(
+        private val networkMonitor: NetworkMonitor,
+        private val accountService: AccountService,
+        private val setBusinessUseCase: SetBusinessUseCase,
+        private val completeBusinessUseCase: CompleteBusinessUseCase,
+        private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
+        private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
+        private val setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase,
+    ) : ViewModel() {
+        private val _buttonStepState = MutableStateFlow(ButtonsStepState())
+        val buttonStepState = _buttonStepState.asStateFlow()
 
     // Business data
     private val _uiState: MutableStateFlow<StepperBusinessUiState> =
@@ -73,7 +71,11 @@ constructor(
         _uiState.update { it.copy(isOnline = isOnline) }
     }
 
-    fun setBusinessInfo(storeType: String, emailBusiness: String, phoneBusiness: String) {
+    fun setBusinessInfo(
+        storeType: String,
+        emailBusiness: String,
+        phoneBusiness: String,
+    ) {
         _uiState.update {
             it.copy(
                 storeType = storeType,
@@ -83,7 +85,10 @@ constructor(
         }
     }
 
-    fun addBranch(branchName: String, branchPhone: String) {
+    fun addBranch(
+        branchName: String,
+        branchPhone: String,
+    ) {
         viewModelScope.launch {
             val branchCode = incrementBranchCode()
             val branch = Branch(branchCode, branchName, branchPhone)
@@ -100,7 +105,10 @@ constructor(
     /**
      * Sets the update branch.
      */
-    fun updateBranch(branchName: String, branchPhone: String) {
+    fun updateBranch(
+        branchName: String,
+        branchPhone: String,
+    ) {
         try {
             val branches = uiState.value.branches.toMutableList()
 
@@ -121,27 +129,27 @@ constructor(
         }
     }
 
-    private fun incrementBranchCode(): Int {
-        return if (uiState.value.branches.isNotEmpty()) {
-            uiState.value.branches.last().branchCode + 1
+    private fun incrementBranchCode(): Int =
+        if (uiState.value.branches.isNotEmpty()) {
+            uiState.value.branches
+                .last()
+                .branchCode + 1
         } else {
             FIRST_BRANCH_NUMBER
         }
-    }
 
     fun setBranchSelected(branch: Branch) {
         _uiState.update { it.copy(branchSelected = branch) }
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun addBusiness(): Business {
-        return Business(
+    fun addBusiness(): Business =
+        Business(
             storeType = uiState.value.storeType.toStoreType(),
             email = uiState.value.emailBusiness,
             phone = uiState.value.phoneBusiness,
             branches = uiState.value.branches.toList(),
         )
-    }
 
     fun setBusiness() =
         viewModelScope.launch {
@@ -161,7 +169,9 @@ constructor(
                             val messageRes =
                                 (addBusiness as? Resource.Empty)?.message
                                     ?: (addBusiness as? Resource.Error)?.message
-                            showSnackbarMessage(messageRes as? Int ?: uiString.core_ui_error_unknown)
+                            showSnackbarMessage(
+                                messageRes as? Int ?: uiString.core_ui_error_unknown
+                            )
                         }
 
                         is Resource.Loading -> {
@@ -169,7 +179,6 @@ constructor(
                         }
                     }
                 }
-
             } else {
                 showSnackbarMessage(uiString.core_ui_error_network)
             }
@@ -183,6 +192,7 @@ constructor(
                         is Resource.Loading -> {
                             _uiState.update { it.copy(isLoading = true) }
                         }
+
                         is Resource.Success -> {
                             _uiState.update {
                                 it.copy(
@@ -196,13 +206,14 @@ constructor(
                         is Resource.Empty -> {
                             _uiState.update { it.copy(isLoading = false) }
                         }
+
                         is Resource.Error -> {
                             _uiState.update { it.copy(isLoading = false) }
                             showSnackbarMessage(
-                                subscriptionsResource.message as? Int ?: uiString.core_ui_error_unknown,
+                                subscriptionsResource.message as? Int
+                                    ?: uiString.core_ui_error_unknown,
                             )
                         }
-
                     }
                 }
             }
@@ -222,11 +233,12 @@ constructor(
 
     private fun addSubscriptionBusinessSelected() =
         viewModelScope.launch {
-
             val subscription = uiState.value.currentSubscription
 
-            when (val resourceAddSubscription =
-                setSubscriptionsBusinessUseCase(subscription.asSubscriptionBusiness())) {
+            when (
+                val resourceAddSubscription =
+                    setSubscriptionsBusinessUseCase(subscription.asSubscriptionBusiness())
+            ) {
                 is Resource.Loading -> {
                     _uiState.update { it.copy(isLoading = true) }
                 }
@@ -319,9 +331,7 @@ constructor(
         }
     }
 
-    private fun isOutOfIndex(index: Int): Boolean {
-        return index == -1
-    }
+    private fun isOutOfIndex(index: Int): Boolean = index == -1
 
     private fun List<Employee>.isUpdateEmployeeNameDuplicate(employee: Employee): Boolean {
         this.forEach {
@@ -356,7 +366,6 @@ constructor(
                         // Then, go on business complete step.
                         setCompletedBusinessStep()
                     }
-
                 }
 
                 is Resource.Error, is Resource.Empty -> {
@@ -367,9 +376,7 @@ constructor(
                     showSnackbarMessage(messageRes as? Int ?: uiString.core_ui_error_unknown)
                 }
             }
-
         }
-
 
     private fun setCompletedBusinessStep() {
         viewModelScope.launch {
@@ -388,11 +395,9 @@ constructor(
                 }
 
                 is Resource.Loading -> {}
-
             }
         }
     }
-
 
     fun nextStep() {
         viewModelScope.launch {
@@ -403,28 +408,24 @@ constructor(
     fun restNextStep() {
         viewModelScope.launch {
             _buttonStepState.update { it.copy(buttonNextStep = false) }
-
         }
     }
 
     fun previousStep() {
         viewModelScope.launch {
             _buttonStepState.update { it.copy(buttonPreviousStep = true) }
-
         }
     }
 
     fun restPreviousStep() {
         viewModelScope.launch {
             _buttonStepState.update { it.copy(buttonPreviousStep = false) }
-
         }
     }
 
     private fun completeStep() {
         viewModelScope.launch {
             _buttonStepState.update { it.copy(buttonCompletedSteps = true) }
-
         }
     }
 

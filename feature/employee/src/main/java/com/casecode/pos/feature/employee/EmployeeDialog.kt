@@ -69,23 +69,29 @@ fun EmployeeDialog(
                     modifier = Modifier.fillMaxWidth(),
                 )
 
-
                 PosOutlinedTextField(
                     value = phone,
                     onValueChange = {
                         phone = it
                         phoneError =
-                            if (it.isBlank()) uiString.core_ui_error_phone_empty else if (!it.matches(
+                            if (it.isBlank()) {
+                                uiString.core_ui_error_phone_empty
+                            } else if (!it.matches(
                                     Patterns.PHONE.toRegex(),
                                 )
-                            ) uiString.core_ui_error_phone_invalid else null
+                            ) {
+                                uiString.core_ui_error_phone_invalid
+                            } else {
+                                null
+                            }
                     },
                     label = stringResource(uiString.core_ui_work_phone_number_hint),
                     supportingText = phoneError?.let { stringResource(it) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next,
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next,
+                        ),
                     isError = phoneError != null,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -95,16 +101,22 @@ fun EmployeeDialog(
                     onValueChange = {
                         password = it
                         passwordError =
-                            if (it.isBlank()) uiString.core_ui_error_add_employee_password_empty else if (it.length < 6) uiString.core_ui_error_add_employee_password else null
+                            if (it.isBlank()) {
+                                uiString.core_ui_error_add_employee_password_empty
+                            } else if (it.length <
+                                6
+                            ) {
+                                uiString.core_ui_error_add_employee_password
+                            } else {
+                                null
+                            }
                     },
                     label = stringResource(uiString.core_ui_employee_password_hint),
                     supportingText = phoneError?.let { stringResource(it) },
-
                     visualTransformation = PasswordVisualTransformation(),
                     isError = passwordError != null,
                     modifier = Modifier.fillMaxWidth(),
                 )
-
 
                 // Branch Dropdown
                 var branchExpanded by remember { mutableStateOf(false) }
@@ -118,13 +130,13 @@ fun EmployeeDialog(
                         readOnly = true,
                         isError = branchError,
                         supportingText =
-                        if (branchError) stringResource(uiString.core_ui_error_add_employee_branch_empty) else null,
-
+                            if (branchError) stringResource(uiString.core_ui_error_add_employee_branch_empty) else null,
                         label = stringResource(uiString.core_ui_branch_name_hint),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = branchExpanded) },
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                            .fillMaxWidth(),
+                        modifier =
+                            Modifier
+                                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                                .fillMaxWidth(),
                     )
                     ExposedDropdownMenu(
                         expanded = branchExpanded,
@@ -157,14 +169,20 @@ fun EmployeeDialog(
                         value = selectedPermission,
                         onValueChange = {},
                         readOnly = true,
-
                         isError = permissionError,
                         label = stringResource(uiString.core_ui_permissions_text),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = permissionExpanded) },
-                        supportingText = if (permissionError) stringResource(uiString.core_ui_error_add_employee_permission_empty) else null,
-
-                        modifier = Modifier
-                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                        supportingText =
+                            if (permissionError) {
+                                stringResource(
+                                    uiString.core_ui_error_add_employee_permission_empty,
+                                )
+                            } else {
+                                null
+                            },
+                        modifier =
+                            Modifier
+                                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                             .fillMaxWidth(),
                     )
                     ExposedDropdownMenu(
@@ -182,32 +200,39 @@ fun EmployeeDialog(
                         }
                     }
                 }
-
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-
-                    if (name.isEmpty() || phone.isEmpty() ||
+                    if (name.isEmpty() ||
+                        phone.isEmpty() ||
                         !phone.matches(Patterns.PHONE.toRegex()) ||
-                        password.isEmpty() || password.length < 6 ||
-                        selectedBranch.isEmpty() || selectedPermission.isEmpty()
+                        password.isEmpty() ||
+                        password.length < 6 ||
+                        selectedBranch.isEmpty() ||
+                        selectedPermission.isEmpty()
                     ) {
                         nameError = name.isEmpty()
-                        phoneError = if (phone.isEmpty()) {
-                            uiString.core_ui_error_phone_empty
-                        } else if (!phone.matches(
-                                Patterns.PHONE.toRegex(),
-                            )
-                        ) {
-                            uiString.core_ui_error_phone_invalid
-                        } else null
-                        passwordError = if (password.isEmpty()) {
-                            uiString.core_ui_error_add_employee_password_empty
-                        } else if (password.length < 6) {
-                            uiString.core_ui_error_add_employee_password
-                        } else null
+                        phoneError =
+                            if (phone.isEmpty()) {
+                                uiString.core_ui_error_phone_empty
+                            } else if (!phone.matches(
+                                    Patterns.PHONE.toRegex(),
+                                )
+                            ) {
+                                uiString.core_ui_error_phone_invalid
+                            } else {
+                                null
+                            }
+                        passwordError =
+                            if (password.isEmpty()) {
+                                uiString.core_ui_error_add_employee_password_empty
+                            } else if (password.length < 6) {
+                                uiString.core_ui_error_add_employee_password
+                            } else {
+                                null
+                            }
                         branchError = selectedBranch.isEmpty()
                         permissionError = selectedPermission.isEmpty()
                     } else {
@@ -232,9 +257,12 @@ fun EmployeeDialog(
                     }
                 },
             ) {
-                Text(stringResource(if (isUpdate) uiString.core_ui_update_employee_button_text else uiString.core_ui_add_employee_button_text))
+                Text(
+                    stringResource(
+                        if (isUpdate) uiString.core_ui_update_employee_button_text else uiString.core_ui_add_employee_button_text,
+                    ),
+                )
             }
         },
-
-        )
+    )
 }

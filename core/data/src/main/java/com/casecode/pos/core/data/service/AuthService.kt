@@ -9,12 +9,17 @@ import kotlinx.coroutines.flow.Flow
 interface AuthService {
     val currentUser: Flow<FirebaseUser?>
     val loginData: Flow<LoginStateResult>
+
     suspend fun hasUser(): Boolean
-    suspend fun  currentUserId(): String
+
+    suspend fun currentUserId(): String
+
     suspend fun currentNameLogin(): String
+
     suspend fun hasEmployeeLogin(): Boolean
 }
-suspend inline fun  <T> AuthService.checkUserNotFound(onUserNotFound:(Resource<T>) -> Unit)  {
+
+suspend inline fun <T> AuthService.checkUserNotFound(onUserNotFound: (Resource<T>) -> Unit) {
     if (!this.hasUser()) {
         onUserNotFound(Resource.Error(R.string.core_data_uid_empty))
     }

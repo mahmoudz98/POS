@@ -1,18 +1,19 @@
 plugins {
     alias(libs.plugins.pos.android.library)
     alias(libs.plugins.protobuf)
-
 }
 
 android {
     namespace = "com.casecode.pos.core.datastore_proto"
-
 }
 
 // Setup protobuf configuration, generating lite Java and Kotlin classes
 protobuf {
     protoc {
-        artifact = libs.protobuf.protoc.get().toString()
+        artifact =
+            libs.protobuf.protoc
+                .get()
+                .toString()
     }
     generateProtoTasks {
         all().forEach { task ->
@@ -38,5 +39,4 @@ androidComponents.beforeVariants {
 
 dependencies {
     api(libs.protobuf.kotlin.lite)
-
 }

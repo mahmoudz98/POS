@@ -11,22 +11,37 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestItemImageRepository @Inject constructor() : ItemImageRepository, BaseTestRepository() {
-    override suspend fun uploadImage(bitmap: Bitmap, imageName: String): UploadImage {
-        return if (shouldReturnError) UploadImage.error(R.string.core_data_download_url_failure)
-        else UploadImage.success("imageTest.com")
+class TestItemImageRepository
+    @Inject
+    constructor() :
+    BaseTestRepository(),
+        ItemImageRepository {
+        override suspend fun uploadImage(
+            bitmap: Bitmap,
+            imageName: String,
+        ): UploadImage =
+            if (shouldReturnError) {
+                UploadImage.error(R.string.core_data_download_url_failure)
+            } else {
+                UploadImage.success("imageTest.com")
+        }
 
-    }
+    override suspend fun replaceImage(
+        bitmap: Bitmap,
+        imageUrl: String,
+    ): ReplaceImage =
+        if (shouldReturnError) {
+            ReplaceImage.error(R.string.core_data_replace_image_failure)
+        } else {
+            ReplaceImage.success("imageTest.com")
+        }
 
-    override suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): ReplaceImage {
-        return if (shouldReturnError) ReplaceImage.error(R.string.core_data_replace_image_failure)
-        else ReplaceImage.success("imageTest.com")
-    }
-
-    override suspend fun deleteImage(imageUrl: String): DeleteImage {
-        return if (shouldReturnError) UploadImage.error(R.string.core_data_delete_image_failure_generic)
-        else DeleteImage.success(true)
-    }
+    override suspend fun deleteImage(imageUrl: String): DeleteImage =
+        if (shouldReturnError) {
+            UploadImage.error(R.string.core_data_delete_image_failure_generic)
+        } else {
+            DeleteImage.success(true)
+        }
 
     override fun init() {}
 }

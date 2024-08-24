@@ -29,91 +29,89 @@ import com.casecode.pos.core.testing.service.TestAccountService
 import com.casecode.pos.core.testing.service.TestAuthService
 import com.casecode.pos.core.testing.util.CoroutinesTestRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
-
 import org.junit.Before
 import org.junit.Rule
 
 abstract class BaseTest {
     // Set the main coroutines dispatcher for unit testing.
     @get:Rule
-    var mainCoroutineRule = CoroutinesTestRule()
-
+    var coroutinesRule = CoroutinesTestRule()
 
     // Repo
-    lateinit var testAccountService: TestAccountService
-    lateinit var testAuthService: TestAuthService
+    lateinit var accountService: TestAccountService
+    lateinit var authService: TestAuthService
 
-    lateinit var testNetworkMonitor: TestNetworkMonitor
-    lateinit var testBusinessRepository: TestBusinessRepository
-    lateinit var testSubscriptionsRepository: TestSubscriptionsRepository
-    lateinit var testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
-    lateinit var testEmployeesBusinessRepository: TestEmployeesBusinessRepository
-    lateinit var testItemRepository: TestItemRepository
-    lateinit var testImageRepository: TestItemImageRepository
-    lateinit var testInvoiceRepository: TestInvoiceRepository
+    lateinit var networkMonitor: TestNetworkMonitor
+    lateinit var businessRepository: TestBusinessRepository
+    lateinit var subscriptionsRepository: TestSubscriptionsRepository
+    lateinit var subscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
+    lateinit var employeesBusinessRepository: TestEmployeesBusinessRepository
+    lateinit var itemRepository: TestItemRepository
+    lateinit var imageRepository: TestItemImageRepository
+    lateinit var invoiceRepository: TestInvoiceRepository
+
     // Use cases
-    lateinit var getBusinessUseCase: GetBusinessUseCase
-    lateinit var setBusinessUseCase: SetBusinessUseCase
-    lateinit var getEmployeesBusinessUseCase: GetEmployeesBusinessUseCase
-    lateinit var addEmployeesUseCase: AddEmployeesUseCase
-    lateinit var updateEmployeesUseCase: UpdateEmployeesUseCase
-    lateinit var completeBusinessUseCase: CompleteBusinessUseCase
-    lateinit var getSubscriptionsUseCase: GetSubscriptionsUseCase
-    lateinit var setSubscriptionBusinessUseCase: SetSubscriptionBusinessUseCase
-    lateinit var setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase
-    lateinit var imageUseCase: ItemImageUseCase
-    lateinit var getItemsUseCase: GetItemsUseCase
-    lateinit var addItemsUseCase: AddItemUseCase
-    lateinit var updateItemsUseCase: UpdateItemUseCase
-    lateinit var deleteItemUseCase: DeleteItemUseCase
-    lateinit var addInvoiceUseCase: AddInvoiceUseCase
-    lateinit var updateStockInItemsUseCase: UpdateStockInItemsUseCase
-    lateinit var getInvoicesUseCase: GetInvoicesUseCase
-    lateinit var getTodayInvoicesUseCase: GetTodayInvoicesUseCase
+    lateinit var getBusiness: GetBusinessUseCase
+    lateinit var setBusiness: SetBusinessUseCase
+    lateinit var getEmployees: GetEmployeesBusinessUseCase
+    lateinit var addEmployee: AddEmployeesUseCase
+    lateinit var updateEmployee: UpdateEmployeesUseCase
+    lateinit var completeBusiness: CompleteBusinessUseCase
+    lateinit var getSubscriptions: GetSubscriptionsUseCase
+    lateinit var setSubscription: SetSubscriptionBusinessUseCase
+    lateinit var setEmployees: SetEmployeesBusinessUseCase
+    lateinit var getImage: ItemImageUseCase
+    lateinit var getItems: GetItemsUseCase
+    lateinit var addItem: AddItemUseCase
+    lateinit var updateItem: UpdateItemUseCase
+    lateinit var deleteItem: DeleteItemUseCase
+    lateinit var addInvoice: AddInvoiceUseCase
+    lateinit var updateStockInItem: UpdateStockInItemsUseCase
+    lateinit var getInvoices: GetInvoicesUseCase
+    lateinit var getTodayInvoices: GetTodayInvoicesUseCase
 
     @Before
     fun setup() {
-        testNetworkMonitor = TestNetworkMonitor()
-        // Repo
-        // Auth
-        testAccountService = TestAccountService()
-        testAuthService = TestAuthService()
-        testBusinessRepository = TestBusinessRepository()
-        testSubscriptionsRepository = TestSubscriptionsRepository()
-        testSubscriptionsBusinessRepository = TestSubscriptionsBusinessRepository()
-        testEmployeesBusinessRepository = TestEmployeesBusinessRepository()
+        networkMonitor = TestNetworkMonitor()
+
+        accountService = TestAccountService()
+        authService = TestAuthService()
+        businessRepository = TestBusinessRepository()
+        subscriptionsRepository = TestSubscriptionsRepository()
+        subscriptionsBusinessRepository = TestSubscriptionsBusinessRepository()
+        employeesBusinessRepository = TestEmployeesBusinessRepository()
 
         // Items repo
-        testItemRepository = TestItemRepository()
-        testImageRepository = TestItemImageRepository()
+        itemRepository = TestItemRepository()
+        imageRepository = TestItemImageRepository()
 
         // Invoice repo
-        testInvoiceRepository = TestInvoiceRepository()
+        invoiceRepository = TestInvoiceRepository()
 
         // use cases
-        getBusinessUseCase = GetBusinessUseCase(testBusinessRepository)
-        setBusinessUseCase = SetBusinessUseCase(testBusinessRepository)
-        getEmployeesBusinessUseCase = GetEmployeesBusinessUseCase(testEmployeesBusinessRepository)
-        addEmployeesUseCase = AddEmployeesUseCase(testEmployeesBusinessRepository)
-        updateEmployeesUseCase = UpdateEmployeesUseCase(testEmployeesBusinessRepository)
-        getSubscriptionsUseCase = GetSubscriptionsUseCase(testSubscriptionsRepository)
-        completeBusinessUseCase = CompleteBusinessUseCase(testBusinessRepository)
-        setSubscriptionBusinessUseCase =
-            SetSubscriptionBusinessUseCase(testSubscriptionsBusinessRepository)
-        setEmployeesBusinessUseCase = SetEmployeesBusinessUseCase(testEmployeesBusinessRepository)
+        getBusiness = GetBusinessUseCase(businessRepository)
+        setBusiness = SetBusinessUseCase(businessRepository)
+        getEmployees = GetEmployeesBusinessUseCase(employeesBusinessRepository)
+        addEmployee = AddEmployeesUseCase(employeesBusinessRepository)
+        updateEmployee = UpdateEmployeesUseCase(employeesBusinessRepository)
+        getSubscriptions = GetSubscriptionsUseCase(subscriptionsRepository)
+        completeBusiness = CompleteBusinessUseCase(businessRepository)
+        setSubscription =
+            SetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
+        setEmployees = SetEmployeesBusinessUseCase(employeesBusinessRepository)
 
         // Items use cases
-        imageUseCase = ItemImageUseCase(testImageRepository)
-        getItemsUseCase = GetItemsUseCase(testItemRepository)
-        addItemsUseCase = AddItemUseCase(testItemRepository)
-        updateItemsUseCase = UpdateItemUseCase(testItemRepository)
-        deleteItemUseCase = DeleteItemUseCase(testItemRepository)
-        updateStockInItemsUseCase = UpdateStockInItemsUseCase(testItemRepository)
+        getImage = ItemImageUseCase(imageRepository)
+        getItems = GetItemsUseCase(itemRepository)
+        addItem = AddItemUseCase(itemRepository)
+        updateItem = UpdateItemUseCase(itemRepository)
+        deleteItem = DeleteItemUseCase(itemRepository)
+        updateStockInItem = UpdateStockInItemsUseCase(itemRepository)
 
         // Invoice use cases
-        addInvoiceUseCase = AddInvoiceUseCase(testInvoiceRepository)
-        getInvoicesUseCase = GetInvoicesUseCase(testInvoiceRepository)
-        getTodayInvoicesUseCase = GetTodayInvoicesUseCase(testInvoiceRepository)
+        addInvoice = AddInvoiceUseCase(invoiceRepository)
+        getInvoices = GetInvoicesUseCase(invoiceRepository)
+        getTodayInvoices = GetTodayInvoicesUseCase(invoiceRepository)
         init()
     }
 

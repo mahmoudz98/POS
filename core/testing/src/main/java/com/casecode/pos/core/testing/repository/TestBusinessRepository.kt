@@ -9,38 +9,31 @@ import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.testing.base.BaseTestRepository
 import javax.inject.Inject
 
-class TestBusinessRepository @Inject constructor() : BusinessRepository, BaseTestRepository() {
+class TestBusinessRepository
+    @Inject
+    constructor() :
+    BaseTestRepository(),
+        BusinessRepository {
+        private var business: Business = Business()
 
-    private var business: Business = Business()
+        override suspend fun getBusiness(): Resource<Business> {
+            if (shouldReturnError) return Resource.error("s")
+            return Resource.success(business)
+            // return business
+        }
 
+        override suspend fun setBusiness(business: Business): AddBusiness = Resource.Success(true)
 
-    override suspend fun getBusiness(): Resource<Business> {
-        if (shouldReturnError) return Resource.error("s")
-        return Resource.success(business)
-        // return business
-    }
-
-    override suspend fun setBusiness(business: Business): AddBusiness {
-
-        return Resource.Success(true)
-
-    }
-
-    override suspend fun completeBusinessSetup(): CompleteBusiness {
-        return Resource.success(true)
-    }
+        override suspend fun completeBusinessSetup(): CompleteBusiness = Resource.success(true)
 
     override suspend fun addBranch(branch: Branch): Resource<Boolean> {
         TODO("Not yet implemented")
     }
 
     fun sendAddBusiness(business: Business) {
-
         this.business = business
     }
 
     override fun init() {
-
     }
-
 }

@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.designsystem.theme.POSTheme
 
 /**
  * Now in Android toggle button with icon and checked icon content slots. Wraps Material 3
@@ -39,15 +39,17 @@ fun PosIconToggleButton(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
         enabled = enabled,
-        colors = IconButtonDefaults.iconToggleButtonColors(
-            checkedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            disabledContainerColor = if (checked) {
-                MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = PosIconButtonDefaults.DISABLED_ICON_BUTTON_CONTAINER_ALPHA,
-                )
-            } else {
-                Color.Transparent
+        colors =
+            IconButtonDefaults.iconToggleButtonColors(
+                checkedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                disabledContainerColor =
+                    if (checked) {
+                        MaterialTheme.colorScheme.onBackground.copy(
+                            alpha = PosIconButtonDefaults.DISABLED_ICON_BUTTON_CONTAINER_ALPHA,
+                        )
+                    } else {
+                        Color.Transparent
             },
         ),
     ) {

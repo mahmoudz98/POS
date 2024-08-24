@@ -1,6 +1,5 @@
 package com.casecode.pos.feature.stepper.employees
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
 import androidx.compose.material.icons.filled.Add
@@ -29,26 +26,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.feature.stepper.R
-import com.casecode.pos.core.ui.R.string as uiString
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.ui.EmployeeEmptyScreen
 import com.casecode.pos.core.model.data.users.Employee
-
+import com.casecode.pos.core.ui.EmployeeEmptyScreen
+import com.casecode.pos.feature.stepper.R
 import com.casecode.pos.feature.stepper.StepperBusinessUiState
 import com.casecode.pos.feature.stepper.StepperBusinessViewModel
+import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun EmployeesStepperScreen(viewModel: StepperBusinessViewModel) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showEmployeeDialog by rememberSaveable  { mutableStateOf(false) }
+    var showEmployeeDialog by rememberSaveable { mutableStateOf(false) }
     var showUpdateEmployeeDialog by rememberSaveable { mutableStateOf(false) }
 
     EmployeesStepperScreen(
@@ -67,7 +61,8 @@ fun EmployeesStepperScreen(viewModel: StepperBusinessViewModel) {
     if (showUpdateEmployeeDialog) {
         EmployeeStepperDialog(
             onDismiss = { showUpdateEmployeeDialog = false },
-            isUpdate = true, viewModel = viewModel,
+            isUpdate = true,
+            viewModel = viewModel,
         )
     }
 }
@@ -77,12 +72,14 @@ fun EmployeesStepperScreen(
     uiState: StepperBusinessUiState,
     onAddClick: () -> Unit,
     onEmployeeClick: (Employee) -> Unit,
-    onDoneClick: () -> Unit, onPreviousClick: () -> Unit,
+    onDoneClick: () -> Unit,
+    onPreviousClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(8.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(modifier = Modifier.weight(1f)) {
@@ -94,9 +91,10 @@ fun EmployeesStepperScreen(
             }
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             PosTextButton(
@@ -111,22 +109,21 @@ fun EmployeesStepperScreen(
             )
             PosTextButton(
                 onClick = onDoneClick,
-                modifier = Modifier
+                modifier =
+                Modifier
                     .wrapContentSize(),
             ) {
                 Text(stringResource(id = R.string.feature_stepper_done_button_text))
             }
-
         }
     }
 }
 
-
-
 @Composable
 fun EmployeesHeader(onAddClick: () -> Unit) {
     Row(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .background(MaterialTheme.colorScheme.surfaceContainer),
@@ -135,7 +132,8 @@ fun EmployeesHeader(onAddClick: () -> Unit) {
         Icon(
             imageVector = Icons.Filled.SupervisedUserCircle,
             contentDescription = null,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(start = 8.dp)
                 .size(24.dp),
         )
@@ -152,7 +150,6 @@ fun EmployeesHeader(onAddClick: () -> Unit) {
         }
     }
 }
-
 
 @com.casecode.pos.core.ui.DevicePreviews
 @Composable
@@ -176,8 +173,10 @@ private fun EmployeesScreenPreview() {
     POSTheme {
         PosBackground {
             EmployeesStepperScreen(
-                uiState = StepperBusinessUiState(
-                    employees = mutableListOf(
+                uiState =
+                StepperBusinessUiState(
+                    employees =
+                    mutableListOf(
                         Employee(
                             "name",
                             "phone",
@@ -236,7 +235,10 @@ private fun EmployeesScreenPreview() {
                         ),
                     ),
                 ),
-                onAddClick = {}, onEmployeeClick = {}, onDoneClick = {}, onPreviousClick = {},
+                onAddClick = {},
+                onEmployeeClick = {},
+                onDoneClick = {},
+                onPreviousClick = {},
             )
         }
     }

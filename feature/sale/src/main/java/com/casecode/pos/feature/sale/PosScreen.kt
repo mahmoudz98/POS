@@ -1,6 +1,5 @@
 package com.casecode.pos.feature.sale
 
-
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -54,7 +53,6 @@ import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.scanOptions
 
-
 @Composable
 internal fun PosScreen(
     viewModel: SaleViewModel = hiltViewModel(),
@@ -85,7 +83,6 @@ internal fun PosScreen(
                 },
                 onCancel = { viewModel.showSnackbarMessage(it) },
             )
-
         },
         onSearchItemClick = viewModel::addItemInvoice,
         onGoToItems = onGoToItems,
@@ -100,9 +97,10 @@ internal fun PosScreen(
     if (showUpdateQuantityItem) {
         QuantityDialog(
             oldQuantity = uiState.itemInvoiceSelected?.quantity ?: 0.0,
-            inStock = uiState.itemSelected?.quantity?.plus(
-                uiState.itemInvoiceSelected?.quantity ?: 0.0,
-            ) ?: 0.0,
+            inStock =
+                uiState.itemSelected?.quantity?.plus(
+                    uiState.itemInvoiceSelected?.quantity ?: 0.0,
+                ) ?: 0.0,
             onDismiss = { showUpdateQuantityItem = false },
             onConfirm = {
                 viewModel.updateQuantityItemInvoice(it)
@@ -111,7 +109,6 @@ internal fun PosScreen(
         )
     }
 }
-
 
 @Composable
 internal fun PosScreen(
@@ -126,7 +123,6 @@ internal fun PosScreen(
     onSaveInvoice: () -> Unit,
     windowSizeClass: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-
     val hasItemsSale by remember(uiState.itemsInvoice) {
         derivedStateOf { uiState.itemsInvoice.isNotEmpty() }
     }
@@ -161,25 +157,29 @@ internal fun PosScreen(
                         onRemoveItem = onRemoveItem,
                         onUpdateQuantity = onUpdateQuantity,
                     )
-
                 }
-
             }
 
             Spacer(modifier = Modifier.height(16.dp))
             AnimatedVisibility(
                 visible = hasItemsSale,
-                enter = slideInVertically(initialOffsetY = { -40 }) + expandVertically(
-                    expandFrom = Alignment.Top,
-                ) + scaleIn(
-                    transformOrigin = TransformOrigin(
-                        0.5f,
-                        0f,
-                    ),
-                ) + fadeIn(initialAlpha = 0.3f),
-                exit = slideOutVertically() + shrinkVertically() + fadeOut() + scaleOut(
-                    targetScale = 1.2f,
-                ),
+                enter =
+                    slideInVertically(initialOffsetY = { -40 }) +
+                        expandVertically(
+                            expandFrom = Alignment.Top,
+                        ) +
+                        scaleIn(
+                            transformOrigin =
+                                TransformOrigin(
+                                    0.5f,
+                                    0f,
+                                ),
+                        ) + fadeIn(initialAlpha = 0.3f),
+                exit =
+                    slideOutVertically() + shrinkVertically() + fadeOut() +
+                        scaleOut(
+                            targetScale = 1.2f,
+                        ),
             ) {
                 Column {
                     OutlinedTextField(
@@ -191,16 +191,17 @@ internal fun PosScreen(
                                 stringResource(
                                     R.string.feature_sale_invoice_total_price_text,
                                     uiState.totalItemsInvoice,
-                                ) + stringResource(
-                                    R.string.feature_sale_sale_invoice_rest_amount_text,
-                                    uiState.restOfAmount,
-                                ),
+                                ) +
+                                        stringResource(
+                                            R.string.feature_sale_sale_invoice_rest_amount_text,
+                                            uiState.restOfAmount,
+                                        ),
                             )
-
                         },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxWidth()
                             .align(Alignment.End),
                     )
@@ -210,20 +211,17 @@ internal fun PosScreen(
                     Button(
                         onClick = onSaveInvoice,
                         modifier = Modifier.fillMaxWidth(),
-
-                        ) {
+                    ) {
                         Text(stringResource(R.string.feature_sale_button_text))
                     }
                 }
             }
-
         }
     } else {
         Row(
             modifier = modifier.padding(12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-
-            ) {
+        ) {
             Column(Modifier.weight(0.5f)) {
                 ExposedDropdownMenuBoxSearch(
                     items = uiState.items,
@@ -252,26 +250,30 @@ internal fun PosScreen(
                             onRemoveItem = onRemoveItem,
                             onUpdateQuantity = onUpdateQuantity,
                         )
-
                     }
-
                 }
             }
             Spacer(modifier = Modifier.width(8.dp))
             AnimatedVisibility(
                 modifier = Modifier.weight(0.5f),
                 visible = hasItemsSale,
-                enter = slideInVertically(initialOffsetY = { -40 }) + expandVertically(
-                    expandFrom = Alignment.Top,
-                ) + scaleIn(
-                    transformOrigin = TransformOrigin(
-                        0.5f,
-                        0f,
-                    ),
-                ) + fadeIn(initialAlpha = 0.3f),
-                exit = slideOutVertically() + shrinkVertically() + fadeOut() + scaleOut(
-                    targetScale = 1.2f,
-                ),
+                enter =
+                slideInVertically(initialOffsetY = { -40 }) +
+                        expandVertically(
+                            expandFrom = Alignment.Top,
+                        ) +
+                        scaleIn(
+                            transformOrigin =
+                            TransformOrigin(
+                                0.5f,
+                                0f,
+                            ),
+                        ) + fadeIn(initialAlpha = 0.3f),
+                exit =
+                slideOutVertically() + shrinkVertically() + fadeOut() +
+                        scaleOut(
+                            targetScale = 1.2f,
+                        ),
             ) {
                 Column {
                     OutlinedTextField(
@@ -283,16 +285,17 @@ internal fun PosScreen(
                                 stringResource(
                                     R.string.feature_sale_invoice_total_price_text,
                                     uiState.totalItemsInvoice,
-                                ) + stringResource(
-                                    R.string.feature_sale_sale_invoice_rest_amount_text,
-                                    uiState.restOfAmount,
-                                ),
+                                ) +
+                                        stringResource(
+                                            R.string.feature_sale_sale_invoice_rest_amount_text,
+                                            uiState.restOfAmount,
+                                        ),
                             )
-
                         },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxWidth()
                             .align(Alignment.End),
                     )
@@ -302,26 +305,22 @@ internal fun PosScreen(
                     Button(
                         onClick = onSaveInvoice,
                         modifier = Modifier.fillMaxWidth(),
-
-                        ) {
+                    ) {
                         Text(stringResource(R.string.feature_sale_button_text))
                     }
                 }
             }
-
         }
-
-
     }
-
-
 }
 
 @Composable
-fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean {
-    return windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
+fun isExpended(
+    windowSizeClass: WindowSizeClass,
+    configuration: Configuration,
+): Boolean =
+    windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
             configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-}
 
 @DevicePreviews
 @Composable
@@ -329,9 +328,11 @@ fun PosScreenPreview() {
     POSTheme {
         PosBackground {
             PosScreen(
-                uiState = SaleUiState(
+                uiState =
+                SaleUiState(
                     invoiceState = InvoiceState.HasItems,
-                    itemsInvoice = mutableSetOf(
+                    itemsInvoice =
+                    mutableSetOf(
                         Item(
                             name = "item1",
                             price = 1.0,
@@ -380,8 +381,7 @@ fun PosScreenPreview() {
                             unitOfMeasurement = null,
                             imageUrl = null,
                         ),
-
-                        ),
+                    ),
                 ),
                 onScan = {},
                 onGoToItems = {},

@@ -49,56 +49,62 @@ import kotlin.coroutines.suspendCoroutine
  * @constructor Creates an [ItemRepositoryImpl] with the provided [firestore] and [ioDispatcher].
  */
 class ItemRepositoryImpl
-@Inject constructor(
-    private val firestore: FirebaseFirestore,
-    private val authService: AuthService,
-    @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
-) : ItemRepository {
-    // TODO: improve minimize cost of use server with use offline cache to get document from
-    private val optionsCache by lazy {
-        SnapshotListenOptions.Builder().setMetadataChanges(MetadataChanges.INCLUDE)
-            .setSource(ListenSource.CACHE).build()
+    @Inject
+    constructor(
+        private val firestore: FirebaseFirestore,
+        private val authService: AuthService,
+        @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
+    ) : ItemRepository {
+        // TODO: improve minimize cost of use server with use offline cache to get document from
+        private val optionsCache by lazy {
+            SnapshotListenOptions
+                .Builder()
+                .setMetadataChanges(MetadataChanges.INCLUDE)
+                .setSource(ListenSource.CACHE)
+            .build()
     }
 
-    override fun getItems(): Flow<Resource<List<Item>>> = flow<Resource<List<Item>>> {
-        emit(Resource.Loading)
-        delay(300)
-        val uid = authService.currentUserId()
-        Timber.e("uid: $uid")
-        authService.checkUserNotFound<List<Item>> {
-            emit(it)
-            return@flow
-        }
-
-        firestore.getCollectionRefFromUser(uid, ITEMS_COLLECTION_PATH)
-            .orderBy(ITEM_NAME_FIELD)
-            .snapshots()
-            .collect { snapshot ->
-                if (snapshot.metadata.hasPendingWrites()) {
-                    Timber.i("Data from LOCAL_DB")
-                } else if (snapshot.metadata.isFromCache) {
-                    Timber.i("Data from LOCAL_CACHE")
-                } else {
-                    Timber.i("Data from SERVER_DB")
-                }
-
-                val itemMutableList = mutableListOf<Item>()
-                snapshot.documents.mapNotNull { document ->
-                    document.toObject(ItemDataModel::class.java)
-                        ?.let { itemMutableList.add(it.asDomainModel()) }
-                }
-
-                if (itemMutableList.isEmpty()) {
-                    emit(Resource.empty())
-                } else {
-                    emit(Resource.success(itemMutableList))
-                }
+    override fun getItems(): Flow<Resource<List<Item>>> =
+        flow<Resource<List<Item>>> {
+            emit(Resource.Loading)
+            delay(300)
+            val uid = authService.currentUserId()
+            Timber.e("uid: $uid")
+            authService.checkUserNotFound<List<Item>> {
+                emit(it)
+                return@flow
             }
-    }.catch { e ->
-        Timber.e(e)
-        emit(Resource.error(R.string.core_data_error_fetching_items))
-    }.flowOn(ioDispatcher)
 
+            firestore
+                .getCollectionRefFromUser(uid, ITEMS_COLLECTION_PATH)
+                .orderBy(ITEM_NAME_FIELD)
+                .snapshots()
+                .collect { snapshot ->
+                    if (snapshot.metadata.hasPendingWrites()) {
+                        Timber.i("Data from LOCAL_DB")
+                    } else if (snapshot.metadata.isFromCache) {
+                        Timber.i("Data from LOCAL_CACHE")
+                    } else {
+                        Timber.i("Data from SERVER_DB")
+                    }
+
+                    val itemMutableList = mutableListOf<Item>()
+                    snapshot.documents.mapNotNull { document ->
+                        document
+                            .toObject(ItemDataModel::class.java)
+                            ?.let { itemMutableList.add(it.asDomainModel()) }
+                    }
+
+                    if (itemMutableList.isEmpty()) {
+                        emit(Resource.empty())
+                    } else {
+                        emit(Resource.success(itemMutableList))
+                    }
+                }
+        }.catch { e ->
+            Timber.e(e)
+            emit(Resource.error(R.string.core_data_error_fetching_items))
+        }.flowOn(ioDispatcher)
 
     override suspend fun addItem(item: Item): AddItem {
         return withContext(ioDispatcher) {
@@ -111,15 +117,18 @@ class ItemRepositoryImpl
                     val itemMap = item.asExternalMapper()
 
                     val sku = item.sku
-                    firestore.getDocumentFromUser(
-                        currentUserId,
-                        ITEMS_COLLECTION_PATH, sku,
-                    ).set(itemMap).addOnSuccessListener {
-                        continuation.resume(Resource.Success(R.string.core_data_item_added_successfully))
-                    }.addOnFailureListener { failure ->
-                        Timber.e(failure)
-                        continuation.resume(Resource.error(R.string.core_data_add_item_failure_generic))
-                    }
+                    firestore
+                        .getDocumentFromUser(
+                            currentUserId,
+                            ITEMS_COLLECTION_PATH,
+                            sku,
+                        ).set(itemMap)
+                        .addOnSuccessListener {
+                            continuation.resume(Resource.Success(R.string.core_data_item_added_successfully))
+                        }.addOnFailureListener { failure ->
+                            Timber.e(failure)
+                            continuation.resume(Resource.error(R.string.core_data_add_item_failure_generic))
+                        }
                 }
             } catch (e: UnknownHostException) {
                 Resource.error(R.string.core_data_add_item_failure_network)
@@ -142,20 +151,21 @@ class ItemRepositoryImpl
 
                         val itemMap = item.asExternalMapper()
                         val sku = item.sku
-                        firestore.getDocumentFromUser(
-                            currentUserUid,
-                            ITEMS_COLLECTION_PATH,
-                            sku,
-                        ).set(
-                            itemMap,
-                            SetOptions.merge(),
-                        ).addOnSuccessListener {
-                            continuation.resume(Resource.Success(R.string.core_data_item_updated_successfully))
-                        }.addOnFailureListener { failure ->
-                            Timber.e(failure)
+                        firestore
+                            .getDocumentFromUser(
+                                currentUserUid,
+                                ITEMS_COLLECTION_PATH,
+                                sku,
+                            ).set(
+                                itemMap,
+                                SetOptions.merge(),
+                            ).addOnSuccessListener {
+                                continuation.resume(Resource.Success(R.string.core_data_item_updated_successfully))
+                            }.addOnFailureListener { failure ->
+                                Timber.e(failure)
 
-                            continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
-                        }
+                                continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
+                            }
                     }
                 } catch (e: UnknownHostException) {
                     Resource.error(R.string.core_data_update_item_failure_network)
@@ -178,10 +188,11 @@ class ItemRepositoryImpl
                     suspendCoroutine { continuation ->
 
                         val batch = firestore.batch()
-                        val collectionRef = firestore.getCollectionRefFromUser(
-                            currentUserUid,
-                            ITEMS_COLLECTION_PATH,
-                        )
+                        val collectionRef =
+                            firestore.getCollectionRefFromUser(
+                                currentUserUid,
+                                ITEMS_COLLECTION_PATH,
+                            )
 
                         items.forEach {
                             val itemRef = collectionRef.document(it.sku)
@@ -191,14 +202,14 @@ class ItemRepositoryImpl
                                 FieldValue.increment(-it.quantity),
                             )
                         }
-                        batch.commit().addOnSuccessListener {
-                            continuation.resume(Resource.Success(items))
-
-                        }.addOnFailureListener {
-                            Timber.e(it)
-                            continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
-                        }
-
+                        batch
+                            .commit()
+                            .addOnSuccessListener {
+                                continuation.resume(Resource.Success(items))
+                            }.addOnFailureListener {
+                                Timber.e(it)
+                                continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
+                            }
                     }
                 } catch (e: UnknownHostException) {
                     Resource.error(R.string.core_data_update_item_failure_network)
@@ -219,18 +230,19 @@ class ItemRepositoryImpl
                 val currentUserId = authService.currentUserId()
                 suspendCoroutine { continuation ->
 
-                    firestore.getDocumentFromUser(
-                        currentUserId,
-                        ITEMS_COLLECTION_PATH,
-                        item.sku,
-                    ).delete().addOnSuccessListener {
-                        continuation.resume(Resource.success(R.string.core_data_item_deleted_successfully))
-                    }.addOnFailureListener { failure ->
-                        Timber.e(failure)
-                        continuation.resume(Resource.error(R.string.core_data_delete_item_failure_generic))
-                    }
+                    firestore
+                        .getDocumentFromUser(
+                            currentUserId,
+                            ITEMS_COLLECTION_PATH,
+                            item.sku,
+                        ).delete()
+                        .addOnSuccessListener {
+                            continuation.resume(Resource.success(R.string.core_data_item_deleted_successfully))
+                        }.addOnFailureListener { failure ->
+                            Timber.e(failure)
+                            continuation.resume(Resource.error(R.string.core_data_delete_item_failure_generic))
+                        }
                 }
-
             } catch (e: UnknownHostException) {
                 Resource.error(R.string.core_data_delete_item_failure_network)
             } catch (e: Exception) {
@@ -246,6 +258,5 @@ class ItemRepositoryImpl
         private const val SERVER_DB = "Server_DB"
         private const val UPDATE_ITEM_TRACE = "updateItem"
         private const val UPDATE_QUANTITY_ITEM_TRACE = "QuantityUpdateItem"
-
     }
 }

@@ -14,28 +14,30 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SalesReportViewModel @Inject constructor(
-    private val getInvoicesUseCase: GetInvoicesUseCase,
-) : ViewModel() {
+class SalesReportViewModel
+    @Inject
+    constructor(
+        private val getInvoicesUseCase: GetInvoicesUseCase,
+    ) : ViewModel() {
+        private val _uiSalesReportState = MutableStateFlow(UiSalesReportState())
+        val uiSalesReportState get() = _uiSalesReportState.asStateFlow()
 
-    private val _uiSalesReportState = MutableStateFlow(UiSalesReportState())
-    val uiSalesReportState get() = _uiSalesReportState.asStateFlow()
+        private val _invoiceSelected =
+            MutableStateFlow<UISalesReportDetails>(UISalesReportDetails.Loading)
 
-    private val _invoiceSelected = MutableStateFlow<UISalesReportDetails>(UISalesReportDetails.Loading)
+        @OptIn(FlowPreview::class)
+        val invoiceSelected get() = _invoiceSelected.asStateFlow().debounce(300)
 
-    @OptIn(FlowPreview::class)
-    val invoiceSelected get() = _invoiceSelected.asStateFlow().debounce(300)
+        init {
+            fetchInvoices()
+        }
 
-    init {
-        fetchInvoices()
-    }
-
-    private fun fetchInvoices() {
-        viewModelScope.launch {
-            delay(500)
-            getInvoicesUseCase().collect {
-                _uiSalesReportState.value = _uiSalesReportState.value.copy(resourceInvoiceGroups = it)
-
+        private fun fetchInvoices() {
+            viewModelScope.launch {
+                delay(500)
+                getInvoicesUseCase().collect {
+                    _uiSalesReportState.value =
+                        _uiSalesReportState.value.copy(resourceInvoiceGroups = it)
             }
         }
     }
@@ -47,6 +49,4 @@ class SalesReportViewModel @Inject constructor(
     fun setSelectedInvoice(invoice: Invoice) {
         _invoiceSelected.value = UISalesReportDetails.Success(invoice)
     }
-
-
 }

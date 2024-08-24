@@ -32,21 +32,22 @@ data class ProfileUiState(
 )
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
-    private val authService: AuthService,
-    private val getBusinessUseCase: GetBusinessUseCase,
-    private val addBranchBusinessUseCase: AddBranchBusinessUseCase,
-    private val getSubscriptionBusinessUseCase: GetSubscriptionBusinessUseCase,
-    private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
-    private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
-) : ViewModel() {
+class ProfileViewModel
+    @Inject
+    constructor(
+        private val authService: AuthService,
+        private val getBusinessUseCase: GetBusinessUseCase,
+        private val addBranchBusinessUseCase: AddBranchBusinessUseCase,
+        private val getSubscriptionBusinessUseCase: GetSubscriptionBusinessUseCase,
+        private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
+        private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(ProfileUiState())
+        val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow(ProfileUiState())
-    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
-
-    init {
-        fetchCurrentUser()
-        fetchBusiness()
+        init {
+            fetchCurrentUser()
+            fetchBusiness()
         fetchSubscriptions()
     }
 
@@ -64,7 +65,8 @@ class ProfileViewModel @Inject constructor(
                 when (result) {
                     is Resource.Empty -> {}
                     is Resource.Error -> {
-                        val message = result.message as? Int ?: com.casecode.pos.core.ui.R.string.core_ui_error_unknown
+                        val message = result.message as? Int
+                            ?: com.casecode.pos.core.ui.R.string.core_ui_error_unknown
                         _uiState.update { it.copy(userMessage = message) }
                     }
 
@@ -98,20 +100,29 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun addBranch(name: String, phoneBranch: String) {
+    fun addBranch(
+        name: String,
+        phoneBranch: String,
+    ) {
         viewModelScope.launch {
             val currentBusiness = _uiState.value.business
-            val lastBranchCode = currentBusiness.branches.lastOrNull()?.branchCode?.inc() ?: 1
-            val branch = Branch(
-                lastBranchCode,
-                branchName = name,
-                phoneNumber = phoneBranch,
-            )
+            val lastBranchCode =
+                currentBusiness.branches
+                    .lastOrNull()
+                    ?.branchCode
+                    ?.inc() ?: 1
+            val branch =
+                Branch(
+                    lastBranchCode,
+                    branchName = name,
+                    phoneNumber = phoneBranch,
+                )
 
             when (val result = addBranchBusinessUseCase(branch)) {
                 is Resource.Empty -> {}
                 is Resource.Error -> {
-                    val message = result.message as? Int ?: com.casecode.pos.core.ui.R.string.core_ui_error_add_branch_message
+                    val message = result.message as? Int
+                        ?: com.casecode.pos.core.ui.R.string.core_ui_error_add_branch_message
                     _uiState.update { it.copy(userMessage = message) }
                 }
 

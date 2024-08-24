@@ -44,9 +44,10 @@ fun PosButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.onBackground,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.onBackground,
+            ),
         contentPadding = contentPadding,
         content = content,
     )
@@ -74,10 +75,11 @@ fun PosButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        contentPadding = if (leadingIcon != null) {
-            ButtonDefaults.ButtonWithIconContentPadding
-        } else {
-            ButtonDefaults.ContentPadding
+        contentPadding =
+            if (leadingIcon != null) {
+                ButtonDefaults.ButtonWithIconContentPadding
+            } else {
+                ButtonDefaults.ContentPadding
         },
     ) {
         PosButtonContent(
@@ -110,16 +112,19 @@ fun PosOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-        ),
-        border = BorderStroke(
-            width = PosButtonDefaults.OutlinedButtonBorderWidth,
-            color = if (enabled) {
-                MaterialTheme.colorScheme.outline
-            } else {
-                MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = PosButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
+        colors =
+            ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ),
+        border =
+            BorderStroke(
+                width = PosButtonDefaults.OutlinedButtonBorderWidth,
+                color =
+                    if (enabled) {
+                        MaterialTheme.colorScheme.outline
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = PosButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
                 )
             },
         ),
@@ -150,8 +155,9 @@ fun PosOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        contentPadding = if (leadingIcon != null) {
-            ButtonDefaults.ButtonWithIconContentPadding
+        contentPadding =
+            if (leadingIcon != null) {
+                ButtonDefaults.ButtonWithIconContentPadding
         } else {
             ButtonDefaults.ContentPadding
         },
@@ -183,8 +189,9 @@ fun PosTextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.textButtonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors =
+            ButtonDefaults.textButtonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
         ),
         content = content,
@@ -209,8 +216,7 @@ fun PosTextButton(
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
     trainingIcon: @Composable (() -> Unit)? = null,
-
-    ) {
+) {
     PosTextButton(
         onClick = onClick,
         modifier = modifier,
@@ -219,8 +225,8 @@ fun PosTextButton(
         PosButtonContent(
             text = text,
             leadingIcon = leadingIcon,
-            trainingIcon = trainingIcon
-            )
+            trainingIcon = trainingIcon,
+        )
     }
 }
 
@@ -245,12 +251,14 @@ private fun PosButtonContent(
     Box(
         Modifier
             .padding(
-                start = if (leadingIcon != null) {
-                    ButtonDefaults.IconSpacing
-                } else {
-                    0.dp
-                },
-                end = if (leadingIcon != null) {
+                start =
+                    if (leadingIcon != null) {
+                        ButtonDefaults.IconSpacing
+                    } else {
+                        0.dp
+                    },
+                end =
+                    if (leadingIcon != null) {
                     ButtonDefaults.IconSpacing
                 } else {
                     0.dp
@@ -259,7 +267,7 @@ private fun PosButtonContent(
     ) {
         text()
     }
-    if(trainingIcon != null){
+    if (trainingIcon != null) {
         Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
             trainingIcon()
         }

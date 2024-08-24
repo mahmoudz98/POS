@@ -1,12 +1,10 @@
-package com.casecode.data.repository
+package com.casecode.pos.core.data.repository
 
-
+import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalEmployees
-import com.casecode.pos.core.data.repository.EmployeesBusinessRepositoryImpl
 import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Employee
-import com.casecode.pos.core.data.R
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -42,7 +40,7 @@ class EmployeesBusinessRepositoryImplTest {
 
     @Before
     fun setup() {
-        //employeesBusinessRepositoryImpl = EmployeesBusinessRepositoryImpl(firestore, testDispatcher)
+        // employeesBusinessRepositoryImpl = EmployeesBusinessRepositoryImpl(firestore, testDispatcher)
     }
 
     @After
@@ -58,7 +56,9 @@ class EmployeesBusinessRepositoryImplTest {
 
             // mock firestore behavior
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update(employees.asExternalEmployees() as Map<String, Any>)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -83,7 +83,9 @@ class EmployeesBusinessRepositoryImplTest {
             val employees = createValidEmployees()
             // Mock firestore behavior
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update(employees.asExternalEmployees() as Map<String, Any>)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))
@@ -107,7 +109,9 @@ class EmployeesBusinessRepositoryImplTest {
             val employees = createValidEmployees()
             // Mock firestore behavior
             every {
-                firestore.collection(USERS_COLLECTION_PATH).document(uid)
+                firestore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(uid)
                     .update(employees.asExternalEmployees() as Map<String, Any>)
                     .addOnSuccessListener(capture(successListenerSlot))
                     .addOnFailureListener(capture(failureListenerSlot))

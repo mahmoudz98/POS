@@ -9,28 +9,43 @@ import com.casecode.pos.core.model.data.users.Employee
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SetEmployeesBusinessUseCase @Inject constructor(private val employeesRepo: EmployeesBusinessRepository) {
-    suspend operator fun invoke(employees: MutableList<Employee>): AddEmployees {
-
-        if (employees.isEmpty()) {
-            return Resource.empty(EmptyType.DATA, R.string.employees_empty)
-        }
-        return employeesRepo.setEmployees(employees)
+class SetEmployeesBusinessUseCase
+    @Inject
+    constructor(
+        private val employeesRepo: EmployeesBusinessRepository,
+    ) {
+        suspend operator fun invoke(employees: MutableList<Employee>): AddEmployees {
+            if (employees.isEmpty()) {
+                return Resource.empty(EmptyType.DATA, R.string.employees_empty)
+            }
+            return employeesRepo.setEmployees(employees)
     }
 }
 
-class GetEmployeesBusinessUseCase @Inject constructor(private val employeesRepo: EmployeesBusinessRepository) {
+class GetEmployeesBusinessUseCase
+@Inject
+constructor(
+    private val employeesRepo: EmployeesBusinessRepository,
+) {
     operator fun invoke(): Flow<Resource<List<Employee>>> = employeesRepo.getEmployees()
 }
 
-class AddEmployeesUseCase @Inject constructor(private val employeesRepo: EmployeesBusinessRepository) {
-    suspend operator fun invoke(employee: Employee): Resource<Boolean> {
-        return employeesRepo.addEmployee(employee)
-    }
+class AddEmployeesUseCase
+@Inject
+constructor(
+    private val employeesRepo: EmployeesBusinessRepository,
+) {
+    suspend operator fun invoke(employee: Employee): Resource<Boolean> =
+        employeesRepo.addEmployee(employee)
 }
 
-class UpdateEmployeesUseCase @Inject constructor(private val employeesRepo: EmployeesBusinessRepository) {
-    suspend operator fun invoke(employee: Employee, oldEmployee: Employee): Resource<Boolean> {
-        return employeesRepo.updateEmployee(employee, oldEmployee)
-    }
+class UpdateEmployeesUseCase
+@Inject
+constructor(
+    private val employeesRepo: EmployeesBusinessRepository,
+) {
+    suspend operator fun invoke(
+        employee: Employee,
+        oldEmployee: Employee,
+    ): Resource<Boolean> = employeesRepo.updateEmployee(employee, oldEmployee)
 }

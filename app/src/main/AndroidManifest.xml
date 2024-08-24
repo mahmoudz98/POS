@@ -57,6 +57,7 @@
         <activity
             android:name="com.casecode.pos.ui.signIn.SignInActivity"
             android:exported="true"
+
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,10 +66,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.casecode.pos.ui.stepper.StepperActivity"
+            android:name="com.casecode.pos.feature.stepper.StepperActivity"
             android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">
-
         </activity>
         <activity
             android:name="com.casecode.pos.ui.main.MainActivity"
@@ -119,7 +120,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-
+        <meta-data
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
     </application>
 
     <queries>

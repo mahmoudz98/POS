@@ -4,73 +4,82 @@ import android.content.Context
 import android.util.DisplayMetrics
 import com.casecode.pos.core.model.data.PrinterConnectionInfo
 import com.casecode.pos.core.model.data.PrinterInfo
-import com.casecode.pos.core.printer.PrintContent
 import com.casecode.pos.core.printer.R
+import com.casecode.pos.core.printer.model.PrintContent
+import com.casecode.pos.core.printer.model.PrinterState
 import com.casecode.pos.core.printer.utils.PrintUtils
+import com.dantsu.escposprinter.connection.DeviceConnection
 import com.dantsu.escposprinter.connection.tcp.TcpConnection
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg
 import timber.log.Timber
 import javax.inject.Inject
 
-class TcpEscPosPrint @Inject constructor(
-) : EscPosPrint() {
-companion object{
-    private const val TIMEOUT_CONNECTION = 6000
-}
-    override fun print(context: Context, printerInfo: PrinterInfo, printContent: PrintContent) {
-        val ipAddress = (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Tcp).ipAddress
-        val portAddress = (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Tcp).port
-        try {
-            super.execute(
-                getAsyncEscPosPrinter(
-                    TcpConnection(ipAddress, portAddress, TIMEOUT_CONNECTION),
-                    printContent,
-                    printerInfo.widthPaper.toFloat(),
-                    context,
-                ),
-            )
+class TcpEscPosPrint
+    @Inject
+    constructor() : EscPosPrint() {
+        companion object {
+            private const val TIMEOUT_CONNECTION = 6000
+        }
 
-        } catch (e: NumberFormatException) {
-            Timber.e("Invalid TCP port address")
-            e.printStackTrace()
-            super._printerState.value =
-                PrinterState.Error(R.string.core_printer_state_result_message_finish_parser_error)
+        override fun print(
+            context: Context,
+            printerInfo: PrinterInfo,
+            printContent: PrintContent,
+        ) {
+            val ipAddress = (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Tcp).ipAddress
+            val portAddress = (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Tcp).port
+            try {
+                execute(
+                    getEscPosPrinterService(
+                        TcpConnection(ipAddress, portAddress, TIMEOUT_CONNECTION),
+                        printContent,
+                        printerInfo.widthPaper.toFloat(),
+                        context,
+                    ),
+                )
+            } catch (e: NumberFormatException) {
+                Timber.e("Invalid TCP port address")
+                e.printStackTrace()
+                printerStateManager._printerState.value =
+                    PrinterState.Error(R.string.core_printer_state_result_message_finish_parser_error)
         }
     }
 
-    private fun getAsyncEscPosPrinter(
-        printerConnection: TcpConnection,
+    override fun <T : DeviceConnection> getEscPosPrinterService(
+        printerConnection: T,
         printContext: PrintContent,
         widthPaper: Float,
         context: Context,
-    ): EscPosPrinterService {
+    ): EscPosPrinter {
         // TODO:Handle paper size
-        return EscPosPrinterService(printerConnection, 203, widthPaper, 32).apply {
-            val textToPrint = when (printContext) {
-                is PrintContent.Receipt -> {
+        return EscPosPrinter(printerConnection, 203, widthPaper, 32).apply {
+            val textToPrint =
+                when (printContext) {
+                    is PrintContent.Receipt -> {
+                        PrintUtils.generatePrintText(
+                            printContext.invoiceId,
+                            printContext.phone,
+                            printContext.items,
+                        )
+                    }
 
-                    PrintUtils.generatePrintText(
-                        printContext.invoiceId,
-                        printContext.phone,
-                        printContext.items,
-                    )
-                }
+                    is PrintContent.QrCode -> {
+                        PrintUtils.generateBarcode(printContext.item)
+                    }
 
-                is PrintContent.QrCode -> {
-                    PrintUtils.generateBarcode(printContext.item)
+                    is PrintContent.Test -> {
+                        val logo =
+                            PrinterTextParserImg.bitmapToHexadecimalString(
+                                this,
+                                context.resources.getDrawableForDensity(
+                                    R.drawable.core_printer_ic_point_of_sale_24,
+                                    DisplayMetrics.DENSITY_MEDIUM,
+                                    null,
+                                ),
+                            )
+                        PrintUtils.test(logo)
+                    }
                 }
-
-                is PrintContent.Test -> {
-                    val logo = PrinterTextParserImg.bitmapToHexadecimalString(
-                        this,
-                        context.resources.getDrawableForDensity(
-                            R.drawable.core_printer_ic_point_of_sale_24,
-                            DisplayMetrics.DENSITY_MEDIUM,
-                        ),
-                    )
-                    PrintUtils.test(logo)
-                }
-            }
             addTextToPrint(textToPrint)
         }
     }

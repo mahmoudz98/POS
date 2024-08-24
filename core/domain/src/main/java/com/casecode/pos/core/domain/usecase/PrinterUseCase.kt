@@ -7,15 +7,22 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class AddPrinterUseCase @Inject constructor(private val printerRepository: PrinterRepository){
-    suspend operator fun invoke(printerInfo: PrinterInfo) = printerRepository.addPrinter(printerInfo)
-}
+class AddPrinterUseCase
+    @Inject
+    constructor(
+        private val printerRepository: PrinterRepository,
+    ) {
+        suspend operator fun invoke(printerInfo: PrinterInfo) = printerRepository.addPrinter(printerInfo)
+    }
 
-class GetPrinterUseCase @Inject constructor(private val printerRepository: PrinterRepository){
-     operator fun invoke(): Flow<Resource<List<PrinterInfo>>> {
-         return flow {
-             emit(Resource.loading())
-             emit(printerRepository.getPrinters())
-         }
-     }
+class GetPrinterUseCase
+    @Inject
+    constructor(
+        private val printerRepository: PrinterRepository,
+    ) {
+        operator fun invoke(): Flow<Resource<List<PrinterInfo>>> =
+            flow {
+                emit(Resource.loading())
+                emit(printerRepository.getPrinters())
+        }
 }

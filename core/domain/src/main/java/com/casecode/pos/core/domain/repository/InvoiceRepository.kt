@@ -6,6 +6,8 @@ import com.casecode.pos.core.model.data.users.InvoiceGroup
 
 interface InvoiceRepository {
     suspend fun addInvoice(invoice: Invoice): Resource<Int>
+
     suspend fun getInvoices(): Resource<List<InvoiceGroup>>
+
     suspend fun getTodayInvoices(): Resource<List<Invoice>>
 }

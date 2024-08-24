@@ -28,7 +28,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -43,7 +42,8 @@ import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun StepperScreen(
-    viewModel: StepperBusinessViewModel = hiltViewModel(), onMoveToMainActivity: () -> Unit,
+    viewModel: StepperBusinessViewModel = hiltViewModel(),
+    onMoveToMainActivity: () -> Unit,
     onMoveToSignInActivity: () -> Unit,
 ) {
     val pagerState = rememberPagerState(pageCount = { 4 })
@@ -108,28 +108,31 @@ private fun StepperScreen(
 ) {
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
         SnackbarHost(
             hostState = snackbarHostState,
-            modifier = Modifier
-                .systemBarsPadding()
-                .wrapContentHeight(Alignment.Bottom)
-                .zIndex(1f),
+            modifier =
+                Modifier
+                    .systemBarsPadding()
+                    .wrapContentHeight(Alignment.Bottom)
+                    .zIndex(1f),
         )
         Column {
-
-            val stepDescriptionList = listOf(
-                stringResource(id = uiString.core_ui_menu_business_info_title),
-                stringResource(id = uiString.core_ui_menu_branches_title),
-                stringResource(id = uiString.core_ui_subscription_plan_title),
-                stringResource(id = uiString.core_ui_employees_title),
-            )
+            val stepDescriptionList =
+                listOf(
+                    stringResource(id = uiString.core_ui_menu_business_info_title),
+                    stringResource(id = uiString.core_ui_menu_branches_title),
+                    stringResource(id = uiString.core_ui_subscription_plan_title),
+                    stringResource(id = uiString.core_ui_employees_title),
+                )
 
             Stepper(
-                modifier = Modifier.fillMaxWidth(), numberOfSteps = pagerState.pageCount,
+                modifier = Modifier.fillMaxWidth(),
+                numberOfSteps = pagerState.pageCount,
                 currentStep = pagerState.currentPage + 1,
                 stepDescriptionList = stepDescriptionList,
                 selectedColor = MaterialTheme.colorScheme.primary,
@@ -161,9 +164,11 @@ private fun StepperScreen(
     }
 }
 
-
 @Composable
-fun CloseBusinessStepDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+fun CloseBusinessStepDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {

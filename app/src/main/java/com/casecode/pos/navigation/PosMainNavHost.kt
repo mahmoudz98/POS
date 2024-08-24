@@ -20,7 +20,6 @@ import com.casecode.pos.feature.signout.signOutDialog
 import com.casecode.pos.feature.statistics.reportsScreen
 import com.casecode.pos.ui.main.MainAppState
 
-
 @Composable
 fun PosMainNavHost(
     appState: MainAppState,
@@ -39,7 +38,11 @@ fun PosMainNavHost(
                     // Pop up to the start destination of the graph to
                     // avoid building up a large stack of destinations
                     // on the back stack as users select items
-                    popUpTo(appState.navController.graph.findStartDestination().id) {
+                    popUpTo(
+                        appState.navController.graph
+                            .findStartDestination()
+                            .id,
+                    ) {
                         saveState = true
                     }
                     // Avoid multiple copies of the same destination when
@@ -61,27 +64,21 @@ fun PosMainNavHost(
             onSalesReportDetailsClick = {
                 appState.navController.navigateToSalesReportDetails()
             },
-
-
-            )
+        )
         itemsGraph(appState.navController)
         employeesScreen()
         settingsGraph(
             appState.navController,
             onSignOutClick = {
                 appState.navController.navigateToSignOut()
-
             },
         )
         signOutDialog(
             onSignOut = {
                 onSignOutClick()
-
             },
             onDismiss = appState.navController::popBackStack,
         )
         profileScreen { appState.navController.popBackStack() }
-
     }
-
 }

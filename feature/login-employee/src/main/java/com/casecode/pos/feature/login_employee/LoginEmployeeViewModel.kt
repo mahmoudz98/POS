@@ -13,22 +13,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginEmployeeViewModel @Inject constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val accountService: AccountService,
-) : ViewModel() {
-    private val _loginEmployeeUiState = MutableStateFlow(LoginEmployeeUiState())
-    val loginEmployeeUiState = _loginEmployeeUiState.asStateFlow()
+class LoginEmployeeViewModel
+    @Inject
+    constructor(
+        private val networkMonitor: NetworkMonitor,
+        private val accountService: AccountService,
+    ) : ViewModel() {
+        private val _loginEmployeeUiState = MutableStateFlow(LoginEmployeeUiState())
+        val loginEmployeeUiState = _loginEmployeeUiState.asStateFlow()
 
-    init {
-        setNetworkMonitor()
-    }
-
-    private fun setNetworkMonitor() = viewModelScope.launch {
-        networkMonitor.isOnline.collect {
-            setConnected(it)
+        init {
+            setNetworkMonitor()
         }
-    }
+
+        private fun setNetworkMonitor() =
+            viewModelScope.launch {
+                networkMonitor.isOnline.collect {
+                    setConnected(it)
+            }
+        }
 
     private fun setConnected(isOnline: Boolean) {
         _loginEmployeeUiState.update { it.copy(isOnline = isOnline) }
@@ -64,9 +67,7 @@ class LoginEmployeeViewModel @Inject constructor(
                                 userMessage = R.string.feature_login_employee_login_error_employee_incorrect,
                             )
                         }
-
                     }
-
                 }
 
                 else -> {
@@ -79,7 +80,5 @@ class LoginEmployeeViewModel @Inject constructor(
                 }
             }
         }
-
     }
-
 }

@@ -27,7 +27,6 @@ import javax.inject.Singleton
     replaces = [RepositoryModule::class],
 )
 interface TestRepositoryModule {
-
     @Singleton
     @Binds
     fun bindTestBusinessRepo(testBusinessRepository: TestBusinessRepository): BusinessRepository
@@ -38,7 +37,9 @@ interface TestRepositoryModule {
 
     @Singleton
     @Binds
-    fun bindTestSubscriptionsBusinessRepo(testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository): SubscriptionsBusinessRepository
+    fun bindTestSubscriptionsBusinessRepo(
+        testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository,
+    ): SubscriptionsBusinessRepository
 
     @Singleton
     @Binds
@@ -55,6 +56,4 @@ interface TestRepositoryModule {
     @Singleton
     @Binds
     fun bindInvoiceRepo(invoiceRepositoryImpl: TestInvoiceRepository): InvoiceRepository
-
-
 }

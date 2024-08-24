@@ -13,8 +13,7 @@ fun NavGraphBuilder.reportsScreen(
 ) {
     composable(
         route = REPORTS_ROUTE,
-
-        ) {
+    ) {
         ReportsScreen(
             onSalesReportClick = onSalesReportClick,
             onInventoryReportClick = onInventoryReportClick,
@@ -22,5 +21,4 @@ fun NavGraphBuilder.reportsScreen(
     }
 }
 
-fun NavController.navigateToReports(navOptions: NavOptions) =
-    navigate(REPORTS_ROUTE, navOptions)
+fun NavController.navigateToReports(navOptions: NavOptions) = navigate(REPORTS_ROUTE, navOptions)

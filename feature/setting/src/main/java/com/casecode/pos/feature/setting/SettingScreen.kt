@@ -68,18 +68,19 @@ fun SettingScreen(
     onSignOutClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
-
         Column(modifier = Modifier.align(Alignment.TopStart)) {
             LocaleLanguageDropdownMenu()
             Spacer(modifier = modifier.height(16.dp))
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onPrinterClick()},
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { onPrinterClick() },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
@@ -91,7 +92,6 @@ fun SettingScreen(
                     text = stringResource(R.string.feature_settings_printer_title),
                 )
             }
-
         }
         Column(modifier = Modifier.align(Alignment.BottomStart)) {
             Text(text = emailUser, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
@@ -102,17 +102,17 @@ fun SettingScreen(
                 text = { Text(stringResource(R.string.feature_setting_sign_out_button_text)) },
             )
         }
-
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LocaleLanguageDropdownMenu() {
-    val localeOptions = mapOf(
-        R.string.feature_setting_language_english to "en",
-        R.string.feature_setting_language_arabic to "ar",
-    ).mapKeys { stringResource(it.key) }
+    val localeOptions =
+        mapOf(
+            R.string.feature_setting_language_english to "en",
+            R.string.feature_setting_language_arabic to "ar",
+        ).mapKeys { stringResource(it.key) }
     val currentLanguageTag =
         ConfigurationCompat.getLocales(LocalConfiguration.current)[0]?.toLanguageTag() ?: ""
     val currentFind = localeOptions.entries.find { it.value == currentLanguageTag.take(2) }?.key
@@ -133,12 +133,12 @@ private fun LocaleLanguageDropdownMenu() {
     ) {
         OutlinedTextField(
             readOnly = true,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                 .fillMaxWidth(),
             label = { Text(stringResource(R.string.feature_settings_language_current_hint)) },
             value = currentLanguage,
-
             onValueChange = { },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
         )
@@ -164,19 +164,17 @@ private fun LocaleLanguageDropdownMenu() {
                     },
                     modifier = Modifier.background(if (isSelected) MaterialTheme.colorScheme.outlineVariant else Color.Transparent),
                     text = { Text(selectionLocale) },
-
-                    )
+                )
             }
         }
     }
 }
 
-
 @Composable
 fun PrinterRow(onClick: () -> Unit) {
-
     Row(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceVariant),
         verticalAlignment = Alignment.CenterVertically,
@@ -186,7 +184,8 @@ fun PrinterRow(onClick: () -> Unit) {
             Icon(
                 imageVector = PosIcons.Print,
                 contentDescription = stringResource(R.string.feature_setting_add_printer),
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(8.dp)
                     .size(24.dp),
             )
@@ -209,5 +208,4 @@ fun SettingPreview() {
     POSTheme {
         SettingScreen(onPrinterClick = {}, onSignOutClick = {}, emailUser = "")
     }
-
 }

@@ -17,9 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.ui.R.string as uiString
 import com.casecode.pos.core.model.data.subscriptions.Subscription
-
+import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 internal fun SubscriptionList(
@@ -28,9 +27,10 @@ internal fun SubscriptionList(
     onSubscriptionClick: (Subscription) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
     ) {
         items(subscriptions) { subscription ->
             val isPayed = currentSubscription.type == subscription.type
@@ -49,7 +49,7 @@ private fun SubscriptionItem(
     isPayed: Boolean = false,
     onSubscriptionClick: (Subscription) -> Unit,
 ) {
-    //TODO: analysis subscription type and add number of days and cost of transaction.
+    // TODO: analysis subscription type and add number of days and cost of transaction.
     ListItem(
         headlineContent = { Text(text = subscription.type) },
         supportingContent = {
@@ -76,14 +76,14 @@ private fun SubscriptionItem(
                 )
             }
         },
-        colors = ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        colors =
+            ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
         ),
     )
-
 }
 
 @com.casecode.pos.core.ui.DevicePreviews

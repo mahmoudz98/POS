@@ -42,7 +42,6 @@ const val EMPLOYEE_PASSWORD_FIELD = "password"
 const val EMPLOYEE_BRANCH_NAME_FIELD = "branchName"
 const val EMPLOYEE_PERMISSION_FIELD = "permission"
 
-
 // fields in items.
 const val IMAGE_FIELDS = "image"
 const val ITEM_NAME_FIELD = "name"
@@ -63,11 +62,10 @@ const val Invoice_ITEMS_FIELD = "items"
 const val ITEM_PATH_FIELD = "item"
 const val IMAGES_PATH_FIELD = "images"
 
-
 // Fields in PrinterInfo
-const val PRINTER_INFO_NAME_FIELD ="name"
+const val PRINTER_INFO_NAME_FIELD = "name"
 const val PRINTER_INFO_CONNECTION_TYPE_FIELD = "connectionType"
 const val PRINTER_INFO_ADDRESS_FIELD = "address"
 const val PRINTER_INFO_PORT_FIELD = "port"
 const val PRINTER_INFO_IS_CURRENT_SELECTED_FIELD = "isCurrentSelected"
-const val PRINTER_INFO_SIZE_FIELD= "size"
+const val PRINTER_INFO_SIZE_FIELD = "size"

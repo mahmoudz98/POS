@@ -1,18 +1,18 @@
 package com.casecode.pos.core.data.repository
 
+import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.common.Dispatcher
+import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asSubscriptionBusinessModel
 import com.casecode.pos.core.data.model.asSubscriptionRequest
 import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.common.Dispatcher
-import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.data.service.checkUserNotFound
 import com.casecode.pos.core.data.utils.SUBSCRIPTION_BUSINESS_FIELD
 import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
 import com.casecode.pos.core.domain.repository.AddSubscriptionBusiness
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
-import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.service.checkUserNotFound
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,28 +28,28 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class SubscriptionsBusinessRepositoryImpl
-@Inject
-constructor(
-    private val fireStore: FirebaseFirestore,
-    private val auth: AuthService,
-    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-) : SubscriptionsBusinessRepository {
-    override suspend fun setSubscriptionBusiness(
-        subscriptionBusiness: SubscriptionBusiness,
-    ): AddSubscriptionBusiness {
-        return withContext(ioDispatcher) {
-            try {
-               auth.checkUserNotFound<Boolean> {
-                    return@withContext it
-               }
-                val currentUID = auth.currentUserId()
-                val resultAddSubscription =
-                    suspendCoroutine<AddSubscriptionBusiness> { continuation ->
+    @Inject
+    constructor(
+        private val fireStore: FirebaseFirestore,
+        private val auth: AuthService,
+        @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+    ) : SubscriptionsBusinessRepository {
+        override suspend fun setSubscriptionBusiness(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness {
+            return withContext(ioDispatcher) {
+                try {
+                    auth.checkUserNotFound<Boolean> {
+                        return@withContext it
+                    }
+                    val currentUID = auth.currentUserId()
+                    val resultAddSubscription =
+                        suspendCoroutine<AddSubscriptionBusiness> { continuation ->
 
-                        val addSubscriptionBusinessRequest =
-                            subscriptionBusiness.asSubscriptionRequest()
+                            val addSubscriptionBusinessRequest =
+                                subscriptionBusiness.asSubscriptionRequest()
 
-                        fireStore.collection(USERS_COLLECTION_PATH).document(currentUID)
+                        fireStore
+                            .collection(USERS_COLLECTION_PATH)
+                            .document(currentUID)
                             .update(
                                 SUBSCRIPTION_BUSINESS_FIELD,
                                 FieldValue.arrayUnion(addSubscriptionBusinessRequest),
@@ -72,8 +72,8 @@ constructor(
         }
     }
 
-    override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> {
-        return callbackFlow<Resource<List<SubscriptionBusiness>>> {
+    override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> =
+        callbackFlow<Resource<List<SubscriptionBusiness>>> {
             trySend(Resource.Loading)
             auth.checkUserNotFound<List<SubscriptionBusiness>> {
                 trySend(it)
@@ -81,7 +81,9 @@ constructor(
             }
             val currentUID = auth.currentUserId()
             val listenerRegistration =
-                fireStore.collection(USERS_COLLECTION_PATH).document(currentUID)
+                fireStore
+                    .collection(USERS_COLLECTION_PATH)
+                    .document(currentUID)
                     .addSnapshotListener { snapshot, error ->
                         if (error != null) {
                             Timber.e(error)
@@ -89,9 +91,10 @@ constructor(
                             close()
                         }
                         @Suppress("UNCHECKED_CAST")
-                        val subscriptionBusinessMap = snapshot?.get(
-                            SUBSCRIPTION_BUSINESS_FIELD,
-                        ) as? List<Map<String, Any>>
+                        val subscriptionBusinessMap =
+                            snapshot?.get(
+                                SUBSCRIPTION_BUSINESS_FIELD,
+                            ) as? List<Map<String, Any>>
                         Timber.e("subscriptionBusinessMap: $subscriptionBusinessMap")
                         if (subscriptionBusinessMap.isNullOrEmpty()) {
                             trySend(Resource.empty())
@@ -110,4 +113,3 @@ constructor(
             }
         }.flowOn(ioDispatcher)
     }
-}

@@ -36,6 +36,7 @@ fun PosOutlinedTextField(
         modifier = modifier,
     )
 }
+
 @Composable
 fun PosOutlinedTextField(
     modifier: Modifier = Modifier,
@@ -44,12 +45,14 @@ fun PosOutlinedTextField(
     isError: Boolean = false,
     readOnly: Boolean = false,
     label: String,
-    enabled:Boolean = true,
+    enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable() (() -> Unit)? = null,
+    trailingIcon:
+        @Composable()
+        (() -> Unit)? = null,
     supportingText: String? = null,
 ) {
     OutlinedTextField(
@@ -66,7 +69,6 @@ fun PosOutlinedTextField(
             }
         },
         keyboardActions = keyboardActions,
-
         visualTransformation = visualTransformation,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,

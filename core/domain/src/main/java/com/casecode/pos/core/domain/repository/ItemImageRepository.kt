@@ -18,7 +18,10 @@ interface ItemImageRepository {
      * @param imageName The name to be assigned to the uploaded image.
      * @return A [UploadImage] resource containing the URL of the uploaded image.
      */
-    suspend fun uploadImage(bitmap: Bitmap, imageName: String): UploadImage
+    suspend fun uploadImage(
+        bitmap: Bitmap,
+        imageName: String,
+    ): UploadImage
 
     /**
      * Replaces an existing image with the image represented by [bitmap].
@@ -27,7 +30,10 @@ interface ItemImageRepository {
      * @param imageUrl The URL of the existing image to be replaced.
      * @return A [ReplaceImage] resource containing the URL of the replaced image.
      */
-    suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): ReplaceImage
+    suspend fun replaceImage(
+        bitmap: Bitmap,
+        imageUrl: String,
+    ): ReplaceImage
 
     /**
      * Deletes the image associated with the given [imageUrl].

@@ -13,14 +13,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ReportsViewModel @Inject constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val getTodayInvoicesUseCase: GetTodayInvoicesUseCase,
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow(UiReportsState())
-    val uiState = _uiState.asStateFlow()
-
+class ReportsViewModel
+    @Inject
+    constructor(
+        private val networkMonitor: NetworkMonitor,
+        private val getTodayInvoicesUseCase: GetTodayInvoicesUseCase,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow(UiReportsState())
+        val uiState = _uiState.asStateFlow()
 
     fun fetchInvoices() {
         viewModelScope.launch {
@@ -42,16 +42,13 @@ class ReportsViewModel @Inject constructor(
 
                     Resource.Loading -> {
                         _uiState.update { it.copy(isLoading = true) }
-
                     }
 
                     is Resource.Success -> {
                         _uiState.update { it.copy(invoices = resource.data, isLoading = false) }
                     }
                 }
-
             }
         }
     }
-
 }

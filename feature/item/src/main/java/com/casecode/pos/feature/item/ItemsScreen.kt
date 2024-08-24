@@ -38,7 +38,6 @@ import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import timber.log.Timber
 
-
 @Composable
 fun ItemsRoute(
     modifier: Modifier = Modifier,
@@ -77,11 +76,13 @@ fun ItemsRoute(
     )
     if (showDialogItemDelete) {
         DeleteItemDialog(
-            onConfirm = { viewModel.checkNetworkAndDeleteItem();showDialogItemDelete = false },
+            onConfirm = {
+                viewModel.checkNetworkAndDeleteItem()
+                showDialogItemDelete = false
+            },
             onDismiss = { showDialogItemDelete = false },
         )
     }
-
 }
 
 @Composable
@@ -100,7 +101,6 @@ internal fun ItemsScreen(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onShownMessage: () -> Unit,
 ) {
-
     Scaffold(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -113,7 +113,6 @@ internal fun ItemsScreen(
                     .wrapContentHeight(Alignment.Top),
             )
         },
-
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -129,9 +128,10 @@ internal fun ItemsScreen(
         },
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
         ) {
             ItemTopAppBar(
                 modifier = modifier,
@@ -139,14 +139,17 @@ internal fun ItemsScreen(
                 searchQuery = searchQuery,
                 onSearchQueryChanged = onSearchQueryChanged,
                 onSearchClicked = { onSearchClicked() },
-                onCloseClicked = { onClearRecentSearches(); },
+                onCloseClicked = {
+                    onClearRecentSearches()
+                },
             )
             when (uiState.resourceItems) {
                 is Resource.Loading -> {
                     PosLoadingWheel(
-                        modifier = modifier
-                            .fillMaxSize()
-                            .wrapContentSize(Alignment.Center),
+                        modifier =
+                            modifier
+                                .fillMaxSize()
+                                .wrapContentSize(Alignment.Center),
                         contentDesc = "LoadingItems",
                     )
                 }
@@ -160,20 +163,23 @@ internal fun ItemsScreen(
                 }
 
                 is Resource.Success -> {
-                    val filteredItems = remember(uiState, searchQuery) {
-                        if (searchQuery.isNotBlank()) {
-                            uiState.resourceItems.data.filter {
-                                it.name.contains(
-                                    searchQuery,
-                                    ignoreCase = true,
-                                ) || it.sku.contains(searchQuery, ignoreCase = true)
+                    val filteredItems =
+                        remember(uiState, searchQuery) {
+                            if (searchQuery.isNotBlank()) {
+                                uiState.resourceItems.data.filter {
+                                    it.name.contains(
+                                        searchQuery,
+                                        ignoreCase = true,
+                                    ) ||
+                                            it.sku.contains(searchQuery, ignoreCase = true)
+                                }
+                            } else {
+                                uiState.resourceItems.data
                             }
-                        } else {
-                            uiState.resourceItems.data
                         }
-                    }
                     ItemsContent(
-                        items = filteredItems, modifier = modifier,
+                        items = filteredItems,
+                        modifier = modifier,
                         onItemClick = {
                             onItemClick(it)
                         },
@@ -185,7 +191,6 @@ internal fun ItemsScreen(
                 }
             }
         }
-
     }
     // Check for user messages to display on the screen
     uiState.userMessage?.let { message ->
@@ -196,9 +201,7 @@ internal fun ItemsScreen(
             onShownMessage()
         }
     }
-
 }
-
 
 @Composable
 private fun ItemsEmptyScreen(modifier: Modifier = Modifier) {
@@ -227,7 +230,6 @@ private fun ItemsEmptyScreen(modifier: Modifier = Modifier) {
         )
     }
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -273,8 +275,7 @@ private fun ItemScreenSuccessWithSearchPreview(
 
 @Preview(showBackground = true)
 @Composable
-private fun ItemScreenLoadingPreview(
-) {
+private fun ItemScreenLoadingPreview() {
     POSTheme {
         ItemsScreen(
             uiState = UIItemsState(Resource.Loading, null),
@@ -287,15 +288,13 @@ private fun ItemScreenLoadingPreview(
             onSearchClicked = {},
             searchQuery = "",
             onSearchQueryChanged = {},
-
-            )
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun ItemScreenEmptyPreview(
-) {
+private fun ItemScreenEmptyPreview() {
     POSTheme {
         ItemsScreen(
             uiState = UIItemsState(Resource.Empty(), null),
@@ -308,7 +307,6 @@ private fun ItemScreenEmptyPreview(
             onSearchClicked = {},
             searchQuery = "",
             onSearchQueryChanged = {},
-
-            )
+        )
     }
 }

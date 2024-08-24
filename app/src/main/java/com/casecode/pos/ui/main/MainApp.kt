@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -46,14 +44,13 @@ import com.casecode.pos.core.designsystem.component.PosNavigationSuiteScaffold
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.theme.GradientColors
 import com.casecode.pos.core.designsystem.theme.LocalGradientColors
+import com.casecode.pos.core.ui.moveToSignInActivity
 import com.casecode.pos.navigation.PosMainNavHost
 import com.casecode.pos.navigation.PosSaleNavHost
 import com.casecode.pos.navigation.SaleTopLevelDestination
 import com.casecode.pos.navigation.TopLevelDestination
-import com.casecode.pos.utils.moveToSignInActivity
 import timber.log.Timber
 import com.casecode.pos.core.ui.R.string as uiString
-
 
 @Composable
 fun MainScreen(
@@ -62,10 +59,11 @@ fun MainScreen(
 ) {
     val shouldShowGradientBackground =
         appState.currentAdminTopLevelDestination == TopLevelDestination.POS ||
-                appState.currentSaleTopLevelDestination == SaleTopLevelDestination.POS
+            appState.currentSaleTopLevelDestination == SaleTopLevelDestination.POS
     PosBackground(modifier = modifier) {
         PosGradientBackground(
-            gradientColors = if (shouldShowGradientBackground) {
+            gradientColors =
+            if (shouldShowGradientBackground) {
                 LocalGradientColors.current
             } else {
                 GradientColors()
@@ -87,10 +85,8 @@ fun MainScreen(
                 appState = appState,
                 snackbarHostState = snackbarHostState,
             )
-
         }
     }
-
 }
 
 @Composable
@@ -127,17 +123,14 @@ internal fun MainApp(
         }
 
         MainAuthUiState.LoginBySaleEmployee -> {
-
             SaleEmployeeScreens(appState, currentDestination, modifier, snackbarHostState, context)
         }
 
         MainAuthUiState.LoginByNoneEmployee -> {
-            //TODO:handle with not permission for employee
+            // TODO:handle with not permission for employee
             Timber.e("LoginByNoneEmployee")
-
         }
     }
-
 }
 
 @Composable
@@ -153,7 +146,6 @@ private fun AdminScreens(
 
     PosNavigationSuiteScaffold(
         navigationSuiteItems = {
-
             appState.topLevelDestinations.forEach { destination ->
                 val selected =
                     currentDestination.isTopLevelDestinationInHierarchy(destination)
@@ -180,11 +172,9 @@ private fun AdminScreens(
                         .testTag("PosSaleNavItem"),
                 )
             }
-
         },
         windowAdaptiveInfo = windowAdaptiveInfo,
-
-        ) {
+    ) {
         Scaffold(
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
@@ -212,14 +202,16 @@ private fun AdminScreens(
                         onActionClick = currentActionBar.onClick,
                         actionIconContentDescription = stringResource(currentActionBar.actionIconContent),
                         actionIcon = currentActionBar.icon,
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        colors =
+                        TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Color.Transparent,
                         ),
                     )
                 }
 
                 Box(
-                    modifier = Modifier.consumeWindowInsets(
+                    modifier =
+                    Modifier.consumeWindowInsets(
                         if (currentActionBar != null) {
                             WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
                         } else {
@@ -235,7 +227,6 @@ private fun AdminScreens(
                     )
                 }
             }
-
         }
     }
 }
@@ -253,8 +244,9 @@ private fun SaleEmployeeScreens(
     PosNavigationSuiteScaffold(
         navigationSuiteItems = {
             appState.saleTopLevelDestinations.forEach { destination ->
-                val selected = currentDestination
-                    .isSaleTopLevelDestinationInHierarchy(destination)
+                val selected =
+                    currentDestination
+                        .isSaleTopLevelDestinationInHierarchy(destination)
                 item(
                     selected = selected,
                     onClick = { appState.navigateToSaleTopLevelDestination(destination) },
@@ -280,7 +272,8 @@ private fun SaleEmployeeScreens(
         windowAdaptiveInfo = windowAdaptiveInfo,
     ) {
         Scaffold(
-            modifier = modifier.semantics {
+            modifier =
+            modifier.semantics {
                 testTagsAsResourceId = true
             },
             containerColor = Color.Transparent,
@@ -304,16 +297,19 @@ private fun SaleEmployeeScreens(
 
                 if (destination != null) {
                     PosTopAppBar(
-                        titleRes = appState.currentSaleTopLevelDestination?.titleTextId
+                        titleRes =
+                        appState.currentSaleTopLevelDestination?.titleTextId
                             ?: R.string.app_name,
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        colors =
+                        TopAppBarDefaults.centerAlignedTopAppBarColors(
                             containerColor = Color.Transparent,
                         ),
                     )
                 }
 
                 Box(
-                    modifier = Modifier.consumeWindowInsets(
+                    modifier =
+                    Modifier.consumeWindowInsets(
                         WindowInsets(0, 0, 0, 0),
                     ),
                 ) {
@@ -324,13 +320,10 @@ private fun SaleEmployeeScreens(
                         },
                     )
                 }
-
             }
-
         }
     }
 }
-
 
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
     this?.hierarchy?.any {

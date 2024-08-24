@@ -79,21 +79,23 @@ internal fun ItemsContent(
             item {
                 Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
             }
-
         }
-        val scrollbarState = scrollableState.scrollbarState(
-            itemsAvailable = items.size,
-        )
+        val scrollbarState =
+            scrollableState.scrollbarState(
+                itemsAvailable = items.size,
+            )
         scrollableState.DraggableScrollbar(
-            modifier = Modifier
-                .fillMaxHeight()
-                .windowInsetsPadding(WindowInsets.systemBars)
-                .padding(horizontal = 2.dp)
-                .align(Alignment.CenterEnd),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .windowInsetsPadding(WindowInsets.systemBars)
+                    .padding(horizontal = 2.dp)
+                    .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            onThumbMoved = scrollableState.rememberDraggableScroller(
-                itemsAvailable = items.size,
+            onThumbMoved =
+                scrollableState.rememberDraggableScroller(
+                    itemsAvailable = items.size,
             ),
         )
     }
@@ -144,20 +146,24 @@ private fun ItemItem(
             }
         },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        modifier = modifier.combinedClickable(
+        modifier =
+        modifier.combinedClickable(
             onClick = { onClick() },
             onLongClick = { onLongClick() },
             onLongClickLabel = stringResource(R.string.feature_item_dialog_delete_item_title),
         ),
-
-        )
+    )
 }
 
 @Composable
-private fun ItemIcon(itemImageUrl: String?, modifier: Modifier = Modifier) {
+private fun ItemIcon(
+    itemImageUrl: String?,
+    modifier: Modifier = Modifier,
+) {
     if (itemImageUrl.isNullOrEmpty()) {
         Icon(
-            modifier = modifier
+            modifier =
+            modifier
                 .background(Color.Transparent)
                 .padding(4.dp),
             imageVector = PosIcons.EmptyImage,
@@ -187,7 +193,6 @@ private fun ItemItemCardPreview() {
                 onPrintButtonClick = {},
                 onLongClick = {},
             )
-
         }
     }
 }
@@ -205,5 +210,4 @@ private fun ItemsContentPreview(
             onPrintItemClick = { _ -> },
         )
     }
-
 }

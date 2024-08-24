@@ -27,7 +27,6 @@ import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Branch
 
-
 @Composable
 internal fun BranchesList(
     branches: List<Branch>,
@@ -37,31 +36,33 @@ internal fun BranchesList(
     Box(modifier = modifier.fillMaxWidth()) {
         val scrollableState = rememberLazyListState()
         LazyColumn(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            state = scrollableState
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+            state = scrollableState,
         ) {
             branches.forEach { branch ->
                 item(key = branch.branchCode) {
                     BranchItem(branch = branch, onUpdateClick)
-
                 }
             }
-
         }
-        val scrollbarState = scrollableState.scrollbarState(
-            itemsAvailable = branches.size,
-        )
+        val scrollbarState =
+            scrollableState.scrollbarState(
+                itemsAvailable = branches.size,
+            )
         scrollableState.DraggableScrollbar(
-            modifier = Modifier
-                .fillMaxHeight()
-                .windowInsetsPadding(WindowInsets.systemBars)
-                .padding(horizontal = 2.dp)
-                .align(Alignment.CenterEnd),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .windowInsetsPadding(WindowInsets.systemBars)
+                    .padding(horizontal = 2.dp)
+                    .align(Alignment.CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            onThumbMoved = scrollableState.rememberDraggableScroller(
+            onThumbMoved =
+            scrollableState.rememberDraggableScroller(
                 itemsAvailable = branches.size,
             ),
         )
@@ -69,14 +70,21 @@ internal fun BranchesList(
 }
 
 @Composable
-private fun BranchItem(branch: Branch, onUpdateClick: (Branch) -> Unit) {
+private fun BranchItem(
+    branch: Branch,
+    onUpdateClick: (Branch) -> Unit,
+) {
     ElevatedCard(
         Modifier
             .padding(bottom = 8.dp)
             .clickable { onUpdateClick(branch) },
     ) {
         ListItem(
-            headlineContent = { Text(text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_branch_name_hint) + branch.branchName) },
+            headlineContent = {
+                Text(
+                    text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_branch_name_hint) + branch.branchName,
+                )
+            },
             supportingContent = {
                 Text(text = branch.phoneNumber)
             },
@@ -86,16 +94,15 @@ private fun BranchItem(branch: Branch, onUpdateClick: (Branch) -> Unit) {
                     style = MaterialTheme.typography.titleMedium,
                 )
             },
-            colors = ListItemDefaults.colors(
+            colors =
+            ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
-
-            )
+        )
     }
-
 }
 
 @com.casecode.pos.core.ui.DevicePreviews
@@ -103,7 +110,8 @@ private fun BranchItem(branch: Branch, onUpdateClick: (Branch) -> Unit) {
 fun BranchItemPreview() {
     POSTheme {
         BranchesList(
-            branches = arrayListOf(
+            branches =
+            arrayListOf(
                 Branch(branchCode = 1, branchName = "branch1", phoneNumber = "0000000000"),
                 Branch(branchCode = 2, branchName = "branch2", phoneNumber = "0000000000"),
             ),

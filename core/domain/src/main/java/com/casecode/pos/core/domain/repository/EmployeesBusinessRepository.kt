@@ -9,7 +9,13 @@ typealias ResourceEmployees = Resource<List<Employee>>
 
 interface EmployeesBusinessRepository {
     fun getEmployees(): Flow<ResourceEmployees>
+
     suspend fun setEmployees(employees: MutableList<Employee>): AddEmployees
+
     suspend fun addEmployee(employees: Employee): Resource<Boolean>
-    suspend fun updateEmployee(employees: Employee, oldEmployee: Employee): Resource<Boolean>
+
+    suspend fun updateEmployee(
+        employees: Employee,
+        oldEmployee: Employee,
+    ): Resource<Boolean>
 }

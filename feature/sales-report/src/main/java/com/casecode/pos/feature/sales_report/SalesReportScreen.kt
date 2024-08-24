@@ -75,7 +75,6 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Invoice
 import com.casecode.pos.core.model.data.users.InvoiceGroup
-
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +93,7 @@ fun SalesReportRoute(
             onSalesReportDetailsClick()
             viewModel.setSelectedInvoice(it)
         },
-        onBackClick =  onBackClick,
+        onBackClick = onBackClick,
         onActionClick = { showDialogDate = true },
         onClearFilterDate = { viewModel.setDateInvoiceSelected(null) },
     )
@@ -152,16 +151,14 @@ fun SalesReportScreen(
                         contentDescription = null,
                     )
                 }
-
             }
         },
-
-
-        ) { padding ->
+    ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
         ) {
             PosTopAppBar(
                 modifier = modifier,
@@ -171,9 +168,10 @@ fun SalesReportScreen(
                 onActionClick = { onActionClick() },
                 actionIconContentDescription = null,
                 actionIcon = PosIcons.Calender,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+                colors =
+                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent,
+                    ),
                 onNavigationClick = { onBackClick() },
             )
             AnimatedContent(
@@ -183,7 +181,8 @@ fun SalesReportScreen(
                         animationSpec = tween(3000),
                     ) togetherWith fadeOut(animationSpec = tween(3000))
                 },
-                modifier = Modifier.clickable(
+                modifier =
+                Modifier.clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                 ) {
@@ -200,7 +199,8 @@ fun SalesReportScreen(
                 when (targetState) {
                     is Resource.Loading -> {
                         PosLoadingWheel(
-                            modifier = modifier
+                            modifier =
+                            modifier
                                 .fillMaxSize()
                                 .wrapContentSize(Alignment.Center),
                             contentDesc = "LoadingItems",
@@ -234,14 +234,9 @@ fun SalesReportScreen(
                         }
                     }
                 }
-
             }
-
         }
-
     }
-
-
 }
 
 @Composable
@@ -292,18 +287,19 @@ fun SalesReportGroupList(
             }
 
             item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing)) }
-
         }
         val scrollbarState = scrollableState.scrollbarState(itemsAvailable = invoiceGroups.size)
         scrollableState.DraggableScrollbar(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxHeight()
                 .windowInsetsPadding(WindowInsets.systemBars)
                 .padding(horizontal = 2.dp)
                 .align(CenterEnd),
             state = scrollbarState,
             orientation = Orientation.Vertical,
-            onThumbMoved = scrollableState.rememberDraggableScroller(
+            onThumbMoved =
+            scrollableState.rememberDraggableScroller(
                 itemsAvailable = invoiceGroups.size,
             ),
         )
@@ -315,10 +311,10 @@ fun SalesReportGroupItem(
     invoiceGroup: InvoiceGroup,
     onItemClick: (Invoice) -> Unit,
 ) {
-
     Column(modifier = Modifier.padding(start = 8.dp)) {
         Row(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .height(IntrinsicSize.Min)
                 .padding(start = 4.dp),
         ) {
@@ -328,7 +324,8 @@ fun SalesReportGroupItem(
             )
             VerticalDivider(Modifier.padding(horizontal = 4.dp))
             Text(
-                text = stringResource(
+                text =
+                stringResource(
                     com.casecode.pos.core.ui.R.string.core_ui_currency,
                     invoiceGroup.totalInvoiceGroup,
                 ),
@@ -345,12 +342,15 @@ fun SalesReportGroupItem(
                 )
             }
         }
-
     }
 }
 
 @Composable
-fun InvoiceCard(modifier: Modifier = Modifier, invoice: Invoice, onItemClick: (Invoice) -> Unit) {
+fun InvoiceCard(
+    modifier: Modifier = Modifier,
+    invoice: Invoice,
+    onItemClick: (Invoice) -> Unit,
+) {
     ElevatedCard(
         modifier = modifier.clickable { onItemClick(invoice) },
     ) {
@@ -368,7 +368,8 @@ fun InvoiceCard(modifier: Modifier = Modifier, invoice: Invoice, onItemClick: (I
             )
             HorizontalDivider(Modifier.padding(vertical = 4.dp))
             Text(
-                text = stringResource(
+                text =
+                stringResource(
                     com.casecode.pos.core.ui.R.string.core_ui_currency,
                     invoice.total.toString(),
                 ),
@@ -378,16 +379,16 @@ fun InvoiceCard(modifier: Modifier = Modifier, invoice: Invoice, onItemClick: (I
     }
 }
 
-
 @Preview(device = "spec:width=360dp,height=640dp,dpi=320", showBackground = true)
 @Composable
 fun InvoiceScreenSuccessPreview() {
     SalesReportScreen(
-        uiSalesReportState = UiSalesReportState(
-            resourceInvoiceGroups = Resource.Success(
+        uiSalesReportState =
+        UiSalesReportState(
+            resourceInvoiceGroups =
+            Resource.Success(
                 listOf(
                     InvoiceGroup(
-
                         "12 june 2024",
                         listOf(
                             Invoice(
@@ -463,8 +464,7 @@ fun InvoiceScreenSuccessPreview() {
                                 customer = null,
                                 items = listOf(),
                             ),
-
-                            ),
+                        ),
                     ),
                 ),
             ),
@@ -508,13 +508,13 @@ fun InvoiceScreenLoadingPreview() {
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun SalesReportGroupItemPreview() {
     POSTheme {
         SalesReportGroupItem(
-            invoiceGroup = InvoiceGroup(
+            invoiceGroup =
+            InvoiceGroup(
                 "",
                 listOf(
                     Invoice(
@@ -570,7 +570,8 @@ fun SalesReportGroupItemPreview() {
 fun InvoiceItemPreview() {
     POSTheme {
         InvoiceCard(
-            invoice = Invoice(
+            invoice =
+            Invoice(
                 invoiceId = "12",
                 date = Date(),
                 createdBy = "1423",

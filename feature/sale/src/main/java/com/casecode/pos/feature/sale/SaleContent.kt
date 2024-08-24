@@ -43,7 +43,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,8 +53,6 @@ import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.ui.scanOptions
-import timber.log.Timber
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,9 +72,8 @@ fun ExposedDropdownMenuBoxSearch(
             } else {
                 items.filter {
                     it.name.contains(searchQuery, ignoreCase = true) ||
-                            it.sku.contains(searchQuery, ignoreCase = true) ||
-                            it.sku.contains(normalizeNumber(searchQuery), ignoreCase = true)
-
+                        it.sku.contains(searchQuery, ignoreCase = true) ||
+                        it.sku.contains(normalizeNumber(searchQuery), ignoreCase = true)
                 }
             }
         }
@@ -99,7 +95,8 @@ fun ExposedDropdownMenuBoxSearch(
                     style = MaterialTheme.typography.bodySmall,
                 )
             },
-            modifier = Modifier
+            modifier =
+            Modifier
                 .menuAnchor(MenuAnchorType.PrimaryEditable)
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
@@ -110,7 +107,6 @@ fun ExposedDropdownMenuBoxSearch(
                     } else {
                         false
                     }
-
                 },
             maxLines = 1,
             singleLine = true,
@@ -132,7 +128,8 @@ fun ExposedDropdownMenuBoxSearch(
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(
+            keyboardActions =
+            KeyboardActions(
                 onSearch = {
                     keyboardController?.hide()
                 },
@@ -142,8 +139,7 @@ fun ExposedDropdownMenuBoxSearch(
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { setExpanded(false) },
-
-                ) {
+            ) {
                 filteredItems.forEach { item ->
                     DropdownMenuItem(
                         text = { ItemDropMenuItem(item) },
@@ -152,13 +148,11 @@ fun ExposedDropdownMenuBoxSearch(
                             setExpanded(false)
                             searchQuery = ""
                         },
-
-                        )
+                    )
                 }
             }
         }
     }
-
 }
 
 private fun normalizeNumber(input: String): String {
@@ -199,7 +193,6 @@ fun ItemDropMenuItem(item: Item) {
     }
 }
 
-
 @Composable
 fun ColumnScope.SaleItems(
     itemsInvoice: Set<Item>,
@@ -208,7 +201,8 @@ fun ColumnScope.SaleItems(
 ) {
     val scrollableState = rememberLazyListState()
     LazyColumn(
-        modifier = Modifier
+        modifier =
+        Modifier
             .weight(1f)
             .padding(horizontal = 8.dp),
         contentPadding = PaddingValues(vertical = 8.dp),
@@ -228,8 +222,6 @@ fun ColumnScope.SaleItems(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -247,10 +239,11 @@ internal fun ItemSale(
         headlineContent = { Text(name, fontWeight = FontWeight.Bold) },
         supportingContent = {
             Row(modifier = Modifier.height(IntrinsicSize.Min)) {
-                val formattedQuantity = stringResource(
-                    com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format,
-                    quantity,
-                )
+                val formattedQuantity =
+                    stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format,
+                        quantity,
+                    )
                 Text(formattedQuantity)
                 VerticalDivider(
                     modifier = Modifier.padding(horizontal = 4.dp),
@@ -274,18 +267,20 @@ internal fun ItemSale(
                 )
             }
         },
-
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),
         modifier = Modifier.clickable(onClick = { onUpdateQuantity() }),
-
-        )
+    )
 }
 
 @Composable
-private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
+private fun ItemIcon(
+    topicImageUrl: String,
+    modifier: Modifier = Modifier,
+) {
     if (topicImageUrl.isEmpty()) {
         Icon(
-            modifier = modifier
+            modifier =
+            modifier
                 .background(Color.Transparent)
                 .padding(4.dp),
             imageVector = PosIcons.EmptyImage,

@@ -65,6 +65,7 @@ fun PosTopAppBar(
         modifier = modifier.testTag("posTopAppBar"),
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PosTopAppBar(
@@ -75,8 +76,7 @@ fun PosTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     onNavigationClick: () -> Unit = {},
     action: @Composable RowScope.() -> Unit = {},
-
-    ) {
+) {
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(id = titleRes)) },
         navigationIcon = {
@@ -95,7 +95,6 @@ fun PosTopAppBar(
         modifier = modifier.testTag("posTopAppBar"),
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Top App Bar")

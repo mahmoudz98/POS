@@ -10,20 +10,18 @@ import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import javax.inject.Inject
 
-class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepository {
+class TestSubscriptionsRepository
+    @Inject
+    constructor() : SubscriptionsRepository {
+        private var subscriptions: List<Subscription> = subscriptionsFake()
 
+        private var shouldReturnError = false
+        private var shouldReturnEmpty = false
 
-    private var subscriptions: List<Subscription> = subscriptionsFake()
-
-
-    private var shouldReturnError = false
-    private var shouldReturnEmpty = false
-
-
-    @Before
-    fun setup() {
-        shouldReturnError = false
-        shouldReturnEmpty = false
+        @Before
+        fun setup() {
+            shouldReturnError = false
+            shouldReturnEmpty = false
     }
 
     /**
@@ -31,17 +29,16 @@ class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepositor
      *
      * @return A Flow of plans.
      */
-    override fun getSubscriptions(): Flow<SubscriptionsResource> = flow {
-
-        if (shouldReturnError) {
-            emit(Resource.error("Error"))
-        } else if (shouldReturnEmpty) {
-            emit(Resource.empty(EmptyType.DATA, "Empty"))
-        } else {
-            emit(Resource.success(subscriptions))
+    override fun getSubscriptions(): Flow<SubscriptionsResource> =
+        flow {
+            if (shouldReturnError) {
+                emit(Resource.error("Error"))
+            } else if (shouldReturnEmpty) {
+                emit(Resource.empty(EmptyType.DATA, "Empty"))
+            } else {
+                emit(Resource.success(subscriptions))
+            }
         }
-
-    }
 
     fun sendSubscriptions(subscriptions: List<Subscription>) {
         this.subscriptions = subscriptions
@@ -55,20 +52,25 @@ class TestSubscriptionsRepository @Inject constructor() : SubscriptionsRepositor
         shouldReturnEmpty = value
     }
 
-    private fun subscriptionsFake(): List<Subscription> {
-        return listOf(
+    private fun subscriptionsFake(): List<Subscription> =
+        listOf(
             Subscription(
                 duration = 30,
-                cost = 0, type = "basic", permissions = listOf("write", "read", "admin"),
+                cost = 0,
+                type = "basic",
+                permissions = listOf("write", "read", "admin"),
             ),
             Subscription(
                 duration = 30,
-                cost = 20, type = "pro", permissions = listOf("write", "read", "admin"),
+                cost = 20,
+                type = "pro",
+                permissions = listOf("write", "read", "admin"),
             ),
             Subscription(
                 duration = 90,
-                cost = 60, type = "premium", permissions = listOf("write", "read", "admin"),
+                cost = 60,
+                type = "premium",
+                permissions = listOf("write", "read", "admin"),
             ),
         )
     }
-}

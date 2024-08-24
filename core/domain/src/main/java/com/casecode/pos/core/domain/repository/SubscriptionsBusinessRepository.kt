@@ -7,10 +7,7 @@ import kotlinx.coroutines.flow.Flow
 typealias AddSubscriptionBusiness = Resource<Boolean>
 
 interface SubscriptionsBusinessRepository {
-    suspend fun setSubscriptionBusiness(
-        subscriptionBusiness: SubscriptionBusiness,
-    ): AddSubscriptionBusiness
+    suspend fun setSubscriptionBusiness(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness
 
     fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>>
-
 }

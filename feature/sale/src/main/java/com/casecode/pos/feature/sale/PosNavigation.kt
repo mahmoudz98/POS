@@ -10,7 +10,6 @@ const val POS_ROUTE = "pos_route"
 fun NavGraphBuilder.posScreen(onGoToItems: () -> Unit) {
     composable(
         route = POS_ROUTE,
-
     ) {
         PosScreen(onGoToItems = onGoToItems)
     }

@@ -19,16 +19,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object FirebaseModule {
-
     /**
      * Configures the Firestore settings.
      */
-    private val setting = firestoreSettings {
-        // Use memory cache
-        setLocalCacheSettings(memoryCacheSettings {})
-        // Use persistent disk cache (default)
-        setLocalCacheSettings(persistentCacheSettings { })
-    }
+    private val setting =
+        firestoreSettings {
+            // Use memory cache
+            setLocalCacheSettings(memoryCacheSettings {})
+            // Use persistent disk cache (default)
+            setLocalCacheSettings(persistentCacheSettings { })
+        }
 
     /**
      * Provides an instance of FirebaseAuth.
@@ -37,7 +37,6 @@ object FirebaseModule {
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
-
     /**
      * Provides an instance of FirebaseFirestore.
      *
@@ -45,9 +44,10 @@ object FirebaseModule {
      */
     @Provides
     @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance().apply {
-        firestoreSettings = setting
-    }
+    fun provideFirebaseFirestore(): FirebaseFirestore =
+        FirebaseFirestore.getInstance().apply {
+            firestoreSettings = setting
+        }
 
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
@@ -56,9 +56,13 @@ object FirebaseModule {
     fun provideSignInRequest(): GetGoogleIdOption {
         val hashedNonce = createHashedNonce()
         val webClient = BuildConfig.web_client_id
-        return GetGoogleIdOption.Builder().setFilterByAuthorizedAccounts(false)
-            .setServerClientId(webClient).setAutoSelectEnabled(true).setNonce(hashedNonce).build()
-
+        return GetGoogleIdOption
+            .Builder()
+            .setFilterByAuthorizedAccounts(false)
+            .setServerClientId(webClient)
+            .setAutoSelectEnabled(true)
+            .setNonce(hashedNonce)
+            .build()
     }
 
     private fun createHashedNonce(): String {

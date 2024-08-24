@@ -12,9 +12,11 @@ import org.junit.runners.model.Statement
 class CoroutinesTestRule(
     private val dispatcher: TestDispatcher = StandardTestDispatcher(),
 ) : TestRule {
-
-    override fun apply(base: Statement?, description: Description?): Statement {
-        return object : Statement() {
+    override fun apply(
+        base: Statement?,
+        description: Description?,
+    ): Statement =
+        object : Statement() {
             override fun evaluate() {
                 beforeEach()
                 try {
@@ -24,7 +26,6 @@ class CoroutinesTestRule(
                 }
             }
         }
-    }
 
     private fun beforeEach() {
         Dispatchers.setMain(dispatcher)

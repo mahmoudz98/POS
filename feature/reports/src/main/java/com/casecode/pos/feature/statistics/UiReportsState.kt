@@ -17,5 +17,4 @@ data class UiReportsState(
         get() {
             return invoices.sumOf { it.total }
         }
-
 }

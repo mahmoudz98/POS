@@ -10,9 +10,8 @@ class InvoicesViewModelTest : BaseTest() {
 
     // Subject under test
     private lateinit var viewModel: SalesReportViewModel
+
     override fun init() {
-        viewModel = SalesReportViewModel(getInvoicesUseCase)
+        viewModel = SalesReportViewModel(getInvoices)
     }
-
-
 }
