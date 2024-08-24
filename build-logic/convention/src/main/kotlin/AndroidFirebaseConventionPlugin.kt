@@ -3,11 +3,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
-
-class AndroidFirebaseConventionPlugin: Plugin<Project> {
+class AndroidFirebaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-
             dependencies {
                 val bom = libs.findLibrary("firebase-bom").get()
                 add("implementation", platform(bom))
@@ -16,8 +14,9 @@ class AndroidFirebaseConventionPlugin: Plugin<Project> {
                 "api"(libs.findLibrary("firebase.auth").get())
                 "implementation"(libs.findLibrary("firebase.firestore").get())
                 "implementation"(libs.findLibrary("firebase.storage").get())
+                "implementation"(libs.findLibrary("firebase.analytics").get())
+                "implementation"(libs.findLibrary("firebase.crashlytics").get())
                 "implementation"(libs.findLibrary("firebase.performance").get())
-
             }
         }
     }

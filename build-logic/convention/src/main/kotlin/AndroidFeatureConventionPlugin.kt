@@ -1,7 +1,6 @@
 import com.android.build.gradle.LibraryExtension
 import com.casecode.pos.configureGradleManagedDevices
 import com.casecode.pos.libs
-
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -31,7 +30,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 // TODO: remove and use kotlin text lib
                 add("testImplementation", libs.findLibrary("test.hamcrest").get())
                 add("testCompileOnly", libs.findLibrary("test.hamcrest.library").get())
-
 
                 add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
             }
