@@ -22,6 +22,9 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = PosBuildType.DEBUG.applicationIdSuffix
+            vcsInfo {
+                include = true
+            }
         }
         release {
             isMinifyEnabled = true
@@ -37,12 +40,11 @@ android {
         }
     }
 
-     testOptions {
+    testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
     }
-
 
     namespace = "com.casecode.pos"
 }
@@ -78,11 +80,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.tracing.ktx)
 
-
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
-
-
 
     debugCompileOnly(libs.kotlinx.coroutines.debug)
     // Debug tools
@@ -95,8 +94,8 @@ dependencies {
     kspTest(libs.hilt.compiler)
 
     // assertion
-   // testImplementation(libs.test.hamcrest)
-    //testImplementation(libs.test.hamcrest.library)
+    // testImplementation(libs.test.hamcrest)
+    // testImplementation(libs.test.hamcrest.library)
 
     // mockito with kotlin
     testImplementation(kotlin("test"))
@@ -113,7 +112,6 @@ dependencies {
 
     // AndroidX Test - Hilt testing
     kspAndroidTest(libs.hilt.compiler)
-
 }
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
