@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="229pt" height="44pt" viewBox="0 0 228.98 44">
     <g class="graph">
-        <path fill="#fff" stroke="transparent" d="M0 44V0h228.98v44H0z"/>
+        <path d="M0 44V0h228.98v44z" fill="#fff" stroke="transparent" />
         <g class="node" transform="translate(4 40)">
             <ellipse cx="110.49" cy="-18" fill="none" stroke="#000" rx="110.48" ry="18"/>
             <text x="110.49" y="-14.3" font-family="Times,serif" font-size="14" text-anchor="middle">:core:datastore_proto</text>
