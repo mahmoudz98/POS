@@ -139,6 +139,10 @@ class PrinterViewModel
             )
         printerConnection = printerConnectionFactory.create(PrinterConnectionType.ETHERNET)
         printerConnection.print(context, printerInfo, PrintContent.Test)
+
+
+
+        collectPrinterState()
     }
 
     @SuppressLint("MissingPermission")
@@ -161,6 +165,7 @@ class PrinterViewModel
             )
         printerConnection = printerConnectionFactory.create(PrinterConnectionType.BLUETOOTH)
         printerConnection.print(context, printerInfo, PrintContent.Test)
+        collectPrinterState()
     }
 
     fun testPrinterUsb(
@@ -178,5 +183,14 @@ class PrinterViewModel
             )
         printerConnection = printerConnectionFactory.create(PrinterConnectionType.USB)
         printerConnection.print(context, printerInfo, PrintContent.Test)
+        collectPrinterState()
+    }
+
+    private fun collectPrinterState() {
+        launchCatching {
+            printerConnection.printerStateManager.printerState.collect {
+                printerState.value = it
+            }
+        }
     }
 }

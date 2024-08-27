@@ -14,6 +14,7 @@ fun formatIPAddress(input: String): String {
 }
 
 fun validateIPAddress(ip: String): Int? {
+    if (ip.isBlank()) return R.string.feature_setting_printer_info_error_ethernet_ip_address_empty
     val segments = ip.split('.')
     if (segments.size > 4 || segments.size < 4) {
         return R.string.feature_setting_printer_info_error_ethernet_ip_address_invalid
