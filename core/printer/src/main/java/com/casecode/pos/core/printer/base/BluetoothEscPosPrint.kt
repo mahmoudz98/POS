@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.DisplayMetrics
 import com.casecode.pos.core.model.data.PrinterConnectionInfo
 import com.casecode.pos.core.model.data.PrinterInfo
@@ -22,80 +23,109 @@ import com.dantsu.escposprinter.textparser.PrinterTextParserImg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 class BluetoothEscPosPrint
-    @Inject
-    constructor() : EscPosPrint() {
-        @SuppressLint("MissingPermission")
-        override suspend fun takePrints(printerData: EscPosPrinter): PrinterStatus =
-            withContext(Dispatchers.IO) {
-                Timber.e("takePrints:BluetoothEscPosPrint")
-                printerStateManager.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
-                val deviceConnection = (printerData.getPrinterConnection() as BluetoothConnection?)
+@Inject
+constructor() : EscPosPrint() {
+    @SuppressLint("MissingPermission")
+    override suspend fun takePrints(printerData: EscPosPrinter): PrinterStatus {
 
-                val updatedPrinterData: EscPosPrinter =
-                    if (deviceConnection == null) {
-                        val pairedDevice = BluetoothPrintersConnections.selectFirstPaired()
-                        EscPosPrinter(
-                            pairedDevice,
-                            printerData.printerDpi,
-                            printerData.printerWidthMM,
-                            printerData.printerNbrCharactersPerLine,
-                        ).apply {
-                            setTextsToPrint(printerData.getTextsToPrint())
-                        }
-                    } else {
-                        try {
-                            deviceConnection.connect()
-                            printerData
-                        } catch (e: EscPosConnectionException) {
-                            e.printStackTrace()
-                            logService.logNonFatalCrash(e)
-                            val log =
-                                """ 
-                                deviceConnection.deviceName=${deviceConnection.device.name}
-                                deviceConnection.deviceAddress=${deviceConnection.device.address}
-                                deviceConnection.isConnected=${deviceConnection.isConnected}
-                                """.trimIndent()
-                            logService.log(log)
-                            logService.log("TextsToPrint = ${printerData.getTextsToPrint().map { it }}")
-                            return@withContext PrinterStatus(
-                                printerData,
-                                PrinterStatusCode.FINISH_PRINTER_DISCONNECTED,
-                            )
-                        }
+        Timber.e("takePrints:BluetoothEscPosPrint")
+        printerStateManager.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
+        val deviceConnection = (printerData.getPrinterConnection() as? BluetoothConnection)
+
+        val updatedPrinterData: EscPosPrinter =
+            if (deviceConnection == null) {
+                Timber.e("No paired Bluetooth devices found")
+                val pairedDevice = BluetoothPrintersConnections.selectFirstPaired()
+                EscPosPrinter(
+                    pairedDevice,
+                    printerData.printerDpi,
+                    printerData.printerWidthMM,
+                    printerData.printerNbrCharactersPerLine,
+                ).apply {
+                    setTextsToPrint(printerData.getTextsToPrint())
+                }
+            } else {
+                try {
+
+                    if (!deviceConnection.isConnected) {
+                        attemptConnection(deviceConnection)
                     }
-
-                super.takePrints(updatedPrinterData)
+                    printerData
+                } catch (e: EscPosConnectionException) {
+                    return handleConnectionException(e, deviceConnection, printerData)
+                }
             }
+        return super.takePrints(updatedPrinterData)
+    }
 
-        override fun print(
-            context: Context,
-            printerInfo: PrinterInfo,
-            printContent: PrintContent,
-        ) {
-            val bluetoothConnection =
-                BluetoothConnection(
-                    getBluetoothDeviceByMacAddress(
-                        context,
-                        (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Bluetooth).macAddress,
-                    ),
-                )
+    @Throws(IOException::class)
+    private fun attemptConnection(deviceConnection: BluetoothConnection) {
+        var attempts = 0
+        while (attempts < 3 && !deviceConnection.isConnected) {
+            try {
+                deviceConnection.connect()
+                attempts = 3 // Exit loop if successful
+            } catch (e: EscPosConnectionException) {
+                Timber.e("Retrying Bluetooth connection, attempts left: $attempts")
+                attempts++
+                if (attempts >= 3) {
+                    throw e // Rethrow the exception after all retries are exhausted
+                }
+            }
+        }
+    }
 
-            execute(
-                getEscPosPrinterService(
-                    bluetoothConnection,
-                    printContent,
-                    printerInfo.widthPaper.toFloat(),
+    @SuppressLint("MissingPermission")
+    private fun handleConnectionException(
+        e: EscPosConnectionException,
+        deviceConnection: BluetoothConnection,
+        printerData: EscPosPrinter,
+    ): PrinterStatus {
+        e.printStackTrace()
+        logService.logNonFatalCrash(e)
+        val log = """
+            deviceConnection.deviceName=${deviceConnection.device.name}
+            deviceConnection.deviceAddress=${deviceConnection.device.address}
+            deviceConnection.isConnected=${deviceConnection.isConnected}
+        """.trimIndent()
+        logService.log(log)
+        logService.log("TextsToPrint = ${printerData.getTextsToPrint().map { it }}")
+        return PrinterStatus(
+            printerData,
+            PrinterStatusCode.FINISH_PRINTER_DISCONNECTED,
+        )
+    }
+
+    override fun print(
+        context: Context,
+        printerInfo: PrinterInfo,
+        printContent: PrintContent,
+    ) {
+        val bluetoothConnection =
+            BluetoothConnection(
+                getBluetoothDeviceByMacAddress(
                     context,
+                    (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Bluetooth).macAddress,
                 ),
             )
-        }
 
-        private fun getBluetoothDeviceByMacAddress(
-            context: Context,
-            macAddress: String,
+        execute(
+            getEscPosPrinterService(
+                bluetoothConnection,
+                printContent,
+                printerInfo.widthPaper.toFloat(),
+                context,
+            ),
+        )
+    }
+
+    private fun getBluetoothDeviceByMacAddress(
+        context: Context,
+        macAddress: String,
     ): BluetoothDevice? {
         val bluetoothManager: BluetoothManager? =
             context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
@@ -121,6 +151,7 @@ class BluetoothEscPosPrint
             printerStateManager._printerState.value =
                 PrinterState.Error(R.string.core_printer_state_bluetooth_message_error_invalid_mac_address)
             Timber.e("Invalid MAC address: $macAddress")
+            e.printStackTrace()
             null
         }
     }
@@ -167,4 +198,4 @@ class BluetoothEscPosPrint
             Timber.e("textToPrint: $textToPrint")
             addTextToPrint(textToPrint)
         }
-    }
+}

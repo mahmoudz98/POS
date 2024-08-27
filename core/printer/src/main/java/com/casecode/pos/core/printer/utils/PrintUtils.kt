@@ -55,6 +55,7 @@ object PrintUtils {
         (
                 "[C]<img>" + logo + "</img>\n" +
                         "[C]<u><font size='big-4'>POS</font></u>\n" +
+                        "[C]<u><font size='big-4'>نقطه بيع</font></u>\n" +
                         "<u></u>" +
                         "[C]<u><font size='big'>Item test1</font></u>\n" +
                         "[L]<b>item 1</b>[R]20.00$\n" +

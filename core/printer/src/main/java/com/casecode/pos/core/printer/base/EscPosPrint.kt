@@ -16,6 +16,7 @@ import com.dantsu.escposprinter.exceptions.EscPosParserException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -48,7 +49,7 @@ abstract class EscPosPrint {
                         printerData.printerDpi,
                         printerData.printerWidthMM,
                         printerData.printerNbrCharactersPerLine,
-                        EscPosCharsetEncoding("windows-1252", 16),
+                        EscPosCharsetEncoding("windows-1256", 16),
                     )
                 //  printer.useEscAsteriskCommand(true)
 
@@ -65,6 +66,8 @@ abstract class EscPosPrint {
                 printerStateManager.publishState(PrinterStatusCode.PROGRESS_PRINTED)
                 PrinterStatus(printerData, PrinterStatusCode.FINISH_SUCCESS)
             } catch (e: Exception) {
+                ensureActive()
+                deviceConnection?.disconnect()
                 logService.logNonFatalCrash(e)
                 handleException(e, printerData)
             }

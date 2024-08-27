@@ -34,6 +34,7 @@ class UsbEscPosPrint
         ) {
             val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
             val usbConnection = UsbPrintersConnections.selectFirstConnected(context)
+
             if (usbConnection != null && usbManager != null) {
                 val permissionIntent =
                     PendingIntent.getBroadcast(
