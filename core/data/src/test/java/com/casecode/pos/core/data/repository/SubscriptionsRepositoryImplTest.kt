@@ -1,6 +1,5 @@
 package com.casecode.pos.core.data.repository
 
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
@@ -76,7 +75,7 @@ class SubscriptionsRepositoryImplTest {
             val subscriptionsResponse = repository.getSubscriptions().first()
 
             // Then
-            assertThat(subscriptionsResponse, equalTo(Resource.empty(EmptyType.DATA, "Empty")))
+            assertThat(subscriptionsResponse, equalTo(Resource.empty("Empty")))
         }
 
     private fun subscriptionsFake(): List<Subscription> =

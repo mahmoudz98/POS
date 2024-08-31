@@ -9,6 +9,7 @@ import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.model.data.users.StoreType
+import com.casecode.pos.core.testing.service.TestAuthService
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -43,6 +44,7 @@ class BusinessRepositoryImplTest {
 
     // subject under test
     private lateinit var businessRepository: BusinessRepositoryImpl
+    private val testAuthService = TestAuthService()
 
     private val uid = "test"
 
@@ -52,8 +54,8 @@ class BusinessRepositoryImplTest {
 
     @Before
     fun setup() {
-    /*     businessRepository =
-             BusinessRepositoryImpl(firestore, testDispatcher)*/
+        businessRepository =
+            BusinessRepositoryImpl(firestore, testAuthService, testDispatcher)
     }
 
     @After
