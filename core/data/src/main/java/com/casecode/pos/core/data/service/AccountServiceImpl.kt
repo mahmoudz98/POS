@@ -47,7 +47,6 @@ class AccountServiceImpl
         private val googleIdOption: GetGoogleIdOption,
         private val firebaseAuth: FirebaseAuth,
         private val firestore: FirebaseFirestore,
-        private val authService: AuthService,
         private val posPreferencesDataSource: PosPreferencesDataSource,
         @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     ) : AccountService {
@@ -64,30 +63,48 @@ class AccountServiceImpl
                     if (authResult.user != null) {
                         Resource.success(R.string.core_data_sign_in_success)
                     } else {
-                        Resource.empty(null, R.string.core_data_sign_in_failure)
+                        Resource.empty(R.string.core_data_sign_in_failure)
                     }
-                } catch (e: GetCredentialCancellationException) {
-                    Timber.e(e)
-                    Resource.error(R.string.core_data_sign_in_cancel)
-                } catch (e: GetCredentialException) {
-                    Timber.e(e)
-                    Resource.error(R.string.core_data_sign_in_exception)
-                } catch (e: UnsupportedApiCallException) {
-                    Timber.e("UnsupportedApiCallException: $e")
-                    Resource.error(R.string.core_data_unsupported_api_call)
-                } catch (e: FirebaseAuthInvalidCredentialsException) {
-                    Resource.error(e.message)
-                } catch (e: FirebaseAuthException) {
-                    Timber.e("Sign-in failed with FirebaseUserException: ${e.message}")
-                    Resource.error(R.string.core_data_sign_in_api_exception)
-                } catch (e: Exception) {
-                    Timber.e("Sign-in failed with unexpected exception: ${e.message}")
-                    Resource.error(R.string.core_data_sign_in_failure)
+
+                    } catch (e: Exception) {
+                        handleSignInException(e)
+                    }
                 }
             }
         }
-    }
 
+    private fun handleSignInException(e: Exception): Resource<Int> {
+        return when (e) {
+            is GetCredentialCancellationException -> {
+                Timber.e(e)
+                Resource.error(R.string.core_data_sign_in_cancel)
+            }
+
+            is GetCredentialException -> {
+                Timber.e(e)
+                Resource.error(R.string.core_data_sign_in_exception)
+            }
+
+            is UnsupportedApiCallException -> {
+                Timber.e("UnsupportedApiCallException: $e")
+                Resource.error(R.string.core_data_unsupported_api_call)
+            }
+
+            is FirebaseAuthInvalidCredentialsException -> {
+                Resource.error(e.message)
+            }
+
+            is FirebaseAuthException -> {
+                Timber.e("Sign-in failed with FirebaseUserException: ${e.message}")
+                Resource.error(R.string.core_data_sign_in_api_exception)
+            }
+
+            else -> {
+                Timber.e("Sign-in failed with unexpected exception: ${e.message}")
+                Resource.error(R.string.core_data_sign_in_failure)
+            }
+        }
+    }
     private suspend fun retrieveGoogleIdToken(activityContext: Context): String {
         val credentialRequest =
             GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
@@ -151,7 +168,7 @@ class AccountServiceImpl
                         .await()
                 if (docRef.exists()) {
                     val data = docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
-                    val isCompletedStep = data as? Boolean ?: false
+                    val isCompletedStep = data as? Boolean == true
                     isCompletedStep
                 } else {
                     false
