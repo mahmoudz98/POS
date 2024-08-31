@@ -14,10 +14,10 @@ class TestAuthService
 
         override suspend fun hasUser(): Boolean = true
 
-        override suspend fun currentUserId(): String = "uid"
+    override suspend fun currentUserId(): String = "uidTest"
 
     override suspend fun currentNameLogin(): String {
-        TODO("Not yet implemented")
+        return "TestName"
     }
 
     override val currentUser: Flow<FirebaseUser?> = flowOf(null)

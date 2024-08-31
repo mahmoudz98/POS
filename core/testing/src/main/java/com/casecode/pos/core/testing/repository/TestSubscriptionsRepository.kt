@@ -2,7 +2,6 @@ package com.casecode.pos.core.testing.repository
 
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsResource
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import kotlinx.coroutines.flow.Flow
@@ -34,7 +33,7 @@ class TestSubscriptionsRepository
             if (shouldReturnError) {
                 emit(Resource.error("Error"))
             } else if (shouldReturnEmpty) {
-                emit(Resource.empty(EmptyType.DATA, "Empty"))
+                emit(Resource.empty("Empty"))
             } else {
                 emit(Resource.success(subscriptions))
             }
