@@ -6,7 +6,6 @@ import com.casecode.pos.core.model.data.LoginStateResult
 import com.casecode.pos.core.model.data.permissions.Permission
 import com.casecode.pos.core.model.data.users.Employee
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -34,7 +33,6 @@ class PosPreferencesDataSourceTest {
     @Test
     fun shouldGetNotSignInByDefault() =
         runTest {
-            println(" coroutineContext: $coroutineContext")
             assertEquals(subject.loginData.first(), LoginStateResult.NotSignIn)
         }
 
@@ -48,10 +46,9 @@ class PosPreferencesDataSourceTest {
     @Test
     fun setLoginWthAdmin_andRestLogin_shouldUpdateLoginState() =
         runTest {
-            subject.setLoginWithAdmin("123", true)
+            subject.setLoginWithAdmin("dgdfgdfg3434", true)
             subject.restLogin()
-
-            assertEquals(subject.loginData.last(), LoginStateResult.NotSignIn)
+            assertEquals(subject.loginData.first(), LoginStateResult.NotSignIn)
         }
 
     @Test
