@@ -42,9 +42,8 @@ fi
 # Check for a version of grep which supports Perl regex.
 # On MacOS the OS installed grep doesn't support Perl regex so check for the existence of the
 # GNU version instead which is prefixed with 'g' to distinguish it from the OS installed version.
-     GREP_COMMAND=grep
+ GREP_COMMAND=grep
 
-echo "GREP_COMMAND is set to: $GREP_COMMAND"
 
 # Initialize an array to store excluded modules
 excluded_modules=()
