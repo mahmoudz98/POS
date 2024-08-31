@@ -16,9 +16,7 @@ import com.dantsu.escposprinter.exceptions.EscPosParserException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import com.dantsu.escposprinter.EscPosPrinter as EscPosPrinterLib
@@ -29,7 +27,6 @@ abstract class EscPosPrint {
 
     @Inject
     lateinit var logService: LogService
-
     abstract fun print(
         context: Context,
         printerInfo: PrinterInfo,
@@ -37,41 +34,40 @@ abstract class EscPosPrint {
     )
 
     @SuppressLint("MissingPermission")
-    open suspend fun takePrints(printerData: EscPosPrinter): PrinterStatus =
-        withContext(Dispatchers.IO) {
-            printerStateManager.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
-            val deviceConnection: DeviceConnection? = printerData.getPrinterConnection()
+    open suspend fun takePrints(printerData: EscPosPrinter): PrinterStatus {
+        printerStateManager.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
+        val deviceConnection: DeviceConnection? = printerData.getPrinterConnection()
 
-            try {
-                val printer =
-                    EscPosPrinterLib(
-                        deviceConnection,
-                        printerData.printerDpi,
-                        printerData.printerWidthMM,
-                        printerData.printerNbrCharactersPerLine,
-                        EscPosCharsetEncoding("windows-1256", 16),
-                    )
-                //  printer.useEscAsteriskCommand(true)
+        try {
+            val printer =
+                EscPosPrinterLib(
+                    deviceConnection,
+                    printerData.printerDpi,
+                    printerData.printerWidthMM,
+                    printerData.printerNbrCharactersPerLine,
+                    EscPosCharsetEncoding("Cp864", 16),
+                )
+            printer.useEscAsteriskCommand(true)
 
-                printerStateManager.publishState(PrinterStatusCode.PROGRESS_PRINTING)
+            printerStateManager.publishState(PrinterStatusCode.PROGRESS_PRINTING)
 
-                val textsToPrint = printerData.getTextsToPrint()
-                Timber.e("textsToPrint: $textsToPrint")
-                textsToPrint.forEach { textToPrint ->
-                    Timber.e("textToPrint:foreach: $textToPrint")
-                    printer.printFormattedTextAndCut(textToPrint)
-                    delay(500)
-                }
-
-                printerStateManager.publishState(PrinterStatusCode.PROGRESS_PRINTED)
-                PrinterStatus(printerData, PrinterStatusCode.FINISH_SUCCESS)
-            } catch (e: Exception) {
-                ensureActive()
-                deviceConnection?.disconnect()
-                logService.logNonFatalCrash(e)
-                handleException(e, printerData)
+            val textsToPrint = printerData.getTextsToPrint()
+            Timber.e("textsToPrint: $textsToPrint")
+            textsToPrint.forEach { textToPrint ->
+                Timber.e("textToPrint:foreach: $textToPrint")
+                printer.printFormattedTextAndCut(textToPrint)
+                delay(500)
             }
+
+            printerStateManager.publishState(PrinterStatusCode.PROGRESS_PRINTED)
+            return PrinterStatus(printerData, PrinterStatusCode.FINISH_SUCCESS)
+        } catch (e: Exception) {
+            deviceConnection?.disconnect()
+            logService.logNonFatalCrash(e)
+            return handleException(e, printerData)
         }
+
+    }
 
     private fun handleException(
         e: Exception,
@@ -121,35 +117,4 @@ abstract class EscPosPrint {
         context: Context,
     ): EscPosPrinter
 
-    /*   open fun publishState(progress: Int) {
-           _printerState.value = when (progress) {
-               PROGRESS_CONNECTING -> PrinterState.Connecting(R.string.core_printer_state_message_connecting)
-               PROGRESS_CONNECTED -> PrinterState.Connected(R.string.core_printer_state_message_connected)
-               PROGRESS_PRINTING -> PrinterState.Printing(R.string.core_printer_state_message_printing)
-               PROGRESS_PRINTED -> PrinterState.Printed(R.string.core_printer_state_message_finished)
-
-               else -> PrinterState.Error(R.string.core_printer_state_result_message_finish_unknown_error)
-           }
-
-       }
-
-       private fun handleResult(result: PrinterStatus) {
-
-           _printerState.value = when (result.printerStatus) {
-               FINISH_SUCCESS -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_success)
-               FINISH_NO_PRINTER -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_no_printer)
-               FINISH_PRINTER_DISCONNECTED -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_printer_disconnected)
-               FINISH_PARSER_ERROR -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_parser_error)
-               FINISH_ENCODING_ERROR -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_parser_error)
-               FINISH_BARCODE_ERROR -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_barcode_error)
-               else -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_unknown_error)
-           }
-
-
-
-           when (result.printerStatus) {
-               FINISH_SUCCESS -> onPrintFinished?.onSuccess(result.asyncEscPosPrinterService)
-               else -> onPrintFinished?.onError(result.asyncEscPosPrinterService, result.printerStatus)
-           }
-       }*/
 }

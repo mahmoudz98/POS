@@ -5,23 +5,21 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
-import android.graphics.Bitmap
 import android.util.DisplayMetrics
 import com.casecode.pos.core.model.data.PrinterConnectionInfo
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.core.printer.R
+import com.casecode.pos.core.printer.connection.MyBluetoothConnection
 import com.casecode.pos.core.printer.model.PrintContent
 import com.casecode.pos.core.printer.model.PrinterState
 import com.casecode.pos.core.printer.model.PrinterStatus
 import com.casecode.pos.core.printer.model.PrinterStatusCode
 import com.casecode.pos.core.printer.utils.PrintUtils
 import com.dantsu.escposprinter.connection.DeviceConnection
-import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections
 import com.dantsu.escposprinter.exceptions.EscPosConnectionException
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -34,7 +32,7 @@ constructor() : EscPosPrint() {
 
         Timber.e("takePrints:BluetoothEscPosPrint")
         printerStateManager.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
-        val deviceConnection = (printerData.getPrinterConnection() as? BluetoothConnection)
+        val deviceConnection = (printerData.getPrinterConnection() as? MyBluetoothConnection)
 
         val updatedPrinterData: EscPosPrinter =
             if (deviceConnection == null) {
@@ -63,13 +61,15 @@ constructor() : EscPosPrint() {
     }
 
     @Throws(IOException::class)
-    private fun attemptConnection(deviceConnection: BluetoothConnection) {
+    private fun attemptConnection(deviceConnection: MyBluetoothConnection) {
         var attempts = 0
         while (attempts < 3 && !deviceConnection.isConnected) {
             try {
+
                 deviceConnection.connect()
                 attempts = 3 // Exit loop if successful
             } catch (e: EscPosConnectionException) {
+                deviceConnection.disconnect()
                 Timber.e("Retrying Bluetooth connection, attempts left: $attempts")
                 attempts++
                 if (attempts >= 3) {
@@ -82,18 +82,17 @@ constructor() : EscPosPrint() {
     @SuppressLint("MissingPermission")
     private fun handleConnectionException(
         e: EscPosConnectionException,
-        deviceConnection: BluetoothConnection,
+        deviceConnection: MyBluetoothConnection,
         printerData: EscPosPrinter,
     ): PrinterStatus {
         e.printStackTrace()
         logService.logNonFatalCrash(e)
         val log = """
-            deviceConnection.deviceName=${deviceConnection.device.name}
-            deviceConnection.deviceAddress=${deviceConnection.device.address}
-            deviceConnection.isConnected=${deviceConnection.isConnected}
-        """.trimIndent()
+            deviceConnection.deviceStatus=${deviceConnection.device?.name},
+             ${deviceConnection.device?.address}
+                     """.trimIndent()
         logService.log(log)
-        logService.log("TextsToPrint = ${printerData.getTextsToPrint().map { it }}")
+        logService.log("TextsToPrint = ${printerData.getTextsToPrint().first()}")
         return PrinterStatus(
             printerData,
             PrinterStatusCode.FINISH_PRINTER_DISCONNECTED,
@@ -106,11 +105,12 @@ constructor() : EscPosPrint() {
         printContent: PrintContent,
     ) {
         val bluetoothConnection =
-            BluetoothConnection(
+            MyBluetoothConnection(
                 getBluetoothDeviceByMacAddress(
                     context,
                     (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Bluetooth).macAddress,
                 ),
+                context,
             )
 
         execute(
