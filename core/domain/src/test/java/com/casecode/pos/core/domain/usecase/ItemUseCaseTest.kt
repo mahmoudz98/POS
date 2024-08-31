@@ -29,11 +29,12 @@ class ItemUseCaseTest {
     @Test
     fun getItems_whenItemsExist_returnsItems() =
         runTest {
-            // When
             val items = itemUseCase()
-
-            // Then
-            assertThat(items.first(), `is`(ResourceItems.success(testItemRepository.fakeListItems)))
+            testItemRepository.sendItems()
+            assertThat(
+                items.first(),
+                `is`(ResourceItems.success(testItemRepository.fakeListItems)),
+            )
         }
 
     @Test

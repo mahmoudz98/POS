@@ -1,7 +1,6 @@
 package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.R
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
 import com.casecode.pos.core.testing.repository.TestSubscriptionsBusinessRepository
@@ -48,7 +47,7 @@ class SetSubscriptionBusinessUseCaseTest {
             // Then - return Resource of empty data
             assertThat(
                 resultEmptySubscriptionBusiness,
-                `is`(Resource.empty(EmptyType.DATA, R.string.add_subscription_business_empty)),
+                `is`(Resource.empty(R.string.add_subscription_business_empty)),
             )
         }
 }

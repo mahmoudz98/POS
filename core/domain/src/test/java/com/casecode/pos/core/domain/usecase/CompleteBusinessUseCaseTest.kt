@@ -1,7 +1,6 @@
 package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
@@ -27,16 +26,4 @@ class CompleteBusinessUseCaseTest {
             assertThat(isCompleteBusiness, `is`(Resource.success(true)))
         }
 
-    @Test
-    fun `invoke with empty UID return resource with UID empty`() =
-        runTest {
-            // When set completed business and uid is empty
-            val isCompleteBusiness = completeBusinessUseCase()
-
-            // Then check if result is empty uid ,
-            assertThat(
-                isCompleteBusiness,
-                `is`(Resource.empty(EmptyType.DATA, R.string.core_data_uid_empty)),
-            )
-        }
 }

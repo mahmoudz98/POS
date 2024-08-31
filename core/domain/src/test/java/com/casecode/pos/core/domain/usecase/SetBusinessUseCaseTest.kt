@@ -2,7 +2,6 @@ package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.R
 import com.casecode.pos.core.domain.repository.AddBusiness
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
@@ -54,7 +53,7 @@ class SetBusinessUseCaseTest {
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(emptyBranchBusiness)
             assertThat(
                 isAddBusiness.last(),
-                `is`(Resource.empty(EmptyType.DATA, R.string.branches_empty)),
+                `is`(Resource.empty(R.string.branches_empty)),
             )
         }
 
@@ -69,7 +68,7 @@ class SetBusinessUseCaseTest {
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyPhone)
             assertThat(
                 isAddBusiness.last(),
-                `is`(Resource.empty(EmptyType.DATA, R.string.phone_business_empty)),
+                `is`(Resource.empty(R.string.phone_business_empty)),
             )
         }
 
@@ -84,7 +83,7 @@ class SetBusinessUseCaseTest {
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyEmail)
             assertThat(
                 isAddBusiness.last(),
-                `is`(Resource.empty(EmptyType.DATA, R.string.email_business_empty)),
+                `is`(Resource.empty(R.string.email_business_empty)),
             )
         }
 }

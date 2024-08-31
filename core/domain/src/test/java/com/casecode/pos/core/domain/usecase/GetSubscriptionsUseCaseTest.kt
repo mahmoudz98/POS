@@ -1,6 +1,5 @@
 package com.casecode.pos.core.domain.usecase
 
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
@@ -39,7 +38,7 @@ class GetSubscriptionsUseCaseTest {
         runTest {
             // Given - send empty
             testSubscriptionsRepository.setReturnEmpty(true)
-            val exceptedResultEmpty = Resource.empty<Boolean>(EmptyType.DATA, "Empty")
+            val exceptedResultEmpty = Resource.empty<Boolean>("Empty")
 
             // when
             val result = getSubscriptionsUseCase()

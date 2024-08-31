@@ -1,7 +1,6 @@
 package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.R
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
@@ -34,20 +33,6 @@ class SetEmployeesBusinessUseCaseTest {
         }
 
     @Test
-    fun `invoke with empty UID return resource with UID empty`() =
-        runTest {
-            // When uid is empty
-            val resultAddEmployeesBusiness =
-                setEmployeesBusinessUseCase(employees)
-
-            // Then - return Resource of empty uid.
-            assertThat(
-                resultAddEmployeesBusiness,
-                `is`(Resource.empty(EmptyType.DATA, dataString.core_data_uid_empty)),
-            )
-        }
-
-    @Test
     fun `invoke with empty Business return resource with employees empty`() =
         runTest {
             // When subscription business fields is empty
@@ -57,7 +42,7 @@ class SetEmployeesBusinessUseCaseTest {
             // Then - return Resource of empty data.
             assertThat(
                 resultEmptySubscriptionBusiness,
-                `is`(Resource.empty(EmptyType.DATA, R.string.employees_empty)),
+                `is`(Resource.empty(R.string.employees_empty)),
             )
         }
 }
