@@ -56,7 +56,7 @@ fun BrowseBluetoothDeviceDialog(
     ) {
         bluetoothDevicesList.clear()
         bluetoothDevicesList.addAll(bluetoothConnections.filterForPrintersTest()) // TODO:remove this invoke
-        bluetoothDevicesList.addAll(bluetoothPrintersConnections.list ?: emptyArray())
+        //bluetoothDevicesList.addAll(bluetoothPrintersConnections.list ?: emptyArray())
     }
 
     AlertDialog(
