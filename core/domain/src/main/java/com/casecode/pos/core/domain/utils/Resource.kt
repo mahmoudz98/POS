@@ -12,7 +12,6 @@ sealed interface Resource<out T> {
     data object Loading : Resource<Nothing>
 
     data class Empty<T>(
-        val emptyType: EmptyType? = null,
         val message: Any? = null,
     ) : Resource<T> {
         val data: T? = null
@@ -26,8 +25,7 @@ sealed interface Resource<out T> {
         fun <T> loading(): Resource<T> = Loading
 
         inline fun <reified T> empty(
-            emptyType: EmptyType? = EmptyType.DATA,
             message: Any? = null,
-        ): Resource<T> = Empty(emptyType, message)
+        ): Resource<T> = Empty(message)
     }
 }

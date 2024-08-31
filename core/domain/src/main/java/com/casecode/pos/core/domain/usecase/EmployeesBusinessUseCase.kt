@@ -3,7 +3,6 @@ package com.casecode.pos.core.domain.usecase
 import com.casecode.pos.core.domain.R
 import com.casecode.pos.core.domain.repository.AddEmployees
 import com.casecode.pos.core.domain.repository.EmployeesBusinessRepository
-import com.casecode.pos.core.domain.utils.EmptyType
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Employee
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +15,7 @@ class SetEmployeesBusinessUseCase
     ) {
         suspend operator fun invoke(employees: MutableList<Employee>): AddEmployees {
             if (employees.isEmpty()) {
-                return Resource.empty(EmptyType.DATA, R.string.employees_empty)
+                return Resource.empty(R.string.employees_empty)
             }
             return employeesRepo.setEmployees(employees)
     }
