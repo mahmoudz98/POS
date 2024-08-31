@@ -11,6 +11,7 @@ fun Context.scanOptions(
     onFailure: (Int) -> Unit,
     onCancel: (Int) -> Unit,
 ) {
+    //TODO: handle for this failure :com.google.mlkit.common.MlKitException: Waiting for the Barcode UI module to be downloaded.
     val scanner = GmsBarcodeScanning.getClient(this)
     val moduleInstallRequest =
         ModuleInstallRequest
@@ -25,7 +26,7 @@ fun Context.scanOptions(
             Timber.e("success")
         }.addOnFailureListener {
             onFailure(R.string.core_ui_message_scan_error_open)
-            Timber.e("failure: $it")
+            Timber.e("moduleInstallClient:failure: $it")
         }
 
     scanner
