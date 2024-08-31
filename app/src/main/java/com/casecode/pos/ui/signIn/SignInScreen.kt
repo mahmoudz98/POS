@@ -111,16 +111,16 @@ fun SignInScreen(
 
     Box(
         modifier =
-            modifier
-                .fillMaxSize()
-                .padding(16.dp),
+        modifier
+            .fillMaxSize()
+            .padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier =
-                modifier
-                    .fillMaxSize()
-                    .align(Alignment.Center),
+            modifier
+                .fillMaxSize()
+                .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -164,14 +164,14 @@ fun SignInScreen(
                 Spacer(modifier = modifier.height(16.dp))
                 PosOutlinedButton(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally),
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally),
                     onClick = onSignInCLick,
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
-                            painter = painterResource(R.drawable.ic_google),
+                            painter = painterResource(com.casecode.pos.feature.signout.R.drawable.feature_signout_ic_google),
                             contentDescription = null,
                             modifier = Modifier.size(ButtonDefaults.IconSize),
                         )
@@ -180,13 +180,13 @@ fun SignInScreen(
                     }
                 }
 
-                Spacer(modifier = modifier.height(8.dp)) // Space between buttons
+                Spacer(modifier = modifier.height(8.dp))
 
                 PosTextButton(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally),
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.CenterHorizontally),
                     onClick = onLoginEmployeeClick,
                 ) {
                     Text(stringResource(id = R.string.sign_in_employee_option))

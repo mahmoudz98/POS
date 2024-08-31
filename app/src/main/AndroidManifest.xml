@@ -65,26 +65,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.casecode.pos.feature.stepper.StepperActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden">
-        </activity>
+
         <activity
             android:name="com.casecode.pos.ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar"
 
             android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
 
+            <!-- <meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                 android:resource="@xml/device_filter" />-->
         </activity>
 
-        <meta-data
-            android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="barcode_ui">
-
-        </meta-data>
 
         <!-- Trigger Google Play services to install the backported photo picker module. -->
         <!--<service
