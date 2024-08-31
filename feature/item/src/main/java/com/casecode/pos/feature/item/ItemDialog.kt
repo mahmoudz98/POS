@@ -50,12 +50,16 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
+import com.casecode.pos.core.designsystem.component.PermissionDialog
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.ui.scanOptions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import timber.log.Timber
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -134,9 +138,9 @@ fun ItemDialog(
 
                 IconButton(
                     modifier =
-                        Modifier
-                            .size(64.dp)
-                            .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .size(64.dp)
+                        .align(Alignment.CenterHorizontally),
                     onClick = {
                         showTakeOrPickImage = true
                     },
@@ -167,10 +171,10 @@ fun ItemDialog(
                     isError = nameError.value,
                     label = stringResource(R.string.feature_item__name_hint),
                     keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next,
-                        ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next,
+                    ),
                     modifier = Modifier.fillMaxWidth(),
                     supportingText = if (nameError.value) stringResource(R.string.feature_item_error_item_name_empty) else null,
                 )
@@ -189,10 +193,10 @@ fun ItemDialog(
                         isError = barcodeError.value,
                         supportingText = if (barcodeError.value) stringResource(R.string.feature_item_error_item_barcode_empty) else null,
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Next,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next,
+                        ),
                         modifier = Modifier.weight(3f),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -263,7 +267,6 @@ fun ItemDialog(
                         quantityError.value = quantity.value.isEmpty()
                         barcodeError.value = barcode.value.isEmpty()
                     } else {
-                        Timber.e("selectedImageUri= $bitmapImage")
                         if (isUpdate) {
                             viewModel.checkNetworkAndUpdateItem(
                                 name.value,
@@ -295,6 +298,7 @@ fun ItemDialog(
     )
 }
 
+// Issue: not open dialog permission when cancel outside dialog permission
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
 internal fun LaunchedTakePictureOrImage(
@@ -305,6 +309,7 @@ internal fun LaunchedTakePictureOrImage(
 ) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var currentPhotoPath by rememberSaveable { mutableStateOf("") }
+    var showPermissionDialog by remember { mutableStateOf(false) }
     val takePictureOrPickPhotoLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult(),
@@ -318,42 +323,54 @@ internal fun LaunchedTakePictureOrImage(
                 Timber.i("Image selection canceled")
             }
         }
-
+    if (showPermissionDialog) {
+        PermissionDialog(
+            onDismiss = {
+                showPermissionDialog = false
+                onCancelTakeImage(null)
+            },
+            messagePermission = R.string.feature_item_need_permission_for_camera,
+        )
+    }
     LaunchedEffect(showTakeOrPickImage, cameraPermissionState.status) {
         if (showTakeOrPickImage) {
-            when (cameraPermissionState.status) {
-                is PermissionStatus.Denied -> {
-                    cameraPermissionState.launchPermissionRequest()
-                }
-
-                PermissionStatus.Granted -> {
-                    val takePicture =
-                        Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-                            resolveActivity(context.packageManager)?.also {
-                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                val uri = PhotoUriManager(context).buildNewUri()
-                                currentPhotoPath = uri.toString()
-                                putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                            }
+            if (cameraPermissionState.status.isGranted) {
+                val takePicture =
+                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                        resolveActivity(context.packageManager)?.also {
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            val uri = PhotoUriManager(context).buildNewUri()
+                            currentPhotoPath = uri.toString()
+                            putExtra(MediaStore.EXTRA_OUTPUT, uri)
                         }
+                    }
 
-                    val pickPhoto =
-                        Intent(
-                            Intent.ACTION_PICK,
-                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        )
+                val pickPhoto =
+                    Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    )
 
-                    val chooserIntent =
-                        Intent
-                            .createChooser(
-                                pickPhoto,
-                                context.getString(R.string.feature_item_dialog_select_image_text),
-                            ).apply {
-                                putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
-                            }
-                    takePictureOrPickPhotoLauncher.launch(chooserIntent)
-                }
+                val chooserIntent =
+                    Intent
+                        .createChooser(
+                            pickPhoto,
+                            context.getString(R.string.feature_item_dialog_select_image_text),
+                        ).apply {
+                            putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
+                        }
+                takePictureOrPickPhotoLauncher.launch(chooserIntent)
+                // Issue: when use shouldShowRationale only is false in device api 28
+            } else if (cameraPermissionState.status.shouldShowRationale
+                || (cameraPermissionState.status as PermissionStatus.Denied).shouldShowRationale
+            ) {
+                showPermissionDialog = true
+
+            } else {
+                cameraPermissionState.launchPermissionRequest()
+
             }
+
         }
     }
 }

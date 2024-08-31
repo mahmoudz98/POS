@@ -33,5 +33,6 @@
     <string name="feature_item_search_items_hint">Search items…</string>
     <string name="feature_item_dialog_print_qr_code_title">Print QR Code</string>
     <string name="feature_item_error_no_image_selected">No image selected.</string>
+    <string name="feature_item_need_permission_for_camera">Need permission for camera.</string>
 
 </resources>
