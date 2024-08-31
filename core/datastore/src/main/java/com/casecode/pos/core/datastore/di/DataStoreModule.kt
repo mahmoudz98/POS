@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.casecode.pos.core.common.AppDispatchers
+import com.casecode.pos.core.common.AppDispatchers.*
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.common.di.ApplicationScope
 import com.casecode.pos.core.datastore.LoginPreferences
@@ -25,7 +26,7 @@ object DataStoreModule {
     @Singleton
     internal fun providesLoginPreferencesDataStore(
         @ApplicationContext context: Context,
-        @Dispatcher(AppDispatchers.IO) ioDispatcher: CoroutineDispatcher,
+        @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
         loginPreferencesSerializer: LoginPreferencesSerializer,
     ): DataStore<LoginPreferences> =

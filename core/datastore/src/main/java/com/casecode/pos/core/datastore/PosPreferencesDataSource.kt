@@ -17,19 +17,19 @@ import com.casecode.pos.core.model.data.users.Employee as EmployeeModel
  * @param loginPreferences The DataStore instance used to store and retrieve login preferences.
  */
 class PosPreferencesDataSource
-    @Inject
-    constructor(
-        private val loginPreferences: DataStore<LoginPreferences>,
-    ) {
-        val currentUid =
-            loginPreferences.data.map {
-                it.uid
-            }
-        val currentNameLogin =
-            loginPreferences.data.map {
-                when (it.authState) {
-                    AuthState.LOGIN_ADMIN -> {
-                        "Login Admin"
+@Inject
+constructor(
+    private val loginPreferences: DataStore<LoginPreferences>,
+) {
+    val currentUid =
+        loginPreferences.data.map {
+            it.uid
+        }
+    val currentNameLogin =
+        loginPreferences.data.map {
+            when (it.authState) {
+                AuthState.LOGIN_ADMIN -> {
+                    AuthState.LOGIN_ADMIN.name
                 }
 
                 AuthState.LOGIN_EMPLOYEE -> {
@@ -117,8 +117,7 @@ class PosPreferencesDataSource
     suspend fun restLogin() {
         try {
             loginPreferences.updateData {
-                it
-                    .toBuilder()
+                it.toBuilder()
                     .clearUid()
                     .clearEmployee()
                     .clearAuthState()
