@@ -7,7 +7,8 @@ plugins {
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.pos.hilt)
 }
-
+// Read this article for compose  and following practice then implement it
+//https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8
 android {
 
     defaultConfig {
