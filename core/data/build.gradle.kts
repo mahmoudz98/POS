@@ -41,4 +41,6 @@ dependencies {
     testCompileOnly(libs.test.hamcrest.library)
     testImplementation(projects.core.testing)
     testImplementation(libs.coroutines.test)
+    implementation(libs.mockk.agent)
+
 }
