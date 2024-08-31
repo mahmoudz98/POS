@@ -51,12 +51,12 @@ fun SignOutDialog(
         onDismissRequest = onDismiss,
         title = {
             Image(
-                painter = painterResource(id = R.drawable.ic_logo_google),
+                painter = painterResource(id = R.drawable.feature_signout_ic_logo_google),
                 contentDescription = "Google Logo",
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .wrapContentSize(Alignment.Center),
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize(Alignment.Center),
             )
         },
         text = {
@@ -69,9 +69,11 @@ fun SignOutDialog(
             ) {
                 DynamicAsyncImage(
                     imageUrl = currentUser?.photoUrl,
-                    placeholder = painterResource(id = R.drawable.ic_google),
+                    placeholder = painterResource(id = R.drawable.feature_signout_ic_google),
                     contentDescription = null,
-                    modifier = Modifier.size(64.dp).clip(CircleShape),
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
