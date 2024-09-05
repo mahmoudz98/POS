@@ -8,7 +8,7 @@ initscript {
     }
 
     dependencies {
-        classpath("com.diffplug.spotless:spotless-plugin-gradle:$ktlintVersion")
+        classpath("com.diffplug.spotless:spotless-plugin-gradle:$spotlessVersion")
     }
 }
 

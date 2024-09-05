@@ -1,79 +1,113 @@
-# Point-of-Sale (POS)
+# Point-of-Sale (POS) App
 
 ## Overview
 
-### Purpose of the POS App
-The purpose of the Point-of-Sale (POS) app is to streamline sales transactions for businesses. It serves as a digital cash register, enabling businesses to accept payments from customers and efficiently manage inventory. The app is designed to enhance the overall sales process by providing a user-friendly interface for both customers and business owners.
+The **Point-of-Sale (POS) App** is designed to simplify and streamline sales transactions for
+businesses. It functions as a digital cash register, enabling businesses to accept payments, manage
+inventory, and generate sales reports. The app focuses on usability, security, and efficiency,
+providing an excellent experience for both customers and business owners.
 
-### Technology Stack
+## Key Features
 
-| Feature                 | Technology              | Description                                                          |
-|-------------------------|-------------------------|----------------------------------------------------------------------|
-| Programming Language    | Kotlin                  | Modern and concise language for Android development.                 |
-| Dependency Injection    | Dagger Hilt             | Provides a compile-time safe way to manage dependencies.             |
-| Asynchronous Operations | Kotlin Coroutines       | Simplifies asynchronous programming and improves app responsiveness. |
-| Local Storage           | Room Database           | Persistent local storage for offline data access.                    |
-| Cloud Storage           | Firebase Firestore      | Real-time cloud database for data synchronization and storage.       |
-| Authentication          | Firebase Authentication | Secure user authentication and account management.                   |
-| Image Storage           | Firebase Storage        | Cloud storage for images and other media files.                      |
-| Testing                 | JUnit, MockK, Espresso  | Comprehensive testing frameworks for unit and UI testing.            |
+- **Sales Management**: Process sales, accept multiple payment methods, and print receipts.
+- **Inventory Management**: Track stock levels, add new products, and receive low-stock
+  notifications.
+- **Cloud Sync**: Synchronize sales and inventory data in real-time across devices.
+- **Secure Authentication**: Protect user accounts with Firebase Authentication.
+- **Offline Support**: Operate seamlessly offline; the app syncs data when back online.
+- **Multi-language Support**: Supports English and Arabic for localized transactions.
 
-## Project Structure
+## Technology Stack
 
-The project follows a modular architecture with the following modules:
+| **Feature**             | **Technology**          | **Description**                                                |
+|-------------------------|-------------------------|----------------------------------------------------------------|
+| Programming Language    | Kotlin                  | Modern, concise, and feature-rich for Android development.     |
+| Dependency Injection    | Dagger Hilt             | Ensures compile-time safe dependency management.               |
+| Asynchronous Operations | Kotlin Coroutines       | Manages async programming and enhances app responsiveness.     |
+| Local Storage           | Datastore-proto         | Persistent storage for offline user data.                      |
+| Cloud Storage           | Firebase Firestore      | Real-time cloud database for data storage and synchronization. |
+| Authentication          | Firebase Authentication | Secure user login and account management.                      |
+| Image Storage           | Firebase Storage        | Handles cloud storage for images and media files.              |
+| Testing                 | JUnit, MockK, Espresso  | Testing frameworks for unit, mock, and UI testing.             |
 
-| Module   | Description                                                                         |
-|----------|-------------------------------------------------------------------------------------|
-| `app`    | Contains the main application logic, UI components, and activities.                 |
-| `data`   | Responsible for data access, including repositories, data sources, and data models. |
-| `domain` | Defines the business logic and use cases of the application.                        |
-| `di`     | Handles dependency injection setup using Dagger Hilt.                               |
+## Architecture and Project Structure
 
-## Firebase Authentication
+The app follows a **modular architecture** designed for scalability and maintainability, with clear
+separation between the core functionality and specific features.
 
-Firebase Authentication is used to create and manage user accounts securely. This is particularly important for business owners and employees who need secure access to the POS system.
+| **Module**              | **Description**                                                                         |
+|-------------------------|-----------------------------------------------------------------------------------------|
+| `build-logic`           | Defines project-specific conventions and plugins, maintaining configurations centrally. |
+| `app`                   | Main application logic resides here, integrating all the features and UI components.    |
+| `feature`               | Contains screens and functionality that are modularized as features.                    |
+| `core`                  | Reusable modules providing utilities and core business logic.                           |
+| `ui-test-hilt-manifest` | Used for testing UI components with Hilt for dependency injection.                      |
 
-## Firestore Integration
+## Use Cases
 
-Firestore is utilized as the database to store and retrieve crucial POS data. The `data` module handles interactions with Firestore, including managing inventory and sales data.
+### 1. **Business Owner**
 
-## Room Database
+A business owner logs in to manage their store's daily transactions, view sales reports, and update
+product inventory.
 
-The Room persistence library provides an abstraction layer over SQLite, enabling efficient and
-convenient local data storage.
+- **Login**: The owner securely logs in using Firebase Authentication.
+- **Inventory Updates**: Add, remove, or update product details in the inventory.
+- **Sales Reporting**: View reports showing total sales, top-selling products, and transaction
+  history.
 
-## Dependency Injection
+### 2. **Cashier**
 
-Dependency injection is implemented using Dagger Hilt. The `di` module provides the necessary setup for dependency injection throughout the project, ensuring scalable and maintainable code.
+The cashier uses the POS system to handle customer purchases and print receipts during checkout.
 
-## Asynchronous Operations
+- **Process Sales**: Scan product barcodes or select products from the menu to process sales.
+- **Payments**: Accept payments via cash, card, or digital payment methods.
+- **Print Receipts**: Print a receipt for the customer after completing the transaction.
 
-Kotlin Coroutines are employed for handling asynchronous operations, enhancing the responsiveness and efficiency of the POS app.
+## Screenshots
+
+### **Business Owner**
+
+![Home Screen](docs/screenshots/home_screen.png)
+*Home Screen*  
+![items Screen](docs/screenshots/items_screen.png)
+![add item Screen](docs/screenshots/add_item_screen.png)
+*Inventory Management*  
+![Profile Screen](docs/screenshots/profile_screen.png)
+![Profile branches Screen](docs/screenshots/profile_branches_screen.png)
+*Profile*
+![Reports screen](docs/screenshots/report_screen.png)
+![Reports sales screen](docs/screenshots/sales_report_screen.png)
+![Reports sales info screen](docs/screenshots/sales_report_info_screen.png)
+*Reports*
+![Setting screen](docs/screenshots/setting_screen.png)
+![Setting sign out screen](docs/screenshots/setting_sign_out.png)
+*Setting*
+
+### ** Cashier**
+
+![Home screen](docs/screenshots/home_screen_cashier.png)
+![Home screen](docs/screenshots/home_screen_cashier_landscape.png)
+
+## Modularization
+
+The project uses a modular approach to structure the app, ensuring flexibility and ease of
+maintenance.
+
+- **App Module**: Main entry point of the application.
+- **Feature Module**: Encapsulates all the features, such as `sales`, `inventory`, and `reports`.
+- **Core Module**: Contains utilities, models, and other shared components.
 
 ## Testing
 
-The project utilizes a combination of testing frameworks, including JUnit, MockK, and Espresso, to
-ensure the correctness and reliability of the POS app.
+We follow a **Test-Driven Development (TDD)** approach and ensure robust testing coverage using the
+following frameworks:
 
-## Getting Started
+- **Unit Testing**: JUnit and MockK for testing core business logic.
+- **UI Testing**: Espresso for testing user interface and interaction.
+- **Integration Testing**: Conducted across features to ensure the app's overall stability.
 
-To get started with the POS app, follow these steps:
-
-1. Clone the repository.
-2. Open the project in Android Studio.
-3. Build and run the app on an emulator or a physical device.
-
-### Download
+## Download APK
 
 You can download the latest APK from the [GitHub Actions](https://github.com/Case-Code/POS/actions)
 page.
-    
-## Contributing
-
-If you would like to contribute to the project, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and submit a pull request.
-
-
+Simply download and install the APK on your Android device to get started.

@@ -1,5 +1,5 @@
 /*
- * Designed and developed 2024 by Mahmoud Abdalhafeez, Abdelaziz Daoud
+ * Designed and developed 2024 by Mahmood Abdalhafeez
  *
  * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
