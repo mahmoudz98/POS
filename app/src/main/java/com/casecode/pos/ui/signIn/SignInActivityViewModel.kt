@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.ui.signIn
 
 import android.content.Context
@@ -28,34 +43,34 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SignInActivityViewModel
-    @Inject
-    constructor(
-        private val networkMonitor: NetworkMonitor,
-        private val accountService: AccountService,
-        private val authService: AuthService,
-    ) : ViewModel() {
-        private val _signInUiState = MutableStateFlow(SignInActivityUiState())
-        val signInUiState = _signInUiState.asStateFlow()
+@Inject
+constructor(
+    private val networkMonitor: NetworkMonitor,
+    private val accountService: AccountService,
+    private val authService: AuthService,
+) : ViewModel() {
+    private val _signInUiState = MutableStateFlow(SignInActivityUiState())
+    val signInUiState = _signInUiState.asStateFlow()
 
-        val loginStateResult: StateFlow<LoginStateResult> =
-            authService.loginData.stateIn(
-                scope = viewModelScope,
-                initialValue = LoginStateResult.Loading,
-                started = SharingStarted.WhileSubscribed(5_000),
-            )
+    val loginStateResult: StateFlow<LoginStateResult> =
+        authService.loginData.stateIn(
+            scope = viewModelScope,
+            initialValue = LoginStateResult.Loading,
+            started = SharingStarted.WhileSubscribed(5_000),
+        )
 
-        init {
-            setNetworkMonitor()
+    init {
+        setNetworkMonitor()
+    }
+
+    private fun setNetworkMonitor() =
+        viewModelScope.launch {
+            networkMonitor.isOnline.collect {
+                setConnected(it)
+            }
         }
 
-        private fun setNetworkMonitor() =
-            viewModelScope.launch {
-                networkMonitor.isOnline.collect {
-                    setConnected(it)
-                }
-            }
-
-        private fun setConnected(isOnline: Boolean) {
+    private fun setConnected(isOnline: Boolean) {
         _signInUiState.update { it.copy(isOnline = isOnline) }
     }
 

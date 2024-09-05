@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.ui.main
 
 import androidx.compose.material.icons.Icons
@@ -21,7 +36,7 @@ import com.casecode.pos.feature.employee.EMPLOYEES_ROUTE
 import com.casecode.pos.feature.employee.navigateToEmployees
 import com.casecode.pos.feature.item.ITEMS_ROUTE
 import com.casecode.pos.feature.item.ITEM_DIALOG_ROUTE
-import com.casecode.pos.feature.item.ITEM_update_DIALOG_ROUTE
+import com.casecode.pos.feature.item.ITEM_UPDATE_DIALOG_ROUTE
 import com.casecode.pos.feature.item.QR_PRINT_ITEM_DIALOG_ROUTE
 import com.casecode.pos.feature.item.navigateToItemsGraph
 import com.casecode.pos.feature.profile.navigateToProfile
@@ -132,7 +147,7 @@ class MainAppState(
             when (currentDestination?.route) {
                 POS_ROUTE -> POS
                 REPORTS_ROUTE -> REPORTS
-                ITEMS_ROUTE, ITEM_DIALOG_ROUTE, ITEM_update_DIALOG_ROUTE, QR_PRINT_ITEM_DIALOG_ROUTE -> ITEMS
+                ITEMS_ROUTE, ITEM_DIALOG_ROUTE, ITEM_UPDATE_DIALOG_ROUTE, QR_PRINT_ITEM_DIALOG_ROUTE -> ITEMS
                 EMPLOYEES_ROUTE -> EMPLOYEES
                 SETTING_ROUTE -> SETTINGS
                 else -> null
