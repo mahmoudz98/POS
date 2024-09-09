@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.designsystem.component
 
 import androidx.compose.animation.core.LinearEasing
@@ -48,26 +63,27 @@ fun Modifier.shimmer(
 
         this.then(
             other =
-                Modifier
-                    .onSizeChanged {
-                        val newTargetValue =
-                            ShimmerConstants.SHIMMER_SIZE_MULTIPLIER *
+            Modifier
+                .onSizeChanged {
+                    val newTargetValue =
+                        ShimmerConstants.SHIMMER_SIZE_MULTIPLIER *
                                 sqrt(
                                     it.height
                                         .toFloat()
                                         .pow(2) +
-                                        it.width
-                                            .toFloat()
-                                            .pow(2),
+                                            it.width
+                                                .toFloat()
+                                                .pow(2),
                                 )
-                        if (targetValue != newTargetValue) {
-                            targetValue = newTargetValue
-                        }
-                    }.drawBehind {
-                        drawRect(
-                            brush = brush,
-                        )
-                    },
+                    if (targetValue != newTargetValue) {
+                        targetValue = newTargetValue
+                    }
+                }
+                .drawBehind {
+                    drawRect(
+                        brush = brush,
+                    )
+                },
         )
     }
 
@@ -99,15 +115,15 @@ fun rememberShimmerBrush(
             initialValue = 0F,
             targetValue = targetValue,
             animationSpec =
-                infiniteRepeatable(
-                    animation =
-                        tween(
-                            durationMillis = ShimmerConstants.DEFAULT_SHIMMER_DURATION,
-                            delayMillis = ShimmerConstants.DEFAULT_SHIMMER_DELAY,
-                            easing = LinearEasing,
-                        ),
-                    repeatMode = RepeatMode.Restart,
+            infiniteRepeatable(
+                animation =
+                tween(
+                    durationMillis = ShimmerConstants.DEFAULT_SHIMMER_DURATION,
+                    delayMillis = ShimmerConstants.DEFAULT_SHIMMER_DELAY,
+                    easing = LinearEasing,
                 ),
+                repeatMode = RepeatMode.Restart,
+            ),
             label = "shimmer_translation",
         )
     return remember {
@@ -117,18 +133,18 @@ fun rememberShimmerBrush(
                     colors = shimmerColors,
                     start = Offset.Zero,
                     end =
-                        Offset(
-                            x = translateAnimation.value,
-                            y = translateAnimation.value,
+                    Offset(
+                        x = translateAnimation.value,
+                        y = translateAnimation.value,
                     ),
                 )
             } else {
                 Brush.linearGradient(
                     colors =
-                        listOf(
-                            Color.Transparent,
+                    listOf(
                         Color.Transparent,
-                        ),
+                        Color.Transparent,
+                    ),
                     start = Offset.Zero,
                     end = Offset.Zero,
                 )

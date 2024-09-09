@@ -1,5 +1,18 @@
-
-
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.designsystem.component
 
 import androidx.compose.foundation.layout.size
@@ -46,54 +59,54 @@ fun PosFilterChip(
         modifier = modifier,
         enabled = enabled,
         leadingIcon =
-            if (selected) {
-                {
-                    Icon(
-                        imageVector = PosIcons.Check,
-                        contentDescription = null,
-                    )
-                }
-            } else {
-                null
+        if (selected) {
+            {
+                Icon(
+                    imageVector = PosIcons.Check,
+                    contentDescription = null,
+                )
+            }
+        } else {
+            null
         },
         shape = CircleShape,
         border =
-            FilterChipDefaults.filterChipBorder(
-                enabled = enabled,
-                selected = selected,
-                borderColor = MaterialTheme.colorScheme.onBackground,
-                selectedBorderColor = MaterialTheme.colorScheme.onBackground,
-                disabledBorderColor =
-                    MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-                    ),
-                disabledSelectedBorderColor =
-                    MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-                    ),
-                selectedBorderWidth = POSChipDefaults.ChipBorderWidth,
+        FilterChipDefaults.filterChipBorder(
+            enabled = enabled,
+            selected = selected,
+            borderColor = MaterialTheme.colorScheme.onBackground,
+            selectedBorderColor = MaterialTheme.colorScheme.onBackground,
+            disabledBorderColor =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
+            disabledSelectedBorderColor =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+            ),
+            selectedBorderWidth = POSChipDefaults.ChipBorderWidth,
+        ),
         colors =
-            FilterChipDefaults.filterChipColors(
-                labelColor = MaterialTheme.colorScheme.onBackground,
-                iconColor = MaterialTheme.colorScheme.onBackground,
-                disabledContainerColor =
-                    if (selected) {
-                        MaterialTheme.colorScheme.onBackground.copy(
-                            alpha = POSChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
-                        )
-                    } else {
-                        Color.Transparent
-                    },
-                disabledLabelColor =
-                    MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-                    ),
-                disabledLeadingIconColor =
-                    MaterialTheme.colorScheme.onBackground.copy(
-                        alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
-                    ),
-                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        FilterChipDefaults.filterChipColors(
+            labelColor = MaterialTheme.colorScheme.onBackground,
+            iconColor = MaterialTheme.colorScheme.onBackground,
+            disabledContainerColor =
+            if (selected) {
+                MaterialTheme.colorScheme.onBackground.copy(
+                    alpha = POSChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
+                )
+            } else {
+                Color.Transparent
+            },
+            disabledLabelColor =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+            ),
+            disabledLeadingIconColor =
+            MaterialTheme.colorScheme.onBackground.copy(
+                alpha = POSChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
+            ),
+            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
             selectedLabelColor = MaterialTheme.colorScheme.onBackground,
             selectedLeadingIconColor = MaterialTheme.colorScheme.onBackground,
         ),

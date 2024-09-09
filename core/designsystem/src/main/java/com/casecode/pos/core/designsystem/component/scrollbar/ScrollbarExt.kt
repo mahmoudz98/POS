@@ -1,5 +1,18 @@
-
-
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.designsystem.component.scrollbar
 
 import androidx.compose.foundation.gestures.Orientation
@@ -39,13 +52,13 @@ fun LazyListState.scrollbarState(
             val firstIndex =
                 min(
                     a =
-                        interpolateFirstItemIndex(
-                            visibleItems = visibleItemsInfo,
-                            itemSize = { it.size },
-                            offset = { it.offset },
-                            nextItemOnMainAxis = { first -> visibleItemsInfo.find { it != first } },
-                            itemIndex = itemIndex,
-                        ),
+                    interpolateFirstItemIndex(
+                        visibleItems = visibleItemsInfo,
+                        itemSize = { it.size },
+                        offset = { it.offset },
+                        nextItemOnMainAxis = { first -> visibleItemsInfo.find { it != first } },
+                        itemIndex = itemIndex,
+                    ),
                     b = itemsAvailable.toFloat(),
                 )
             if (firstIndex.isNaN()) return@snapshotFlow null
@@ -73,10 +86,10 @@ fun LazyListState.scrollbarState(
             scrollbarStateValue(
                 thumbSizePercent = thumbSizePercent,
                 thumbMovedPercent =
-                    when {
-                        layoutInfo.reverseLayout -> 1f - thumbTravelPercent
-                        else -> thumbTravelPercent
-                    },
+                when {
+                    layoutInfo.reverseLayout -> 1f - thumbTravelPercent
+                    else -> thumbTravelPercent
+                },
             )
         }.filterNotNull()
             .distinctUntilChanged()
