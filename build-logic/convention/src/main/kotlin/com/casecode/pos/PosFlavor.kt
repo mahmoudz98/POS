@@ -14,7 +14,7 @@ enum class FlavorDimension {
 // purposes, or from a production backend server which supplies up-to-date, real content.
 // These two product flavors reflect this behaviour.
 @Suppress("EnumEntryName")
-enum class NiaFlavor(
+enum class PosFlavor(
     val dimension: FlavorDimension,
     val applicationIdSuffix: String? = null,
 ) {
@@ -24,12 +24,12 @@ enum class NiaFlavor(
 
 fun configureFlavors(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
-    flavorConfigurationBlock: ProductFlavor.(flavor: NiaFlavor) -> Unit = {},
+    flavorConfigurationBlock: ProductFlavor.(flavor: PosFlavor) -> Unit = {},
 ) {
     commonExtension.apply {
         flavorDimensions += FlavorDimension.contentType.name
         productFlavors {
-            NiaFlavor.values().forEach {
+            PosFlavor.values().forEach {
                 create(it.name) {
                     dimension = it.dimension.name
                     flavorConfigurationBlock(this, it)
