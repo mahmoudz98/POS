@@ -10,8 +10,7 @@ class AndroidFirebaseConventionPlugin : Plugin<Project> {
                 val bom = libs.findLibrary("firebase-bom").get()
                 add("implementation", platform(bom))
                 "implementation"(libs.findLibrary("play.services.auth").get())
-                // TODO: create firebaseUserData model
-                "api"(libs.findLibrary("firebase.auth").get())
+                "implementation"(libs.findLibrary("firebase.auth").get())
                 "implementation"(libs.findLibrary("firebase.firestore").get())
                 "implementation"(libs.findLibrary("firebase.storage").get())
                 "implementation"(libs.findLibrary("firebase.analytics").get())
