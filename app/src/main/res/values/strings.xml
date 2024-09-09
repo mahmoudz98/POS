@@ -18,34 +18,12 @@
     <string name="pos" translatable="false">POS</string>
 
 
-
-    <!-- Sign In -->
-    <string name="sign_in_google_title">Sign in with Google</string>
-    <string name="sign_in_hint">Track sales, manage inventory, and stay in control of your business.</string>
-    <string name="sign_in_employee_option">Or, log in as an employee</string>
-    <string name="google_play_services_required">Google Play Services Required</string>
-    <string name="google_play_services_message">This app needs Google Play services to work correctly. Please download and install them from the Play Store.</string>
-    <string name="action_download">Download</string>
-    <string name="error_google_sign_in">Google sign-in failed: %s</string>
-
-
     <!-- Main Menu -->
-
     <string name="reports_title">Reports</string>
     <string name="menu_items">Items</string>
     <string name="menu_code_scanner">Code Scanner</string>
     <string name="settings_title">Settings</string>
     <string name="menu_sales">Sales</string>
     <string name="menu_pay">Pay</string>
-
-    <!-- Business Info -->
-
-
-
-
-    <!-- Invoices -->
-
-
-
 
 </resources>
