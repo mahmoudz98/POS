@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.R
@@ -34,7 +49,7 @@ class SetBusinessUseCaseTest {
     private val setBusinessUseCase: SetBusinessUseCase = SetBusinessUseCase(testBusinessRepository)
 
     @Test
-    fun `invoke with valid data should add new business and return Resource of success true`() =
+    fun `when valid data should add new business and return Resource of success true`() =
         runTest {
             // When add new business in use case
             val addBusiness = setBusinessUseCase(business)
@@ -44,7 +59,7 @@ class SetBusinessUseCaseTest {
         }
 
     @Test
-    fun `invoke with empty business branches should return Resource with BRANCHES_EMPTY error`() =
+    fun `when empty business branches should return Resource with BRANCHES_EMPTY error`() =
         runTest {
             // When add business and business branches are empty
             val emptyBranchBusiness = Business()
@@ -53,12 +68,12 @@ class SetBusinessUseCaseTest {
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(emptyBranchBusiness)
             assertThat(
                 isAddBusiness.last(),
-                `is`(Resource.empty(R.string.branches_empty)),
+                `is`(Resource.empty(R.string.core_domain_branches_empty)),
             )
         }
 
     @Test
-    fun `invoke with empty phone should return Resource with PHONE_BUSINESS_EMPTY error`() =
+    fun `when empty phone should return Resource with PHONE_BUSINESS_EMPTY error`() =
         runTest {
             // When add business and phone is empty
             val businessWithEmptyPhone =
@@ -68,12 +83,12 @@ class SetBusinessUseCaseTest {
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyPhone)
             assertThat(
                 isAddBusiness.last(),
-                `is`(Resource.empty(R.string.phone_business_empty)),
+                `is`(Resource.empty(R.string.core_domain_phone_business_empty)),
             )
         }
 
     @Test
-    fun `invoke with empty email should return Resource with EMAIL_BUSINESS_EMPTY error`() =
+    fun `when empty email should return Resource with EMAIL_BUSINESS_EMPTY error`() =
         runTest {
             // When add business and email is empty
             val businessWithEmptyEmail =
@@ -83,7 +98,7 @@ class SetBusinessUseCaseTest {
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyEmail)
             assertThat(
                 isAddBusiness.last(),
-                `is`(Resource.empty(R.string.email_business_empty)),
+                `is`(Resource.empty(R.string.core_domain_email_business_empty)),
             )
         }
 }
