@@ -97,7 +97,6 @@ fun SignInScreen(viewModel: SignInActivityViewModel) {
     SignInScreen(
         uiState = uiState,
         onSignInCLick = {
-
             if (isGooglePlayServicesAvailable(context)) {
                 viewModel.signIn {
                     retrieveGoogleIdToken(
@@ -105,7 +104,6 @@ fun SignInScreen(viewModel: SignInActivityViewModel) {
                         viewModel.googleIdOption,
                     )
                 }
-
             } else {
                 showDownloadGooglePlay = true
             }
@@ -262,7 +260,6 @@ private suspend fun retrieveGoogleIdToken(
         GoogleIdTokenCredential.createFrom(credential.credential.data)
     return googleIdTokenCredentialRequest.idToken
 }
-
 
 @DevicePreviews
 @Composable
