@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_signin_app_name" translatable="false">POS</string>
+    <string name="feature_signin_pos" translatable="false">POS</string>
+    <!-- Sign In -->
+    <string name="feature_signin_google_title">Sign in with Google</string>
+    <string name="feature_signin_hint">Track sales, manage inventory, and stay in control of your business.</string>
+    <string name="feature_signin_employee_option">Or, log in as an employee</string>
+    <string name="feature_signin_google_play_services_required">Google Play Services Required</string>
+    <string name="feature_signin_google_play_services_message">This app needs Google Play services to work correctly. Please download and install them from the Play Store.</string>
+    <string name="feature_signin_action_download">Download</string>
+    <string name="feature_signin_error_google_sign_in">Google sign-in failed: %s</string>
+</resources>

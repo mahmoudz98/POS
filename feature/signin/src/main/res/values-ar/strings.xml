@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_signin_app_name" translatable="false">POS</string>
+    <string name="feature_signin_pos" translatable="false">نقطة البيع</string>
+    <!-- Sign In -->
+    <string name="feature_signin_google_title">تسجيل الدخول باستخدام Google</string>
+    <string name="feature_signin_hint">تتبع المبيعات، إدارة المخزون، والتحكم الكامل في عملك.</string>
+    <string name="feature_signin_employee_option">أو سجل الدخول كموظف</string>
+    <string name="feature_signin_google_play_services_required">خدمات Google Play مطلوبة</string>
+    <string name="feature_signin_google_play_services_message">يتطلب هذا التطبيق خدمات Google Play ليعمل بشكل صحيح. الرجاء تنزيلها وتثبيتها من متجر Play.</string>
+    <string name="feature_signin_action_download">تنزيل</string>
+    <string name="feature_signin_error_google_sign_in">فشل تسجيل الدخول باستخدام Google: %s</string>
+
+</resources>
