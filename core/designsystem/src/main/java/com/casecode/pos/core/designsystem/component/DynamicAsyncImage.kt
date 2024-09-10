@@ -50,7 +50,7 @@ import com.casecode.pos.core.designsystem.theme.LocalTintTheme
  */
 @Composable
 fun DynamicAsyncImage(
-    imageUrl: String,
+    imageUrl: String?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     placeholder: Painter = painterResource(R.drawable.core_designsystem_ic_placeholder),
