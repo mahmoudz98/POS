@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.domain.di
 
 import com.casecode.pos.core.domain.repository.BusinessRepository
@@ -8,6 +23,7 @@ import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
 import com.casecode.pos.core.domain.usecase.AddBranchBusinessUseCase
+import com.casecode.pos.core.domain.usecase.AddEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.AddEmployeesUseCase
 import com.casecode.pos.core.domain.usecase.AddInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.AddItemUseCase
@@ -21,7 +37,6 @@ import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.pos.core.domain.usecase.GetTodayInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.ItemImageUseCase
 import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.SetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
 import com.casecode.pos.core.domain.usecase.UpdateItemUseCase
@@ -58,7 +73,7 @@ object UseCaseModule {
 
     @Provides
     fun provideSetEmployeesBusinessUseCase(employeesBusRepo: EmployeesBusinessRepository) =
-        SetEmployeesBusinessUseCase(employeesBusRepo)
+        AddEmployeesBusinessUseCase(employeesBusRepo)
 
     @Provides
     fun provideAddEmployeesBusinessUseCase(employeesBusRepo: EmployeesBusinessRepository) =

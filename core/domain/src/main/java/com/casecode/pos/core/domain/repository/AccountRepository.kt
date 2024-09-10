@@ -16,11 +16,21 @@
 package com.casecode.pos.core.domain.repository
 
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.subscriptions.Subscription
-import kotlinx.coroutines.flow.Flow
 
-typealias SubscriptionsResource = Resource<List<Subscription>>
+interface AccountRepository {
+    suspend fun signIn(idToken: suspend () -> String): Resource<Int>
 
-interface SubscriptionsRepository {
-    fun getSubscriptions(): Flow<SubscriptionsResource>
+    suspend fun employeeLogin(
+        uid: String,
+        employeeId: String,
+        password: String,
+    ): Resource<Boolean>
+
+    suspend fun checkUserLogin()
+
+    suspend fun checkRegistration(email: String): Resource<Boolean>
+
+    suspend fun employeeLogOut()
+
+    suspend fun signOut()
 }
