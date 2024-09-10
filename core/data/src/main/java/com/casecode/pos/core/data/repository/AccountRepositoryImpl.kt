@@ -1,12 +1,24 @@
-package com.casecode.pos.core.data.service
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.core.data.repository
 
 import android.content.Context
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.exceptions.GetCredentialCancellationException
-import androidx.credentials.exceptions.GetCredentialException
-import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.common.AppDispatchers
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalModel
@@ -17,18 +29,14 @@ import com.casecode.pos.core.data.utils.EMPLOYEE_NAME_FIELD
 import com.casecode.pos.core.data.utils.EMPLOYEE_PASSWORD_FIELD
 import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
 import com.casecode.pos.core.datastore.PosPreferencesDataSource
+import com.casecode.pos.core.domain.repository.AccountRepository
 import com.casecode.pos.core.domain.utils.Resource
-import com.google.android.gms.common.api.UnsupportedApiCallException
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.casecode.pos.core.firebase.services.trace
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -40,80 +48,68 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class AccountServiceImpl
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-        private val googleIdOption: GetGoogleIdOption,
-        private val firebaseAuth: FirebaseAuth,
-        private val firestore: FirebaseFirestore,
-        private val posPreferencesDataSource: PosPreferencesDataSource,
-        @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    ) : AccountService {
-        private val credentialManager: CredentialManager = CredentialManager.create(context)
+class AccountRepositoryImpl
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
+    private val firebaseAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
+    private val posPreferencesDataSource: PosPreferencesDataSource,
+    @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+) : AccountRepository {
+    private val credentialManager: CredentialManager = CredentialManager.create(context)
 
-        override suspend fun signIn(activityContext: Context): Resource<Int> {
-            trace(SIGN_IN) {
-                return withContext(ioDispatcher) {
-                    try {
-                        val googleIdToken = retrieveGoogleIdToken(activityContext)
-                        val googleCredentials = buildGoogleAuthCredential(googleIdToken)
-                        val authResult = signInWithGoogleCredentials(googleCredentials)
+    override suspend fun signIn(idToken: suspend () -> String): Resource<Int> {
+        trace(SIGN_IN) {
+            return withContext(ioDispatcher) {
+                try {
+                    val googleIdToken = idToken()
+                    val googleCredentials = buildGoogleAuthCredential(googleIdToken)
+                    val authResult = signInWithGoogleCredentials(googleCredentials)
 
                     if (authResult.user != null) {
                         Resource.success(R.string.core_data_sign_in_success)
                     } else {
                         Resource.empty(R.string.core_data_sign_in_failure)
                     }
-
-                    } catch (e: Exception) {
-                        handleSignInException(e)
-                    }
+                } catch (e: Exception) {
+                    handleSignInException(e)
                 }
             }
         }
+    }
 
-    private fun handleSignInException(e: Exception): Resource<Int> {
-        return when (e) {
-            is GetCredentialCancellationException -> {
-                Timber.e(e)
-                Resource.error(R.string.core_data_sign_in_cancel)
-            }
+    private fun handleSignInException(e: Exception): Resource<Int> = when (e) {
+        is androidx.credentials.exceptions.GetCredentialCancellationException -> {
+            Timber.e(e)
+            Resource.error(R.string.core_data_sign_in_cancel)
+        }
 
-            is GetCredentialException -> {
-                Timber.e(e)
-                Resource.error(R.string.core_data_sign_in_exception)
-            }
+        is androidx.credentials.exceptions.GetCredentialException -> {
+            Timber.e(e)
+            Resource.error(com.casecode.pos.core.data.R.string.core_data_sign_in_exception)
+        }
 
-            is UnsupportedApiCallException -> {
-                Timber.e("UnsupportedApiCallException: $e")
-                Resource.error(R.string.core_data_unsupported_api_call)
-            }
+        is com.google.android.gms.common.api.UnsupportedApiCallException -> {
+            Timber.e("UnsupportedApiCallException: $e")
+            Resource.error(com.casecode.pos.core.data.R.string.core_data_unsupported_api_call)
+        }
 
-            is FirebaseAuthInvalidCredentialsException -> {
-                Resource.error(e.message)
-            }
+        is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> {
+            Resource.error(e.message)
+        }
 
-            is FirebaseAuthException -> {
-                Timber.e("Sign-in failed with FirebaseUserException: ${e.message}")
-                Resource.error(R.string.core_data_sign_in_api_exception)
-            }
+        is com.google.firebase.auth.FirebaseAuthException -> {
+            Timber.e("Sign-in failed with FirebaseUserException: ${e.message}")
+            Resource.error(com.casecode.pos.core.data.R.string.core_data_sign_in_api_exception)
+        }
 
-            else -> {
-                Timber.e("Sign-in failed with unexpected exception: ${e.message}")
-                Resource.error(R.string.core_data_sign_in_failure)
-            }
+        else -> {
+            Timber.e("Sign-in failed with unexpected exception: ${e.message}")
+            Resource.error(com.casecode.pos.core.data.R.string.core_data_sign_in_failure)
         }
     }
-    private suspend fun retrieveGoogleIdToken(activityContext: Context): String {
-        val credentialRequest =
-            GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
-        val credential =
-            credentialManager.getCredential(request = credentialRequest, context = activityContext)
-        val googleIdTokenCredentialRequest =
-            GoogleIdTokenCredential.createFrom(credential.credential.data)
-        return googleIdTokenCredentialRequest.idToken
-    }
+
 
     private fun buildGoogleAuthCredential(googleIdToken: String): AuthCredential =
         GoogleAuthProvider.getCredential(googleIdToken, null)
@@ -125,29 +121,10 @@ class AccountServiceImpl
         trace(IS_REGISTRATION_AND_BUSINESS_COMPLETED) {
             withContext(ioDispatcher) {
                 val currentUser = firebaseAuth.currentUser ?: return@withContext
-                val isAdmin =
-                    if (isFirstTimeSignIn(currentUser)) {
-                        false
-                    } else {
-                        isUserCompleteStep(currentUser.uid)
-                    }
+                val isAdmin = isUserCompleteStep(currentUser.uid)
+
                 posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
             }
-        }
-    }
-
-    private fun isFirstTimeSignIn(firebaseUser: FirebaseUser): Boolean {
-        val creationTime = firebaseUser.metadata?.creationTimestamp
-        val currentTime = System.currentTimeMillis()
-        val timeDifference = currentTime - creationTime!!
-
-        // Adjust the threshold as needed (e.g., 5 minutes)
-        return if (timeDifference < 5 * 60 * 1000) {
-            // First-time sign-in
-            true
-        } else {
-            // Existing user
-            false
         }
     }
 
@@ -167,7 +144,8 @@ class AccountServiceImpl
                         .get()
                         .await()
                 if (docRef.exists()) {
-                    val data = docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
+                    val data =
+                        docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
                     val isCompletedStep = data as? Boolean == true
                     isCompletedStep
                 } else {
@@ -187,7 +165,7 @@ class AccountServiceImpl
                 // Account creation succeeded, email is available
                 Timber.i("checkRegistration: email is created before :true")
                 Resource.Success(true)
-            } catch (e: FirebaseAuthUserCollisionException) {
+            } catch (_: FirebaseAuthUserCollisionException) {
                 Timber.i("checkRegistration: email is created before :false")
                 // Email already exists
                 Resource.Success(false) // Assuming password-based sign-in
@@ -211,12 +189,13 @@ class AccountServiceImpl
                 val document =
                     firestore
                         .collection(USERS_COLLECTION_PATH)
-                        .document("gOGCYjEnHRYqBu9YVub7Be1xUU93")
+                        .document(uid)
                         .get()
                         .await()
 
                 @Suppress("UNCHECKED_CAST")
-                val employees = document.get(EMPLOYEES_FIELD) as List<Map<String, Any>>?
+                val employees =
+                    document.get(EMPLOYEES_FIELD) as List<Map<String, Any>>?
                 val employee =
                     employees?.find { it[EMPLOYEE_NAME_FIELD] == employeeId && it[EMPLOYEE_PASSWORD_FIELD] == password }
                 if (employee != null) {
