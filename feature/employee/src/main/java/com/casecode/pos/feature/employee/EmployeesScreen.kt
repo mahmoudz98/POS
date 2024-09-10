@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.employee
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -46,6 +61,7 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
     var showEmployeeDialog by remember { mutableStateOf(false) }
     var showUpdateEmployeeDialog by remember { mutableStateOf(false) }
     val snackState = remember { SnackbarHostState() }
+    var showDeleteDialogDelete by remember { mutableStateOf(false) }
 
     SnackbarHost(
         hostState = snackState,
@@ -67,7 +83,10 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
             showUpdateEmployeeDialog = true
             viewModel.setEmployeeSelected(it)
         },
-        onItemLongClick = {},
+        onItemLongClick = {
+            viewModel.setEmployeeSelected(it)
+            showDeleteDialogDelete = true
+        },
     )
     if (showEmployeeDialog) {
         EmployeeDialog(onDismiss = { showEmployeeDialog = false }, viewModel = viewModel)
@@ -77,6 +96,15 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
             onDismiss = { showUpdateEmployeeDialog = false },
             isUpdate = true,
             viewModel = viewModel,
+        )
+    }
+    if (showDeleteDialogDelete) {
+        DeleteEmployeeDialog(
+            onConfirm = {
+                viewModel.deleteEmployee()
+                showDeleteDialogDelete = false
+            },
+            onDismiss = { showEmployeeDialog = false },
         )
     }
 }
@@ -91,19 +119,19 @@ fun EmployeesScreen(
 ) {
     Box(
         modifier =
-            modifier
-                .fillMaxSize()
-                .padding(16.dp),
+        modifier
+            .fillMaxSize()
+            .padding(16.dp),
     ) {
         FloatingActionButton(
             onClick = {
                 onAddClick()
             },
             modifier =
-                Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .zIndex(1f),
+            Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+                .zIndex(1f),
         ) {
             Icon(
                 imageVector = PosIcons.Add,
@@ -126,7 +154,7 @@ fun EmployeesScreen(
                     modifier
                         .fillMaxSize()
                         .wrapContentSize(Alignment.Center),
-                    contentDesc = "LoadingItems",
+                    contentDesc = "LoadingEmployees",
                 )
             }
 

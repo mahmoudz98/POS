@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.employee
 
 import android.util.Patterns
@@ -28,6 +43,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
+import com.casecode.pos.core.model.data.users.Branch
+import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.ui.R.array as uiArray
 import com.casecode.pos.core.ui.R.string as uiString
 
@@ -40,11 +57,43 @@ fun EmployeeDialog(
 ) {
     val employeeUpdate = if (isUpdate) viewModel.employeeSelected.collectAsState() else null
     val branches = viewModel.branches.collectAsState()
-    var name by remember { mutableStateOf(employeeUpdate?.value?.name ?: "") }
-    var phone by remember { mutableStateOf(employeeUpdate?.value?.phoneNumber ?: "") }
-    var password by remember { mutableStateOf(employeeUpdate?.value?.password ?: "") }
-    var selectedBranch by remember { mutableStateOf(employeeUpdate?.value?.branchName ?: "") }
-    var selectedPermission by remember { mutableStateOf(employeeUpdate?.value?.permission ?: "") }
+    EmployeeDialog(
+        isUpdate = isUpdate,
+        employeeUpdate = employeeUpdate?.value,
+        branches = branches.value,
+        onAddEmployee = viewModel::addEmployee,
+        onUpdateEmployee = viewModel::updateEmployee,
+        onDismiss = onDismiss,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EmployeeDialog(
+    isUpdate: Boolean,
+    employeeUpdate: Employee?,
+    branches: List<Branch>,
+    onAddEmployee: (
+        name: String,
+        phone: String,
+        password: String,
+        branchName: String,
+        permission: String,
+    ) -> Unit,
+    onUpdateEmployee: (
+        name: String,
+        phone: String,
+        password: String,
+        branchName: String,
+        permission: String,
+    ) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var name by remember { mutableStateOf(employeeUpdate?.name ?: "") }
+    var phone by remember { mutableStateOf(employeeUpdate?.phoneNumber ?: "") }
+    var password by remember { mutableStateOf(employeeUpdate?.password ?: "") }
+    var selectedBranch by remember { mutableStateOf(employeeUpdate?.branchName ?: "") }
+    var selectedPermission by remember { mutableStateOf(employeeUpdate?.permission ?: "") }
 
     var nameError by remember { mutableStateOf(false) }
     var phoneError by remember { mutableStateOf<Int?>(null) }
@@ -88,10 +137,10 @@ fun EmployeeDialog(
                     label = stringResource(uiString.core_ui_work_phone_number_hint),
                     supportingText = phoneError?.let { stringResource(it) },
                     keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Next,
-                        ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Next,
+                    ),
                     isError = phoneError != null,
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -112,7 +161,7 @@ fun EmployeeDialog(
                             }
                     },
                     label = stringResource(uiString.core_ui_employee_password_hint),
-                    supportingText = phoneError?.let { stringResource(it) },
+                    supportingText = passwordError?.let { stringResource(it) },
                     visualTransformation = PasswordVisualTransformation(),
                     isError = passwordError != null,
                     modifier = Modifier.fillMaxWidth(),
@@ -130,19 +179,19 @@ fun EmployeeDialog(
                         readOnly = true,
                         isError = branchError,
                         supportingText =
-                            if (branchError) stringResource(uiString.core_ui_error_add_employee_branch_empty) else null,
+                        if (branchError) stringResource(uiString.core_ui_error_add_employee_branch_empty) else null,
                         label = stringResource(uiString.core_ui_branch_name_hint),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = branchExpanded) },
                         modifier =
-                            Modifier
-                                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                                .fillMaxWidth(),
+                        Modifier
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth(),
                     )
                     ExposedDropdownMenu(
                         expanded = branchExpanded,
                         onDismissRequest = { branchExpanded = false },
                     ) {
-                        branches.value.forEach { branch ->
+                        branches.forEach { branch ->
                             DropdownMenuItem(
                                 text = {
                                     Text(
@@ -173,16 +222,16 @@ fun EmployeeDialog(
                         label = stringResource(uiString.core_ui_permissions_text),
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = permissionExpanded) },
                         supportingText =
-                            if (permissionError) {
-                                stringResource(
-                                    uiString.core_ui_error_add_employee_permission_empty,
-                                )
-                            } else {
-                                null
-                            },
+                        if (permissionError) {
+                            stringResource(
+                                uiString.core_ui_error_add_employee_permission_empty,
+                            )
+                        } else {
+                            null
+                        },
                         modifier =
-                            Modifier
-                                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                        Modifier
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                             .fillMaxWidth(),
                     )
                     ExposedDropdownMenu(
@@ -237,7 +286,7 @@ fun EmployeeDialog(
                         permissionError = selectedPermission.isEmpty()
                     } else {
                         if (isUpdate) {
-                            viewModel.updateEmployee(
+                            onUpdateEmployee(
                                 name,
                                 phone,
                                 password,
@@ -245,7 +294,7 @@ fun EmployeeDialog(
                                 selectedPermission,
                             )
                         } else {
-                            viewModel.addEmployee(
+                            onAddEmployee(
                                 name,
                                 phone,
                                 password,
