@@ -1,4 +1,19 @@
-package com.casecode.pos.feature.login_employee
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.feature.login.employee
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -41,8 +55,10 @@ import androidx.window.core.layout.WindowWidthSizeClass
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
+import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.scanOptions
 import com.casecode.pos.core.ui.R.string as uiString
 
@@ -57,7 +73,7 @@ fun LoginInEmployeeDialog(
         viewModel::showMessageLoginEmployee,
         viewModel::snackbarMessageShownLoginEmployee,
         viewModel::loginByEmployee,
-        onDismiss,
+        onDismiss = onDismiss,
     )
 }
 
@@ -67,9 +83,9 @@ fun LoginInEmployeeDialog(
     showMessage: (Int) -> Unit,
     onShowMessage: () -> Unit,
     onLoginEmployeeClick: (String, String, String) -> Unit,
-    onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
+    modifier: Modifier = Modifier,
+    onDismiss: () -> Unit,
 ) {
     val isCompact = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT
     val configuration = LocalConfiguration.current
@@ -86,7 +102,7 @@ fun LoginInEmployeeDialog(
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
+        modifier = modifier.widthIn(max = configuration.screenWidthDp.dp - 40.dp),
         onDismissRequest = { onDismiss() },
         title = {
             Text(
@@ -100,19 +116,8 @@ fun LoginInEmployeeDialog(
             Box {
                 SnackbarHost(
                     hostState = snackState,
-                    modifier
-                        .align(Alignment.TopCenter)
-                        .padding(2.dp)
-                        .zIndex(1f),
+                    modifier.zIndex(1f),
                 )
-
-                uiState.userMessage?.let { message ->
-                    val snackbarText = stringResource(message)
-                    LaunchedEffect(snackState, uiState, message, snackbarText) {
-                        snackState.showSnackbar(snackbarText)
-                        onShowMessage()
-                    }
-                }
 
                 Column {
                     PosOutlinedTextField(
@@ -125,23 +130,25 @@ fun LoginInEmployeeDialog(
                         label = stringResource(R.string.feature_login_employee_hint_scan_admin_id),
                         isError = userAdminError.value,
                         supportingText =
-                            if (userAdminError.value) {
-                                stringResource(
-                                    R.string.feature_login_employee_login_error_uid_empty,
-                                )
-                            } else {
-                                null
-                            },
+                        if (userAdminError.value) {
+                            stringResource(
+                                R.string.feature_login_employee_login_error_uid_empty,
+                            )
+                        } else {
+                            null
+                        },
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Unspecified,
-                                imeAction = ImeAction.Next,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Unspecified,
+                            imeAction = ImeAction.Next,
+                        ),
                         trailingIcon = {
                             IconButton(
                                 onClick = {
                                     context.scanOptions(
+                                        onModuleDownloaded = { showMessage(it) },
+                                        onModuleDownloading = { showMessage(it) },
                                         onResult = {
                                             userAdmin.value = it
                                             userAdminError.value = it.isBlank()
@@ -274,7 +281,7 @@ fun LoginInEmployeeDialog(
             }
         },
         confirmButton = {
-            Button(
+            PosTextButton(
                 enabled = uiState.inProgressLoginEmployee.not(),
                 onClick = {
                     if (name.value.isEmpty() || userAdmin.value.isEmpty() || password.value.isEmpty()) {
@@ -290,9 +297,16 @@ fun LoginInEmployeeDialog(
             }
         },
     )
+    uiState.userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(snackState, uiState, message, snackbarText) {
+            snackState.showSnackbar(snackbarText)
+            onShowMessage()
+        }
+    }
 }
 
-@com.casecode.pos.core.ui.DevicePreviews
+@DevicePreviews
 @Composable
 fun LoginInEmployeeDialogPreview() {
     POSTheme {
@@ -302,13 +316,13 @@ fun LoginInEmployeeDialogPreview() {
                 showMessage = {},
                 onShowMessage = {},
                 onLoginEmployeeClick = { _, _, _ -> },
-                {},
+                onDismiss = {},
             )
         }
     }
 }
 
-@com.casecode.pos.core.ui.DevicePreviews
+@DevicePreviews
 @Composable
 fun LoginInEmployeeDialogLoadingPreview() {
     POSTheme {
@@ -318,7 +332,7 @@ fun LoginInEmployeeDialogLoadingPreview() {
                 showMessage = {},
                 onShowMessage = {},
                 onLoginEmployeeClick = { _, _, _ -> },
-                {},
+                onDismiss = {},
             )
         }
     }
