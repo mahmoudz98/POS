@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.ui.signIn
+package com.casecode.pos.feature.signin
 
 data class SignInActivityUiState(
     val userMessage: Int? = null,
     val isOnline: Boolean = false,
+    val isLoading: Boolean = false,
 )

@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.ui.signIn
+package com.casecode.pos.feature.signin
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,13 +31,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,28 +53,59 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.core.content.ContextCompat.startActivity
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.R
 import com.casecode.pos.core.designsystem.component.PosBackground
+import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.model.data.LoginStateResult
+import com.casecode.pos.core.ui.DevicePreviews
+import com.casecode.pos.core.ui.moveToMainActivity
+import com.casecode.pos.core.ui.moveToStepperActivity
+import com.casecode.pos.feature.login.employee.LoginInEmployeeDialog
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.casecode.pos.core.ui.R as uiR
 
 @Composable
 fun SignInScreen(viewModel: SignInActivityViewModel) {
     val uiState by viewModel.signInUiState.collectAsStateWithLifecycle()
+    val signUiState by viewModel.loginStateResult.collectAsStateWithLifecycle()
     var showDialogLoginEmployee by rememberSaveable { mutableStateOf(false) }
     var showDownloadGooglePlay by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    DisposableEffect(signUiState) {
+        when (signUiState) {
+            is LoginStateResult.NotCompleteBusiness -> {
+                moveToStepperActivity(context)
+            }
+
+            is LoginStateResult.EmployeeLogin, is LoginStateResult.SuccessLoginAdmin -> {
+                moveToMainActivity(context)
+            }
+
+            else -> {}
+        }
+        onDispose {}
+    }
 
     SignInScreen(
         uiState = uiState,
         onSignInCLick = {
+
             if (isGooglePlayServicesAvailable(context)) {
-                viewModel.signIn(context as Activity)
+                viewModel.signIn {
+                    retrieveGoogleIdToken(
+                        context as Activity,
+                        viewModel.googleIdOption,
+                    )
+                }
+
             } else {
                 showDownloadGooglePlay = true
             }
@@ -89,17 +117,17 @@ fun SignInScreen(viewModel: SignInActivityViewModel) {
     )
 
     if (showDialogLoginEmployee) {
-        com.casecode.pos.feature.loginEmployee.LoginInEmployeeDialog {
+        LoginInEmployeeDialog {
             showDialogLoginEmployee = false
         }
     }
     if (showDownloadGooglePlay) {
-        ShowAlternativeSignInDialog(context) { showDownloadGooglePlay = false }
+        DownloadPlayServiceDialog(context) { showDownloadGooglePlay = false }
     }
 }
 
 @Composable
-fun SignInScreen(
+internal fun SignInScreen(
     modifier: Modifier = Modifier,
     uiState: SignInActivityUiState,
     onSignInCLick: () -> Unit,
@@ -116,14 +144,6 @@ fun SignInScreen(
             .zIndex(1f),
     )
 
-    uiState.userMessage?.let { message ->
-        val snackbarText = stringResource(message)
-        LaunchedEffect(snackState, uiState, message, snackbarText) {
-            snackState.showSnackbar(snackbarText)
-            onMessageShown()
-        }
-    }
-
     Box(
         modifier =
         modifier
@@ -131,6 +151,9 @@ fun SignInScreen(
             .padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
+        if (uiState.isLoading) {
+            PosLoadingWheel("SignInLoading")
+        }
         Column(
             modifier =
             modifier
@@ -143,7 +166,7 @@ fun SignInScreen(
                 Spacer(modifier = Modifier.height(64.dp))
             }
             Image(
-                painter = painterResource(id = R.drawable.ic_point_of_sale_24),
+                painter = painterResource(id = R.drawable.feature_signin_ic_point_of_sale_24),
                 contentDescription = null,
                 modifier = Modifier.wrapContentSize(),
             )
@@ -153,26 +176,26 @@ fun SignInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(id = R.string.app_name),
+                    text = stringResource(id = R.string.feature_signin_app_name),
                     style = MaterialTheme.typography.headlineLarge,
                     textAlign = TextAlign.Center,
                 )
                 if (!isLandscape) {
                     Text(
-                        text = stringResource(id = R.string.pos),
+                        text = stringResource(id = R.string.feature_signin_pos),
                         style = MaterialTheme.typography.labelMedium,
                         textAlign = TextAlign.Center,
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f)) // Push buttons to the bottom
+            Spacer(modifier = Modifier.weight(1f))
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(id = R.string.sign_in_hint),
+                    text = stringResource(id = R.string.feature_signin_hint),
                     style = MaterialTheme.typography.labelMedium,
                     textAlign = TextAlign.Center,
                 )
@@ -186,12 +209,12 @@ fun SignInScreen(
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
-                            painter = painterResource(com.casecode.pos.feature.signout.R.drawable.feature_signout_ic_google),
+                            painter = painterResource(uiR.drawable.core_ui_ic_google),
                             contentDescription = null,
                             modifier = Modifier.size(ButtonDefaults.IconSize),
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = stringResource(id = R.string.sign_in_google_title))
+                        Text(text = stringResource(id = R.string.feature_signin_google_title))
                     }
                 }
 
@@ -204,11 +227,18 @@ fun SignInScreen(
                         .wrapContentWidth(Alignment.CenterHorizontally),
                     onClick = onLoginEmployeeClick,
                 ) {
-                    Text(stringResource(id = R.string.sign_in_employee_option))
+                    Text(stringResource(id = R.string.feature_signin_employee_option))
                 }
             }
 
             Spacer(modifier = Modifier.height(16.dp)) // Bottom padding
+        }
+    }
+    uiState.userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(snackState, uiState, message, snackbarText) {
+            snackState.showSnackbar(snackbarText)
+            onMessageShown()
         }
     }
 }
@@ -219,55 +249,22 @@ private fun isGooglePlayServicesAvailable(context: Context): Boolean {
     return resultCode == ConnectionResult.SUCCESS
 }
 
-@Composable
-private fun ShowAlternativeSignInDialog(
-    context: Context,
-    onDismiss: () -> Unit,
-) {
-    // Display a dialog or message informing the user about the lack of Google Play services
-    // and provide an option to download them from the Play Store.
-    AlertDialog(
-        onDismissRequest = { onDismiss() },
-        title = { Text(text = stringResource(R.string.google_play_services_required)) },
-        text = { Text(text = stringResource(R.string.google_play_services_message)) },
-        confirmButton = {
-            PosTextButton(
-                onClick = {
-                    openGooglePlayStore(context)
-                    onDismiss()
-                },
-                text = { Text(stringResource(R.string.action_download)) },
-            )
-        },
-        dismissButton = {
-            PosTextButton(
-                onClick = { onDismiss() },
-                text = { Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text)) },
-            )
-        },
-    )
+private suspend fun retrieveGoogleIdToken(
+    activityContext: Context,
+    googleIdOption: GetGoogleIdOption,
+): String {
+    val credentialRequest =
+        GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
+    val credential =
+        CredentialManager.create(activityContext)
+            .getCredential(request = credentialRequest, context = activityContext)
+    val googleIdTokenCredentialRequest =
+        GoogleIdTokenCredential.createFrom(credential.credential.data)
+    return googleIdTokenCredentialRequest.idToken
 }
 
-private fun openGooglePlayStore(context: Context) {
-    val playStoreIntent =
-        Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
-        )
-    try {
-        startActivity(context, playStoreIntent, null)
-    } catch (_: ActivityNotFoundException) {
-        // Handle the case where the Play Store app is not installed
-        val webIntent =
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
-            )
-        startActivity(context, webIntent, null)
-    }
-}
 
-@com.casecode.pos.core.ui.DevicePreviews
+@DevicePreviews
 @Composable
 fun SignInScreenPreview() {
     POSTheme {
