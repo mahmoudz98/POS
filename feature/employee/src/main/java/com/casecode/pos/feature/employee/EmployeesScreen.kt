@@ -17,7 +17,8 @@ package com.casecode.pos.feature.employee
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,14 +26,17 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,13 +45,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
+import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.Resource
@@ -60,24 +65,12 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showEmployeeDialog by remember { mutableStateOf(false) }
     var showUpdateEmployeeDialog by remember { mutableStateOf(false) }
-    val snackState = remember { SnackbarHostState() }
     var showDeleteDialogDelete by remember { mutableStateOf(false) }
+    var showUserAdminQrDialog by remember { mutableStateOf(false) }
 
-    SnackbarHost(
-        hostState = snackState,
-        Modifier
-            .padding(8.dp)
-            .zIndex(1f),
-    )
-    uiState.userMessage?.let { message ->
-        val snackbarText = stringResource(message)
-        LaunchedEffect(snackState, uiState, message, snackbarText) {
-            snackState.showSnackbar(snackbarText)
-            viewModel.snackbarMessageShown()
-        }
-    }
     EmployeesScreen(
         uiState,
+        onActionClick = { showUserAdminQrDialog = true },
         onAddClick = { showEmployeeDialog = true },
         onEmployeeClick = {
             showUpdateEmployeeDialog = true
@@ -87,7 +80,12 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
             viewModel.setEmployeeSelected(it)
             showDeleteDialogDelete = true
         },
-    )
+        onMessageShown = viewModel::snackbarMessageShown,
+
+        )
+    if (showUserAdminQrDialog) {
+        UserAdminQrDialog(onDismiss = { showUserAdminQrDialog = false })
+    }
     if (showEmployeeDialog) {
         EmployeeDialog(onDismiss = { showEmployeeDialog = false }, viewModel = viewModel)
     }
@@ -104,69 +102,100 @@ fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
                 viewModel.deleteEmployee()
                 showDeleteDialogDelete = false
             },
-            onDismiss = { showEmployeeDialog = false },
+            onDismiss = { showDeleteDialogDelete = false },
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmployeesScreen(
     uiState: UiEmployeesState,
     modifier: Modifier = Modifier,
+    onActionClick: () -> Unit = {},
     onAddClick: () -> Unit,
     onEmployeeClick: (Employee) -> Unit = {},
     onItemLongClick: (Employee) -> Unit = {},
+    onMessageShown: () -> Unit = {},
 ) {
-    Box(
-        modifier =
-        modifier
-            .fillMaxSize()
-            .padding(16.dp),
-    ) {
-        FloatingActionButton(
-            onClick = {
-                onAddClick()
-            },
+    val snackState = remember { SnackbarHostState() }
+
+    Scaffold(
+        containerColor = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onBackground,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        snackbarHost = {
+            SnackbarHost(hostState = snackState)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    onAddClick()
+                },
+                modifier = Modifier.padding(16.dp),
+
+                ) {
+                Icon(
+                    imageVector = PosIcons.Add,
+                    contentDescription = stringResource(uiString.core_ui_add_employee_button_text),
+                )
+            }
+        },
+    ) { padding ->
+        Column(
             modifier =
-            Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .zIndex(1f),
+            modifier
+                .fillMaxSize()
+                .padding(padding),
         ) {
-            Icon(
-                imageVector = PosIcons.Add,
-                contentDescription = stringResource(uiString.core_ui_add_employee_button_text),
-            )
-        }
+            PosTopAppBar(
+                modifier = modifier,
+                titleRes = uiString.core_ui_employee_header_title,
+                onActionClick = { onActionClick() },
+                actionIconContentDescription = null,
+                actionIcon = PosIcons.UserAdman,
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
 
-        when (uiState.resourceEmployees) {
-            is Resource.Empty -> {
-                EmployeeEmptyScreen()
-            }
-
-            is Resource.Error -> {
-                EmployeeEmptyScreen()
-            }
-
-            Resource.Loading -> {
-                PosLoadingWheel(
-                    modifier =
-                    modifier
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center),
-                    contentDesc = "LoadingEmployees",
                 )
+            when (uiState.resourceEmployees) {
+                is Resource.Empty -> {
+                    EmployeeEmptyScreen()
+                }
+
+                is Resource.Error -> {
+                    EmployeeEmptyScreen()
+                }
+
+                Resource.Loading -> {
+                    PosLoadingWheel(
+                        modifier =
+                        modifier
+                            .fillMaxSize()
+                            .wrapContentSize(Alignment.Center),
+                        contentDesc = "LoadingEmployees",
+                    )
+                }
+
+                is Resource.Success -> {
+                    EmployeesContent(
+                        uiState.resourceEmployees.data,
+                        onEmployeeClick = onEmployeeClick,
+                        onEmployeeLongClick = onItemLongClick,
+                    )
+                }
             }
 
-            is Resource.Success -> {
-                EmployeesContent(
-                    uiState.resourceEmployees.data,
-                    onEmployeeClick = onEmployeeClick,
-                    onEmployeeLongClick = onItemLongClick,
-                )
-            }
         }
     }
+    uiState.userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(message) {
+            snackState.showSnackbar(snackbarText)
+            onMessageShown()
+
+        }
+    }
+
 }
 
 @Composable

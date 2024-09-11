@@ -62,7 +62,9 @@ internal fun DeleteEmployeeDialog(
             }
         },
         dismissButton = {
-            PosTextButton(onClick = onDismiss) { Text(stringResource(uiString.string.core_ui_dialog_cancel_button_text)) }
+            PosTextButton(onClick = onDismiss) {
+                Text(stringResource(uiString.string.core_ui_dialog_cancel_button_text))
+            }
         },
     )
 }

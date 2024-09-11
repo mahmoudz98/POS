@@ -16,4 +16,6 @@
 <resources>
     <string name="feature_employee_dialog_delete_title">حذف الموظف</string>
     <string name="feature_employee_dialog_delete_message">هل انت متاكد من حدف الموظف</string>
+    <string name="feature_employee_dialog_title_user_admin">معرف المستخدم المسؤول</string>
+    <string name="feature_employee_dialog_message_user_admin">استخدم الماسح الضوئي لمسح رمز الاستجابة السريعة عندما يرغب الموظف في تسجيل الدخول كبائع أو مسؤول.</string>
 </resources>

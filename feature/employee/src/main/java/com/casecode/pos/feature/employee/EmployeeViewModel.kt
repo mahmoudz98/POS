@@ -27,6 +27,7 @@ import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.domain.utils.BusinessResult
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.firebase.services.AuthService
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Employee
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -47,6 +48,7 @@ constructor(
     private val addEmployeesUseCase: AddEmployeesUseCase,
     private val updateEmployeesUseCase: UpdateEmployeesUseCase,
     private val deleteEmployeeUseCase: DeleteEmployeeUseCase,
+    private val authService: AuthService,
 ) : ViewModel() {
     private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -58,6 +60,14 @@ constructor(
 
     private val _branches: MutableStateFlow<List<Branch>> = MutableStateFlow(emptyList())
     val branches get() = _branches.asStateFlow()
+    val currentUid = MutableStateFlow<String>("")
+
+    fun getCurrentUid() {
+        viewModelScope.launch {
+            currentUid.update { authService.currentUserId() }
+        }
+
+    }
 
     init {
         fetchEmployees()
@@ -122,13 +132,8 @@ constructor(
     }
 
     fun addEmployee(
-        name: String,
-        phone: String,
-        password: String,
-        branchName: String,
-        permission: String,
+        employee: Employee,
     ) {
-        val employee = Employee(name, phone, password, branchName, permission)
         if (isOnline.value == false) {
             return showSnackbarMessage(uiString.core_ui_error_network)
         }
@@ -150,27 +155,22 @@ constructor(
         }
     }
 
-    fun updateEmployee(
-        name: String,
-        phone: String,
-        password: String,
-        branchName: String,
-        permission: String,
-    ) {
+    fun updateEmployee(newEmployee: Employee) {
         if (isOnline.value == false) return showSnackbarMessage(uiString.core_ui_error_network)
-        val newEmployee = Employee(name, phone, password, branchName, permission)
         val oldEmployee =
             _employeeSelected.value
                 ?: return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
 
-        val employees = (uiState.value.resourceEmployees as? Resource.Success)?.data
 
+        if (oldEmployee == newEmployee) {
+            return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
+        }
+        val employees = (uiState.value.resourceEmployees as? Resource.Success)?.data
         if (employees?.isEmployeeNameDuplicate(newEmployee, oldEmployee) == true) {
             return showSnackbarMessage(uiString.core_ui_error_employee_name_duplicate)
         }
-        if (oldEmployee == newEmployee) return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
         viewModelScope.launch {
-            val updateEmployeeResource = updateEmployeesUseCase(newEmployee, oldEmployee)
+            val updateEmployeeResource = updateEmployeesUseCase(oldEmployee, newEmployee)
             if (updateEmployeeResource is Resource.Error) {
                 val message =
                     updateEmployeeResource.message as? Int
@@ -181,6 +181,7 @@ constructor(
             }
         }
     }
+
     fun deleteEmployee() {
         if (isOnline.value == false) {
             return showSnackbarMessage(uiString.core_ui_error_network)
@@ -199,6 +200,7 @@ constructor(
             }
         }
     }
+
     fun showSnackbarMessage(message: Int) {
         _uiState.update { it.copy(userMessage = message) }
     }

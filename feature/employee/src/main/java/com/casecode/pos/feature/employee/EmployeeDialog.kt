@@ -73,20 +73,8 @@ fun EmployeeDialog(
     isUpdate: Boolean,
     employeeUpdate: Employee?,
     branches: List<Branch>,
-    onAddEmployee: (
-        name: String,
-        phone: String,
-        password: String,
-        branchName: String,
-        permission: String,
-    ) -> Unit,
-    onUpdateEmployee: (
-        name: String,
-        phone: String,
-        password: String,
-        branchName: String,
-        permission: String,
-    ) -> Unit,
+    onAddEmployee: (Employee) -> Unit,
+    onUpdateEmployee: (Employee) -> Unit,
     onDismiss: () -> Unit,
 ) {
     var name by remember { mutableStateOf(employeeUpdate?.name ?: "") }
@@ -287,19 +275,12 @@ fun EmployeeDialog(
                     } else {
                         if (isUpdate) {
                             onUpdateEmployee(
-                                name,
-                                phone,
-                                password,
-                                selectedBranch,
-                                selectedPermission,
-                            )
+                                Employee(name, phone, password, selectedBranch, selectedPermission),
+
+                                )
                         } else {
                             onAddEmployee(
-                                name,
-                                phone,
-                                password,
-                                selectedBranch,
-                                selectedPermission,
+                                Employee(name, phone, password, selectedBranch, selectedPermission),
                             )
                         }
                         onDismiss()
