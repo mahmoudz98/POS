@@ -20,8 +20,10 @@ import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
+import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
+import com.casecode.pos.core.testing.service.TestAuthService
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
 import kotlinx.coroutines.test.runTest
@@ -40,13 +42,14 @@ class EmployeeViewModelTest {
     private lateinit var viewModel: EmployeeViewModel
     private val networkMonitor = TestNetworkMonitor()
     private val employeesBusinessRepository = TestEmployeesBusinessRepository()
+    private val testAuth = TestAuthService()
     private val businessRepository = TestBusinessRepository()
     private val getEmployees = GetEmployeesBusinessUseCase(employeesBusinessRepository)
     private val getBusiness = GetBusinessUseCase(businessRepository)
     private val addEmployee = AddEmployeesUseCase(employeesBusinessRepository)
     private val updateEmployee = UpdateEmployeesUseCase(employeesBusinessRepository)
     private val deleteEmployeeUseCase = DeleteEmployeeUseCase(employeesBusinessRepository)
-
+    private val employee = Employee("mahmoud22", "131434", "1234", "branch1", "sale")
     @Before
     fun init() {
         viewModel = EmployeeViewModel(
@@ -56,13 +59,14 @@ class EmployeeViewModelTest {
             addEmployee,
             updateEmployee,
             deleteEmployeeUseCase,
+            testAuth,
         )
     }
 
     @Test
     fun addEmployee_hasEmployee_returnAddEmployeeMessage() = runTest {
         // Given
-        viewModel.addEmployee("mahmoud22", "131434", "1234", "branch1", "sale")
+        viewModel.addEmployee(employee)
         assertEquals(
             viewModel.uiState.value.userMessage,
             uiString.core_ui_success_add_employee_message,
@@ -72,7 +76,8 @@ class EmployeeViewModelTest {
     @Test
     fun addEmployee_nameEmployeeDuplicateEmployee_returnMessageDuplicateName() = runTest {
         // Given
-        viewModel.addEmployee("Mahmoud", "131434", "1234", "branch1", "sale")
+        val nameDuplicate = employeesBusinessRepository.fakeEmployees[0].name
+        viewModel.addEmployee(Employee(nameDuplicate, "131434", "1234", "branch1", "sale"))
         assertEquals(
             viewModel.uiState.value.userMessage,
             uiString.core_ui_error_employee_name_duplicate,
@@ -82,7 +87,7 @@ class EmployeeViewModelTest {
     @Test
     fun addEmployee_error_returnMessageError() = runTest {
         employeesBusinessRepository setReturnError true
-        viewModel.addEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
+        viewModel.addEmployee(employee)
         assertEquals(
             viewModel.uiState.value.userMessage,
             com.casecode.pos.core.data.R.string.core_data_add_employees_business_failure,
@@ -94,7 +99,7 @@ class EmployeeViewModelTest {
         // Given
         viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
         // When
-        viewModel.updateEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
+        viewModel.updateEmployee(employee)
         assertEquals(
             viewModel.uiState.value.userMessage,
             uiString.core_ui_success_update_employee_message,
@@ -107,7 +112,7 @@ class EmployeeViewModelTest {
         viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
         // When
         val nameDuplicate = employeesBusinessRepository.fakeEmployees[1].name
-        viewModel.updateEmployee(nameDuplicate, "131434", "1234", "branch1", "sale")
+        viewModel.updateEmployee(Employee(nameDuplicate, "131434", "1234", "branch1", "sale"))
         assertEquals(
             viewModel.uiState.value.userMessage,
             uiString.core_ui_error_employee_name_duplicate,
@@ -124,8 +129,8 @@ class EmployeeViewModelTest {
         val branchName = employeesBusinessRepository.fakeEmployees[0].branchName!!
         val permission = employeesBusinessRepository.fakeEmployees[0].permission
         // When
-
-        viewModel.updateEmployee(name, phoneNumber, password, branchName, permission)
+        val sameEmployee = Employee(name, phoneNumber, password, branchName, permission)
+        viewModel.updateEmployee(sameEmployee)
 
         assertEquals(
             viewModel.uiState.value.userMessage,
@@ -137,7 +142,7 @@ class EmployeeViewModelTest {
     fun updateEmployee_error_returnMessageError() = runTest {
         employeesBusinessRepository setReturnError true
         viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
-        viewModel.updateEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
+        viewModel.updateEmployee(employee)
 
         assertEquals(
             viewModel.uiState.value.userMessage,
@@ -151,7 +156,7 @@ class EmployeeViewModelTest {
         viewModel.setEmployeeSelected(employeesBusinessRepository.fakeEmployees[0])
         // When
         networkMonitor.setConnected(false)
-        viewModel.updateEmployee("Mahmoud1223", "131434", "1234", "branch1", "sale")
+        viewModel.updateEmployee(employee)
         // Then
 
         assertEquals(
