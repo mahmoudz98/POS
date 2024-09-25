@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.item
 
 import androidx.compose.runtime.remember
@@ -11,15 +26,15 @@ import androidx.navigation.compose.navigation
 
 const val ITEMS_GRAPH = "items_graph"
 const val ITEMS_ROUTE = "items_route"
-const val ITEM_DIALOG_ROUTE = "item_dialog_route"
-const val ITEM_update_DIALOG_ROUTE = "item_update_dialog_route"
+const val ADD_ITEM_ROUTE = "add_item_route"
+const val UPDATE_ITEM_ROUTE = "update_item_route"
 const val QR_PRINT_ITEM_DIALOG_ROUTE = "qr_print_item_dialog_route"
 
 fun NavGraphBuilder.itemsGraph(navController: NavController) {
     navigation(startDestination = ITEMS_ROUTE, route = ITEMS_GRAPH) {
         itemsScreen(navController)
-        itemDialog(navController, onDismiss = { navController.popBackStack() })
-        itemUpdateDialog(navController)
+        addItemScreen(navController, onNavigateBack = { navController.popBackStack() })
+        updateItemScreen(navController)
         qrCodePrintItemDialog(navController)
     }
 }
@@ -34,41 +49,41 @@ fun NavGraphBuilder.itemsScreen(navController: NavController) {
 
         ItemsRoute(
             viewModel = viewModel,
-            onAddItemClick = navController::navigateToItemDialog,
-            onItemClick = navController::navigateToUpdateItemDialog,
+            onAddItemClick = navController::navigateToAddItem,
+            onItemClick = navController::navigateToUpdateUpdateItem,
             onPrintItemClick = navController::navigateToQRCodePrintItemDialog,
         )
     }
 }
 
-private fun NavGraphBuilder.itemDialog(
+private fun NavGraphBuilder.addItemScreen(
     navController: NavController,
-    onDismiss: () -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
-    dialog(route = ITEM_DIALOG_ROUTE) {
+    composable(route = ADD_ITEM_ROUTE) {
         val parentEntry =
             remember(it) {
                 navController.getBackStackEntry(ITEMS_GRAPH)
             }
         val parentViewModel: ItemsViewModel = hiltViewModel(parentEntry)
-        ItemDialog(
+        AddOrUpdateItemRoute(
             viewModel = parentViewModel,
-            onDismiss = onDismiss,
+            onNavigateBack = onNavigateBack,
         )
     }
 }
 
-private fun NavGraphBuilder.itemUpdateDialog(navController: NavController) {
-    dialog(route = ITEM_update_DIALOG_ROUTE) {
+private fun NavGraphBuilder.updateItemScreen(navController: NavController) {
+    composable(route = UPDATE_ITEM_ROUTE) {
         val parentEntry =
             remember(it) {
                 navController.getBackStackEntry(ITEMS_GRAPH)
             }
         val parentViewModel: ItemsViewModel = hiltViewModel(parentEntry)
-        ItemDialog(
+        AddOrUpdateItemRoute(
             viewModel = parentViewModel,
             isUpdate = true,
-            onDismiss = {
+            onNavigateBack = {
                 navController.popBackStack()
             },
         )
@@ -95,8 +110,8 @@ fun NavController.navigateToItemsGraph(navOptions: NavOptions) = navigate(ITEMS_
 
 fun NavController.navigateToItems() = navigate(ITEMS_ROUTE)
 
-private fun NavController.navigateToItemDialog() = navigate(ITEM_DIALOG_ROUTE)
+private fun NavController.navigateToAddItem() = navigate(ADD_ITEM_ROUTE)
 
-fun NavController.navigateToUpdateItemDialog() = navigate(ITEM_update_DIALOG_ROUTE)
+fun NavController.navigateToUpdateUpdateItem() = navigate(UPDATE_ITEM_ROUTE)
 
 fun NavController.navigateToQRCodePrintItemDialog() = navigate(QR_PRINT_ITEM_DIALOG_ROUTE)
