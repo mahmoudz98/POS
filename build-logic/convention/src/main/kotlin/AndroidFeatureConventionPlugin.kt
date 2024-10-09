@@ -5,7 +5,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import kotlin.text.get
 
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -27,8 +26,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
-                add("testImplementation", libs.findLibrary("test.hamcrest").get())
-                add("testCompileOnly", libs.findLibrary("test.hamcrest.library").get())
 
                 add("testImplementation", libs.findLibrary("androidx.navigation.testing").get())
                 add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
