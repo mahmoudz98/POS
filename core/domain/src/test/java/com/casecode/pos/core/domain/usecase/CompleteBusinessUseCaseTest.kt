@@ -19,8 +19,6 @@ import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,10 +31,24 @@ class CompleteBusinessUseCaseTest {
     private val completeBusinessUseCase = CompleteBusinessUseCase(testBusinessRepository)
 
     @Test
-    fun `when valid UID return resource with success`() =
+    fun `when completed business successfully then return resource success`() =
         runTest {
-            val isCompleteBusiness = completeBusinessUseCase()
+            // When
+            val result = completeBusinessUseCase()
 
-            assertThat(isCompleteBusiness, `is`(Resource.success(true)))
+            // Then
+            assert(result is Resource.Success)
+        }
+
+    @Test
+    fun `when completed business failed then return resource error`() =
+        runTest {
+            // given
+            testBusinessRepository.setReturnError(true)
+            // When
+            val result = completeBusinessUseCase()
+
+            // Then
+            assert(result is Resource.Error)
         }
 }
