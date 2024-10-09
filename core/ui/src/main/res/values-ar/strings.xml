@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <resources>
 
     <string name="core_ui_menu_business_info_title">معلومات العمل</string>
@@ -12,7 +26,8 @@
     <string name="core_ui_message_scan_complete">تم المسح الضوئي.</string>
     <string name="core_ui_message_scan_error">خطأ في المسح الضوئي: %s</string>
     <string name="core_ui_message_scan_error_open">خطا فى فتح شاشه ماسح الباركود</string>
-
+    <string name="core_ui_scan_module_downloading">جارى تحميل خدمه قارى الباركود</string>
+    <string name="core_ui_scan_module_complete_downloading">يتم فتح قارى الباركود</string>
     <string name="core_ui_scan_result_empty">نتيجة المسح الضوئي فارغة.</string>
     <string name="core_ui_employee_name_hint">الاسم</string>
     <string name="core_ui_employee_password_hint">كلمة المرور</string>
@@ -89,11 +104,15 @@
 
     <!-- Dialogs -->
     <string name="core_ui_dialog_cancel_button_text">إلغاء</string>
+    <string name="core_ui_dialog_delete_button_text">حذف</string>
     <string name="core_ui_dialog_ok_button_text">موافق</string>
     <string name="core_ui_dialog_permission_camera_title">مطلوب إذن الكاميرا</string>
     <string name="core_ui_dialog_permission_camera_message">يحتاج هذا التطبيق إلى إذن الوصول إلى الكاميرا ليعمل بشكل صحيح.</string>
     <string name="core_ui_request_permission_button_text">منح الإذن</string>
 
+    <string name="core_ui_item_quantity_label">الكمية</string>
+    <string name="core_ui_item_reorder_level_label">إعادة ترتيب مستوى الكمية</string>
+    <string name="core_ui_item_qty_per_pack_label">الكمية لكل علبة</string>
     <string name="core_ui_item_quantity_format">الكمية: %s</string>
 
 </resources>
