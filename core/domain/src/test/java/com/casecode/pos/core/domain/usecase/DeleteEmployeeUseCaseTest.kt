@@ -29,23 +29,27 @@ class DeleteEmployeeUseCaseTest {
         DeleteEmployeeUseCase(testEmployeesBusinessRepository)
 
     @Test
-    fun deleteEmployees_returnResourceSuccess() =
-        runTest {
-            val employees = Employee()
-            // When
-            val resultAddEmployeesBusiness = deleteEmployeeUseCase(employees)
+    fun deleteEmployee_success() = runTest {
+        // Given
+        val employee = Employee()
 
-            // Then
-            assert(resultAddEmployeesBusiness is Resource.Success)
-        }
+        // When
+        val result = deleteEmployeeUseCase(employee)
+
+        // Then
+        assert(result is Resource.Success)
+    }
 
     @Test
-    fun deleteEmployee_whenHasError_returnResourceError() = runTest {
+    fun deleteEmployee_error() = runTest {
+        // Given
+        val employee = Employee()
         testEmployeesBusinessRepository.setReturnError(true)
-        val employees = Employee()
+
         // When
-        val resultAddEmployeesBusiness = deleteEmployeeUseCase(employees)
+        val result = deleteEmployeeUseCase(employee)
+
         // Then
-        assert(resultAddEmployeesBusiness is Resource.Error)
+        assert(result is Resource.Error)
     }
 }
