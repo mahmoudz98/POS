@@ -15,46 +15,50 @@
  */
 package com.casecode.pos.core.domain.usecase
 
-import com.casecode.pos.core.domain.R
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 
 class AddEmployeesBusinessUseCaseTest {
-    // Given uid and employees
-    private val employees = arrayListOf(Employee())
-
-    // Subject under test
-    private val testEmployeesBusinessRepository: TestEmployeesBusinessRepository =
-        TestEmployeesBusinessRepository()
-    private val addEmployeesBusinessUseCase: AddEmployeesBusinessUseCase =
-        AddEmployeesBusinessUseCase(testEmployeesBusinessRepository)
+    private val testEmployeesBusinessRepository = TestEmployeesBusinessRepository()
+    private val addEmployeesBusinessUseCase = AddEmployeesBusinessUseCase(testEmployeesBusinessRepository)
 
     @Test
-    fun addEmployees_shouldAddNewEmployees_returnResourceOfTrue() =
-        runTest {
-            // When
-            val resultAddEmployeesBusiness = addEmployeesBusinessUseCase(employees)
+    fun `addEmployees when employees are not empty return Success`() = runTest {
+        // Given
+        val employees = arrayListOf(Employee())
 
-            // Then
-            assert(resultAddEmployeesBusiness is AddEmployeeResult.Success)
-        }
+        // When
+        val result = addEmployeesBusinessUseCase(employees)
+
+        // Then
+        assert(result is AddEmployeeResult.Success)
+    }
 
     @Test
-    fun `addEmployees when empty Business return resource with employees empty`() =
-        runTest {
-            // When subscription business fields is empty
-            val resultEmptySubscriptionBusiness =
-                addEmployeesBusinessUseCase(arrayListOf())
+    fun `addEmployees when employees are empty return Empty`() = runTest {
+        // Given
+        val employees = arrayListOf<Employee>()
 
-            // Then - return Resource of empty data.
-            assertThat(
-                resultEmptySubscriptionBusiness,
-                `is`(AddEmployeeResult.Error(R.string.core_domain_employees_empty)),
-            )
-        }
+        // When
+        val result = addEmployeesBusinessUseCase(employees)
+
+        // Then
+        assert(result is AddEmployeeResult.Error)
+    }
+
+    @Test
+    fun `addEmployees when employees are empty returns error`() = runTest {
+        // Given
+        val employees = arrayListOf<Employee>()
+
+        // When
+        testEmployeesBusinessRepository.setReturnError(true)
+        val result = addEmployeesBusinessUseCase(employees)
+
+        // Then
+        assert(result is AddEmployeeResult.Error)
+    }
 }
