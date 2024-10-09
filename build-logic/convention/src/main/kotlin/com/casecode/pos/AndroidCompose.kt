@@ -32,7 +32,6 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
         buildFeatures {
             compose = true
         }
-
         dependencies {
             val bom = libs.findLibrary("androidx-compose-bom").get()
             add("implementation", platform(bom))
@@ -41,31 +40,22 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
             add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
         }
     }
-
     extensions.configure<ComposeCompilerGradlePluginExtension> {
         fun Provider<String>.onlyIfTrue() = flatMap { provider { it.takeIf(String::toBoolean) } }
+        fun Provider<*>.relativeToRootProject(dir: String) = flatMap {
+            rootProject.layout.buildDirectory.dir(projectDir.toRelativeString(rootDir))
+        }.map { it.dir(dir) }
 
-        fun Provider<*>.relativeToRootProject(dir: String) =
-            flatMap {
-                rootProject.layout.buildDirectory.dir(projectDir.toRelativeString(rootDir))
-            }.map { it.dir(dir) }
-
-        project.providers
-            .gradleProperty("enableComposeCompilerMetrics")
-            .onlyIfTrue()
+        project.providers.gradleProperty("enableComposeCompilerMetrics").onlyIfTrue()
             .relativeToRootProject("compose-metrics")
             .let(metricsDestination::set)
 
-        project.providers
-            .gradleProperty("enableComposeCompilerReports")
-            .onlyIfTrue()
+        project.providers.gradleProperty("enableComposeCompilerReports").onlyIfTrue()
             .relativeToRootProject("compose-reports")
             .let(reportsDestination::set)
 
-/*
-        stabilityConfigurationFile = rootProject.layout.projectDirectory.file("compose_compiler_config.conf")
-*/
-
-
+        stabilityConfigurationFile.set(
+            rootProject.layout.projectDirectory.file("compose_compiler_config.conf"),
+        )
     }
 }
