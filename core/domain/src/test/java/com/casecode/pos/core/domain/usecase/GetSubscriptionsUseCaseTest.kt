@@ -19,12 +19,10 @@ import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class GetSubscriptionsUseCaseTest {
     @get:Rule
@@ -37,30 +35,31 @@ class GetSubscriptionsUseCaseTest {
     @Test
     fun `getSubscriptionsUseCase return resource success of subscriptions`() =
         runTest {
-            // Given
-            val exceptedResultSuccess = Resource.success(subscriptionsFake())
-            testSubscriptionsRepository.sendSubscriptions(subscriptionsFake())
+            // 1- Given
+            val expectedSubscriptions = subscriptionsFake()
+            testSubscriptionsRepository.sendSubscriptions(expectedSubscriptions)
 
-            // When
-            val result = getSubscriptionsUseCase()
-            val resultValueSuccess = result.first()
-            // Then
-            assertThat(exceptedResultSuccess, `is`(resultValueSuccess))
+            // 2- When
+            val actualSubscriptions = getSubscriptionsUseCase()
+
+            // 3- Then
+            assertEquals(
+                expected = Resource.success(expectedSubscriptions),
+                actual = actualSubscriptions,
+            )
         }
 
     @Test
-    fun getSubscriptionsUseCaseWhenResourceEmptyReturnEmpty() =
+    fun `getSubscriptionsUseCase when no subscriptions available returns Resource Empty`() =
         runTest {
-            // Given - send empty
+            // 1- Given
             testSubscriptionsRepository.setReturnEmpty(true)
-            val exceptedResultEmpty = Resource.empty<Boolean>("Empty")
 
-            // when
-            val result = getSubscriptionsUseCase()
-            val resultEmptyValue = result.first()
+            // 2- When
+            val actualSubscriptions = getSubscriptionsUseCase()
 
-            // Then
-            assertThat(resultEmptyValue, `is`(exceptedResultEmpty))
+            // 3- Then
+            assert(actualSubscriptions is Resource.Empty)
         }
 
     private fun subscriptionsFake(): List<Subscription> =
