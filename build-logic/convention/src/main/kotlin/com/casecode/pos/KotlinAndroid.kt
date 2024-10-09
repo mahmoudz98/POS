@@ -25,8 +25,8 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
             isCoreLibraryDesugaringEnabled = true
         }
     }
@@ -43,8 +43,8 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
  */
 internal fun Project.configureKotlinJvm() {
     extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     configureKotlin<KotlinJvmProjectExtension>()
 }
@@ -62,12 +62,15 @@ private inline fun <reified T : KotlinTopLevelExtension> Project.configureKotlin
             is KotlinJvmProjectExtension -> compilerOptions
             else -> TODO("Unsupported project extension $this ${T::class}")
         }.apply {
-            jvmTarget = JvmTarget.JVM_11
+            jvmTarget = JvmTarget.JVM_17
             allWarningsAsErrors = warningsAsErrors.toBoolean()
 
-            freeCompilerArgs.add(
-                // Enable experimental coroutines APIs, including Flow
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            freeCompilerArgs.set(
+                freeCompilerArgs.getOrElse(emptyList()) + listOf(
+                    "-Xcontext-receivers",
+                    // Enable experimental coroutines APIs, including Flow
+                    "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                ),
             )
         }
     }
