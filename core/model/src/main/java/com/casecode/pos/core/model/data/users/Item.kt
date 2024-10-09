@@ -16,21 +16,37 @@
 package com.casecode.pos.core.model.data.users
 
 /**
- * Represents an item in inventory or a product.
+ * Data class representing an item in the inventory.
  *
  * @property name The name of the item.
- * @property price The price of the item. Default is 0.0.
- * @property quantity The quantity of the item. Default is 0.0.
- * @property sku The stock keeping unit (SKU) of the item.
- * @property unitOfMeasurement The unit of measurement for the item. Can be null.
- * @property imageUrl The URL of the image associated with the item. Default is null.
- * @constructor Creates an item with default values for name, price, quantity, and imageUrl.
+ * @property category The category the item belongs to.
+ * @property supplierName The name of the supplier for this item.
+ * @property costPrice The cost price of the item.
+ * @property unitPrice The selling price of the item.
+ * @property reorderLevel The minimum stock level at which the item should be reordered.
+ * @property quantity The current quantity of the item in stock.
+ * @property qtyPerPack The number of items in a single pack.
+ * @property sku The Stock Keeping Unit (SKU) for the item.
+ * @property unitOfMeasurement The unit of measurement for the item (e.g., Per Piece, Per Kilo).
+ * @property deleted Indicates whether the item has been marked as deleted.
+ * @property imageUrl The URL of the item's image.
  */
 data class Item(
     val name: String = "",
-    val price: Double = 0.0,
-    var quantity: Double = 0.0,
+    val category: String = "",
+    val supplierName: String = "",
+    val costPrice: Float = 0f,
+    val unitPrice: Float = 0f,
+    val reorderLevel: Int = -1,
+    var quantity: Int = 0,
+    val qtyPerPack: Int = 0,
     val sku: String = "",
-    var unitOfMeasurement: String? = "",
+    var unitOfMeasurement: UnitOfMeasurement? = UnitOfMeasurement.PerPiece,
     var imageUrl: String? = "",
-)
+    val deleted: Boolean = false,
+) {
+
+    fun isInStockAndTracked(): Boolean = !((quantity > 0) xor (isTrackStock()))
+    fun isTrackStock(): Boolean = (reorderLevel != -1)
+    fun isLowLevelStock(): Boolean = reorderLevel >= quantity
+}
