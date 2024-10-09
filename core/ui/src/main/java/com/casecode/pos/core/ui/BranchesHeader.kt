@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.ui
 
 import androidx.compose.foundation.background
@@ -24,19 +39,19 @@ import androidx.compose.ui.unit.dp
 fun BranchesHeader(onAddClick: () -> Unit) {
     Row(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .background(MaterialTheme.colorScheme.surfaceContainer),
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .background(MaterialTheme.colorScheme.surfaceContainer),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = Icons.Filled.Storage,
             contentDescription = null,
             modifier =
-                Modifier
-                    .padding(start = 8.dp)
-                    .size(24.dp),
+            Modifier
+                .padding(start = 8.dp)
+                .size(24.dp),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
