@@ -24,26 +24,29 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.HideImage
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PointOfSale
-import androidx.compose.material.icons.filled.Print
 import androidx.compose.material.icons.filled.PrintDisabled
 import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Receipt
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.StackedLineChart
 import androidx.compose.material.icons.filled.Store
+import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.filled.SupervisorAccount
+import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.FilterList
+import androidx.compose.material.icons.rounded.FilterListOff
 import androidx.compose.material.icons.rounded.PointOfSale
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -67,15 +70,19 @@ object PosIcons {
     val SettingsBorder = Icons.Rounded.Settings
     val SignOut = Icons.AutoMirrored.Filled.Logout
     val EmptyImage = Icons.Filled.HideImage
+    val EmptySearch = Icons.Filled.ImageSearch
     val Print = Icons.Outlined.Print
     val QrCodeScanner = Icons.Filled.QrCodeScanner
     val QrCodeError = Icons.Filled.QrCode2
     val Search = Icons.Rounded.Search
     val Add = Icons.Rounded.Add
+    val Filter = Icons.Rounded.FilterList
+    val FilterClear = Icons.Rounded.FilterListOff
+
     val Calender = Icons.Filled.CalendarToday
     val Delete = Icons.Filled.Delete
     val PrinterDisabled = Icons.Filled.PrintDisabled
-
+    val UserAdman = Icons.Filled.SupervisedUserCircle
     val Placeholder = Icons.Filled.Image
     val Email = Icons.Filled.Email
     val Phone = Icons.Filled.Phone
@@ -84,6 +91,7 @@ object PosIcons {
     val Bookmark = Icons.Rounded.Bookmark
     val BookmarkBorder = Icons.Rounded.BookmarkBorder
     val Check = Icons.Rounded.Check
+    val Track = Icons.Filled.TrackChanges
     val Close = Icons.Rounded.Close
     val MoreVert = Icons.Default.MoreVert
     val ShortText = Icons.AutoMirrored.Rounded.ShortText
