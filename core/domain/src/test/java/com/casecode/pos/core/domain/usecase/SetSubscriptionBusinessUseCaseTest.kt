@@ -21,17 +21,15 @@ import com.casecode.pos.core.model.data.users.SubscriptionBusiness
 import com.casecode.pos.core.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.pos.core.testing.util.CoroutinesTestRule
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class SetSubscriptionBusinessUseCaseTest {
     @get:Rule
     val coroutineTestRule = CoroutinesTestRule()
 
     // Given uid and subscription
-    private val uid = "test"
     private val subscription: SubscriptionBusiness =
         SubscriptionBusiness(type = "Pro", cost = 20L, duration = 60, listOf("admin"))
 
@@ -49,7 +47,7 @@ class SetSubscriptionBusinessUseCaseTest {
 
             // Then
             val isAddSubscriptionBusiness = Resource.success(true)
-            assertThat(isAddSubscriptionBusiness, `is`(resultIsAddSubscriptionBusiness))
+            assertEquals(isAddSubscriptionBusiness, (resultIsAddSubscriptionBusiness))
         }
 
     @Test
@@ -60,9 +58,9 @@ class SetSubscriptionBusinessUseCaseTest {
                 setSubscriptionBusinessUseCase(SubscriptionBusiness())
 
             // Then - return Resource of empty data
-            assertThat(
+            assertEquals(
                 resultEmptySubscriptionBusiness,
-                `is`(Resource.empty(R.string.core_domain_add_subscription_business_empty)),
+                (Resource.empty(R.string.core_domain_add_subscription_business_empty)),
             )
         }
 }
