@@ -26,10 +26,9 @@ import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SetBusinessUseCaseTest {
     @get:Rule
@@ -55,7 +54,7 @@ class SetBusinessUseCaseTest {
             val addBusiness = setBusinessUseCase(business)
 
             // Then check if result in  business repo and business use case is same.
-            assertThat(addBusiness.last(), `is`(Resource.success(true)))
+            assertEquals(addBusiness.last(), (Resource.success(true)))
         }
 
     @Test
@@ -66,9 +65,9 @@ class SetBusinessUseCaseTest {
 
             // Then check if the result is empty business branches,
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(emptyBranchBusiness)
-            assertThat(
+            assertEquals(
                 isAddBusiness.last(),
-                `is`(Resource.empty(R.string.core_domain_branches_empty)),
+                (Resource.empty(R.string.core_domain_branches_empty)),
             )
         }
 
@@ -81,9 +80,9 @@ class SetBusinessUseCaseTest {
 
             // Then check if the result is empty phone,
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyPhone)
-            assertThat(
+            assertEquals(
                 isAddBusiness.last(),
-                `is`(Resource.empty(R.string.core_domain_phone_business_empty)),
+                (Resource.empty(R.string.core_domain_phone_business_empty)),
             )
         }
 
@@ -96,9 +95,9 @@ class SetBusinessUseCaseTest {
 
             // Then check if the result is empty email,
             val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyEmail)
-            assertThat(
+            assertEquals(
                 isAddBusiness.last(),
-                `is`(Resource.empty(R.string.core_domain_email_business_empty)),
+                (Resource.empty(R.string.core_domain_email_business_empty)),
             )
         }
 }
