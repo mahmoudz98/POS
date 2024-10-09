@@ -20,10 +20,9 @@ import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.Is.`is`
 import org.junit.Rule
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class GetBusinessUseCaseTest {
     @get:Rule
@@ -35,16 +34,25 @@ class GetBusinessUseCaseTest {
 
     @Test
     fun `when has business then return resource with success`() = runTest {
-        val actualBusiness = Business()
+        val expected = BusinessResult.Success(Business())
 
-        val expected = getBusinessUseCase()
-        assertThat(BusinessResult.Success(actualBusiness), `is`(expected))
+        // When
+        val actual = getBusinessUseCase()
+
+        // Then
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun `when has error then return resource with empty`() = runTest {
+    fun `when has error then return resource with error`() = runTest {
+        // Given
         testBusinessRepository.setReturnError(true)
-        val expected = getBusinessUseCase()
-        assertThat(BusinessResult.Error(-1), `is`(expected))
+        val expected = BusinessResult.Error(-1)
+
+        // When
+        val actual = getBusinessUseCase()
+
+        // Then
+        assertEquals(expected, actual)
     }
 }
