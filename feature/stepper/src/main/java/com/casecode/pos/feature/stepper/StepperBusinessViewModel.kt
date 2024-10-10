@@ -1,22 +1,38 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.stepper
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.data.model.asSubscriptionBusiness
-import com.casecode.pos.core.data.model.toStoreType
-import com.casecode.pos.core.data.service.AccountService
 import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.domain.repository.AccountRepository
+import com.casecode.pos.core.domain.usecase.AddEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.CompleteBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.SetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
+import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.model.data.users.Employee
+import com.casecode.pos.core.model.data.users.StoreType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,18 +49,18 @@ import com.casecode.pos.core.ui.R.string as uiString
  */
 @HiltViewModel
 class StepperBusinessViewModel
-    @Inject
-    constructor(
-        private val networkMonitor: NetworkMonitor,
-        private val accountService: AccountService,
-        private val setBusinessUseCase: SetBusinessUseCase,
-        private val completeBusinessUseCase: CompleteBusinessUseCase,
-        private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
-        private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
-        private val setEmployeesBusinessUseCase: SetEmployeesBusinessUseCase,
-    ) : ViewModel() {
-        private val _buttonStepState = MutableStateFlow(ButtonsStepState())
-        val buttonStepState = _buttonStepState.asStateFlow()
+@Inject
+constructor(
+    private val networkMonitor: NetworkMonitor,
+    private val accountRepository: AccountRepository,
+    private val setBusinessUseCase: SetBusinessUseCase,
+    private val completeBusinessUseCase: CompleteBusinessUseCase,
+    private val getSubscriptionsUseCase: GetSubscriptionsUseCase,
+    private val setSubscriptionsBusinessUseCase: SetSubscriptionBusinessUseCase,
+    private val addEmployeesBusinessUseCase: AddEmployeesBusinessUseCase,
+) : ViewModel() {
+    private val _buttonStepState = MutableStateFlow(ButtonsStepState())
+    val buttonStepState = _buttonStepState.asStateFlow()
 
     // Business data
     private val _uiState: MutableStateFlow<StepperBusinessUiState> =
@@ -65,7 +81,7 @@ class StepperBusinessViewModel
             }
         }
 
-    fun signOut() = viewModelScope.launch { accountService.signOut() }
+    fun signOut() = viewModelScope.launch { accountRepository.signOut() }
 
     fun setConnected(isOnline: Boolean) {
         _uiState.update { it.copy(isOnline = isOnline) }
@@ -124,7 +140,7 @@ class StepperBusinessViewModel
             } else {
                 showSnackbarMessage(uiString.core_ui_error_update_branch_message)
             }
-        } catch (e: IndexOutOfBoundsException) {
+        } catch (_: IndexOutOfBoundsException) {
             showSnackbarMessage(uiString.core_ui_error_update_branch_message)
         }
     }
@@ -145,7 +161,7 @@ class StepperBusinessViewModel
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun addBusiness(): Business =
         Business(
-            storeType = uiState.value.storeType.toStoreType(),
+            storeType = StoreType.toStoreType(uiState.value.storeType),
             email = uiState.value.emailBusiness,
             phone = uiState.value.phoneBusiness,
             branches = uiState.value.branches.toList(),
@@ -170,7 +186,7 @@ class StepperBusinessViewModel
                                 (addBusiness as? Resource.Empty)?.message
                                     ?: (addBusiness as? Resource.Error)?.message
                             showSnackbarMessage(
-                                messageRes as? Int ?: uiString.core_ui_error_unknown
+                                messageRes as? Int ?: uiString.core_ui_error_unknown,
                             )
                         }
 
@@ -187,33 +203,32 @@ class StepperBusinessViewModel
     fun getSubscriptionsBusiness() =
         viewModelScope.launch {
             if (uiState.value.subscriptions.isEmpty()) {
-                getSubscriptionsUseCase().collect { subscriptionsResource ->
-                    when (subscriptionsResource) {
-                        is Resource.Loading -> {
-                            _uiState.update { it.copy(isLoading = true) }
-                        }
+                val subscriptionsResource = getSubscriptionsUseCase()
+                when (subscriptionsResource) {
+                    is Resource.Loading -> {
+                        _uiState.update { it.copy(isLoading = true) }
+                    }
 
-                        is Resource.Success -> {
-                            _uiState.update {
-                                it.copy(
-                                    subscriptions = subscriptionsResource.data.toMutableList(),
-                                    isLoading = false,
-                                    currentSubscription = subscriptionsResource.data.first(),
-                                )
-                            }
-                        }
-
-                        is Resource.Empty -> {
-                            _uiState.update { it.copy(isLoading = false) }
-                        }
-
-                        is Resource.Error -> {
-                            _uiState.update { it.copy(isLoading = false) }
-                            showSnackbarMessage(
-                                subscriptionsResource.message as? Int
-                                    ?: uiString.core_ui_error_unknown,
+                    is Resource.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                subscriptions = subscriptionsResource.data.toMutableList(),
+                                isLoading = false,
+                                currentSubscription = subscriptionsResource.data.first(),
                             )
                         }
+                    }
+
+                    is Resource.Empty -> {
+                        _uiState.update { it.copy(isLoading = false) }
+                    }
+
+                    is Resource.Error -> {
+                        _uiState.update { it.copy(isLoading = false) }
+                        showSnackbarMessage(
+                            subscriptionsResource.message as? Int
+                                ?: uiString.core_ui_error_unknown,
+                        )
                     }
                 }
             }
@@ -273,7 +288,7 @@ class StepperBusinessViewModel
     ) {
         val currentEmployees = uiState.value.employees
         val employee = Employee(name, phone, password, branchName, permission)
-        if (isEmployeeNameDuplicate(currentEmployees, employee)) {
+        if (employee.isEmployeeNameDuplicate(currentEmployees)) {
             showSnackbarMessage(uiString.core_ui_error_employee_name_duplicate)
             return
         }
@@ -285,18 +300,6 @@ class StepperBusinessViewModel
         } else {
             showSnackbarMessage(uiString.core_ui_error_add_employee_message)
         }
-    }
-
-    private fun isEmployeeNameDuplicate(
-        currentEmployees: List<Employee>,
-        employee: Employee,
-    ): Boolean {
-        currentEmployees.forEach {
-            if (it.name == employee.name) {
-                return true
-            }
-        }
-        return false
     }
 
     fun setEmployeeSelected(employeeSelect: Employee) {
@@ -354,26 +357,19 @@ class StepperBusinessViewModel
     private fun setEmployeesBusiness() =
         viewModelScope.launch {
             val employeesList = uiState.value.employees
+            _uiState.update { it.copy(isLoading = true) }
 
-            when (val resourceAddEmployees = setEmployeesBusinessUseCase(employeesList)) {
-                is Resource.Loading -> {
-                    _uiState.update { it.copy(isLoading = true) }
+            when (val resourceAddEmployees = addEmployeesBusinessUseCase(employeesList)) {
+                is AddEmployeeResult.Success -> {
+                    showSnackbarMessage(uiString.core_ui_success_add_employees_message)
+                    // Then, go on business complete step.
+                    setCompletedBusinessStep()
                 }
 
-                is Resource.Success -> {
-                    if (resourceAddEmployees.data) {
-                        showSnackbarMessage(uiString.core_ui_success_add_employees_message)
-                        // Then, go on business complete step.
-                        setCompletedBusinessStep()
-                    }
-                }
+                is AddEmployeeResult.Error -> {
+                    val messageRes = resourceAddEmployees.message
 
-                is Resource.Error, is Resource.Empty -> {
-                    val messageRes =
-                        (resourceAddEmployees as? Resource.Empty)?.message
-                            ?: (resourceAddEmployees as? Resource.Error)?.message
-
-                    showSnackbarMessage(messageRes as? Int ?: uiString.core_ui_error_unknown)
+                    showSnackbarMessage(messageRes)
                 }
             }
         }
