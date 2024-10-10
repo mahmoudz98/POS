@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.stepper.subscriptions
 
 import androidx.compose.foundation.layout.Arrangement
@@ -52,9 +67,9 @@ private fun BusinessSubscriptionScreen(
 ) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(8.dp),
+        Modifier
+            .fillMaxSize()
+            .padding(8.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         if (uiState.isLoading) {
@@ -72,9 +87,9 @@ private fun BusinessSubscriptionScreen(
         }
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             PosTextButton(
@@ -97,8 +112,8 @@ private fun BusinessSubscriptionScreen(
                     )
                 },
                 modifier =
-                    Modifier
-                        .wrapContentSize(),
+                Modifier
+                    .wrapContentSize(),
             )
         }
     }
@@ -127,18 +142,18 @@ fun BusinessSubscriptionScreenPreview() {
             BusinessSubscriptionScreen(
                 StepperBusinessUiState(
                     subscriptions =
-                        listOf(
-                            Subscription(
-                                cost = 1150,
-                                duration = 6946,
-                                permissions = listOf(),
-                                type = "maecenas",
-                            ),
-                            Subscription(
-                                cost = 6456,
-                                duration = 7802,
-                                permissions = listOf(),
-                                type = "quaerendum",
+                    listOf(
+                        Subscription(
+                            cost = 1150,
+                            duration = 6946,
+                            permissions = listOf(),
+                            type = "maecenas",
+                        ),
+                        Subscription(
+                            cost = 6456,
+                            duration = 7802,
+                            permissions = listOf(),
+                            type = "quaerendum",
                         ),
                     ),
                     isLoading = false,
