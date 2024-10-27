@@ -199,7 +199,7 @@ fun CloseBusinessStepDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = stringResource(id = string.core_ui_dialog_cancel_button_text))
+                Text(text = stringResource(id = uiString.core_ui_dialog_cancel_button_text))
             }
         },
     )
