@@ -1,24 +1,27 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.data.utils.EMPLOYEES_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEE_BRANCH_NAME_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEE_NAME_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEE_PASSWORD_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEE_PERMISSION_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEE_PHONE_NUMBER_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEES_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEE_BRANCH_NAME_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEE_NAME_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEE_PASSWORD_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEE_PERMISSION_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEE_PHONE_NUMBER_FIELD
 import com.casecode.pos.core.model.data.users.Employee
-
-fun List<Employee>.isEmployeeNameDuplicate(
-    employee: Employee,
-    oldEmployee: Employee? = null,
-): Boolean {
-    this.forEach {
-        if (it.name == employee.name && it != oldEmployee) {
-            return true
-        }
-    }
-    return false
-}
 
 fun Map<String, Any>.asExternalModel(): Employee =
     Employee(
@@ -29,9 +32,6 @@ fun Map<String, Any>.asExternalModel(): Employee =
         permission = this[EMPLOYEE_PERMISSION_FIELD] as String,
     )
 
-/**
- * Created by Mahmoud Abdalhafeez
- */
 fun List<Employee>.asExternalEmployees(): HashMap<String, MutableList<Map<String, Any?>>> {
     val employeesRequest = mutableListOf<Map<String, Any?>>()
     this.forEach {
