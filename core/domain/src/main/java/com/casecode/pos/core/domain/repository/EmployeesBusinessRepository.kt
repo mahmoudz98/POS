@@ -30,7 +30,7 @@ interface EmployeesBusinessRepository {
     suspend fun deleteEmployee(employee: Employee): Resource<Int>
 
     suspend fun updateEmployee(
-        employees: Employee,
         oldEmployee: Employee,
+        newEmployee: Employee,
     ): Resource<Boolean>
 }

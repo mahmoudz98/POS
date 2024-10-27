@@ -46,6 +46,22 @@ constructor(
 }
 
 /**
+ * Use case for adding a new employee.
+ *
+ * This use case interacts with the [EmployeesBusinessRepository] to add a new [Employee] to the data source.
+ *
+ * @property employeesRepo The repository responsible for managing employee data.
+ */
+class AddEmployeeUseCase
+@Inject
+constructor(
+    private val employeesRepo: EmployeesBusinessRepository,
+) {
+    suspend operator fun invoke(employee: Employee): AddEmployeeResult =
+        employeesRepo.addEmployee(employee)
+}
+
+/**
  * Use case for retrieving a list of employees.
  *
  * This use case interacts with the [EmployeesBusinessRepository] to fetch employee data
@@ -62,21 +78,6 @@ constructor(
 }
 
 /**
- * Use case for adding a new employee.
- *
- * This use case interacts with the [EmployeesBusinessRepository] to add a new [Employee] to the data source.
- *
- * @property employeesRepo The repository responsible for managing employee data.
- */
-class AddEmployeesUseCase
-@Inject
-constructor(
-    private val employeesRepo: EmployeesBusinessRepository,
-) {
-    suspend operator fun invoke(employee: Employee) = employeesRepo.addEmployee(employee)
-}
-
-/**
  * Use case for updating an existing employee.
  *
  * This use case interacts with the [EmployeesBusinessRepository] to update an employee's information.
@@ -89,9 +90,9 @@ constructor(
     private val employeesRepo: EmployeesBusinessRepository,
 ) {
     suspend operator fun invoke(
-        employee: Employee,
         oldEmployee: Employee,
-    ) = employeesRepo.updateEmployee(employee, oldEmployee)
+        newEmployee: Employee,
+    ) = employeesRepo.updateEmployee(oldEmployee, newEmployee)
 }
 
 /**
