@@ -15,20 +15,12 @@
  */
 package com.casecode.pos.core.designsystem.component
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DismissibleNavigationDrawer
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
@@ -40,16 +32,12 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemCo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.designsystem.theme.PosTypography
 
 /**
  * Pos navigation bar item with icon and label content slots. Wraps Material 3
@@ -133,8 +121,6 @@ fun PosNavigationSuiteScaffold(
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
     content: @Composable () -> Unit,
 ) {
-    // TODO: issue when using adaptive navigation drawer in compact, have not custom navigation
-    //  drawer
     val layoutType =
         NavigationSuiteScaffoldDefaults
             .calculateFromAdaptiveInfo(windowAdaptiveInfo)
@@ -217,59 +203,6 @@ class PosNavigationSuiteScope internal constructor(
     )
 }
 
-@Composable
-fun PosNavigationDrawerHeader(textHeader: String) {
-    Box(
-        modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        contentAlignment = Alignment.TopStart,
-    ) {
-        Text(text = textHeader, style = PosTypography.titleLarge)
-    }
-}
-
-@Composable
-fun PosNavigationDrawerItem(
-    selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    icon: @Composable () -> Unit,
-    selectedIcon: @Composable () -> Unit = icon,
-    label: @Composable (() -> Unit),
-) {
-    NavigationDrawerItem(
-        label = label,
-        selected = selected,
-        onClick = onClick,
-        icon = if (selected) selectedIcon else icon,
-        modifier = modifier.padding(end = 12.dp),
-        colors =
-        NavigationDrawerItemDefaults.colors(
-            selectedIconColor = PosNavigationDefaults.navigationSelectedItemColor(),
-            unselectedIconColor = PosNavigationDefaults.navigationContentColor(),
-            selectedTextColor = PosNavigationDefaults.navigationSelectedItemColor(),
-            unselectedTextColor = PosNavigationDefaults.navigationContentColor(),
-        ),
-    )
-}
-
-@Composable
-fun PosNavigationDrawer(
-    modifier: Modifier = Modifier,
-    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
-    drawerContent: @Composable () -> Unit,
-    content: @Composable () -> Unit = {},
-) {
-    DismissibleNavigationDrawer(
-        drawerState = drawerState,
-        modifier = modifier,
-        drawerContent = drawerContent,
-        content = content,
-    )
-}
-
 @ThemePreviews
 @Composable
 fun NiaNavigationBarPreview() {
@@ -310,102 +243,6 @@ fun NiaNavigationBarPreview() {
             }
         }
     }
-}
-
-@Composable
-fun PosNavigationDrawerHeaderItems(
-    @StringRes title: Int,
-) {
-    Text(
-        text = stringResource(title),
-        style = PosTypography.titleSmall,
-        modifier =
-        Modifier
-            .padding(bottom = 8.dp, start = 16.dp)
-            .fillMaxWidth(),
-    )
-}
-
-@Composable
-fun PosNavigationDrawerContent(onClick: () -> Unit) {
-    /*    ModalDrawerSheet(modifier = Modifier) {
-            PosNavigationDrawerHeader()
-            Spacer(modifier = Modifier.padding(12.dp))
-
-            PosNavigationDrawerHeaderItems(title = R.string.pos)
-            PosNavigationDrawerItem(
-                label = { Text(stringResource(R.string.menu_reports)) },
-                selected = false,
-                icon = {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_trending_up_24),
-                        contentDescription = null,
-                    )
-                },
-                onClick = { onClick() },
-            )
-            PosNavigationDrawerItem(
-                label = { Text(stringResource(R.string.pos)) },
-                selected = false,
-                icon = { Icon(imageVector = Icons.Filled.PointOfSale, contentDescription = null) },
-                onClick = { onClick() },
-            )
-            PosNavigationDrawerItem(
-                label = { Text(stringResource(R.string.menu_items)) },
-                selected = false,
-                icon = {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_receipt_long_24),
-                        contentDescription = null,
-                    )
-                },
-                onClick = { onClick() },
-            )
-            HorizontalDivider(Modifier.padding(16.dp))
-
-            PosNavigationDrawerHeaderItems(title = R.string.menu_items)
-            PosNavigationDrawerItem(
-                label = { Text(stringResource(R.string.menu_items)) },
-                selected = false,
-                icon = {
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_view_module_24),
-                        contentDescription = null,
-                    )
-                },
-                onClick = { onClick() },
-            )
-            HorizontalDivider(Modifier.padding(16.dp))
-            PosNavigationDrawerHeaderItems(title = R.string.menu_permissions)
-            PosNavigationDrawerItem(
-                label = { Text(stringResource(R.string.menu_employees)) },
-                selected = false,
-                icon = {
-                    Icon(
-                        imageVector = Icons.Filled.SupervisorAccount,
-                        contentDescription = null,
-                    )
-                },
-                onClick = { onClick() },
-            )
-            PosNavigationDrawerItem(
-                label = { Text(stringResource(R.string.menu_settings)) },
-                selected = false,
-                icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = null) },
-                onClick = { onClick() },
-            )
-            PosNavigationDrawerItem(
-                label = { Text(stringResource(R.string.menu_sign_out)) },
-                selected = false,
-                icon = {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Logout,
-                        contentDescription = null,
-                    )
-                },
-                onClick = { onClick() },
-            )
-        }*/
 }
 
 /**

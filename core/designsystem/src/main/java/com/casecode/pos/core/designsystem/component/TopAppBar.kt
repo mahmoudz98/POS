@@ -29,13 +29,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.casecode.pos.core.designsystem.R
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 
@@ -48,6 +48,7 @@ fun PosTopAppBar(
     navigationIconContentDescription: String? = null,
     actionIcon: ImageVector? = null,
     actionIconContentDescription: String? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     onNavigationClick: () -> Unit = {},
     onActionClick: () -> Unit = {},
@@ -65,6 +66,7 @@ fun PosTopAppBar(
                 }
             }
         },
+        scrollBehavior = scrollBehavior,
         actions = {
             IconButton(onClick = onActionClick) {
                 if (actionIcon != null) {
@@ -88,6 +90,7 @@ fun PosTopAppBar(
     @StringRes titleRes: Int,
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     onNavigationClick: () -> Unit = {},
     action: @Composable RowScope.() -> Unit = {},
@@ -105,6 +108,7 @@ fun PosTopAppBar(
                 }
             }
         },
+        scrollBehavior = scrollBehavior,
         actions = action,
         colors = colors,
         modifier = modifier.testTag("posTopAppBar"),
