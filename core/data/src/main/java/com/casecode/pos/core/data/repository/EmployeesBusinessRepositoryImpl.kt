@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.repository
 
 import com.casecode.pos.core.common.AppDispatchers.IO
@@ -6,168 +21,167 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asEntityEmployees
 import com.casecode.pos.core.data.model.asExternalEmployee
 import com.casecode.pos.core.data.model.asExternalEmployees
-import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.data.service.checkUserNotFound
-import com.casecode.pos.core.data.utils.EMPLOYEES_FIELD
-import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
-import com.casecode.pos.core.domain.repository.AddEmployees
+import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
+import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnMessage
+import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.EmployeesBusinessRepository
 import com.casecode.pos.core.domain.repository.ResourceEmployees
+import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.firebase.services.EMPLOYEES_FIELD
+import com.casecode.pos.core.firebase.services.FirestoreService
+import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.Employee
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.UnknownHostException
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class EmployeesBusinessRepositoryImpl
-    @Inject
-    constructor(
-        private val firestore: FirebaseFirestore,
-        private val auth: AuthService,
-        @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    ) : EmployeesBusinessRepository {
-        override fun getEmployees(): Flow<ResourceEmployees> =
-            callbackFlow {
-                trySend(Resource.Loading)
-                auth.checkUserNotFound<List<Employee>> {
-                    trySend(it)
-                    close()
-                    return@callbackFlow
+@Inject
+constructor(
+    private val db: FirestoreService,
+    private val auth: AuthRepository,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+) : EmployeesBusinessRepository {
+    override fun getEmployees(): Flow<ResourceEmployees> =
+        flow {
+            emit(Resource.Loading)
+            auth.checkUserNotFoundAndReturnErrorMessage<List<Employee>> {
+                emit(it)
+                return@flow
             }
-
-            val listenerRegistration =
-                firestore
-                    .collection(USERS_COLLECTION_PATH)
-                    .document(
-                        auth.currentUserId(),
-                    ).addSnapshotListener { snapshot, error ->
-                        if (error != null) {
-                            Timber.e(error)
-                            trySend(Resource.error(R.string.core_data_get_business_failure))
-                            close()
-                        }
-                        @Suppress("UNCHECKED_CAST")
-                        val employeesMap =
-                            snapshot?.get(EMPLOYEES_FIELD) as? List<Map<String, Any>>
-                        if (employeesMap.isNullOrEmpty()) {
-                            trySend(Resource.empty())
-                            close()
-                        } else {
-                            trySend(Resource.success(employeesMap.asEntityEmployees()))
-                        }
-                    }
-            awaitClose {
-                listenerRegistration.remove()
+            val uid = auth.currentUserId()
+            db.listenToCollection(USERS_COLLECTION_PATH, uid).collect {
+                @Suppress("UNCHECKED_CAST")
+                val employeesMap =
+                    it.get(EMPLOYEES_FIELD) as? List<Map<String, Any>>
+                if (employeesMap.isNullOrEmpty()) {
+                    emit(Resource.empty())
+                } else {
+                    emit(Resource.success(employeesMap.asEntityEmployees()))
+                }
             }
+        }.catch { e ->
+            Timber.e(e)
+            emit(Resource.error(R.string.core_data_get_business_failure))
         }.flowOn(ioDispatcher)
 
-    override suspend fun setEmployees(employees: MutableList<Employee>): AddEmployees {
+    override suspend fun setEmployees(employees: List<Employee>): AddEmployeeResult {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFound<Boolean> { return@withContext it }
+                auth.checkUserNotFoundAndReturnMessage {
+                    return@withContext AddEmployeeResult.Error(it)
+                }
 
                 val uid = auth.currentUserId()
-                val resultAddEmployee =
-                    suspendCoroutine<AddEmployees> { continuation ->
-                        val employeesRequest = employees.asExternalEmployees()
 
-                        firestore
-                            .collection(USERS_COLLECTION_PATH)
-                            .document(uid)
-                            .update(employeesRequest as Map<String, Any>)
-                            .addOnSuccessListener {
-                                continuation.resume(Resource.Success(true))
-                            }.addOnFailureListener {
-                                continuation.resume(Resource.error(R.string.core_data_add_employees_business_failure))
-                                Timber.e("employees Failure: $it")
-                            }
-                    }
-                resultAddEmployee
-            } catch (e: UnknownHostException) {
-                Resource.error(R.string.core_data_add_employees_business_network)
+                val employeesRequest = employees.asExternalEmployees()
+                val isSuccess = db.updateDocument(
+                    USERS_COLLECTION_PATH,
+                    uid,
+                    employeesRequest as Map<String, Any>,
+                )
+                if (isSuccess) {
+                    AddEmployeeResult.Success
+                } else {
+                    AddEmployeeResult.Error(R.string.core_data_add_employees_business_failure)
+                }
+            } catch (_: UnknownHostException) {
+                AddEmployeeResult.Error(R.string.core_data_add_employees_business_network)
             } catch (e: Exception) {
                 Timber.e("Exception while adding employees: $e")
-                Resource.error(R.string.core_data_add_employees_business_failure)
+                AddEmployeeResult.Error(R.string.core_data_add_employees_business_failure)
             }
         }
     }
 
-    override suspend fun addEmployee(employees: Employee): Resource<Boolean> {
+    override suspend fun addEmployee(employees: Employee): AddEmployeeResult {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFound<Boolean> { return@withContext it }
+                auth.checkUserNotFoundAndReturnMessage {
+                    return@withContext AddEmployeeResult.Error(it)
+                }
                 val uid = auth.currentUserId()
-                val resultAddEmployee =
-                    suspendCoroutine<AddEmployees> { continuation ->
-                        val employeesRequest = employees.asExternalEmployee()
+                val employeesRequest = employees.asExternalEmployee()
 
-                        firestore
-                            .collection(USERS_COLLECTION_PATH)
-                            .document(uid)
-                            .update(EMPLOYEES_FIELD, FieldValue.arrayUnion(employeesRequest))
-                            .addOnSuccessListener {
-                                Timber.d("employees is added successfully")
-                                continuation.resume(Resource.Success(true))
-                            }.addOnFailureListener {
-                                continuation.resume(Resource.error(R.string.core_data_employee_add_business_failure))
-
-                                Timber.e("employees Failure: $it")
-                            }
-                    }
-                resultAddEmployee
-            } catch (e: UnknownHostException) {
-                Resource.error(R.string.core_data_employee_add_business_network)
+                val isSuccess = db.updateDocument(
+                    USERS_COLLECTION_PATH,
+                    uid,
+                    mapOf(EMPLOYEES_FIELD to FieldValue.arrayUnion(employeesRequest)),
+                )
+                if (isSuccess) {
+                    AddEmployeeResult.Success
+                } else {
+                    AddEmployeeResult.Error(R.string.core_data_employee_add_business_failure)
+                }
+            } catch (_: UnknownHostException) {
+                AddEmployeeResult.Error(R.string.core_data_employee_add_business_network)
             } catch (e: Exception) {
                 Timber.e("Exception while adding employees: $e")
-                Resource.error(R.string.core_data_employee_add_business_failure)
+                AddEmployeeResult.Error(R.string.core_data_employee_add_business_failure)
+            }
+        }
+    }
+
+    override suspend fun deleteEmployee(employee: Employee): Resource<Int> {
+        return withContext(ioDispatcher) {
+            if (!auth.hasUser()) {
+                return@withContext Resource.empty(message = R.string.core_data_uid_empty)
+            }
+            try {
+                val currentUID = auth.currentUserId()
+                val deleteEmployee =
+                    mapOf(EMPLOYEES_FIELD to FieldValue.arrayRemove(employee.asExternalEmployee()))
+                val isSuccess = db.updateDocument(USERS_COLLECTION_PATH, currentUID, deleteEmployee)
+                if (isSuccess) {
+                    Resource.success(R.string.core_data_employee_delete_business_success)
+                } else {
+                    Resource.error(R.string.core_data_employee_delete_business_failure)
+                }
+            } catch (_: UnknownHostException) {
+                Resource.error(R.string.core_data_employee_delete_business_network)
+            } catch (_: Exception) {
+                Resource.error(R.string.core_data_employee_delete_business_failure)
             }
         }
     }
 
     override suspend fun updateEmployee(
-        employees: Employee,
         oldEmployee: Employee,
+        newEmployee: Employee,
     ): Resource<Boolean> {
         return withContext(ioDispatcher) {
             if (!auth.hasUser()) {
                 return@withContext Resource.empty(message = R.string.core_data_uid_empty)
             }
-            val currentUID = auth.currentUserId()
-
-            suspendCoroutine { continuation ->
-                val updatesEmployee =
-                    mapOf(
-                        EMPLOYEES_FIELD to FieldValue.arrayRemove(oldEmployee.asExternalEmployee()),
-                        EMPLOYEES_FIELD to FieldValue.arrayUnion(employees.asExternalEmployee()),
-                    )
-                firestore
-                    .collection(USERS_COLLECTION_PATH)
-                    .document(currentUID)
-                    .update(updatesEmployee)
-                    .addOnSuccessListener {
-                        continuation.resumeWith(Result.success(Resource.success(true)))
-                    }.addOnFailureListener { exception ->
-                        when (exception) {
-                            is UnknownHostException -> {
-                                continuation.resume(Resource.error(R.string.core_data_employee_update_business_network))
-                            }
-
-                            else -> {
-                                Timber.e("Exception while adding employees: $exception")
-                                continuation.resume(Resource.error(R.string.core_data_employee_update_business_failure))
-                            }
-                        }
-                    }
+            try {
+                val currentUID = auth.currentUserId()
+                val isSuccessRemove = db.updateDocument(
+                    USERS_COLLECTION_PATH,
+                    currentUID,
+                    mapOf(EMPLOYEES_FIELD to FieldValue.arrayRemove(oldEmployee.asExternalEmployee())),
+                )
+                val isSuccessAdd = db.updateDocument(
+                    USERS_COLLECTION_PATH,
+                    currentUID,
+                    mapOf(EMPLOYEES_FIELD to FieldValue.arrayUnion(newEmployee.asExternalEmployee())),
+                )
+                if (isSuccessRemove && isSuccessAdd) {
+                    Resource.success(true)
+                } else {
+                    Resource.error(R.string.core_data_employee_update_business_failure)
+                }
+            } catch (_: UnknownHostException) {
+                Resource.error(R.string.core_data_employee_update_business_network)
+            } catch (_: Exception) {
+                Resource.error(R.string.core_data_employee_update_business_failure)
             }
         }
     }
