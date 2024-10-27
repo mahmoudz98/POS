@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.setting
 
 import androidx.navigation.NavController
@@ -5,19 +20,32 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.casecode.pos.feature.setting.printer.PrinterInfoRoute
-import com.casecode.pos.feature.setting.printer.PrinterRoute
+import com.casecode.pos.feature.setting.SettingNavigation.PrinterInfoRoute
+import com.casecode.pos.feature.setting.SettingNavigation.PrinterRoute
+import com.casecode.pos.feature.setting.SettingNavigation.SettingRoute
+import com.casecode.pos.feature.setting.printer.PrinterInfoScreen
+import com.casecode.pos.feature.setting.printer.PrinterScreen
+import kotlinx.serialization.Serializable
 
-const val SETTING_GRAPH = "setting_graph"
-const val SETTING_ROUTE = "settings_route"
-const val PRINTER_ROUTE = "printer_route"
-const val PRINTER_INFO_ROUTE = "printer_info_route"
+@Serializable
+sealed class SettingNavigation {
+    @Serializable
+    data object SettingGraph : SettingNavigation()
 
+    @Serializable
+    data object SettingRoute : SettingNavigation()
+
+    @Serializable
+    data object PrinterRoute : SettingNavigation()
+
+    @Serializable
+    data object PrinterInfoRoute : SettingNavigation()
+}
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onSignOutClick: () -> Unit,
 ) {
-    navigation(startDestination = SETTING_ROUTE, route = SETTING_GRAPH) {
+    navigation<SettingNavigation.SettingGraph>(startDestination = SettingRoute) {
         settingScreen(
             onSignOutClick = onSignOutClick,
             onPrinterClick = { navController.navigateToPrinter() },
@@ -34,8 +62,8 @@ fun NavGraphBuilder.settingScreen(
     onSignOutClick: () -> Unit,
     onPrinterClick: () -> Unit,
 ) {
-    composable(route = SETTING_ROUTE) {
-        SettingRoute(onSignOutClick = onSignOutClick, onPrinterClick = onPrinterClick)
+    composable<SettingRoute> {
+        SettingScreen(onSignOutClick = onSignOutClick, onPrinterClick = onPrinterClick)
     }
 }
 
@@ -43,19 +71,20 @@ private fun NavGraphBuilder.printerScreen(
     onBackClick: () -> Unit,
     onPrinterInfoClick: () -> Unit,
 ) {
-    composable(route = PRINTER_ROUTE) {
-        PrinterRoute(onBackClick = onBackClick, onPrinterInfoClick = onPrinterInfoClick)
+    composable<PrinterRoute> {
+        PrinterScreen(onBackClick = onBackClick, onPrinterInfoClick = onPrinterInfoClick)
     }
 }
 
 private fun NavGraphBuilder.printerInfoScreen(onBackClick: () -> Unit) {
-    composable(route = PRINTER_INFO_ROUTE) {
-        PrinterInfoRoute(onNavigateBack = onBackClick)
+    composable<PrinterInfoRoute> {
+        PrinterInfoScreen(onNavigateBack = onBackClick)
     }
 }
 
-fun NavController.navigateToSettings(navOptions: NavOptions) = navigate(SETTING_GRAPH, navOptions)
+fun NavController.navigateToSettings(navOptions: NavOptions) =
+    navigate(SettingNavigation.SettingGraph, navOptions)
 
-fun NavController.navigateToPrinter() = navigate(PRINTER_ROUTE)
+fun NavController.navigateToPrinter() = navigate(PrinterRoute)
 
-fun NavController.navigateToPrinterInfo() = navigate(PRINTER_INFO_ROUTE)
+fun NavController.navigateToPrinterInfo() = navigate(PrinterInfoRoute)
