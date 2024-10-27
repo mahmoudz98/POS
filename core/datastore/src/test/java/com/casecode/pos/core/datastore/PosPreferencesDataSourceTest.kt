@@ -42,7 +42,8 @@ class PosPreferencesDataSourceTest {
 
     @Before
     fun setup() {
-        subject = PosPreferencesDataSource(tmpFolder.testLoginPreferencesDataStore(testScope))
+        subject =
+            PosPreferencesDataSource(tmpFolder.testLoginPreferencesDataStore(testScope.backgroundScope))
     }
 
     @Test
