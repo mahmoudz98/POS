@@ -16,6 +16,7 @@
 plugins {
     alias(libs.plugins.pos.android.library)
     alias(libs.plugins.pos.android.library.compose)
+    alias(libs.plugins.pos.android.library.jacoco)
 }
 
 android {
