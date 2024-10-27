@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services
+package com.casecode.pos.core.data.repository
 
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
@@ -33,13 +33,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AuthServiceImpl
+class AuthRepositoryImpl
 @Inject
 constructor(
     private val auth: FirebaseAuth,
     private val posPreferencesDataSource: PosPreferencesDataSource,
     @Dispatcher(IO) private val io: CoroutineDispatcher,
-) : AuthService {
+) : com.casecode.pos.core.domain.repository.AuthRepository {
     override val loginData: Flow<LoginStateResult> =
         posPreferencesDataSource.loginData.map {
             LoginStateResult.Loading
