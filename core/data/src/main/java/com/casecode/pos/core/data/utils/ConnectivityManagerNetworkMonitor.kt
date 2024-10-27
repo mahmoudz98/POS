@@ -1,11 +1,11 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Designed and developed 2024 by Mahmood Abdalhafeez
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the MIT License (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *     https://opensource.org/licenses/MIT
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.casecode.pos.core.data.utils
 
 import android.content.Context
@@ -33,72 +32,70 @@ import kotlinx.coroutines.flow.conflate
 import timber.log.Timber
 import javax.inject.Inject
 
-class ConnectivityManagerNetworkMonitor
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-        val coroutineScope: CoroutineScope,
-    ) : NetworkMonitor {
-        override val isOnline: Flow<Boolean> =
-            callbackFlow {
-                val connectivityManager = context.getSystemService<ConnectivityManager>()
-                if (connectivityManager == null) {
-                    channel.trySend(false)
-                    channel.close()
-                    return@callbackFlow
-                }
+class ConnectivityManagerNetworkMonitor @Inject constructor(
+    @ApplicationContext private val context: Context,
+    val coroutineScope: CoroutineScope,
+) : NetworkMonitor {
+    override val isOnline: Flow<Boolean> =
+        callbackFlow {
+            val connectivityManager = context.getSystemService<ConnectivityManager>()
+            if (connectivityManager == null) {
+                channel.trySend(false)
+                channel.close()
+                return@callbackFlow
+            }
 
-                /**
-                 * The callback's methods are invoked on changes to *any* network matching the [NetworkRequest],
-                 * not just the active network. So we can simply track the presence (or absence) of such [Network].
-                 */
-                val callback =
-                    object : NetworkCallback() {
-                        private val networks = mutableSetOf<Network>()
+            /**
+             * The callback's methods are invoked on changes to *any* network matching the [NetworkRequest],
+             * not just the active network. So we can simply track the presence (or absence) of such [Network].
+             */
+            val callback =
+                object : NetworkCallback() {
+                    private val networks = mutableSetOf<Network>()
 
-                        override fun onAvailable(network: Network) {
-                            networks += network
-                            channel.trySend(true)
-                        }
-
-                        override fun onLost(network: Network) {
-                            networks -= network
-                            channel.trySend(networks.isNotEmpty())
-                        }
+                    override fun onAvailable(network: Network) {
+                        networks += network
+                        channel.trySend(true)
                     }
 
-                val request =
-                    Builder()
-                        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                        .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-                        .build()
-                connectivityManager.registerNetworkCallback(request, callback)
-
-                /**
-                 * Sends the latest connectivity status to the underlying channel.
-                 */
-                channel.trySend(connectivityManager.isCurrentlyConnected())
-
-                awaitClose {
-                    connectivityManager.unregisterNetworkCallback(callback)
-                    Timber.d("close connectivity manager")
+                    override fun onLost(network: Network) {
+                        networks -= network
+                        channel.trySend(networks.isNotEmpty())
+                    }
                 }
-            }.conflate()
 
-        private fun ConnectivityManager.isCurrentlyConnected(): Boolean {
-            val capabilities =
-                this.getNetworkCapabilities(
-                    this.activeNetwork,
-                )
-            return capabilities != null &&
+            val request =
+                Builder()
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    .build()
+            connectivityManager.registerNetworkCallback(request, callback)
+
+            /**
+             * Sends the latest connectivity status to the underlying channel.
+             */
+            channel.trySend(connectivityManager.isCurrentlyConnected())
+
+            awaitClose {
+                connectivityManager.unregisterNetworkCallback(callback)
+                Timber.d("close connectivity manager")
+            }
+        }.conflate()
+
+    private fun ConnectivityManager.isCurrentlyConnected(): Boolean {
+        val capabilities =
+            this.getNetworkCapabilities(
+                this.activeNetwork,
+            )
+        return capabilities != null &&
                 (
-                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                        capabilities.hasCapability(
-                            NetworkCapabilities.NET_CAPABILITY_VALIDATED,
-                        ) &&
-                        (
-                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                        capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                                capabilities.hasCapability(
+                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED,
+                                ) &&
+                                (
+                                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
                                         )
                         )
     }
