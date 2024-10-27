@@ -1,20 +1,38 @@
-﻿import com.casecode.pos.PosBuildType
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import com.casecode.pos.PosBuildType
 
 plugins {
     alias(libs.plugins.pos.android.application)
     alias(libs.plugins.pos.android.application.compose)
     alias(libs.plugins.pos.android.application.flavors)
+    alias(libs.plugins.pos.android.application.jacoco)
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.pos.hilt)
+    alias(libs.plugins.baselineprofile)
+
 }
-// Read this article for compose  and following practice then implement it
-//https://medium.com/androiddevelopers/jetpack-compose-stability-explained-79c10db270c8
+
 android {
 
     defaultConfig {
         applicationId = "com.casecode.pos"
-        versionCode = com.casecode.pos.Configuration.versionCode
-        versionName = com.casecode.pos.Configuration.versionName
+        versionCode = com.casecode.pos.Configuration.VERSION_CODE
+        versionName = com.casecode.pos.Configuration.VERSION_NAME
 
         resourceConfigurations.addAll(listOf("en", "ar"))
         testInstrumentationRunner = "com.casecode.pos.core.testing.PosTestRunner"
@@ -29,10 +47,12 @@ android {
         }
         release {
             isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("debug")
             applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
+            signingConfig = signingConfigs.getByName("debug")
 
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            baselineProfile.automaticGenerationDuringBuild = true
+
         }
     }
     packaging {
@@ -51,7 +71,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.loginEmployee)
+    implementation(projects.feature.signin)
     implementation(projects.feature.stepper)
     implementation(projects.feature.employee)
     implementation(projects.feature.salesReport)
@@ -84,6 +104,8 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
 
+    ksp(libs.hilt.compiler)
+
     debugCompileOnly(libs.kotlinx.coroutines.debug)
     // Debug tools
     // debugImplementation(libs.leakcanary)
@@ -93,26 +115,26 @@ dependencies {
     testImplementation(projects.core.testing)
 
     kspTest(libs.hilt.compiler)
-
-    // assertion
-    // testImplementation(libs.test.hamcrest)
-    // testImplementation(libs.test.hamcrest.library)
-
-    // mockito with kotlin
     testImplementation(kotlin("test"))
-
     testImplementation(libs.coroutines.android)
 
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(libs.firebase.testlab)
     androidTestImplementation(libs.coil.test)
-    androidTestImplementation(libs.test.espresso.core)
-    androidTestImplementation(libs.navigation.testing)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
 
-    // AndroidX Test - Hilt testing
-    kspAndroidTest(libs.hilt.compiler)
+
+    baselineProfile(projects.benchmark)
+
+}
+baselineProfile {
+    // Don't build on every iteration of a full assemble.
+    // Instead enable generation directly for the release build variant.
+    automaticGenerationDuringBuild = false
+    dexLayoutOptimization = true
 }
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
