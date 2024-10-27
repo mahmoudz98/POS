@@ -16,7 +16,7 @@
 package com.casecode.pos.feature.signin
 
 import com.casecode.pos.core.testing.repository.TestAccountRepository
-import com.casecode.pos.core.testing.service.TestAuthService
+import com.casecode.pos.core.testing.repository.TestAuthRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
 import com.casecode.pos.core.ui.R
@@ -36,7 +36,7 @@ class SignInActivityViewModelTest {
     private lateinit var viewModel: SignInActivityViewModel
     private val networkMonitor = TestNetworkMonitor()
     private val accountService = TestAccountRepository()
-    private val authService = TestAuthService()
+    private val authService = TestAuthRepository()
 
     @Before
     fun init() {
