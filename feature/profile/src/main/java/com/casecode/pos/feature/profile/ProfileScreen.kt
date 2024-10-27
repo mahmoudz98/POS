@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.profile
 
 import androidx.compose.foundation.layout.Column
@@ -36,7 +51,7 @@ import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
-import com.google.firebase.auth.FirebaseUser
+import com.casecode.pos.core.model.data.users.FirebaseUser
 import kotlinx.coroutines.launch
 
 @Composable
@@ -79,21 +94,21 @@ fun ProfileScreen(
         )
     Column(
         modifier =
-            modifier
-                .padding(8.dp)
-                .fillMaxSize(),
+        modifier
+            .padding(8.dp)
+            .fillMaxSize(),
     ) {
         PosTopAppBar(
             modifier = Modifier,
             titleRes = R.string.feature_profile_title,
             navigationIcon = PosIcons.ArrowBack,
             navigationIconContentDescription =
-                stringResource(
-                    id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
-                ),
+            stringResource(
+                id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
+            ),
             colors =
-                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.Transparent,
             ),
             onNavigationClick = { onBackClick() },
         )

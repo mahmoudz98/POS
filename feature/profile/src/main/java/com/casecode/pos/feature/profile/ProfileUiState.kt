@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.pos.android.feature)
-    alias(libs.plugins.pos.android.library.compose)
-    alias(libs.plugins.pos.android.library.jacoco)
-}
+package com.casecode.pos.feature.profile
 
-android {
-    namespace = "com.casecode.pos.feature.profile"
-}
+import com.casecode.pos.core.model.data.subscriptions.Subscription
+import com.casecode.pos.core.model.data.users.Business
+import com.casecode.pos.core.model.data.users.FirebaseUser
 
-dependencies {
-    implementation(projects.core.data)
-
-    testImplementation(libs.hilt.android.testing)
-    testImplementation(projects.core.testing)
-    androidTestImplementation(projects.core.testing)
-    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
-
-}
+data class ProfileUiState(
+    val currentUser: FirebaseUser? = null,
+    val business: Business = Business(),
+    val isLoading: Boolean = false,
+    val userMessage: Int? = null,
+    val subscriptions: List<Subscription> = emptyList(),
+    val isSubscriptionsError: Boolean = false,
+    val selectedSubscription: Subscription? = null,
+)
