@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <resources>
     <!-- sign in -->
     <string name="core_data_sign_in_failure">فشل تسجيل الدخول.</string>
@@ -9,16 +23,21 @@
     <string name="core_data_sign_in_exception">حدث خطأ ما في عملية النقر الواحد.</string>
 
     <!-- business -->
+    <string name="core_data_uid_empty">يرجى تسجيل الدخول مره اخرى</string>
     <string name="core_data_add_business_failure">فشل إضافة العمل.</string>
+    <string name="core_data_get_business_failure_network">فشل فى ايحاد بيانات العمل نحقق من اتصالك بالانترنت</string>
     <string name="core_data_add_business_network">فشل إضافة العمل، يرجى التحقق من اتصال الإنترنت.</string>
 
+    <string name="core_data_add_branch_business_failure">فشل فى اضافه فرع حديد</string>
     <string name="core_data_add_subscription_business_failure">فشل إضافة عمل مشترك.</string>
     <string name="core_data_add_subscription_business_network">فشل إضافة عمل مشترك، يرجى التحقق من اتصال الإنترنت.</string>
     <string name="core_data_complete_business_failure">فشل إكمال عمل مشترك.</string>
 
     <string name="core_data_add_employees_business_failure">فشل إضافة موظفين للعمل.</string>
+    <string name="core_data_employee_update_business_failure">فشل فى تحديث بيانات الموظف</string>
     <string name="core_data_add_employees_business_network">فشل إضافة موظفين، يرجى التحقق من اتصال الإنترنت.</string>
 
+    <string name="core_data_employee_delete_business_network">فشل فى حذف الموظف تخقق من اتصالك بالانترنت</string>
     <string name="core_data_add_product_network">فشل إضافة المنتج، يرجى التحقق من اتصال الإنترنت.</string>
 
     <string name="core_data_update_product_network">فشل تحديث المنتج، يرجى التحقق من اتصال الإنترنت.</string>
@@ -26,7 +45,7 @@
 
     <string name="core_data_delete_product_network">فشل حذف المنتج، يرجى التحقق من اتصال الإنترنت.</string>
 
-    <!-- items -->
+    <!-- allItems -->
     <string name="core_data_error_fetching_items">حدث خطأ في استرجاع العناصر. يرجى المحاولة مرة أخرى لاحقًا.</string>
 
     <string name="core_data_item_deleted_successfully">تم حذف العنصر بنجاح</string>
@@ -54,4 +73,21 @@
     <string name="core_data_image_deleted_successfully">تم حذف الصورة بنجاح</string>
     <string name="core_data_delete_image_failure_network">فشل حذف الصورة بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
     <string name="core_data_delete_image_failure_generic">فشل حذف الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
+    <string name="core_data_sign_in_success">تم تسجيل الدخول بنحاخ</string>
+    <string name="core_data_get_business_failure">فشل فى ايجاد بيانات العمل</string>
+    <string name="core_data_add_branch_business_network">فشل فى اضافه فرع جديد نحقق من اتصالك بالانترنت</string>
+    <string name="core_data_employee_add_business_failure">فشل فى اضافه موظف جديد</string>
+    <string name="core_data_employee_add_business_network">فشل فى اضافه موظف حديد نخقق من اتصالك بالانترنت</string>
+    <string name="core_data_employee_update_business_network">فشل فى نحديث بيانات الموظف  تحقق من اتصالك بالانترنت</string>
+    <string name="core_data_employee_delete_business_failure">فشل فى حدف الموظف</string>
+    <string name="core_data_add_invoice_failure_network">فشل فى اضافه الفاتوره تخقق من اتصالك بالانترنت</string>
+    <string name="core_data_add_invoice_successfully">تم اضافه الفاتوره بنجاح</string>
+    <string name="core_data_add_invoice_failure">فشل فى اضافه الفاتوره</string>
+    <string name="core_data_get_invoice_failure">فشل فى تحميل الفواتير</string>
+    <string name="core_data_get_invoice_failure_network">فشل فى تحميل الفواتير تخقق من اتصالك بالانترنت</string>
+    <string name="core_data_add_printer_info_sucessfully">تم اضافه بيانات الطابغه بنجاح</string>
+    <string name="core_data_get_printer_info_failure">فشل فى تحميل الطابغات المسجله</string>
+    <string name="core_data_get_printer_info_failure_network">فشل فى تحميل الطابغات المسجله تخقق من اتصالك بالانترنت</string>
+    <string name="core_data_add_printer_info_failure_network">فشل فى اضافه بيانات الطابعه تخقق من اتصالك بالانترنت</string>
+    <string name="core_data_add_printer_info_failure">فشل فى اضافه بيانات الطابعه</string>
 </resources>
