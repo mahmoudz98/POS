@@ -16,9 +16,11 @@
 package com.casecode.pos.core.domain.repository
 
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.domain.utils.SignInGoogleState
 
 interface AccountRepository {
-    suspend fun signIn(idToken: suspend () -> String): Resource<Int>
+    fun isGooglePlayServicesAvailable(): Boolean
+    suspend fun signIn(idToken: suspend () -> String): SignInGoogleState
 
     suspend fun employeeLogin(
         uid: String,

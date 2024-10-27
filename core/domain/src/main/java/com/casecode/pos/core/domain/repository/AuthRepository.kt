@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services
-
+package com.casecode.pos.core.domain.repository
 
 import com.casecode.pos.core.model.data.LoginStateResult
 import com.casecode.pos.core.model.data.users.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 
-interface AuthService {
+interface AuthRepository {
     val currentUser: Flow<FirebaseUser?>
     val loginData: Flow<LoginStateResult>
 
@@ -32,4 +31,3 @@ interface AuthService {
 
     suspend fun hasEmployeeLogin(): Boolean
 }
-

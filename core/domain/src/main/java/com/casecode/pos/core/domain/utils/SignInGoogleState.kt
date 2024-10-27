@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.repository
+package com.casecode.pos.core.domain.utils
 
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.subscriptions.Subscription
-
-typealias SubscriptionsResource = Resource<List<Subscription>>
-
-interface SubscriptionsRepository {
-    suspend fun getSubscriptions(): SubscriptionsResource
+sealed interface SignInGoogleState {
+    object Success : SignInGoogleState
+    object Cancelled : SignInGoogleState
+    data class Error(val message: Int) : SignInGoogleState
 }
