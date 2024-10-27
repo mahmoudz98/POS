@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "578787836284-khe5qr3f930jmdr8odhlr41bgddhbc18.apps.googleusercontent.com",
+          "client_id": "578787836284-bfkkcaci1rktr1mbdfmgpu2gt62icocp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.casecode.pos",
-            "certificate_hash": "2c732c050f1c89d44f64e166450b31fec155c310"
+            "certificate_hash": "970bdbb6f3e2cf1c3673ce897234f63ba773cf92"
           }
         },
         {
@@ -29,7 +29,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDVaeEVg9agwF1BLaZt-scwrMT2MutKZo4"
+          "current_key": "AIzaSyAQ_rXSGv38QctTCBiO_pHWGahZIgnhQIY"
         },
         {
           "current_key": "AIzaSyCHmpN1VpeqLRdMYDOaqEh7sXjdinJC50g"
@@ -55,11 +55,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "578787836284-5gen640qijq5dp0k1v0hpi8of9fne4ro.apps.googleusercontent.com",
+          "client_id": "578787836284-r0sn9nonhl4vjji6od3pd9nlkg32pjdu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.casecode.pos.debug",
-            "certificate_hash": "2c732c050f1c89d44f64e166450b31fec155c310"
+            "certificate_hash": "970bdbb6f3e2cf1c3673ce897234f63ba773cf92"
           }
         },
         {
@@ -69,7 +69,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDVaeEVg9agwF1BLaZt-scwrMT2MutKZo4"
+          "current_key": "AIzaSyAQ_rXSGv38QctTCBiO_pHWGahZIgnhQIY"
         },
         {
           "current_key": "AIzaSyCHmpN1VpeqLRdMYDOaqEh7sXjdinJC50g"
@@ -95,11 +95,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "578787836284-4o885g3o4p02ebl2a0h6njcu4h4tc7th.apps.googleusercontent.com",
+          "client_id": "578787836284-e08nvj0copcfv7dnhvdqdf3fprtrel8u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.casecode.pos.demo",
-            "certificate_hash": "2c732c050f1c89d44f64e166450b31fec155c310"
+            "certificate_hash": "970bdbb6f3e2cf1c3673ce897234f63ba773cf92"
           }
         },
         {
@@ -109,7 +109,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDVaeEVg9agwF1BLaZt-scwrMT2MutKZo4"
+          "current_key": "AIzaSyAQ_rXSGv38QctTCBiO_pHWGahZIgnhQIY"
         },
         {
           "current_key": "AIzaSyCHmpN1VpeqLRdMYDOaqEh7sXjdinJC50g"
@@ -135,11 +135,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "578787836284-03aoqfaq27b7q645892vp3puqa43hmlp.apps.googleusercontent.com",
+          "client_id": "578787836284-asdp7s8guffbd39m1k55p4e2l01031na.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.casecode.pos.demo.debug",
-            "certificate_hash": "2c732c050f1c89d44f64e166450b31fec155c310"
+            "certificate_hash": "970bdbb6f3e2cf1c3673ce897234f63ba773cf92"
           }
         },
         {
@@ -149,7 +149,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDVaeEVg9agwF1BLaZt-scwrMT2MutKZo4"
+          "current_key": "AIzaSyAQ_rXSGv38QctTCBiO_pHWGahZIgnhQIY"
         },
         {
           "current_key": "AIzaSyCHmpN1VpeqLRdMYDOaqEh7sXjdinJC50g"
