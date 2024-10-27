@@ -66,8 +66,6 @@ import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.moveToMainActivity
 import com.casecode.pos.core.ui.moveToStepperActivity
 import com.casecode.pos.feature.login.employee.LoginInEmployeeDialog
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.casecode.pos.core.ui.R as uiR
@@ -97,7 +95,7 @@ fun SignInScreen(viewModel: SignInActivityViewModel) {
     SignInScreen(
         uiState = uiState,
         onSignInCLick = {
-            if (isGooglePlayServicesAvailable(context)) {
+            if (viewModel.isGooglePlayServicesAvailable()) {
                 viewModel.signIn {
                     retrieveGoogleIdToken(
                         context as Activity,
@@ -239,12 +237,6 @@ internal fun SignInScreen(
             onMessageShown()
         }
     }
-}
-
-private fun isGooglePlayServicesAvailable(context: Context): Boolean {
-    val apiAvailability = GoogleApiAvailability.getInstance()
-    val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
-    return resultCode == ConnectionResult.SUCCESS
 }
 
 private suspend fun retrieveGoogleIdToken(

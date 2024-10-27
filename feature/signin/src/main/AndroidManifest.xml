@@ -19,6 +19,7 @@
         <activity
             android:name="com.casecode.pos.feature.signin.SignInActivity"
             android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 </manifest>

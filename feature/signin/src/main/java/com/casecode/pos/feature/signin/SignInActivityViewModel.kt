@@ -19,8 +19,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.domain.repository.AccountRepository
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.AuthService
+import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.utils.SignInGoogleState
 import com.casecode.pos.core.model.data.LoginStateResult
 import com.casecode.pos.core.ui.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
@@ -39,7 +39,7 @@ import javax.inject.Inject
  *
  * @property networkMonitor Network monitor to track network connectivity.
  * @property accountRepository Service for interacting with account data.
- * @property authService Service for authentication.
+ * @property authRepository Service for authentication.
  */
 @HiltViewModel
 class SignInActivityViewModel
@@ -47,7 +47,7 @@ class SignInActivityViewModel
 constructor(
     private val networkMonitor: NetworkMonitor,
     private val accountRepository: AccountRepository,
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
 
 ) : ViewModel() {
     @Inject
@@ -57,7 +57,7 @@ constructor(
     val signInUiState = _signInUiState.asStateFlow()
 
     val loginStateResult: StateFlow<LoginStateResult> =
-        authService.loginData.stateIn(
+        authRepository.loginData.stateIn(
             scope = viewModelScope,
             initialValue = LoginStateResult.Loading,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -77,7 +77,7 @@ constructor(
     private fun setConnected(isOnline: Boolean) {
         _signInUiState.update { it.copy(isOnline = isOnline) }
     }
-
+    fun isGooglePlayServicesAvailable() = accountRepository.isGooglePlayServicesAvailable()
     fun signIn(idToken: suspend () -> String) {
         if (!signInUiState.value.isOnline) {
             _signInUiState.update { it.copy(userMessage = R.string.core_ui_error_network) }
@@ -85,35 +85,29 @@ constructor(
             viewModelScope.launch {
                 _signInUiState.update { it.copy(isLoading = true) }
                 when (val result = accountRepository.signIn(idToken)) {
-                    is Resource.Success -> {
+                    is SignInGoogleState.Success -> {
                         _signInUiState.update {
-                            it.copy(
-                                isLoading = true,
-                                userMessage = result.data,
-                            )
+                            it.copy(isLoading = false)
                         }
                         checkIfRegistrationAndBusinessCompleted()
                     }
 
-                    is Resource.Error -> {
+                    SignInGoogleState.Cancelled -> {
                         _signInUiState.update {
                             it.copy(
                                 isLoading = false,
-                                userMessage = result.message as Int,
                             )
                         }
                     }
 
-                    is Resource.Empty -> {
+                    is SignInGoogleState.Error -> {
                         _signInUiState.update {
                             it.copy(
                                 isLoading = false,
-                                userMessage = result.message as Int,
+                                userMessage = result.message,
                             )
                         }
                     }
-
-                    else -> {}
                 }
             }
         }
