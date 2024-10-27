@@ -32,9 +32,9 @@ interface ItemRepository {
     /**
      * Retrieves items associated with the specified user ID.
      *
-     * @return A [ResourceItems] resource containing the retrieved items.
+     * @return A [] resource containing the retrieved items.
      */
-    fun getItems(): Flow<ResourceItems>
+    fun getItems(): Flow<Resource<List<Item>>>
 
     /**
      * Adds a new item to the repository.
