@@ -1,14 +1,29 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.data.utils.BRANCHES_CODE_FIELD
-import com.casecode.pos.core.data.utils.BRANCHES_FIELD
-import com.casecode.pos.core.data.utils.BRANCHES_NAME_FIELD
-import com.casecode.pos.core.data.utils.BRANCHES_PHONE_NUMBER_FIELD
-import com.casecode.pos.core.data.utils.BUSINESS_EMAIL_FIELD
-import com.casecode.pos.core.data.utils.BUSINESS_FIELD
-import com.casecode.pos.core.data.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
-import com.casecode.pos.core.data.utils.BUSINESS_PHONE_NUMBER_FIELD
-import com.casecode.pos.core.data.utils.BUSINESS_STORE_TYPE_FIELD
+import com.casecode.pos.core.firebase.services.BRANCHES_CODE_FIELD
+import com.casecode.pos.core.firebase.services.BRANCHES_FIELD
+import com.casecode.pos.core.firebase.services.BRANCHES_NAME_FIELD
+import com.casecode.pos.core.firebase.services.BRANCHES_PHONE_NUMBER_FIELD
+import com.casecode.pos.core.firebase.services.BUSINESS_EMAIL_FIELD
+import com.casecode.pos.core.firebase.services.BUSINESS_FIELD
+import com.casecode.pos.core.firebase.services.BUSINESS_IS_COMPLETED_STEP_FIELD
+import com.casecode.pos.core.firebase.services.BUSINESS_PHONE_NUMBER_FIELD
+import com.casecode.pos.core.firebase.services.BUSINESS_STORE_TYPE_FIELD
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.model.data.users.StoreType
@@ -17,7 +32,7 @@ fun Map<String, Any>.asEntityBusiness(): Business {
     val storeType = this[BUSINESS_STORE_TYPE_FIELD] as? String ?: ""
     val email = this[BUSINESS_EMAIL_FIELD] as? String ?: ""
     val phone = this[BUSINESS_PHONE_NUMBER_FIELD] as? String ?: ""
-    val isCompletedStep = this[BUSINESS_IS_COMPLETED_STEP_FIELD] as? Boolean ?: false
+    val isCompletedStep = this[BUSINESS_IS_COMPLETED_STEP_FIELD] as? Boolean == true
 
     // Retrieve branches data and apply necessary transformations
     @Suppress("UNCHECKED_CAST")
@@ -32,8 +47,7 @@ fun Map<String, Any>.asEntityBusiness(): Business {
         val branch = Branch(branchCode, branchName, phoneNumber)
         branches.add(branch)
     }
-
-    return Business(storeType.toStoreType(), email, phone, isCompletedStep, branches)
+    return Business(StoreType.toStoreType(storeType), email, phone, isCompletedStep, branches)
 }
 
 fun Branch.asExternalBranch(): Map<String, Any?> =
@@ -66,8 +80,3 @@ fun Business.asExternalBusiness(): HashMap<String, HashMap<String, Any?>> {
             ),
     )
 }
-
-fun String.toStoreType(): StoreType? =
-    StoreType.entries.find { type ->
-        type.arabicName == this || type.englishName.lowercase() == this.lowercase()
-    }
