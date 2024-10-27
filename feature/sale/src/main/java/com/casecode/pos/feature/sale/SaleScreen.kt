@@ -1,6 +1,22 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.sale
 
 import android.content.res.Configuration
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -12,10 +28,15 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imeNestedScroll
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
@@ -54,27 +75,21 @@ import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.scanOptions
 
 @Composable
-internal fun PosScreen(
+internal fun SaleRoute(
     viewModel: SaleViewModel = hiltViewModel(),
     onGoToItems: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var showUpdateQuantityItem by remember { mutableStateOf(false) }
-    val snackState = remember { SnackbarHostState() }
-    SnackbarHost(hostState = snackState, Modifier.zIndex(1f))
-    uiState.userMessage?.let { message ->
-        val snackbarText = stringResource(message)
-        LaunchedEffect(snackState, viewModel, message, snackbarText) {
-            snackState.showSnackbar(snackbarText)
-            viewModel.snackbarMessageShown()
-        }
-    }
 
-    PosScreen(
+    SaleScreen(
         uiState = uiState,
+        onSnackbarMessageShown = viewModel::snackbarMessageShown,
         onScan = {
             context.scanOptions(
+                onModuleDownloaded = { viewModel.showSnackbarMessage(it) },
+                onModuleDownloading = { viewModel.showSnackbarMessage(it) },
                 onResult = {
                     viewModel.scanItem(it)
                 },
@@ -96,11 +111,11 @@ internal fun PosScreen(
     )
     if (showUpdateQuantityItem) {
         QuantityDialog(
-            oldQuantity = uiState.itemInvoiceSelected?.quantity ?: 0.0,
+            oldQuantity = uiState.itemInvoiceSelected?.quantity ?: 0,
             inStock =
-                uiState.itemSelected?.quantity?.plus(
-                    uiState.itemInvoiceSelected?.quantity ?: 0.0,
-                ) ?: 0.0,
+            uiState.itemSelected?.quantity?.plus(
+                uiState.itemInvoiceSelected?.quantity ?: 0,
+            ) ?: 0,
             onDismiss = { showUpdateQuantityItem = false },
             onConfirm = {
                 viewModel.updateQuantityItemInvoice(it)
@@ -110,11 +125,13 @@ internal fun PosScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun PosScreen(
+internal fun SaleScreen(
     modifier: Modifier = Modifier,
     uiState: SaleUiState,
     onSearchItemClick: (Item) -> Unit,
+    onSnackbarMessageShown: () -> Unit = {},
     onScan: () -> Unit,
     onGoToItems: () -> Unit,
     onRemoveItem: (Item) -> Unit,
@@ -123,13 +140,31 @@ internal fun PosScreen(
     onSaveInvoice: () -> Unit,
     windowSizeClass: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
+    ReportDrawnWhen { uiState.itemsInvoice.isNotEmpty() }
+
     val hasItemsSale by remember(uiState.itemsInvoice) {
         derivedStateOf { uiState.itemsInvoice.isNotEmpty() }
     }
     val configuration = LocalConfiguration.current
 
+    val snackState = remember { SnackbarHostState() }
+    SnackbarHost(hostState = snackState, Modifier.zIndex(1f))
+    uiState.userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(snackState, message, snackbarText) {
+            snackState.showSnackbar(snackbarText)
+            onSnackbarMessageShown()
+        }
+    }
     if (!isExpended(windowSizeClass.windowSizeClass, configuration)) {
-        Column(modifier = modifier.padding(8.dp)) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(8.dp)
+                .navigationBarsPadding()
+                .imeNestedScroll()
+                .imePadding(),
+        ) {
             ExposedDropdownMenuBoxSearch(
                 items = uiState.items,
                 onScan = onScan,
@@ -164,24 +199,27 @@ internal fun PosScreen(
             AnimatedVisibility(
                 visible = hasItemsSale,
                 enter =
-                    slideInVertically(initialOffsetY = { -40 }) +
+                slideInVertically(initialOffsetY = { -40 }) +
                         expandVertically(
                             expandFrom = Alignment.Top,
                         ) +
                         scaleIn(
                             transformOrigin =
-                                TransformOrigin(
-                                    0.5f,
-                                    0f,
-                                ),
+                            TransformOrigin(
+                                0.5f,
+                                0f,
+                            ),
                         ) + fadeIn(initialAlpha = 0.3f),
                 exit =
-                    slideOutVertically() + shrinkVertically() + fadeOut() +
+                slideOutVertically() + shrinkVertically() + fadeOut() +
                         scaleOut(
                             targetScale = 1.2f,
                         ),
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.imePadding(),
+                    // . windowInsetsPadding(WindowInsets.safeContent.only(WindowInsetsSides.Horizontal))
+                ) {
                     OutlinedTextField(
                         value = uiState.amountInput,
                         onValueChange = { onAmountChanged(it) },
@@ -219,7 +257,9 @@ internal fun PosScreen(
         }
     } else {
         Row(
-            modifier = modifier.padding(12.dp),
+            modifier = modifier
+                .padding(12.dp)
+                .imePadding(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(Modifier.weight(0.5f)) {
@@ -327,7 +367,7 @@ fun isExpended(
 fun PosScreenPreview() {
     POSTheme {
         PosBackground {
-            PosScreen(
+            SaleScreen(
                 uiState =
                 SaleUiState(
                     invoiceState = InvoiceState.HasItems,
@@ -335,48 +375,48 @@ fun PosScreenPreview() {
                     mutableSetOf(
                         Item(
                             name = "item1",
-                            price = 1.0,
-                            quantity = 1.0,
+                            unitPrice = 1.0,
+                            quantity = 1,
                             sku = "23233232",
                             unitOfMeasurement = null,
                             imageUrl = null,
                         ),
                         Item(
                             name = "item2",
-                            price = 20.0,
-                            quantity = 1.0,
+                            unitPrice = 20.0,
+                            quantity = 1,
                             sku = "2323232323",
                             unitOfMeasurement = null,
                             imageUrl = null,
                         ),
                         Item(
                             name = "item33",
-                            price = 11.0,
-                            quantity = 1.0,
+                            unitPrice = 11.0,
+                            quantity = 1,
                             sku = "23232323",
                             unitOfMeasurement = null,
                             imageUrl = null,
                         ),
                         Item(
                             name = "item22",
-                            price = 11.0,
-                            quantity = 1.0,
+                            unitPrice = 11.0,
+                            quantity = 1,
                             sku = "21121212",
                             unitOfMeasurement = null,
                             imageUrl = null,
                         ),
                         Item(
                             name = "item222",
-                            price = 10.0,
-                            quantity = 0.0,
+                            unitPrice = 10.0,
+                            quantity = 0,
                             sku = "211111111111",
                             unitOfMeasurement = null,
                             imageUrl = null,
                         ),
                         Item(
                             name = "item2221",
-                            price = 11.0,
-                            quantity = 2.0,
+                            unitPrice = 11.0,
+                            quantity = 2,
                             sku = "22223",
                             unitOfMeasurement = null,
                             imageUrl = null,

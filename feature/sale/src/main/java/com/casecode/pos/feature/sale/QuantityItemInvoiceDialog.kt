@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.sale
 
 import androidx.compose.foundation.layout.Column
@@ -7,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,13 +30,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.casecode.pos.core.designsystem.component.PosTextButton
+import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun QuantityDialog(
-    oldQuantity: Double,
-    inStock: Double,
+    oldQuantity: Int,
+    inStock: Int,
     onDismiss: () -> Unit,
-    onConfirm: (Double) -> Unit,
+    onConfirm: (Int) -> Unit,
 ) {
     val quantity =
         rememberSaveable { mutableStateOf(oldQuantity.toString()) }
@@ -42,7 +58,7 @@ fun QuantityDialog(
                         quantityError.value = it.isEmpty() || it.toDouble() > inStock || it.toDouble() <= 0
                     },
                     isError = quantityError.value,
-                    label = { Text(text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format)) },
+                    label = { Text(text = stringResource(uiString.core_ui_item_quantity_label)) },
                     supportingText = {
                         Text(
                             if (quantityError.value) {
@@ -68,21 +84,21 @@ fun QuantityDialog(
             }
         },
         confirmButton = {
-            TextButton(
+            PosTextButton(
                 onClick = {
                     if (!quantityError.value) {
-                        onConfirm(quantity.value.toDouble())
+                        onConfirm(quantity.value.toInt())
                     }
                 },
             ) {
-                Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_ok_button_text))
+                Text(stringResource(uiString.core_ui_dialog_ok_button_text))
             }
         },
         dismissButton = {
-            TextButton(
+            PosTextButton(
                 onClick = onDismiss,
             ) {
-                Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text))
+                Text(stringResource(uiString.core_ui_dialog_cancel_button_text))
             }
         },
     )

@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.sale
 
 import androidx.compose.foundation.background
@@ -5,11 +20,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -72,7 +89,8 @@ fun ExposedDropdownMenuBoxSearch(
             } else {
                 items.filter {
                     it.name.contains(searchQuery, ignoreCase = true) ||
-                        it.sku.contains(searchQuery, ignoreCase = true) ||
+                            it.sku.contains(searchQuery) ||
+                            it.category.contains(searchQuery, ignoreCase = true) ||
                         it.sku.contains(normalizeNumber(searchQuery), ignoreCase = true)
                 }
             }
@@ -193,6 +211,7 @@ fun ItemDropMenuItem(item: Item) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ColumnScope.SaleItems(
     itemsInvoice: Set<Item>,
@@ -201,9 +220,9 @@ fun ColumnScope.SaleItems(
 ) {
     val scrollableState = rememberLazyListState()
     LazyColumn(
-        modifier =
-        Modifier
+        modifier = Modifier
             .weight(1f)
+            .imeNestedScroll()
             .padding(horizontal = 8.dp),
         contentPadding = PaddingValues(vertical = 8.dp),
         state = scrollableState,
@@ -213,7 +232,7 @@ fun ColumnScope.SaleItems(
             item(key = sku) {
                 ItemSale(
                     name = item.name,
-                    price = item.price,
+                    price = item.unitPrice,
                     quantity = item.quantity,
                     itemImageUrl = item.imageUrl ?: "",
                     onRemoveItem = { onRemoveItem(item) },
@@ -228,7 +247,7 @@ fun ColumnScope.SaleItems(
 internal fun ItemSale(
     name: String,
     price: Double,
-    quantity: Double,
+    quantity: Int,
     itemImageUrl: String,
     onRemoveItem: () -> Unit,
     onUpdateQuantity: () -> Unit,
@@ -303,8 +322,8 @@ fun ItemDropMenuItemPreview() {
         ItemDropMenuItem(
             Item(
                 name = "Iphone5",
-                price = 202.0,
-                quantity = 12222222220.0,
+                unitPrice = 202.0,
+                quantity = 12222,
                 sku = "12345678912345",
                 unitOfMeasurement = null,
                 imageUrl = null,
@@ -317,6 +336,6 @@ fun ItemDropMenuItemPreview() {
 @Composable
 fun SaleItemPreview() {
     POSTheme {
-        ItemSale("Item Name", 10.0, 5.0, "", {}, {})
+        ItemSale("Item Name", 10.0, 5, "", {}, {})
     }
 }
