@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.signout
 
 import androidx.compose.foundation.Image
@@ -29,11 +44,15 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
+import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.model.data.users.FirebaseUser
+import com.casecode.pos.core.ui.R
 
 @Composable
 fun SignOutDialog(
@@ -42,8 +61,24 @@ fun SignOutDialog(
     onDismiss: () -> Unit,
 ) {
     val currentUser by authViewModel.userUiState.collectAsStateWithLifecycle()
-    val configuration = LocalConfiguration.current
     var isSignOut by remember { mutableStateOf(false) }
+
+    SignOutDialog(onDismiss, currentUser) { isSignOut = true }
+    LaunchedEffect(isSignOut) {
+        if (isSignOut) {
+            authViewModel.signOut().await()
+            onSignOut()
+        }
+    }
+}
+
+@Composable
+private fun SignOutDialog(
+    onDismiss: () -> Unit,
+    currentUser: FirebaseUser?,
+    onSignOut: () -> Unit,
+) {
+    val configuration = LocalConfiguration.current
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -51,7 +86,7 @@ fun SignOutDialog(
         onDismissRequest = onDismiss,
         title = {
             Image(
-                painter = painterResource(id = R.drawable.feature_signout_ic_logo_google),
+                painter = painterResource(id = R.drawable.core_ui_ic_google),
                 contentDescription = "Google Logo",
                 modifier =
                 Modifier
@@ -69,7 +104,7 @@ fun SignOutDialog(
             ) {
                 DynamicAsyncImage(
                     imageUrl = currentUser?.photoUrl,
-                    placeholder = painterResource(id = R.drawable.feature_signout_ic_google),
+                    placeholder = painterResource(id = R.drawable.core_ui_ic_google),
                     contentDescription = null,
                     modifier = Modifier
                         .size(64.dp)
@@ -79,7 +114,7 @@ fun SignOutDialog(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = currentUser?.displayName ?: "Mahmoud",
+                    text = currentUser?.displayName ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                 )
 
@@ -96,7 +131,7 @@ fun SignOutDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    isSignOut = true
+                    onSignOut()
                 },
                 colors =
                 ButtonDefaults.buttonColors(
@@ -104,14 +139,20 @@ fun SignOutDialog(
                     contentColor = MaterialTheme.colorScheme.error,
                 ),
             ) {
-                Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_ok_button_text))
+                Text(stringResource(R.string.core_ui_dialog_ok_button_text))
             }
         },
     )
-    LaunchedEffect(isSignOut) {
-        if (isSignOut) {
-            authViewModel.signOut().await()
-            onSignOut()
-        }
+}
+
+@Preview
+@Composable
+fun SignOutDialogPreview() {
+    POSTheme {
+        SignOutDialog(
+            onDismiss = {},
+            currentUser = FirebaseUser("email", "name", "photoUrl"),
+            onSignOut = {},
+        )
     }
 }
