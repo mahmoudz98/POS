@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -15,6 +14,7 @@ plugins {
     alias(libs.plugins.gradle.cache.fix) apply false
     alias(libs.plugins.dependencyGuard) apply false
     alias(libs.plugins.module.graph) apply true
+    alias(libs.plugins.power.assert) apply false
     // alias(libs.plugins.dependency.analysis) apply true
 }
 /*moduleGraphAssert {
@@ -27,5 +27,3 @@ tasks.withType<JavaCompile>().configureEach {
     options.isIncremental = true
 }
 
-// TODo: use gradle profile https://developer.android.com/build/profile-your-build#getting_started
-// TODO: Add Dependency graph let visualize dependencies in a graph.
