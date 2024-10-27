@@ -13,17 +13,22 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://jitpack.io")
+        maven {
+            url = uri("https://jitpack.io")
+        }
+
     }
 }
 
 rootProject.name = "POS"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
+include(":benchmark")
 include(":core:domain")
 include(":core:model")
 include(":core:common")
 include(":core:data")
+include(":core:firebase-services")
 include(":core:datastore")
 include(":core:datastore_proto")
 include(":core:datastore-test")
@@ -31,7 +36,7 @@ include(":core:testing")
 include(":core:designsystem")
 include(":core:ui")
 include(":core:printer")
-
+include(":feature:signin")
 include(":feature:login-employee")
 include(":feature:stepper")
 include(":feature:employee")
