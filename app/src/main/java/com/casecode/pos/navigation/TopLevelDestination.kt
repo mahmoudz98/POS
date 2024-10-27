@@ -15,32 +15,87 @@
  */
 package com.casecode.pos.navigation
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import com.casecode.pos.R
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.ui.R.string.core_ui_employees_title
+import com.casecode.pos.feature.employee.EmployeesRoute
+import com.casecode.pos.feature.employee.navigateToEmployees
+import com.casecode.pos.feature.item.navigation.ItemsGraph
+import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
+import com.casecode.pos.feature.sale.SaleRoute
+import com.casecode.pos.feature.sale.navigateToSale
+import com.casecode.pos.feature.setting.SettingNavigation
+import com.casecode.pos.feature.setting.navigateToSettings
+import com.casecode.pos.feature.statistics.ReportsRoute
+import com.casecode.pos.feature.statistics.navigateToReports
+import kotlin.reflect.KClass
 
-enum class TopLevelDestination(
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val titleTextId: Int,
+interface TopLevelDestination {
+    val selectedIcon: ImageVector
+    val unselectedIcon: ImageVector
+    val titleTextId: Int
+    val route: KClass<*>
+    fun navigate(navController: NavHostController, navOptions: NavOptions)
+}
+
+private fun TopLevelDestination.navigateTo(
+    navController: NavHostController,
+    navOptions: NavOptions,
 ) {
-    POS(PosIcons.Pos, PosIcons.Pos, R.string.pos),
-    REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title),
+    when (this.route) {
+        SaleRoute::class -> navController.navigateToSale(navOptions)
+        ReportsRoute::class -> navController.navigateToReports(navOptions)
+        ItemsGraph::class -> navController.navigateToItemsGraph(navOptions)
+        EmployeesRoute::class -> navController.navigateToEmployees(navOptions)
+        SettingNavigation.SettingRoute::class -> navController.navigateToSettings(navOptions)
+    }
+}
 
-    ITEMS(
-        PosIcons.Items,
-        PosIcons.Items,
-        R.string.menu_items,
-    ),
-    EMPLOYEES(
-        PosIcons.Employee,
-        PosIcons.Employee,
-        core_ui_employees_title,
-    ),
+enum class AdminTopLevelDestination(
+    override val selectedIcon: ImageVector,
+    override val unselectedIcon: ImageVector,
+    override val titleTextId: Int,
+    override val route: KClass<*>,
+) : TopLevelDestination {
+
+    POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
+    REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title, ReportsRoute::class),
+    ITEMS(PosIcons.Items, PosIcons.Items, R.string.menu_items, ItemsGraph::class),
+    EMPLOYEES(PosIcons.Employee, PosIcons.Employee, core_ui_employees_title, EmployeesRoute::class),
     SETTINGS(
         PosIcons.Settings,
         PosIcons.Settings,
         R.string.settings_title,
+        SettingNavigation.SettingRoute::class,
     ),
+    ;
+
+    override fun navigate(navController: NavHostController, navOptions: NavOptions) {
+        navigateTo(navController, navOptions)
+    }
+}
+
+enum class SaleTopLevelDestination(
+    override val selectedIcon: ImageVector,
+    override val unselectedIcon: ImageVector,
+    @StringRes override val titleTextId: Int,
+    override val route: KClass<*>,
+) : TopLevelDestination {
+    POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
+    REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title, ReportsRoute::class),
+    SETTINGS(
+        PosIcons.Settings,
+        PosIcons.Settings,
+        R.string.settings_title,
+        SettingNavigation.SettingGraph::class,
+    ),
+    ;
+
+    override fun navigate(navController: NavHostController, navOptions: NavOptions) {
+        navigateTo(navController, navOptions)
+    }
 }
