@@ -1,12 +1,23 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.repository
 
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
-import com.google.firebase.firestore.FirebaseFirestore
-import io.mockk.mockk
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -21,7 +32,6 @@ import org.junit.Test
  * all asynchronous tasks are executed immediately.
  */
 class SubscriptionsRepositoryImplTest {
-    private var firestore: FirebaseFirestore = mockk<FirebaseFirestore>()
 
     private val testDispatcher = StandardTestDispatcher()
     private val testScope: TestScope = TestScope(testDispatcher)
@@ -42,7 +52,7 @@ class SubscriptionsRepositoryImplTest {
 
             // when and  send some test Subscriptions and get followed state
             repository.sendSubscriptions(actualSubscriptions)
-            val expectedSubscriptions = repository.getSubscriptions().last()
+            val expectedSubscriptions = repository.getSubscriptions()
 
             // Then
             assertThat(expectedSubscriptions, equalTo(Resource.Success(actualSubscriptions)))
@@ -58,7 +68,7 @@ class SubscriptionsRepositoryImplTest {
             repository.setReturnError(true)
 
             // when  send some test error and get followed state
-            val actualError = repository.getSubscriptions().first()
+            val actualError = repository.getSubscriptions()
 
             // Then
             assert(actualError is Resource.Error)
@@ -72,7 +82,7 @@ class SubscriptionsRepositoryImplTest {
         runTest {
             // When send plans is empty
             repository.setReturnEmpty(true)
-            val subscriptionsResponse = repository.getSubscriptions().first()
+            val subscriptionsResponse = repository.getSubscriptions()
 
             // Then
             assertThat(subscriptionsResponse, equalTo(Resource.empty("Empty")))

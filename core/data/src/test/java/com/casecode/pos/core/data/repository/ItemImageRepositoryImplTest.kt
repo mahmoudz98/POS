@@ -1,52 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.repository
 
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import io.mockk.clearAllMocks
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.mockkConstructor
-import io.mockk.slot
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestScope
-import org.junit.After
-import org.junit.Before
-
-class ItemImageRepositoryImplTest {
-    private val auth: FirebaseAuth = mockk<FirebaseAuth>()
-    private val firebaseStorage: FirebaseStorage = mockk<FirebaseStorage>()
-
-    private val testDispatcher = StandardTestDispatcher()
-    private val testScope: TestScope = TestScope(testDispatcher)
-
-    // subject under test
-    private lateinit var itemImageRepositoryImpl: ItemImageRepositoryImpl
-
-    private val uid = "test"
-
-    // Capture the success and failure listeners
-    private val successListenerSlot = slot<OnSuccessListener<Void>>()
-    private val failureListenerSlot = slot<OnFailureListener>()
-
-    private lateinit var mockStorageReference: StorageReference
-
-    @Before
-    fun setup() {
-        mockkConstructor(ItemImageRepositoryImpl::class)
-
-        mockStorageReference = mockk()
-
-        every { auth.currentUser?.uid } returns uid
-/*
-        itemImageRepositoryImpl = ItemImageRepositoryImpl(auth, firebaseStorage, testDispatcher)
-*/
-    }
-
-    @After
-    fun tearDown() {
-        clearAllMocks()
-    }
-}
+class ItemImageRepositoryImplTest
