@@ -13,44 +13,69 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.ui.main
+package com.casecode.pos
 
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import com.casecode.pos.core.data.service.AuthService
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.ui.moveToSignInActivity
+import com.casecode.pos.ui.MainScreen
+import com.casecode.pos.ui.rememberMainAppState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
 
-    @Inject
-    lateinit var authService: AuthService
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
+        var authUiState: MainAuthUiState by mutableStateOf(MainAuthUiState.Loading)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.mainAuthUiState.onEach { authUiState = it }.collect()
+            }
+        }
+        splashScreen.setKeepOnScreenCondition {
+            authUiState == MainAuthUiState.Loading
+        }
 
+        if (authUiState is MainAuthUiState.ErrorLogin) {
+            moveToSignInActivity(this)
+        }
+        super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         setContent {
             val darkTheme = isSystemInDarkTheme()
-
             DisposableEffect(darkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle =
                     SystemBarStyle.auto(
-                        android.graphics.Color.TRANSPARENT,
-                        android.graphics.Color.TRANSPARENT,
+                        Color.TRANSPARENT,
+                        Color.TRANSPARENT,
                     ) { darkTheme },
                     navigationBarStyle =
                     SystemBarStyle.auto(
@@ -63,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             val appState =
                 rememberMainAppState(
                     networkMonitor = networkMonitor,
-                    authService = authService,
+                    mainAuthUiState = authUiState,
                 )
             CompositionLocalProvider {
                 POSTheme {
@@ -76,10 +101,10 @@ class MainActivity : AppCompatActivity() {
     /**
      * The default light scrim, as defined by androidx and the platform:
      */
-    private val lightScrim = android.graphics.Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+    private val lightScrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
 
     /**
      * The default dark scrim, as defined by androidx and the platform:
      */
-    private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+    private val darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
 }
