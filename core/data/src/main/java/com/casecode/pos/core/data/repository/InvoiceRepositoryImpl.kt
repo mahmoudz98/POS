@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.repository
 
 import android.icu.util.Calendar
@@ -6,18 +21,17 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.model.toInvoicesGroup
-import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.data.service.checkUserNotFound
-import com.casecode.pos.core.data.utils.Invoice_DATE_FIELD
-import com.casecode.pos.core.data.utils.Invoice_FIELD
-import com.casecode.pos.core.data.utils.getCollectionRefFromUser
-import com.casecode.pos.core.data.utils.getDocumentFromUser
+import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
+import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.InvoiceRepository
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.firebase.services.FirestoreService
+import com.casecode.pos.core.firebase.services.INVOICE_DATE_FIELD
+import com.casecode.pos.core.firebase.services.INVOICE_FIELD
+import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.Invoice
 import com.casecode.pos.core.model.data.users.InvoiceGroup
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -27,34 +41,37 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class InvoiceRepositoryImpl
-    @Inject
-    constructor(
-        private val auth: AuthService,
-        private val db: FirebaseFirestore,
-        @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
-    ) : InvoiceRepository {
-        override suspend fun addInvoice(invoice: Invoice): Resource<Int> {
-            return withContext(ioDispatcher) {
-                try {
-                    auth.checkUserNotFound<Int> {
-                        return@withContext it
-                    }
-                    val currentUID = auth.currentUserId()
-                    val currentNameLogin = auth.currentNameLogin()
-                    suspendCoroutine { continuation ->
-                        val documentRef = db.getDocumentFromUser(currentUID, Invoice_FIELD)
-                        val invoiceMap = invoice.asExternalMapper(documentRef, currentNameLogin)
-                        documentRef
-                            .set(invoiceMap)
-                            .addOnSuccessListener {
-                                continuation.resume(Resource.success(R.string.core_data_add_invoice_successfully))
-                            }.addOnFailureListener {
-                                continuation.resume(Resource.error(R.string.core_data_add_invoice_failure))
-                            }
-                    }
-                } catch (e: UnknownHostException) {
-                    Resource.error(R.string.core_data_add_invoice_failure_network)
-                } catch (e: Exception) {
+@Inject
+constructor(
+    private val auth: AuthRepository,
+    private val db: FirestoreService,
+    @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
+) : InvoiceRepository {
+    override suspend fun addInvoice(invoice: Invoice): Resource<Int> {
+        return withContext(ioDispatcher) {
+            try {
+                auth.checkUserNotFoundAndReturnErrorMessage<Int> {
+                    return@withContext it
+                }
+                val currentUID = auth.currentUserId()
+                val currentNameLogin =
+                    auth.currentNameLogin()
+
+                suspendCoroutine { continuation ->
+                    val doc =
+                        db.getDocumentInChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
+                    val invoiceMap = invoice.asExternalMapper(doc, currentNameLogin)
+                    doc
+                        .set(invoiceMap)
+                        .addOnSuccessListener {
+                            continuation.resume(Resource.success(R.string.core_data_add_invoice_successfully))
+                        }.addOnFailureListener {
+                            continuation.resume(Resource.error(R.string.core_data_add_invoice_failure))
+                        }
+                }
+            } catch (_: UnknownHostException) {
+                Resource.error(R.string.core_data_add_invoice_failure_network)
+            } catch (_: Exception) {
                 Resource.error(R.string.core_data_add_invoice_failure)
             }
         }
@@ -86,10 +103,11 @@ class InvoiceRepositoryImpl
 
                 val currentUID = auth.currentUserId()
                 suspendCoroutine { continuation ->
-                    db
-                        .getCollectionRefFromUser(currentUID, Invoice_FIELD)
-                        .whereGreaterThanOrEqualTo(Invoice_DATE_FIELD, startTimestamp)
-                        .whereLessThanOrEqualTo(Invoice_DATE_FIELD, endTimestamp)
+                    db.getCollectionChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
+                        /* firestore
+                             .getCollectionRefFromUser(currentUID, INVOICE_FIELD)*/
+                        .whereGreaterThanOrEqualTo(INVOICE_DATE_FIELD, startTimestamp)
+                        .whereLessThanOrEqualTo(INVOICE_DATE_FIELD, endTimestamp)
                         .get()
                         .addOnSuccessListener {
                             val invoices =
@@ -117,12 +135,11 @@ class InvoiceRepositoryImpl
 
     override suspend fun getInvoices(): Resource<List<InvoiceGroup>> {
         return withContext(ioDispatcher) {
-            auth.checkUserNotFound<List<InvoiceGroup>> { return@withContext it }
+            auth.checkUserNotFoundAndReturnErrorMessage<List<InvoiceGroup>> { return@withContext it }
             try {
                 val currentUID = auth.currentUserId()
                 suspendCoroutine { continuation ->
-                    db
-                        .getCollectionRefFromUser(currentUID, Invoice_FIELD)
+                    db.getCollectionChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
                         .get()
                         .addOnSuccessListener {
                             val invoices =
@@ -139,9 +156,10 @@ class InvoiceRepositoryImpl
                             continuation.resume(Resource.error(R.string.core_data_get_invoice_failure))
                         }
                 }
-            } catch (e: UnknownHostException) {
+            } catch (_: UnknownHostException) {
                 Resource.error(R.string.core_data_get_invoice_failure_network)
             } catch (e: Exception) {
+                Timber.e(e)
                 Resource.error(R.string.core_data_get_invoice_failure)
             }
         }
