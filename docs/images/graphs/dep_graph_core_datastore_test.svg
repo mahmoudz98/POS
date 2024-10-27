@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="545pt" height="188pt" viewBox="0 0 544.88 188">
     <g class="graph">
-        <path d="M0 188V0h544.88v188z" fill="#fff" stroke="transparent" />
+        <path fill="#fff" stroke="transparent" d="M0 188V0h544.88v188z" />
         <g class="node" transform="translate(4 184)">
             <ellipse cx="233.39" cy="-162" fill="none" stroke="#000" rx="102.08" ry="18"/>
             <text x="233.39" y="-158.3" font-family="Times,serif" font-size="14" text-anchor="middle">:core:datastore-test</text>
@@ -19,7 +19,7 @@
         </g>
         <g stroke="red" stroke-width="2" class="edge">
             <path fill="none" d="M237.39 40.3v25.59"/>
-            <path d="m240.89 65.9-3.5 10-3.5-10z" fill="red" />
+            <path fill="red" d="m240.89 65.9-3.5 10-3.5-10z" />
         </g>
         <g class="node" transform="translate(4 184)">
             <ellipse cx="426.39" cy="-18" fill="none" stroke="#000" rx="110.48" ry="18"/>
@@ -43,7 +43,7 @@
         </g>
         <g stroke="red" stroke-width="2" class="edge">
             <path fill="none" d="M237.39 112.3v25.59"/>
-            <path d="m240.89 137.9-3.5 10-3.5-10z" fill="red" />
+            <path fill="red" d="m240.89 137.9-3.5 10-3.5-10z" />
         </g>
     </g>
 </svg>

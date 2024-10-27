@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="116pt" viewBox="0 0 149.69 116">
     <g class="graph">
-        <path d="M0 116V0h149.69v116z" fill="#fff" stroke="transparent" />
+        <path fill="#fff" stroke="transparent" d="M0 116V0h149.69v116z" />
         <g class="node" transform="translate(4 112)">
             <ellipse cx="70.84" cy="-90" fill="none" stroke="#000" rx="70.69" ry="18"/>
             <text x="70.84" y="-86.3" font-family="Times,serif" font-size="14" text-anchor="middle">:core:domain</text>
@@ -11,7 +11,7 @@
         </g>
         <g stroke="red" stroke-width="2" class="edge">
             <path fill="none" d="M74.84 40.3v25.59"/>
-            <path d="m78.34 65.9-3.5 10-3.5-10z" fill="red" />
+            <path fill="red" d="m78.34 65.9-3.5 10-3.5-10z" />
         </g>
     </g>
 </svg>
