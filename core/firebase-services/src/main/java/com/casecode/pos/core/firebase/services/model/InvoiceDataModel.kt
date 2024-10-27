@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services.di
+package com.casecode.pos.core.firebase.services.model
 
-import com.casecode.pos.core.firebase.services.LogService
-import com.casecode.pos.core.firebase.services.LogServiceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import com.casecode.pos.core.model.data.users.Customer
+import com.casecode.pos.core.model.data.users.Item
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.Date
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class ServiceModule {
-
-    @Binds
-    internal abstract fun bindLogService(logServiceImpl: LogServiceImpl): LogService
-}
+data class InvoiceDataModel(
+    @DocumentId val invoiceId: String = "",
+    @ServerTimestamp val date: Date = Date(),
+    val createdBy: String = "",
+    val customer: Customer? = null,
+    val items: List<Item> = emptyList(),
+)
