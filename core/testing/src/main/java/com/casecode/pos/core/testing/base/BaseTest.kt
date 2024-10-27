@@ -1,6 +1,22 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.testing.base
 
-import com.casecode.pos.core.domain.usecase.AddEmployeesUseCase
+import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.AddEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.AddInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.AddItemUseCase
 import com.casecode.pos.core.domain.usecase.CompleteBusinessUseCase
@@ -13,11 +29,12 @@ import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.pos.core.domain.usecase.GetTodayInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.ItemImageUseCase
 import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.SetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
 import com.casecode.pos.core.domain.usecase.UpdateItemUseCase
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
+import com.casecode.pos.core.testing.repository.TestAccountRepository
+import com.casecode.pos.core.testing.repository.TestAuthRepository
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
 import com.casecode.pos.core.testing.repository.TestInvoiceRepository
@@ -25,8 +42,6 @@ import com.casecode.pos.core.testing.repository.TestItemImageRepository
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
-import com.casecode.pos.core.testing.service.TestAccountService
-import com.casecode.pos.core.testing.service.TestAuthService
 import com.casecode.pos.core.testing.util.CoroutinesTestRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
 import org.junit.Before
@@ -38,8 +53,8 @@ abstract class BaseTest {
     var coroutinesRule = CoroutinesTestRule()
 
     // Repo
-    lateinit var accountService: TestAccountService
-    lateinit var authService: TestAuthService
+    lateinit var accountService: TestAccountRepository
+    lateinit var authService: TestAuthRepository
 
     lateinit var networkMonitor: TestNetworkMonitor
     lateinit var businessRepository: TestBusinessRepository
@@ -54,12 +69,12 @@ abstract class BaseTest {
     lateinit var getBusiness: GetBusinessUseCase
     lateinit var setBusiness: SetBusinessUseCase
     lateinit var getEmployees: GetEmployeesBusinessUseCase
-    lateinit var addEmployee: AddEmployeesUseCase
+    lateinit var addEmployee: AddEmployeeUseCase
     lateinit var updateEmployee: UpdateEmployeesUseCase
     lateinit var completeBusiness: CompleteBusinessUseCase
     lateinit var getSubscriptions: GetSubscriptionsUseCase
     lateinit var setSubscription: SetSubscriptionBusinessUseCase
-    lateinit var setEmployees: SetEmployeesBusinessUseCase
+    lateinit var setEmployees: AddEmployeesBusinessUseCase
     lateinit var getImage: ItemImageUseCase
     lateinit var getItems: GetItemsUseCase
     lateinit var addItem: AddItemUseCase
@@ -74,8 +89,8 @@ abstract class BaseTest {
     fun setup() {
         networkMonitor = TestNetworkMonitor()
 
-        accountService = TestAccountService()
-        authService = TestAuthService()
+        accountService = TestAccountRepository()
+        authService = TestAuthRepository()
         businessRepository = TestBusinessRepository()
         subscriptionsRepository = TestSubscriptionsRepository()
         subscriptionsBusinessRepository = TestSubscriptionsBusinessRepository()
@@ -92,13 +107,13 @@ abstract class BaseTest {
         getBusiness = GetBusinessUseCase(businessRepository)
         setBusiness = SetBusinessUseCase(businessRepository)
         getEmployees = GetEmployeesBusinessUseCase(employeesBusinessRepository)
-        addEmployee = AddEmployeesUseCase(employeesBusinessRepository)
+        addEmployee = AddEmployeeUseCase(employeesBusinessRepository)
         updateEmployee = UpdateEmployeesUseCase(employeesBusinessRepository)
         getSubscriptions = GetSubscriptionsUseCase(subscriptionsRepository)
         completeBusiness = CompleteBusinessUseCase(businessRepository)
         setSubscription =
             SetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
-        setEmployees = SetEmployeesBusinessUseCase(employeesBusinessRepository)
+        setEmployees = AddEmployeesBusinessUseCase(employeesBusinessRepository)
 
         // Items use cases
         getImage = ItemImageUseCase(imageRepository)

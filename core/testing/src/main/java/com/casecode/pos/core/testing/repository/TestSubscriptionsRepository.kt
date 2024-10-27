@@ -1,26 +1,39 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.testing.repository
 
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsResource
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import org.junit.Before
 import javax.inject.Inject
 
 class TestSubscriptionsRepository
-    @Inject
-    constructor() : SubscriptionsRepository {
-        private var subscriptions: List<Subscription> = subscriptionsFake()
+@Inject
+constructor() : SubscriptionsRepository {
+    private var subscriptions: List<Subscription> = subscriptionsFake()
 
-        private var shouldReturnError = false
-        private var shouldReturnEmpty = false
+    private var shouldReturnError = false
+    private var shouldReturnEmpty = false
 
-        @Before
-        fun setup() {
-            shouldReturnError = false
-            shouldReturnEmpty = false
+    @Before
+    fun setup() {
+        shouldReturnError = false
+        shouldReturnEmpty = false
     }
 
     /**
@@ -28,16 +41,13 @@ class TestSubscriptionsRepository
      *
      * @return A Flow of plans.
      */
-    override fun getSubscriptions(): Flow<SubscriptionsResource> =
-        flow {
-            if (shouldReturnError) {
-                emit(Resource.error("Error"))
-            } else if (shouldReturnEmpty) {
-                emit(Resource.empty("Empty"))
-            } else {
-                emit(Resource.success(subscriptions))
-            }
-        }
+    override suspend fun getSubscriptions(): SubscriptionsResource = if (shouldReturnError) {
+        Resource.error("Error")
+    } else if (shouldReturnEmpty) {
+        Resource.empty("Empty")
+    } else {
+        Resource.success(subscriptions)
+    }
 
     fun sendSubscriptions(subscriptions: List<Subscription>) {
         this.subscriptions = subscriptions
@@ -72,4 +82,4 @@ class TestSubscriptionsRepository
                 permissions = listOf("write", "read", "admin"),
             ),
         )
-    }
+}

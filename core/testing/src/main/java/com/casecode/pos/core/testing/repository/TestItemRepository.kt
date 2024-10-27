@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.testing.repository
 
 import com.casecode.pos.core.domain.repository.AddItem
@@ -9,34 +24,35 @@ import com.casecode.pos.core.domain.repository.UpdateQuantityItems
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.testing.base.BaseTestRepository
+import com.casecode.pos.core.testing.data.itemsTestData
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
+import kotlin.text.isNotBlank
 import com.casecode.pos.core.data.R.string as DataResource
 
 class TestItemRepository
-    @Inject
-    constructor() :
+@Inject
+constructor() :
     BaseTestRepository(),
-        ItemRepository {
-        private val resourcesItemsFlow: MutableSharedFlow<ResourceItems> =
-            MutableSharedFlow(replay = 2, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-        var fakeListItems =
-            arrayListOf(
-                Item("item #1", 1.0, 23.0, "1234567899090", "EA", "www.image1.png"),
-                Item("item #2", 3.0, 421312.0, "1555567899090", "EA", "www.image2.png"),
-                Item("item #2", 3.0, 0.0, "1222345002345", "EA", "www.image2.png"),
-        )
+    ItemRepository {
+    private val resourcesItemsFlow: MutableSharedFlow<ResourceItems> =
+        MutableSharedFlow(replay = 2, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val itemsTest = ArrayList(itemsTestData)
+    val categoriesTest
+        get() = itemsTest.mapNotNull {
+            it.category.takeIf { it.isNotBlank() }
+        }.toSet()
 
     override fun init() = Unit
 
     fun sendItems() {
-        resourcesItemsFlow.tryEmit(Resource.success(fakeListItems))
+        resourcesItemsFlow.tryEmit(Resource.success(itemsTest))
     }
 
     fun sendItems(itemsArrayList: ArrayList<Item>) {
-        fakeListItems.addAll(itemsArrayList)
+        itemsTest.addAll(itemsArrayList)
         sendItems()
     }
 
@@ -54,16 +70,16 @@ class TestItemRepository
 
     override suspend fun addItem(item: Item): AddItem =
         if (shouldReturnError) {
-            AddItem.error(DataResource.core_data_add_item_failure_generic)
+            Resource.Companion.error(DataResource.core_data_add_item_failure_generic)
         } else {
-            fakeListItems.add(item)
-            resourcesItemsFlow.tryEmit(Resource.success(fakeListItems))
+            itemsTest.add(item)
+            resourcesItemsFlow.tryEmit(Resource.success(itemsTest))
             Resource.Success(DataResource.core_data_item_added_successfully)
         }
 
     override suspend fun updateItem(item: Item): UpdateItem {
         if (shouldReturnError) {
-            return UpdateItem.error(DataResource.core_data_update_item_failure_generic)
+            return Resource.Companion.error(DataResource.core_data_update_item_failure_generic)
         }
         return Resource.Success(DataResource.core_data_item_updated_successfully)
     }
@@ -71,16 +87,16 @@ class TestItemRepository
     override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
         println(shouldReturnError)
         if (shouldReturnError) {
-            return UpdateQuantityItems.error(DataResource.core_data_update_item_failure_generic)
+            return Resource.Companion.error(DataResource.core_data_update_item_failure_generic)
         }
         return Resource.Success(items)
     }
 
     override suspend fun deleteItem(item: Item): DeleteItem {
         if (shouldReturnError) {
-            return DeleteItem.error(DataResource.core_data_delete_item_failure_generic)
+            return Resource.Companion.error(DataResource.core_data_delete_item_failure_generic)
         }
-        fakeListItems.remove(item)
+        itemsTest.remove(item)
         return Resource.success(DataResource.core_data_item_deleted_successfully)
     }
 }
