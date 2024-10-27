@@ -1,4 +1,19 @@
-package com.casecode.pos.feature.sales_report
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.feature.sales.report
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
@@ -17,19 +32,24 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import kotlinx.serialization.Serializable
 
-const val SALES_REPORT_GRAPH = "sales_report_graph"
-const val SALES_REPORT_ROUTE = "sales_report_route"
-const val SALES_REPORT_DETAILS_ROUTE = "sales_report_details_route"
+@Serializable
+data object SalesReportGraph
+
+@Serializable
+data object SalesReportRoute
+
+@Serializable
+data object SalesReportDetailsRoute
 
 fun NavGraphBuilder.salesReportGraph(
     navController: NavController,
     onBackClick: () -> Unit,
     onSalesReportDetailsClick: () -> Unit,
 ) {
-    navigation(
-        startDestination = SALES_REPORT_ROUTE,
-        route = SALES_REPORT_GRAPH,
+    navigation<SalesReportGraph>(
+        startDestination = SalesReportRoute,
     ) {
         salesReportScreen(navController = navController, onBackClick = onBackClick) {
             onSalesReportDetailsClick()
@@ -43,9 +63,9 @@ private fun NavGraphBuilder.salesReportScreen(
     onBackClick: () -> Unit,
     onSalesReportDetailsClick: () -> Unit,
 ) {
-    composable(route = SALES_REPORT_ROUTE) {
-        val viewModel = it.sharedViewModel<SalesReportViewModel>(navController, SALES_REPORT_GRAPH)
-        SalesReportRoute(
+    composable<SalesReportRoute> {
+        val viewModel = it.sharedViewModel<SalesReportViewModel>(navController)
+        SalesReportScreen(
             viewModel = viewModel,
             onBackClick = onBackClick,
             onSalesReportDetailsClick = onSalesReportDetailsClick,
@@ -57,15 +77,15 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
     navController: NavController,
     onBackClick: () -> Unit,
 ) {
-    composable(
-        route = SALES_REPORT_DETAILS_ROUTE,
+    composable<SalesReportDetailsRoute>(
+
         enterTransition = {
             fadeIn(
                 animationSpec =
-                    tween(
-                        300,
-                        easing = LinearEasing,
-                    ),
+                tween(
+                    300,
+                    easing = LinearEasing,
+                ),
             ) +
                 slideIntoContainer(
                     animationSpec = tween(300, easing = EaseIn),
@@ -75,10 +95,10 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
         exitTransition = {
             fadeOut(
                 animationSpec =
-                    tween(
-                        300,
-                        easing = LinearEasing,
-                    ),
+                tween(
+                    300,
+                    easing = LinearEasing,
+                ),
             ) +
                 slideOutOfContainer(
                     animationSpec = tween(300, easing = EaseOut),
@@ -86,7 +106,7 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
                 )
         },
     ) {
-        val viewModel = it.sharedViewModel<SalesReportViewModel>(navController, SALES_REPORT_GRAPH)
+        val viewModel = it.sharedViewModel<SalesReportViewModel>(navController)
         SalesReportDetailsRoute(
             viewModel,
             onBackClick = onBackClick,
@@ -95,17 +115,17 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
 }
 
 @Composable
-inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
+inline fun <reified VM : ViewModel> NavBackStackEntry.sharedViewModel(
     navController: NavController,
-    route: String,
-): T {
+): VM {
     val parentEntry =
         remember(this) {
-            navController.getBackStackEntry(route)
+            navController.getBackStackEntry(SalesReportGraph)
         }
     return hiltViewModel(parentEntry)
 }
 
-fun NavController.navigateToSalesReport(navOptions: NavOptions? = null) = navigate(SALES_REPORT_GRAPH, navOptions)
+fun NavController.navigateToSalesReport(navOptions: NavOptions? = null) =
+    navigate(SalesReportGraph, navOptions)
 
-fun NavController.navigateToSalesReportDetails() = navigate(SALES_REPORT_DETAILS_ROUTE)
+fun NavController.navigateToSalesReportDetails() = navigate(SalesReportDetailsRoute)

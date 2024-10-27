@@ -1,4 +1,19 @@
-package com.casecode.pos.feature.sales_report
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.feature.sales.report
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -79,7 +94,7 @@ import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SalesReportRoute(
+fun SalesReportScreen(
     viewModel: SalesReportViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onSalesReportDetailsClick: () -> Unit,
@@ -156,9 +171,9 @@ fun SalesReportScreen(
     ) { padding ->
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(padding),
+            Modifier
+                .fillMaxSize()
+                .padding(padding),
         ) {
             PosTopAppBar(
                 modifier = modifier,
@@ -169,17 +184,17 @@ fun SalesReportScreen(
                 actionIconContentDescription = null,
                 actionIcon = PosIcons.Calender,
                 colors =
-                    TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent,
-                    ),
+                TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
+                ),
                 onNavigationClick = { onBackClick() },
             )
             AnimatedContent(
                 uiSalesReportState.resourceInvoiceGroups,
                 transitionSpec = {
                     fadeIn(
-                        animationSpec = tween(3000),
-                    ) togetherWith fadeOut(animationSpec = tween(3000))
+                        animationSpec = tween(300),
+                    ) togetherWith fadeOut(animationSpec = tween(300))
                 },
                 modifier =
                 Modifier.clickable(
@@ -194,7 +209,7 @@ fun SalesReportScreen(
                             is Resource.Success -> uiSalesReportState.resourceInvoiceGroups
                         }
                 },
-                label = "Animated Content",
+                label = "Sale Animated Content",
             ) { targetState ->
                 when (targetState) {
                     is Resource.Loading -> {

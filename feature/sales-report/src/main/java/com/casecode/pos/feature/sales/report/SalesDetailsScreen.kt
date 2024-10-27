@@ -1,4 +1,19 @@
-package com.casecode.pos.feature.sales_report
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.feature.sales.report
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -78,24 +93,24 @@ fun SalesReportDetailsScreen(
 ) {
     Column(
         modifier =
-            Modifier
-                .fillMaxSize(),
+        Modifier
+            .fillMaxSize(),
     ) {
         PosTopAppBar(
             modifier = Modifier,
             titleRes = R.string.feature_sales_report_details_title,
             navigationIcon = PosIcons.ArrowBack,
             navigationIconContentDescription =
-                stringResource(
-                    id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
-                ),
+            stringResource(
+                id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
+            ),
             onActionClick = { onPrintClick() },
             actionIconContentDescription = stringResource(R.string.feature_sales_report_print_action_text),
             actionIcon = PosIcons.Print,
             colors =
-                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.Transparent,
+            ),
             onNavigationClick = { onBackClick() },
         )
         when (uiSalesReportDetails) {
@@ -164,7 +179,7 @@ fun ItemsSalesReportDetailsContent(
                 item(key = sku) {
                     ItemInvoice(
                         name = item.name,
-                        price = item.price,
+                        price = item.unitPrice,
                         quantity = item.quantity,
                         itemImageUrl = item.imageUrl ?: "",
                     )
@@ -201,7 +216,7 @@ fun ItemsSalesReportDetailsContent(
 fun ItemInvoice(
     name: String,
     price: Double,
-    quantity: Double,
+    quantity: Int,
     itemImageUrl: String,
     modifier: Modifier = Modifier,
 ) {
@@ -263,9 +278,9 @@ fun SalesReportDetailsScreenSuccessPreview() {
                 listOf(
                     Item(
                         name = "Eloise McCoy",
-                        price = 4.5,
-                        quantity = 6.7,
-                        sku = "ad",
+                        unitPrice = 4.5,
+                        quantity = 6,
+                        sku = "3423423",
                         unitOfMeasurement = null,
                         imageUrl = null,
                     ),
