@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.sale
 
 import android.icu.text.Collator
@@ -36,7 +51,7 @@ class SaleViewModelTest : BaseTest() {
             itemRepository.sendItems()
             val items = viewModel.uiState.value.items
             // Then
-            assertThat(items, `is`(itemRepository.fakeListItems))
+            assertThat(items, `is`(itemRepository.itemsTest))
         }
 
     @kotlin.test.Test
@@ -55,7 +70,7 @@ class SaleViewModelTest : BaseTest() {
             // Then -
             assertThat(actual.sku, `is`(expected.sku))
             assertThat(actual.name, `is`(expected.name))
-            assertThat(actual.price, `is`(expected.price))
+            assertThat(actual.unitPrice, `is`(expected.unitPrice))
             assertThat(actual.imageUrl, `is`(expected.imageUrl))
             assertThat(actual.quantity, `is`(newStock))
             assertThat(1.0, `is`(expected.quantity))
@@ -79,7 +94,7 @@ class SaleViewModelTest : BaseTest() {
             // Then -
             assertThat(selectedItem.sku, `is`(expected.sku))
             assertThat(selectedItem.name, `is`(expected.name))
-            assertThat(selectedItem.price, `is`(expected.price))
+            assertThat(selectedItem.unitPrice, `is`(expected.unitPrice))
             assertThat(selectedItem.imageUrl, `is`(expected.imageUrl))
             assertThat(selectedItem.quantity, `is`(newStock))
             assertThat(3.0, `is`(expected.quantity))
@@ -91,7 +106,7 @@ class SaleViewModelTest : BaseTest() {
         itemRepository.sendItems()
 
         // When - added item and out of stock
-        val actual = itemRepository.fakeListItems[2]
+        val actual = itemRepository.itemsTest[2]
         viewModel.addItemInvoice(actual)
         // Then
         assertThat(
@@ -106,16 +121,16 @@ class SaleViewModelTest : BaseTest() {
             // Given
             itemRepository.sendItems()
             // When
-            viewModel.scanItem(itemRepository.fakeListItems[0].sku)
+            viewModel.scanItem(itemRepository.itemsTest[0].sku)
             val expectedItem =
                 viewModel.uiState.value.itemsInvoice
                     .elementAt(0)
-            val actualItem = itemRepository.fakeListItems[0]
+            val actualItem = itemRepository.itemsTest[0]
             // Then - check item added to invoice and check quantity is start by one
             assertThat(expectedItem.sku, `is`(actualItem.sku))
             assertThat(expectedItem.quantity, `is`(1.0))
             assertThat(expectedItem.name, `is`(actualItem.name))
-            assertThat(expectedItem.price, `is`(actualItem.price))
+            assertThat(expectedItem.unitPrice, `is`(actualItem.unitPrice))
             assertThat(expectedItem.unitOfMeasurement, `is`(actualItem.unitOfMeasurement))
             assertThat(expectedItem.imageUrl, `is`(actualItem.imageUrl))
         }
@@ -147,7 +162,7 @@ class SaleViewModelTest : BaseTest() {
             assertThat(
                 viewModel.uiState.value.items[0]
                     .quantity,
-                `is`(itemRepository.fakeListItems[0].quantity),
+                `is`(itemRepository.itemsTest[0].quantity),
             )
         }
 
@@ -163,7 +178,7 @@ class SaleViewModelTest : BaseTest() {
                 viewModel.uiState.value.itemsInvoice
                     .elementAt(0),
             )
-            viewModel.updateQuantityItemInvoice(23.0)
+            viewModel.updateQuantityItemInvoice(23)
             println("TEST: ${viewModel.uiState.value.itemsInvoice}")
             // Then update item in stock and in items invoice
             assertThat(
@@ -183,9 +198,9 @@ class SaleViewModelTest : BaseTest() {
     fun updateQuantityItem_whenItemsSelectedIsNull_ShouldShowMessageUpdateFail() {
         // Given - Add Items to Invoice
         itemRepository.sendItems()
-        viewModel.addItemInvoice(itemRepository.fakeListItems[0])
+        viewModel.addItemInvoice(itemRepository.itemsTest[0])
         // When - Update the quantity
-        viewModel.updateQuantityItemInvoice(23.0)
+        viewModel.updateQuantityItemInvoice(23)
         // Then - show message fail to update quantity item
         assertThat(
             viewModel.uiState.value.userMessage,
@@ -197,10 +212,10 @@ class SaleViewModelTest : BaseTest() {
     fun updateQuantityItem_whenQuantityNotChange_ShouldShowMessageUpdateFail() {
         // Given - Add Items to Invoice
         itemRepository.sendItems()
-        viewModel.addItemInvoice(itemRepository.fakeListItems[0])
+        viewModel.addItemInvoice(itemRepository.itemsTest[0])
         // When - Update the quantity and not change
-        viewModel.itemInvoiceSelected(itemRepository.fakeListItems[0].copy(quantity = 1.0))
-        viewModel.updateQuantityItemInvoice(1.0)
+        viewModel.itemInvoiceSelected(itemRepository.itemsTest[0].copy(quantity = 1))
+        viewModel.updateQuantityItemInvoice(1)
         // Then
         assertThat(
             viewModel.uiState.value.userMessage,
@@ -212,9 +227,9 @@ class SaleViewModelTest : BaseTest() {
     fun updateQuantityItem_whenItemsInvoiceIsEmpty_shouldShowMessageUpdateFail() {
         // Given - Add Items to Invoice
         itemRepository.sendItems()
-        viewModel.itemInvoiceSelected(itemRepository.fakeListItems[0])
+        viewModel.itemInvoiceSelected(itemRepository.itemsTest[0])
         // When - Update the quantity
-        viewModel.updateQuantityItemInvoice(23.0)
+        viewModel.updateQuantityItemInvoice(23)
         // Then
         assertThat(
             viewModel.uiState.value.userMessage,
@@ -232,16 +247,16 @@ class SaleViewModelTest : BaseTest() {
             listOf(
                 Item(
                     name = "Iphone1",
-                    price = 10.0,
-                    quantity = 5.0,
+                    unitPrice = 10.0,
+                    quantity = 5,
                     sku = "123",
                     unitOfMeasurement = null,
                     imageUrl = null,
                 ),
                 Item(
                     name = "Iphone6",
-                    price = 10.0,
-                    quantity = 5.0,
+                    unitPrice = 10.0,
+                    quantity = 5,
                     sku = "1234",
                     unitOfMeasurement = null,
                     imageUrl = null,
