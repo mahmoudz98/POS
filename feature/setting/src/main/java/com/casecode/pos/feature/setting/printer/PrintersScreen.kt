@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.setting.printer
 
 import androidx.compose.foundation.Image
@@ -32,7 +47,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosBackground
@@ -46,7 +60,7 @@ import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.feature.setting.R
 
 @Composable
-internal fun PrinterRoute(
+internal fun PrinterScreen(
     printerVIewModel: PrinterViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onPrinterInfoClick: () -> Unit,
@@ -69,55 +83,59 @@ fun PrinterScreen(
     onAddClick: () -> Unit,
     onPrinterItemClick: (PrinterInfo) -> Unit,
 ) {
-    Box(modifier = modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+    ) {
         PosTopAppBar(
             modifier = Modifier,
             titleRes = R.string.feature_settings_printer_title,
             navigationIcon = PosIcons.ArrowBack,
             navigationIconContentDescription = null,
             colors =
-                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.Transparent,
+            ),
             onNavigationClick = onBackClick,
         )
-        when (resourcePrinters) {
-            is Resource.Loading -> {
-                PosLoadingWheel(
-                    modifier =
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+        ) {
+            when (resourcePrinters) {
+                is Resource.Loading -> {
+                    PosLoadingWheel(
+                        modifier =
                         modifier
                             .fillMaxSize()
                             .wrapContentSize(Alignment.Center),
-                    contentDesc = "LoadingPrinters",
+                        contentDesc = "LoadingPrintersInfo",
+                    )
+                }
+
+                is Resource.Empty -> {
+                    PrintersEmptyScreen()
+                }
+
+                is Resource.Error -> PrintersEmptyScreen()
+                is Resource.Success -> {
+                    PrinterList(
+                        printers = resourcePrinters.data,
+                        onPrinterClick = onPrinterItemClick,
+                    )
+                }
+            }
+
+            FloatingActionButton(
+                onClick = { onAddClick() },
+                modifier = Modifier.align(Alignment.BottomEnd),
+            ) {
+                Icon(
+                    imageVector = PosIcons.Add,
+                    contentDescription = null,
                 )
             }
-
-            is Resource.Empty -> {
-                PrintersEmptyScreen()
-            }
-
-            is Resource.Error -> PrintersEmptyScreen()
-            is Resource.Success -> {
-                PrinterList(printers = resourcePrinters.data, onPrinterClick = onPrinterItemClick)
-            }
-        }
-
-        FloatingActionButton(
-            onClick = {
-                onAddClick()
-            },
-            modifier =
-            Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .zIndex(1f),
-        ) {
-            Icon(
-                imageVector = PosIcons.Add,
-                contentDescription = null,
-            )
         }
     }
 }

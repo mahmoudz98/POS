@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.setting.printer
 
 import android.Manifest
@@ -9,13 +24,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,7 +62,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,6 +73,7 @@ import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.PrinterConnectionType
 import com.casecode.pos.core.model.data.toConnectionType
 import com.casecode.pos.core.printer.base.UsbEscPosPrint.Companion.ACTION_USB_PERMISSION
@@ -78,7 +91,7 @@ import timber.log.Timber
 import com.casecode.pos.core.printer.R as resourcePrinter
 
 @Composable
-internal fun PrinterInfoRoute(
+internal fun PrinterInfoScreen(
     printerViewModel: PrinterViewModel = hiltViewModel(),
     isEditMode: Boolean = false,
     onNavigateBack: () -> Unit,
@@ -87,12 +100,34 @@ internal fun PrinterInfoRoute(
     PrinterInfoScreen(
         isEditMode = isEditMode,
         onNavigateBack = onNavigateBack,
-        onSave = {},
+        onAddPrinterInfoUsb = printerViewModel::addPrinterInfoUsb,
+        onAddPrinterInfoEthernet = printerViewModel::addPrinterInfoEthernet,
+        onAddPrinterInfoBluetooth = printerViewModel::addPrinterInfoBluetooth,
+
         onTestEthernetPrinter = printerViewModel::testPrinterEthernet,
         onTestBluetoothPrinter = printerViewModel::testPrinterBluetooth,
         onTestUsbPrinter = printerViewModel::testPrinterUsb,
         printerStatus = printerStatus,
     )
+    val addPrinterResult by printerViewModel.addPrinterResult.collectAsStateWithLifecycle()
+    when (addPrinterResult) {
+        is Resource.Error -> {
+        }
+
+        is Resource.Empty -> {
+            Timber.e("Empty")
+        }
+
+        Resource.Loading -> {
+            Timber.e("Loading")
+        }
+
+        is Resource.Success -> {
+            onNavigateBack()
+        }
+
+        null -> {}
+    }
 }
 
 @SuppressLint("MissingPermission")
@@ -102,6 +137,9 @@ fun PrinterInfoScreen(
     rootModifier: Modifier = Modifier,
     isEditMode: Boolean,
     onNavigateBack: () -> Unit,
+    onAddPrinterInfoBluetooth: (namePrinter: String, nameDevice: String, address: String, paperWidth: String) -> Unit = { _, _, _, _ -> },
+    onAddPrinterInfoUsb: (namePrinter: String, nameDevice: String, paperWidth: String) -> Unit = { _, _, _ -> },
+    onAddPrinterInfoEthernet: (namePrinter: String, ipAddress: String, port: String, paperWidth: String) -> Unit = { _, _, _, _ -> },
     onTestEthernetPrinter: (
         namePrinter: String,
         ethernetIpAddress: String,
@@ -122,7 +160,6 @@ fun PrinterInfoScreen(
         applicationContext: Context,
     ) -> Unit? = { _, _, _, _ -> },
     printerStatus: PrinterState,
-    onSave: () -> Unit,
 ) {
     val applicationContext = LocalContext.current
 
@@ -184,7 +221,43 @@ fun PrinterInfoScreen(
                 containerColor = Color.Transparent,
             ),
             action = {
-                PosTextButton(onClick = onSave) {
+                PosTextButton(
+                    onClick = {
+                        when (selectedConnectionType.toConnectionType()) {
+                            PrinterConnectionType.BLUETOOTH -> {
+                                if (!hasValidBluetoothInput()) {
+                                    onAddPrinterInfoBluetooth(
+                                        printerDisplayName,
+                                        selectedBluetoothConnection!!.device.name,
+                                        selectedBluetoothConnection!!.device.address,
+                                        selectedPaperWidthValue.replace(" mm", ""),
+                                    )
+                                }
+                            }
+
+                            PrinterConnectionType.USB -> {
+                                onAddPrinterInfoUsb(
+                                    printerDisplayName,
+                                    usbDeviceName,
+                                    selectedPaperWidthValue.replace(" mm", ""),
+                                )
+
+                                //  onTestUsbPrinter(printerName, usbConnection!!, selectedPaperWidth.replace(" mm", ""), context)
+                            }
+
+                            else -> {
+                                if (!hasValidEthernetInput()) {
+                                    onAddPrinterInfoEthernet(
+                                        printerDisplayName,
+                                        ethernetIpAddress,
+                                        ethernetPort,
+                                        selectedPaperWidthValue.replace(" mm", ""),
+                                    )
+                                }
+                            }
+                        }
+                    },
+                ) {
                     Text(text = stringResource(R.string.feature_setting_printer_info_save_button_text))
                 }
             },
@@ -378,17 +451,16 @@ private fun UsbContent(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val usbConnection = remember {
+    remember {
         UsbPrintersConnections.selectFirstConnected(context)
     }
-    val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager?
+    context.getSystemService(Context.USB_SERVICE) as UsbManager?
     val permissionUsb = rememberPermissionState("${context.packageName}.USB_PERMISSION")
     LaunchedEffect(permissionUsb.status) {
         if (!permissionUsb.status.isGranted) {
             permissionUsb.launchPermissionRequest()
         }
     }
-
 
     DisposableEffect(lifecycleOwner) {
         val usbPermissionReceiver =
@@ -401,7 +473,6 @@ private fun UsbContent(
                     if (ACTION_USB_PERMISSION == intent.action) {
                         Timber.e("ACTION_USB_PERMISSION")
                         synchronized(this) {
-
                             val usbDevice: UsbDevice? =
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                     intent.getParcelableExtra(
@@ -420,7 +491,6 @@ private fun UsbContent(
                                 )
                             ) {
                                 usbDeviceName = usbDevice?.deviceName.toString()
-
                             }
                         }
                     }
@@ -429,7 +499,8 @@ private fun UsbContent(
 
         val intentFilter = IntentFilter(ACTION_USB_PERMISSION)
         context.registerReceiver(
-            usbPermissionReceiver, intentFilter,
+            usbPermissionReceiver,
+            intentFilter,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) Context.RECEIVER_EXPORTED else 0,
         )
 
@@ -542,7 +613,6 @@ private fun BluetoothContent(
                     } else {
                         bluetoothPermissions.launchMultiplePermissionRequest()
                     }
-
                 }
             },
             modifier =
@@ -619,7 +689,6 @@ fun PrinterInfoScreenPreview() {
             PrinterInfoScreen(
                 isEditMode = false,
                 onNavigateBack = {},
-                onSave = {},
                 printerStatus = PrinterState.Connecting(12),
             )
         }

@@ -1,9 +1,23 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.setting.printer
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.data.service.LogService
 import com.casecode.pos.core.domain.usecase.AddPrinterUseCase
 import com.casecode.pos.core.domain.usecase.GetPrinterUseCase
 import com.casecode.pos.core.domain.utils.Resource
@@ -18,6 +32,7 @@ import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,36 +42,40 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PrinterViewModel
-    @Inject
-    constructor(
-        private val addPrinterUseCase: AddPrinterUseCase,
-        private val getPrinterUseCase: GetPrinterUseCase,
-        private val printerConnectionFactory: PrinterConnectionFactory,
-        private val logService: LogService,
-    ) : ViewModel() {
-        val printersUiState: StateFlow<Resource<List<PrinterInfo>>> =
-            getPrinterUseCase()
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5_000),
-                    initialValue = Resource.Loading,
-                )
+@Inject
+constructor(
+    private val addPrinterUseCase: AddPrinterUseCase,
+    private val getPrinterUseCase: GetPrinterUseCase,
+    private val printerConnectionFactory: PrinterConnectionFactory,
+    // private val logService: LogService,
+) : ViewModel() {
+    private val _addPrinterResult = MutableStateFlow<Resource<Int>?>(null)
+    val addPrinterResult: StateFlow<Resource<Int>?> = _addPrinterResult
+    val printersUiState: StateFlow<Resource<List<PrinterInfo>>> =
+        getPrinterUseCase()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = Resource.Loading,
+            )
 
-        private lateinit var printerConnection: EscPosPrint
+    private lateinit var printerConnection: EscPosPrint
 
-        var printerState: MutableStateFlow<PrinterState> = MutableStateFlow(PrinterState.None)
+    var printerState: MutableStateFlow<PrinterState> = MutableStateFlow(PrinterState.None)
 
     private fun launchCatching(block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch(
             CoroutineExceptionHandler { _, throwable ->
-                logService.logNonFatalCrash(throwable)
+                //    logService.logNonFatalCrash(throwable)
             },
             block = block,
         )
 
     fun addPrinter(printerInfo: PrinterInfo) {
-        viewModelScope.launch {
-            addPrinterUseCase(printerInfo)
+        launchCatching {
+            _addPrinterResult.value = Resource.loading()
+            delay(1000)
+            _addPrinterResult.value = addPrinterUseCase(printerInfo)
         }
     }
 
@@ -116,7 +135,7 @@ class PrinterViewModel
             }
 
         launchCatching{
-            printerConnection.printerStateManager.printerState.collect {
+            printerConnection.printerState.printerState.collect {
                 printerState.value = it
             }
         }
@@ -140,9 +159,53 @@ class PrinterViewModel
         printerConnection = printerConnectionFactory.create(PrinterConnectionType.ETHERNET)
         printerConnection.print(context, printerInfo, PrintContent.Test)
 
-
-
         collectPrinterState()
+    }
+    fun addPrinterInfoBluetooth(
+        namePrinter: String,
+        nameDevice: String,
+        address: String,
+        paperWidth: String,
+    ) {
+        val printerInfo =
+            PrinterInfo(
+                name = namePrinter,
+                connectionTypeInfo =
+                PrinterConnectionInfo.Bluetooth(
+                    nameDevice,
+                    address,
+                ),
+                isDefaultPrint = false,
+                widthPaper = paperWidth,
+            )
+        addPrinter(printerInfo)
+    }
+
+    fun addPrinterInfoUsb(namePrinter: String, nameDevice: String, paperWidth: String) {
+        val printerInfo =
+            PrinterInfo(
+                name = namePrinter,
+                connectionTypeInfo = PrinterConnectionInfo.Usb(nameDevice),
+                isDefaultPrint = false,
+                widthPaper = paperWidth,
+            )
+        addPrinter(printerInfo)
+    }
+
+    fun addPrinterInfoEthernet(
+        namePrinter: String,
+        ipAddress: String,
+        port: String,
+        paperWidth: String,
+    ) {
+        val printerInfo =
+            PrinterInfo(
+                name = namePrinter,
+                connectionTypeInfo = PrinterConnectionInfo.Tcp(ipAddress, port.toInt()),
+                isDefaultPrint = false,
+                widthPaper = paperWidth,
+            )
+        addPrinter(printerInfo)
     }
 
     @SuppressLint("MissingPermission")
@@ -188,7 +251,7 @@ class PrinterViewModel
 
     private fun collectPrinterState() {
         launchCatching {
-            printerConnection.printerStateManager.printerState.collect {
+            printerConnection.printerState.printerState.collect {
                 printerState.value = it
             }
         }
