@@ -1,17 +1,32 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.repository
 
 import android.graphics.Bitmap
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
-import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.data.service.checkUserNotFound
-import com.casecode.pos.core.data.utils.IMAGES_PATH_FIELD
-import com.casecode.pos.core.data.utils.ITEM_PATH_FIELD
+import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
+import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.DeleteImage
 import com.casecode.pos.core.domain.repository.ItemImageRepository
 import com.casecode.pos.core.domain.repository.ReplaceImage
 import com.casecode.pos.core.domain.repository.UploadImage
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.firebase.services.IMAGES_PATH_FIELD
+import com.casecode.pos.core.firebase.services.ITEM_PATH_FIELD
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -30,30 +45,31 @@ import com.casecode.pos.core.data.R.string as StringResource
  * @property ioDispatcher CoroutineDispatcher for performing operations in the background.
  */
 class ItemImageRepositoryImpl
-    @Inject
-    constructor(
-        private val authService: AuthService,
-        private val firebaseStorage: FirebaseStorage,
-        @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
-    ) : ItemImageRepository {
-        /**
-         * Uploads an image to Firebase Storage.
-         *
-         * @param bitmap Bitmap image to upload.
-         * @param imageName Name of the image.
-         * @return [UploadImage] representing the result of the upload operation.
-         */
-        override suspend fun uploadImage(
-            bitmap: Bitmap,
-            imageName: String,
-        ): UploadImage {
-            return withContext(ioDispatcher) {
-                try {
-                    authService.checkUserNotFound<String> { return@withContext it }
-                    val currentUserId = authService.currentUserId()
-                    // Get a reference to the Firebase Storage location
-                    val storageRef =
-                        firebaseStorage.getReference("$ITEM_PATH_FIELD/$IMAGES_PATH_FIELD/$currentUserId/$imageName")
+@Inject
+constructor(
+    private val authService: AuthRepository,
+    private val firebaseStorage: FirebaseStorage,
+    @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
+) : ItemImageRepository {
+    /**
+     * Uploads an image to Firebase Storage.
+     *
+     * @param bitmap Bitmap image to upload.
+     * @param imageName Name of the image.
+     * @return [UploadImage] representing the result of the upload operation.
+     */
+    override suspend fun uploadImage(
+        bitmap: Bitmap,
+        imageName: String,
+    ): UploadImage {
+        return withContext(ioDispatcher) {
+            try {
+                authService.checkUserNotFoundAndReturnErrorMessage<String> { return@withContext it }
+                val currentUserId =
+                    authService.currentUserId()
+                // Get a reference to the Firebase Storage location
+                val storageRef =
+                    firebaseStorage.getReference("$ITEM_PATH_FIELD/$IMAGES_PATH_FIELD/$currentUserId/$imageName")
                 val image = compressImage(bitmap)
 
                 suspendCoroutine { continuation ->
@@ -156,7 +172,7 @@ class ItemImageRepositoryImpl
                             continuation.resume(Resource.error(StringResource.core_data_delete_image_failure_generic))
                         }
                 }
-            } catch (e: UnknownHostException) {
+            } catch (_: UnknownHostException) {
                 Resource.error(StringResource.core_data_delete_image_failure_network)
             } catch (e: Exception) {
                 Timber.e(e)
