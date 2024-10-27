@@ -72,7 +72,6 @@ constructor(
     private val businessRep: BusinessRepository,
 ) {
     suspend operator fun invoke() = businessRep.getBusiness()
-
 }
 
 class AddBranchBusinessUseCase
@@ -86,8 +85,5 @@ constructor(
         }
 
         return businessRep.addBranch(branch)
-
     }
-
 }
-
