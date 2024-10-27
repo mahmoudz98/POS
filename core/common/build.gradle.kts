@@ -15,15 +15,10 @@
  */
 
 plugins {
-    alias(libs.plugins.pos.android.library)
+    alias(libs.plugins.pos.jvm.library)
     alias(libs.plugins.pos.hilt)
-    alias(libs.plugins.pos.android.library.jacoco)
-
 }
 
-android {
-    namespace = "com.casecode.pos.core.common"
-}
 
 dependencies {
     implementation(libs.coroutines.core)
