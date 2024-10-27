@@ -1,8 +1,24 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.printer.base
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.casecode.pos.core.data.service.LogService
+import com.casecode.pos.core.common.di.ApplicationScope
+import com.casecode.pos.core.firebase.services.LogService
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.core.printer.model.PrintContent
 import com.casecode.pos.core.printer.model.PrinterStatus
@@ -14,7 +30,6 @@ import com.dantsu.escposprinter.exceptions.EscPosConnectionException
 import com.dantsu.escposprinter.exceptions.EscPosEncodingException
 import com.dantsu.escposprinter.exceptions.EscPosParserException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -23,10 +38,15 @@ import com.dantsu.escposprinter.EscPosPrinter as EscPosPrinterLib
 
 abstract class EscPosPrint {
     @Inject
-    lateinit var printerStateManager: PrinterStateManager
+    @ApplicationScope
+    lateinit var applicationScope: CoroutineScope
 
     @Inject
-    lateinit var logService: LogService
+    lateinit var printerState: PrinterStateManager
+
+    @Inject
+    lateinit var logger: LogService
+
     abstract fun print(
         context: Context,
         printerInfo: PrinterInfo,
@@ -34,87 +54,92 @@ abstract class EscPosPrint {
     )
 
     @SuppressLint("MissingPermission")
-    open suspend fun takePrints(printerData: EscPosPrinter): PrinterStatus {
-        printerStateManager.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
-        val deviceConnection: DeviceConnection? = printerData.getPrinterConnection()
+    open suspend fun takePrints(printer: EscPosPrinter): PrinterStatus {
+        this@EscPosPrint.printerState.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
+        val connection: DeviceConnection? = printer.getPrinterConnection()
+        delay(1000L)
 
         try {
-            val printer =
+            val escPosPrinter =
                 EscPosPrinterLib(
-                    deviceConnection,
-                    printerData.printerDpi,
-                    printerData.printerWidthMM,
-                    printerData.printerNbrCharactersPerLine,
-                    EscPosCharsetEncoding("Cp864", 16),
+                    connection,
+                    printer.printerDpi,
+                    printer.printerWidthMM,
+                    printer.printerNbrCharactersPerLine,
+                    EscPosCharsetEncoding("Cp864", 0x16),
+                    /**
+                     * encoding support arabic:
+                     * Cp864
+                     * Cp720
+                     *
+                     */
                 )
-            printer.useEscAsteriskCommand(true)
+            logger.log("PrinterEncodingName: ${escPosPrinter.encoding.name}")
 
-            printerStateManager.publishState(PrinterStatusCode.PROGRESS_PRINTING)
+            escPosPrinter.useEscAsteriskCommand(true)
 
-            val textsToPrint = printerData.getTextsToPrint()
-            Timber.e("textsToPrint: $textsToPrint")
-            textsToPrint.forEach { textToPrint ->
-                Timber.e("textToPrint:foreach: $textToPrint")
-                printer.printFormattedTextAndCut(textToPrint)
-                delay(500)
+            this@EscPosPrint.printerState.publishState(PrinterStatusCode.PROGRESS_PRINTING)
+
+            val printLines = printer.getTextsToPrint()
+            printLines.forEach { line ->
+                Timber.e("lineTaskPrint: $line")
+                escPosPrinter.printFormattedTextAndCut(line)
+                delay(400)
             }
 
-            printerStateManager.publishState(PrinterStatusCode.PROGRESS_PRINTED)
-            return PrinterStatus(printerData, PrinterStatusCode.FINISH_SUCCESS)
-        } catch (e: Exception) {
-            deviceConnection?.disconnect()
-            logService.logNonFatalCrash(e)
-            return handleException(e, printerData)
+            this@EscPosPrint.printerState.publishState(PrinterStatusCode.PROGRESS_PRINTED)
+            return PrinterStatus(printer, PrinterStatusCode.FINISH_SUCCESS)
+        } catch (exception: Exception) {
+            connection?.disconnect()
+            logger.logNonFatalCrash(exception)
+            return handleException(exception, printer)
         }
-
     }
 
     private fun handleException(
-        e: Exception,
-        printerData: EscPosPrinter,
+        exception: Exception,
+        printer: EscPosPrinter,
     ): PrinterStatus {
-        e.printStackTrace()
-        return when (e) {
+        exception.printStackTrace()
+        return when (exception) {
             is EscPosConnectionException ->
                 PrinterStatus(
-                    printerData,
+                    printer,
                     PrinterStatusCode.FINISH_PRINTER_DISCONNECTED,
                 )
 
             is EscPosParserException ->
                 PrinterStatus(
-                    printerData,
+                    printer,
                     PrinterStatusCode.FINISH_PARSER_ERROR,
                 )
 
             is EscPosEncodingException ->
                 PrinterStatus(
-                    printerData,
+                    printer,
                     PrinterStatusCode.FINISH_ENCODING_ERROR,
                 )
 
             is EscPosBarcodeException ->
                 PrinterStatus(
-                    printerData,
+                    printer,
                     PrinterStatusCode.FINISH_BARCODE_ERROR,
                 )
 
-            else -> PrinterStatus(printerData, PrinterStatusCode.FINISH_NO_PRINTER)
+            else -> PrinterStatus(printer, PrinterStatusCode.FINISH_NO_PRINTER)
         }
     }
 
-    open fun execute(printerData: EscPosPrinter) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val result = takePrints(printerData)
-            printerStateManager.handleResult(result)
+    open fun execute(printer: EscPosPrinter) {
+        applicationScope.launch {
+            this@EscPosPrint.printerState.handleResult(takePrints(printer))
         }
     }
 
     protected abstract fun <T : DeviceConnection> getEscPosPrinterService(
-        printerConnection: T,
-        printContext: PrintContent,
-        widthPaper: Float,
+        deviceConnection: T,
+        content: PrintContent,
+        paperWidth: Float,
         context: Context,
     ): EscPosPrinter
-
 }

@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.printer.base
 
 import android.app.PendingIntent
@@ -18,38 +33,38 @@ import com.dantsu.escposprinter.connection.usb.UsbPrintersConnections
 import com.dantsu.escposprinter.textparser.PrinterTextParserImg
 import javax.inject.Inject
 
+@Suppress("DEPRECATION")
 class UsbEscPosPrint
-    @Inject
-    constructor() : EscPosPrint() {
-        companion object {
-            const val ACTION_USB_PERMISSION = "com.casecode.pos.core.printer.USB_PERMISSION"
-        }
+@Inject
+constructor() : EscPosPrint() {
+    companion object {
+        const val ACTION_USB_PERMISSION = "com.casecode.pos.core.printer.USB_PERMISSION"
+    }
 
-        private var printerContext: PrintContent? = null
+    private var printerContext: PrintContent? = null
 
-        override fun print(
-            context: Context,
-            printerInfo: PrinterInfo,
-            printContent: PrintContent,
-        ) {
-            val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
-            val usbConnection = UsbPrintersConnections.selectFirstConnected(context)
+    override fun print(
+        context: Context,
+        printerInfo: PrinterInfo,
+        printContent: PrintContent,
+    ) {
+        val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
+        val usbConnection = UsbPrintersConnections.selectFirstConnected(context)
 
-            if (usbConnection != null && usbManager != null) {
-                val permissionIntent =
-                    PendingIntent.getBroadcast(
-                        context,
-                        0,
-                        Intent(ACTION_USB_PERMISSION),
-                        PendingIntent.FLAG_IMMUTABLE,
-                    )
-                context.registerReceiver(
-                    usbReceiver,
-                    IntentFilter(ACTION_USB_PERMISSION),
+        if (usbConnection != null) {
+            val permissionIntent =
+                PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    Intent(ACTION_USB_PERMISSION),
+                    PendingIntent.FLAG_IMMUTABLE,
                 )
-                this.printerContext = printContent
-                usbManager.requestPermission(usbConnection.device, permissionIntent)
-        } else {
+            context.registerReceiver(
+                usbReceiver,
+                IntentFilter(ACTION_USB_PERMISSION),
+            )
+            this.printerContext = printContent
+            usbManager.requestPermission(usbConnection.device, permissionIntent)
         }
     }
 
@@ -116,4 +131,4 @@ class UsbEscPosPrint
 
             addTextToPrint(textToPrint)
         }
-    }
+}
