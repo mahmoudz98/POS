@@ -39,7 +39,7 @@ class DeleteItemUseCaseTest {
             // Given
             val newItem = Item(
                 name = "New Item",
-                unitPrice = 10.0f,
+                unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
@@ -62,7 +62,7 @@ class DeleteItemUseCaseTest {
             testItemRepository.setReturnError(true)
             val newItem = Item(
                 name = "New Item",
-                unitPrice = 10.0f,
+                unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
