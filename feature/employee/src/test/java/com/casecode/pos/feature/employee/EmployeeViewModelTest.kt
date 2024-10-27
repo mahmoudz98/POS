@@ -15,15 +15,15 @@
  */
 package com.casecode.pos.feature.employee
 
-import com.casecode.pos.core.domain.usecase.AddEmployeesUseCase
+import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
 import com.casecode.pos.core.model.data.users.Employee
+import com.casecode.pos.core.testing.repository.TestAuthRepository
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
-import com.casecode.pos.core.testing.service.TestAuthService
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
 import kotlinx.coroutines.test.runTest
@@ -42,14 +42,15 @@ class EmployeeViewModelTest {
     private lateinit var viewModel: EmployeeViewModel
     private val networkMonitor = TestNetworkMonitor()
     private val employeesBusinessRepository = TestEmployeesBusinessRepository()
-    private val testAuth = TestAuthService()
+    private val testAuth = TestAuthRepository()
     private val businessRepository = TestBusinessRepository()
     private val getEmployees = GetEmployeesBusinessUseCase(employeesBusinessRepository)
     private val getBusiness = GetBusinessUseCase(businessRepository)
-    private val addEmployee = AddEmployeesUseCase(employeesBusinessRepository)
+    private val addEmployee = AddEmployeeUseCase(employeesBusinessRepository)
     private val updateEmployee = UpdateEmployeesUseCase(employeesBusinessRepository)
     private val deleteEmployeeUseCase = DeleteEmployeeUseCase(employeesBusinessRepository)
     private val employee = Employee("mahmoud22", "131434", "1234", "branch1", "sale")
+
     @Before
     fun init() {
         viewModel = EmployeeViewModel(
@@ -90,7 +91,7 @@ class EmployeeViewModelTest {
         viewModel.addEmployee(employee)
         assertEquals(
             viewModel.uiState.value.userMessage,
-            com.casecode.pos.core.data.R.string.core_data_add_employees_business_failure,
+            string.core_data_add_employees_business_failure,
         )
     }
 
@@ -146,7 +147,7 @@ class EmployeeViewModelTest {
 
         assertEquals(
             viewModel.uiState.value.userMessage,
-            com.casecode.pos.core.data.R.string.core_data_employee_update_business_failure,
+            string.core_data_employee_update_business_failure,
         )
     }
 
