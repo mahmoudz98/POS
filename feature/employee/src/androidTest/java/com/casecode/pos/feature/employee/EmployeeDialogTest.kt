@@ -41,9 +41,10 @@ class EmployeeDialogTest {
             EmployeeDialog(
                 isUpdate = false,
                 employeeUpdate = null,
+                countryIsoCode = "en",
                 branches = listOf(Branch(1, "Branch 1")),
-                onAddEmployee = { _, _, _, _, _ -> },
-                onUpdateEmployee = { _, _, _, _, _ -> },
+                onAddEmployee = { _ -> },
+                onUpdateEmployee = { _ -> },
                 onDismiss = {},
             )
         }
@@ -80,9 +81,10 @@ class EmployeeDialogTest {
             EmployeeDialog(
                 isUpdate = false,
                 employeeUpdate = null,
+                countryIsoCode = "en",
                 branches = listOf(Branch(1, "Branch 1")),
-                onAddEmployee = { _, _, _, _, _ -> },
-                onUpdateEmployee = { _, _, _, _, _ -> },
+                onAddEmployee = { },
+                onUpdateEmployee = { },
                 onDismiss = {},
             )
         }
