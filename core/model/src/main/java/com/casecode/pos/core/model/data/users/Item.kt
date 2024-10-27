@@ -35,8 +35,8 @@ data class Item(
     val name: String = "",
     val category: String = "",
     val supplierName: String = "",
-    val costPrice: Float = 0f,
-    val unitPrice: Float = 0f,
+    val costPrice: Double = 0.0,
+    val unitPrice: Double = 0.0,
     val reorderLevel: Int = -1,
     var quantity: Int = 0,
     val qtyPerPack: Int = 0,
@@ -48,5 +48,13 @@ data class Item(
 
     fun isInStockAndTracked(): Boolean = !((quantity > 0) xor (isTrackStock()))
     fun isTrackStock(): Boolean = (reorderLevel != -1)
-    fun isLowLevelStock(): Boolean = reorderLevel >= quantity
+    fun hasLowLevelStock(): Boolean = reorderLevel >= quantity
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Item) return false
+        return name == other.name && category == other.category && sku == other.sku
+    }
+
+    override fun hashCode(): Int = 31 * name.hashCode() + 31 * sku.hashCode()
 }

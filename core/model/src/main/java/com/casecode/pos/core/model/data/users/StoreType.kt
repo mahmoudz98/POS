@@ -22,4 +22,12 @@ enum class StoreType(
     Clothes("Clothes", "ملابس"),
     Coffee("Coffee", "قهوة"),
     Market("Market", "سوبر ماركت"),
+    ;
+
+    companion object {
+        fun toStoreType(store: String): StoreType? =
+            StoreType.entries.find { type ->
+                type.arabicName == store || type.englishName.lowercase() == store.lowercase()
+            }
+    }
 }

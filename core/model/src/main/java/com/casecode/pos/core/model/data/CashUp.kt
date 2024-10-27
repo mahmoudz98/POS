@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data.users
+package com.casecode.pos.core.model.data
 
-data class Employee(
-    val name: String = "",
-    val phoneNumber: String = "",
-    val password: String? = null,
-    val branchName: String? = null,
-    val permission: String = "",
-) {
-    fun isEmployeeNameDuplicate(
-        currentEmployees: List<Employee>?,
-        oldEmployee: Employee? = null,
-    ): Boolean {
-        currentEmployees?.forEach {
-            if (it.name == this.name && it != oldEmployee) {
-                return true
-            }
-        }
-        return false
-    }
-}
+import java.util.Date
+
+data class CashUp(
+    val openDate: Date,
+    val closeDate: Date,
+    val openCashAmount: Double,
+    val transferCashAmount: Double,
+    val closedAmountCash: Double,
+    val closedAmountCard: Double,
+    val closedAmountCheck: Double,
+    val closedAmountTotal: Double,
+    val branchName: String,
+    val openEmployeeName: String,
+    val closedEmployeeName: String,
+    val closedAmountDue: Double,
+)

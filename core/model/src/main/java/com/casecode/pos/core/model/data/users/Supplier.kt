@@ -15,22 +15,11 @@
  */
 package com.casecode.pos.core.model.data.users
 
-data class Employee(
-    val name: String = "",
-    val phoneNumber: String = "",
-    val password: String? = null,
-    val branchName: String? = null,
-    val permission: String = "",
-) {
-    fun isEmployeeNameDuplicate(
-        currentEmployees: List<Employee>?,
-        oldEmployee: Employee? = null,
-    ): Boolean {
-        currentEmployees?.forEach {
-            if (it.name == this.name && it != oldEmployee) {
-                return true
-            }
-        }
-        return false
-    }
-}
+data class Supplier(
+    val companyName: String,
+    val contactName: String,
+    val contactEmail: String,
+    val contactPhone: String,
+    val address: String,
+    val category: String,
+)

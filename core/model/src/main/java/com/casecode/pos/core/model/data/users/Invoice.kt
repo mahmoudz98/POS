@@ -25,7 +25,7 @@ data class Invoice(
     val items: List<Item> = emptyList(),
 ) {
     val total: Double
-        get() = items.sumOf { it.price * it.quantity }
+        get() = items.sumOf { it.unitPrice * it.quantity.toDouble() }
 }
 
 fun Set<Item>.addItemToInvoices(item: Item): Set<Item> {
@@ -36,6 +36,6 @@ fun Set<Item>.addItemToInvoices(item: Item): Set<Item> {
             add(existingItem.copy(quantity = existingItem.quantity + 1))
         }
     } else {
-        plus(item.copy(quantity = 1.0))
+        plus(item.copy(quantity = 1))
     }
 }
