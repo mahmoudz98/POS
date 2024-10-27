@@ -17,9 +17,9 @@ package com.casecode.pos.feature.employee
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.data.model.isEmployeeNameDuplicate
 import com.casecode.pos.core.data.utils.NetworkMonitor
-import com.casecode.pos.core.domain.usecase.AddEmployeesUseCase
+import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
@@ -27,7 +27,6 @@ import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.domain.utils.BusinessResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.AuthService
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Employee
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,10 +44,10 @@ constructor(
     private val networkMonitor: NetworkMonitor,
     private val getEmployeesBusinessUseCase: GetEmployeesBusinessUseCase,
     private val getBusinessUseCase: GetBusinessUseCase,
-    private val addEmployeesUseCase: AddEmployeesUseCase,
+    private val addEmployeesUseCase: AddEmployeeUseCase,
     private val updateEmployeesUseCase: UpdateEmployeesUseCase,
     private val deleteEmployeeUseCase: DeleteEmployeeUseCase,
-    private val authService: AuthService,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -64,9 +63,8 @@ constructor(
 
     fun getCurrentUid() {
         viewModelScope.launch {
-            currentUid.update { authService.currentUserId() }
+            currentUid.update { authRepository.currentUserId() }
         }
-
     }
 
     init {
@@ -138,7 +136,7 @@ constructor(
             return showSnackbarMessage(uiString.core_ui_error_network)
         }
         val employees = (uiState.value.resourceEmployees as? Resource.Success)?.data
-        if (employees?.isEmployeeNameDuplicate(employee) == true) {
+        if (employee.isEmployeeNameDuplicate(employees) == true) {
             return showSnackbarMessage(uiString.core_ui_error_employee_name_duplicate)
         }
         viewModelScope.launch {
@@ -161,12 +159,11 @@ constructor(
             _employeeSelected.value
                 ?: return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
 
-
         if (oldEmployee == newEmployee) {
             return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
         }
         val employees = (uiState.value.resourceEmployees as? Resource.Success)?.data
-        if (employees?.isEmployeeNameDuplicate(newEmployee, oldEmployee) == true) {
+        if (newEmployee.isEmployeeNameDuplicate(employees, oldEmployee) == true) {
             return showSnackbarMessage(uiString.core_ui_error_employee_name_duplicate)
         }
         viewModelScope.launch {

@@ -19,19 +19,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 
-const val EMPLOYEES_ROUTE = "employees_route"
-
+@Serializable
+data object EmployeesRoute
 fun NavGraphBuilder.employeesScreen() {
-    composable(
-        route = EMPLOYEES_ROUTE,
-    ) {
-        EmployeesRoute()
+    composable<EmployeesRoute> {
+        EmployeesScreen()
     }
 }
 
-fun NavController.navigateToEmployees(navOptions: NavOptions) =
-    navigate(
-        EMPLOYEES_ROUTE,
-        navOptions,
-    )
+fun NavController.navigateToEmployees(navOptions: NavOptions) = navigate(EmployeesRoute, navOptions)

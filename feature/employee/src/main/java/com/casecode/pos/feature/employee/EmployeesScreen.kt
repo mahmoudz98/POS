@@ -61,7 +61,7 @@ import com.casecode.pos.core.ui.EmployeeEmptyScreen
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun EmployeesRoute(viewModel: EmployeeViewModel = hiltViewModel()) {
+fun EmployeesScreen(viewModel: EmployeeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showEmployeeDialog by remember { mutableStateOf(false) }
     var showUpdateEmployeeDialog by remember { mutableStateOf(false) }
@@ -155,8 +155,7 @@ fun EmployeesScreen(
                 actionIconContentDescription = null,
                 actionIcon = PosIcons.UserAdman,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
-
-                )
+            )
             when (uiState.resourceEmployees) {
                 is Resource.Empty -> {
                     EmployeeEmptyScreen()
@@ -184,7 +183,6 @@ fun EmployeesScreen(
                     )
                 }
             }
-
         }
     }
     uiState.userMessage?.let { message ->
@@ -192,10 +190,8 @@ fun EmployeesScreen(
         LaunchedEffect(message) {
             snackState.showSnackbar(snackbarText)
             onMessageShown()
-
         }
     }
-
 }
 
 @Composable
