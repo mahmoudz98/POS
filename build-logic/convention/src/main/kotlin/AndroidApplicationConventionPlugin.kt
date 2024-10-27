@@ -28,7 +28,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = Configuration.targetSdk
+                defaultConfig.targetSdk = Configuration.TARGET_SDK
                 configureGradleManagedDevices(this)
             }
             extensions.configure<PowerAssertGradleExtension> {
