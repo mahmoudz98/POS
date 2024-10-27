@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.data.repository
 
 import com.casecode.pos.core.common.AppDispatchers.IO
@@ -5,20 +20,20 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asSubscriptionBusinessModel
 import com.casecode.pos.core.data.model.asSubscriptionRequest
-import com.casecode.pos.core.data.service.AuthService
-import com.casecode.pos.core.data.service.checkUserNotFound
-import com.casecode.pos.core.data.utils.SUBSCRIPTION_BUSINESS_FIELD
-import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
+import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
 import com.casecode.pos.core.domain.repository.AddSubscriptionBusiness
+import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.firebase.services.FirestoreService
+import com.casecode.pos.core.firebase.services.SUBSCRIPTION_BUSINESS_FIELD
+import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -28,88 +43,68 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class SubscriptionsBusinessRepositoryImpl
-    @Inject
-    constructor(
-        private val fireStore: FirebaseFirestore,
-        private val auth: AuthService,
-        @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
-    ) : SubscriptionsBusinessRepository {
-        override suspend fun setSubscriptionBusiness(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness {
-            return withContext(ioDispatcher) {
-                try {
-                    auth.checkUserNotFound<Boolean> {
-                        return@withContext it
+@Inject
+constructor(
+    private val db: FirestoreService,
+    private val auth: AuthRepository,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
+) : SubscriptionsBusinessRepository {
+    override suspend fun setSubscriptionBusiness(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness {
+        return withContext(ioDispatcher) {
+            try {
+                auth.checkUserNotFoundAndReturnErrorMessage<Boolean> {
+                    return@withContext it
+                }
+                val currentUID = auth.currentUserId()
+
+                suspendCoroutine<AddSubscriptionBusiness> { continuation ->
+
+                    val addSubscriptionBusinessRequest =
+                        subscriptionBusiness.asSubscriptionRequest()
+                    db.updateDocumentWithTask(
+                        USERS_COLLECTION_PATH,
+                        currentUID,
+                        mapOf(
+                            SUBSCRIPTION_BUSINESS_FIELD to FieldValue.arrayUnion(
+                                addSubscriptionBusinessRequest,
+                            ),
+                        ),
+                    ).addOnSuccessListener {
+                        Timber.d("Subscription business is added successfully")
+                        continuation.resume(Resource.Companion.success(true))
+                    }.addOnFailureListener {
+                        continuation.resume(Resource.Companion.error(R.string.core_data_add_subscription_business_failure))
                     }
-                    val currentUID = auth.currentUserId()
-                    val resultAddSubscription =
-                        suspendCoroutine<AddSubscriptionBusiness> { continuation ->
-
-                            val addSubscriptionBusinessRequest =
-                                subscriptionBusiness.asSubscriptionRequest()
-
-                        fireStore
-                            .collection(USERS_COLLECTION_PATH)
-                            .document(currentUID)
-                            .update(
-                                SUBSCRIPTION_BUSINESS_FIELD,
-                                FieldValue.arrayUnion(addSubscriptionBusinessRequest),
-                            ).addOnSuccessListener {
-                                Timber.d("Subscription business is added successfully")
-                                continuation.resume(AddSubscriptionBusiness.success(true))
-                            }.addOnFailureListener {
-                                continuation.resume(AddSubscriptionBusiness.error(R.string.core_data_add_subscription_business_failure))
-
-                                Timber.e("Add Subscription Business failure: $it")
-                            }
-                    }
-                resultAddSubscription
-            } catch (e: UnknownHostException) {
-                AddSubscriptionBusiness.error(R.string.core_data_add_subscription_business_network)
+                }
+            } catch (_: UnknownHostException) {
+                Resource.Companion.error(R.string.core_data_add_subscription_business_network)
             } catch (e: Exception) {
                 Timber.e("Exception while adding business: $e")
-                AddSubscriptionBusiness.error(R.string.core_data_add_subscription_business_failure)
+                Resource.Companion.error(R.string.core_data_add_subscription_business_failure)
             }
         }
     }
 
     override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> =
-        callbackFlow<Resource<List<SubscriptionBusiness>>> {
-            trySend(Resource.Loading)
-            auth.checkUserNotFound<List<SubscriptionBusiness>> {
-                trySend(it)
-                close()
+        flow<Resource<List<SubscriptionBusiness>>> {
+            auth.checkUserNotFoundAndReturnErrorMessage<List<SubscriptionBusiness>> {
+                emit(it)
+                return@flow
             }
             val currentUID = auth.currentUserId()
-            val listenerRegistration =
-                fireStore
-                    .collection(USERS_COLLECTION_PATH)
-                    .document(currentUID)
-                    .addSnapshotListener { snapshot, error ->
-                        if (error != null) {
-                            Timber.e(error)
-                            trySend(Resource.error(R.string.core_data_add_subscription_business_failure))
-                            close()
-                        }
-                        @Suppress("UNCHECKED_CAST")
-                        val subscriptionBusinessMap =
-                            snapshot?.get(
-                                SUBSCRIPTION_BUSINESS_FIELD,
-                            ) as? List<Map<String, Any>>
-                        Timber.e("subscriptionBusinessMap: $subscriptionBusinessMap")
-                        if (subscriptionBusinessMap.isNullOrEmpty()) {
-                            trySend(Resource.empty())
-                        } else {
-                            trySend(
-                                Resource.success(
-                                    asSubscriptionBusinessModel(
-                                        subscriptionBusinessMap,
-                                    ),
-                                ),
-                            )
-                        }
-                    }
-            awaitClose {
-                listenerRegistration.remove()
+            db.listenToCollection(USERS_COLLECTION_PATH, currentUID).collect { snapshot ->
+                @Suppress("UNCHECKED_CAST")
+                val subscriptionBusinessMap =
+                    snapshot.get(
+                        SUBSCRIPTION_BUSINESS_FIELD,
+                    ) as? List<Map<String, Any>>
+                if (subscriptionBusinessMap.isNullOrEmpty()) {
+                    emit(Resource.empty())
+                } else {
+                    emit(Resource.success(asSubscriptionBusinessModel(subscriptionBusinessMap)))
+                }
             }
+        }.catch {
+            emit(Resource.error(R.string.core_data_add_subscription_business_failure))
         }.flowOn(ioDispatcher)
-    }
+}
