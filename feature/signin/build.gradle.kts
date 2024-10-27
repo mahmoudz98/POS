@@ -16,6 +16,7 @@
 plugins {
     alias(libs.plugins.pos.android.feature)
     alias(libs.plugins.pos.android.library.compose)
+    alias(libs.plugins.pos.android.library.jacoco)
 }
 android {
     namespace = "com.casecode.pos.feature.signin"
