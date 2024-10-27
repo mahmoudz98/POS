@@ -31,7 +31,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = Configuration.CompileSdk
+                defaultConfig.targetSdk = Configuration.COMPILE_SDK
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
                 testOptions.animationsDisabled = true
