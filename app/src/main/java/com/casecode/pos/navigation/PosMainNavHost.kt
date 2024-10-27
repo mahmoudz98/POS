@@ -21,33 +21,32 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.casecode.pos.feature.employee.employeesScreen
-import com.casecode.pos.feature.item.itemsGraph
-import com.casecode.pos.feature.item.navigateToItemsGraph
+import com.casecode.pos.feature.item.navigation.itemsGraph
+import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.profile.profileScreen
-import com.casecode.pos.feature.sale.POS_ROUTE
-import com.casecode.pos.feature.sale.posScreen
-import com.casecode.pos.feature.salesReport.navigateToSalesReport
-import com.casecode.pos.feature.salesReport.navigateToSalesReportDetails
-import com.casecode.pos.feature.salesReport.salesReportGraph
+import com.casecode.pos.feature.sale.SaleRoute
+import com.casecode.pos.feature.sale.saleScreen
+import com.casecode.pos.feature.sales.report.navigateToSalesReport
+import com.casecode.pos.feature.sales.report.navigateToSalesReportDetails
+import com.casecode.pos.feature.sales.report.salesReportGraph
 import com.casecode.pos.feature.setting.settingsGraph
 import com.casecode.pos.feature.signout.navigateToSignOut
 import com.casecode.pos.feature.signout.signOutDialog
 import com.casecode.pos.feature.statistics.reportsScreen
-import com.casecode.pos.ui.main.MainAppState
+import com.casecode.pos.ui.MainAppState
 
 @Composable
 fun PosMainNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
-    startDestination: String = POS_ROUTE,
     onSignOutClick: () -> Unit,
 ) {
     NavHost(
         navController = appState.navController,
-        startDestination = startDestination,
+        startDestination = SaleRoute,
         modifier = modifier,
     ) {
-        posScreen {
+        saleScreen {
             appState.navController.navigateToItemsGraph(
                 navOptions {
                     // Pop up to the start destination of the graph to
