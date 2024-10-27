@@ -18,27 +18,34 @@ package com.casecode.pos.core.data.repository
 import android.content.Context
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialException
 import com.casecode.pos.core.common.AppDispatchers
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalModel
-import com.casecode.pos.core.data.utils.BUSINESS_FIELD
-import com.casecode.pos.core.data.utils.BUSINESS_IS_COMPLETED_STEP_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEES_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEE_NAME_FIELD
-import com.casecode.pos.core.data.utils.EMPLOYEE_PASSWORD_FIELD
-import com.casecode.pos.core.data.utils.USERS_COLLECTION_PATH
 import com.casecode.pos.core.datastore.PosPreferencesDataSource
 import com.casecode.pos.core.domain.repository.AccountRepository
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.trace
+import com.casecode.pos.core.domain.utils.SignInGoogleState
+import com.casecode.pos.core.firebase.services.BUSINESS_FIELD
+import com.casecode.pos.core.firebase.services.BUSINESS_IS_COMPLETED_STEP_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEES_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEE_NAME_FIELD
+import com.casecode.pos.core.firebase.services.EMPLOYEE_PASSWORD_FIELD
+import com.casecode.pos.core.firebase.services.FirestoreService
+import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.UnsupportedApiCallException
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
@@ -53,63 +60,67 @@ class AccountRepositoryImpl
 constructor(
     @ApplicationContext private val context: Context,
     private val firebaseAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
+    private val db: FirestoreService,
     private val posPreferencesDataSource: PosPreferencesDataSource,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : AccountRepository {
+
     private val credentialManager: CredentialManager = CredentialManager.create(context)
 
-    override suspend fun signIn(idToken: suspend () -> String): Resource<Int> {
-        trace(SIGN_IN) {
-            return withContext(ioDispatcher) {
-                try {
-                    val googleIdToken = idToken()
-                    val googleCredentials = buildGoogleAuthCredential(googleIdToken)
-                    val authResult = signInWithGoogleCredentials(googleCredentials)
+    // TODO: refactor use activityContext with HILT and refactor this method
+    override suspend fun signIn(idToken: suspend () -> String): SignInGoogleState =
+        withContext(ioDispatcher) {
+            try {
+                val googleIdToken = idToken()
+                val googleCredentials = buildGoogleAuthCredential(googleIdToken)
+                val authResult = signInWithGoogleCredentials(googleCredentials)
 
-                    if (authResult.user != null) {
-                        Resource.success(R.string.core_data_sign_in_success)
-                    } else {
-                        Resource.empty(R.string.core_data_sign_in_failure)
-                    }
-                } catch (e: Exception) {
-                    handleSignInException(e)
+                if (authResult.user != null) {
+                    SignInGoogleState.Success
+                } else {
+                    SignInGoogleState.Error(R.string.core_data_sign_in_failure)
                 }
+            } catch (e: Exception) {
+                handleSignInException(e)
             }
         }
-    }
 
-    private fun handleSignInException(e: Exception): Resource<Int> = when (e) {
-        is androidx.credentials.exceptions.GetCredentialCancellationException -> {
+    private fun handleSignInException(e: Exception): SignInGoogleState = when (e) {
+        is GetCredentialCancellationException -> {
             Timber.e(e)
-            Resource.error(R.string.core_data_sign_in_cancel)
+            SignInGoogleState.Cancelled
         }
 
-        is androidx.credentials.exceptions.GetCredentialException -> {
+        is GetCredentialException -> {
             Timber.e(e)
-            Resource.error(com.casecode.pos.core.data.R.string.core_data_sign_in_exception)
+            SignInGoogleState.Error(R.string.core_data_sign_in_exception)
         }
 
-        is com.google.android.gms.common.api.UnsupportedApiCallException -> {
+        is UnsupportedApiCallException -> {
             Timber.e("UnsupportedApiCallException: $e")
-            Resource.error(com.casecode.pos.core.data.R.string.core_data_unsupported_api_call)
+            SignInGoogleState.Error(R.string.core_data_unsupported_api_call)
         }
 
-        is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException -> {
-            Resource.error(e.message)
+        is FirebaseAuthInvalidCredentialsException -> {
+            SignInGoogleState.Error(R.string.core_data_sign_in_api_exception)
         }
 
-        is com.google.firebase.auth.FirebaseAuthException -> {
+        is FirebaseAuthException -> {
             Timber.e("Sign-in failed with FirebaseUserException: ${e.message}")
-            Resource.error(com.casecode.pos.core.data.R.string.core_data_sign_in_api_exception)
+            SignInGoogleState.Error(R.string.core_data_sign_in_api_exception)
         }
 
         else -> {
             Timber.e("Sign-in failed with unexpected exception: ${e.message}")
-            Resource.error(com.casecode.pos.core.data.R.string.core_data_sign_in_failure)
+            SignInGoogleState.Error(R.string.core_data_sign_in_failure)
         }
     }
 
+    override fun isGooglePlayServicesAvailable(): Boolean {
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
+        return resultCode == ConnectionResult.SUCCESS
+    }
 
     private fun buildGoogleAuthCredential(googleIdToken: String): AuthCredential =
         GoogleAuthProvider.getCredential(googleIdToken, null)
@@ -118,13 +129,10 @@ constructor(
         firebaseAuth.signInWithCredential(credentials).await()
 
     override suspend fun checkUserLogin() {
-        trace(IS_REGISTRATION_AND_BUSINESS_COMPLETED) {
-            withContext(ioDispatcher) {
-                val currentUser = firebaseAuth.currentUser ?: return@withContext
-                val isAdmin = isUserCompleteStep(currentUser.uid)
-
-                posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
-            }
+        withContext(ioDispatcher) {
+            val currentUser = firebaseAuth.currentUser ?: return@withContext
+            val isAdmin = isUserCompleteStep(currentUser.uid)
+            posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
         }
     }
 
@@ -135,14 +143,8 @@ constructor(
     private suspend fun isUserCompleteStep(currentUid: String): Boolean =
         withContext(ioDispatcher) {
             try {
-                //  val id = firebaseAuth.currentUser?.uid ?: return@withContext false
-                Timber.e("id = $currentUid")
-                val docRef =
-                    firestore
-                        .collection(USERS_COLLECTION_PATH)
-                        .document(currentUid)
-                        .get()
-                        .await()
+                val docRef = db.getDocument(USERS_COLLECTION_PATH, currentUid)
+
                 if (docRef.exists()) {
                     val data =
                         docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
@@ -186,12 +188,7 @@ constructor(
     ): Resource<Boolean> =
         withContext(ioDispatcher) {
             try {
-                val document =
-                    firestore
-                        .collection(USERS_COLLECTION_PATH)
-                        .document(uid)
-                        .get()
-                        .await()
+                val document = db.getDocument(USERS_COLLECTION_PATH, uid)
 
                 @Suppress("UNCHECKED_CAST")
                 val employees =
@@ -218,26 +215,17 @@ constructor(
         }
 
     override suspend fun signOut() {
-        trace(SIGN_OUT) {
-            try {
-                credentialManager.clearCredentialState(ClearCredentialStateRequest())
-                firebaseAuth.signOut()
-                posPreferencesDataSource.restLogin()
-            } catch (e: Exception) {
-                Timber.e("SignOut exception: $e")
-                e.printStackTrace()
-                if (e is CancellationException) {
-                    Timber.e("SignOut Cancellation: $e")
-                    throw e
-                }
+        try {
+            credentialManager.clearCredentialState(ClearCredentialStateRequest())
+            firebaseAuth.signOut()
+            posPreferencesDataSource.restLogin()
+        } catch (e: Exception) {
+            Timber.e("SignOut exception: $e")
+            e.printStackTrace()
+            if (e is CancellationException) {
+                Timber.e("SignOut Cancellation: $e")
+                throw e
             }
         }
-    }
-
-    companion object {
-        private const val SIGN_IN = "SIGN_IN"
-        private const val SIGN_OUT = "SIGN_OUT"
-        private const val IS_REGISTRATION_AND_BUSINESS_COMPLETED =
-            "IS_REGISTRATION_AND_BUSINESS_COMPLETED"
     }
 }
