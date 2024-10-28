@@ -41,8 +41,8 @@ data class Item(
     var quantity: Int = 0,
     val qtyPerPack: Int = 0,
     val sku: String = "",
-    var unitOfMeasurement: UnitOfMeasurement? = UnitOfMeasurement.PerPiece,
-    var imageUrl: String? = "",
+    val unitOfMeasurement: UnitOfMeasurement? = UnitOfMeasurement.PerPiece,
+    val imageUrl: String? = "",
     val deleted: Boolean = false,
 ) {
 
