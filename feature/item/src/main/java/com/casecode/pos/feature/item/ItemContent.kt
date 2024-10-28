@@ -357,9 +357,6 @@ internal fun ItemsContent(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
-        if (items.isEmpty()) {
-            ItemsSearchEmptyScreen()
-        } else {
             val scrollableState = rememberLazyListState()
             LazyColumn(
                 modifier = modifier.padding(horizontal = 8.dp),
@@ -380,23 +377,26 @@ internal fun ItemsContent(
                         HorizontalDivider(Modifier.padding(bottom = 4.dp))
                     }
                 }
-                items.forEach { item ->
-                    val itemKey = item.hashCode()
-                    item(key = itemKey) {
-                        ItemItem(
-                            modifier = Modifier.animateItem(),
-                            name = item.name,
-                            price = item.unitPrice,
-                            quantity = item.quantity,
-                            isTracked = item.isTrackStock(),
-                            itemImageUrl = item.imageUrl,
-                            onClick = { onItemClick(item) },
-                            onPrintButtonClick = { onPrintItemClick(item) },
-                            onLongClick = { onItemLongClick(item) },
-                        )
+                if (items.isEmpty()) {
+                    item { ItemsSearchEmptyScreen() }
+                } else {
+                    items.forEach { item ->
+                        val itemKey = item.hashCode()
+                        item(key = itemKey) {
+                            ItemItem(
+                                modifier = Modifier.animateItem(),
+                                name = item.name,
+                                price = item.unitPrice,
+                                quantity = item.quantity,
+                                isTracked = item.isTrackStock(),
+                                itemImageUrl = item.imageUrl,
+                                onClick = { onItemClick(item) },
+                                onPrintButtonClick = { onPrintItemClick(item) },
+                                onLongClick = { onItemLongClick(item) },
+                            )
+                        }
                     }
                 }
-
                 item {
                     Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
                 }
@@ -420,7 +420,7 @@ internal fun ItemsContent(
                 ),
             )
         }
-    }
+
 }
 
 @Composable
@@ -462,12 +462,14 @@ private fun ItemItem(
         leadingContent = { ItemIcon(itemImageUrl, iconModifier.size(64.dp)) },
         overlineContent = { Text(name) },
         headlineContent = {
-            if (isTracked) Text(
-                stringResource(
-                    uiString.core_ui_item_quantity_format,
-                    quantity,
-                ),
-            )
+            if (isTracked) {
+                Text(
+                    stringResource(
+                        uiString.core_ui_item_quantity_format,
+                        quantity,
+                    ),
+                )
+            }
         },
         supportingContent = {
             val formattedPrice = DecimalFormat("#,###.##").format(price)
