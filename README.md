@@ -1,7 +1,5 @@
 # Point-of-Sale (POS) App
 
-## Overview
-
 The **Point-of-Sale (POS) App** is designed to simplify and streamline sales transactions for
 businesses. It functions as a digital cash register, enabling businesses to accept payments, manage
 inventory, and generate sales reports. The app focuses on usability, security, and efficiency,
@@ -43,6 +41,8 @@ separation between the core functionality and specific features.
 | `core`                  | Reusable modules providing utilities and core business logic.                           |
 | `ui-test-hilt-manifest` | Used for testing UI components with Hilt for dependency injection.                      |
 
+## The features include:
+
 ## Use Cases
 
 ### 1. **Business Owner**
@@ -63,30 +63,67 @@ The cashier uses the POS system to handle customer purchases and print receipts 
 - **Payments**: Accept payments via cash, card, or digital payment methods.
 - **Print Receipts**: Print a receipt for the customer after completing the transaction.
 
-## Screenshots
+# Screenshots
 
-### **Business Owner**
+<h2>Sign in Screen</h2>
+<table>
+<tr>
 
-![Home Screen](docs/screenshots/home_screen.png)
-*Home Screen*  
-![items Screen](docs/screenshots/items_screen.png)
-![add item Screen](docs/screenshots/add_item_screen.png)
-*Inventory Management*  
-![Profile Screen](docs/screenshots/profile_screen.png)
-![Profile branches Screen](docs/screenshots/profile_branches_screen.png)
-*Profile*
-![Reports screen](docs/screenshots/report_screen.png)
-![Reports sales screen](docs/screenshots/sales_report_screen.png)
-![Reports sales info screen](docs/screenshots/sales_report_info_screen.png)
-*Reports*
-![Setting screen](docs/screenshots/setting_screen.png)
-![Setting sign out screen](docs/screenshots/setting_sign_out.png)
-*Setting*
+</tr>
+</table>
+<h2>Admin Owner screens</h2>
+<table>
+  <tr>
+    <td><img src="docs/screenshots/home_screen.png" alt="Home Screen" width="250"/></td>
+  </tr>
+<tr>
+    <td colspan="4" align="center">*Inventory*</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/inventory/items_screen.jpeg" alt="Items Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/items_filter_screen.jpeg" alt="Items Filter Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/items_filter2_screen.jpeg" alt="Items Filter Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/items_filtered_screen.jpeg" alt="Items filtered Screen" width="250"/></td>
+  </tr>
+ <tr>
+    <td><img src="docs/screenshots/inventory/add_item_screen.jpeg" alt="Add item Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/update_item_screen.jpeg" alt="Update Item Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/print_item_screen.jpeg" alt="Print Item Screen" width="250"/></td>
+  </tr>
 
-### ** Cashier**
+<tr>
+    <td colspan="3" align="center">*Profile*</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/profile_screen.png" alt="Profile Screen" width="250"/></td>
+    <td><img src="docs/screenshots/profile_branches_screen.png" alt="Profile Branches Screen" width="250"/></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center">*Reports*</td>
+  </tr>
+   <tr>
+    <td><img src="docs/screenshots/report_screen.png" alt="Reports Screen" width="250"/></td>
+    <td><img src="docs/screenshots/sales_report_screen.png" alt="Sales Report Screen" width="250"/></td>
+    <td><img src="docs/screenshots/sales_report_info_screen.png" alt="Sales Report Info Screen" width="250"/></td>
+  </tr>
 
-![Home screen](docs/screenshots/home_screen_cashier.png)
-![Home screen](docs/screenshots/home_screen_cashier_landscape.png)
+  <tr>
+    <td colspan="3" align="center">*Settings*</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/setting_screen.png" alt="Setting Screen" width="250"/></td>
+    <td><img src="docs/screenshots/setting_sign_out.png" alt="Setting Sign Out Screen" width="250"/></td>
+  </tr>
+</table>
+
+
+<h2>Cashier screens</h2>
+<table>
+<tr>
+<td><img src="docs/screenshots/home_screen_cashier.png"alt="Sale Screen" width="250"/></td>
+<td><img src="docs/screenshots/home_screen_cashier_landscape.png"alt="Sale Screen(landscape)" width="400"/></td>
+</tr>
+</table>
 
 ## Modularization
 
