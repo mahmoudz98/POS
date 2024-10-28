@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,11 +23,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.onConsumedWindowInsetsChanged
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -62,14 +64,15 @@ import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.theme.GradientColors
 import com.casecode.pos.core.designsystem.theme.LocalGradientColors
 import com.casecode.pos.core.ui.moveToSignInActivity
+import com.casecode.pos.feature.profile.R
 import com.casecode.pos.feature.sale.SaleRoute
 import com.casecode.pos.navigation.PosMainNavHost
 import com.casecode.pos.navigation.PosSaleNavHost
 import com.casecode.pos.navigation.TopLevelDestination
-import timber.log.Timber
 import kotlin.reflect.KClass
 import com.casecode.pos.core.ui.R.string as uiString
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun MainScreen(
     appState: MainAppState,
@@ -135,7 +138,6 @@ internal fun MainApp(
 
         MainAuthUiState.LoginByNoneEmployee -> {
             // TODO:handle with not permission for employee
-            Timber.e("LoginByNoneEmployee")
         }
     }
 }
@@ -164,7 +166,7 @@ fun AdminScreens(
             appState = appState,
             modifier = modifier,
             snackbarHostState = snackbarHostState,
-            currentDestination = appState.currentAdminTopLevelDestination,
+            topLevelDestination = appState.currentAdminTopLevelDestination,
         ) {
             PosMainNavHost(
                 appState = appState,
@@ -200,7 +202,7 @@ fun SaleEmployeeScreens(
             appState = appState,
             modifier = modifier,
             snackbarHostState = snackbarHostState,
-            currentDestination = appState.currentSaleTopLevelDestination,
+            topLevelDestination = appState.currentSaleTopLevelDestination,
         ) {
             PosSaleNavHost(
                 appState = appState,
@@ -246,7 +248,7 @@ fun ScreenContent(
     appState: MainAppState,
     modifier: Modifier,
     snackbarHostState: SnackbarHostState,
-    currentDestination: TopLevelDestination?,
+    topLevelDestination: TopLevelDestination?,
     content: @Composable () -> Unit,
 ) {
     Scaffold(
@@ -262,32 +264,25 @@ fun ScreenContent(
                 .padding(padding)
                 .consumeWindowInsets(padding)
                 .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
-                .onConsumedWindowInsetsChanged {
-                    Timber.e("onConsumedWindowInsetsChanged:  $it")
-                },
         ) {
             // Show the top app bar on top level destinations.
-            val destination = currentDestination
+            val destination = topLevelDestination
 
-            val currentActionBar = appState.currentTopAppBarAction
-            Timber.e("currentActionBar: $currentActionBar destination: $destination")
-            if (currentActionBar != null && destination != null) {
+            val hasProfileAction = appState.hasProfileActionBar(appState.currentDestination)
+            if (hasProfileAction && destination != null) {
                 PosTopAppBar(
                     titleRes = destination.titleTextId,
-                    onActionClick = currentActionBar.onClick,
-                    actionIconContentDescription = stringResource(currentActionBar.actionIconContent),
-                    actionIcon = currentActionBar.icon,
-                    colors =
-                    TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent,
-                    ),
+                    onActionClick = { appState.navigateToProfile() },
+                    actionIconContentDescription = stringResource(R.string.feature_profile_title),
+                    actionIcon = Icons.Default.Person,
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
                 )
             }
             Box(
                 modifier = Modifier
                     .weight(1f)
                     .consumeWindowInsets(
-                        if (currentActionBar != null) {
+                        if (hasProfileAction) {
                             WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
                         } else {
                             WindowInsets(0, 0, 0, 0)
@@ -301,6 +296,7 @@ fun ScreenContent(
     }
 }
 
+@SuppressLint("RestrictedApi")
 private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
     this?.hierarchy?.any {
         it.hasRoute(route)

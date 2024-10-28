@@ -15,13 +15,11 @@
  */
 package com.casecode.pos.ui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -31,7 +29,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.casecode.pos.MainAuthUiState
 import com.casecode.pos.core.data.utils.NetworkMonitor
-import com.casecode.pos.feature.profile.R
 import com.casecode.pos.feature.profile.navigateToProfile
 import com.casecode.pos.feature.sale.SaleRoute
 import com.casecode.pos.feature.setting.SettingNavigation
@@ -67,13 +64,6 @@ fun rememberMainAppState(
     }
 
 @Stable
-class TopAppBarAction(
-    val icon: ImageVector = Icons.Default.Person,
-    val actionIconContent: Int = R.string.feature_profile_title,
-    val onClick: () -> Unit = { },
-)
-
-@Stable
 class MainAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
@@ -91,7 +81,8 @@ class MainAppState(
 
     val saleTopLevelDestinations: List<SaleTopLevelDestination> by lazy { SaleTopLevelDestination.entries }
 
-    private fun isProfileRoute(currentDestination: NavDestination?): Boolean {
+    @SuppressLint("RestrictedApi")
+    fun hasProfileActionBar(currentDestination: NavDestination?): Boolean {
         val profileRoutes = setOf(
             SaleRoute::class,
             ReportsRoute::class,
@@ -101,27 +92,9 @@ class MainAppState(
         return profileRoutes.any { currentDestination?.hasRoute(it) == true }
     }
 
-    val currentTopAppBarAction: TopAppBarAction?
-        @Composable
-        get() {
-            return if (isProfileRoute(currentDestination)) {
-                TopAppBarAction(
-                    icon = Icons.Default.Person,
-                    actionIconContent = R.string.feature_profile_title,
-                    onClick = {
-                        navController.navigateToProfile(
-                            navOptions {
-                                launchSingleTop = true
-                                restoreState = true
-                            },
-                        )
-                    },
-                )
-            } else {
-                null
-            }
-        }
+    fun navigateToProfile() = navController.navigateToProfile()
 
+    @SuppressLint("RestrictedApi")
     @Composable
     private fun getCurrentTopLevelDestination(destinations: List<TopLevelDestination>): TopLevelDestination? =
         destinations.firstOrNull { currentDestination?.hasRoute(it.route) == true }
