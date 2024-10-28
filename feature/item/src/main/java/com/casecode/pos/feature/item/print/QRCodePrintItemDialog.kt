@@ -1,4 +1,19 @@
-package com.casecode.pos.feature.item
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.feature.item.print
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -34,6 +50,8 @@ import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.feature.item.ItemsViewModel
+import com.casecode.pos.feature.item.R
 
 @Composable
 fun QRCodePrintItemDialog(
@@ -52,8 +70,8 @@ internal fun QRCodePrintItemDialog(
     val configuration = LocalConfiguration.current
     val name = rememberSaveable { mutableStateOf(itemPrint?.name) }
     val barcode = rememberSaveable { mutableStateOf(itemPrint?.sku) }
-    val price = rememberSaveable { mutableStateOf(itemPrint?.price) }
-    var printedItemCount by rememberSaveable { mutableStateOf(1) } // Use State for printedItemCount
+    val price = rememberSaveable { mutableStateOf(itemPrint?.unitPrice) }
+    var printedItemCount by rememberSaveable { mutableIntStateOf(1) } // Use State for printedItemCount
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -80,10 +98,10 @@ internal fun QRCodePrintItemDialog(
                     isError = printedItemCount < 1,
                     label = stringResource(R.string.feature_item_copies_text),
                     keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done,
-                        ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done,
+                    ),
                     modifier = Modifier.fillMaxWidth(),
                     supportingText = if (printedItemCount < 1) stringResource(R.string.feature_item_error_copies_empty) else null,
                 )
@@ -132,8 +150,8 @@ fun PreviewQRCodePrintItemDialog() {
         QRCodePrintItemDialog(
             Item(
                 name = "Janine Whitfield",
-                price = 4.5,
-                quantity = 6.7,
+                unitPrice = 4.5,
+                quantity = 6,
                 sku = "12345666",
                 unitOfMeasurement = null,
                 imageUrl = null,

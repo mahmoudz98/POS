@@ -1,4 +1,19 @@
-package com.casecode.pos.feature.item
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.feature.item.delete
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
@@ -13,9 +28,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.casecode.pos.core.designsystem.component.PosTextButton
+import com.casecode.pos.feature.item.R
+import com.casecode.pos.core.ui.R as uiString
 
 @Composable
-fun DeleteItemDialog(
+internal fun DeleteItemDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -42,11 +59,11 @@ fun DeleteItemDialog(
         },
         confirmButton = {
             PosTextButton(onClick = onConfirm) {
-                Text(stringResource(R.string.feature_item_dialog_delete_button_text))
+                Text(stringResource(uiString.string.core_ui_dialog_delete_button_text))
             }
         },
         dismissButton = {
-            PosTextButton(onClick = onDismiss) { Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text)) }
+            PosTextButton(onClick = onDismiss) { Text(stringResource(uiString.string.core_ui_dialog_cancel_button_text)) }
         },
     )
 }
