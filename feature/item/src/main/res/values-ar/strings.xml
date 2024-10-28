@@ -1,22 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <resources>
-    <string name="feature_item__barcode_hint">الرمز الشريطي</string>
-    <string name="feature_item__name_hint">الاسم</string>
+    <string name="feature_item_barcode_hint">الرمز الشريطي</string>
+    <string name="feature_item_name_hint">الاسم</string>
+    <string name="feature_item_category_hint">فئة</string>
+
     <string name="feature_item_price_hint">السعر</string>
-    <string name="feature_item_item_quantity_label">الكمية</string>
-    <string name="feature_item_add_item_action_text">إضافة منتج</string>
+    <string name="feature_item_cost_price_hint">سعر التكلفة</string>
+    <string name="feature_item_add_item_title_text">إضافة منتج</string>
+    <string name="feature_item_update_item_title_text">تحديث المنتج</string>
     <string name="feature_item_header_title">المنتجات</string>
-    <string name="feature_item_update_item_button_text">تحديث المنتج</string>
+    <string name="feature_item_save_action_text">حفظ</string>
     <string name="feature_item_error_update_item_message">فشل تحديث المنتج.</string>
     <string name="feature_item_dialog_delete_item_title">حذف المنتج</string>
     <string name="feature_item_dialog_delete_item_message">هل أنت متأكد أنك تريد حذف هذا المنتج؟</string>
-    <string name="feature_item_dialog_delete_button_text">حذف</string>
     <string name="feature_item_empty_list_message">لا توجد منتجات لعرضها.</string>
     <string name="feature_item_empty_items_image_description">صورة لقائمة المنتجات الفارغة</string>
-    <string name="feature_item_error_item_name_empty">الاسم مطلوب.</string>
-    <string name="feature_item_error_item_price_empty">السعر مطلوب.</string>
-    <string name="feature_item_error_item_quantity_empty">الكمية مطلوبة.</string>
-    <string name="feature_item_error_item_barcode_empty">الرمز الشريطي مطلوب.</string>
+    <string name="feature_item_error_name_empty">الاسم مطلوب.</string>
+    <string name="feature_item_error_price_empty">السعر مطلوب.</string>
+    <string name="feature_item_error_price_size">يجب أن يكون السعر أقل من 999_999_999</string>
+    <string name="feature_item_error_sku_error_size">يجب أن يكون الباركود مساويا لـ 14 رقما.</string>
+
+    <string name="feature_item_error_quantity_empty">الكمية مطلوبة.</string>
+    <string name="feature_item_error_sku_empty">الرمز الشريطي مطلوب.</string>
     <string name="feature_item_error_no_camera_gallery_app">لم يتم العثور على تطبيق الكاميرا أو المعرض.</string>
     <string name="feature_item_dialog_select_image_text">اختيار صورة</string>
     <string name="feature_item_scan_barcode_text">مسح الرمز الشريطي</string>
@@ -26,11 +45,30 @@
     <string name="feature_item_error_copies_empty">الرجاء إدخال عدد النسخ للطباعة.</string>
     <string name="feature_item_empty_items_icon_description">وصف الأيقونة للمنتجات الفارغة</string>
     <string name="feature_item_empty_items_title">لم يتم العثور على منتجات.</string>
+    <string name="feature_item_empty_items_filter_title">لم يتم العثور على منتجات مع عامل تصفية.</string>
+    <string name="feature_item_error_duplicate">يوجد منتج بالفعل مع هذا الرمز الشريطي</string>
+
     <string name="feature_item_empty_items_message">لا توجد منتجات متاحة حاليًا.</string>
     <string name="feature_item_error_item_action_state_empty">حالة إجراء المنتج لا تحتوي على بيانات.</string>
     <string name="feature_item_search_action_text">بحث</string>
     <string name="feature_item_search_items_hint">البحث عن المنتجات…</string>
     <string name="feature_item_dialog_print_qr_code_title">طباعة رمز الاستجابة السريعة</string>
     <string name="feature_item_error_no_image_selected">لم يتم اختيار صورة.</string>
+    <string name="feature_item_need_permission_for_camera">بحاجة إلى إذن للكاميرا.</string>
+    <string name="feature_item_tracked_stock_chip_label">تتبع المخزون</string>
+    <string name="feature_item_not_track_stock_chip_label">لا تتبع المخزون</string>
+    <string name="feature_item_filter_label">تصفيه</string>
+    <string name="feature_item_rest_filter_label">إعادة ضبط التصفيه</string>
+    <string name="feature_item_filter_stock_label">حسب المخزون</string>
+    <string name="feature_item_filter_all_label">الكل</string>
+    <string name="feature_item_filter_in_stock_label">في المخزون</string>
+    <string name="feature_item_filter_out_stock_label">غير متوفر في المخزون</string>
+    <string name="feature_item_filter_low_stock_label">انخفاض مستوى المخزون</string>
+
+    <string name="feature_item_sort_price_label">ترتيب حسب السعر</string>
+    <string name="feature_item_filter_category_label">الفئات</string>
+    <string name="feature_item_sort_price_none_label">بدون ترتيب</string>
+    <string name="feature_item_sort_price_low_to_high_label">من الأقل إلى الأعلى</string>
+    <string name="feature_item_sort_price_high_to_low_label">من الأعلى إلى الأقل</string>
 
 </resources>
