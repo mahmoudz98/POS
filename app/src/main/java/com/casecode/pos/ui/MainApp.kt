@@ -263,15 +263,12 @@ fun ScreenContent(
                 .fillMaxSize()
                 .padding(padding)
                 .consumeWindowInsets(padding)
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
+                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
         ) {
-            // Show the top app bar on top level destinations.
-            val destination = topLevelDestination
-
             val hasProfileAction = appState.hasProfileActionBar(appState.currentDestination)
-            if (hasProfileAction && destination != null) {
+            if (hasProfileAction && topLevelDestination != null) {
                 PosTopAppBar(
-                    titleRes = destination.titleTextId,
+                    titleRes = topLevelDestination.titleTextId,
                     onActionClick = { appState.navigateToProfile() },
                     actionIconContentDescription = stringResource(R.string.feature_profile_title),
                     actionIcon = Icons.Default.Person,
