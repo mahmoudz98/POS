@@ -24,6 +24,7 @@ rootProject.name = "POS"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":benchmark")
+include(":core:analytics")
 include(":core:domain")
 include(":core:model")
 include(":core:common")
