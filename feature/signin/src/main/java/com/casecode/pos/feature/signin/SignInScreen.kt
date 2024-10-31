@@ -162,7 +162,7 @@ internal fun SignInScreen(
                 Spacer(modifier = Modifier.height(64.dp))
             }
             Image(
-                painter = painterResource(id = R.drawable.feature_signin_ic_point_of_sale_24),
+                painter = painterResource(id = uiR.drawable.core_ui_ic_point_of_sale_24),
                 contentDescription = null,
                 modifier = Modifier.wrapContentSize(),
             )
