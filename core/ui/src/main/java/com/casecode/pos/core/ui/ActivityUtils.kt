@@ -24,36 +24,30 @@ fun moveToSignInActivity(context: Context) {
     val intent = Intent(context, Class.forName("com.casecode.pos.feature.signin.SignInActivity"))
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
     context.startActivity(intent)
-    context.findActivity().finish()
+    findActivity<Activity>(context)?.finish()
 }
 
 fun moveToMainActivity(context: Context) {
-    val intent = Intent(context, Class.forName("com.casecode.pos.ui.main.MainActivity"))
+    val intent = Intent(context, Class.forName("com.casecode.pos.MainActivity"))
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
     context.startActivity(intent)
-    context.findActivity().finish()
+    findActivity<Activity>(context)?.finish()
 }
 
 fun moveToStepperActivity(context: Context) {
     val intent = Intent(context, Class.forName("com.casecode.pos.feature.stepper.StepperActivity"))
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
     context.startActivity(intent)
-    context.findActivity().finish()
+    findActivity<Activity>(context)?.finish()
 }
 
-private fun Context.getActivityOrNull(): Activity? {
-    var context = this
-    while (context is ContextWrapper) {
-        if (context is Activity) return context
-        context = context.baseContext
+private inline fun <reified T> findActivity(context: Context): T? {
+    var innerContext = context
+    while (innerContext is ContextWrapper) {
+        if (innerContext is T) {
+            return innerContext
+        }
+        innerContext = innerContext.baseContext
     }
-
     return null
 }
-
-private tailrec fun Context.findActivity(): Activity =
-    when (this) {
-        is Activity -> this
-        is ContextWrapper -> this.baseContext.findActivity()
-        else -> throw IllegalArgumentException("Could not find activity!")
-    }
