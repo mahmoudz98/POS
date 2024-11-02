@@ -17,12 +17,7 @@ plugins {
     alias(libs.plugins.power.assert) apply false
     // alias(libs.plugins.dependency.analysis) apply true
 }
-/*moduleGraphAssert {
-    maxHeight = 4
-    allowed = arrayOf(":.* -> :core', ':feature.* -> :lib.")
-    restricted = arrayOf(":feature-[a-z]* -X> :forbidden-to-depend-on")
-    assertOnAnyBuild = true
-}*/
+
 tasks.withType<JavaCompile>().configureEach {
     options.isIncremental = true
 }
