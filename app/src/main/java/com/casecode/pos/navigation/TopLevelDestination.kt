@@ -25,10 +25,13 @@ import com.casecode.pos.core.ui.R.string.core_ui_employees_title
 import com.casecode.pos.feature.employee.EmployeesRoute
 import com.casecode.pos.feature.employee.navigateToEmployees
 import com.casecode.pos.feature.item.navigation.ItemsGraph
+import com.casecode.pos.feature.item.navigation.ItemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
+import com.casecode.pos.feature.item.navigation.navigateToItemsSaleGraph
 import com.casecode.pos.feature.sale.SaleRoute
 import com.casecode.pos.feature.sale.navigateToSale
-import com.casecode.pos.feature.setting.SettingNavigation
+import com.casecode.pos.feature.setting.SettingGraph
+import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.setting.navigateToSettings
 import com.casecode.pos.feature.statistics.ReportsRoute
 import com.casecode.pos.feature.statistics.navigateToReports
@@ -50,8 +53,9 @@ private fun TopLevelDestination.navigateTo(
         SaleRoute::class -> navController.navigateToSale(navOptions)
         ReportsRoute::class -> navController.navigateToReports(navOptions)
         ItemsGraph::class -> navController.navigateToItemsGraph(navOptions)
+        ItemsSaleGraph::class -> navController.navigateToItemsSaleGraph(navOptions)
         EmployeesRoute::class -> navController.navigateToEmployees(navOptions)
-        SettingNavigation.SettingRoute::class -> navController.navigateToSettings(navOptions)
+        SettingRoute::class -> navController.navigateToSettings(navOptions)
     }
 }
 
@@ -70,7 +74,7 @@ enum class AdminTopLevelDestination(
         PosIcons.Settings,
         PosIcons.Settings,
         R.string.settings_title,
-        SettingNavigation.SettingRoute::class,
+        SettingRoute::class,
     ),
     ;
 
@@ -87,13 +91,13 @@ enum class SaleTopLevelDestination(
 ) : TopLevelDestination {
     POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
     REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title, ReportsRoute::class),
+    ITEMS(PosIcons.Items, PosIcons.Items, R.string.menu_items, ItemsSaleGraph::class),
     SETTINGS(
         PosIcons.Settings,
         PosIcons.Settings,
         R.string.settings_title,
-        SettingNavigation.SettingGraph::class,
-    ),
-    ;
+        SettingGraph::class,
+    );
 
     override fun navigate(navController: NavHostController, navOptions: NavOptions) {
         navigateTo(navController, navOptions)

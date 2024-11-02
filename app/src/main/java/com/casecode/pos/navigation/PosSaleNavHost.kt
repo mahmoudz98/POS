@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.casecode.pos.feature.item.navigation.itemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.sale.SaleRoute
 import com.casecode.pos.feature.sale.saleScreen
@@ -63,7 +64,6 @@ fun PosSaleNavHost(
                 },
             )
         }
-        //
         reportsScreen(onSalesReportClick = {}, onInventoryReportClick = {})
         salesReportGraph(
             navController = appState.navController,
@@ -72,6 +72,7 @@ fun PosSaleNavHost(
                 appState.navController.navigateToSalesReportDetails()
             },
         )
+        itemsSaleGraph(appState.navController)
         settingsGraph(
             appState.navController,
             onSignOutClick = {

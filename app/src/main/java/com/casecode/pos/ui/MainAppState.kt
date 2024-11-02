@@ -31,7 +31,7 @@ import com.casecode.pos.MainAuthUiState
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.feature.profile.navigateToProfile
 import com.casecode.pos.feature.sale.SaleRoute
-import com.casecode.pos.feature.setting.SettingNavigation
+import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.signout.SignOutRoute
 import com.casecode.pos.feature.statistics.ReportsRoute
 import com.casecode.pos.navigation.AdminTopLevelDestination
@@ -86,7 +86,7 @@ class MainAppState(
         val profileRoutes = setOf(
             SaleRoute::class,
             ReportsRoute::class,
-            SettingNavigation.SettingRoute::class,
+            SettingRoute::class,
             SignOutRoute::class,
         )
         return profileRoutes.any { currentDestination?.hasRoute(it) == true }

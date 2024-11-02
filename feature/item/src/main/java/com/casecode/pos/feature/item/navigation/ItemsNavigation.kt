@@ -84,23 +84,27 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenTransitio
     slideIntoContainer(
         animationSpec = tween(200, easing = EaseIn),
         towards = AnimatedContentTransitionScope.SlideDirection.Start,
-    ) + fadeIn(
-        animationSpec = tween(
-            200,
-            easing = LinearEasing,
-        ),
-    )
+    ) +
+        fadeIn(
+            animationSpec =
+                tween(
+                    200,
+                    easing = LinearEasing,
+                ),
+        )
 
 fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenExitTransition() =
     slideOutOfContainer(
         animationSpec = tween(200, easing = EaseOut),
         towards = AnimatedContentTransitionScope.SlideDirection.End,
-    ) + fadeOut(
-        animationSpec = tween(
-            200,
-            easing = LinearEasing,
-        ),
-    )
+    ) +
+            fadeOut(
+            animationSpec =
+                tween(
+                    200,
+                    easing = LinearEasing,
+                ),
+        )
 
 private fun NavGraphBuilder.addItemScreen(
     navController: NavController,
@@ -126,8 +130,7 @@ private fun NavGraphBuilder.updateItemScreen(navController: NavController) {
     composable<UpdateItemRoute>(
         enterTransition = { scaleAndExpandVertically() },
         exitTransition = { scaleAndShrinkVertically() },
-
-        ) {
+    ) {
         val parentEntry =
             remember(it) {
                 navController.getBackStackEntry(ItemsGraph)
@@ -161,10 +164,10 @@ private fun NavGraphBuilder.qrCodePrintItemDialog(navController: NavController) 
 
 fun NavController.navigateToItemsGraph(navOptions: NavOptions) = navigate(ItemsGraph, navOptions)
 
-fun NavController.navigateToItems() = navigate(ItemsRoute)
+private fun NavController.navigateToItems() = navigate(ItemsRoute)
 
 private fun NavController.navigateToAddItem() = navigate(AddItemRoute)
 
-fun NavController.navigateToUpdateUpdateItem() = navigate(UpdateItemRoute)
+private fun NavController.navigateToUpdateUpdateItem() = navigate(UpdateItemRoute)
 
-fun NavController.navigateToQRCodePrintItemDialog() = navigate(QRPrintItemDialogRoute)
+private fun NavController.navigateToQRCodePrintItemDialog() = navigate(QRPrintItemDialogRoute)

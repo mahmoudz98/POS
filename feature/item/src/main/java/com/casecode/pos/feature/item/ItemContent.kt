@@ -81,6 +81,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -351,8 +352,8 @@ internal fun ItemsContent(
     selectedCategories: Set<String>,
     onCategorySelected: (String) -> Unit,
     onCategoryUnselected: (String) -> Unit,
-    onItemClick: (Item) -> Unit,
-    onItemLongClick: (Item) -> Unit,
+    onItemClick: (Item) -> Unit = {},
+    onItemLongClick: (Item) -> Unit = {},
     onPrintItemClick: (Item) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -440,6 +441,34 @@ private fun ItemsSearchEmptyScreen(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.titleMedium,
             color = Color.Black,
             modifier = Modifier.padding(top = 16.dp),
+        )
+    }
+}
+
+@Composable
+internal fun ItemsEmptyScreen(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120),
+            contentDescription = stringResource(id = R.string.feature_item_empty_items_icon_description),
+            modifier = Modifier.size(120.dp),
+        )
+
+        Text(
+            text = stringResource(id = R.string.feature_item_empty_items_title),
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.Black,
+            modifier = Modifier.padding(top = 16.dp),
+        )
+
+        Text(
+            text = stringResource(id = R.string.feature_item_empty_items_message),
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(top = 8.dp),
         )
     }
 }
