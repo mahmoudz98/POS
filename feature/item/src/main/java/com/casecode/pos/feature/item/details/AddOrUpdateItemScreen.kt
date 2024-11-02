@@ -19,7 +19,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
@@ -30,6 +29,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,12 +45,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.recalculateWindowInsets
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -79,10 +78,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -99,14 +98,11 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
+import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.scanOptions
 import com.casecode.pos.feature.item.ItemsViewModel
 import com.casecode.pos.feature.item.R
-import com.casecode.pos.feature.item.utils.MAX_CURRENCY_LENGTH_SIZE
-import com.casecode.pos.feature.item.utils.MAX_SKU_LENGTH_SIZE
-import com.casecode.pos.feature.item.utils.NOT_TRACKED_REORDER_LEVEL
 import com.casecode.pos.feature.item.utils.PhotoUriManager
-import com.casecode.pos.feature.item.utils.TRACKED_REORDER_LEVEL
 import com.casecode.pos.feature.item.utils.rememberCurrencyVisualTransformation
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
@@ -153,54 +149,43 @@ fun AddOrUpdateItemScreen(
     onAddItem: (Item, Bitmap?) -> Unit,
     onUpdateItem: (Item, Bitmap?) -> Unit,
 ) {
-    val context = LocalContext.current
-    val configuration = LocalConfiguration.current
-    val keyboardController = LocalSoftwareKeyboardController.current
+    TrackScreenViewEvent(screenName = "AddOrUpdateItem")
+
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    val snackbarHostState = remember { SnackbarHostState() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val context = LocalContext.current
     val itemInputState = rememberItemInputState(itemUpdated)
-    var bitmapImage = remember<Bitmap?> { null }
+    val snackbarHostState = remember { SnackbarHostState() }
     var showTakeOrPickImage by remember { mutableStateOf(false) }
+    var bitmapImage = remember<Bitmap?> { null }
 
     val onSaveTriggered = {
         if (itemInputState.hasValidateInput()) {
+            val item =
+                Item(
+                    name = itemInputState.name,
+                    category = itemInputState.category,
+                    unitPrice = itemInputState.price.toDouble(),
+                    costPrice =
+                        itemInputState.costPrice
+                            .takeIf {
+                                it.isNotBlank()
+                            }?.toDouble() ?: 0.0,
+                    quantity = itemInputState.quantity.takeIf { it.isNotBlank() }?.toInt() ?: 0,
+                    qtyPerPack = itemInputState.qtyPerPack,
+                    reorderLevel = itemInputState.reorderLevel,
+                    sku = itemInputState.sku,
+                )
             if (isUpdate) {
-                onUpdateItem(
-                    Item(
-                        name = itemInputState.name,
-                        category = itemInputState.category,
-                        unitPrice = itemInputState.price.toDouble(),
-                        costPrice = itemInputState.costPrice.takeIf { it.isNotBlank() }?.toDouble()
-                            ?: 0.0,
-                        quantity = itemInputState.quantity.takeIf { it.isNotBlank() }?.toInt() ?: 0,
-                        qtyPerPack = itemInputState.qtyPerPack,
-                        reorderLevel = itemInputState.reorderLevel,
-                        sku = itemInputState.sku,
-                    ),
-                    bitmapImage
-                )
+                onUpdateItem(item, bitmapImage)
             } else {
-                onAddItem(
-                    Item(
-                        name = itemInputState.name,
-                        category = itemInputState.category,
-                        unitPrice = itemInputState.price.toDouble(),
-                        costPrice = itemInputState.costPrice.takeIf { it.isNotBlank() }?.toDouble()
-                            ?: 0.0,
-                        quantity = itemInputState.quantity.takeIf { it.isNotBlank() }?.toInt() ?: 0,
-                        reorderLevel = itemInputState.reorderLevel,
-                        qtyPerPack = itemInputState.qtyPerPack,
-                        sku = itemInputState.sku,
-                    ),
-                    bitmapImage
-                )
+                onAddItem(item, bitmapImage)
             }
             onNavigateBack()
         }
         keyboardController?.hide()
     }
-
     Scaffold(
         topBar = {
             PosTopAppBar(
@@ -217,85 +202,72 @@ fun AddOrUpdateItemScreen(
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        modifier = modifier
-            .focusRequester(focusRequester)
-            .focusProperties {
-                exit = {
-                    focusRequester.saveFocusedChild()
-                    FocusRequester.Default
-                }
-                enter = {
-                    if (focusRequester.restoreFocusedChild()) FocusRequester.Cancel else focusRequester
-                }
-            },
-    ) { innerPadding ->
-
-        Box(
+        modifier =
             Modifier
+                .focusRequester(focusRequester)
+                .focusProperties {
+                    enter = { focusRequester }
+                    exit = { FocusRequester.Cancel }
+                },
+    ) { innerPadding ->
+        Box(
+            modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .recalculateWindowInsets()
-
+                .recalculateWindowInsets(),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .navigationBarsPadding()
-                    .imePadding()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .navigationBarsPadding()
+                        .imePadding()
+                        .verticalScroll(rememberScrollState()),
             ) {
-                IconButton(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .align(Alignment.CenterHorizontally),
-                    onClick = { showTakeOrPickImage = true },
-                ) {
-                    if (itemInputState.selectedImageUri == Uri.EMPTY) {
-                        Icon(
-                            Icons.Filled.AddAPhoto,
-                            stringResource(R.string.feature_item_error_no_image_selected),
-                            modifier = Modifier.size(48.dp),
+                DynamicAsyncImage(
+                    imageUrl = itemInputState.selectedImageUri,
+                    modifier =
+                        Modifier
+                            .size(64.dp)
+                            .align(Alignment.CenterHorizontally)
+                            .clickable { showTakeOrPickImage = true },
+                    placeholder = PosIcons.AddPhoto,
+                    contentDescription = null,
+                    onSuccess = { image -> bitmapImage = image },
+                )
 
-                            )
-                    } else {
-                        itemInputState.selectedImageUri?.let {
-                            DynamicAsyncImage(
-                                imageUrl = it,
-                                contentDescription = null,
-                                modifier = Modifier.size(64.dp),
-                                onSuccess = { image -> bitmapImage = image },
-                            )
-                        }
-                    }
-                }
                 Spacer(modifier = Modifier.height(16.dp))
                 PosOutlinedTextField(
                     value = itemInputState.name,
-                    onValueChange = {
-                        itemInputState.name = it
-                        itemInputState.nameError = it.isEmpty()
-                    },
+                    onValueChange = itemInputState::onNameChange,
                     isError = itemInputState.nameError,
                     label = stringResource(R.string.feature_item_name_hint),
-                    keyboardOptions = KeyboardOptions(
+                    keyboardOptions =
+                    KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next,
                     ),
-                    keyboardActions = KeyboardActions(
+                    keyboardActions =
+                    KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) },
                     ),
-                    modifier = Modifier.fillMaxWidth(),
                     supportingText = if (itemInputState.nameError) stringResource(R.string.feature_item_error_name_empty) else null,
+                    modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                        .testTag("nameOutlinedTextField"),
                 )
                 PosExposeDropdownMenuBox(
                     label = stringResource(R.string.feature_item_category_hint),
                     currentText = itemInputState.category,
                     items = categories.toList(),
-                    onClickItem = { itemInputState.category = it },
+                    onClickItem = itemInputState::onCategoryChange,
                     menuAnchorType = MenuAnchorType.PrimaryEditable,
                     readOnly = false,
-                    keyboardOption = KeyboardOptions(
+                    keyboardOption =
+                    KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next,
                     ),
@@ -308,21 +280,17 @@ fun AddOrUpdateItemScreen(
                     PosOutlinedTextField(
                         enabled = isUpdate.not(),
                         value = itemInputState.sku,
-                        onValueChange = {
-                            if (it.length <= MAX_SKU_LENGTH_SIZE) {
-                                itemInputState.sku = it
-                            } else {
-                                itemInputState.skuError = R.string.feature_item_error_sku_error_size
-                            }
-                        },
+                        onValueChange = itemInputState::onSkuChange,
                         label = stringResource(R.string.feature_item_barcode_hint),
                         isError = itemInputState.skuError != null,
                         supportingText = itemInputState.skuError?.let { stringResource(it) },
-                        keyboardOptions = KeyboardOptions(
+                        keyboardOptions =
+                        KeyboardOptions(
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next,
                         ),
-                        keyboardActions = KeyboardActions(
+                        keyboardActions =
+                        KeyboardActions(
                             onNext = { focusManager.moveFocus(FocusDirection.Down) },
                         ),
                         modifier = Modifier.weight(0.9f),
@@ -330,14 +298,15 @@ fun AddOrUpdateItemScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     IconButton(
                         enabled = isUpdate.not(),
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .weight(0.1f)
                             .align(Alignment.CenterVertically),
                         onClick = {
                             context.scanOptions(
                                 onModuleDownloaded = { showSnackbarMessage(it) },
                                 onModuleDownloading = { showSnackbarMessage(it) },
-                                onResult = { itemInputState.sku = it },
+                                onResult = itemInputState::onSkuChange,
                                 onFailure = { showSnackbarMessage(it) },
                                 onCancel = { showSnackbarMessage(it) },
                             )
@@ -345,36 +314,12 @@ fun AddOrUpdateItemScreen(
                     ) { Icon(PosIcons.QrCodeScanner, "Scan barcode") }
                 }
                 PriceItemContent(
-                    configuration,
                     itemInputState.price,
                     itemInputState.priceError,
                     itemInputState.costPrice,
                     itemInputState.costPriceError,
-                    onPriceChange = { newPrice ->
-                        if (newPrice.filter { it.isDigit() }.length <= MAX_CURRENCY_LENGTH_SIZE) {
-                            itemInputState.price = if (newPrice.startsWith("0")) {
-                                newPrice.replaceFirst("0", "")
-
-                            } else {
-                                newPrice
-                            }
-                            itemInputState.priceError =
-                                if (itemInputState.price.isEmpty()) R.string.feature_item_error_price_empty else null
-                        } else {
-                            itemInputState.priceError = R.string.feature_item_error_price_size
-                        }
-                    },
-                    onCostPriceChange = { newCostPrice ->
-                        if (newCostPrice.filter { it.isDigit() }.length <= MAX_CURRENCY_LENGTH_SIZE) {
-                            itemInputState.costPrice = if (newCostPrice.startsWith("0")) {
-                                newCostPrice.replaceFirst("0", "")
-                            } else {
-                                newCostPrice
-                            }
-                        } else {
-                            itemInputState.costPriceError = R.string.feature_item_error_price_size
-                        }
-                    },
+                    onPriceChange = itemInputState::onUnitPriceChange,
+                    onCostPriceChange = itemInputState::onCostPriceChange,
                 )
                 TrackQuantityContent(
                     trackSelected = itemInputState.isTrackSelected,
@@ -382,23 +327,10 @@ fun AddOrUpdateItemScreen(
                     quantity = itemInputState.quantity,
                     quantityError = itemInputState.quantityError,
                     qtyPerPack = itemInputState.qtyPerPack.toString(),
-                    onSelectedChange = {
-                        itemInputState.reorderLevel = if (it) {
-                            TRACKED_REORDER_LEVEL
-                        } else {
-                            NOT_TRACKED_REORDER_LEVEL
-                        }
-                    },
-                    onQuantityChange = {
-                        itemInputState.quantity = it
-                        itemInputState.quantityError = it.isEmpty()
-                    },
-                    onReorderLevelChange = {
-                        itemInputState.reorderLevel = it.takeIf { it.isNotBlank() }?.toInt() ?: 0
-                    },
-                    onQtyPerPackChange = {
-                        itemInputState.qtyPerPack = it.takeIf { it.isNotBlank() }?.toInt() ?: 0
-                    },
+                    onSelectedChange = itemInputState::onReorderTrack,
+                    onQuantityChange = itemInputState::onQuantityChange,
+                    onReorderLevelChange = itemInputState::onReorderLevelChange,
+                    onQtyPerPackChange = itemInputState::onQtyPerPackChange,
                 )
             }
         }
@@ -406,12 +338,13 @@ fun AddOrUpdateItemScreen(
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+        keyboardController?.show()
     }
     LaunchedTakePictureOrImage(
         showTakeOrPickImage = showTakeOrPickImage,
         context = context,
         onSelectedImageUri = {
-            itemInputState.selectedImageUri = it
+            itemInputState.onSelectImage(it)
             showTakeOrPickImage = false
             if (isUpdate) {
                 onUpdateImageItem()
@@ -433,7 +366,6 @@ fun AddOrUpdateItemScreen(
 
 @Composable
 private fun PriceItemContent(
-    configuration: Configuration,
     price: String,
     priceError: Int?,
     costPrice: String,
@@ -441,6 +373,7 @@ private fun PriceItemContent(
     onPriceChange: (String) -> Unit,
     onCostPriceChange: (String) -> Unit,
 ) {
+    val configuration = LocalConfiguration.current
     val currencyVisualTransformation =
         rememberCurrencyVisualTransformation(configuration.locales[0])
     Row(
@@ -455,11 +388,13 @@ private fun PriceItemContent(
             label = stringResource(R.string.feature_item_price_hint),
             visualTransformation = currencyVisualTransformation,
             supportingText = priceError?.let { stringResource(it) },
-            keyboardOptions = KeyboardOptions(
+            keyboardOptions =
+            KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next,
             ),
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(end = 8.dp)
                 .weight(0.5f),
         )
@@ -470,7 +405,8 @@ private fun PriceItemContent(
             label = stringResource(R.string.feature_item_cost_price_hint),
             visualTransformation = currencyVisualTransformation,
             supportingText = costPriceError?.let { stringResource(it) },
-            keyboardOptions = KeyboardOptions(
+            keyboardOptions =
+            KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
             ),
@@ -511,7 +447,7 @@ private fun TrackQuantityContent(
         label = "size transform",
     ) { targetExpanded ->
         if (targetExpanded) {
-            Column {
+            Column(Modifier.wrapContentSize()) {
                 PosOutlinedTextField(
                     value = quantity,
                     onValueChange = {
@@ -520,7 +456,8 @@ private fun TrackQuantityContent(
                     isError = quantityError,
                     label = stringResource(uiString.core_ui_item_quantity_label),
                     supportingText = if (quantityError) stringResource(R.string.feature_item_error_quantity_empty) else null,
-                    keyboardOptions = KeyboardOptions(
+                    keyboardOptions =
+                    KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                         imeAction = ImeAction.Next,
                     ),
@@ -533,11 +470,13 @@ private fun TrackQuantityContent(
                             onReorderLevelChange(it)
                         },
                         label = stringResource(uiString.core_ui_item_reorder_level_label),
-                        keyboardOptions = KeyboardOptions(
+                        keyboardOptions =
+                        KeyboardOptions(
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next,
                         ),
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .padding(end = 8.dp)
                             .weight(0.5f),
                     )
@@ -545,7 +484,8 @@ private fun TrackQuantityContent(
                         value = qtyPerPack,
                         onValueChange = { onQtyPerPackChange(it) },
                         label = stringResource(uiString.core_ui_item_qty_per_pack_label),
-                        keyboardOptions = KeyboardOptions(
+                        keyboardOptions =
+                        KeyboardOptions(
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Done,
                         ),
@@ -553,26 +493,6 @@ private fun TrackQuantityContent(
                     )
                 }
             }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun TrackQuantityContentPreview() {
-    POSTheme {
-        PosBackground {
-            TrackQuantityContent(
-                trackSelected = true,
-                reorderLevel = "1",
-                quantity = "1",
-                quantityError = false,
-                qtyPerPack = "12",
-                onSelectedChange = {},
-                onQuantityChange = {},
-                onReorderLevelChange = {},
-                onQtyPerPackChange = {},
-            )
         }
     }
 }
@@ -591,17 +511,18 @@ internal fun LaunchedTakePictureOrImage(
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var currentPhotoPath by rememberSaveable { mutableStateOf("") }
     var showPermissionDialog by remember { mutableStateOf(false) }
-    val takePictureOrPickPhotoLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let { onSelectedImageUri(it) } ?: run {
-                onSelectedImageUri(currentPhotoPath.toUri())
+    val takePictureOrPickPhotoLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { onSelectedImageUri(it) } ?: run {
+                    onSelectedImageUri(currentPhotoPath.toUri())
+                }
+            } else if (result.resultCode == Activity.RESULT_CANCELED) {
+                onCancelTakeImage(R.string.feature_item_error_no_image_selected)
             }
-        } else if (result.resultCode == Activity.RESULT_CANCELED) {
-            onCancelTakeImage(R.string.feature_item_error_no_image_selected)
         }
-    }
     if (showPermissionDialog) {
         PermissionDialog(
             onDismiss = {
@@ -615,24 +536,28 @@ internal fun LaunchedTakePictureOrImage(
         if (showTakeOrPickImage) {
             val status = cameraPermissionState.status
             if (status.isGranted) {
-                val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    val uri = PhotoUriManager(context).buildNewUri()
-                    currentPhotoPath = uri.toString()
-                    putExtra(MediaStore.EXTRA_OUTPUT, uri)
-                }
+                val takePicture =
+                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        val uri = PhotoUriManager(context).buildNewUri()
+                        currentPhotoPath = uri.toString()
+                        putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                    }
 
-                val pickPhoto = Intent(
-                    Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                )
+                val pickPhoto =
+                    Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    )
 
-                val chooserIntent = Intent.createChooser(
-                    pickPhoto,
-                    context.getString(R.string.feature_item_dialog_select_image_text),
-                ).apply {
-                    putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
-                }
+                val chooserIntent =
+                    Intent
+                        .createChooser(
+                            pickPhoto,
+                            context.getString(R.string.feature_item_dialog_select_image_text),
+                        ).apply {
+                            putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePicture))
+                        }
                 takePictureOrPickPhotoLauncher.launch(chooserIntent)
             } else if (status is PermissionStatus.Denied && !status.shouldShowRationale) {
                 cameraPermissionState.launchPermissionRequest()
@@ -671,7 +596,8 @@ fun UpdateItemPreview() {
         PosBackground {
             AddOrUpdateItemScreen(
                 isUpdate = true,
-                itemUpdated = Item(
+                itemUpdated =
+                Item(
                     name = "Product",
                     category = "Category",
                     costPrice = 123454678.0,
