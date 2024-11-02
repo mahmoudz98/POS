@@ -30,7 +30,6 @@ import org.junit.Test
 import com.casecode.pos.core.ui.R.string as uiString
 
 class AddOrUpdateItemScreenTest {
-
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
@@ -82,7 +81,8 @@ class AddOrUpdateItemScreenTest {
             )
         }
 
-        composeTestRule.onNodeWithText(trackStockChipLabel)
+        composeTestRule
+            .onNodeWithText(trackStockChipLabel)
             .performScrollTo()
             .performClick()
 
@@ -142,37 +142,44 @@ class AddOrUpdateItemScreenTest {
     }
 
     private fun assertErrorDisplayed(stringRes: Int) {
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(stringRes))
+        composeTestRule
+            .onNodeWithText(composeTestRule.activity.getString(stringRes))
             .assertIsDisplayed()
     }
 
     private fun assertTextDisplayed(stringRes: Int) {
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(stringRes))
+        composeTestRule
+            .onNodeWithText(composeTestRule.activity.getString(stringRes))
             .performScrollTo()
             .assertIsDisplayed()
     }
 
     private fun fillValidInputs() {
-        composeTestRule.onNodeWithText(
-            composeTestRule.activity.getString(string.feature_item_name_hint),
-        ).performTextInput("Test Item")
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(string.feature_item_name_hint),
+            ).performTextInput("Test Item")
 
-        composeTestRule.onNodeWithText(
-            composeTestRule.activity.getString(string.feature_item_barcode_hint),
-        ).performTextInput("123")
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(string.feature_item_barcode_hint),
+            ).performTextInput("123")
 
-        composeTestRule.onNodeWithText(
-            composeTestRule.activity.getString(string.feature_item_price_hint),
-        ).performTextInput("100.0")
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(string.feature_item_price_hint),
+            ).performTextInput("100.0")
     }
 
     private fun fillValidInputsUpdate() {
-        composeTestRule.onNodeWithText(
-            composeTestRule.activity.getString(string.feature_item_name_hint),
-        ).performTextInput("Test Item")
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(string.feature_item_name_hint),
+            ).performTextInput("Test Item")
 
-        composeTestRule.onNodeWithText(
-            composeTestRule.activity.getString(string.feature_item_price_hint),
-        ).performTextInput("100.0")
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(string.feature_item_price_hint),
+            ).performTextInput("100.0")
     }
 }
