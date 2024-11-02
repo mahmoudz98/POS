@@ -345,7 +345,6 @@ class ItemsViewModelTest {
                 viewModel.userMessage.value,
                 ResourcesData.core_data_item_added_successfully,
             )
-
         }
 
     @Test
