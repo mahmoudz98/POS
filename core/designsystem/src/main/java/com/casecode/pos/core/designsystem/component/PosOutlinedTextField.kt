@@ -65,9 +65,7 @@ fun PosOutlinedTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon:
-    @Composable()
-    (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
     supportingText: String? = null,
 ) {
     OutlinedTextField(

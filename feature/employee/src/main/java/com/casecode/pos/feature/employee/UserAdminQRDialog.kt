@@ -93,8 +93,7 @@ internal fun UserAdminQrDialog(
                 Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text))
             }
         },
-
-        )
+    )
 }
 
 @Preview

@@ -14,104 +14,104 @@
      limitations under the License.
 -->
 <resources>
-    <string name="core_ui_menu_business_info_title">Business Info</string>
-    <string name="core_ui_menu_branches_title">Branches</string>
-    <string name="core_ui_employees_title">Employees</string>
-    <!-- Network -->
-    <string name="core_ui_error_network">Please check your internet connection.</string>
-    <string name="core_ui_message_back_online">Back online.</string>
-    <!-- General Errors and Messages -->
-    <string name="core_ui_error_unknown">Something went wrong!</string>
-    <string name="core_ui_message_scan_complete">Scan completed.</string>
-    <string name="core_ui_message_scan_error">Scan error: %s</string>
-    <string name="core_ui_message_scan_error_open">Can\'t open Scan, wait until download completes</string>
-    <string name="core_ui_scan_result_empty">Scan deleteResult is empty.</string>
-    <string name="core_ui_scan_module_downloading">Downloading module…</string>
-    <string name="core_ui_scan_module_complete_downloading">Go to Scanner…</string>
+  <string name="core_ui_menu_business_info_title">Business Info</string>
+  <string name="core_ui_menu_branches_title">Branches</string>
+  <string name="core_ui_employees_title">Employees</string>
+  <!-- Network -->
+  <string name="core_ui_error_network">Please check your internet connection.</string>
+  <string name="core_ui_message_back_online">Back online.</string>
+  <!-- General Errors and Messages -->
+  <string name="core_ui_error_unknown">Something went wrong!</string>
+  <string name="core_ui_message_scan_complete">Scan completed.</string>
+  <string name="core_ui_message_scan_error">Scan error: %s</string>
+  <string name="core_ui_message_scan_error_open">Can\'t open Scan, wait until download completes</string>
+  <string name="core_ui_scan_result_empty">Scan deleteResult is empty.</string>
+  <string name="core_ui_scan_module_downloading">Downloading module…</string>
+  <string name="core_ui_scan_module_complete_downloading">Go to Scanner…</string>
 
-    <string name="core_ui_employee_name_hint">Name</string>
-    <string name="core_ui_employee_password_hint">Password</string>
-    <string name="core_ui_error_email_empty">Email is required.</string>
-    <string name="core_ui_error_phone_empty">Phone number is required.</string>
-    <string name="core_ui_error_phone_invalid">Please enter a valid phone number (exception.g., 1234567890).</string>
-    <string name="core_ui_email_invalid">Please enter a valid email address.</string>
-    <string name="core_ui_error_branch_name_empty">Branch name is required.</string>
+  <string name="core_ui_employee_name_hint">Name</string>
+  <string name="core_ui_employee_password_hint">Password</string>
+  <string name="core_ui_error_email_empty">Email is required.</string>
+  <string name="core_ui_error_phone_empty">Phone number is required.</string>
+  <string name="core_ui_error_phone_invalid">Please enter a valid phone number (exception.g., 1234567890).</string>
+  <string name="core_ui_email_invalid">Please enter a valid email address.</string>
+  <string name="core_ui_error_branch_name_empty">Branch name is required.</string>
 
-    <string name="core_ui_store_type_hint">Store Type</string>
-    <string name="core_ui_work_email_hint">Work Email</string>
-    <string name="core_ui_work_phone_number_hint">Work Phone Number</string>
-    <string name="core_ui_branch_name_hint">Branch Name: </string>
-    <string name="core_ui_hint_phone_number_branch">Branch Phone Number</string>
+  <string name="core_ui_store_type_hint">Store Type</string>
+  <string name="core_ui_work_email_hint">Work Email</string>
+  <string name="core_ui_work_phone_number_hint">Work Phone Number</string>
+  <string name="core_ui_branch_name_hint">Branch Name: </string>
+  <string name="core_ui_hint_phone_number_branch">Branch Phone Number</string>
 
-    <string name="core_ui_add_branch_title">Add a Branch</string>
-    <string name="core_ui_update_branch_title">Update a Branch</string>
-    <string name="core_ui_add_branch_button_text">Add Branch</string>
-    <string name="core_ui_update_branch_button_text">Update Branch</string>
+  <string name="core_ui_add_branch_title">Add a Branch</string>
+  <string name="core_ui_update_branch_title">Update a Branch</string>
+  <string name="core_ui_add_branch_button_text">Add Branch</string>
+  <string name="core_ui_update_branch_button_text">Update Branch</string>
 
-    <!-- Branches -->
-    <string name="core_ui_branch_header_title">Branches</string>
-    <string name="core_ui_success_add_branch_message">Branch added successfully!</string>
-    <string name="core_ui_error_add_branch_message">Failed to add branch.</string>
-    <string name="core_ui_success_update_branch_message">Branch updated successfully!</string>
-    <string name="core_ui_error_update_branch_message">Failed to update branch.</string>
-    <string name="core_ui_error_add_branch_empty">Please fill in all required branch information.</string>
+  <!-- Branches -->
+  <string name="core_ui_branch_header_title">Branches</string>
+  <string name="core_ui_success_add_branch_message">Branch added successfully!</string>
+  <string name="core_ui_error_add_branch_message">Failed to add branch.</string>
+  <string name="core_ui_success_update_branch_message">Branch updated successfully!</string>
+  <string name="core_ui_error_update_branch_message">Failed to update branch.</string>
+  <string name="core_ui_error_add_branch_empty">Please fill in all required branch information.</string>
 
-    <!-- Subscription -->
-    <string name="core_ui_subscription_plan_title">Subscription Plan</string>
-    <string name="core_ui_subscribe_button_text">Subscribe</string>
-    <string name="core_ui_currency" translatable="false">$%s</string>
-    <string name="core_ui_time_month_label"> month</string>
-    <string name="core_ui_error_add_subscription_message">Failed to add subscription. Please try again.</string>
-    <string name="core_ui_success_add_subscription_message">Subscription added successfully!</string>
-
-
-    <!-- Employees -->
-    <string name="core_ui_employee_header_title">Employees</string>
-    <string name="core_ui_add_employee_title">Add a employee</string>
-    <string name="core_ui_update_employee_title">Update a employee</string>
-    <string name="core_ui_error_employee_name_empty">Employee name is required.</string>
-    <string name="core_ui_error_add_employee_password_empty">Password is required.</string>
-    <string name="core_ui_error_add_employee_branch_empty">Please select a branch for the employee.</string>
-    <string name="core_ui_error_add_employee_permission_empty">Please select employee permissions.</string>
-    <string name="core_ui_add_employee_button_text">Add Employee</string>
-    <string name="core_ui_update_employee_button_text">update Employee</string>
-    <string name="core_ui_error_add_employee_password">Password must be at least 6 characters.</string>
-    <string name="core_ui_success_add_employees_message">Employees added successfully. Let\'s go!</string>
-    <string name="core_ui_success_add_employee_message">Employee added successfully!</string>
-    <string name="core_ui_error_add_employee_message">Failed to add employee.</string>
-    <string name="core_ui_error_employee_name_duplicate">An employee with this name already exists.</string>
-    <string name="core_ui_success_update_employee_message">Employee updated successfully!</string>
-    <string name="core_ui_error_update_employee_message">Failed to update employee.</string>
+  <!-- Subscription -->
+  <string name="core_ui_subscription_plan_title">Subscription Plan</string>
+  <string name="core_ui_subscribe_button_text">Subscribe</string>
+  <string name="core_ui_currency" translatable="false">$%s</string>
+  <string name="core_ui_time_month_label"> month</string>
+  <string name="core_ui_error_add_subscription_message">Failed to add subscription. Please try again.</string>
+  <string name="core_ui_success_add_subscription_message">Subscription added successfully!</string>
 
 
-    <!-- Employees (Empty State) -->
-    <string name="core_ui_employees_empty_title">No employees found.</string>
-    <string name="core_ui_employees_empty_message">Add employees to manage your business.</string>
+  <!-- Employees -->
+  <string name="core_ui_employee_header_title">Employees</string>
+  <string name="core_ui_add_employee_title">Add a employee</string>
+  <string name="core_ui_update_employee_title">Update a employee</string>
+  <string name="core_ui_error_employee_name_empty">Employee name is required.</string>
+  <string name="core_ui_error_add_employee_password_empty">Password is required.</string>
+  <string name="core_ui_error_add_employee_branch_empty">Please select a branch for the employee.</string>
+  <string name="core_ui_error_add_employee_permission_empty">Please select employee permissions.</string>
+  <string name="core_ui_add_employee_button_text">Add Employee</string>
+  <string name="core_ui_update_employee_button_text">update Employee</string>
+  <string name="core_ui_error_add_employee_password">Password must be at least 6 characters.</string>
+  <string name="core_ui_success_add_employees_message">Employees added successfully. Let\'s go!</string>
+  <string name="core_ui_success_add_employee_message">Employee added successfully!</string>
+  <string name="core_ui_error_add_employee_message">Failed to add employee.</string>
+  <string name="core_ui_error_employee_name_duplicate">An employee with this name already exists.</string>
+  <string name="core_ui_success_update_employee_message">Employee updated successfully!</string>
+  <string name="core_ui_error_update_employee_message">Failed to update employee.</string>
 
-    <!-- Permissions -->
-    <string name="core_ui_permissions_text">Permissions</string>
-    <string name="core_ui_permission_admin_text">Admin</string>
-    <string name="core_ui_permission_sales_text">Sales</string>
-    <string name="core_ui_permission_none_text">None</string>
 
-    <!-- String Arrays -->
-    <string-array name="core_ui_employee_permissions">
-        <item>@string/core_ui_permission_admin_text</item>
-        <item>@string/core_ui_permission_sales_text</item>
-        <item>@string/core_ui_permission_none_text</item>
-    </string-array>
+  <!-- Employees (Empty State) -->
+  <string name="core_ui_employees_empty_title">No employees found.</string>
+  <string name="core_ui_employees_empty_message">Add employees to manage your business.</string>
 
-    <!-- Dialogs -->
-    <string name="core_ui_dialog_cancel_button_text">Cancel</string>
-    <string name="core_ui_dialog_delete_button_text">Delete</string>
-    <string name="core_ui_dialog_ok_button_text">OK</string>
-    <string name="core_ui_dialog_permission_camera_title">Camera Permission Required</string>
-    <string name="core_ui_dialog_permission_camera_message">This app needs camera access to function properly.</string>
-    <string name="core_ui_request_permission_button_text">Grant Permission</string>
+  <!-- Permissions -->
+  <string name="core_ui_permissions_text">Permissions</string>
+  <string name="core_ui_permission_admin_text">Admin</string>
+  <string name="core_ui_permission_sales_text">Sales</string>
+  <string name="core_ui_permission_none_text">None</string>
 
-    <string name="core_ui_item_quantity_label">Quantity</string>
-    <string name="core_ui_item_reorder_level_label">Reorder level qty</string>
-    <string name="core_ui_item_qty_per_pack_label">Quantity per pack</string>
-    <string name="core_ui_item_quantity_format">Qty: %s</string>
+  <!-- String Arrays -->
+  <string name="core_ui_dialog_cancel_button_text">Cancel</string>
+
+  <!-- Dialogs -->
+  <string name="core_ui_dialog_delete_button_text">Delete</string>
+  <string name="core_ui_dialog_ok_button_text">OK</string>
+  <string name="core_ui_dialog_permission_camera_title">Camera Permission Required</string>
+  <string name="core_ui_dialog_permission_camera_message">This app needs camera access to function properly.</string>
+  <string name="core_ui_request_permission_button_text">Grant Permission</string>
+  <string name="core_ui_item_quantity_label">Quantity</string>
+
+  <string name="core_ui_item_reorder_level_label">Reorder level qty</string>
+  <string name="core_ui_item_qty_per_pack_label">Quantity per pack</string>
+  <string name="core_ui_item_quantity_format">Qty: %s</string>
+  <string-array name="core_ui_employee_permissions">
+    <item>@string/core_ui_permission_admin_text</item>
+    <item>@string/core_ui_permission_sales_text</item>
+    <item>@string/core_ui_permission_none_text</item>
+  </string-array>
 
 </resources>

@@ -20,32 +20,26 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.casecode.pos.feature.setting.SettingNavigation.PrinterInfoRoute
-import com.casecode.pos.feature.setting.SettingNavigation.PrinterRoute
-import com.casecode.pos.feature.setting.SettingNavigation.SettingRoute
 import com.casecode.pos.feature.setting.printer.PrinterInfoScreen
 import com.casecode.pos.feature.setting.printer.PrinterScreen
 import kotlinx.serialization.Serializable
+@Serializable
+data object SettingGraph
 
 @Serializable
-sealed class SettingNavigation {
-    @Serializable
-    data object SettingGraph : SettingNavigation()
+data object SettingRoute
 
-    @Serializable
-    data object SettingRoute : SettingNavigation()
+@Serializable
+data object PrinterRoute
 
-    @Serializable
-    data object PrinterRoute : SettingNavigation()
+@Serializable
+data object PrinterInfoRoute
 
-    @Serializable
-    data object PrinterInfoRoute : SettingNavigation()
-}
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onSignOutClick: () -> Unit,
 ) {
-    navigation<SettingNavigation.SettingGraph>(startDestination = SettingRoute) {
+    navigation<SettingGraph>(startDestination = SettingRoute) {
         settingScreen(
             onSignOutClick = onSignOutClick,
             onPrinterClick = { navController.navigateToPrinter() },
@@ -83,7 +77,7 @@ private fun NavGraphBuilder.printerInfoScreen(onBackClick: () -> Unit) {
 }
 
 fun NavController.navigateToSettings(navOptions: NavOptions) =
-    navigate(SettingNavigation.SettingGraph, navOptions)
+    navigate(SettingGraph, navOptions)
 
 fun NavController.navigateToPrinter() = navigate(PrinterRoute)
 

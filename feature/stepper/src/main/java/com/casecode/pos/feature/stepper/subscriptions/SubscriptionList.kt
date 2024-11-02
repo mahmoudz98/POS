@@ -68,7 +68,8 @@ private fun SubscriptionItem(
     ListItem(
         headlineContent = { Text(text = subscription.type) },
         supportingContent = {
-            val costFormated = stringResource(uiString.core_ui_currency, subscription.cost.toString())
+            val costFormated =
+                stringResource(uiString.core_ui_currency, subscription.cost.toString())
             val durationFormated =
                 "${subscription.duration / 30} ${stringResource(uiString.core_ui_time_month_label)}"
             Text(

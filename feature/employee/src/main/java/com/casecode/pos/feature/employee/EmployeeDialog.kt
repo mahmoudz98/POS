@@ -109,18 +109,13 @@ fun EmployeeDialog(
             branchError = selectedBranch.isEmpty()
             permissionError = selectedPermission.isEmpty()
         } else {
+            val employee = Employee(name, phone, password, selectedBranch, selectedPermission)
             if (isUpdate) {
-                onUpdateEmployee(
-                    Employee(name, phone, password, selectedBranch, selectedPermission),
-
-                    )
+                onUpdateEmployee(employee)
             } else {
-                onAddEmployee(
-                    Employee(name, phone, password, selectedBranch, selectedPermission),
-                )
+                onAddEmployee(employee)
             }
             keyboardController?.hide()
-
             onDismiss()
         }
     }

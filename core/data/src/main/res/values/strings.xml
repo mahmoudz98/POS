@@ -14,96 +14,96 @@
      limitations under the License.
 -->
 <resources>
-    <!-- sign in -->
-    <string name="core_data_sign_in_failure">Sign in field.</string>
-    <string name="core_data_unsupported_api_call">Sign in unsupported, please check google play service.</string>
-    <string name="core_data_sign_in_cancel">One-tap dialog was closed..</string>
-    <string name="core_data_sign_in_network_error">One-tap encountered a network error..</string>
-    <string name="core_data_sign_in_api_exception">Couldn\'t get credential from deleteResult.</string>
-    <string name="core_data_sign_in_exception">Something error in one-tap.</string>
-    <string name="core_data_sign_in_success">Sign in success.</string>
-    <string name="core_data_uid_empty">Can not find user, please sign in again</string>
+  <!-- sign in -->
+  <string name="core_data_sign_in_failure">Sign in field.</string>
+  <string name="core_data_unsupported_api_call">Sign in unsupported, please check google play service.</string>
+  <string name="core_data_sign_in_cancel">One-tap dialog was closed..</string>
+  <string name="core_data_sign_in_network_error">One-tap encountered a network error..</string>
+  <string name="core_data_sign_in_api_exception">Couldn\'t get credential from deleteResult.</string>
+  <string name="core_data_sign_in_exception">Something error in one-tap.</string>
+  <string name="core_data_sign_in_success">Sign in success.</string>
+  <string name="core_data_uid_empty">Can not find user, please sign in again</string>
 
-    <!-- business -->
-    <string name="core_data_add_business_failure">Add Business failure,</string>
-    <string name="core_data_get_business_failure">Get Business failure,</string>
-    <string name="core_data_get_business_failure_network">Get Business failure,Check internet connection</string>
-    <string name="core_data_add_business_network">Failure when add business, Check internet connection</string>
-    <string name="core_data_add_branch_business_network">Failure when add branch, Check internet connection</string>
-    <string name="core_data_add_branch_business_failure">Add branch Business failure,</string>
+  <!-- business -->
+  <string name="core_data_add_business_failure">Add Business failure,</string>
+  <string name="core_data_get_business_failure">Get Business failure,</string>
+  <string name="core_data_get_business_failure_network">Get Business failure,Check internet connection</string>
+  <string name="core_data_add_business_network">Failure when add business, Check internet connection</string>
+  <string name="core_data_add_branch_business_network">Failure when add branch, Check internet connection</string>
+  <string name="core_data_add_branch_business_failure">Add branch Business failure,</string>
 
-    <string name="core_data_add_subscription_business_failure">Add Subscription Business failure,</string>
-    <string name="core_data_add_subscription_business_network">Failure when add subscription business, Check internet connection</string>
-    <string name="core_data_complete_business_failure">Complete Subscription Business failure,</string>
+  <string name="core_data_add_subscription_business_failure">Add Subscription Business failure,</string>
+  <string name="core_data_add_subscription_business_network">Failure when add subscription business, Check internet connection</string>
+  <string name="core_data_complete_business_failure">Complete Subscription Business failure,</string>
 
-    <string name="core_data_add_employees_business_failure">Add employees Business failure,</string>
-    <string name="core_data_employee_add_business_failure">Add employee Business failure,</string>
-    <string name="core_data_employee_update_business_failure">Update employees Business failure,</string>
-    <string name="core_data_add_employees_business_network">Failure when add Employees, Check internet connection</string>
-    <string name="core_data_employee_add_business_network">Failure when add Employee, Check internet connection</string>
-    <string name="core_data_employee_update_business_network">Failure when update Employee, Check internet connection</string>
-    <string name="core_data_employee_delete_business_failure">Failure when delete employee</string>
-    <string name="core_data_employee_delete_business_network">Failure when delete employee, Check internet connection</string>
-    <string name="core_data_employee_delete_business_success">Deleted employee successfully</string>
+  <string name="core_data_add_employees_business_failure">Add employees Business failure,</string>
+  <string name="core_data_employee_add_business_failure">Add employee Business failure,</string>
+  <string name="core_data_employee_update_business_failure">Update employees Business failure,</string>
+  <string name="core_data_add_employees_business_network">Failure when add Employees, Check internet connection</string>
+  <string name="core_data_employee_add_business_network">Failure when add Employee, Check internet connection</string>
+  <string name="core_data_employee_update_business_network">Failure when update Employee, Check internet connection</string>
+  <string name="core_data_employee_delete_business_failure">Failure when delete employee</string>
+  <string name="core_data_employee_delete_business_network">Failure when delete employee, Check internet connection</string>
+  <string name="core_data_employee_delete_business_success">Deleted employee successfully</string>
 
-    <string name="core_data_add_product_network">Failure when add product, Check internet connection</string>
+  <string name="core_data_add_product_network">Failure when add product, Check internet connection</string>
 
-    <string name="core_data_update_product_network">Failure when update product, Check internet connection</string>
-    <string name="core_data_update_product_failure">Update product failure,</string>
+  <string name="core_data_update_product_network">Failure when update product, Check internet connection</string>
+  <string name="core_data_update_product_failure">Update product failure,</string>
 
-    <string name="core_data_delete_product_network">Failure when delete product, Check internet connection</string>
+  <string name="core_data_delete_product_network">Failure when delete product, Check internet connection</string>
 
-    <!-- ======================================================================================= -->
-    <!-- allItems -->
-    <!-- ======================================================================================= -->
-    <string name="core_data_error_fetching_items">Error fetching allItems. Please try again later.</string>
+  <!-- ======================================================================================= -->
+  <!-- allItems -->
+  <!-- ======================================================================================= -->
+  <string name="core_data_error_fetching_items">Error fetching allItems. Please try again later.</string>
 
-    <string name="core_data_item_deleted_successfully">Item deleted successfully</string>
-    <string name="core_data_item_deleted_failure">Item deleted failure</string>
-    <string name="core_data_delete_item_failure_network">Unable to delete targetItem. Please check your internet connection.</string>
-    <string name="core_data_delete_item_failure_generic">Failed to delete targetItem. Please try again later.</string>
+  <string name="core_data_item_deleted_successfully">Item deleted successfully</string>
+  <string name="core_data_item_deleted_failure">Item deleted failure</string>
+  <string name="core_data_delete_item_failure_network">Unable to delete targetItem. Please check your internet connection.</string>
+  <string name="core_data_delete_item_failure_generic">Failed to delete targetItem. Please try again later.</string>
 
-    <string name="core_data_item_updated_successfully">Item updated successfully</string>
-    <string name="core_data_update_item_failure_network">Unable to update targetItem. Please check your internet
+  <string name="core_data_item_updated_successfully">Item updated successfully</string>
+  <string name="core_data_update_item_failure_network">Unable to update targetItem. Please check your internet
         connection.</string>
-    <string name="core_data_update_item_failure_generic">Failed to update targetItem. Please try again later.</string>
+  <string name="core_data_update_item_failure_generic">Failed to update targetItem. Please try again later.</string>
 
-    <string name="core_data_item_added_successfully">Item added successfully</string>
-    <string name="core_data_add_item_failure_network">Unable to add targetItem. Please check your internet
+  <string name="core_data_item_added_successfully">Item added successfully</string>
+  <string name="core_data_add_item_failure_network">Unable to add targetItem. Please check your internet
         connection.</string>
-    <string name="core_data_add_item_failure_generic">Failed to add targetItem. Please try again later.</string>
+  <string name="core_data_add_item_failure_generic">Failed to add targetItem. Please try again later.</string>
 
-    <string name="core_data_upload_image_failure_network">Upload image failed due to network issues. Please check your internet connection and try again.</string>
-    <string name="core_data_upload_image_failure">Upload image failed. Please try again later.</string>
+  <string name="core_data_upload_image_failure_network">Upload image failed due to network issues. Please check your internet connection and try again.</string>
+  <string name="core_data_upload_image_failure">Upload image failed. Please try again later.</string>
 
-    <string name="core_data_replace_image_failure_network">Replace image failed due to network issues.
+  <string name="core_data_replace_image_failure_network">Replace image failed due to network issues.
         Please check your internet connection and try again.</string>
-    <string name="core_data_replace_image_failure">Replace image failed. Please try again later
+  <string name="core_data_replace_image_failure">Replace image failed. Please try again later
         .</string>
 
-    <string name="core_data_download_url_failure_network">Failed to retrieve download URL due to network issues. Please check your internet connection and try again.</string>
-    <string name="core_data_download_url_failure">Failed to retrieve download URL. Please try again later.</string>
+  <string name="core_data_download_url_failure_network">Failed to retrieve download URL due to network issues. Please check your internet connection and try again.</string>
+  <string name="core_data_download_url_failure">Failed to retrieve download URL. Please try again later.</string>
 
-    <string name="core_data_image_deleted_successfully">Image deleted successfully</string>
-    <string name="core_data_delete_image_failure_network">Delete image failed due to network issues.
+  <string name="core_data_image_deleted_successfully">Image deleted successfully</string>
+  <string name="core_data_delete_image_failure_network">Delete image failed due to network issues.
         Please check your internet connection and try again.</string>
-    <string name="core_data_delete_image_failure_generic">Delete image failed, Please try again later.</string>
-    <!-- ======================================================================================= -->
+  <string name="core_data_delete_image_failure_generic">Delete image failed, Please try again later.</string>
+  <!-- ======================================================================================= -->
 
-    // Invoice
-    <string name="core_data_add_invoice_failure_network">Unable to add invoice. Please check your internet
+  // Invoice
+  <string name="core_data_add_invoice_failure_network">Unable to add invoice. Please check your internet
         connection.</string>
-    <string name="core_data_add_invoice_successfully">Invoice Added successfully</string>
-    <string name="core_data_add_invoice_failure">Invoice Added failed, Please try again later.</string>
-    <string name="core_data_get_invoice_failure">fetch Invoice failed, Please try again later.</string>
-    <string name="core_data_get_invoice_failure_network">Unable to fetch invoices. Please check your internet
+  <string name="core_data_add_invoice_successfully">Invoice Added successfully</string>
+  <string name="core_data_add_invoice_failure">Invoice Added failed, Please try again later.</string>
+  <string name="core_data_get_invoice_failure">fetch Invoice failed, Please try again later.</string>
+  <string name="core_data_get_invoice_failure_network">Unable to fetch invoices. Please check your internet
         connection.</string>
 
-    <string name="core_data_add_printer_info_failure_network">Unable to add printer. Please check your internet
+  <string name="core_data_add_printer_info_failure_network">Unable to add printer. Please check your internet
         connection.</string>
-    <string name="core_data_add_printer_info_failure">printer info failed.</string>
-    <string name="core_data_add_printer_info_sucessfully">printer info added successfully</string>
-    <string name="core_data_get_printer_info_failure">fetch printer info failed.</string>
-    <string name="core_data_get_printer_info_failure_network">fetch printer info failed, Please check your internet network</string>
+  <string name="core_data_add_printer_info_failure">printer info failed.</string>
+  <string name="core_data_add_printer_info_sucessfully">printer info added successfully</string>
+  <string name="core_data_get_printer_info_failure">fetch printer info failed.</string>
+  <string name="core_data_get_printer_info_failure_network">fetch printer info failed, Please check your internet network</string>
 
 </resources>

@@ -36,8 +36,7 @@ fun Map<String, Any>.asEntityBusiness(): Business {
 
     // Retrieve branches data and apply necessary transformations
     @Suppress("UNCHECKED_CAST")
-    val branchesData =
-        this[BRANCHES_FIELD] as? List<Map<String, Any>> ?: emptyList()
+    val branchesData = this[BRANCHES_FIELD] as? List<Map<String, Any>> ?: emptyList()
     val branches = mutableListOf<Branch>()
     for (branchData in branchesData) {
         // Extract and transform branch data
@@ -70,13 +69,12 @@ fun Business.asExternalBusiness(): HashMap<String, HashMap<String, Any?>> {
     }
 
     return hashMapOf(
-        BUSINESS_FIELD to
-            hashMapOf(
-                BUSINESS_STORE_TYPE_FIELD to storeType,
-                BUSINESS_EMAIL_FIELD to email,
-                BUSINESS_PHONE_NUMBER_FIELD to phone,
-                BUSINESS_IS_COMPLETED_STEP_FIELD to false,
-                BRANCHES_FIELD to branchesRequest,
-            ),
+        BUSINESS_FIELD to hashMapOf(
+            BUSINESS_STORE_TYPE_FIELD to storeType,
+            BUSINESS_EMAIL_FIELD to email,
+            BUSINESS_PHONE_NUMBER_FIELD to phone,
+            BUSINESS_IS_COMPLETED_STEP_FIELD to false,
+            BRANCHES_FIELD to branchesRequest,
+        ),
     )
 }

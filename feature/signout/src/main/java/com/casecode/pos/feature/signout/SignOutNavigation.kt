@@ -22,6 +22,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data object SignOutRoute
+
 fun NavGraphBuilder.signOutDialog(
     onSignOut: () -> Unit,
     onDismiss: () -> Unit,

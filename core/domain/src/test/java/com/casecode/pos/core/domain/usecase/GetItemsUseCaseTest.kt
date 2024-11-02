@@ -52,14 +52,7 @@ class GetItemsUseCaseTest {
             // When
             val items = getItemsUseCase()
             // Then
-            assertEquals(
-                items.first(),
-                (
-                        Resource.error(
-                            stringData.core_data_error_fetching_items,
-                        )
-                        ),
-            )
+            assertEquals(items.first(), Resource.error(stringData.core_data_error_fetching_items))
         }
 
     @Test

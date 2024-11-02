@@ -573,8 +573,7 @@ private fun BluetoothContent(
                 onSelectPrinterDevice(it)
                 showBluetoothDevicesDialog = false
             },
-
-            )
+        )
     }
     if (showPermissionDialog) {
         PermissionDialog(

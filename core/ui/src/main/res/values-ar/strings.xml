@@ -15,104 +15,102 @@
 -->
 <resources>
 
-    <string name="core_ui_menu_business_info_title">معلومات العمل</string>
-    <string name="core_ui_menu_branches_title">الفروع</string>
-    <string name="core_ui_employees_title">الموظفون</string>
-    <!-- Network -->
-    <string name="core_ui_error_network">الرجاء التحقق من اتصال الإنترنت.</string>
-    <string name="core_ui_message_back_online">تم الاتصال بالإنترنت.</string>
-    <!-- General Errors and Messages -->
-    <string name="core_ui_error_unknown">حدث خطأ ما!</string>
-    <string name="core_ui_message_scan_complete">تم المسح الضوئي.</string>
-    <string name="core_ui_message_scan_error">خطأ في المسح الضوئي: %s</string>
-    <string name="core_ui_message_scan_error_open">خطا فى فتح شاشه ماسح الباركود</string>
-    <string name="core_ui_scan_module_downloading">جارى تحميل خدمه قارى الباركود</string>
-    <string name="core_ui_scan_module_complete_downloading">يتم فتح قارى الباركود</string>
-    <string name="core_ui_scan_result_empty">نتيجة المسح الضوئي فارغة.</string>
-    <string name="core_ui_employee_name_hint">الاسم</string>
-    <string name="core_ui_employee_password_hint">كلمة المرور</string>
-    <string name="core_ui_email_invalid">الرجاء إدخال عنوان بريد إلكتروني صالح.</string>
-    <string name="core_ui_error_email_empty">البريد الإلكتروني مطلوب.</string>
-    <string name="core_ui_error_phone_empty">رقم الهاتف مطلوب.</string>
-    <string name="core_ui_error_phone_invalid">الرجاء إدخال رقم هاتف صالح (مثال: 1234567890).</string>
-    <string name="core_ui_error_branch_name_empty">اسم الفرع مطلوب.</string>
+  <string name="core_ui_menu_business_info_title">معلومات العمل</string>
+  <string name="core_ui_menu_branches_title">الفروع</string>
+  <string name="core_ui_employees_title">الموظفون</string>
+  <!-- Network -->
+  <string name="core_ui_error_network">الرجاء التحقق من اتصال الإنترنت.</string>
+  <string name="core_ui_message_back_online">تم الاتصال بالإنترنت.</string>
+  <!-- General Errors and Messages -->
+  <string name="core_ui_error_unknown">حدث خطأ ما!</string>
+  <string name="core_ui_message_scan_complete">تم المسح الضوئي.</string>
+  <string name="core_ui_message_scan_error">خطأ في المسح الضوئي: %s</string>
+  <string name="core_ui_message_scan_error_open">خطا فى فتح شاشه ماسح الباركود</string>
+  <string name="core_ui_scan_module_downloading">جارى تحميل خدمه قارى الباركود</string>
+  <string name="core_ui_scan_module_complete_downloading">يتم فتح قارى الباركود</string>
+  <string name="core_ui_scan_result_empty">نتيجة المسح الضوئي فارغة.</string>
+  <string name="core_ui_employee_name_hint">الاسم</string>
+  <string name="core_ui_employee_password_hint">كلمة المرور</string>
+  <string name="core_ui_email_invalid">الرجاء إدخال عنوان بريد إلكتروني صالح.</string>
+  <string name="core_ui_error_email_empty">البريد الإلكتروني مطلوب.</string>
+  <string name="core_ui_error_phone_empty">رقم الهاتف مطلوب.</string>
+  <string name="core_ui_error_phone_invalid">الرجاء إدخال رقم هاتف صالح (مثال: 1234567890).</string>
+  <string name="core_ui_error_branch_name_empty">اسم الفرع مطلوب.</string>
 
-    <string name="core_ui_store_type_hint">نوع المتجر</string>
-    <string name="core_ui_work_email_hint">البريد الإلكتروني للعمل</string>
-    <string name="core_ui_work_phone_number_hint">رقم هاتف العمل</string>
-    <string name="core_ui_branch_name_hint">اسم الفرع: </string>
-    <string name="core_ui_hint_phone_number_branch">رقم هاتف الفرع</string>
-    <string name="core_ui_add_branch_title">اضافه الفرع</string>
-    <string name="core_ui_update_branch_title">تحديث الفرع</string>
-    <string name="core_ui_add_branch_button_text">إضافة فرع</string>
-    <string name="core_ui_update_branch_button_text">تحديث فرع</string>
-
-
-
-    <!-- Branches -->
-    <string name="core_ui_branch_header_title">الفروع</string>
-    <string name="core_ui_success_add_branch_message">تم إضافة الفرع بنجاح!</string>
-    <string name="core_ui_error_add_branch_message">فشل إضافة الفرع.</string>
-    <string name="core_ui_success_update_branch_message">تم تحديث الفرع بنجاح!</string>
-    <string name="core_ui_error_update_branch_message">فشل تحديث الفرع.</string>
-    <string name="core_ui_error_add_branch_empty">الرجاء ملء جميع معلومات الفرع المطلوبة.</string>
-
-    <!-- Subscription -->
-    <string name="core_ui_subscription_plan_title">خطة الاشتراك</string>
-    <string name="core_ui_subscribe_button_text">اشتراك</string>
-
-    <string name="core_ui_time_month_label"> شهر</string>
-    <string name="core_ui_error_add_subscription_message">فشل إضافة الاشتراك. الرجاء المحاولة مرة أخرى.</string>
-    <string name="core_ui_success_add_subscription_message">تم إضافة الاشتراك بنجاح!</string>
+  <string name="core_ui_store_type_hint">نوع المتجر</string>
+  <string name="core_ui_work_email_hint">البريد الإلكتروني للعمل</string>
+  <string name="core_ui_work_phone_number_hint">رقم هاتف العمل</string>
+  <string name="core_ui_branch_name_hint">اسم الفرع: </string>
+  <string name="core_ui_hint_phone_number_branch">رقم هاتف الفرع</string>
+  <string name="core_ui_add_branch_title">اضافه الفرع</string>
+  <string name="core_ui_update_branch_title">تحديث الفرع</string>
+  <string name="core_ui_add_branch_button_text">إضافة فرع</string>
+  <string name="core_ui_update_branch_button_text">تحديث فرع</string>
 
 
+  <!-- Branches -->
+  <string name="core_ui_branch_header_title">الفروع</string>
+  <string name="core_ui_success_add_branch_message">تم إضافة الفرع بنجاح!</string>
+  <string name="core_ui_error_add_branch_message">فشل إضافة الفرع.</string>
+  <string name="core_ui_success_update_branch_message">تم تحديث الفرع بنجاح!</string>
+  <string name="core_ui_error_update_branch_message">فشل تحديث الفرع.</string>
+  <string name="core_ui_error_add_branch_empty">الرجاء ملء جميع معلومات الفرع المطلوبة.</string>
 
-    <!-- Employees -->
-    <string name="core_ui_employee_header_title">الموظفون</string>
-    <string name="core_ui_add_employee_title">موظف صافه ا</string>
-    <string name="core_ui_update_employee_title">تحديث موظف</string>
-    <string name="core_ui_error_employee_name_empty">يجب ادخال اسم الموظف</string>
-    <string name="core_ui_error_add_employee_password_empty">يجب ادخال كلمه سر للموظف</string>
-    <string name="core_ui_error_add_employee_branch_empty">الرجاء اختيار فرع للموظف.</string>
-    <string name="core_ui_error_add_employee_permission_empty">الرجاء تحديد صلاحيات الموظف.</string>
-    <string name="core_ui_add_employee_button_text">اضافه موظف</string>
-    <string name="core_ui_update_employee_button_text">تحديث بيانات الموظف</string>
-    <string name="core_ui_error_add_employee_password">يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.</string>
-    <string name="core_ui_success_add_employees_message">تمت إضافة الموظفين بنجاح. لنبدأ!</string>
-    <string name="core_ui_success_add_employee_message">تمت إضافة الموظف بنجاح!</string>
-    <string name="core_ui_error_add_employee_message">فشل إضافة الموظف.</string>
-    <string name="core_ui_error_employee_name_duplicate">يوجد موظف بهذا الاسم بالفعل.</string>
-    <string name="core_ui_success_update_employee_message">تم تحديث الموظف بنجاح!</string>
-    <string name="core_ui_error_update_employee_message">فشل تحديث الموظف.</string>
+  <!-- Subscription -->
+  <string name="core_ui_subscription_plan_title">خطة الاشتراك</string>
+  <string name="core_ui_subscribe_button_text">اشتراك</string>
 
-    <!-- Employees (Empty State) -->
-    <string name="core_ui_employees_empty_title">لم يتم العثور على موظفين.</string>
-    <string name="core_ui_employees_empty_message">أضف موظفين لإدارة عملك.</string>
+  <string name="core_ui_time_month_label"> شهر</string>
+  <string name="core_ui_error_add_subscription_message">فشل إضافة الاشتراك. الرجاء المحاولة مرة أخرى.</string>
+  <string name="core_ui_success_add_subscription_message">تم إضافة الاشتراك بنجاح!</string>
 
-    <!-- Permissions -->
-    <string name="core_ui_permissions_text">الصلاحيات</string>
-    <string name="core_ui_permission_admin_text">مدير</string>
-    <string name="core_ui_permission_sales_text">مبيعات</string>
-    <string name="core_ui_permission_none_text">لا يوجد</string>
 
-    <!-- String Arrays -->
-    <string-array name="core_ui_employee_permissions">
-        <item>@string/core_ui_permission_admin_text</item>
-        <item>@string/core_ui_permission_sales_text</item>
-        <item>@string/core_ui_permission_none_text</item>
-    </string-array>
+  <!-- Employees -->
+  <string name="core_ui_employee_header_title">الموظفون</string>
+  <string name="core_ui_add_employee_title">موظف صافه ا</string>
+  <string name="core_ui_update_employee_title">تحديث موظف</string>
+  <string name="core_ui_error_employee_name_empty">يجب ادخال اسم الموظف</string>
+  <string name="core_ui_error_add_employee_password_empty">يجب ادخال كلمه سر للموظف</string>
+  <string name="core_ui_error_add_employee_branch_empty">الرجاء اختيار فرع للموظف.</string>
+  <string name="core_ui_error_add_employee_permission_empty">الرجاء تحديد صلاحيات الموظف.</string>
+  <string name="core_ui_add_employee_button_text">اضافه موظف</string>
+  <string name="core_ui_update_employee_button_text">تحديث بيانات الموظف</string>
+  <string name="core_ui_error_add_employee_password">يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.</string>
+  <string name="core_ui_success_add_employees_message">تمت إضافة الموظفين بنجاح. لنبدأ!</string>
+  <string name="core_ui_success_add_employee_message">تمت إضافة الموظف بنجاح!</string>
+  <string name="core_ui_error_add_employee_message">فشل إضافة الموظف.</string>
+  <string name="core_ui_error_employee_name_duplicate">يوجد موظف بهذا الاسم بالفعل.</string>
+  <string name="core_ui_success_update_employee_message">تم تحديث الموظف بنجاح!</string>
+  <string name="core_ui_error_update_employee_message">فشل تحديث الموظف.</string>
 
-    <!-- Dialogs -->
-    <string name="core_ui_dialog_cancel_button_text">إلغاء</string>
-    <string name="core_ui_dialog_delete_button_text">حذف</string>
-    <string name="core_ui_dialog_ok_button_text">موافق</string>
-    <string name="core_ui_dialog_permission_camera_title">مطلوب إذن الكاميرا</string>
-    <string name="core_ui_dialog_permission_camera_message">يحتاج هذا التطبيق إلى إذن الوصول إلى الكاميرا ليعمل بشكل صحيح.</string>
-    <string name="core_ui_request_permission_button_text">منح الإذن</string>
+  <!-- Employees (Empty State) -->
+  <string name="core_ui_employees_empty_title">لم يتم العثور على موظفين.</string>
+  <string name="core_ui_employees_empty_message">أضف موظفين لإدارة عملك.</string>
 
-    <string name="core_ui_item_quantity_label">الكمية</string>
-    <string name="core_ui_item_reorder_level_label">إعادة ترتيب مستوى الكمية</string>
-    <string name="core_ui_item_qty_per_pack_label">الكمية لكل علبة</string>
-    <string name="core_ui_item_quantity_format">الكمية: %s</string>
+  <!-- Permissions -->
+  <string name="core_ui_permissions_text">الصلاحيات</string>
+  <string name="core_ui_permission_admin_text">مدير</string>
+  <string name="core_ui_permission_sales_text">مبيعات</string>
+  <string name="core_ui_permission_none_text">لا يوجد</string>
+
+  <!-- String Arrays -->
+  <string name="core_ui_dialog_cancel_button_text">إلغاء</string>
+
+  <!-- Dialogs -->
+  <string name="core_ui_dialog_delete_button_text">حذف</string>
+  <string name="core_ui_dialog_ok_button_text">موافق</string>
+  <string name="core_ui_dialog_permission_camera_title">مطلوب إذن الكاميرا</string>
+  <string name="core_ui_dialog_permission_camera_message">يحتاج هذا التطبيق إلى إذن الوصول إلى الكاميرا ليعمل بشكل صحيح.</string>
+  <string name="core_ui_request_permission_button_text">منح الإذن</string>
+  <string name="core_ui_item_quantity_label">الكمية</string>
+
+  <string name="core_ui_item_reorder_level_label">إعادة ترتيب مستوى الكمية</string>
+  <string name="core_ui_item_qty_per_pack_label">الكمية لكل علبة</string>
+  <string name="core_ui_item_quantity_format">الكمية: %s</string>
+  <string-array name="core_ui_employee_permissions">
+    <item>@string/core_ui_permission_admin_text</item>
+    <item>@string/core_ui_permission_sales_text</item>
+    <item>@string/core_ui_permission_none_text</item>
+  </string-array>
 
 </resources>

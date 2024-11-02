@@ -23,7 +23,8 @@ import org.junit.Test
 
 class AddEmployeesBusinessUseCaseTest {
     private val testEmployeesBusinessRepository = TestEmployeesBusinessRepository()
-    private val addEmployeesBusinessUseCase = AddEmployeesBusinessUseCase(testEmployeesBusinessRepository)
+    private val addEmployeesBusinessUseCase =
+        AddEmployeesBusinessUseCase(testEmployeesBusinessRepository)
 
     @Test
     fun `addEmployees when employees are not empty return Success`() = runTest {

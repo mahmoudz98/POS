@@ -23,6 +23,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data object EmployeesRoute
+
 fun NavGraphBuilder.employeesScreen() {
     composable<EmployeesRoute> {
         EmployeesScreen()

@@ -150,7 +150,10 @@ fun SalesReportDetailsContent(invoice: Invoice) {
             )
             VerticalDivider(Modifier.padding(horizontal = 4.dp))
             Text(
-                text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_currency, invoice.total),
+                text = stringResource(
+                    com.casecode.pos.core.ui.R.string.core_ui_currency,
+                    invoice.total,
+                ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.secondaryContainer,
             )
@@ -225,7 +228,8 @@ fun ItemInvoice(
         headlineContent = { Text(name) },
         supportingContent = {
             Row(modifier = Modifier.height(IntrinsicSize.Min)) {
-                val formattedQuantity = "${stringResource(com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format)} $quantity"
+                val formattedQuantity =
+                    "${stringResource(com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format)} $quantity"
                 Text(formattedQuantity)
                 VerticalDivider(
                     modifier = Modifier.padding(horizontal = 4.dp),
@@ -233,7 +237,12 @@ fun ItemInvoice(
 
                 val formattedPrice =
                     DecimalFormat("#,###.##").format(price * quantity)
-                Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_currency, formattedPrice))
+                Text(
+                    stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_currency,
+                        formattedPrice,
+                    ),
+                )
             }
         },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),

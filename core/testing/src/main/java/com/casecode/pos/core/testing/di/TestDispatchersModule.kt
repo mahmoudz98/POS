@@ -33,7 +33,8 @@ import kotlinx.coroutines.test.TestDispatcher
 object TestDispatchersModule {
     @Provides
     @Dispatcher(IO)
-    fun providesIODispatcherTest(testDispatcher: TestDispatcher): CoroutineDispatcher = testDispatcher
+    fun providesIODispatcherTest(testDispatcher: TestDispatcher): CoroutineDispatcher =
+        testDispatcher
 
     @Provides
     @Dispatcher(DEFAULT)

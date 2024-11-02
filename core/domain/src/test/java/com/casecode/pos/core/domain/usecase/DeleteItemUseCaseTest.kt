@@ -73,11 +73,7 @@ class DeleteItemUseCaseTest {
             // Then
             assertEquals(
                 result,
-                (
-                        Resource.error(
-                            stringData.core_data_delete_item_failure_generic,
-                        )
-                        ),
+                Resource.error(stringData.core_data_delete_item_failure_generic),
             )
         }
 }

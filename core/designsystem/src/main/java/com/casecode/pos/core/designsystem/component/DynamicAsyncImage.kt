@@ -21,6 +21,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -192,40 +193,53 @@ fun DynamicAsyncImage(
 
 @Composable
 fun DynamicAsyncImage(
+    modifier: Modifier = Modifier,
     imageUrl: Uri?,
     contentDescription: String?,
-    modifier: Modifier = Modifier,
     placeholder: ImageVector,
+    onSuccess: (Bitmap?) -> Unit,
 ) {
     val iconTint = LocalTintTheme.current.iconTint
-    var isLoading by remember { mutableStateOf(true) }
-    var isError by remember { mutableStateOf(false) }
-    val imageLoader =
-        rememberAsyncImagePainter(
-            model = imageUrl,
-            onState = { state ->
-                isLoading = state is Loading
-                isError = state is Error
-            },
-        )
 
-    val isLocalInspection = LocalInspectionMode.current
-    Box(
-        modifier = modifier,
-    ) {
-        if (isLoading && !isLocalInspection) {
-            // Display a progress bar while loading
-            CircularProgressIndicator(
-                modifier = Modifier.size(64.dp),
-                color = MaterialTheme.colorScheme.tertiary,
+    if (imageUrl != null && imageUrl != Uri.EMPTY) {
+        var isLoading by remember { mutableStateOf(true) }
+        var isError by remember { mutableStateOf(false) }
+
+        val imageLoader =
+            rememberAsyncImagePainter(
+                model = imageUrl,
+                onState = { state ->
+                    isLoading = state is Loading
+                    isError = state is Error
+                    if (state is Success) {
+                        onSuccess(state.result.drawable.toBitmap())
+                    }
+                },
             )
+
+        val isLocalInspection = LocalInspectionMode.current
+        Box(modifier = modifier) {
+            if (isLoading && !isLocalInspection) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(64.dp),
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+            }
+            if (isError.not() && !isLocalInspection) {
+                Image(
+                    contentScale = ContentScale.Crop,
+                    painter = imageLoader,
+                    contentDescription = contentDescription,
+                    colorFilter = if (iconTint != Unspecified) ColorFilter.tint(iconTint) else null,
+                )
+            }
         }
-        Image(
-            contentScale = ContentScale.Crop,
-            imageVector = (if (isError.not() && !isLocalInspection) imageLoader else placeholder) as ImageVector,
-            contentDescription = contentDescription,
+    } else {
+        Icon(
             modifier = modifier,
-            colorFilter = if (iconTint != Unspecified) ColorFilter.tint(iconTint) else null,
+            imageVector = placeholder,
+            contentDescription = contentDescription,
+            tint = iconTint,
         )
     }
 }

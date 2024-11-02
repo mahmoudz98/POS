@@ -30,8 +30,6 @@ import kotlin.test.assertTrue
 class SaleViewModelTest : BaseTest() {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
-
-    // Subject under test
     private lateinit var viewModel: SaleViewModel
 
     override fun init() {

@@ -14,5 +14,5 @@
      limitations under the License.
 -->
 <resources>
-    <string name="core_designsystem_go_to_setting">Go to Setting</string>
+  <string name="core_designsystem_go_to_setting">Go to Setting</string>
 </resources>

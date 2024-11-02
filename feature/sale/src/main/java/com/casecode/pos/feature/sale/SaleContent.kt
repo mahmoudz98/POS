@@ -185,6 +185,7 @@ private fun normalizeNumber(input: String): String {
                 val index = arabicNumerals.indexOf(char)
                 sb.append(englishNumerals[index])
             }
+
             else -> sb.append(char) // Append non-numeric characters as is
         }
     }

@@ -161,6 +161,7 @@ constructor(
 
         collectPrinterState()
     }
+
     fun addPrinterInfoBluetooth(
         namePrinter: String,
         nameDevice: String,

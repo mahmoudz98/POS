@@ -37,7 +37,8 @@ fun Date.toDateFormatString(): String {
     return dataFormated
 }
 
-fun Date.toTimeFormatedString(): String = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(this)
+fun Date.toTimeFormatedString(): String =
+    SimpleDateFormat("hh:mm a", Locale.getDefault()).format(this)
 
 fun Calendar.toDateFormatString(): String {
     val year = this.get(Calendar.YEAR)

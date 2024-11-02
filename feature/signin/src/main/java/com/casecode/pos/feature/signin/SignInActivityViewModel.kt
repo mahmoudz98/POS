@@ -48,7 +48,6 @@ constructor(
     private val networkMonitor: NetworkMonitor,
     private val accountRepository: AccountRepository,
     private val authRepository: AuthRepository,
-
 ) : ViewModel() {
     @Inject
     lateinit var googleIdOption: GetGoogleIdOption
@@ -77,6 +76,7 @@ constructor(
     private fun setConnected(isOnline: Boolean) {
         _signInUiState.update { it.copy(isOnline = isOnline) }
     }
+
     fun isGooglePlayServicesAvailable() = accountRepository.isGooglePlayServicesAvailable()
     fun signIn(idToken: suspend () -> String) {
         if (!signInUiState.value.isOnline) {

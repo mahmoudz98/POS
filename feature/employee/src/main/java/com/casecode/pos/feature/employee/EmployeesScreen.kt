@@ -81,8 +81,7 @@ fun EmployeesScreen(viewModel: EmployeeViewModel = hiltViewModel()) {
             showDeleteDialogDelete = true
         },
         onMessageShown = viewModel::snackbarMessageShown,
-
-        )
+    )
     if (showUserAdminQrDialog) {
         UserAdminQrDialog(onDismiss = { showUserAdminQrDialog = false })
     }
@@ -133,8 +132,7 @@ fun EmployeesScreen(
                     onAddClick()
                 },
                 modifier = Modifier.padding(16.dp),
-
-                ) {
+            ) {
                 Icon(
                     imageVector = PosIcons.Add,
                     contentDescription = stringResource(uiString.core_ui_add_employee_button_text),

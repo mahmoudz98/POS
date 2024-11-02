@@ -55,7 +55,10 @@ fun QuantityDialog(
                     onValueChange = {
                         quantity.value = it
 
-                        quantityError.value = it.isEmpty() || it.toDouble() > inStock || it.toDouble() <= 0
+                        quantityError.value =
+                            it.isEmpty() ||
+                                    it.toDouble() > inStock ||
+                                    it.toDouble() <= 0
                     },
                     isError = quantityError.value,
                     label = { Text(text = stringResource(uiString.core_ui_item_quantity_label)) },

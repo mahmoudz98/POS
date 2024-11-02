@@ -78,7 +78,6 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
     onBackClick: () -> Unit,
 ) {
     composable<SalesReportDetailsRoute>(
-
         enterTransition = {
             fadeIn(
                 animationSpec =
@@ -86,11 +85,10 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
                     300,
                     easing = LinearEasing,
                 ),
-            ) +
-                slideIntoContainer(
-                    animationSpec = tween(300, easing = EaseIn),
-                    towards = AnimatedContentTransitionScope.SlideDirection.Start,
-                )
+            ) + slideIntoContainer(
+                animationSpec = tween(300, easing = EaseIn),
+                towards = AnimatedContentTransitionScope.SlideDirection.Start,
+            )
         },
         exitTransition = {
             fadeOut(
@@ -115,9 +113,7 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
 }
 
 @Composable
-inline fun <reified VM : ViewModel> NavBackStackEntry.sharedViewModel(
-    navController: NavController,
-): VM {
+inline fun <reified VM : ViewModel> NavBackStackEntry.sharedViewModel(navController: NavController): VM {
     val parentEntry =
         remember(this) {
             navController.getBackStackEntry(SalesReportGraph)

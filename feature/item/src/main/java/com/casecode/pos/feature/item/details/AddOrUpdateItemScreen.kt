@@ -168,10 +168,10 @@ fun AddOrUpdateItemScreen(
                     category = itemInputState.category,
                     unitPrice = itemInputState.price.toDouble(),
                     costPrice =
-                        itemInputState.costPrice
-                            .takeIf {
-                                it.isNotBlank()
-                            }?.toDouble() ?: 0.0,
+                    itemInputState.costPrice
+                        .takeIf {
+                            it.isNotBlank()
+                        }?.toDouble() ?: 0.0,
                     quantity = itemInputState.quantity.takeIf { it.isNotBlank() }?.toInt() ?: 0,
                     qtyPerPack = itemInputState.qtyPerPack,
                     reorderLevel = itemInputState.reorderLevel,
@@ -203,12 +203,12 @@ fun AddOrUpdateItemScreen(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier =
-            Modifier
-                .focusRequester(focusRequester)
-                .focusProperties {
-                    enter = { focusRequester }
-                    exit = { FocusRequester.Cancel }
-                },
+        Modifier
+            .focusRequester(focusRequester)
+            .focusProperties {
+                enter = { focusRequester }
+                exit = { FocusRequester.Cancel }
+            },
     ) { innerPadding ->
         Box(
             modifier
@@ -218,20 +218,20 @@ fun AddOrUpdateItemScreen(
         ) {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp)
-                        .navigationBarsPadding()
-                        .imePadding()
-                        .verticalScroll(rememberScrollState()),
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .navigationBarsPadding()
+                    .imePadding()
+                    .verticalScroll(rememberScrollState()),
             ) {
                 DynamicAsyncImage(
                     imageUrl = itemInputState.selectedImageUri,
                     modifier =
-                        Modifier
-                            .size(64.dp)
-                            .align(Alignment.CenterHorizontally)
-                            .clickable { showTakeOrPickImage = true },
+                    Modifier
+                        .size(64.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clickable { showTakeOrPickImage = true },
                     placeholder = PosIcons.AddPhoto,
                     contentDescription = null,
                     onSuccess = { image -> bitmapImage = image },

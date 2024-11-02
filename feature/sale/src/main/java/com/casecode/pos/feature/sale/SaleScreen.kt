@@ -141,6 +141,7 @@ internal fun SaleScreen(
     windowSizeClass: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     ReportDrawnWhen { uiState.itemsInvoice.isNotEmpty() }
+    ReportDrawnWhen { uiState.items.isNotEmpty() }
 
     val hasItemsSale by remember(uiState.itemsInvoice) {
         derivedStateOf { uiState.itemsInvoice.isNotEmpty() }

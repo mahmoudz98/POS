@@ -177,7 +177,6 @@ private fun FilterItemsScreen(
                         filterUiState.stockFilter != FilterStockState.All ||
                                 filterUiState.selectedCategories.isNotEmpty() ||
                                 filterUiState.sortPrice != SortPriceState.None
-
                     IconButton(onClick = onRestDefaultFilter, enabled = resetEnabled) {
                         Icon(
                             imageVector = PosIcons.FilterClear,

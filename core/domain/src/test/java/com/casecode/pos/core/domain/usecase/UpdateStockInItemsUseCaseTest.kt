@@ -66,11 +66,7 @@ class UpdateStockInItemsUseCaseTest {
             // Then
             assertEquals(
                 result,
-                (
-                        Resource.empty(
-                            message = stringDomain.core_domain_invoice_items_empty,
-                        )
-                        ),
+                Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
             )
         }
 

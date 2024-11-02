@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ShortText
+import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
@@ -96,4 +97,5 @@ object PosIcons {
     val MoreVert = Icons.Default.MoreVert
     val ShortText = Icons.AutoMirrored.Rounded.ShortText
     val ViewDay = Icons.Rounded.ViewDay
+    val AddPhoto = Icons.Filled.AddAPhoto
 }

@@ -91,7 +91,7 @@ class EmployeeViewModelTest {
         viewModel.addEmployee(employee)
         assertEquals(
             viewModel.uiState.value.userMessage,
-            string.core_data_add_employees_business_failure,
+            dataString.core_data_add_employees_business_failure,
         )
     }
 
@@ -147,7 +147,7 @@ class EmployeeViewModelTest {
 
         assertEquals(
             viewModel.uiState.value.userMessage,
-            string.core_data_employee_update_business_failure,
+            dataString.core_data_employee_update_business_failure,
         )
     }
 

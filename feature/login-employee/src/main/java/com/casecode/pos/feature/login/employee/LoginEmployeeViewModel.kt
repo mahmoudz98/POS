@@ -20,15 +20,13 @@ import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.domain.repository.AccountRepository
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.ui.R as CoreResource
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import com.casecode.pos.core.ui.R as CoreResource
 
 @HiltViewModel
 class LoginEmployeeViewModel

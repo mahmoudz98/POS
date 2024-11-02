@@ -486,7 +486,6 @@ private fun ItemItem(
     onLongClick: () -> Unit,
     onPrintButtonClick: () -> Unit,
 ) {
-
     ListItem(
         leadingContent = { ItemIcon(itemImageUrl, iconModifier.size(64.dp)) },
         overlineContent = { Text(name) },

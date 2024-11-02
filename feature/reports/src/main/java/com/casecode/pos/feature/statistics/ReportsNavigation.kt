@@ -23,6 +23,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data object ReportsRoute
+
 fun NavGraphBuilder.reportsScreen(
     onSalesReportClick: () -> Unit,
     onInventoryReportClick: () -> Unit,

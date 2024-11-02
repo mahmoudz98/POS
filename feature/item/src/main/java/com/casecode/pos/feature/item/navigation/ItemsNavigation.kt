@@ -87,10 +87,10 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenTransitio
     ) +
         fadeIn(
             animationSpec =
-                tween(
-                    200,
-                    easing = LinearEasing,
-                ),
+            tween(
+                200,
+                easing = LinearEasing,
+            ),
         )
 
 fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenExitTransition() =
@@ -100,10 +100,10 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenExitTrans
     ) +
             fadeOut(
             animationSpec =
-                tween(
-                    200,
-                    easing = LinearEasing,
-                ),
+            tween(
+                200,
+                easing = LinearEasing,
+            ),
         )
 
 private fun NavGraphBuilder.addItemScreen(

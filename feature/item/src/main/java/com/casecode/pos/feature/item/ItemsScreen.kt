@@ -115,7 +115,6 @@ fun ItemsScreen(
     }
 }
 
-
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ItemsScreen(

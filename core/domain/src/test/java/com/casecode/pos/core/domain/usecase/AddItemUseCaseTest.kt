@@ -70,13 +70,6 @@ class AddItemUseCaseTest {
             val result = addItemUseCase(newItem)
 
             // Then
-            assertEquals(
-                result,
-                (
-                    Resource.error(
-                        stringData.core_data_add_item_failure_generic,
-                    )
-                    ),
-            )
+            assertEquals(result, Resource.error(stringData.core_data_add_item_failure_generic))
         }
 }

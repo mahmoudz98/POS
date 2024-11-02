@@ -102,10 +102,8 @@ fun PosGradientBackground(
                                         .toRadians(11.06)
                                         .toFloat(),
                                 )
-
                     val start = Offset(size.width / 2 + offset / 2, 0f)
                     val end = Offset(size.width / 2 - offset / 2, size.height)
-
                     // Create the top gradient that fades out after the halfway point vertically
                     val topGradient =
                         Brush.linearGradient(

@@ -42,7 +42,9 @@ interface TopLevelDestination {
     val unselectedIcon: ImageVector
     val titleTextId: Int
     val route: KClass<*>
-    fun navigate(navController: NavHostController, navOptions: NavOptions)
+    fun navigate(navController: NavHostController, navOptions: NavOptions) {
+        navigateTo(navController, navOptions)
+    }
 }
 
 private fun TopLevelDestination.navigateTo(
@@ -76,11 +78,6 @@ enum class AdminTopLevelDestination(
         R.string.settings_title,
         SettingRoute::class,
     ),
-    ;
-
-    override fun navigate(navController: NavHostController, navOptions: NavOptions) {
-        navigateTo(navController, navOptions)
-    }
 }
 
 enum class SaleTopLevelDestination(
@@ -97,9 +94,5 @@ enum class SaleTopLevelDestination(
         PosIcons.Settings,
         R.string.settings_title,
         SettingGraph::class,
-    );
-
-    override fun navigate(navController: NavHostController, navOptions: NavOptions) {
-        navigateTo(navController, navOptions)
-    }
+    ),
 }
