@@ -33,7 +33,7 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.navigation
 import com.casecode.pos.core.designsystem.component.scaleAndExpandVertically
 import com.casecode.pos.core.designsystem.component.scaleAndShrinkVertically
-import com.casecode.pos.feature.item.ItemsRoute
+import com.casecode.pos.feature.item.ItemsScreen
 import com.casecode.pos.feature.item.ItemsViewModel
 import com.casecode.pos.feature.item.details.AddOrUpdateItemScreen
 import com.casecode.pos.feature.item.print.QRCodePrintItemDialog
@@ -71,7 +71,7 @@ fun NavGraphBuilder.itemsScreen(navController: NavController) {
             }
         val viewModel: ItemsViewModel = hiltViewModel(parentEntry)
 
-        ItemsRoute(
+        ItemsScreen(
             viewModel = viewModel,
             onAddItemClick = navController::navigateToAddItem,
             onItemClick = navController::navigateToUpdateUpdateItem,

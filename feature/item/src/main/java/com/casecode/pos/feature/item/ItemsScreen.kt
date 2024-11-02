@@ -15,7 +15,6 @@
  */
 package com.casecode.pos.feature.item
 
-import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -62,11 +61,11 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.ItemsPreviewParameterProvider
+import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.item.delete.DeleteItemDialog
 
 @Composable
-fun ItemsRoute(
-    modifier: Modifier = Modifier,
+fun ItemsScreen(
     viewModel: ItemsViewModel,
     onAddItemClick: () -> Unit,
     onItemClick: () -> Unit,
@@ -81,7 +80,6 @@ fun ItemsRoute(
 
     var showDialogItemDelete by remember { mutableStateOf(false) }
     ItemsScreen(
-        modifier = modifier,
         uiState = uiState,
         searchWidgetState = searchWidgetState,
         onSearchClicked = viewModel::openSearchWidgetState,
@@ -112,7 +110,7 @@ fun ItemsRoute(
         onAddItemClick = onAddItemClick,
         onShownMessage = viewModel::snackbarMessageShown,
 
-    )
+        )
     if (showDialogItemDelete) {
         DeleteItemDialog(
             onConfirm = {
@@ -149,9 +147,8 @@ internal fun ItemsScreen(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onShownMessage: () -> Unit,
 ) {
-    ReportDrawnWhen { (uiState as? ItemsUIState.Success)?.items?.isNotEmpty() == true }
+    TrackScreenViewEvent(screenName = "Items")
     var filtersVisible by remember { mutableStateOf(false) }
-
     Scaffold(
         topBar = {
             ItemTopAppBar(
@@ -319,7 +316,7 @@ private fun ItemScreenSuccessPreview(
             onAddItemClick = {},
             onShownMessage = {},
 
-        )
+            )
     }
 }
 

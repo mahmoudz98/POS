@@ -357,70 +357,69 @@ internal fun ItemsContent(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
-            val scrollableState = rememberLazyListState()
-            LazyColumn(
-                modifier = modifier.padding(horizontal = 8.dp),
-                contentPadding = PaddingValues(vertical = 8.dp),
-                state = scrollableState,
-            ) {
-                item {
-                    CategoryFilterChips(
-                        filterScreenVisible = filterScreenVisible,
-                        onShowFilters = onShowFilters,
-                        sharedTransitionScope = sharedTransitionScope,
-                        categories = categories,
-                        selectedCategories = selectedCategories,
-                        onCategorySelected = onCategorySelected,
-                        onCategoryUnselected = onCategoryUnselected,
-                    )
-                    if (categories.isNotEmpty()) {
-                        HorizontalDivider(Modifier.padding(bottom = 4.dp))
-                    }
-                }
-                if (items.isEmpty()) {
-                    item { ItemsSearchEmptyScreen() }
-                } else {
-                    items.forEach { item ->
-                        val itemKey = item.hashCode()
-                        item(key = itemKey) {
-                            ItemItem(
-                                modifier = Modifier.animateItem(),
-                                name = item.name,
-                                price = item.unitPrice,
-                                quantity = item.quantity,
-                                isTracked = item.isTrackStock(),
-                                itemImageUrl = item.imageUrl,
-                                onClick = { onItemClick(item) },
-                                onPrintButtonClick = { onPrintItemClick(item) },
-                                onLongClick = { onItemLongClick(item) },
-                            )
-                        }
-                    }
-                }
-                item {
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+        val scrollableState = rememberLazyListState()
+        LazyColumn(
+            modifier = modifier.padding(horizontal = 8.dp),
+            contentPadding = PaddingValues(vertical = 8.dp),
+            state = scrollableState,
+        ) {
+            item {
+                CategoryFilterChips(
+                    filterScreenVisible = filterScreenVisible,
+                    onShowFilters = onShowFilters,
+                    sharedTransitionScope = sharedTransitionScope,
+                    categories = categories,
+                    selectedCategories = selectedCategories,
+                    onCategorySelected = onCategorySelected,
+                    onCategoryUnselected = onCategoryUnselected,
+                )
+                if (categories.isNotEmpty()) {
+                    HorizontalDivider(Modifier.padding(bottom = 4.dp))
                 }
             }
-            val scrollbarState =
-                scrollableState.scrollbarState(
-                    itemsAvailable = items.size,
-                )
-            scrollableState.DraggableScrollbar(
-                modifier =
-                Modifier
-                    .fillMaxHeight()
-                    .windowInsetsPadding(WindowInsets.systemBars)
-                    .padding(horizontal = 2.dp)
-                    .align(Alignment.CenterEnd),
-                state = scrollbarState,
-                orientation = Orientation.Vertical,
-                onThumbMoved =
-                scrollableState.rememberDraggableScroller(
-                    itemsAvailable = items.size,
-                ),
-            )
+            if (items.isEmpty()) {
+                item { ItemsSearchEmptyScreen() }
+            } else {
+                items.forEach { item ->
+                    val itemKey = item.hashCode()
+                    item(key = itemKey) {
+                        ItemItem(
+                            modifier = Modifier.animateItem(),
+                            name = item.name,
+                            price = item.unitPrice,
+                            quantity = item.quantity,
+                            isTracked = item.isTrackStock(),
+                            itemImageUrl = item.imageUrl,
+                            onClick = { onItemClick(item) },
+                            onPrintButtonClick = { onPrintItemClick(item) },
+                            onLongClick = { onItemLongClick(item) },
+                        )
+                    }
+                }
+            }
+            item {
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+            }
         }
-
+        val scrollbarState =
+            scrollableState.scrollbarState(
+                itemsAvailable = items.size,
+            )
+        scrollableState.DraggableScrollbar(
+            modifier =
+            Modifier
+                .fillMaxHeight()
+                .windowInsetsPadding(WindowInsets.systemBars)
+                .padding(horizontal = 2.dp)
+                .align(Alignment.CenterEnd),
+            state = scrollbarState,
+            orientation = Orientation.Vertical,
+            onThumbMoved =
+            scrollableState.rememberDraggableScroller(
+                itemsAvailable = items.size,
+            ),
+        )
+    }
 }
 
 @Composable
@@ -458,6 +457,7 @@ private fun ItemItem(
     onLongClick: () -> Unit,
     onPrintButtonClick: () -> Unit,
 ) {
+
     ListItem(
         leadingContent = { ItemIcon(itemImageUrl, iconModifier.size(64.dp)) },
         overlineContent = { Text(name) },

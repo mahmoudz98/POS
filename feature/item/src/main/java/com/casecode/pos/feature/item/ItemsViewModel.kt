@@ -202,19 +202,17 @@ constructor(
 
     fun checkNetworkAndAddItem(targetItem: Item, imageBitmap: Bitmap?) {
         viewModelScope.launch {
-            if (isOnline.value) {
-                val isDuplicate = (itemsUiState.value as? ItemsUIState.Success)
-                    ?.items
-                    ?.containsKey(targetItem.sku) == true
-                println("isDuplicate: $isDuplicate")
-                if (isDuplicate) {
-                    showSnackbarMessage(R.string.feature_item_error_duplicate)
-                    return@launch
-                }
-                uploadImageAndAddItem(targetItem, imageBitmap)
-            } else {
+            if (!isOnline.value) {
                 showSnackbarMessage(uiString.core_ui_error_network)
+                return@launch
             }
+            val isDuplicate = (itemsUiState.value as? ItemsUIState.Success)?.items
+                ?.containsKey(targetItem.sku) == true
+            if (isDuplicate) {
+                showSnackbarMessage(R.string.feature_item_error_duplicate)
+                return@launch
+            }
+            uploadImageAndAddItem(targetItem, imageBitmap)
         }
     }
 
@@ -253,7 +251,6 @@ constructor(
         imageBitmap: Bitmap?,
     ) {
         if (isOnline.value) {
-
             checkItemImageChangeAndItemUpdate(targetItem, imageBitmap)
         } else {
             showSnackbarMessage(uiString.core_ui_error_network)
