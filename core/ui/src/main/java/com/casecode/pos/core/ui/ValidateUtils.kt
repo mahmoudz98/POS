@@ -30,6 +30,7 @@ fun validatePhoneNumber(
         try {
             phoneNumberUtil.getCountryCodeForRegion(countryIsoCode)
         } catch (e: Exception) {
+            Timber.e(e)
             null
         }
 

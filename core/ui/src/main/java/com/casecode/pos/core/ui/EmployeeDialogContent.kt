@@ -109,7 +109,7 @@ fun EmployeeDialogContent(
             value = password,
             onValueChange = { onPasswordChange(it) },
             label = stringResource(uiString.core_ui_employee_password_hint),
-            supportingText = hasPhoneError?.let { stringResource(it) },
+            supportingText = hasPasswordError?.let { stringResource(it) },
             visualTransformation = PasswordVisualTransformation(),
             isError = hasPasswordError != null,
             modifier = Modifier.fillMaxWidth(),
