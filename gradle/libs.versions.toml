@@ -46,7 +46,7 @@ ksp = "2.0.21-1.0.25"
 #  Services
 firebaseBom = "33.5.0"
 firebase-auth = "23.0.0"
-firebaseFirestoreKtx = "25.1.0"
+firebaseFirestoreKtx = "25.1.1"
 firebaseStorageKtx = "21.0.0"
 testlab = "0.2"
 firebaseMessaging = "24.0.0"
