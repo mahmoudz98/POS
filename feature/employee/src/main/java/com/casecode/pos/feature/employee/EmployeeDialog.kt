@@ -75,13 +75,11 @@ fun EmployeeDialog(
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-
     var name by remember { mutableStateOf(employeeUpdate?.name ?: "") }
     var phone by remember { mutableStateOf(employeeUpdate?.phoneNumber ?: "") }
     var password by remember { mutableStateOf(employeeUpdate?.password ?: "") }
     var selectedBranch by remember { mutableStateOf(employeeUpdate?.branchName ?: "") }
     var selectedPermission by remember { mutableStateOf(employeeUpdate?.permission ?: "") }
-
     var nameError by remember { mutableStateOf(false) }
     var phoneError by remember { mutableStateOf<Int?>(null) }
     var passwordError by remember { mutableStateOf<Int?>(null) }
@@ -125,7 +123,17 @@ fun EmployeeDialog(
             keyboardController?.hide()
             onDismiss()
         },
-        title = { Text(stringResource(if (isUpdate) uiString.core_ui_update_employee_title else uiString.core_ui_add_employee_title)) },
+        title = {
+            Text(
+                stringResource(
+                    if (isUpdate) {
+                        uiString.core_ui_update_employee_title
+                    } else {
+                        uiString.core_ui_add_employee_title
+                    },
+                ),
+            )
+        },
         text = {
             EmployeeDialogContent(
                 name = name,
@@ -177,7 +185,11 @@ fun EmployeeDialog(
             ) {
                 Text(
                     stringResource(
-                        if (isUpdate) uiString.core_ui_update_employee_button_text else uiString.core_ui_add_employee_button_text,
+                        if (isUpdate) {
+                            uiString.core_ui_update_employee_button_text
+                        } else {
+                            uiString.core_ui_add_employee_button_text
+                        },
                     ),
                 )
             }
