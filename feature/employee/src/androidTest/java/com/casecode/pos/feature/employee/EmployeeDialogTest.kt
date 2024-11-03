@@ -96,7 +96,7 @@ class EmployeeDialogTest {
             EmployeeDialog(
                 isUpdate = false,
                 employeeUpdate = null,
-                countryIsoCode = "en",
+                countryIsoCode = "EG",
                 branches = listOf(Branch(1, "Branch 1")),
                 onAddEmployee = { },
                 onUpdateEmployee = { },
