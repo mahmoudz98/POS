@@ -27,7 +27,6 @@ plugins {
 }
 
 android {
-
     defaultConfig {
         applicationId = "com.casecode.pos"
         versionCode = com.casecode.pos.Configuration.VERSION_CODE
@@ -49,7 +48,10 @@ android {
             applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
             signingConfig = signingConfigs.getByName("debug")
 
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
             baselineProfile.automaticGenerationDuringBuild = true
         }
     }
@@ -83,7 +85,6 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
-
     // AndroidX
     implementation(libs.androidx.activity.compose)
     implementation(libs.appcompat)
@@ -98,14 +99,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.tracing.ktx)
-
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
 
     ksp(libs.hilt.compiler)
 
     debugCompileOnly(libs.kotlinx.coroutines.debug)
-    // Debug tools
     // debugImplementation(libs.leakcanary)
     implementation(libs.timber)
     // ******* UNIT TESTING ******************************************************
