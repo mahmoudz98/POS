@@ -96,7 +96,7 @@ jobs:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
-      - name: Upload test results (XML)
+      - name: Upload JVM local results (XML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
