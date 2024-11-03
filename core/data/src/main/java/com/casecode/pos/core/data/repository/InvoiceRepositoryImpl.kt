@@ -21,7 +21,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.model.toInvoicesGroup
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
+import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.InvoiceRepository
 import com.casecode.pos.core.domain.utils.Resource
@@ -50,7 +50,7 @@ constructor(
     override suspend fun addInvoice(invoice: Invoice): Resource<Int> {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnErrorMessage<Int> {
+                auth.ensureUserExists<Int> {
                     return@withContext it
                 }
                 val currentUID = auth.currentUserId()
@@ -64,9 +64,13 @@ constructor(
                     doc
                         .set(invoiceMap)
                         .addOnSuccessListener {
-                            continuation.resume(Resource.success(R.string.core_data_add_invoice_successfully))
+                            continuation.resume(
+                                Resource.success(R.string.core_data_add_invoice_successfully),
+                            )
                         }.addOnFailureListener {
-                            continuation.resume(Resource.error(R.string.core_data_add_invoice_failure))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_add_invoice_failure),
+                            )
                         }
                 }
             } catch (_: UnknownHostException) {
@@ -82,28 +86,25 @@ constructor(
             try {
                 // Get current date
                 val calendar = Calendar.getInstance()
-
                 // Set time to start of the day (00:00:00)
                 calendar.set(Calendar.HOUR_OF_DAY, 0)
                 calendar.set(Calendar.MINUTE, 0)
                 calendar.set(Calendar.SECOND, 0)
                 calendar.set(Calendar.MILLISECOND, 0)
                 val startOfDay = calendar.time
-
                 // Set time to end of the day (23:59:59)
                 calendar.set(Calendar.HOUR_OF_DAY, 23)
                 calendar.set(Calendar.MINUTE, 59)
                 calendar.set(Calendar.SECOND, 59)
                 calendar.set(Calendar.MILLISECOND, 999)
                 val endOfDay = calendar.time
-
                 // Convert to Timestamps
                 val startTimestamp = Timestamp(startOfDay)
                 val endTimestamp = Timestamp(endOfDay)
-
                 val currentUID = auth.currentUserId()
                 suspendCoroutine { continuation ->
-                    db.getCollectionChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
+                    db
+                        .getCollectionChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
                         /* firestore
                              .getCollectionRefFromUser(currentUID, INVOICE_FIELD)*/
                         .whereGreaterThanOrEqualTo(INVOICE_DATE_FIELD, startTimestamp)
@@ -120,7 +121,9 @@ constructor(
                             }
                             continuation.resume(Resource.success(invoices))
                         }.addOnFailureListener {
-                            continuation.resume(Resource.error(R.string.core_data_get_invoice_failure))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_get_invoice_failure),
+                            )
                         }
                 }
             } catch (e: UnknownHostException) {
@@ -135,11 +138,12 @@ constructor(
 
     override suspend fun getInvoices(): Resource<List<InvoiceGroup>> {
         return withContext(ioDispatcher) {
-            auth.checkUserNotFoundAndReturnErrorMessage<List<InvoiceGroup>> { return@withContext it }
+            auth.ensureUserExists<List<InvoiceGroup>> { return@withContext it }
             try {
                 val currentUID = auth.currentUserId()
                 suspendCoroutine { continuation ->
-                    db.getCollectionChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
+                    db
+                        .getCollectionChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
                         .get()
                         .addOnSuccessListener {
                             val invoices =
@@ -153,7 +157,9 @@ constructor(
                             val invoicesGroup = invoices.toInvoicesGroup()
                             continuation.resume(Resource.success(invoicesGroup))
                         }.addOnFailureListener {
-                            continuation.resume(Resource.error(R.string.core_data_get_invoice_failure))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_get_invoice_failure),
+                            )
                         }
                 }
             } catch (_: UnknownHostException) {

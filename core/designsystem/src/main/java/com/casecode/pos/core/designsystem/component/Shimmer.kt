@@ -49,43 +49,42 @@ fun Modifier.shimmer(
     isShimmerVisible: Boolean = true,
     backgroundColor: Color? = null,
     shimmerColor: Color? = null,
-): Modifier =
-    composed {
-        var targetValue by remember {
-            mutableFloatStateOf(0F)
-        }
-        val brush by rememberShimmerBrush(
-            isShimmerVisible = isShimmerVisible,
-            targetValue = targetValue,
-            backgroundColor = backgroundColor,
-            shimmerColor = shimmerColor,
-        )
-
-        this.then(
-            other =
-            Modifier
-                .onSizeChanged {
-                    val newTargetValue =
-                        ShimmerConstants.SHIMMER_SIZE_MULTIPLIER *
-                                sqrt(
-                                    it.height
-                                        .toFloat()
-                                        .pow(2) +
-                                            it.width
-                                                .toFloat()
-                                                .pow(2),
-                                )
-                    if (targetValue != newTargetValue) {
-                        targetValue = newTargetValue
-                    }
-                }
-                .drawBehind {
-                    drawRect(
-                        brush = brush,
-                    )
-                },
-        )
+): Modifier = composed {
+    var targetValue by remember {
+        mutableFloatStateOf(0F)
     }
+    val brush by rememberShimmerBrush(
+        isShimmerVisible = isShimmerVisible,
+        targetValue = targetValue,
+        backgroundColor = backgroundColor,
+        shimmerColor = shimmerColor,
+    )
+
+    this.then(
+        other =
+        Modifier
+            .onSizeChanged {
+                val newTargetValue =
+                    ShimmerConstants.SHIMMER_SIZE_MULTIPLIER *
+                        sqrt(
+                            it.height
+                                .toFloat()
+                                .pow(2) +
+                                it.width
+                                    .toFloat()
+                                    .pow(2),
+                        )
+                if (targetValue != newTargetValue) {
+                    targetValue = newTargetValue
+                }
+            }
+            .drawBehind {
+                drawRect(
+                    brush = brush,
+                )
+            },
+    )
+}
 
 @Composable
 fun rememberShimmerBrush(

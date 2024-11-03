@@ -58,19 +58,37 @@ class LoginInEmployeeDialogKtTest {
                 )
             }
         }
-
         // Attempt to click login with empty input fields and check validation error messages
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_login_action_login))
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(
+                    R.string.feature_login_employee_login_action_login,
+                ),
+            )
             .performClick()
-
         // Check for error messages on empty input fields
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_login_error_uid_empty))
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(
+                    R.string.feature_login_employee_login_error_uid_empty,
+                ),
+            )
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_error_name_empty))
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(
+                    R.string.feature_login_employee_error_name_empty,
+                ),
+            )
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_error_password_empty))
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.getString(
+                    R.string.feature_login_employee_error_password_empty,
+                ),
+            )
             .assertIsDisplayed()
     }
 }

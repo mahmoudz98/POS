@@ -34,7 +34,9 @@ constructor(
         return flow {
             emit(Resource.Loading)
             if (items.isEmpty()) {
-                return@flow emit(Resource.Companion.empty(message = R.string.core_domain_invoice_items_empty))
+                return@flow emit(
+                    Resource.Companion.empty(message = R.string.core_domain_invoice_items_empty),
+                )
             }
             val invoice = Invoice(items = items)
             emit(invoiceRepository.addInvoice(invoice))
@@ -47,11 +49,10 @@ class GetInvoicesUseCase
 constructor(
     private val invoiceRepository: InvoiceRepository,
 ) {
-    operator fun invoke(): Flow<Resource<List<InvoiceGroup>>> =
-        flow {
-            emit(Resource.Loading)
-            emit(invoiceRepository.getInvoices())
-        }
+    operator fun invoke(): Flow<Resource<List<InvoiceGroup>>> = flow {
+        emit(Resource.Loading)
+        emit(invoiceRepository.getInvoices())
+    }
 }
 
 class GetTodayInvoicesUseCase
@@ -59,9 +60,8 @@ class GetTodayInvoicesUseCase
 constructor(
     private val invoiceRepository: InvoiceRepository,
 ) {
-    operator fun invoke(): Flow<Resource<List<Invoice>>> =
-        flow {
-            emit(Resource.Loading)
-            emit(invoiceRepository.getTodayInvoices())
-        }
+    operator fun invoke(): Flow<Resource<List<Invoice>>> = flow {
+        emit(Resource.Loading)
+        emit(invoiceRepository.getTodayInvoices())
+    }
 }

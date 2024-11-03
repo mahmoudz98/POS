@@ -77,7 +77,8 @@ fun SettingScreen(
     onSignOutClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize()
             .padding(16.dp),
     ) {
@@ -85,7 +86,8 @@ fun SettingScreen(
             SectionLanguages()
             Spacer(modifier = modifier.height(16.dp))
             Row(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .fillMaxWidth()
                     .clickable { onPrinterClick() },
                 verticalAlignment = Alignment.CenterVertically,
@@ -114,16 +116,15 @@ fun SettingScreen(
 
 @Composable
 private fun SectionLanguages() {
-    val localeOptions = mapOf(
-        R.string.feature_setting_language_english to "en",
-        R.string.feature_setting_language_arabic to "ar",
-    ).mapKeys { stringResource(it.key) }
-
+    val localeOptions =
+        mapOf(
+            R.string.feature_setting_language_english to "en",
+            R.string.feature_setting_language_arabic to "ar",
+        ).mapKeys { stringResource(it.key) }
     val currentLanguageTag =
         ConfigurationCompat.getLocales(LocalConfiguration.current)[0]?.toLanguageTag() ?: ""
     val currentFind = localeOptions.entries.find { it.value == currentLanguageTag.take(2) }?.key
     var currentLanguage by remember { mutableStateOf(currentFind ?: "") }
-
     val context = LocalContext.current
 
     PosExposeDropdownMenuBox(
@@ -142,10 +143,7 @@ private fun SectionLanguages() {
     }
 }
 
-private fun setLanguage(
-    context: Context,
-    languageCode: String,
-) {
+private fun setLanguage(context: Context, languageCode: String) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         context.getSystemService(LocaleManager::class.java).applicationLocales =
             LocaleList.forLanguageTags(languageCode)

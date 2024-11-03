@@ -17,6 +17,10 @@ package com.casecode.pos.core.domain.utils
 
 sealed interface SignInGoogleState {
     object Success : SignInGoogleState
+
     object Cancelled : SignInGoogleState
-    data class Error(val message: Int) : SignInGoogleState
+
+    data class Error(
+        val message: Int,
+    ) : SignInGoogleState
 }

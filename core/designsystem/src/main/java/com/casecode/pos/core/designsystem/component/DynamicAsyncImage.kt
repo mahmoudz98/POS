@@ -166,7 +166,6 @@ fun DynamicAsyncImage(
                 }
             },
         )
-
     val isLocalInspection = LocalInspectionMode.current
     Box(
         modifier = modifier,
@@ -204,7 +203,6 @@ fun DynamicAsyncImage(
     if (imageUrl != null && imageUrl != Uri.EMPTY) {
         var isLoading by remember { mutableStateOf(true) }
         var isError by remember { mutableStateOf(false) }
-
         val imageLoader =
             rememberAsyncImagePainter(
                 model = imageUrl,
@@ -216,7 +214,6 @@ fun DynamicAsyncImage(
                     }
                 },
             )
-
         val isLocalInspection = LocalInspectionMode.current
         Box(modifier = modifier) {
             if (isLoading && !isLocalInspection) {

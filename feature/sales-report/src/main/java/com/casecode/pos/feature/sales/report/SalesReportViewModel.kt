@@ -36,7 +36,6 @@ constructor(
 ) : ViewModel() {
     private val _uiSalesReportState = MutableStateFlow(UiSalesReportState())
     val uiSalesReportState get() = _uiSalesReportState.asStateFlow()
-
     private val _invoiceSelected =
         MutableStateFlow<UISalesReportDetails>(UISalesReportDetails.Loading)
 

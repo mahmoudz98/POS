@@ -55,7 +55,13 @@ fun BranchDialogContent(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next,
             ),
-            supportingText = if (hasNameError) stringResource(R.string.core_ui_error_branch_name_empty) else null,
+            supportingText = if (hasNameError) {
+                stringResource(
+                    R.string.core_ui_error_branch_name_empty,
+                )
+            } else {
+                null
+            },
             modifier =
             Modifier
                 .fillMaxWidth()

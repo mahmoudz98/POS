@@ -26,7 +26,6 @@ class TestSubscriptionsRepository
 @Inject
 constructor() : SubscriptionsRepository {
     private var subscriptions: List<Subscription> = subscriptionsFake()
-
     private var shouldReturnError = false
     private var shouldReturnEmpty = false
 
@@ -61,25 +60,24 @@ constructor() : SubscriptionsRepository {
         shouldReturnEmpty = value
     }
 
-    private fun subscriptionsFake(): List<Subscription> =
-        listOf(
-            Subscription(
-                duration = 30,
-                cost = 0,
-                type = "basic",
-                permissions = listOf("write", "read", "admin"),
-            ),
-            Subscription(
-                duration = 30,
-                cost = 20,
-                type = "pro",
-                permissions = listOf("write", "read", "admin"),
-            ),
-            Subscription(
-                duration = 90,
-                cost = 60,
-                type = "premium",
-                permissions = listOf("write", "read", "admin"),
-            ),
-        )
+    private fun subscriptionsFake(): List<Subscription> = listOf(
+        Subscription(
+            duration = 30,
+            cost = 0,
+            type = "basic",
+            permissions = listOf("write", "read", "admin"),
+        ),
+        Subscription(
+            duration = 30,
+            cost = 20,
+            type = "pro",
+            permissions = listOf("write", "read", "admin"),
+        ),
+        Subscription(
+            duration = 90,
+            cost = 60,
+            type = "premium",
+            permissions = listOf("write", "read", "admin"),
+        ),
+    )
 }

@@ -25,7 +25,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ServiceModule {
-
     @Binds
     internal abstract fun bindLogService(logServiceImpl: LogServiceImpl): LogService
 }

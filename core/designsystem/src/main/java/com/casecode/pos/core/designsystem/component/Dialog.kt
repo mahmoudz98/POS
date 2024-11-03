@@ -32,7 +32,6 @@ fun PermissionDialog(messagePermission: Int, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
         title = {},
-
         text = {
             Text(stringResource(messagePermission))
         },
@@ -50,9 +49,10 @@ fun PermissionDialog(messagePermission: Int, onDismiss: () -> Unit) {
 }
 
 fun Context.goToAppSetting() {
-    val intent = Intent(
-        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.fromParts("package", packageName, null),
-    )
+    val intent =
+        Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", packageName, null),
+        )
     startActivity(intent)
 }

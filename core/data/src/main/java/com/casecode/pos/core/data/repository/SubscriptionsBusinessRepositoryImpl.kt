@@ -20,7 +20,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asSubscriptionBusinessModel
 import com.casecode.pos.core.data.model.asSubscriptionRequest
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
+import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.domain.repository.AddSubscriptionBusiness
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
@@ -49,32 +49,39 @@ constructor(
     private val auth: AuthRepository,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SubscriptionsBusinessRepository {
-    override suspend fun setSubscriptionBusiness(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness {
+    override suspend fun setSubscriptionBusiness(
+        subscriptionBusiness: SubscriptionBusiness,
+    ): AddSubscriptionBusiness {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnErrorMessage<Boolean> {
+                auth.ensureUserExists<Boolean> {
                     return@withContext it
                 }
                 val currentUID = auth.currentUserId()
 
                 suspendCoroutine<AddSubscriptionBusiness> { continuation ->
-
                     val addSubscriptionBusinessRequest =
                         subscriptionBusiness.asSubscriptionRequest()
-                    db.updateDocumentWithTask(
-                        USERS_COLLECTION_PATH,
-                        currentUID,
-                        mapOf(
-                            SUBSCRIPTION_BUSINESS_FIELD to FieldValue.arrayUnion(
-                                addSubscriptionBusinessRequest,
+                    db
+                        .updateDocumentWithTask(
+                            USERS_COLLECTION_PATH,
+                            currentUID,
+                            mapOf(
+                                SUBSCRIPTION_BUSINESS_FIELD to
+                                    FieldValue.arrayUnion(
+                                        addSubscriptionBusinessRequest,
+                                    ),
                             ),
-                        ),
-                    ).addOnSuccessListener {
-                        Timber.d("Subscription business is added successfully")
-                        continuation.resume(Resource.Companion.success(true))
-                    }.addOnFailureListener {
-                        continuation.resume(Resource.Companion.error(R.string.core_data_add_subscription_business_failure))
-                    }
+                        ).addOnSuccessListener {
+                            Timber.d("Subscription business is added successfully")
+                            continuation.resume(Resource.Companion.success(true))
+                        }.addOnFailureListener {
+                            continuation.resume(
+                                Resource.Companion.error(
+                                    R.string.core_data_add_subscription_business_failure,
+                                ),
+                            )
+                        }
                 }
             } catch (_: UnknownHostException) {
                 Resource.Companion.error(R.string.core_data_add_subscription_business_network)
@@ -87,7 +94,7 @@ constructor(
 
     override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> =
         flow<Resource<List<SubscriptionBusiness>>> {
-            auth.checkUserNotFoundAndReturnErrorMessage<List<SubscriptionBusiness>> {
+            auth.ensureUserExists<List<SubscriptionBusiness>> {
                 emit(it)
                 return@flow
             }

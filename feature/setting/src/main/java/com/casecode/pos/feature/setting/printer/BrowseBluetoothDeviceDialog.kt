@@ -44,7 +44,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 @SuppressLint("MissingPermission")
 fun BluetoothConnections.filterForPrintersTest(): Array<BluetoothConnection> {
     val bluetoothDevicesList: Array<BluetoothConnection> = this.getList() ?: emptyArray()
-
     val printers = mutableListOf<BluetoothConnection>()
     for (bluetoothConnection in bluetoothDevicesList) {
         printers.add(bluetoothConnection)
@@ -70,17 +69,27 @@ fun BrowseBluetoothDeviceDialog(
         bluetoothPrintersConnections.list,
     ) {
         bluetoothDevicesList.clear()
-        bluetoothDevicesList.addAll(bluetoothConnections.filterForPrintersTest()) // TODO:remove this invoke
+        bluetoothDevicesList.addAll(
+            bluetoothConnections.filterForPrintersTest(),
+        ) // TODO:remove this invoke
         // bluetoothDevicesList.addAll(bluetoothPrintersConnections.list ?: emptyArray())
     }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.feature_setting_printer_dialog_bluetooth_devices_title)) },
+        title = {
+            Text(
+                stringResource(R.string.feature_setting_printer_dialog_bluetooth_devices_title),
+            )
+        },
         text = {
             Column {
                 if (bluetoothDevicesList.isEmpty()) {
-                    Text(stringResource(R.string.feature_setting_printer_dialog_bluetooth_devices_message_empty))
+                    Text(
+                        stringResource(
+                            R.string.feature_setting_printer_dialog_bluetooth_devices_message_empty,
+                        ),
+                    )
                 } else {
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 4.dp),
@@ -94,7 +103,9 @@ fun BrowseBluetoothDeviceDialog(
                                     Modifier.clickable {
                                         onSelectPrinterDevice(it)
                                     },
-                                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                                    colors = ListItemDefaults.colors(
+                                        containerColor = Color.Transparent,
+                                    ),
                                 )
                             }
                         }
@@ -106,7 +117,11 @@ fun BrowseBluetoothDeviceDialog(
             TextButton(
                 onClick = onDismiss,
             ) {
-                Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text))
+                Text(
+                    stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
+                    ),
+                )
             }
         },
     )

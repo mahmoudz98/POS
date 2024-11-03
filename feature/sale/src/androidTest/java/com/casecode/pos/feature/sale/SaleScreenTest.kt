@@ -23,11 +23,9 @@ import org.junit.Rule
 import org.junit.Test
 
 class SaleScreenTest {
-
     // PosScreen UI Tests
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
-
     private val doneButtonMatcher by lazy {
         hasText(
             composeTestRule.activity.resources.getString(R.string.feature_sale_button_text),

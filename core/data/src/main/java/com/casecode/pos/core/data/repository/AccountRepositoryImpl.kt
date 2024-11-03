@@ -64,7 +64,6 @@ constructor(
     private val posPreferencesDataSource: PosPreferencesDataSource,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : AccountRepository {
-
     private val credentialManager: CredentialManager = CredentialManager.create(context)
 
     // TODO: refactor use activityContext with HILT and refactor this method
@@ -183,36 +182,38 @@ constructor(
 
     override suspend fun employeeLogin(
         uid: String,
-        employeeId: String,
+        employeeName: String,
         password: String,
-    ): Resource<Boolean> =
-        withContext(ioDispatcher) {
-            try {
-                val document = db.getDocument(USERS_COLLECTION_PATH, uid)
+    ): Resource<Boolean> = withContext(ioDispatcher) {
+        try {
+            val document = db.getDocument(USERS_COLLECTION_PATH, uid)
 
-                @Suppress("UNCHECKED_CAST")
-                val employees =
-                    document.get(EMPLOYEES_FIELD) as List<Map<String, Any>>?
-                val employee =
-                    employees?.find { it[EMPLOYEE_NAME_FIELD] == employeeId && it[EMPLOYEE_PASSWORD_FIELD] == password }
-                if (employee != null) {
-                    Timber.e("employee: $employee")
-                    posPreferencesDataSource.setLoginByEmployee(employee.asExternalModel(), uid)
-                    Resource.success(true)
-                } else {
-                    Resource.success(false)
+            @Suppress("UNCHECKED_CAST")
+            val employees =
+                document.get(EMPLOYEES_FIELD) as List<Map<String, Any>>?
+            val employee =
+                employees?.find {
+                    it[EMPLOYEE_NAME_FIELD] == employeeName &&
+                        it[EMPLOYEE_PASSWORD_FIELD] == password
                 }
-            } catch (e: FirebaseException) {
-                Timber.e("ex: $e")
-                Resource.error(e.message)
-            } catch (e: FirebaseFirestoreException) {
-                Timber.e("ex: $e")
-                Resource.error(e.message)
-            } catch (e: Exception) {
-                Timber.e("exception = $e")
-                Resource.error(e.message)
+            if (employee != null) {
+                Timber.e("employee: $employee")
+                posPreferencesDataSource.setLoginByEmployee(employee.asExternalModel(), uid)
+                Resource.success(true)
+            } else {
+                Resource.success(false)
             }
+        } catch (e: FirebaseException) {
+            Timber.e("ex: $e")
+            Resource.error(e.message)
+        } catch (e: FirebaseFirestoreException) {
+            Timber.e("ex: $e")
+            Resource.error(e.message)
+        } catch (e: Exception) {
+            Timber.e("exception = $e")
+            Resource.error(e.message)
         }
+    }
 
     override suspend fun signOut() {
         try {

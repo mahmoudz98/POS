@@ -42,12 +42,11 @@ constructor(
         setNetworkMonitor()
     }
 
-    private fun setNetworkMonitor() =
-        viewModelScope.launch {
-            networkMonitor.isOnline.collect {
-                setConnected(it)
-            }
+    private fun setNetworkMonitor() = viewModelScope.launch {
+        networkMonitor.isOnline.collect {
+            setConnected(it)
         }
+    }
 
     private fun setConnected(isOnline: Boolean) {
         _loginEmployeeUiState.update { it.copy(isOnline = isOnline) }
@@ -61,13 +60,13 @@ constructor(
         _loginEmployeeUiState.update { it.copy(userMessage = message) }
     }
 
-    fun loginByEmployee(
-        uid: String,
-        name: String,
-        password: String,
-    ) {
+    fun loginByEmployee(uid: String, name: String, password: String) {
         if (_loginEmployeeUiState.value.isOnline.not()) {
-            _loginEmployeeUiState.update { it.copy(userMessage = CoreResource.string.core_ui_error_network) }
+            _loginEmployeeUiState.update {
+                it.copy(
+                    userMessage = CoreResource.string.core_ui_error_network,
+                )
+            }
             return
         }
         _loginEmployeeUiState.update { it.copy(inProgressLoginEmployee = true) }

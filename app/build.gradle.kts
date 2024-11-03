@@ -24,7 +24,6 @@ plugins {
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.pos.hilt)
     alias(libs.plugins.baselineprofile)
-
 }
 
 android {
@@ -52,7 +51,6 @@ android {
 
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             baselineProfile.automaticGenerationDuringBuild = true
-
         }
     }
     packaging {
@@ -126,9 +124,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
 
-
     baselineProfile(projects.benchmark)
-
 }
 baselineProfile {
     // Don't build on every iteration of a full assemble.

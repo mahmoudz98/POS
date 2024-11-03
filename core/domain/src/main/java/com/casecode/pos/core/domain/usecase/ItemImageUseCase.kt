@@ -43,10 +43,7 @@ constructor(
      * @param imageName The name to be assigned to the uploaded image.
      * @return A [UploadImage] resource containing the URL of the uploaded image.
      */
-    fun uploadImage(
-        bitmap: Bitmap?,
-        imageName: String?,
-    ) = flow {
+    fun uploadImage(bitmap: Bitmap?, imageName: String?) = flow {
         emit(Resource.Companion.loading())
         emit(
             if (bitmap != null && imageName != null) {
@@ -61,12 +58,11 @@ constructor(
         bitmap: Bitmap?,
         imageUrl: String?,
         imageName: String?,
-    ): Flow<Resource<String>> =
-        if (imageUrl.isNullOrEmpty()) {
-            uploadImage(bitmap, imageName)
-        } else {
-            replaceImage(bitmap, imageUrl)
-        }
+    ): Flow<Resource<String>> = if (imageUrl.isNullOrEmpty()) {
+        uploadImage(bitmap, imageName)
+    } else {
+        replaceImage(bitmap, imageUrl)
+    }
 
     /**
      * Replaces an existing image with the image represented by [bitmap].
@@ -75,10 +71,7 @@ constructor(
      * @param imageUrl The URL of the existing image to be replaced.
      * @return A [ReplaceImage] resource containing the URL of the replaced image.
      */
-    private fun replaceImage(
-        bitmap: Bitmap?,
-        imageUrl: String?,
-    ) = flow {
+    private fun replaceImage(bitmap: Bitmap?, imageUrl: String?) = flow {
         emit(Resource.Companion.loading())
         emit(
             if (bitmap != null && imageUrl != null) {
@@ -95,15 +88,14 @@ constructor(
      * @param imageUrl The URL of the image to be deleted.
      * @return A [DeleteImage] resource indicating the success or failure of the deletion operation.
      */
-    suspend fun deleteImage(imageUrl: String?) =
-        flow {
-            emit(Resource.Companion.loading())
-            emit(
-                if (imageUrl.isNullOrEmpty()) {
-                    Resource.Companion.empty()
-                } else {
-                    imageRepository.deleteImage(imageUrl)
-                },
-            )
-        }
+    suspend fun deleteImage(imageUrl: String?) = flow {
+        emit(Resource.Companion.loading())
+        emit(
+            if (imageUrl.isNullOrEmpty()) {
+                Resource.Companion.empty()
+            } else {
+                imageRepository.deleteImage(imageUrl)
+            },
+        )
+    }
 }

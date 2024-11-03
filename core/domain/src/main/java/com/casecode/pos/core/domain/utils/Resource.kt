@@ -39,8 +39,6 @@ sealed interface Resource<out T> {
 
         fun <T> loading(): Resource<T> = Loading
 
-        inline fun <reified T> empty(
-            message: Any? = null,
-        ): Resource<T> = Empty(message)
+        inline fun <reified T> empty(message: Any? = null): Resource<T> = Empty(message)
     }
 }

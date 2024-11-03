@@ -66,7 +66,6 @@ constructor(
     private val _uiState: MutableStateFlow<StepperBusinessUiState> =
         MutableStateFlow(StepperBusinessUiState())
     val uiState = _uiState.asStateFlow()
-
     private val _userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
     val userMessage get() = _userMessage.asStateFlow()
 
@@ -74,12 +73,11 @@ constructor(
         networkMonitor()
     }
 
-    fun networkMonitor() =
-        viewModelScope.launch {
-            networkMonitor.isOnline.collect {
-                setConnected(it)
-            }
+    fun networkMonitor() = viewModelScope.launch {
+        networkMonitor.isOnline.collect {
+            setConnected(it)
         }
+    }
 
     fun signOut() = viewModelScope.launch { accountRepository.signOut() }
 
@@ -87,11 +85,7 @@ constructor(
         _uiState.update { it.copy(isOnline = isOnline) }
     }
 
-    fun setBusinessInfo(
-        storeType: String,
-        emailBusiness: String,
-        phoneBusiness: String,
-    ) {
+    fun setBusinessInfo(storeType: String, emailBusiness: String, phoneBusiness: String) {
         _uiState.update {
             it.copy(
                 storeType = storeType,
@@ -101,10 +95,7 @@ constructor(
         }
     }
 
-    fun addBranch(
-        branchName: String,
-        branchPhone: String,
-    ) {
+    fun addBranch(branchName: String, branchPhone: String) {
         viewModelScope.launch {
             val branchCode = incrementBranchCode()
             val branch = Branch(branchCode, branchName, branchPhone)
@@ -121,13 +112,9 @@ constructor(
     /**
      * Sets the update branch.
      */
-    fun updateBranch(
-        branchName: String,
-        branchPhone: String,
-    ) {
+    fun updateBranch(branchName: String, branchPhone: String) {
         try {
             val branches = uiState.value.branches.toMutableList()
-
             val index = branches.indexOf(uiState.value.branchSelected)
             val currentBranch = branches[index]
             val updateBranch =
@@ -145,94 +132,91 @@ constructor(
         }
     }
 
-    private fun incrementBranchCode(): Int =
-        if (uiState.value.branches.isNotEmpty()) {
-            uiState.value.branches
-                .last()
-                .branchCode + 1
-        } else {
-            FIRST_BRANCH_NUMBER
-        }
+    private fun incrementBranchCode(): Int = if (uiState.value.branches.isNotEmpty()) {
+        uiState.value.branches
+            .last()
+            .branchCode + 1
+    } else {
+        FIRST_BRANCH_NUMBER
+    }
 
     fun setBranchSelected(branch: Branch) {
         _uiState.update { it.copy(branchSelected = branch) }
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun addBusiness(): Business =
-        Business(
-            storeType = StoreType.toStoreType(uiState.value.storeType),
-            email = uiState.value.emailBusiness,
-            phone = uiState.value.phoneBusiness,
-            branches = uiState.value.branches.toList(),
-        )
+    fun addBusiness(): Business = Business(
+        storeType = StoreType.toStoreType(uiState.value.storeType),
+        email = uiState.value.emailBusiness,
+        phone = uiState.value.phoneBusiness,
+        branches = uiState.value.branches.toList(),
+    )
 
-    fun setBusiness() =
-        viewModelScope.launch {
-            if (uiState.value.isOnline) {
-                // TODO: when no uid move  to sign in screen.
-                setBusinessUseCase(addBusiness()).collect { addBusiness ->
-                    when (addBusiness) {
-                        is Resource.Success -> {
-                            _uiState.update { it.copy(isLoading = false) }
-                            showSnackbarMessage(R.string.feature_stepper_success_add_business_message)
-                            nextStep()
-                        }
-
-                        is Resource.Empty, is Resource.Error -> {
-                            _uiState.update { it.copy(isLoading = false) }
-
-                            val messageRes =
-                                (addBusiness as? Resource.Empty)?.message
-                                    ?: (addBusiness as? Resource.Error)?.message
-                            showSnackbarMessage(
-                                messageRes as? Int ?: uiString.core_ui_error_unknown,
-                            )
-                        }
-
-                        is Resource.Loading -> {
-                            _uiState.update { it.copy(isLoading = true) }
-                        }
+    fun setBusiness() = viewModelScope.launch {
+        if (uiState.value.isOnline) {
+            // TODO: when no uid move  to sign in screen.
+            setBusinessUseCase(addBusiness()).collect { addBusiness ->
+                when (addBusiness) {
+                    is Resource.Success -> {
+                        _uiState.update { it.copy(isLoading = false) }
+                        showSnackbarMessage(
+                            R.string.feature_stepper_success_add_business_message,
+                        )
+                        nextStep()
                     }
-                }
-            } else {
-                showSnackbarMessage(uiString.core_ui_error_network)
-            }
-        }
 
-    fun getSubscriptionsBusiness() =
-        viewModelScope.launch {
-            if (uiState.value.subscriptions.isEmpty()) {
-                val subscriptionsResource = getSubscriptionsUseCase()
-                when (subscriptionsResource) {
+                    is Resource.Empty, is Resource.Error -> {
+                        _uiState.update { it.copy(isLoading = false) }
+                        val messageRes =
+                            (addBusiness as? Resource.Empty)?.message
+                                ?: (addBusiness as? Resource.Error)?.message
+                        showSnackbarMessage(
+                            messageRes as? Int ?: uiString.core_ui_error_unknown,
+                        )
+                    }
+
                     is Resource.Loading -> {
                         _uiState.update { it.copy(isLoading = true) }
                     }
+                }
+            }
+        } else {
+            showSnackbarMessage(uiString.core_ui_error_network)
+        }
+    }
 
-                    is Resource.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                subscriptions = subscriptionsResource.data.toMutableList(),
-                                isLoading = false,
-                                currentSubscription = subscriptionsResource.data.first(),
-                            )
-                        }
-                    }
+    fun getSubscriptionsBusiness() = viewModelScope.launch {
+        if (uiState.value.subscriptions.isEmpty()) {
+            val subscriptionsResource = getSubscriptionsUseCase()
+            when (subscriptionsResource) {
+                is Resource.Loading -> {
+                    _uiState.update { it.copy(isLoading = true) }
+                }
 
-                    is Resource.Empty -> {
-                        _uiState.update { it.copy(isLoading = false) }
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.update { it.copy(isLoading = false) }
-                        showSnackbarMessage(
-                            subscriptionsResource.message as? Int
-                                ?: uiString.core_ui_error_unknown,
+                is Resource.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            subscriptions = subscriptionsResource.data.toMutableList(),
+                            isLoading = false,
+                            currentSubscription = subscriptionsResource.data.first(),
                         )
                     }
                 }
+
+                is Resource.Empty -> {
+                    _uiState.update { it.copy(isLoading = false) }
+                }
+
+                is Resource.Error -> {
+                    _uiState.update { it.copy(isLoading = false) }
+                    showSnackbarMessage(
+                        subscriptionsResource.message as? Int
+                            ?: uiString.core_ui_error_unknown,
+                    )
+                }
             }
         }
+    }
 
     fun addSubscriptionBusinessSelected(subscription: Subscription) {
         _uiState.update { it.copy(currentSubscription = subscription) }
@@ -246,38 +230,36 @@ constructor(
         }
     }
 
-    private fun addSubscriptionBusinessSelected() =
-        viewModelScope.launch {
-            val subscription = uiState.value.currentSubscription
+    private fun addSubscriptionBusinessSelected() = viewModelScope.launch {
+        val subscription = uiState.value.currentSubscription
 
-            when (
-                val resourceAddSubscription =
-                    setSubscriptionsBusinessUseCase(subscription.asSubscriptionBusiness())
-            ) {
-                is Resource.Loading -> {
-                    _uiState.update { it.copy(isLoading = true) }
-                }
+        when (
+            val resourceAddSubscription =
+                setSubscriptionsBusinessUseCase(subscription.asSubscriptionBusiness())
+        ) {
+            is Resource.Loading -> {
+                _uiState.update { it.copy(isLoading = true) }
+            }
 
-                is Resource.Success -> {
-                    showSnackbarMessage(uiString.core_ui_success_add_subscription_message)
-                    _uiState.update { it.copy(isLoading = false) }
+            is Resource.Success -> {
+                showSnackbarMessage(uiString.core_ui_success_add_subscription_message)
+                _uiState.update { it.copy(isLoading = false) }
 
-                    if (resourceAddSubscription.data) {
-                        nextStep()
-                    }
-                }
-
-                is Resource.Error, is Resource.Empty -> {
-                    _uiState.update { it.copy(isLoading = false) }
-
-                    val messageRes =
-                        (resourceAddSubscription as? Resource.Empty)?.message
-                            ?: (resourceAddSubscription as? Resource.Error)?.message
-
-                    showSnackbarMessage(messageRes as? Int ?: uiString.core_ui_error_unknown)
+                if (resourceAddSubscription.data) {
+                    nextStep()
                 }
             }
+
+            is Resource.Error, is Resource.Empty -> {
+                _uiState.update { it.copy(isLoading = false) }
+                val messageRes =
+                    (resourceAddSubscription as? Resource.Empty)?.message
+                        ?: (resourceAddSubscription as? Resource.Error)?.message
+
+                showSnackbarMessage(messageRes as? Int ?: uiString.core_ui_error_unknown)
+            }
         }
+    }
 
     fun addEmployee(
         name: String,
@@ -292,7 +274,6 @@ constructor(
             showSnackbarMessage(uiString.core_ui_error_employee_name_duplicate)
             return
         }
-
         val newEmployees = currentEmployees.toMutableList().apply { add(employee) }
         if (currentEmployees.size < newEmployees.size) {
             _uiState.update { it.copy(employees = newEmployees) }
@@ -320,8 +301,12 @@ constructor(
     private fun updateEmployee(employee: Employee) {
         val employeesUpdate = uiState.value.employees.toMutableList()
         val index = employeesUpdate.indexOf(uiState.value.employeeSelected)
-        if (isOutOfIndex(index)) return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
-
+        if (isOutOfIndex(
+                index,
+            )
+        ) {
+            return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
+        }
         val currentEmployee = employeesUpdate[index]
         if (employeesUpdate.isUpdateEmployeeNameDuplicate(employee)) return
 
@@ -354,31 +339,32 @@ constructor(
         }
     }
 
-    private fun setEmployeesBusiness() =
-        viewModelScope.launch {
-            val employeesList = uiState.value.employees
-            _uiState.update { it.copy(isLoading = true) }
+    private fun setEmployeesBusiness() = viewModelScope.launch {
+        val employeesList = uiState.value.employees
+        _uiState.update { it.copy(isLoading = true) }
 
-            when (val resourceAddEmployees = addEmployeesBusinessUseCase(employeesList)) {
-                is AddEmployeeResult.Success -> {
-                    showSnackbarMessage(uiString.core_ui_success_add_employees_message)
-                    // Then, go on business complete step.
-                    setCompletedBusinessStep()
-                }
+        when (val resourceAddEmployees = addEmployeesBusinessUseCase(employeesList)) {
+            is AddEmployeeResult.Success -> {
+                showSnackbarMessage(uiString.core_ui_success_add_employees_message)
+                // Then, go on business complete step.
+                setCompletedBusinessStep()
+            }
 
-                is AddEmployeeResult.Error -> {
-                    val messageRes = resourceAddEmployees.message
+            is AddEmployeeResult.Error -> {
+                val messageRes = resourceAddEmployees.message
 
-                    showSnackbarMessage(messageRes)
-                }
+                showSnackbarMessage(messageRes)
             }
         }
+    }
 
     private fun setCompletedBusinessStep() {
         viewModelScope.launch {
             when (val isCompleteBusinessStep = completeBusinessUseCase()) {
                 is Resource.Success -> {
-                    showSnackbarMessage(R.string.feature_stepper_success_complete_business_setup_message)
+                    showSnackbarMessage(
+                        R.string.feature_stepper_success_complete_business_setup_message,
+                    )
                     completeStep()
                 }
 

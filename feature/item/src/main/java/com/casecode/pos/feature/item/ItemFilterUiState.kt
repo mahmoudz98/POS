@@ -17,14 +17,18 @@ package com.casecode.pos.feature.item
 
 import androidx.annotation.StringRes
 
-enum class FilterStockState(@StringRes val label: Int) {
+enum class FilterStockState(
+    @StringRes val label: Int,
+) {
     All(label = R.string.feature_item_filter_all_label),
     InStock(label = R.string.feature_item_filter_in_stock_label),
     OutOfStock(label = R.string.feature_item_filter_out_stock_label),
     LowLevelStock(label = R.string.feature_item_filter_low_stock_label),
 }
 
-enum class SortPriceState(@StringRes val label: Int) {
+enum class SortPriceState(
+    @StringRes val label: Int,
+) {
     None(label = R.string.feature_item_sort_price_none_label),
     LowToHigh(label = R.string.feature_item_sort_price_low_to_high_label),
     HighToLow(label = R.string.feature_item_sort_price_high_to_low_label),

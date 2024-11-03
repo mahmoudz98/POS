@@ -46,7 +46,10 @@ data class AnalyticsEvent(
      *
      * @param value - the parameter value.
      */
-    data class Param(val key: String, val value: String)
+    data class Param(
+        val key: String,
+        val value: String,
+    )
 
     // Standard parameter keys.
     class ParamKeys {

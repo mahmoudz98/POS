@@ -160,10 +160,10 @@ private fun ReportsSalesTodayContent(
                     Text(
                         text =
                         stringResource(R.string.feature_reports_sales_label) +
-                                stringResource(
-                                    com.casecode.pos.core.ui.R.string.core_ui_currency,
-                                    totalSalesToday,
-                                ),
+                            stringResource(
+                                com.casecode.pos.core.ui.R.string.core_ui_currency,
+                                totalSalesToday,
+                            ),
                         modifier = Modifier.padding(start = 4.dp),
                     )
                     Text(

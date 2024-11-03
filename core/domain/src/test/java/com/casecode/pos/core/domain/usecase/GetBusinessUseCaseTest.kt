@@ -35,10 +35,8 @@ class GetBusinessUseCaseTest {
     @Test
     fun `when has business then return resource with success`() = runTest {
         val expected = BusinessResult.Success(Business())
-
         // When
         val actual = getBusinessUseCase()
-
         // Then
         assertEquals(expected, actual)
     }
@@ -48,10 +46,8 @@ class GetBusinessUseCaseTest {
         // Given
         testBusinessRepository.setReturnError(true)
         val expected = BusinessResult.Error(-1)
-
         // When
         val actual = getBusinessUseCase()
-
         // Then
         assertEquals(expected, actual)
     }

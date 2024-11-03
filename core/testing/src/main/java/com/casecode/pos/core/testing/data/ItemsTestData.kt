@@ -31,7 +31,6 @@ val itemsTestData =
         Item(
             "Samsung S2",
             category = "Phones",
-
             unitPrice = 3000.0,
             quantity = 4,
             reorderLevel = 5,
@@ -41,7 +40,6 @@ val itemsTestData =
         Item(
             "Hp Envy",
             category = "Laptops",
-
             unitPrice = 3.0,
             quantity = 0,
             sku = "13123200",
@@ -50,7 +48,6 @@ val itemsTestData =
         Item(
             "Macbook pro M3",
             category = "Laptops",
-
             unitPrice = 3.0,
             quantity = 0,
             reorderLevel = 1,
@@ -60,10 +57,8 @@ val itemsTestData =
         Item(
             "Airpods V1",
             category = "headphones",
-
             unitPrice = 3.0,
             quantity = 0,
-
             sku = "122300",
             imageUrl = "www.image2.png",
         ),

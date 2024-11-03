@@ -45,10 +45,8 @@ fun LazyListState.scrollbarState(
     LaunchedEffect(this, itemsAvailable) {
         snapshotFlow {
             if (itemsAvailable == 0) return@snapshotFlow null
-
             val visibleItemsInfo = layoutInfo.visibleItemsInfo
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
-
             val firstIndex =
                 min(
                     a =
@@ -62,7 +60,6 @@ fun LazyListState.scrollbarState(
                     b = itemsAvailable.toFloat(),
                 )
             if (firstIndex.isNaN()) return@snapshotFlow null
-
             val itemsVisible =
                 visibleItemsInfo.floatSumOf { itemInfo ->
                     itemVisibilityPercentage(
@@ -72,7 +69,6 @@ fun LazyListState.scrollbarState(
                         viewportEndOffset = layoutInfo.viewportEndOffset,
                     )
                 }
-
             val thumbTravelPercent =
                 min(
                     a = firstIndex / itemsAvailable,
@@ -113,10 +109,8 @@ fun LazyGridState.scrollbarState(
     LaunchedEffect(this, itemsAvailable) {
         snapshotFlow {
             if (itemsAvailable == 0) return@snapshotFlow null
-
             val visibleItemsInfo = layoutInfo.visibleItemsInfo
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
-
             val firstIndex =
                 min(
                     a =
@@ -142,7 +136,6 @@ fun LazyGridState.scrollbarState(
                     b = itemsAvailable.toFloat(),
                 )
             if (firstIndex.isNaN()) return@snapshotFlow null
-
             val itemsVisible =
                 visibleItemsInfo.floatSumOf { itemInfo ->
                     itemVisibilityPercentage(
@@ -152,7 +145,6 @@ fun LazyGridState.scrollbarState(
                         viewportEndOffset = layoutInfo.viewportEndOffset,
                     )
                 }
-
             val thumbTravelPercent =
                 min(
                     a = firstIndex / itemsAvailable,
@@ -194,10 +186,8 @@ fun LazyStaggeredGridState.scrollbarState(
     LaunchedEffect(this, itemsAvailable) {
         snapshotFlow {
             if (itemsAvailable == 0) return@snapshotFlow null
-
             val visibleItemsInfo = layoutInfo.visibleItemsInfo
             if (visibleItemsInfo.isEmpty()) return@snapshotFlow null
-
             val firstIndex =
                 min(
                     a =
@@ -213,7 +203,6 @@ fun LazyStaggeredGridState.scrollbarState(
                     b = itemsAvailable.toFloat(),
                 )
             if (firstIndex.isNaN()) return@snapshotFlow null
-
             val itemsVisible =
                 visibleItemsInfo.floatSumOf { itemInfo ->
                     itemVisibilityPercentage(
@@ -223,7 +212,6 @@ fun LazyStaggeredGridState.scrollbarState(
                         viewportEndOffset = layoutInfo.viewportEndOffset,
                     )
                 }
-
             val thumbTravelPercent =
                 min(
                     a = firstIndex / itemsAvailable,

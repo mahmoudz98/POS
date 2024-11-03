@@ -180,10 +180,7 @@ private fun StepperScreen(
 }
 
 @Composable
-fun CloseBusinessStepDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-) {
+fun CloseBusinessStepDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
@@ -194,7 +191,11 @@ fun CloseBusinessStepDialog(
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(text = stringResource(id = R.string.feature_stepper_dialog_exit_yes_button_text))
+                Text(
+                    text = stringResource(
+                        id = R.string.feature_stepper_dialog_exit_yes_button_text,
+                    ),
+                )
             }
         },
         dismissButton = {

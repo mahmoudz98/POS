@@ -113,7 +113,8 @@ private fun FilterItemsScreen(
     onDismiss: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxSize()
             .clickable(
                 indication = null,
@@ -121,7 +122,8 @@ private fun FilterItemsScreen(
             ) { },
     ) {
         Spacer(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .background(Color.Black.copy(alpha = 0.5f))
                 .clickable(
@@ -162,10 +164,11 @@ private fun FilterItemsScreen(
                         )
                     }
                     Box(
-                        modifier = Modifier
-                            .weight(1f) // This will make the Box take all the available width
+                        modifier =
+                        Modifier
+                            .weight(1f)
                             .fillMaxHeight(),
-                        contentAlignment = Alignment.Center, // Align title in the center of the Box
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = stringResource(id = R.string.feature_item_filter_label),
@@ -175,12 +178,14 @@ private fun FilterItemsScreen(
                     }
                     val resetEnabled =
                         filterUiState.stockFilter != FilterStockState.All ||
-                                filterUiState.selectedCategories.isNotEmpty() ||
-                                filterUiState.sortPrice != SortPriceState.None
+                            filterUiState.selectedCategories.isNotEmpty() ||
+                            filterUiState.sortPrice != SortPriceState.None
                     IconButton(onClick = onRestDefaultFilter, enabled = resetEnabled) {
                         Icon(
                             imageVector = PosIcons.FilterClear,
-                            contentDescription = stringResource(id = R.string.feature_item_rest_filter_label),
+                            contentDescription = stringResource(
+                                id = R.string.feature_item_rest_filter_label,
+                            ),
                         )
                     }
                 }
@@ -290,7 +295,8 @@ fun FilterCategorySection(
     com.casecode.pos.core.ui.R.string.core_ui_currency
     FilterTitle(stringResource(R.string.feature_item_filter_category_label))
     FlowRow(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .padding(top = 12.dp, bottom = 8.dp)
             .padding(horizontal = 4.dp),

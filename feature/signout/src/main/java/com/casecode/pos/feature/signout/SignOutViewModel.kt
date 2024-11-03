@@ -43,8 +43,7 @@ constructor(
                 started = SharingStarted.WhileSubscribed(1_000),
             )
 
-    fun signOut(): Deferred<Unit> =
-        viewModelScope.async {
-            accountRepository.signOut()
-        }
+    fun signOut(): Deferred<Unit> = viewModelScope.async {
+        accountRepository.signOut()
+    }
 }

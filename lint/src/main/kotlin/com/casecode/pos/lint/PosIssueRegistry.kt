@@ -21,20 +21,21 @@ import com.android.tools.lint.detector.api.CURRENT_API
 import com.casecode.pos.lint.designsystem.DesignSystemDetector
 
 class PosIssueRegistry : IssueRegistry() {
-
-    override val issues = listOf(
-        DesignSystemDetector.ISSUE,
-        TestMethodNameDetector.FORMAT,
-        TestMethodNameDetector.PREFIX,
-    )
+    override val issues =
+        listOf(
+            DesignSystemDetector.ISSUE,
+            TestMethodNameDetector.FORMAT,
+            TestMethodNameDetector.PREFIX,
+        )
 
     override val api: Int = CURRENT_API
 
     override val minApi: Int = 12
 
-    override val vendor: Vendor = Vendor(
-        vendorName = "POS",
-        feedbackUrl = "https://github.com/mahmoudz98/POS/issues",
-        contact = "https://github.com/mahmoudz98/POS",
-    )
+    override val vendor: Vendor =
+        Vendor(
+            vendorName = "POS",
+            feedbackUrl = "https://github.com/mahmoudz98/POS/issues",
+            contact = "https://github.com/mahmoudz98/POS",
+        )
 }

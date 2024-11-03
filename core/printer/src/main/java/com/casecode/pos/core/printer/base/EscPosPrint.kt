@@ -60,6 +60,7 @@ abstract class EscPosPrint {
         delay(1000L)
 
         try {
+            //  encoding support arabic: Cp864 , Cp720
             val escPosPrinter =
                 EscPosPrinterLib(
                     connection,
@@ -67,19 +68,12 @@ abstract class EscPosPrint {
                     printer.printerWidthMM,
                     printer.printerNbrCharactersPerLine,
                     EscPosCharsetEncoding("Cp864", 0x16),
-                    /**
-                     * encoding support arabic:
-                     * Cp864
-                     * Cp720
-                     *
-                     */
                 )
             logger.log("PrinterEncodingName: ${escPosPrinter.encoding.name}")
 
             escPosPrinter.useEscAsteriskCommand(true)
 
             this@EscPosPrint.printerState.publishState(PrinterStatusCode.PROGRESS_PRINTING)
-
             val printLines = printer.getTextsToPrint()
             printLines.forEach { line ->
                 Timber.e("lineTaskPrint: $line")

@@ -41,6 +41,7 @@ import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableS
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Branch
+import com.casecode.pos.core.ui.R as uiR
 
 @Composable
 internal fun BranchesList(
@@ -85,10 +86,7 @@ internal fun BranchesList(
 }
 
 @Composable
-private fun BranchItem(
-    branch: Branch,
-    onUpdateClick: (Branch) -> Unit,
-) {
+private fun BranchItem(branch: Branch, onUpdateClick: (Branch) -> Unit) {
     ElevatedCard(
         Modifier
             .padding(bottom = 8.dp)
@@ -97,7 +95,7 @@ private fun BranchItem(
         ListItem(
             headlineContent = {
                 Text(
-                    text = stringResource(com.casecode.pos.core.ui.R.string.core_ui_branch_name_hint) + branch.branchName,
+                    text = stringResource(uiR.string.core_ui_branch_name_hint) + branch.branchName,
                 )
             },
             supportingContent = {

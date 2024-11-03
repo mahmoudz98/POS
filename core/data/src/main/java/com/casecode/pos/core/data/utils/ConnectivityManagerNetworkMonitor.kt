@@ -32,7 +32,9 @@ import kotlinx.coroutines.flow.conflate
 import timber.log.Timber
 import javax.inject.Inject
 
-class ConnectivityManagerNetworkMonitor @Inject constructor(
+class ConnectivityManagerNetworkMonitor
+@Inject
+constructor(
     @ApplicationContext private val context: Context,
     val coroutineScope: CoroutineScope,
 ) : NetworkMonitor {
@@ -44,7 +46,6 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
                 channel.close()
                 return@callbackFlow
             }
-
             /**
              * The callback's methods are invoked on changes to *any* network matching the [NetworkRequest],
              * not just the active network. So we can simply track the presence (or absence) of such [Network].
@@ -63,14 +64,12 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
                         channel.trySend(networks.isNotEmpty())
                     }
                 }
-
             val request =
                 Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                     .build()
             connectivityManager.registerNetworkCallback(request, callback)
-
             /**
              * Sends the latest connectivity status to the underlying channel.
              */
@@ -88,15 +87,13 @@ class ConnectivityManagerNetworkMonitor @Inject constructor(
                 this.activeNetwork,
             )
         return capabilities != null &&
-                (
-                        capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                                capabilities.hasCapability(
-                                    NetworkCapabilities.NET_CAPABILITY_VALIDATED,
-                                ) &&
-                                (
-                                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                                                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                                        )
+            (
+                capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
+                    (
+                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
                         )
+                )
     }
 }

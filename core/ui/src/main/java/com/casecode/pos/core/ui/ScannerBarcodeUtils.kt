@@ -26,28 +26,25 @@ fun Context.scanOptions(
     onResult: (String) -> Unit,
     onFailure: (Int) -> Unit,
     onCancel: (Int) -> Unit,
-    onModuleDownloading: (Int) -> Unit, // Notify UI when downloading starts
-    onModuleDownloaded: (Int) -> Unit, // Notify UI when the module is downloaded
+    onModuleDownloading: (Int) -> Unit,
+    onModuleDownloaded: (Int) -> Unit,
 ) {
     // issue: Scan failure: com.google.mlkit.common.MlKitException: Failed to scan code.
-    // Create the scanner instance
     val scanner = GmsBarcodeScanning.getClient(this)
-
-    // Prepare the ModuleInstall request
-    val moduleInstallRequest = ModuleInstallRequest.newBuilder()
-        .addApi(scanner) // Ensure the barcode scanner API is included
-        .build()
-
+    val moduleInstallRequest =
+        ModuleInstallRequest
+            .newBuilder()
+            .addApi(scanner)
+            .build()
     val moduleInstallClient = ModuleInstall.getClient(this)
 
-    moduleInstallClient.installModules(moduleInstallRequest)
+    moduleInstallClient
+        .installModules(moduleInstallRequest)
         .addOnSuccessListener {
             onModuleDownloaded(R.string.core_ui_scan_module_complete_downloading)
             startScanner(scanner, onResult, onFailure, onCancel)
-        }
-        .addOnFailureListener { exception ->
+        }.addOnFailureListener { exception ->
             onModuleDownloading(R.string.core_ui_scan_module_downloading)
-
             onFailure(R.string.core_ui_message_scan_error_open)
             Timber.e("ModuleInstallClient failure: $exception")
         }
@@ -59,8 +56,8 @@ private fun startScanner(
     onFailure: (Int) -> Unit,
     onCancel: (Int) -> Unit,
 ) {
-    // Start the scanning process
-    scanner.startScan()
+    scanner
+        .startScan()
         .addOnSuccessListener { result ->
             val barcode = result.rawValue
             if (barcode.isNullOrEmpty()) {
@@ -68,13 +65,10 @@ private fun startScanner(
             } else {
                 onResult(barcode)
             }
-        }
-        .addOnFailureListener { exception ->
-            // Handle scan failure, log and notify the UI
+        }.addOnFailureListener { exception ->
             Timber.e("Scan failure: $exception")
             onFailure(R.string.core_ui_scan_result_empty)
-        }
-        .addOnCanceledListener {
+        }.addOnCanceledListener {
             // Handle scan cancellation
             onCancel(R.string.core_ui_scan_result_empty)
         }

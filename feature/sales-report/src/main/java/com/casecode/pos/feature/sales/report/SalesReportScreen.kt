@@ -262,7 +262,9 @@ fun SalesReportEmptyScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = painterResource(id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120),
+            painter = painterResource(
+                id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120,
+            ),
             contentDescription = stringResource(id = R.string.feature_sales_report_empty_message),
             modifier = Modifier.size(120.dp),
         )
@@ -322,10 +324,7 @@ fun SalesReportGroupList(
 }
 
 @Composable
-fun SalesReportGroupItem(
-    invoiceGroup: InvoiceGroup,
-    onItemClick: (Invoice) -> Unit,
-) {
+fun SalesReportGroupItem(invoiceGroup: InvoiceGroup, onItemClick: (Invoice) -> Unit) {
     Column(modifier = Modifier.padding(start = 8.dp)) {
         Row(
             modifier =
@@ -361,11 +360,7 @@ fun SalesReportGroupItem(
 }
 
 @Composable
-fun InvoiceCard(
-    modifier: Modifier = Modifier,
-    invoice: Invoice,
-    onItemClick: (Invoice) -> Unit,
-) {
+fun InvoiceCard(modifier: Modifier = Modifier, invoice: Invoice, onItemClick: (Invoice) -> Unit) {
     ElevatedCard(
         modifier = modifier.clickable { onItemClick(invoice) },
     ) {

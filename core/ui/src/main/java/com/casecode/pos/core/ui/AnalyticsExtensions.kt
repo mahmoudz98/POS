@@ -31,7 +31,8 @@ fun AnalyticsHelper.logScreenView(screenName: String) {
     logEvent(
         AnalyticsEvent(
             type = Types.SCREEN_VIEW,
-            extras = listOf(
+            extras =
+            listOf(
                 Param(ParamKeys.SCREEN_NAME, screenName),
             ),
         ),
@@ -40,9 +41,11 @@ fun AnalyticsHelper.logScreenView(screenName: String) {
 
 fun AnalyticsHelper.logNewsResourceOpened(newsResourceId: String) {
     logEvent(
-        event = AnalyticsEvent(
+        event =
+        AnalyticsEvent(
             type = "news_resource_opened",
-            extras = listOf(
+            extras =
+            listOf(
                 Param("opened_news_resource", newsResourceId),
             ),
         ),

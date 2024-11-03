@@ -20,7 +20,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asDomainModel
 import com.casecode.pos.core.data.model.asExternalMapper
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
+import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.domain.repository.AddItem
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.DeleteItem
@@ -63,18 +63,17 @@ constructor(
     private val auth: AuthRepository,
     @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
 ) : ItemRepository {
-
-    override fun getItems(): Flow<Resource<List<Item>>> =
-        flow<Resource<List<Item>>> {
-            emit(Resource.Loading)
-            delay(300)
-            val uid = auth.currentUserId()
-            Timber.e("uid: $uid")
-            auth.checkUserNotFoundAndReturnErrorMessage<List<Item>> {
-                emit(it)
-                return@flow
-            }
-            db.listenToCollectionChild(
+    override fun getItems(): Flow<Resource<List<Item>>> = flow<Resource<List<Item>>> {
+        emit(Resource.Loading)
+        delay(300)
+        val uid = auth.currentUserId()
+        Timber.e("uid: $uid")
+        auth.ensureUserExists<List<Item>> {
+            emit(it)
+            return@flow
+        }
+        db
+            .listenToCollectionChild(
                 collection = USERS_COLLECTION_PATH,
                 documentId = uid,
                 collectionChild = ITEMS_COLLECTION_PATH,
@@ -88,7 +87,6 @@ constructor(
                 } else {
                     Timber.i("Data from SERVER_DB")
                 }
-
                 val itemMutableList = mutableListOf<Item>()
                 snapshot.documents.mapNotNull { document ->
                     document
@@ -102,34 +100,38 @@ constructor(
                     emit(Resource.success(itemMutableList))
                 }
             }
-        }.catch { e ->
-            Timber.e(e)
-            emit(Resource.error(R.string.core_data_error_fetching_items))
-        }.flowOn(ioDispatcher)
+    }.catch { e ->
+        Timber.e(e)
+        emit(Resource.error(R.string.core_data_error_fetching_items))
+    }.flowOn(ioDispatcher)
 
     override suspend fun addItem(item: Item): AddItem {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnErrorMessage<Int> {
+                auth.ensureUserExists<Int> {
                     return@withContext it
                 }
                 val currentUserId =
                     auth.currentUserId()
                 suspendCoroutine { continuation ->
                     val itemMap = item.asExternalMapper()
-
                     val sku = item.sku
-                    db.getOrAddDocumentInChild(
-                        USERS_COLLECTION_PATH,
-                        currentUserId,
-                        ITEMS_COLLECTION_PATH,
-                        sku,
-                    ).set(itemMap)
+                    db
+                        .getOrAddDocumentInChild(
+                            USERS_COLLECTION_PATH,
+                            currentUserId,
+                            ITEMS_COLLECTION_PATH,
+                            sku,
+                        ).set(itemMap)
                         .addOnSuccessListener {
-                            continuation.resume(Resource.Success(R.string.core_data_item_added_successfully))
+                            continuation.resume(
+                                Resource.Success(R.string.core_data_item_added_successfully),
+                            )
                         }.addOnFailureListener { failure ->
                             Timber.e(failure)
-                            continuation.resume(Resource.error(R.string.core_data_add_item_failure_generic))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_add_item_failure_generic),
+                            )
                         }
                 }
             } catch (_: UnknownHostException) {
@@ -144,30 +146,34 @@ constructor(
     override suspend fun updateItem(item: Item): UpdateItem {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnErrorMessage<Int> {
+                auth.ensureUserExists<Int> {
                     return@withContext it
                 }
                 val currentUserUid =
                     auth.currentUserId()
                 suspendCoroutine { continuation ->
-
                     val itemMap = item.asExternalMapper()
                     val sku = item.sku
-                    db.getOrAddDocumentInChild(
-                        USERS_COLLECTION_PATH,
-                        currentUserUid,
-                        ITEMS_COLLECTION_PATH,
-                        sku,
-                    ).set(
-                        itemMap,
-                        SetOptions.merge(),
-                    ).addOnSuccessListener {
-                        continuation.resume(Resource.Success(R.string.core_data_item_updated_successfully))
-                    }.addOnFailureListener { failure ->
-                        Timber.e(failure)
+                    db
+                        .getOrAddDocumentInChild(
+                            USERS_COLLECTION_PATH,
+                            currentUserUid,
+                            ITEMS_COLLECTION_PATH,
+                            sku,
+                        ).set(
+                            itemMap,
+                            SetOptions.merge(),
+                        ).addOnSuccessListener {
+                            continuation.resume(
+                                Resource.Success(R.string.core_data_item_updated_successfully),
+                            )
+                        }.addOnFailureListener { failure ->
+                            Timber.e(failure)
 
-                        continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
-                    }
+                            continuation.resume(
+                                Resource.error(R.string.core_data_update_item_failure_generic),
+                            )
+                        }
                 }
             } catch (_: UnknownHostException) {
                 Resource.error(R.string.core_data_update_item_failure_network)
@@ -181,26 +187,27 @@ constructor(
     override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnErrorMessage<List<Item>> {
+                auth.ensureUserExists<List<Item>> {
                     return@withContext it
                 }
                 val currentUserUid =
                     auth.currentUserId()
                 suspendCoroutine { continuation ->
-
                     val batch = db.batch()
-                    val collectionRef = db.getCollectionChild(
-                        USERS_COLLECTION_PATH,
-                        currentUserUid,
-                        ITEMS_COLLECTION_PATH,
-                    )
+                    val collectionRef =
+                        db.getCollectionChild(
+                            USERS_COLLECTION_PATH,
+                            currentUserUid,
+                            ITEMS_COLLECTION_PATH,
+                        )
 
                     items.forEach {
                         val itemRef = collectionRef.document(it.sku)
                         batch.update(
                             itemRef,
                             ITEM_QUANTITY_FIELD,
-                            com.casecode.pos.core.firebase.services.FieldValue.increment(-it.quantity.toDouble()),
+                            com.casecode.pos.core.firebase.services.FieldValue
+                                .increment(-it.quantity.toDouble()),
                         )
                     }
                     batch
@@ -209,7 +216,9 @@ constructor(
                             continuation.resume(Resource.Success(items))
                         }.addOnFailureListener {
                             Timber.e(it)
-                            continuation.resume(Resource.error(R.string.core_data_update_item_failure_generic))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_update_item_failure_generic),
+                            )
                         }
                 }
             } catch (_: UnknownHostException) {
@@ -224,23 +233,28 @@ constructor(
     override suspend fun deleteItem(item: Item): DeleteItem {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnErrorMessage<Int> {
+                auth.ensureUserExists<Int> {
                     return@withContext it
                 }
                 val currentUserId =
                     auth.currentUserId()
                 suspendCoroutine { continuation ->
-                    db.getOrAddDocumentInChild(
-                        USERS_COLLECTION_PATH,
-                        currentUserId,
-                        ITEMS_COLLECTION_PATH,
-                        item.sku,
-                    ).update(mapOf(ITEM_DELETED_FIELD to true))
+                    db
+                        .getOrAddDocumentInChild(
+                            USERS_COLLECTION_PATH,
+                            currentUserId,
+                            ITEMS_COLLECTION_PATH,
+                            item.sku,
+                        ).update(mapOf(ITEM_DELETED_FIELD to true))
                         .addOnSuccessListener {
-                            continuation.resume(Resource.success(R.string.core_data_item_deleted_successfully))
+                            continuation.resume(
+                                Resource.success(R.string.core_data_item_deleted_successfully),
+                            )
                         }.addOnFailureListener { failure ->
                             Timber.e(failure)
-                            continuation.resume(Resource.error(R.string.core_data_delete_item_failure_generic))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_delete_item_failure_generic),
+                            )
                         }
                 }
             } catch (_: UnknownHostException) {

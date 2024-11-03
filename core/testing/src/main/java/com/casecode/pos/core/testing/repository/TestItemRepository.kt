@@ -41,9 +41,11 @@ constructor() :
         MutableSharedFlow(replay = 2, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val itemsTest = ArrayList(itemsTestData)
     val categoriesTest
-        get() = itemsTest.mapNotNull {
-            it.category.takeIf { it.isNotBlank() }
-        }.toSet()
+        get() =
+            itemsTest
+                .mapNotNull {
+                    it.category.takeIf { it.isNotBlank() }
+                }.toSet()
 
     override fun init() = Unit
 
@@ -68,14 +70,13 @@ constructor() :
 
     override fun getItems(): Flow<ResourceItems> = resourcesItemsFlow
 
-    override suspend fun addItem(item: Item): AddItem =
-        if (shouldReturnError) {
-            Resource.Companion.error(DataResource.core_data_add_item_failure_generic)
-        } else {
-            itemsTest.add(item)
-            resourcesItemsFlow.tryEmit(Resource.success(itemsTest))
-            Resource.Success(DataResource.core_data_item_added_successfully)
-        }
+    override suspend fun addItem(item: Item): AddItem = if (shouldReturnError) {
+        Resource.Companion.error(DataResource.core_data_add_item_failure_generic)
+    } else {
+        itemsTest.add(item)
+        resourcesItemsFlow.tryEmit(Resource.success(itemsTest))
+        Resource.Success(DataResource.core_data_item_added_successfully)
+    }
 
     override suspend fun updateItem(item: Item): UpdateItem {
         if (shouldReturnError) {

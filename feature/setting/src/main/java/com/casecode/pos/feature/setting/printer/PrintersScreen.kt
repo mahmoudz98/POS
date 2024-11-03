@@ -84,7 +84,8 @@ fun PrinterScreen(
     onPrinterItemClick: (PrinterInfo) -> Unit,
 ) {
     Column(
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxSize(),
     ) {
         PosTopAppBar(
@@ -99,7 +100,8 @@ fun PrinterScreen(
             onNavigationClick = onBackClick,
         )
         Box(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(16.dp),
         ) {
@@ -148,7 +150,9 @@ fun PrintersEmptyScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = painterResource(id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120),
+            painter = painterResource(
+                id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120,
+            ),
             contentDescription = stringResource(id = R.string.feature_setting_sign_out_button_text),
             modifier = Modifier.size(120.dp),
         )

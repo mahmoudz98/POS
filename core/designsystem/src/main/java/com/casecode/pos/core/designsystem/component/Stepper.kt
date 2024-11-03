@@ -95,16 +95,16 @@ private fun Step(
     unSelectedColor: Color,
 ) {
     val transition = updateTransition(isCompete, label = "")
-
     val innerCircleColor by transition.animateColor(label = "innerCircleColor") {
         if (it) selectedColor else unSelectedColor
     }
-    val textColor by transition.animateColor(label = "txtColor") { if (it || isCurrent) selectedColor else unSelectedColor }
-
-    val color by transition.animateColor(label = "color") { if (it || isCurrent) selectedColor else Color.Gray }
-
+    val textColor by transition.animateColor(label = "txtColor") {
+        if (it || isCurrent) selectedColor else unSelectedColor
+    }
+    val color by transition.animateColor(label = "color") {
+        if (it || isCurrent) selectedColor else Color.Gray
+    }
     val borderStroke = BorderStroke(1.dp, color)
-
     val textSize by remember { mutableStateOf(12.sp) }
 
     ConstraintLayout(modifier = modifier) {

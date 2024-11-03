@@ -27,7 +27,6 @@ android {
             isReturnDefaultValues = true
         }
     }
-
 }
 
 dependencies {
@@ -46,8 +45,6 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.zxing.generate.barcode)
 
-
     testImplementation(projects.core.testing)
     testImplementation(libs.coroutines.test)
-
 }

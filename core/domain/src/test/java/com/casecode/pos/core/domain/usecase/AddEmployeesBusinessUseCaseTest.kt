@@ -30,10 +30,8 @@ class AddEmployeesBusinessUseCaseTest {
     fun `addEmployees when employees are not empty return Success`() = runTest {
         // Given
         val employees = arrayListOf(Employee())
-
         // When
         val result = addEmployeesBusinessUseCase(employees)
-
         // Then
         assert(result is AddEmployeeResult.Success)
     }
@@ -42,10 +40,8 @@ class AddEmployeesBusinessUseCaseTest {
     fun `addEmployees when employees are empty return Empty`() = runTest {
         // Given
         val employees = arrayListOf<Employee>()
-
         // When
         val result = addEmployeesBusinessUseCase(employees)
-
         // Then
         assert(result is AddEmployeeResult.Error)
     }
@@ -54,11 +50,9 @@ class AddEmployeesBusinessUseCaseTest {
     fun `addEmployees when employees are empty returns error`() = runTest {
         // Given
         val employees = arrayListOf<Employee>()
-
         // When
         testEmployeesBusinessRepository.setReturnError(true)
         val result = addEmployeesBusinessUseCase(employees)
-
         // Then
         assert(result is AddEmployeeResult.Error)
     }

@@ -40,11 +40,9 @@ class BluetoothConnectionImpl(
     private val context: Context,
 ) : DeviceConnection() {
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
-
     private val mmSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         device?.createRfcommSocketToServiceRecord(getDeviceUUID())
     }
-
     private val bluetoothAdapter: BluetoothAdapter by lazy {
         (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
     }
@@ -94,7 +92,9 @@ class BluetoothConnectionImpl(
                         delay(1000)
                         disconnect()
                         if (retries == 0) {
-                            throw EscPosConnectionException("Unable to connect to bluetooth device, ${e.message}")
+                            throw EscPosConnectionException(
+                                "Unable to connect to bluetooth device, ${e.message}",
+                            )
                         }
                     }
                 }

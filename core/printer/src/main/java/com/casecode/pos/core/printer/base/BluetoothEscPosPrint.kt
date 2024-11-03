@@ -46,7 +46,6 @@ constructor() : EscPosPrint() {
         Timber.e("takePrints:BluetoothEscPosPrint")
         this@BluetoothEscPosPrint.printerState.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
         val deviceConnection = (printerData.getPrinterConnection() as? BluetoothConnectionImpl)
-
         val updatedPrinterData: EscPosPrinter =
             if (deviceConnection == null) {
                 Timber.e("No paired Bluetooth devices found")
@@ -90,10 +89,11 @@ constructor() : EscPosPrint() {
     ): PrinterStatus {
         e.printStackTrace()
         logger.logNonFatalCrash(e)
-        val log = """
-            deviceConnection.deviceStatus=${deviceConnection.device?.name},
-             ${deviceConnection.device?.address}
-        """.trimIndent()
+        val log =
+            """
+                deviceConnection.deviceStatus=${deviceConnection.device?.name},
+                 ${deviceConnection.device?.address}
+            """.trimIndent()
         logger.log(log)
         logger.log("TextsToPrint = ${printerData.getTextsToPrint().first()}")
         return PrinterStatus(
@@ -102,11 +102,7 @@ constructor() : EscPosPrint() {
         )
     }
 
-    override fun print(
-        context: Context,
-        printerInfo: PrinterInfo,
-        printContent: PrintContent,
-    ) {
+    override fun print(context: Context, printerInfo: PrinterInfo, printContent: PrintContent) {
         val bluetoothConnection =
             BluetoothConnectionImpl(
                 getBluetoothDeviceByMacAddress(
@@ -164,42 +160,40 @@ constructor() : EscPosPrint() {
         printContext: PrintContent,
         widthPaper: Float,
         context: Context,
-    ): EscPosPrinter =
-        EscPosPrinter(
-            printerConnection,
-            printerDpi = 203,
-            printerWidthMM = widthPaper,
-            printerNbrCharactersPerLine = 32,
-        ).apply {
-            val textToPrint =
-                when (printContext) {
-                    is PrintContent.Receipt -> {
-                        PrintUtils.generatePrintText(
-                            printContext.invoiceId,
-                            printContext.phone,
-                            printContext.items,
-                        )
-                    }
-
-                    is PrintContent.QrCode -> {
-                        PrintUtils.generateBarcode(printContext.item)
-                    }
-
-                    is PrintContent.Test -> {
-                        PrinterTextParserImg.bitmapToHexadecimalString(
-                            this,
-                            context.resources.getDrawableForDensity(
-                                R.drawable.core_printer_ic_point_of_sale_24,
-                                DisplayMetrics.DENSITY_MEDIUM,
-                                null,
-                            ),
-                        )
-                        PrintUtils.testWithoutLogo()
-
-                        // PrintUtils.test(logo)
-                    }
+    ): EscPosPrinter = EscPosPrinter(
+        printerConnection,
+        printerDpi = 203,
+        printerWidthMM = widthPaper,
+        printerNbrCharactersPerLine = 32,
+    ).apply {
+        val textToPrint =
+            when (printContext) {
+                is PrintContent.Receipt -> {
+                    PrintUtils.generatePrintText(
+                        printContext.invoiceId,
+                        printContext.phone,
+                        printContext.items,
+                    )
                 }
-            Timber.e("textToPrint: $textToPrint")
-            addTextToPrint(textToPrint)
-        }
+
+                is PrintContent.QrCode -> {
+                    PrintUtils.generateBarcode(printContext.item)
+                }
+
+                is PrintContent.Test -> {
+                    PrinterTextParserImg.bitmapToHexadecimalString(
+                        this,
+                        context.resources.getDrawableForDensity(
+                            R.drawable.core_printer_ic_point_of_sale_24,
+                            DisplayMetrics.DENSITY_MEDIUM,
+                            null,
+                        ),
+                    )
+                    PrintUtils.testWithoutLogo()
+                    // PrintUtils.test(logo)
+                }
+            }
+        Timber.e("textToPrint: $textToPrint")
+        addTextToPrint(textToPrint)
+    }
 }

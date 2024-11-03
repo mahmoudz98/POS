@@ -58,7 +58,8 @@ fun PosExposeDropdownMenuBox(
         onExpandedChange = { expanded = !expanded },
     ) {
         PosOutlinedTextField(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                 .fillMaxWidth(),
             readOnly = true,
@@ -66,7 +67,6 @@ fun PosExposeDropdownMenuBox(
             value = currentItemSelected,
             onValueChange = { onClickItem(it) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-
         )
         ExposedDropdownMenu(
             expanded = expanded,
@@ -84,7 +84,13 @@ fun PosExposeDropdownMenuBox(
 
                         expanded = false
                     },
-                    modifier = Modifier.background(if (isSelected) MaterialTheme.colorScheme.outlineVariant else Color.Transparent),
+                    modifier = Modifier.background(
+                        if (isSelected) {
+                            MaterialTheme.colorScheme.outlineVariant
+                        } else {
+                            Color.Transparent
+                        },
+                    ),
                     text = { Text(selectionLocale) },
                 )
             }
@@ -106,7 +112,6 @@ fun PosExposeDropdownMenuBox(
 ) {
     val filterItems = items.fastFilter { it.contains(currentText, ignoreCase = true) }
     val (allowExpanded, setExpanded) = remember { mutableStateOf(false) }
-
     val expanded = allowExpanded && filterItems.isNotEmpty()
 
     ExposedDropdownMenuBox(
@@ -114,15 +119,16 @@ fun PosExposeDropdownMenuBox(
         onExpandedChange = setExpanded,
     ) {
         PosOutlinedTextField(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .menuAnchor(menuAnchorType)
                 .fillMaxWidth(),
             readOnly = readOnly,
-
             label = label,
             value = currentText,
             keyboardOptions = keyboardOption,
-            keyboardActions = KeyboardActions(
+            keyboardActions =
+            KeyboardActions(
                 onNext = {
                     onKeyboardAction()
                     setExpanded(false)
@@ -132,11 +138,9 @@ fun PosExposeDropdownMenuBox(
                     setExpanded(false)
                 },
             ),
-
             onValueChange = { onClickItem(it) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-
-            )
+        )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = {
@@ -152,7 +156,13 @@ fun PosExposeDropdownMenuBox(
                         onClickItem(selectionLocale)
                         setExpanded(false)
                     },
-                    modifier = Modifier.background(if (isSelected) MaterialTheme.colorScheme.outlineVariant else Color.Transparent),
+                    modifier = Modifier.background(
+                        if (isSelected) {
+                            MaterialTheme.colorScheme.outlineVariant
+                        } else {
+                            Color.Transparent
+                        },
+                    ),
                     text = { Text(selectionLocale) },
                 )
             }

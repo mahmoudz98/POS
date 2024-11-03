@@ -85,14 +85,11 @@ internal fun BusinessInfoScreen(
     var storeType by rememberSaveable { mutableStateOf(uiState.storeType) }
     var email by rememberSaveable { mutableStateOf(uiState.emailBusiness) }
     var phone by rememberSaveable { mutableStateOf(uiState.phoneBusiness) }
-
     var storeTypeError by remember { mutableStateOf(false) }
     var emailError by remember { mutableStateOf<Int?>(null) }
     var phoneError by remember { mutableStateOf<Int?>(null) }
-
     var expanded by remember { mutableStateOf(false) }
     val storeTypes = stringArrayResource(R.array.feature_stepper_business_store_types)
-
     Column(
         modifier =
         modifier
@@ -118,7 +115,11 @@ internal fun BusinessInfoScreen(
                         .fillMaxWidth(),
                     label = stringResource(id = uiString.core_ui_store_type_hint),
                     value = storeType,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(
+                            expanded = expanded,
+                        )
+                    },
                     onValueChange = { },
                     isError = storeTypeError,
                     supportingText =

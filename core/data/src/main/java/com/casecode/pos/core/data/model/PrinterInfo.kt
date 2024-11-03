@@ -29,36 +29,34 @@ import com.casecode.pos.core.model.data.PrinterConnectionInfo
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.google.firebase.firestore.DocumentSnapshot
 
-fun PrinterInfo.asExternalMapper(): Map<String, Any?> =
-    mapOf(
-        PRINTER_INFO_NAME_FIELD to this.name,
-        PRINTER_INFO_CONNECTION_TYPE_FIELD to this.connectionTypeInfo.asExternalMapper(),
-        PRINTER_INFO_IS_CURRENT_SELECTED_FIELD to this.isDefaultPrint,
-        PRINTER_INFO_SIZE_FIELD to this.widthPaper,
-    )
+fun PrinterInfo.asExternalMapper(): Map<String, Any?> = mapOf(
+    PRINTER_INFO_NAME_FIELD to this.name,
+    PRINTER_INFO_CONNECTION_TYPE_FIELD to this.connectionTypeInfo.asExternalMapper(),
+    PRINTER_INFO_IS_CURRENT_SELECTED_FIELD to this.isDefaultPrint,
+    PRINTER_INFO_SIZE_FIELD to this.widthPaper,
+)
 
-private fun PrinterConnectionInfo.asExternalMapper(): Map<String, Any?> =
-    when (this) {
-        is PrinterConnectionInfo.Bluetooth -> {
-            mapOf(
-                PRINTER_INFO_NAME_DEVICE_FIELD to this.name,
-                PRINTER_INFO_ADDRESS_FIELD to this.macAddress,
-            )
-        }
-
-        is PrinterConnectionInfo.Tcp -> {
-            mapOf(
-                PRINTER_INFO_ADDRESS_FIELD to this.ipAddress,
-                PRINTER_INFO_PORT_FIELD to this.port,
-            )
-        }
-
-        is PrinterConnectionInfo.Usb -> {
-            mapOf(
-                PRINTER_INFO_USB_NAME_DEVICE_FIELD to this.usbDeviceName,
-            )
-        }
+private fun PrinterConnectionInfo.asExternalMapper(): Map<String, Any?> = when (this) {
+    is PrinterConnectionInfo.Bluetooth -> {
+        mapOf(
+            PRINTER_INFO_NAME_DEVICE_FIELD to this.name,
+            PRINTER_INFO_ADDRESS_FIELD to this.macAddress,
+        )
     }
+
+    is PrinterConnectionInfo.Tcp -> {
+        mapOf(
+            PRINTER_INFO_ADDRESS_FIELD to this.ipAddress,
+            PRINTER_INFO_PORT_FIELD to this.port,
+        )
+    }
+
+    is PrinterConnectionInfo.Usb -> {
+        mapOf(
+            PRINTER_INFO_USB_NAME_DEVICE_FIELD to this.usbDeviceName,
+        )
+    }
+}
 
 fun DocumentSnapshot.asExternalModel(): PrinterInfo = PrinterInfo(
     name = this[PRINTER_INFO_NAME_FIELD] as String,

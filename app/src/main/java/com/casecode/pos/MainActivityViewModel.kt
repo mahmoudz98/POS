@@ -26,25 +26,28 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class MainActivityViewModel
+@Inject
+constructor(
     authRepository: AuthRepository,
 ) : ViewModel() {
-    val mainAuthUiState: StateFlow<MainAuthUiState> = authRepository.loginData.map {
-        when (it) {
-            LoginStateResult.Loading -> MainAuthUiState.Loading
-            is LoginStateResult.EmployeeLogin -> {
-                when (it.employee.permission) {
-                    Permission.ADMIN -> MainAuthUiState.LoginByAdminEmployee
-                    Permission.SALE -> MainAuthUiState.LoginBySaleEmployee
-                    Permission.NONE -> MainAuthUiState.ErrorLogin
+    val mainAuthUiState: StateFlow<MainAuthUiState> =
+        authRepository.loginData.map {
+            when (it) {
+                LoginStateResult.Loading -> MainAuthUiState.Loading
+                is LoginStateResult.EmployeeLogin -> {
+                    when (it.employee.permission) {
+                        Permission.ADMIN -> MainAuthUiState.LoginByAdminEmployee
+                        Permission.SALE -> MainAuthUiState.LoginBySaleEmployee
+                        Permission.NONE -> MainAuthUiState.ErrorLogin
+                    }
                 }
-            }
 
-            LoginStateResult.Error, LoginStateResult.NotSignIn -> MainAuthUiState.ErrorLogin
-            is LoginStateResult.NotCompleteBusiness -> MainAuthUiState.ErrorLogin
-            is LoginStateResult.SuccessLoginAdmin -> MainAuthUiState.LoginByAdmin
-        }
-    }.stateInWhileSubscribed(MainAuthUiState.Loading)
+                LoginStateResult.Error, LoginStateResult.NotSignIn -> MainAuthUiState.ErrorLogin
+                is LoginStateResult.NotCompleteBusiness -> MainAuthUiState.ErrorLogin
+                is LoginStateResult.SuccessLoginAdmin -> MainAuthUiState.LoginByAdmin
+            }
+        }.stateInWhileSubscribed(MainAuthUiState.Loading)
 }
 
 sealed interface MainAuthUiState {

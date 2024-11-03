@@ -40,11 +40,12 @@ class SignInActivityViewModelTest {
 
     @Before
     fun init() {
-        viewModel = SignInActivityViewModel(
-            networkMonitor,
-            accountService,
-            authService,
-        )
+        viewModel =
+            SignInActivityViewModel(
+                networkMonitor,
+                accountService,
+                authService,
+            )
     }
 
     @Test

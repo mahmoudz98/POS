@@ -37,7 +37,7 @@
     <string name="feature_setting_printer_info_interface_connection_ethernet_port">Port</string>
     <string name="feature_setting_printer_info_interface_connection_bluetooth_name_label">Bluetooth printer</string>
     <string name="feature_setting_printer_info_interface_connection_usb_name_label">Usb printer</string>
-    <string name="feature_setting_printer_info_interface_connection_bluetooth_search_button_text">Search</string>
+    <string name="feature_setting_printer_connection_bluetooth_search_button_text">Search</string>
     <string name="feature_setting_printer_info_papper_width_label">Paper width</string>
     <string name="feature_setting_printer_info_test_button_text">Test</string>
     <string name="feature_setting_printer_info_save_button_text">Save</string>

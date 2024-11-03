@@ -21,8 +21,8 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asEntityEmployees
 import com.casecode.pos.core.data.model.asExternalEmployee
 import com.casecode.pos.core.data.model.asExternalEmployees
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
 import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnMessage
+import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.EmployeesBusinessRepository
 import com.casecode.pos.core.domain.repository.ResourceEmployees
@@ -50,28 +50,27 @@ constructor(
     private val auth: AuthRepository,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : EmployeesBusinessRepository {
-    override fun getEmployees(): Flow<ResourceEmployees> =
-        flow {
-            emit(Resource.Loading)
-            auth.checkUserNotFoundAndReturnErrorMessage<List<Employee>> {
-                emit(it)
-                return@flow
+    override fun getEmployees(): Flow<ResourceEmployees> = flow {
+        emit(Resource.Loading)
+        auth.ensureUserExists<List<Employee>> {
+            emit(it)
+            return@flow
+        }
+        val uid = auth.currentUserId()
+        db.listenToCollection(USERS_COLLECTION_PATH, uid).collect {
+            @Suppress("UNCHECKED_CAST")
+            val employeesMap =
+                it.get(EMPLOYEES_FIELD) as? List<Map<String, Any>>
+            if (employeesMap.isNullOrEmpty()) {
+                emit(Resource.empty())
+            } else {
+                emit(Resource.success(employeesMap.asEntityEmployees()))
             }
-            val uid = auth.currentUserId()
-            db.listenToCollection(USERS_COLLECTION_PATH, uid).collect {
-                @Suppress("UNCHECKED_CAST")
-                val employeesMap =
-                    it.get(EMPLOYEES_FIELD) as? List<Map<String, Any>>
-                if (employeesMap.isNullOrEmpty()) {
-                    emit(Resource.empty())
-                } else {
-                    emit(Resource.success(employeesMap.asEntityEmployees()))
-                }
-            }
-        }.catch { e ->
-            Timber.e(e)
-            emit(Resource.error(R.string.core_data_get_business_failure))
-        }.flowOn(ioDispatcher)
+        }
+    }.catch { e ->
+        Timber.e(e)
+        emit(Resource.error(R.string.core_data_get_business_failure))
+    }.flowOn(ioDispatcher)
 
     override suspend fun setEmployees(employees: List<Employee>): AddEmployeeResult {
         return withContext(ioDispatcher) {
@@ -79,15 +78,14 @@ constructor(
                 auth.checkUserNotFoundAndReturnMessage {
                     return@withContext AddEmployeeResult.Error(it)
                 }
-
                 val uid = auth.currentUserId()
-
                 val employeesRequest = employees.asExternalEmployees()
-                val isSuccess = db.updateDocument(
-                    USERS_COLLECTION_PATH,
-                    uid,
-                    employeesRequest as Map<String, Any>,
-                )
+                val isSuccess =
+                    db.updateDocument(
+                        USERS_COLLECTION_PATH,
+                        uid,
+                        employeesRequest as Map<String, Any>,
+                    )
                 if (isSuccess) {
                     AddEmployeeResult.Success
                 } else {
@@ -110,12 +108,12 @@ constructor(
                 }
                 val uid = auth.currentUserId()
                 val employeesRequest = employees.asExternalEmployee()
-
-                val isSuccess = db.updateDocument(
-                    USERS_COLLECTION_PATH,
-                    uid,
-                    mapOf(EMPLOYEES_FIELD to FieldValue.arrayUnion(employeesRequest)),
-                )
+                val isSuccess =
+                    db.updateDocument(
+                        USERS_COLLECTION_PATH,
+                        uid,
+                        mapOf(EMPLOYEES_FIELD to FieldValue.arrayUnion(employeesRequest)),
+                    )
                 if (isSuccess) {
                     AddEmployeeResult.Success
                 } else {
@@ -163,16 +161,24 @@ constructor(
             }
             try {
                 val currentUID = auth.currentUserId()
-                val isSuccessRemove = db.updateDocument(
-                    USERS_COLLECTION_PATH,
-                    currentUID,
-                    mapOf(EMPLOYEES_FIELD to FieldValue.arrayRemove(oldEmployee.asExternalEmployee())),
-                )
-                val isSuccessAdd = db.updateDocument(
-                    USERS_COLLECTION_PATH,
-                    currentUID,
-                    mapOf(EMPLOYEES_FIELD to FieldValue.arrayUnion(newEmployee.asExternalEmployee())),
-                )
+                val isSuccessRemove =
+                    db.updateDocument(
+                        USERS_COLLECTION_PATH,
+                        currentUID,
+                        mapOf(
+                            EMPLOYEES_FIELD to
+                                FieldValue.arrayRemove(oldEmployee.asExternalEmployee()),
+                        ),
+                    )
+                val isSuccessAdd =
+                    db.updateDocument(
+                        USERS_COLLECTION_PATH,
+                        currentUID,
+                        mapOf(
+                            EMPLOYEES_FIELD to
+                                FieldValue.arrayUnion(newEmployee.asExternalEmployee()),
+                        ),
+                    )
                 if (isSuccessRemove && isSuccessAdd) {
                     Resource.success(true)
                 } else {

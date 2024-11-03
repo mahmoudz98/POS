@@ -44,7 +44,6 @@ constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SaleUiState())
     val uiState: StateFlow<SaleUiState> = _uiState.asStateFlow()
-
     private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
@@ -52,12 +51,11 @@ constructor(
         setupNetworkMonitor()
     }
 
-    private fun setupNetworkMonitor() =
-        viewModelScope.launch {
-            networkMonitor.isOnline.collect {
-                isOnline.value = it
-            }
+    private fun setupNetworkMonitor() = viewModelScope.launch {
+        networkMonitor.isOnline.collect {
+            isOnline.value = it
         }
+    }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun fetchItems() {
@@ -125,7 +123,9 @@ constructor(
 
     private fun checkTouUpdateInvoiceState() {
         _uiState.update {
-            it.copy(invoiceState = if (it.itemsInvoice.isEmpty()) InvoiceState.EmptyItemInvoice else InvoiceState.HasItems)
+            it.copy(
+                invoiceState = if (it.itemsInvoice.isEmpty()) InvoiceState.EmptyItemInvoice else InvoiceState.HasItems,
+            )
         }
     }
 
@@ -135,10 +135,7 @@ constructor(
         }
     }
 
-    private fun updateStockInItem(
-        item: Item,
-        quantity: Int,
-    ) {
+    private fun updateStockInItem(item: Item, quantity: Int) {
         _uiState.update { currentState ->
             currentState.copy(
                 items =
@@ -162,7 +159,6 @@ constructor(
             itemInStock,
             item.quantity.plus(itemInStock.quantity),
         )
-
         val newItemsInvoice = uiState.value.itemsInvoice.minus(item)
         _uiState.update {
             it.copy(itemsInvoice = newItemsInvoice.toMutableSet())
@@ -195,7 +191,6 @@ constructor(
         if (newQuantity == updateItemInvoice.quantity) {
             return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
         }
-
         val newQuantityInStock =
             newQuantity.minus(updateItemInvoice.quantity).minus(updateItemSelectedInStock.quantity)
         updateStockInItem(updateItemSelectedInStock, newQuantityInStock)
@@ -246,7 +241,6 @@ constructor(
                 }
 
                 Resource.Loading -> {}
-
                 is Resource.Success -> {
                     _uiState.update {
                         it.copy(

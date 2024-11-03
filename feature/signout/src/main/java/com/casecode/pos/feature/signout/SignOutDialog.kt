@@ -106,7 +106,8 @@ private fun SignOutDialog(
                     imageUrl = currentUser?.photoUrl,
                     placeholder = painterResource(id = R.drawable.core_ui_ic_google),
                     contentDescription = null,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .size(64.dp)
                         .clip(CircleShape),
                 )

@@ -35,12 +35,13 @@ constructor() : SubscriptionsBusinessRepository {
         shouldReturnEmpty = false
     }
 
-    override suspend fun setSubscriptionBusiness(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness =
-        if (shouldReturnError) {
-            Resource.Error("Exception")
-        } else {
-            Resource.Success(true)
-        }
+    override suspend fun setSubscriptionBusiness(
+        subscriptionBusiness: SubscriptionBusiness,
+    ): AddSubscriptionBusiness = if (shouldReturnError) {
+        Resource.Error("Exception")
+    } else {
+        Resource.Success(true)
+    }
 
     override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> {
         TODO("Not yet implemented")

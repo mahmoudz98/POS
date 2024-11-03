@@ -113,12 +113,12 @@ fun ItemTopAppBar(
     AnimatedContent(
         targetState = searchWidgetState,
         transitionSpec = {
-            slideInHorizontally(animationSpec = tween(150)) togetherWith slideOutHorizontally(
-                animationSpec = tween(150),
-            )
+            slideInHorizontally(animationSpec = tween(150)) togetherWith
+                slideOutHorizontally(
+                    animationSpec = tween(150),
+                )
         },
     ) { targetState ->
-
         when (targetState) {
             SearchWidgetState.CLOSED -> {
                 DefaultAppBar(
@@ -141,10 +141,7 @@ fun ItemTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultAppBar(
-    onSearchClicked: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun DefaultAppBar(onSearchClicked: () -> Unit, modifier: Modifier = Modifier) {
     PosTopAppBar(
         modifier = modifier,
         titleRes = R.string.feature_item_header_title,
@@ -186,9 +183,7 @@ private fun SearchTextField(
     onCloseClicked: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
-
     val keyboardController = LocalSoftwareKeyboardController.current
-
     val onSearchExplicitlyTriggered = {
         onCloseClicked()
         keyboardController?.hide()
@@ -244,8 +239,7 @@ private fun SearchTextField(
                 } else {
                     false
                 }
-            }
-            .testTag("searchTextField"),
+            }.testTag("searchTextField"),
         shape = RoundedCornerShape(32.dp),
         value = searchQuery,
         keyboardOptions =
@@ -288,7 +282,8 @@ internal fun CategoryFilterChips(
                 AnimatedVisibility(visible = !filterScreenVisible) {
                     IconButton(
                         onClick = onShowFilters,
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .sharedBounds(
                                 rememberSharedContentState(FilterSharedElementKey),
                                 animatedVisibilityScope = this@AnimatedVisibility,
@@ -299,8 +294,10 @@ internal fun CategoryFilterChips(
                             imageVector = PosIcons.Filter,
                             tint = MaterialTheme.colorScheme.primary,
                             contentDescription = stringResource(R.string.feature_item_filter_label),
-                            modifier = Modifier.diagonalGradientBorder(
-                                colors = listOf(
+                            modifier =
+                            Modifier.diagonalGradientBorder(
+                                colors =
+                                listOf(
                                     MaterialTheme.colorScheme.primary,
                                     MaterialTheme.colorScheme.primaryContainer,
                                     MaterialTheme.colorScheme.secondaryContainer,
@@ -432,7 +429,9 @@ private fun ItemsSearchEmptyScreen(modifier: Modifier = Modifier) {
     ) {
         Image(
             imageVector = PosIcons.EmptySearch,
-            contentDescription = stringResource(id = R.string.feature_item_empty_items_icon_description),
+            contentDescription = stringResource(
+                id = R.string.feature_item_empty_items_icon_description,
+            ),
             modifier = Modifier.size(120.dp),
         )
 
@@ -453,8 +452,12 @@ internal fun ItemsEmptyScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = painterResource(id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120),
-            contentDescription = stringResource(id = R.string.feature_item_empty_items_icon_description),
+            painter = painterResource(
+                id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120,
+            ),
+            contentDescription = stringResource(
+                id = R.string.feature_item_empty_items_icon_description,
+            ),
             modifier = Modifier.size(120.dp),
         )
 
@@ -507,7 +510,9 @@ private fun ItemItem(
             IconButton(onClick = onPrintButtonClick) {
                 Icon(
                     imageVector = PosIcons.Print,
-                    contentDescription = stringResource(R.string.feature_item_dialog_print_button_text),
+                    contentDescription = stringResource(
+                        R.string.feature_item_dialog_print_button_text,
+                    ),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
@@ -523,10 +528,7 @@ private fun ItemItem(
 }
 
 @Composable
-private fun ItemIcon(
-    itemImageUrl: String?,
-    modifier: Modifier = Modifier,
-) {
+private fun ItemIcon(itemImageUrl: String?, modifier: Modifier = Modifier) {
     if (itemImageUrl.isNullOrEmpty()) {
         Icon(
             modifier =
@@ -612,8 +614,7 @@ private fun ItemsContentPreview(
                 selectedCategories = setOf(),
                 onCategorySelected = {},
                 onCategoryUnselected = {},
-
-                )
+            )
         }
     }
 }

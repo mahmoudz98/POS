@@ -92,10 +92,7 @@ fun RowScope.PosNavigationBarItem(
  * [NavigationBarItem]s.
  */
 @Composable
-fun PosNavigationBar(
-    modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit,
-) {
+fun PosNavigationBar(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
     NavigationBar(
         modifier = modifier,
         contentColor = PosNavigationDefaults.navigationContentColor(),
@@ -113,7 +110,6 @@ fun PosNavigationBar(
  * @param windowAdaptiveInfo The window adaptive info.
  * @param content The app content inside the scaffold.
  */
-
 @Composable
 fun PosNavigationSuiteScaffold(
     navigationSuiteItems: PosNavigationSuiteScope.() -> Unit,
@@ -124,7 +120,6 @@ fun PosNavigationSuiteScaffold(
     val layoutType =
         NavigationSuiteScaffoldDefaults
             .calculateFromAdaptiveInfo(windowAdaptiveInfo)
-
     val navigationSuiteItemColors =
         NavigationSuiteItemColors(
             navigationBarItemColors =

@@ -81,8 +81,7 @@ fun ItemsSaleScreen(
             onPrintItemClick()
         },
         onShownMessage = viewModel::snackbarMessageShown,
-
-        )
+    )
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -136,14 +135,18 @@ internal fun ItemsSaleScreen(
                     uiState,
                     transitionSpec = {
                         fadeIn(animationSpec = tween(300)) togetherWith
-                                fadeOut(animationSpec = tween(300))
+                            fadeOut(
+                                animationSpec =
+                                tween(
+                                    300,
+                                ),
+                            )
                     },
                     modifier =
                     Modifier.clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
-                    ) {
-                    },
+                    ) {},
                     label = "Items Content",
                 ) { targetState ->
                     when (targetState) {

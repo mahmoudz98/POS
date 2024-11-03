@@ -25,10 +25,8 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 class AddBranchBusinessUseCaseTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
-
     private lateinit var testBusinessRepository: TestBusinessRepository
     private lateinit var addBranchBusinessUseCaseTest: AddBranchBusinessUseCase
 
@@ -42,10 +40,8 @@ class AddBranchBusinessUseCaseTest {
     fun `addBranch given valid branch then return success`() = runTest {
         // Given
         val inputBranch = Branch(1, "Test Branch", "1234567890")
-
         // When
         val result = addBranchBusinessUseCaseTest(inputBranch)
-
         // Then
         assert(result is AddBranchBusinessResult.Success)
     }
@@ -55,10 +51,8 @@ class AddBranchBusinessUseCaseTest {
         // Given
         testBusinessRepository.setReturnError(true)
         val inputBranch = Branch(1, "Test Branch", "1234567890")
-
         // When
         val result = addBranchBusinessUseCaseTest(inputBranch)
-
         // Then
         assert(result is AddBranchBusinessResult.Error) {
             "Expected AddBranchBusinessResult.Error, but got $result"

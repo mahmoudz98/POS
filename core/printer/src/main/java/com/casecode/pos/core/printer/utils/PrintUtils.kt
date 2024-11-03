@@ -21,11 +21,7 @@ import java.util.Date
 import java.util.Locale
 
 object PrintUtils {
-    fun generatePrintText(
-        invoiceId: String,
-        phone: String,
-        items: List<Item>,
-    ): String {
+    fun generatePrintText(invoiceId: String, phone: String, items: List<Item>): String {
         val format = SimpleDateFormat("'on' yyyy-MM-dd 'at' HH:mm:ss", Locale.getDefault())
         val currentDate = format.format(Date())
         buildString {
@@ -59,44 +55,41 @@ object PrintUtils {
                 "[C]================================\n" +
                 "[L]\n" +
                 "[L]Tel : ${phone}\n"
-                )
+            )
     }
 
-    fun generateBarcode(item: Item): String =
-        (
+    fun generateBarcode(item: Item): String = (
+        "[L]\n" +
+            "[C]<u><font size='big'>${item.name}</font></u>\n" +
+            "[L]<b>${item.name}</b>[R]${item.unitPrice}€\n" +
+            "[L]  + qty : ${item.quantity}\n" +
             "[L]\n" +
-                "[C]<u><font size='big'>${item.name}</font></u>\n" +
-                    "[L]<b>${item.name}</b>[R]${item.unitPrice}€\n" +
-                    "[L]  + qty : ${item.quantity}\n" +
-                    "[L]\n" +
-                    "[C]<qrcode size='20'>${item.sku}</qrcode>\n"
-                )
+            "[C]<qrcode size='20'>${item.sku}</qrcode>\n"
+        )
 
-    fun test(logo: String): String =
-        (
-                "[C]<img>" + logo + "</img>\n" +
-                        "[C]<u><font size='big-4'>POS</font></u>\n" +
-                        "[C]<u><font size='big-4'>نقطه بيع</font></u>\n" +
-                        "<u></u>" +
-                        "[C]<u><font size='big'>Item test1</font></u>\n" +
-                        "[L]<b>item 1</b>[R]20.00$\n" +
-                        "[L]  + qty : 5.0\n" +
-                        "[L]\n" +
-                        "[C]<qrcode size='20'> 2222112121</qrcode>\n"
-                )
+    fun test(logo: String): String = (
+        "[C]<img>" + logo + "</img>\n" +
+            "[C]<u><font size='big-4'>POS</font></u>\n" +
+            "[C]<u><font size='big-4'>نقطه بيع</font></u>\n" +
+            "<u></u>" +
+            "[C]<u><font size='big'>Item test1</font></u>\n" +
+            "[L]<b>item 1</b>[R]20.00$\n" +
+            "[L]  + qty : 5.0\n" +
+            "[L]\n" +
+            "[C]<qrcode size='20'> 2222112121</qrcode>\n"
+        )
 
     fun testWithoutLogo(): String = (
-            "[C]<u><font size='big-4'>POS</font></u>\n" +
-                    "[C]<u><font size='big-4'>نقطه بيع</font></u>\n" +
-                    "<u></u>" +
-                    "[C]<u><font size='big'>Item test1</font></u>\n" +
-                    "[L]<b>item 1</b>[R]20.00$\n" +
-                    "[L]  + qty : 5.0\n" +
-                    "[L]\n" +
-                    "[C]<qrcode size='20'> 2222112121</qrcode>\n"
-            )
+        "[C]<u><font size='big-4'>POS</font></u>\n" +
+            "[C]<u><font size='big-4'>نقطه بيع</font></u>\n" +
+            "<u></u>" +
+            "[C]<u><font size='big'>Item test1</font></u>\n" +
+            "[L]<b>item 1</b>[R]20.00$\n" +
+            "[L]  + qty : 5.0\n" +
+            "[L]\n" +
+            "[C]<qrcode size='20'> 2222112121</qrcode>\n"
+        )
 }
-
 /**
  * EscPosPrinter printer = new EscPosPrinter(BluetoothPrintersConnections.selectFirstPaired(), 203, 48f, 32);
  * printer

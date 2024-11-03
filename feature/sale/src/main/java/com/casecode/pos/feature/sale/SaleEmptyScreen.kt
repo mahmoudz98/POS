@@ -37,10 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun SaleItemsEmpty(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-) {
+internal fun SaleItemsEmpty(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Column(
         modifier =
         modifier
@@ -62,7 +59,9 @@ internal fun SaleItemsEmpty(
             modifier = Modifier.padding(top = 8.dp),
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onClick) { Text(stringResource(R.string.feature_sale_go_to_items_button_text)) }
+        Button(
+            onClick = onClick,
+        ) { Text(stringResource(R.string.feature_sale_go_to_items_button_text)) }
     }
 }
 
@@ -77,7 +76,9 @@ fun SaleItemsInvoiceEmpty(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = painterResource(id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120),
+            painter = painterResource(
+                id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120,
+            ),
             contentDescription = stringResource(id = R.string.feature_sale_empty_title),
             modifier = Modifier.size(64.dp),
         )

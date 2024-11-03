@@ -29,7 +29,6 @@ import com.casecode.pos.core.data.R.string as stringData
 import com.casecode.pos.core.domain.R.string as stringDomain
 
 class AddInvoiceUseCaseTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 

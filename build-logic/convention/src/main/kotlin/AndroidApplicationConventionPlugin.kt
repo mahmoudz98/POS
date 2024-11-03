@@ -24,7 +24,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 apply("pos.android.lint")
                 apply("com.dropbox.dependency-guard")
                 apply("org.jetbrains.kotlin.plugin.power-assert")
-
             }
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)

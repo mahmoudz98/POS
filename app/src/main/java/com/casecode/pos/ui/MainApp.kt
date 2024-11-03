@@ -74,10 +74,7 @@ import com.casecode.pos.core.ui.R.string as uiString
 
 @SuppressLint("RestrictedApi")
 @Composable
-fun MainScreen(
-    appState: MainAppState,
-    modifier: Modifier = Modifier,
-) {
+fun MainScreen(appState: MainAppState, modifier: Modifier = Modifier) {
     val shouldShowGradientBackground =
         appState.currentDestination?.hasRoute(SaleRoute::class) == true
     PosBackground(modifier = modifier) {
@@ -91,7 +88,6 @@ fun MainScreen(
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-
             val notConnectedMessage = stringResource(uiString.core_ui_error_network)
             LaunchedEffect(isOffline) {
                 if (isOffline) {
@@ -118,11 +114,9 @@ internal fun MainApp(
     // TODO: Change to use [PosScaffoldNavigation], when have custom layout with custom
     val currentDestination = appState.currentDestination
     val context = LocalContext.current
-
     val mainAuthUiState = appState.mainAuthUiState
     when (mainAuthUiState) {
         MainAuthUiState.Loading -> {}
-
         MainAuthUiState.ErrorLogin -> {
             // TODO: handle when error login to sign out and login again
             moveToSignInActivity(context = context)
@@ -272,11 +266,14 @@ fun ScreenContent(
                     onActionClick = { appState.navigateToProfile() },
                     actionIconContentDescription = stringResource(R.string.feature_profile_title),
                     actionIcon = Icons.Default.Person,
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.Transparent,
+                    ),
                 )
             }
             Box(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .weight(1f)
                     .consumeWindowInsets(
                         if (hasProfileAction) {
@@ -285,8 +282,7 @@ fun ScreenContent(
                             WindowInsets(0, 0, 0, 0)
                         },
                     ),
-
-                ) {
+            ) {
                 content()
             }
         }
@@ -294,7 +290,6 @@ fun ScreenContent(
 }
 
 @SuppressLint("RestrictedApi")
-private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
-    this?.hierarchy?.any {
-        it.hasRoute(route)
-    } == true
+private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) = this?.hierarchy?.any {
+    it.hasRoute(route)
+} == true

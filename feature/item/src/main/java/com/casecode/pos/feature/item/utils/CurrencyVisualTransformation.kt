@@ -41,11 +41,12 @@ private class CurrencyVisualTransformation(
      * Currency formatter. Uses default Locale but there is an option to set
      * any Locale we want e.g. NumberFormat.getCurrencyInstance(Locale.ENGLISH)
      */
-    private val numberFormatter = NumberFormat.getCurrencyInstance().apply {
-        currency = Currency.getInstance(locale)
-        maximumFractionDigits = 0
-        maximumIntegerDigits = 9
-    }
+    private val numberFormatter =
+        NumberFormat.getCurrencyInstance().apply {
+            currency = Currency.getInstance(locale)
+            maximumFractionDigits = 0
+            maximumIntegerDigits = 9
+        }
 
     override fun filter(text: AnnotatedString): TransformedText {
         /**
@@ -71,7 +72,9 @@ private class CurrencyVisualTransformation(
              * and log warning.
              * Then return same TransformedText like above.
              */
-            Timber.w("Currency visual transformation require using digits only but found [$originalText]")
+            Timber.w(
+                "Currency visual transformation require using digits only but found [$originalText]",
+            )
             return TransformedText(text, OffsetMapping.Identity)
         }
         /**
@@ -120,7 +123,10 @@ fun rememberCurrencyVisualTransformation(locale: Locale): VisualTransformation {
  *                      character positioning, due to added
  *                      or removed formatting characters.
  */
-class CurrencyOffsetMapping(originalText: String, formattedText: String) : OffsetMapping {
+class CurrencyOffsetMapping(
+    originalText: String,
+    formattedText: String,
+) : OffsetMapping {
     private val originalLength: Int = originalText.length
     private val indexes = findDigitIndexes(originalText, formattedText)
 

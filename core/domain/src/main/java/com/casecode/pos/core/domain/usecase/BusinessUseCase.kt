@@ -32,30 +32,28 @@ class SetBusinessUseCase
 constructor(
     private val businessRep: BusinessRepository,
 ) {
-    operator fun invoke(business: Business): Flow<AddBusiness> =
-        flow {
-            emit(Resource.loading())
+    operator fun invoke(business: Business): Flow<AddBusiness> = flow {
+        emit(Resource.loading())
 
-            if (business.branches.isEmpty()) {
-                emit(Resource.empty(R.string.core_domain_branches_empty))
-                return@flow
-            }
-            if (business.storeType?.name.isNullOrBlank()) {
-                emit(Resource.empty(R.string.core_domain_store_type_business_empty))
-                return@flow
-            }
-            if (business.phone?.isEmpty() == true) {
-                emit(Resource.empty(R.string.core_domain_phone_business_empty))
-                return@flow
-            }
-            if (business.email?.isEmpty() == true) {
-                emit(Resource.empty(R.string.core_domain_email_business_empty))
-                return@flow
-            }
-
-            // If all validations pass, proceed to save the business
-            emit(businessRep.setBusiness(business))
+        if (business.branches.isEmpty()) {
+            emit(Resource.empty(R.string.core_domain_branches_empty))
+            return@flow
         }
+        if (business.storeType?.name.isNullOrBlank()) {
+            emit(Resource.empty(R.string.core_domain_store_type_business_empty))
+            return@flow
+        }
+        if (business.phone?.isEmpty() == true) {
+            emit(Resource.empty(R.string.core_domain_phone_business_empty))
+            return@flow
+        }
+        if (business.email?.isEmpty() == true) {
+            emit(Resource.empty(R.string.core_domain_email_business_empty))
+            return@flow
+        }
+        // If all validations pass, proceed to save the business
+        emit(businessRep.setBusiness(business))
+    }
 }
 
 class CompleteBusinessUseCase

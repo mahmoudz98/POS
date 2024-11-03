@@ -150,7 +150,6 @@ fun AddOrUpdateItemScreen(
     onUpdateItem: (Item, Bitmap?) -> Unit,
 ) {
     TrackScreenViewEvent(screenName = "AddOrUpdateItem")
-
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -159,7 +158,6 @@ fun AddOrUpdateItemScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var showTakeOrPickImage by remember { mutableStateOf(false) }
     var bitmapImage = remember<Bitmap?> { null }
-
     val onSaveTriggered = {
         if (itemInputState.hasValidateInput()) {
             val item =
@@ -192,7 +190,9 @@ fun AddOrUpdateItemScreen(
                 titleRes = if (isUpdate) R.string.feature_item_update_item_title_text else R.string.feature_item_add_item_title_text,
                 navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = null,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
+                ),
                 action = {
                     PosTextButton(
                         onClick = { onSaveTriggered() },
@@ -252,7 +252,13 @@ fun AddOrUpdateItemScreen(
                     KeyboardActions(
                         onNext = { focusManager.moveFocus(FocusDirection.Down) },
                     ),
-                    supportingText = if (itemInputState.nameError) stringResource(R.string.feature_item_error_name_empty) else null,
+                    supportingText = if (itemInputState.nameError) {
+                        stringResource(
+                            R.string.feature_item_error_name_empty,
+                        )
+                    } else {
+                        null
+                    },
                     modifier =
                     Modifier
                         .fillMaxWidth()
@@ -442,7 +448,7 @@ private fun TrackQuantityContent(
         targetState = trackSelected,
         transitionSpec = {
             expandVertically(animationSpec = tween(200, 150)) togetherWith
-                    shrinkVertically(animationSpec = tween(150, 150))
+                shrinkVertically(animationSpec = tween(150, 150))
         },
         label = "size transform",
     ) { targetExpanded ->
@@ -455,7 +461,13 @@ private fun TrackQuantityContent(
                     },
                     isError = quantityError,
                     label = stringResource(uiString.core_ui_item_quantity_label),
-                    supportingText = if (quantityError) stringResource(R.string.feature_item_error_quantity_empty) else null,
+                    supportingText = if (quantityError) {
+                        stringResource(
+                            R.string.feature_item_error_quantity_empty,
+                        )
+                    } else {
+                        null
+                    },
                     keyboardOptions =
                     KeyboardOptions(
                         keyboardType = KeyboardType.Number,
@@ -507,7 +519,6 @@ internal fun LaunchedTakePictureOrImage(
     onCancelTakeImage: (Int?) -> Unit,
 ) {
     if (LocalInspectionMode.current) return
-
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var currentPhotoPath by rememberSaveable { mutableStateOf("") }
     var showPermissionDialog by remember { mutableStateOf(false) }
@@ -543,13 +554,11 @@ internal fun LaunchedTakePictureOrImage(
                         currentPhotoPath = uri.toString()
                         putExtra(MediaStore.EXTRA_OUTPUT, uri)
                     }
-
                 val pickPhoto =
                     Intent(
                         Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     )
-
                 val chooserIntent =
                     Intent
                         .createChooser(

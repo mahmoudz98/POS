@@ -32,10 +32,8 @@ class DeleteEmployeeUseCaseTest {
     fun deleteEmployee_success() = runTest {
         // Given
         val employee = Employee()
-
         // When
         val result = deleteEmployeeUseCase(employee)
-
         // Then
         assert(result is Resource.Success)
     }
@@ -45,10 +43,8 @@ class DeleteEmployeeUseCaseTest {
         // Given
         val employee = Employee()
         testEmployeesBusinessRepository.setReturnError(true)
-
         // When
         val result = deleteEmployeeUseCase(employee)
-
         // Then
         assert(result is Resource.Error)
     }

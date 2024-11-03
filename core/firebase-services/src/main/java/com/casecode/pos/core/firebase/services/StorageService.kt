@@ -34,8 +34,11 @@ typealias FieldValue = com.google.firebase.firestore.FieldValue
 typealias SetOptions = com.google.firebase.firestore.SetOptions
 
 @Singleton
-class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
-    // TODO: improve minimize cost of use server with use offline cache to get document from
+class FirestoreService
+@Inject
+constructor(
+    private val firestore: FirebaseFirestore,
+) {
     private val optionsCache by lazy {
         SnapshotListenOptions
             .Builder()
@@ -45,7 +48,11 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     }
 
     suspend fun getDocument(collection: String, documentId: String): DocumentSnapshot = try {
-        firestore.collection(collection).document(documentId).get().await()
+        firestore
+            .collection(collection)
+            .document(documentId)
+            .get()
+            .await()
     } catch (e: Exception) {
         Timber.e(e, "Failed to get document")
         throw e
@@ -57,8 +64,11 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         collectionChild: String,
     ): DocumentReference {
         trace(collectionChild) {
-            return firestore.collection(collectionParent).document(documentId)
-                .collection(collectionChild).document()
+            return firestore
+                .collection(collectionParent)
+                .document(documentId)
+                .collection(collectionChild)
+                .document()
         }
     }
 
@@ -69,8 +79,11 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         nameNewDocument: String,
     ): DocumentReference {
         trace(collectionChild) {
-            return firestore.collection(collectionParent).document(documentId)
-                .collection(collectionChild).document(nameNewDocument)
+            return firestore
+                .collection(collectionParent)
+                .document(documentId)
+                .collection(collectionChild)
+                .document(nameNewDocument)
         }
     }
 
@@ -80,19 +93,22 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         collectionParent: String,
         documentId: String,
         collectionChild: String,
-    ): CollectionReference = firestore.collection(collectionParent).document(documentId)
+    ): CollectionReference = firestore
+        .collection(collectionParent)
+        .document(documentId)
         .collection(collectionChild)
 
-    suspend fun setDocument(
-        collection: String,
-        documentId: String,
-        data: Map<String, Any>,
-    ): Void = try {
-        firestore.collection(collection).document(documentId).set(data).await()
-    } catch (e: Exception) {
-        Timber.e(e, "Failed to set document")
-        throw e
-    }
+    suspend fun setDocument(collection: String, documentId: String, data: Map<String, Any>): Void =
+        try {
+            firestore
+                .collection(collection)
+                .document(documentId)
+                .set(data)
+                .await()
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to set document")
+            throw e
+        }
 
     fun setDocumentWithTask(
         collection: String,
@@ -112,9 +128,11 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
     ): Boolean {
         trace(updates.keys.toString()) {
             return try {
-                firestore.collection(collection)
+                firestore
+                    .collection(collection)
                     .document(documentId)
-                    .update(updates).await()
+                    .update(updates)
+                    .await()
                 true
             } catch (e: Exception) {
                 Timber.e(e, "Failed to update document$e")
@@ -143,16 +161,19 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         documentId: String,
         callback: (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit,
     ) {
-        firestore.collection(collection).document(documentId).firestore.collection(collection)
-            .document(documentId).addSnapshotListener { snapshot, error ->
+        firestore
+            .collection(collection)
+            .document(documentId)
+            .firestore
+            .collection(collection)
+            .document(documentId)
+            .addSnapshotListener { snapshot, error ->
                 callback(snapshot, error)
             }
     }
 
-    fun listenToCollection(
-        collection: String,
-        documentId: String,
-    ) = firestore.collection(collection).document(documentId).snapshots()
+    fun listenToCollection(collection: String, documentId: String) =
+        firestore.collection(collection).document(documentId).snapshots()
 
     fun listenToCollectionChild(
         collection: String,
@@ -160,7 +181,9 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         collectionChild: String,
         condition: Pair<String, Any>,
         sortWithFieldName: String,
-    ) = firestore.collection(collection).document(documentId)
+    ) = firestore
+        .collection(collection)
+        .document(documentId)
         .collection(collectionChild)
         .whereEqualTo(condition.first, condition.second)
         .orderBy(sortWithFieldName)

@@ -24,25 +24,45 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PrinterStateManager @Inject constructor() {
+class PrinterStateManager
+@Inject
+constructor() {
     var printerState = MutableStateFlow<PrinterState>(PrinterState.None)
         internal set
 
     fun publishState(statusCode: PrinterStatusCode) {
         printerState.value =
             when (statusCode) {
-                PrinterStatusCode.PROGRESS_CONNECTING -> PrinterState.Connecting(R.string.core_printer_state_message_connecting)
-                PrinterStatusCode.PROGRESS_CONNECTED -> PrinterState.Connected(R.string.core_printer_state_message_connected)
-                PrinterStatusCode.PROGRESS_PRINTING -> PrinterState.Printing(R.string.core_printer_state_message_printing)
-                PrinterStatusCode.PROGRESS_PRINTED -> PrinterState.Printed(R.string.core_printer_state_message_finished)
-                else -> PrinterState.Error(R.string.core_printer_state_result_message_finish_unknown_error)
+                PrinterStatusCode.PROGRESS_CONNECTING -> {
+                    PrinterState.Connecting(R.string.core_printer_state_message_connecting)
+                }
+
+                PrinterStatusCode.PROGRESS_CONNECTED -> {
+                    PrinterState.Connected(R.string.core_printer_state_message_connected)
+                }
+
+                PrinterStatusCode.PROGRESS_PRINTING -> {
+                    PrinterState.Printing(R.string.core_printer_state_message_printing)
+                }
+
+                PrinterStatusCode.PROGRESS_PRINTED -> {
+                    PrinterState.Printed(R.string.core_printer_state_message_finished)
+                }
+
+                else -> {
+                    PrinterState.Error(
+                        R.string.core_printer_state_result_message_finish_unknown_error,
+                    )
+                }
             }
     }
 
     fun handleResult(result: PrinterStatus) {
         printerState.value =
             when (result.printerStatus) {
-                PrinterStatusCode.FINISH_SUCCESS -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_success)
+                PrinterStatusCode.FINISH_SUCCESS ->
+                    PrinterState.Finished(R.string.core_printer_state_result_message_finish_success)
+
                 PrinterStatusCode.FINISH_NO_PRINTER ->
                     PrinterState.Finished(
                         R.string.core_printer_state_result_message_finish_no_printer,
@@ -67,8 +87,10 @@ class PrinterStateManager @Inject constructor() {
                     PrinterState.Finished(
                         R.string.core_printer_state_result_message_finish_barcode_error,
                     )
-
-                else -> PrinterState.Finished(R.string.core_printer_state_result_message_finish_unknown_error)
+                else ->
+                    PrinterState.Finished(
+                        R.string.core_printer_state_result_message_finish_unknown_error,
+                    )
             }
     }
 }

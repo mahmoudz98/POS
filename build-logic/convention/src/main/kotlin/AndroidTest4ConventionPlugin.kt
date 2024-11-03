@@ -1,5 +1,3 @@
-
-
 import com.android.build.gradle.TestExtension
 import com.casecode.pos.Configuration
 import com.casecode.pos.configureGradleManagedDevices

@@ -47,30 +47,29 @@ constructor(
             it
         }
 
-    override suspend fun currentUserId(): String =
-        withContext(io) {
-            async {
-                posPreferencesDataSource.currentUid.first() ?: ""
-            }.await()
-        }
+    override suspend fun currentUserId(): String = withContext(io) {
+        async {
+            posPreferencesDataSource.currentUid.first() ?: ""
+        }.await()
+    }
 
-    override suspend fun currentNameLogin(): String =
-        withContext(io) {
-            async {
-                posPreferencesDataSource.currentNameLogin.first() ?: ""
-            }.await()
-        }
+    override suspend fun currentNameLogin(): String = withContext(io) {
+        async {
+            posPreferencesDataSource.currentNameLogin.first() ?: ""
+        }.await()
+    }
 
     override val currentUser: Flow<FirebaseUser?>
         get() =
             callbackFlow {
                 val listener =
                     FirebaseAuth.AuthStateListener { auth ->
-                        val user = FirebaseUser(
-                            auth.currentUser?.email,
-                            auth.currentUser?.displayName,
-                            auth.currentUser?.photoUrl.toString(),
-                        )
+                        val user =
+                            FirebaseUser(
+                                auth.currentUser?.email,
+                                auth.currentUser?.displayName,
+                                auth.currentUser?.photoUrl.toString(),
+                            )
                         this.trySend(user)
                     }
                 auth.addAuthStateListener(listener)

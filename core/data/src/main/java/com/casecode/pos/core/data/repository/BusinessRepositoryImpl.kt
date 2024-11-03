@@ -21,8 +21,8 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asEntityBusiness
 import com.casecode.pos.core.data.model.asExternalBranch
 import com.casecode.pos.core.data.model.asExternalBusiness
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
 import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnMessage
+import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.domain.repository.AddBusiness
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.BusinessRepository
@@ -78,22 +78,25 @@ constructor(
     override suspend fun setBusiness(business: Business): AddBusiness {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnErrorMessage<Boolean> {
+                auth.ensureUserExists<Boolean> {
                     return@withContext it
                 }
-
                 val currentUID = auth.currentUserId()
 
                 suspendCoroutine<AddBusiness> { continuation ->
-                    db.setDocumentWithTask(
-                        USERS_COLLECTION_PATH,
-                        currentUID,
-                        business.asExternalBusiness() as Map<String, Any>,
-                    )
-                        .addOnSuccessListener {
+                    db
+                        .setDocumentWithTask(
+                            USERS_COLLECTION_PATH,
+                            currentUID,
+                            business.asExternalBusiness() as Map<String, Any>,
+                        ).addOnSuccessListener {
                             continuation.resume(Resource.Companion.success(true))
                         }.addOnFailureListener {
-                            continuation.resume(Resource.Companion.error(R.string.core_data_add_subscription_business_failure))
+                            continuation.resume(
+                                Resource.Companion.error(
+                                    R.string.core_data_add_subscription_business_failure,
+                                ),
+                            )
                         }
                 }
             } catch (_: FirebaseFirestoreException) {
@@ -115,15 +118,18 @@ constructor(
                 val currentUID = auth.currentUserId()
 
                 suspendCoroutine<CompleteBusiness> { continuation ->
-                    db.updateDocumentWithTask(
-                        USERS_COLLECTION_PATH,
-                        currentUID,
-                        mapOf("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD" to true),
-                    ).addOnSuccessListener {
-                        continuation.resume(Resource.success(true))
-                    }.addOnFailureListener {
-                        continuation.resume(Resource.error(R.string.core_data_complete_business_failure))
-                    }
+                    db
+                        .updateDocumentWithTask(
+                            USERS_COLLECTION_PATH,
+                            currentUID,
+                            mapOf("$BUSINESS_FIELD.$BUSINESS_IS_COMPLETED_STEP_FIELD" to true),
+                        ).addOnSuccessListener {
+                            continuation.resume(Resource.success(true))
+                        }.addOnFailureListener {
+                            continuation.resume(
+                                Resource.error(R.string.core_data_complete_business_failure),
+                            )
+                        }
                 }
             } catch (_: FirebaseFirestoreException) {
                 Resource.error(R.string.core_data_complete_business_failure)
@@ -136,28 +142,41 @@ constructor(
     override suspend fun addBranch(branch: Branch): AddBranchBusinessResult {
         return withContext(ioDispatcher) {
             if (!auth.hasUser()) {
-                return@withContext AddBranchBusinessResult.Error(message = R.string.core_data_uid_empty)
+                return@withContext AddBranchBusinessResult.Error(
+                    message = R.string.core_data_uid_empty,
+                )
             }
             val currentUID = auth.currentUserId()
 
             suspendCoroutine<AddBranchBusinessResult> { continuation ->
-                db.updateDocumentWithTask(
-                    USERS_COLLECTION_PATH,
-                    currentUID,
-                    mapOf("$BUSINESS_FIELD.$BRANCHES_FIELD" to FieldValue.arrayUnion(branch.asExternalBranch())),
-                ).addOnSuccessListener {
-                    continuation.resume(AddBranchBusinessResult.Success)
-                }.addOnFailureListener {
-                    when (it) {
-                        is UnknownHostException -> {
-                            continuation.resume(AddBranchBusinessResult.Error(R.string.core_data_add_branch_business_network))
-                        }
+                db
+                    .updateDocumentWithTask(
+                        USERS_COLLECTION_PATH,
+                        currentUID,
+                        mapOf(
+                            "$BUSINESS_FIELD.$BRANCHES_FIELD" to FieldValue.arrayUnion(branch.asExternalBranch()),
+                        ),
+                    ).addOnSuccessListener {
+                        continuation.resume(AddBranchBusinessResult.Success)
+                    }.addOnFailureListener {
+                        when (it) {
+                            is UnknownHostException -> {
+                                continuation.resume(
+                                    AddBranchBusinessResult.Error(
+                                        R.string.core_data_add_branch_business_network,
+                                    ),
+                                )
+                            }
 
-                        else -> {
-                            continuation.resume(AddBranchBusinessResult.Error(R.string.core_data_add_branch_business_failure))
+                            else -> {
+                                continuation.resume(
+                                    AddBranchBusinessResult.Error(
+                                        R.string.core_data_add_branch_business_failure,
+                                    ),
+                                )
+                            }
                         }
                     }
-                }
             }
         }
     }

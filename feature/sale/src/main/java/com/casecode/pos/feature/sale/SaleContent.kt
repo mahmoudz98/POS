@@ -89,8 +89,8 @@ fun ExposedDropdownMenuBoxSearch(
             } else {
                 items.filter {
                     it.name.contains(searchQuery, ignoreCase = true) ||
-                            it.sku.contains(searchQuery) ||
-                            it.category.contains(searchQuery, ignoreCase = true) ||
+                        it.sku.contains(searchQuery) ||
+                        it.category.contains(searchQuery, ignoreCase = true) ||
                         it.sku.contains(normalizeNumber(searchQuery), ignoreCase = true)
                 }
             }
@@ -140,7 +140,9 @@ fun ExposedDropdownMenuBoxSearch(
                     IconButton(onClick = onScan) {
                         Icon(
                             PosIcons.QrCodeScanner,
-                            contentDescription = stringResource(R.string.feature_sale_scan_item_text),
+                            contentDescription = stringResource(
+                                R.string.feature_sale_scan_item_text,
+                            ),
                         )
                     }
                 }
@@ -176,7 +178,6 @@ fun ExposedDropdownMenuBoxSearch(
 private fun normalizeNumber(input: String): String {
     val arabicNumerals = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
     val englishNumerals = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-
     val sb = StringBuilder()
     for (char in input) {
         when (char) {
@@ -221,7 +222,8 @@ fun ColumnScope.SaleItems(
 ) {
     val scrollableState = rememberLazyListState()
     LazyColumn(
-        modifier = Modifier
+        modifier =
+        Modifier
             .weight(1f)
             .imeNestedScroll()
             .padding(horizontal = 8.dp),
@@ -282,7 +284,9 @@ internal fun ItemSale(
             IconButton(onClick = { onRemoveItem() }) {
                 Icon(
                     imageVector = PosIcons.Delete,
-                    contentDescription = stringResource(R.string.feature_sale_dialog_delete_invoice_item_title),
+                    contentDescription = stringResource(
+                        R.string.feature_sale_dialog_delete_invoice_item_title,
+                    ),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
@@ -293,10 +297,7 @@ internal fun ItemSale(
 }
 
 @Composable
-private fun ItemIcon(
-    topicImageUrl: String,
-    modifier: Modifier = Modifier,
-) {
+private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     if (topicImageUrl.isEmpty()) {
         Icon(
             modifier =

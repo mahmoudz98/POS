@@ -34,45 +34,43 @@ class UpdateItemUseCaseTest {
     private val updateItemUseCase = UpdateItemUseCase(testItemRepository)
 
     @Test
-    fun updateItem_whenHasError_returnsError() =
-        runTest {
-            // Given
-            testItemRepository.setReturnError(true)
-            val newItem = Item(
+    fun updateItem_whenHasError_returnsError() = runTest {
+        // Given
+        testItemRepository.setReturnError(true)
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-            // When
-            val result = updateItemUseCase(newItem)
-
-            // Then
-            assertEquals(
-                result,
-                (Resource.error(stringData.core_data_update_item_failure_generic)),
-            )
-        }
+        // When
+        val result = updateItemUseCase(newItem)
+        // Then
+        assertEquals(
+            result,
+            (Resource.error(stringData.core_data_update_item_failure_generic)),
+        )
+    }
 
     @Test
-    fun updateItem_whenItemUpdated_returnsSuccess() =
-        runTest {
-            // Given
-            val newItem = Item(
+    fun updateItem_whenItemUpdated_returnsSuccess() = runTest {
+        // Given
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-            // When
-            val result = updateItemUseCase(newItem)
-
-            // Then
-            assertEquals(
-                result,
-                (Resource.success(stringData.core_data_item_updated_successfully)),
-            )
-        }
+        // When
+        val result = updateItemUseCase(newItem)
+        // Then
+        assertEquals(
+            result,
+            (Resource.success(stringData.core_data_item_updated_successfully)),
+        )
+    }
 }

@@ -70,10 +70,7 @@ import java.text.DecimalFormat
 import java.util.Date
 
 @Composable
-fun SalesReportDetailsRoute(
-    viewModel: SalesReportViewModel,
-    onBackClick: () -> Unit,
-) {
+fun SalesReportDetailsRoute(viewModel: SalesReportViewModel, onBackClick: () -> Unit) {
     val uiSalesReportDetails =
         viewModel.invoiceSelected.collectAsStateWithLifecycle(UISalesReportDetails.Loading)
     SalesReportDetailsScreen(
@@ -105,7 +102,9 @@ fun SalesReportDetailsScreen(
                 id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
             ),
             onActionClick = { onPrintClick() },
-            actionIconContentDescription = stringResource(R.string.feature_sales_report_print_action_text),
+            actionIconContentDescription = stringResource(
+                R.string.feature_sales_report_print_action_text,
+            ),
             actionIcon = PosIcons.Print,
             colors =
             TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -150,7 +149,8 @@ fun SalesReportDetailsContent(invoice: Invoice) {
             )
             VerticalDivider(Modifier.padding(horizontal = 4.dp))
             Text(
-                text = stringResource(
+                text =
+                stringResource(
                     com.casecode.pos.core.ui.R.string.core_ui_currency,
                     invoice.total,
                 ),
@@ -166,10 +166,7 @@ fun SalesReportDetailsContent(invoice: Invoice) {
 }
 
 @Composable
-fun ItemsSalesReportDetailsContent(
-    items: List<Item>,
-    modifier: Modifier = Modifier,
-) {
+fun ItemsSalesReportDetailsContent(items: List<Item>, modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxWidth()) {
         val scrollableState = rememberLazyListState()
         LazyColumn(
@@ -229,12 +226,13 @@ fun ItemInvoice(
         supportingContent = {
             Row(modifier = Modifier.height(IntrinsicSize.Min)) {
                 val formattedQuantity =
-                    "${stringResource(com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format)} $quantity"
+                    "${stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format,
+                    )} $quantity"
                 Text(formattedQuantity)
                 VerticalDivider(
                     modifier = Modifier.padding(horizontal = 4.dp),
                 )
-
                 val formattedPrice =
                     DecimalFormat("#,###.##").format(price * quantity)
                 Text(
@@ -250,10 +248,7 @@ fun ItemInvoice(
 }
 
 @Composable
-private fun ItemIcon(
-    topicImageUrl: String,
-    modifier: Modifier = Modifier,
-) {
+private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     if (topicImageUrl.isEmpty()) {
         Icon(
             modifier =

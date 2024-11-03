@@ -34,46 +34,43 @@ class DeleteItemUseCaseTest {
     private val deleteItemUseCase = DeleteItemUseCase(testItemRepository)
 
     @Test
-    fun deleteItem_whenItemDeleted_returnsSuccess() =
-        runTest {
-            // Given
-            val newItem = Item(
+    fun deleteItem_whenItemDeleted_returnsSuccess() = runTest {
+        // Given
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-
-            // When
-            val result = deleteItemUseCase(newItem)
-
-            // Then
-            assertEquals(
-                result,
-                (Resource.success(stringData.core_data_item_deleted_successfully)),
-            )
-        }
+        // When
+        val result = deleteItemUseCase(newItem)
+        // Then
+        assertEquals(
+            result,
+            (Resource.success(stringData.core_data_item_deleted_successfully)),
+        )
+    }
 
     @Test
-    fun deleteItem_whenHasError_returnsError() =
-        runTest {
-            // Given
-            testItemRepository.setReturnError(true)
-            val newItem = Item(
+    fun deleteItem_whenHasError_returnsError() = runTest {
+        // Given
+        testItemRepository.setReturnError(true)
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-            // When
-            val result = deleteItemUseCase(newItem)
-
-            // Then
-            assertEquals(
-                result,
-                Resource.error(stringData.core_data_delete_item_failure_generic),
-            )
-        }
+        // When
+        val result = deleteItemUseCase(newItem)
+        // Then
+        assertEquals(
+            result,
+            Resource.error(stringData.core_data_delete_item_failure_generic),
+        )
+    }
 }

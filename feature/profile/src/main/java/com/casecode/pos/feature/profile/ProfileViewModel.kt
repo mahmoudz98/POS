@@ -69,8 +69,9 @@ constructor(
             _uiState.update { it.copy(isLoading = true) }
             when (val result = getBusinessUseCase()) {
                 is BusinessResult.Error -> {
-                    val message = result.message
-                        ?: com.casecode.pos.core.ui.R.string.core_ui_error_unknown
+                    val message =
+                        result.message
+                            ?: com.casecode.pos.core.ui.R.string.core_ui_error_unknown
                     _uiState.update { it.copy(userMessage = message) }
                 }
 
@@ -98,10 +99,7 @@ constructor(
         }
     }
 
-    fun addBranch(
-        name: String,
-        phoneBranch: String,
-    ) {
+    fun addBranch(name: String, phoneBranch: String) {
         viewModelScope.launch {
             val currentBusiness = _uiState.value.business
             val lastBranchCode =

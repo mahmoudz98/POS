@@ -18,7 +18,6 @@ plugins {
     alias(libs.plugins.pos.hilt)
     alias(libs.plugins.pos.android.firebase.library)
     alias(libs.plugins.secrets)
-
 }
 
 android {

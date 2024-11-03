@@ -20,7 +20,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.model.asExternalModel
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnErrorMessage
+import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.PrinterRepository
 import com.casecode.pos.core.domain.utils.Resource
@@ -47,19 +47,24 @@ constructor(
         return withContext(ioDispatcher) {
             try {
                 val uid = auth.currentUserId()
-                auth.checkUserNotFoundAndReturnErrorMessage<List<PrinterInfo>> {
+                auth.ensureUserExists<List<PrinterInfo>> {
                     return@withContext it
                 }
                 suspendCoroutine { continuation ->
-                    db.getCollectionChild(USERS_COLLECTION_PATH, uid, PRINTER_INFO_COLLECTION_PATH)
+                    db
+                        .getCollectionChild(
+                            USERS_COLLECTION_PATH,
+                            uid,
+                            PRINTER_INFO_COLLECTION_PATH,
+                        )
                         .get()
                         .addOnSuccessListener { documents ->
                             val printerMutableList = mutableListOf<PrinterInfo>()
                             documents.mapNotNull {
                             }
                             documents.documents.mapNotNull { document ->
-
-                                document.asExternalModel()
+                                document
+                                    .asExternalModel()
                                     .let { printerMutableList.add(it) }
                             }
 
@@ -70,7 +75,9 @@ constructor(
                             }
                         }.addOnFailureListener {
                             Timber.e("${it.message}")
-                            continuation.resume(Resource.error(R.string.core_data_get_printer_info_failure))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_get_printer_info_failure),
+                            )
                         }
                 }
             } catch (_: UnknownHostException) {
@@ -83,22 +90,33 @@ constructor(
         return withContext(ioDispatcher) {
             try {
                 val uid = auth.currentUserId()
-                auth.checkUserNotFoundAndReturnErrorMessage<Int> {
+                auth.ensureUserExists<Int> {
                     return@withContext it
                 }
                 suspendCoroutine { continuation ->
-                    db.getCollectionChild(USERS_COLLECTION_PATH, uid, PRINTER_INFO_COLLECTION_PATH)
+                    db
+                        .getCollectionChild(
+                            USERS_COLLECTION_PATH,
+                            uid,
+                            PRINTER_INFO_COLLECTION_PATH,
+                        )
                         .document(printerInfo.name)
                         .set(printerInfo.asExternalMapper())
                         .addOnSuccessListener {
-                            continuation.resume(Resource.success(R.string.core_data_add_printer_info_sucessfully))
+                            continuation.resume(
+                                Resource.success(R.string.core_data_add_printer_info_sucessfully),
+                            )
                         }.addOnFailureListener {
                             Timber.e("${it.message}")
-                            continuation.resume(Resource.error(R.string.core_data_add_printer_info_failure_network))
+                            continuation.resume(
+                                Resource.error(R.string.core_data_add_printer_info_failure_network),
+                            )
                         }
                 }
             } catch (_: UnknownHostException) {
-                return@withContext Resource.error(R.string.core_data_add_printer_info_failure_network)
+                return@withContext Resource.error(
+                    R.string.core_data_add_printer_info_failure_network,
+                )
             } catch (e: Exception) {
                 Timber.e("${e.message}")
                 return@withContext Resource.error(R.string.core_data_add_printer_info_failure)

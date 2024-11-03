@@ -76,7 +76,13 @@ fun EmployeeDialogContent(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next,
             ),
-            supportingText = if (hasNameError) stringResource(uiString.core_ui_error_employee_name_empty) else null,
+            supportingText = if (hasNameError) {
+                stringResource(
+                    uiString.core_ui_error_employee_name_empty,
+                )
+            } else {
+                null
+            },
             modifier =
             Modifier
                 .fillMaxWidth()
@@ -108,7 +114,6 @@ fun EmployeeDialogContent(
             isError = hasPasswordError != null,
             modifier = Modifier.fillMaxWidth(),
         )
-
         var branchExpanded by remember { mutableStateOf(false) }
         ExposedDropdownMenuBox(
             expanded = branchExpanded,
@@ -119,9 +124,19 @@ fun EmployeeDialogContent(
                 onValueChange = {},
                 readOnly = true,
                 isError = branchError,
-                supportingText = if (branchError) stringResource(uiString.core_ui_error_add_employee_branch_empty) else null,
+                supportingText = if (branchError) {
+                    stringResource(
+                        uiString.core_ui_error_add_employee_branch_empty,
+                    )
+                } else {
+                    null
+                },
                 label = stringResource(uiString.core_ui_branch_name_hint),
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = branchExpanded) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(
+                        expanded = branchExpanded,
+                    )
+                },
                 modifier =
                 Modifier
                     .menuAnchor(MenuAnchorType.PrimaryNotEditable)
@@ -146,7 +161,6 @@ fun EmployeeDialogContent(
                 }
             }
         }
-
         var permissionExpanded by remember { mutableStateOf(false) }
         val permissions = stringArrayResource(R.array.core_ui_employee_permissions)
         ExposedDropdownMenuBox(
@@ -159,7 +173,11 @@ fun EmployeeDialogContent(
                 readOnly = true,
                 isError = permissionError,
                 label = stringResource(uiString.core_ui_permissions_text),
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = permissionExpanded) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(
+                        expanded = permissionExpanded,
+                    )
+                },
                 supportingText =
                 if (permissionError) {
                     stringResource(

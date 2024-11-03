@@ -98,7 +98,7 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenExitTrans
         animationSpec = tween(200, easing = EaseOut),
         towards = AnimatedContentTransitionScope.SlideDirection.End,
     ) +
-            fadeOut(
+        fadeOut(
             animationSpec =
             tween(
                 200,

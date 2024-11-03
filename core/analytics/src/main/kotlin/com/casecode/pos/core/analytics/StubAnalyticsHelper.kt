@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.core.analytics
 
-import android.util.Log
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,8 +26,10 @@ private const val TAG = "StubAnalyticsHelper"
  * analytics events should be sent to a backend.
  */
 @Singleton
-internal class StubAnalyticsHelper @Inject constructor() : AnalyticsHelper {
+internal class StubAnalyticsHelper
+@Inject
+constructor() : AnalyticsHelper {
     override fun logEvent(event: AnalyticsEvent) {
-        Log.d(TAG, "Received analytics event: $event")
+        Timber.tag(TAG).d("Received analytics event: $event")
     }
 }

@@ -53,15 +53,16 @@ class EmployeeViewModelTest {
 
     @Before
     fun init() {
-        viewModel = EmployeeViewModel(
-            networkMonitor,
-            getEmployees,
-            getBusiness,
-            addEmployee,
-            updateEmployee,
-            deleteEmployeeUseCase,
-            testAuth,
-        )
+        viewModel =
+            EmployeeViewModel(
+                networkMonitor,
+                getEmployees,
+                getBusiness,
+                addEmployee,
+                updateEmployee,
+                deleteEmployeeUseCase,
+                testAuth,
+            )
     }
 
     @Test
@@ -159,7 +160,6 @@ class EmployeeViewModelTest {
         networkMonitor.setConnected(false)
         viewModel.updateEmployee(employee)
         // Then
-
         assertEquals(
             viewModel.uiState.value.userMessage,
             uiString.core_ui_error_network,

@@ -48,7 +48,7 @@ fun DatePickerView(
         )
 
     DatePickerDialog(
-        modifier = Modifier,
+        modifier = modifier,
         onDismissRequest = { onDismiss() },
         confirmButton = {
             PosTextButton(

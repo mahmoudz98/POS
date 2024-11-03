@@ -86,7 +86,6 @@ fun AddBranchDialog(
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = Modifier.widthIn(max = configuration.screenWidthDp.dp - 80.dp),
-
         onDismissRequest = {
             focusRequester.freeFocus()
 

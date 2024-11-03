@@ -39,18 +39,20 @@ fun scaleAndShrinkVertically(): ExitTransition = scaleOut() + shrinkVertically()
 @OptIn(ExperimentalAnimationApi::class)
 fun slideInVerticallyAndScale(): EnterTransition = slideInHorizontally(
     animationSpec = tween(300),
-) + scaleIn(
-    initialScale = 0.8f,
-    animationSpec = tween(300),
-)
+) +
+    scaleIn(
+        initialScale = 0.8f,
+        animationSpec = tween(300),
+    )
 
 @OptIn(ExperimentalAnimationApi::class)
 fun slideOutVerticallyAndFade(): ExitTransition = slideOutVertically(
     targetOffsetY = { it },
     animationSpec = tween(300),
-) + fadeOut(
-    animationSpec = tween(3000),
-)
+) +
+    fadeOut(
+        animationSpec = tween(3000),
+    )
 
 enum class ScaleTransitionDirection {
     INWARDS,
@@ -69,7 +71,8 @@ fun scaleOutOfContainer(
     direction: ScaleTransitionDirection = ScaleTransitionDirection.OUTWARDS,
     targetScale: Float = if (direction == ScaleTransitionDirection.INWARDS) 0.9f else 1.1f,
 ): ExitTransition = scaleOut(
-    animationSpec = tween(
+    animationSpec =
+    tween(
         durationMillis = 3000,
         delayMillis = 90,
     ),

@@ -26,7 +26,9 @@ interface EmployeesBusinessRepository {
     fun getEmployees(): Flow<ResourceEmployees>
 
     suspend fun setEmployees(employees: List<Employee>): AddEmployeeResult
+
     suspend fun addEmployee(employees: Employee): AddEmployeeResult
+
     suspend fun deleteEmployee(employee: Employee): Resource<Int>
 
     suspend fun updateEmployee(

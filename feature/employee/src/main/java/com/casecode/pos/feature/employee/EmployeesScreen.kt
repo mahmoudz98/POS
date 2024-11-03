@@ -152,7 +152,9 @@ fun EmployeesScreen(
                 onActionClick = { onActionClick() },
                 actionIconContentDescription = null,
                 actionIcon = PosIcons.UserAdman,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
+                ),
             )
             when (uiState.resourceEmployees) {
                 is Resource.Empty -> {
@@ -281,7 +283,9 @@ fun EmployeesScreenEmptyPreview() {
 fun EmployeesScreenErrorPreview() {
     POSTheme {
         EmployeesScreen(
-            uiState = UiEmployeesState(resourceEmployees = Resource.error(uiString.core_ui_error_unknown)),
+            uiState = UiEmployeesState(
+                resourceEmployees = Resource.error(uiString.core_ui_error_unknown),
+            ),
             onAddClick = {},
             onEmployeeClick = {},
             onItemLongClick = {},

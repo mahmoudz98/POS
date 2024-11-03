@@ -78,17 +78,17 @@ class MainAppState(
      * route.
      */
     val topLevelDestinations: List<AdminTopLevelDestination> by lazy { AdminTopLevelDestination.entries }
-
     val saleTopLevelDestinations: List<SaleTopLevelDestination> by lazy { SaleTopLevelDestination.entries }
 
     @SuppressLint("RestrictedApi")
     fun hasProfileActionBar(currentDestination: NavDestination?): Boolean {
-        val profileRoutes = setOf(
-            SaleRoute::class,
-            ReportsRoute::class,
-            SettingRoute::class,
-            SignOutRoute::class,
-        )
+        val profileRoutes =
+            setOf(
+                SaleRoute::class,
+                ReportsRoute::class,
+                SettingRoute::class,
+                SignOutRoute::class,
+            )
         return profileRoutes.any { currentDestination?.hasRoute(it) == true }
     }
 
@@ -101,10 +101,8 @@ class MainAppState(
 
     val currentAdminTopLevelDestination: TopLevelDestination?
         @Composable get() = getCurrentTopLevelDestination(topLevelDestinations)
-
     val currentSaleTopLevelDestination: TopLevelDestination?
         @Composable get() = getCurrentTopLevelDestination(saleTopLevelDestinations)
-
     val isOffline =
         networkMonitor.isOnline.map(Boolean::not).stateIn(
             scope = coroutineScope,
@@ -119,15 +117,15 @@ class MainAppState(
      *
      * @param topLevelDestination: The destination the app needs to navigate to.
      */
-
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-        val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
+        val navOptions =
+            navOptions {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
             }
-            launchSingleTop = true
-            restoreState = true
-        }
         topLevelDestination.navigate(navController, navOptions)
     }
 }

@@ -18,14 +18,16 @@
         </compositeConfiguration>
         <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="21" />
+        <option name="gradleJvm" value="23" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/benchmark" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/analytics" />
             <option value="$PROJECT_DIR$/core/common" />
             <option value="$PROJECT_DIR$/core/data" />
             <option value="$PROJECT_DIR$/core/datastore" />
@@ -33,6 +35,7 @@
             <option value="$PROJECT_DIR$/core/datastore_proto" />
             <option value="$PROJECT_DIR$/core/designsystem" />
             <option value="$PROJECT_DIR$/core/domain" />
+            <option value="$PROJECT_DIR$/core/firebase-services" />
             <option value="$PROJECT_DIR$/core/model" />
             <option value="$PROJECT_DIR$/core/printer" />
             <option value="$PROJECT_DIR$/core/testing" />
@@ -46,8 +49,10 @@
             <option value="$PROJECT_DIR$/feature/sale" />
             <option value="$PROJECT_DIR$/feature/sales-report" />
             <option value="$PROJECT_DIR$/feature/setting" />
+            <option value="$PROJECT_DIR$/feature/signin" />
             <option value="$PROJECT_DIR$/feature/signout" />
             <option value="$PROJECT_DIR$/feature/stepper" />
+            <option value="$PROJECT_DIR$/lint" />
             <option value="$PROJECT_DIR$/ui-test-hilt-manifest" />
           </set>
         </option>

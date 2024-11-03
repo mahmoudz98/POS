@@ -23,6 +23,7 @@ import androidx.navigation.compose.navigation
 import com.casecode.pos.feature.setting.printer.PrinterInfoScreen
 import com.casecode.pos.feature.setting.printer.PrinterScreen
 import kotlinx.serialization.Serializable
+
 @Serializable
 data object SettingGraph
 
@@ -76,8 +77,7 @@ private fun NavGraphBuilder.printerInfoScreen(onBackClick: () -> Unit) {
     }
 }
 
-fun NavController.navigateToSettings(navOptions: NavOptions) =
-    navigate(SettingGraph, navOptions)
+fun NavController.navigateToSettings(navOptions: NavOptions) = navigate(SettingGraph, navOptions)
 
 fun NavController.navigateToPrinter() = navigate(PrinterRoute)
 

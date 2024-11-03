@@ -75,10 +75,7 @@ import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.scanOptions
 
 @Composable
-internal fun SaleRoute(
-    viewModel: SaleViewModel = hiltViewModel(),
-    onGoToItems: () -> Unit,
-) {
+internal fun SaleRoute(viewModel: SaleViewModel = hiltViewModel(), onGoToItems: () -> Unit) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var showUpdateQuantityItem by remember { mutableStateOf(false) }
@@ -142,12 +139,10 @@ internal fun SaleScreen(
 ) {
     ReportDrawnWhen { uiState.itemsInvoice.isNotEmpty() }
     ReportDrawnWhen { uiState.items.isNotEmpty() }
-
     val hasItemsSale by remember(uiState.itemsInvoice) {
         derivedStateOf { uiState.itemsInvoice.isNotEmpty() }
     }
     val configuration = LocalConfiguration.current
-
     val snackState = remember { SnackbarHostState() }
     SnackbarHost(hostState = snackState, Modifier.zIndex(1f))
     uiState.userMessage?.let { message ->
@@ -159,7 +154,8 @@ internal fun SaleScreen(
     }
     if (!isExpended(windowSizeClass.windowSizeClass, configuration)) {
         Column(
-            modifier = modifier
+            modifier =
+            modifier
                 .fillMaxSize()
                 .padding(8.dp)
                 .navigationBarsPadding()
@@ -201,21 +197,21 @@ internal fun SaleScreen(
                 visible = hasItemsSale,
                 enter =
                 slideInVertically(initialOffsetY = { -40 }) +
-                        expandVertically(
-                            expandFrom = Alignment.Top,
-                        ) +
-                        scaleIn(
-                            transformOrigin =
-                            TransformOrigin(
-                                0.5f,
-                                0f,
-                            ),
-                        ) + fadeIn(initialAlpha = 0.3f),
+                    expandVertically(
+                        expandFrom = Alignment.Top,
+                    ) +
+                    scaleIn(
+                        transformOrigin =
+                        TransformOrigin(
+                            0.5f,
+                            0f,
+                        ),
+                    ) + fadeIn(initialAlpha = 0.3f),
                 exit =
                 slideOutVertically() + shrinkVertically() + fadeOut() +
-                        scaleOut(
-                            targetScale = 1.2f,
-                        ),
+                    scaleOut(
+                        targetScale = 1.2f,
+                    ),
             ) {
                 Column(
                     modifier = Modifier.imePadding(),
@@ -231,10 +227,10 @@ internal fun SaleScreen(
                                     R.string.feature_sale_invoice_total_price_text,
                                     uiState.totalItemsInvoice,
                                 ) +
-                                        stringResource(
-                                            R.string.feature_sale_sale_invoice_rest_amount_text,
-                                            uiState.restOfAmount,
-                                        ),
+                                    stringResource(
+                                        R.string.feature_sale_sale_invoice_rest_amount_text,
+                                        uiState.restOfAmount,
+                                    ),
                             )
                         },
                         singleLine = true,
@@ -258,7 +254,8 @@ internal fun SaleScreen(
         }
     } else {
         Row(
-            modifier = modifier
+            modifier =
+            modifier
                 .padding(12.dp)
                 .imePadding(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -300,21 +297,21 @@ internal fun SaleScreen(
                 visible = hasItemsSale,
                 enter =
                 slideInVertically(initialOffsetY = { -40 }) +
-                        expandVertically(
-                            expandFrom = Alignment.Top,
-                        ) +
-                        scaleIn(
-                            transformOrigin =
-                            TransformOrigin(
-                                0.5f,
-                                0f,
-                            ),
-                        ) + fadeIn(initialAlpha = 0.3f),
+                    expandVertically(
+                        expandFrom = Alignment.Top,
+                    ) +
+                    scaleIn(
+                        transformOrigin =
+                        TransformOrigin(
+                            0.5f,
+                            0f,
+                        ),
+                    ) + fadeIn(initialAlpha = 0.3f),
                 exit =
                 slideOutVertically() + shrinkVertically() + fadeOut() +
-                        scaleOut(
-                            targetScale = 1.2f,
-                        ),
+                    scaleOut(
+                        targetScale = 1.2f,
+                    ),
             ) {
                 Column {
                     OutlinedTextField(
@@ -327,10 +324,10 @@ internal fun SaleScreen(
                                     R.string.feature_sale_invoice_total_price_text,
                                     uiState.totalItemsInvoice,
                                 ) +
-                                        stringResource(
-                                            R.string.feature_sale_sale_invoice_rest_amount_text,
-                                            uiState.restOfAmount,
-                                        ),
+                                    stringResource(
+                                        R.string.feature_sale_sale_invoice_rest_amount_text,
+                                        uiState.restOfAmount,
+                                    ),
                             )
                         },
                         singleLine = true,
@@ -356,12 +353,9 @@ internal fun SaleScreen(
 }
 
 @Composable
-fun isExpended(
-    windowSizeClass: WindowSizeClass,
-    configuration: Configuration,
-): Boolean =
+fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean =
     windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
-            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @DevicePreviews
 @Composable

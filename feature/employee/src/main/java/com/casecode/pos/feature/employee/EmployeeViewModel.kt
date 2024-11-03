@@ -50,22 +50,13 @@ constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
     private val _uiState = MutableStateFlow(UiEmployeesState())
     val uiState get() = _uiState.asStateFlow()
-
     private val _employeeSelected: MutableStateFlow<Employee?> = MutableStateFlow(null)
     val employeeSelected = _employeeSelected.asStateFlow()
-
     private val _branches: MutableStateFlow<List<Branch>> = MutableStateFlow(emptyList())
     val branches get() = _branches.asStateFlow()
     val currentUid = MutableStateFlow<String>("")
-
-    fun getCurrentUid() {
-        viewModelScope.launch {
-            currentUid.update { authRepository.currentUserId() }
-        }
-    }
 
     init {
         fetchEmployees()
@@ -73,12 +64,17 @@ constructor(
         setNetworkMonitor()
     }
 
-    private fun setNetworkMonitor() =
+    fun getCurrentUid() {
         viewModelScope.launch {
-            networkMonitor.isOnline.collect {
-                setConnected(it)
-            }
+            currentUid.update { authRepository.currentUserId() }
         }
+    }
+
+    private fun setNetworkMonitor() = viewModelScope.launch {
+        networkMonitor.isOnline.collect {
+            setConnected(it)
+        }
+    }
 
     private fun setConnected(isConnect: Boolean) {
         isOnline.update { isConnect }
@@ -100,8 +96,12 @@ constructor(
                             )
                         }
                     }
+                    Resource.Loading -> _uiState.update {
+                        it.copy(
+                            resourceEmployees = resourceEmployees,
+                        )
+                    }
 
-                    Resource.Loading -> _uiState.update { it.copy(resourceEmployees = resourceEmployees) }
                     is Resource.Success -> {
                         _uiState.update { it.copy(resourceEmployees = resourceEmployees) }
                     }
@@ -129,9 +129,7 @@ constructor(
         _employeeSelected.value = employeeSelect
     }
 
-    fun addEmployee(
-        employee: Employee,
-    ) {
+    fun addEmployee(employee: Employee) {
         if (isOnline.value == false) {
             return showSnackbarMessage(uiString.core_ui_error_network)
         }

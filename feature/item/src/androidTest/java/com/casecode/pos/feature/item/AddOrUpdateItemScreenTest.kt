@@ -32,7 +32,6 @@ import com.casecode.pos.core.ui.R.string as uiString
 class AddOrUpdateItemScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
-
     private val saveButtonLabel by lazy {
         composeTestRule.activity.getString(string.feature_item_save_action_text)
     }

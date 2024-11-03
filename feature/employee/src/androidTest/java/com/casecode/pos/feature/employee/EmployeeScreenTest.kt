@@ -40,7 +40,8 @@ class EmployeeScreenTest {
                 onItemLongClick = {},
             )
         }
-        composeTestRule.onNodeWithContentDescription("LoadingEmployees")
+        composeTestRule
+            .onNodeWithContentDescription("LoadingEmployees")
             .assertExists()
     }
 
@@ -84,20 +85,21 @@ class EmployeeScreenTest {
         composeTestRule.onNodeWithText(employees[1].name).assertIsDisplayed()
     }
 
-    val employees = listOf(
-        Employee(
-            name = "John Doe",
-            phoneNumber = "123-456-7890",
-            permission = "Admin",
-            branchName = "Branch 1",
-            password = "password",
-        ),
-        Employee(
-            name = "Jane Smith",
-            phoneNumber = "987-654-3210",
-            permission = "User",
-            branchName = "Branch 2",
-            password = "password2",
-        ),
-    )
+    val employees =
+        listOf(
+            Employee(
+                name = "John Doe",
+                phoneNumber = "123-456-7890",
+                permission = "Admin",
+                branchName = "Branch 1",
+                password = "password",
+            ),
+            Employee(
+                name = "Jane Smith",
+                phoneNumber = "987-654-3210",
+                permission = "User",
+                branchName = "Branch 2",
+                password = "password2",
+            ),
+        )
 }

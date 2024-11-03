@@ -58,18 +58,15 @@ constructor(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = Resource.Loading,
             )
-
     private lateinit var printerConnection: EscPosPrint
-
     var printerState: MutableStateFlow<PrinterState> = MutableStateFlow(PrinterState.None)
 
-    private fun launchCatching(block: suspend CoroutineScope.() -> Unit) =
-        viewModelScope.launch(
-            CoroutineExceptionHandler { _, throwable ->
-                //    logService.logNonFatalCrash(throwable)
-            },
-            block = block,
-        )
+    private fun launchCatching(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch(
+        CoroutineExceptionHandler { _, throwable ->
+            //    logService.logNonFatalCrash(throwable)
+        },
+        block = block,
+    )
 
     fun addPrinter(printerInfo: PrinterInfo) {
         launchCatching {
@@ -141,7 +138,6 @@ constructor(
         }
 
     }*/
-
     fun testPrinterEthernet(
         namePrinter: String,
         ipAddress: String,

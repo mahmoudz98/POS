@@ -55,10 +55,7 @@ import com.casecode.pos.core.model.data.users.FirebaseUser
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileRoute(
-    profileViewModel: ProfileViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-) {
+fun ProfileRoute(profileViewModel: ProfileViewModel = hiltViewModel(), onBackClick: () -> Unit) {
     ProfileScreen(profileViewModel = profileViewModel, onBackClick = onBackClick)
 }
 
@@ -85,7 +82,6 @@ fun ProfileScreen(
             profileViewModel.onSnackbarMessageShown()
         }
     }
-
     val pagerState =
         rememberPagerState(
             pageCount = {
@@ -127,7 +123,9 @@ fun ProfileScreen(
 
             TabRow(selectedTabIndex = pagerState.currentPage) {
                 ProfileTab(
-                    title = stringResource(com.casecode.pos.core.ui.R.string.core_ui_menu_business_info_title),
+                    title = stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_menu_business_info_title,
+                    ),
                     onClick = {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(0)
@@ -135,7 +133,9 @@ fun ProfileScreen(
                     },
                 )
                 ProfileTab(
-                    title = stringResource(com.casecode.pos.core.ui.R.string.core_ui_menu_branches_title),
+                    title = stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_menu_branches_title,
+                    ),
                     onClick = {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(1)
@@ -143,7 +143,9 @@ fun ProfileScreen(
                     },
                 )
                 ProfileTab(
-                    title = stringResource(com.casecode.pos.core.ui.R.string.core_ui_subscription_plan_title),
+                    title = stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_subscription_plan_title,
+                    ),
                     onClick = {
                         coroutineScope.launch {
                             pagerState.animateScrollToPage(2)
@@ -152,7 +154,6 @@ fun ProfileScreen(
                 )
             }
         }
-
         // Pager
         HorizontalPager(
             state = pagerState,
@@ -195,12 +196,9 @@ fun ProfileHeader(firebaseUser: FirebaseUser?) {
 }
 
 @Composable
-fun ProfileTab(
-    title: String,
-    onClick: () -> Unit,
-) {
+fun ProfileTab(title: String, onClick: () -> Unit) {
     Tab(
-        selected = false, // This should reflect the actual selected state
+        selected = false,
         onClick = onClick,
         text = { Text(text = title) },
     )

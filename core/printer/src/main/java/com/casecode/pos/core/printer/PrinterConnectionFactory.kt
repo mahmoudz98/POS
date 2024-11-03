@@ -29,10 +29,9 @@ constructor(
     private val tcpEscPosPrint: TcpEscPosPrint,
     private val usbEscPosPrint: UsbEscPosPrint,
 ) {
-    fun create(printerType: PrinterConnectionType): EscPosPrint =
-        when (printerType) {
-            PrinterConnectionType.BLUETOOTH -> bluetoothEscPosPrint
-            PrinterConnectionType.ETHERNET -> tcpEscPosPrint
-            PrinterConnectionType.USB -> usbEscPosPrint
-        }
+    fun create(printerType: PrinterConnectionType): EscPosPrint = when (printerType) {
+        PrinterConnectionType.BLUETOOTH -> bluetoothEscPosPrint
+        PrinterConnectionType.ETHERNET -> tcpEscPosPrint
+        PrinterConnectionType.USB -> usbEscPosPrint
+    }
 }

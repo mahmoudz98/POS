@@ -42,6 +42,7 @@ interface TopLevelDestination {
     val unselectedIcon: ImageVector
     val titleTextId: Int
     val route: KClass<*>
+
     fun navigate(navController: NavHostController, navOptions: NavOptions) {
         navigateTo(navController, navOptions)
     }
@@ -67,7 +68,6 @@ enum class AdminTopLevelDestination(
     override val titleTextId: Int,
     override val route: KClass<*>,
 ) : TopLevelDestination {
-
     POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
     REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title, ReportsRoute::class),
     ITEMS(PosIcons.Items, PosIcons.Items, R.string.menu_items, ItemsGraph::class),

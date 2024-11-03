@@ -19,7 +19,6 @@ plugins {
     alias(libs.plugins.pos.hilt)
 }
 
-
 dependencies {
     implementation(libs.coroutines.core)
     testImplementation(libs.coroutines.test)

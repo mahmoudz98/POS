@@ -20,6 +20,7 @@ import com.casecode.pos.core.domain.utils.SignInGoogleState
 
 interface AccountRepository {
     fun isGooglePlayServicesAvailable(): Boolean
+
     suspend fun signIn(idToken: suspend () -> String): SignInGoogleState
 
     suspend fun employeeLogin(

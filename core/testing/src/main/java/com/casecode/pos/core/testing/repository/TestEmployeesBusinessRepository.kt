@@ -45,7 +45,11 @@ constructor() :
 
     override fun getEmployees(): Flow<Resource<List<Employee>>> {
         return flow<Resource<List<Employee>>> {
-            if (shouldReturnError) return@flow emit(Resource.error(R.string.core_data_get_business_failure))
+            if (shouldReturnError) {
+                return@flow emit(
+                    Resource.error(R.string.core_data_get_business_failure),
+                )
+            }
             if (shouldReturnEmpty) return@flow emit(Resource.empty())
             emit(Resource.success(fakeEmployees))
         }
@@ -76,7 +80,11 @@ constructor() :
         employees: Employee,
         oldEmployee: Employee,
     ): Resource<Boolean> {
-        if (shouldReturnError) return Resource.error(R.string.core_data_employee_update_business_failure)
+        if (shouldReturnError) {
+            return Resource.error(
+                R.string.core_data_employee_update_business_failure,
+            )
+        }
         return Resource.success(true)
     }
 }

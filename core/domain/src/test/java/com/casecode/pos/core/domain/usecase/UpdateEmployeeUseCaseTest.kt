@@ -28,17 +28,17 @@ class UpdateEmployeeUseCaseTest {
     @Test
     fun `updateEmployeeUseCase when has error return Error`() = runTest {
         val oldEmployee = Employee()
-        val newEmployee = Employee(
-            name = "new name",
-            phoneNumber = "1212",
-            password = "12333",
-            branchName = "new branch",
-            permission = "sales",
-        )
+        val newEmployee =
+            Employee(
+                name = "new name",
+                phoneNumber = "1212",
+                password = "12333",
+                branchName = "new branch",
+                permission = "sales",
+            )
         // When
         testEmployeesBusinessRepository.setReturnError(true)
         val result = updateEmployeeUseCase(oldEmployee, newEmployee)
-
         // Then
         assert(result is Resource.Error)
     }
@@ -46,16 +46,16 @@ class UpdateEmployeeUseCaseTest {
     @Test
     fun `updateEmployeeUseCase when has success return Success`() = runTest {
         val oldEmployee = Employee()
-        val newEmployee = Employee(
-            name = "new name",
-            phoneNumber = "1212",
-            password = "12333",
-            branchName = "new branch",
-            permission = "sales",
-        )
+        val newEmployee =
+            Employee(
+                name = "new name",
+                phoneNumber = "1212",
+                password = "12333",
+                branchName = "new branch",
+                permission = "sales",
+            )
         // When
         val result = updateEmployeeUseCase(oldEmployee, newEmployee)
-
         // Then
         assert(result is Resource.Success)
     }

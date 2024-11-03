@@ -36,11 +36,7 @@ constructor() : EscPosPrint() {
         private const val TIMEOUT_CONNECTION = 6000
     }
 
-    override fun print(
-        context: Context,
-        printerInfo: PrinterInfo,
-        printContent: PrintContent,
-    ) {
+    override fun print(context: Context, printerInfo: PrinterInfo, printContent: PrintContent) {
         val ipAddress = (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Tcp).ipAddress
         val portAddress = (printerInfo.connectionTypeInfo as PrinterConnectionInfo.Tcp).port
         try {

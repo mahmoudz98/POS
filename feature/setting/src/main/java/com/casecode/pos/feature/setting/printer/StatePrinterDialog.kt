@@ -33,10 +33,7 @@ import com.casecode.pos.core.printer.model.PrinterState
 import com.casecode.pos.core.printer.R as printerR
 
 @Composable
-fun StatePrinterDialog(
-    printerState: PrinterState,
-    onDismiss: () -> Unit,
-) {
+fun StatePrinterDialog(printerState: PrinterState, onDismiss: () -> Unit) {
     var shouldDismiss by remember { mutableStateOf(false) }
     AlertDialog(
         properties =
@@ -50,7 +47,9 @@ fun StatePrinterDialog(
         },
         title = {
             if (printerState !is PrinterState.Error && printerState !is PrinterState.Finished) {
-                Text(stringResource(printerR.string.core_printer_state_message_printing_in_progress))
+                Text(
+                    stringResource(printerR.string.core_printer_state_message_printing_in_progress),
+                )
             }
         },
         text = {

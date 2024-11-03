@@ -51,10 +51,8 @@ constructor(
 ) : ViewModel() {
     @Inject
     lateinit var googleIdOption: GetGoogleIdOption
-
     private val _signInUiState = MutableStateFlow(SignInActivityUiState())
     val signInUiState = _signInUiState.asStateFlow()
-
     val loginStateResult: StateFlow<LoginStateResult> =
         authRepository.loginData.stateIn(
             scope = viewModelScope,
@@ -66,18 +64,18 @@ constructor(
         setNetworkMonitor()
     }
 
-    private fun setNetworkMonitor() =
-        viewModelScope.launch {
-            networkMonitor.isOnline.collect {
-                setConnected(it)
-            }
+    private fun setNetworkMonitor() = viewModelScope.launch {
+        networkMonitor.isOnline.collect {
+            setConnected(it)
         }
+    }
 
     private fun setConnected(isOnline: Boolean) {
         _signInUiState.update { it.copy(isOnline = isOnline) }
     }
 
     fun isGooglePlayServicesAvailable() = accountRepository.isGooglePlayServicesAvailable()
+
     fun signIn(idToken: suspend () -> String) {
         if (!signInUiState.value.isOnline) {
             _signInUiState.update { it.copy(userMessage = R.string.core_ui_error_network) }

@@ -82,7 +82,6 @@ private fun BranchDialog(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     val configuration = LocalConfiguration.current
-
     var branchName by remember { mutableStateOf(if (isUpdate) branchSelected.branchName else "") }
     var phoneNumber by remember { mutableStateOf(if (isUpdate) branchSelected.phoneNumber else "") }
     var nameError by remember { mutableStateOf(false) }
@@ -109,7 +108,9 @@ private fun BranchDialog(
         },
         title = {
             Text(
-                text = stringResource(if (isUpdate) uiString.core_ui_update_branch_title else uiString.core_ui_add_branch_title),
+                text = stringResource(
+                    if (isUpdate) uiString.core_ui_update_branch_title else uiString.core_ui_add_branch_title,
+                ),
             )
         },
         text = {

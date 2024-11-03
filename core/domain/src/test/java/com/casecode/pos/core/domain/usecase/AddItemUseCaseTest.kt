@@ -34,42 +34,40 @@ class AddItemUseCaseTest {
     private val addItemUseCase = AddItemUseCase(testItemRepository)
 
     @Test
-    fun addItem_whenItemAdded_returnsSuccess() =
-        runTest {
-            // Given
-            val newItem = Item(
+    fun addItem_whenItemAdded_returnsSuccess() = runTest {
+        // Given
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-            // When
-            val result = addItemUseCase(newItem)
-
-            // Then
-            assertEquals(
-                result,
-                (Resource.success(stringData.core_data_item_added_successfully)),
-            )
-        }
+        // When
+        val result = addItemUseCase(newItem)
+        // Then
+        assertEquals(
+            result,
+            (Resource.success(stringData.core_data_item_added_successfully)),
+        )
+    }
 
     @Test
-    fun addItem_whenHasError_returnsError() =
-        runTest {
-            // Given
-            testItemRepository.setReturnError(true)
-            val newItem = Item(
+    fun addItem_whenHasError_returnsError() = runTest {
+        // Given
+        testItemRepository.setReturnError(true)
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-            // When
-            val result = addItemUseCase(newItem)
-
-            // Then
-            assertEquals(result, Resource.error(stringData.core_data_add_item_failure_generic))
-        }
+        // When
+        val result = addItemUseCase(newItem)
+        // Then
+        assertEquals(result, Resource.error(stringData.core_data_add_item_failure_generic))
+    }
 }

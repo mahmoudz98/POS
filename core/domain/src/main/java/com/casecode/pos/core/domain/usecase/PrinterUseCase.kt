@@ -36,9 +36,8 @@ class GetPrinterUseCase
 constructor(
     private val printerRepository: PrinterRepository,
 ) {
-    operator fun invoke(): Flow<Resource<List<PrinterInfo>>> =
-        flow {
-            emit(Resource.loading())
-            emit(printerRepository.getPrinters())
-        }
+    operator fun invoke(): Flow<Resource<List<PrinterInfo>>> = flow {
+        emit(Resource.loading())
+        emit(printerRepository.getPrinters())
+    }
 }

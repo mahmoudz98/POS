@@ -20,7 +20,6 @@ plugins {
 }
 android {
     namespace = "com.casecode.pos.feature.signin"
-
 }
 
 dependencies {
@@ -28,12 +27,11 @@ dependencies {
     implementation(projects.feature.loginEmployee)
 
     implementation(libs.googleid)
-    //implementation(libs.androidx.credentials)
+    // implementation(libs.androidx.credentials)
 
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.core.testing)
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
     androidTestImplementation(projects.core.testing)
-
 }

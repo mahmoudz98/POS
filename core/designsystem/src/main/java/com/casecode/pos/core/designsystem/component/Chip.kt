@@ -144,7 +144,8 @@ fun PosElevatedFilterChip(
         },
         modifier = modifier,
         enabled = enabled,
-        trailingIcon = if (selected) {
+        trailingIcon =
+        if (selected) {
             {
                 Icon(
                     imageVector = PosIcons.Check,

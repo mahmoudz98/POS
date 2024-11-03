@@ -139,7 +139,6 @@ internal fun SignInScreen(
             .padding(16.dp)
             .zIndex(1f),
     )
-
     Box(
         modifier =
         modifier
@@ -246,7 +245,8 @@ private suspend fun retrieveGoogleIdToken(
     val credentialRequest =
         GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
     val credential =
-        CredentialManager.create(activityContext)
+        CredentialManager
+            .create(activityContext)
             .getCredential(request = credentialRequest, context = activityContext)
     val googleIdTokenCredentialRequest =
         GoogleIdTokenCredential.createFrom(credential.credential.data)

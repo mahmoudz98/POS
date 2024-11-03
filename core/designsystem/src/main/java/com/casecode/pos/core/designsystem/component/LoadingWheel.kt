@@ -50,13 +50,8 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun PosLoadingWheel(
-    contentDesc: String,
-    modifier: Modifier = Modifier,
-) {
+fun PosLoadingWheel(contentDesc: String, modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "wheel transition")
-
-    // Specifies the float animation for slowly drawing out the lines on entering
     val startValue = if (LocalInspectionMode.current) 0F else 1F
     val floatAnimValues = (0 until NUM_OF_LINES).map { remember { Animatable(startValue) } }
     LaunchedEffect(floatAnimValues) {
@@ -74,7 +69,6 @@ fun PosLoadingWheel(
             }
         }
     }
-
     // Specifies the rotation animation of the entire Canvas composable
     val rotationAnim by infiniteTransition.animateFloat(
         initialValue = 0F,
@@ -85,11 +79,9 @@ fun PosLoadingWheel(
         ),
         label = "wheel rotation animation",
     )
-
     // Specifies the color animation for the base-to-progress line color change
     val baseLineColor = MaterialTheme.colorScheme.onBackground
     val progressLineColor = MaterialTheme.colorScheme.inversePrimary
-
     val colorAnimValues =
         (0 until NUM_OF_LINES).map { index ->
             infiniteTransition.animateColor(
@@ -109,7 +101,6 @@ fun PosLoadingWheel(
                 label = "wheel color animation",
             )
         }
-
     // Draws out the LoadingWheel Canvas composable and sets the animations
     Canvas(
         modifier =
@@ -137,10 +128,7 @@ fun PosLoadingWheel(
 }
 
 @Composable
-fun PosOverlayLoadingWheel(
-    contentDesc: String,
-    modifier: Modifier = Modifier,
-) {
+fun PosOverlayLoadingWheel(contentDesc: String, modifier: Modifier = Modifier) {
     Surface(
         shape = RoundedCornerShape(60.dp),
         shadowElevation = 8.dp,

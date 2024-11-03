@@ -21,4 +21,3 @@ plugins {
 tasks.withType<JavaCompile>().configureEach {
     options.isIncremental = true
 }
-

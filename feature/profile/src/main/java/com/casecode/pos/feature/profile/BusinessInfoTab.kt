@@ -41,7 +41,11 @@ fun BusinessInfoTab(business: Business) {
         OutlinedTextField(
             value = business.storeType?.englishName ?: "",
             onValueChange = { /* No changes allowed */ },
-            label = { Text(stringResource(id = com.casecode.pos.core.ui.R.string.core_ui_store_type_hint)) },
+            label = {
+                Text(
+                    stringResource(id = com.casecode.pos.core.ui.R.string.core_ui_store_type_hint),
+                )
+            },
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
         )
@@ -51,7 +55,11 @@ fun BusinessInfoTab(business: Business) {
         OutlinedTextField(
             value = business.email ?: "",
             onValueChange = { /* No changes allowed */ },
-            label = { Text(stringResource(id = com.casecode.pos.core.ui.R.string.core_ui_work_email_hint)) },
+            label = {
+                Text(
+                    stringResource(id = com.casecode.pos.core.ui.R.string.core_ui_work_email_hint),
+                )
+            },
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
         )
@@ -61,7 +69,13 @@ fun BusinessInfoTab(business: Business) {
         OutlinedTextField(
             value = business.phone ?: "",
             onValueChange = { /* No changes allowed */ },
-            label = { Text(stringResource(id = com.casecode.pos.core.ui.R.string.core_ui_work_phone_number_hint)) },
+            label = {
+                Text(
+                    stringResource(
+                        id = com.casecode.pos.core.ui.R.string.core_ui_work_phone_number_hint,
+                    ),
+                )
+            },
             modifier = Modifier.fillMaxWidth(),
             readOnly = true,
         )

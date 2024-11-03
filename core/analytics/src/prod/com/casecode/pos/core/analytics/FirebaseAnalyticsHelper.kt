@@ -22,10 +22,11 @@ import javax.inject.Inject
 /**
  * Implementation of `AnalyticsHelper` which logs events to a Firebase backend.
  */
-internal class FirebaseAnalyticsHelper @Inject constructor(
+internal class FirebaseAnalyticsHelper
+@Inject
+constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : AnalyticsHelper {
-
     override fun logEvent(event: AnalyticsEvent) {
         firebaseAnalytics.logEvent(event.type) {
             for (extra in event.extras) {

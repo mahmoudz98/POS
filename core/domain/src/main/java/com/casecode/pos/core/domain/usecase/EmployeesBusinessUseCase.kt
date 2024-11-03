@@ -89,10 +89,8 @@ class UpdateEmployeesUseCase
 constructor(
     private val employeesRepo: EmployeesBusinessRepository,
 ) {
-    suspend operator fun invoke(
-        oldEmployee: Employee,
-        newEmployee: Employee,
-    ) = employeesRepo.updateEmployee(oldEmployee, newEmployee)
+    suspend operator fun invoke(oldEmployee: Employee, newEmployee: Employee) =
+        employeesRepo.updateEmployee(oldEmployee, newEmployee)
 }
 
 /**
@@ -100,6 +98,10 @@ constructor(
  *
  * @param employeeRepo The repository responsible for employee data operations.
  */
-class DeleteEmployeeUseCase @Inject constructor(private val employeeRepo: EmployeesBusinessRepository) {
+class DeleteEmployeeUseCase
+@Inject
+constructor(
+    private val employeeRepo: EmployeesBusinessRepository,
+) {
     suspend operator fun invoke(employee: Employee) = employeeRepo.deleteEmployee(employee)
 }

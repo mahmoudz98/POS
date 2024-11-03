@@ -28,17 +28,16 @@ class AddEmployeeUseCaseTest {
     @Test
     fun `addEmployee should return Success when employees are not empty`() = runTest {
         // Given
-        val employees = Employee(
-            name = "",
-            phoneNumber = "",
-            password = "",
-            branchName = "",
-            permission = "",
-        )
-
+        val employees =
+            Employee(
+                name = "",
+                phoneNumber = "",
+                password = "",
+                branchName = "",
+                permission = "",
+            )
         // When
         val result = addEmployeeUseCase(employees)
-
         // Then
         assert(result is AddEmployeeResult.Success)
     }
@@ -47,11 +46,9 @@ class AddEmployeeUseCaseTest {
     fun `addEmployee when has error return Error`() = runTest {
         // Given
         val employees = Employee()
-
         // When
         testEmployeesBusinessRepository.setReturnError(true)
         val result = addEmployeeUseCase(employees)
-
         // Then
         assert(result is AddEmployeeResult.Error)
     }

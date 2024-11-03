@@ -34,7 +34,6 @@ import org.jetbrains.uast.UQualifiedReferenceExpression
 class DesignSystemDetector :
     Detector(),
     Detector.UastScanner {
-
     override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(
         UCallExpression::class.java,
         UQualifiedReferenceExpression::class.java,
@@ -57,49 +56,55 @@ class DesignSystemDetector :
 
     companion object {
         @JvmField
-        val ISSUE: Issue = Issue.create(
-            id = "DesignSystem",
-            briefDescription = "Design system",
-            explanation = "This check highlights calls in code that use Compose Material " +
-                    "composables instead of equivalents from the POS design system " +
-                    "module.",
-            category = Category.CUSTOM_LINT_CHECKS,
-            priority = 7,
-            severity = Severity.ERROR,
-            implementation = Implementation(
-                DesignSystemDetector::class.java,
-                Scope.JAVA_FILE_SCOPE,
-            ),
-        )
+        val ISSUE: Issue =
+            Issue.create(
+                id = "DesignSystem",
+                briefDescription = "Design system",
+                explanation =
+                """This check highlights calls in code that use Compose
+                   Material composables instead of equivalents
+                   from the POS design system module.
+                """.trimMargin(),
+                category = Category.CUSTOM_LINT_CHECKS,
+                priority = 7,
+                severity = Severity.ERROR,
+                implementation =
+                Implementation(
+                    DesignSystemDetector::class.java,
+                    Scope.JAVA_FILE_SCOPE,
+                ),
+            )
 
         // Unfortunately :lint is a Java module and thus can't depend on the :core-designsystem
         // Android module, so we can't use composable function references (eg. ::Button.name)
         // instead of hardcoded names.
-        val METHOD_NAMES = mapOf(
-            "MaterialTheme" to "PosTheme",
-            "Button" to "PosButton",
-            "OutlinedButton" to "PosOutlinedButton",
-            "TextButton" to "PosTextButton",
-            "FilterChip" to "PosFilterChip",
-            "ElevatedFilterChip" to "PosFilterChip",
-            "NavigationBar" to "PosNavigationBar",
-            "NavigationBarItem" to "PosNavigationBarItem",
-            "NavigationRail" to "PosNavigationRail",
-            "NavigationRailItem" to "PosNavigationRailItem",
-            "TabRow" to "PosTabRow",
-            "Tab" to "PosTab",
-            "IconToggleButton" to "PosIconToggleButton",
-            "FilledIconToggleButton" to "PosIconToggleButton",
-            "FilledTonalIconToggleButton" to "PosIconToggleButton",
-            "OutlinedIconToggleButton" to "PosIconToggleButton",
-            "CenterAlignedTopAppBar" to "PosTopAppBar",
-            "SmallTopAppBar" to "PosTopAppBar",
-            "MediumTopAppBar" to "PosTopAppBar",
-            "LargeTopAppBar" to "PosTopAppBar",
-        )
-        val RECEIVER_NAMES = mapOf(
-            "Icons" to "PosIcons",
-        )
+        val METHOD_NAMES =
+            mapOf(
+                "MaterialTheme" to "PosTheme",
+                "Button" to "PosButton",
+                "OutlinedButton" to "PosOutlinedButton",
+                "TextButton" to "PosTextButton",
+                "FilterChip" to "PosFilterChip",
+                "ElevatedFilterChip" to "PosFilterChip",
+                "NavigationBar" to "PosNavigationBar",
+                "NavigationBarItem" to "PosNavigationBarItem",
+                "NavigationRail" to "PosNavigationRail",
+                "NavigationRailItem" to "PosNavigationRailItem",
+                "TabRow" to "PosTabRow",
+                "Tab" to "PosTab",
+                "IconToggleButton" to "PosIconToggleButton",
+                "FilledIconToggleButton" to "PosIconToggleButton",
+                "FilledTonalIconToggleButton" to "PosIconToggleButton",
+                "OutlinedIconToggleButton" to "PosIconToggleButton",
+                "CenterAlignedTopAppBar" to "PosTopAppBar",
+                "SmallTopAppBar" to "PosTopAppBar",
+                "MediumTopAppBar" to "PosTopAppBar",
+                "LargeTopAppBar" to "PosTopAppBar",
+            )
+        val RECEIVER_NAMES =
+            mapOf(
+                "Icons" to "PosIcons",
+            )
 
         fun reportIssue(
             context: JavaContext,

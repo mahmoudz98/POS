@@ -54,24 +54,22 @@ import com.casecode.pos.feature.item.ItemsViewModel
 import com.casecode.pos.feature.item.R
 
 @Composable
-fun QRCodePrintItemDialog(
-    viewModel: ItemsViewModel,
-    onDismiss: () -> Unit,
-) {
+fun QRCodePrintItemDialog(viewModel: ItemsViewModel, onDismiss: () -> Unit) {
     val itemPrint = viewModel.itemSelected.collectAsStateWithLifecycle()
     QRCodePrintItemDialog(itemPrint = itemPrint.value, onDismiss = onDismiss)
 }
 
 @Composable
-internal fun QRCodePrintItemDialog(
-    itemPrint: Item?,
-    onDismiss: () -> Unit,
-) {
+internal fun QRCodePrintItemDialog(itemPrint: Item?, onDismiss: () -> Unit) {
     val configuration = LocalConfiguration.current
     val name = rememberSaveable { mutableStateOf(itemPrint?.name) }
     val barcode = rememberSaveable { mutableStateOf(itemPrint?.sku) }
     val price = rememberSaveable { mutableStateOf(itemPrint?.unitPrice) }
-    var printedItemCount by rememberSaveable { mutableIntStateOf(1) } // Use State for printedItemCount
+    var printedItemCount by rememberSaveable {
+        mutableIntStateOf(
+            1,
+        )
+    } // Use State for printedItemCount
 
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -88,7 +86,7 @@ internal fun QRCodePrintItemDialog(
         text = {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally, // Align all children to center
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 PosOutlinedTextField(
                     value = printedItemCount.toString(),
@@ -103,7 +101,13 @@ internal fun QRCodePrintItemDialog(
                         imeAction = ImeAction.Done,
                     ),
                     modifier = Modifier.fillMaxWidth(),
-                    supportingText = if (printedItemCount < 1) stringResource(R.string.feature_item_error_copies_empty) else null,
+                    supportingText = if (printedItemCount < 1) {
+                        stringResource(
+                            R.string.feature_item_error_copies_empty,
+                        )
+                    } else {
+                        null
+                    },
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -112,7 +116,6 @@ internal fun QRCodePrintItemDialog(
                     data = barcode.value?.encodeAsBitmap(),
                     contentDescription = null,
                 )
-
                 // Use more descriptive variable names
                 val itemName = name.value ?: ""
                 val itemBarcode = barcode.value.toString()
@@ -137,7 +140,11 @@ internal fun QRCodePrintItemDialog(
         },
         dismissButton = {
             PosTextButton(onClick = onDismiss) {
-                Text(stringResource(com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text))
+                Text(
+                    stringResource(
+                        com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
+                    ),
+                )
             }
         },
     )

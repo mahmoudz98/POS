@@ -23,12 +23,10 @@ plugins {
 android {
     namespace = "com.casecode.pos.benchmark"
 
-
     defaultConfig {
         minSdk = 27
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "APP_BUILD_TYPE_SUFFIX", "\"\"")
-
     }
     buildFeatures {
         buildConfig = true
@@ -51,7 +49,6 @@ android {
         }
     }
 
-
     targetProjectPath = ":app"
     experimentalProperties["android.experimental.self-instrumenting"] = true
 }
@@ -61,7 +58,6 @@ baselineProfile {
 
     // Don't use a connected device but rely on a GMD for consistency between local and CI builds.
     useConnectedDevices = false
-
 }
 
 dependencies {

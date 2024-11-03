@@ -52,7 +52,9 @@ constructor(
      */
     override suspend fun getSubscriptions(): SubscriptionsResource = withContext(ioDispatcher) {
         suspendCoroutine<SubscriptionsResource> { continuation ->
-            db.getCollection(SUBSCRIPTIONS_COLLECTION_PATH).orderBy(SUBSCRIPTION_COST_FIELD)
+            db
+                .getCollection(SUBSCRIPTIONS_COLLECTION_PATH)
+                .orderBy(SUBSCRIPTION_COST_FIELD)
                 .get()
                 .addOnSuccessListener {
                     val subscriptions = mutableListOf<Subscription>()

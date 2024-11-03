@@ -23,5 +23,4 @@ internal fun PowerAssertGradleExtension.configurePowerAssert() {
             "prodReleaseUnitTest",
         ),
     )
-
 }

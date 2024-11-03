@@ -93,11 +93,9 @@ fun LoginInEmployeeDialog(
     val userAdmin = rememberSaveable { mutableStateOf("") }
     val name = rememberSaveable { mutableStateOf("") }
     val password = rememberSaveable { mutableStateOf("") }
-
     val userAdminError = remember { mutableStateOf(false) }
     val nameError = remember { mutableStateOf(false) }
     val passwordError = remember { mutableStateOf(false) }
-
     val snackState = remember { SnackbarHostState() }
 
     AlertDialog(
@@ -284,7 +282,9 @@ fun LoginInEmployeeDialog(
             PosTextButton(
                 enabled = uiState.inProgressLoginEmployee.not(),
                 onClick = {
-                    if (name.value.isEmpty() || userAdmin.value.isEmpty() || password.value.isEmpty()) {
+                    if (name.value.isEmpty() ||
+                        userAdmin.value.isEmpty() || password.value.isEmpty()
+                    ) {
                         nameError.value = name.value.isEmpty()
                         userAdminError.value = userAdmin.value.isBlank()
                         passwordError.value = password.value.isEmpty()

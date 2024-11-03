@@ -70,7 +70,6 @@ fun ItemsScreen(
     val categories by viewModel.categoriesUiState.collectAsStateWithLifecycle()
     val filterUiState by viewModel.filterUiState.collectAsStateWithLifecycle()
     val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
-
     var showDialogItemDelete by remember { mutableStateOf(false) }
     ItemsScreen(
         uiState = uiState,
@@ -95,15 +94,13 @@ fun ItemsScreen(
             showDialogItemDelete = true
             viewModel.setItemSelected(it)
         },
-
         onPrintItemClick = {
             viewModel.setItemSelected(it)
             onPrintItemClick()
         },
         onAddItemClick = onAddItemClick,
         onShownMessage = viewModel::snackbarMessageShown,
-
-        )
+    )
     if (showDialogItemDelete) {
         DeleteItemDialog(
             onConfirm = {
@@ -184,14 +181,18 @@ internal fun ItemsScreen(
                     uiState,
                     transitionSpec = {
                         fadeIn(animationSpec = tween(300)) togetherWith
-                                fadeOut(animationSpec = tween(300))
+                            fadeOut(
+                                animationSpec =
+                                tween(
+                                    300,
+                                ),
+                            )
                     },
                     modifier =
                     Modifier.clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
-                    ) {
-                    },
+                    ) {},
                     label = "Items Content",
                 ) { targetState ->
                     when (targetState) {
@@ -223,8 +224,7 @@ internal fun ItemsScreen(
                                 onItemLongClick = {
                                     onItemLongClick(it)
                                 },
-
-                                )
+                            )
                         }
                     }
                 }
@@ -279,8 +279,7 @@ private fun ItemScreenSuccessPreview(
             onPrintItemClick = {},
             onAddItemClick = {},
             onShownMessage = {},
-
-            )
+        )
     }
 }
 
@@ -291,7 +290,8 @@ private fun ItemScreenSuccessWithSearchPreview(
 ) {
     POSTheme {
         ItemsScreen(
-            uiState = ItemsUIState.Success(
+            uiState =
+            ItemsUIState.Success(
                 HashMap(items.associateBy { it.sku }),
             ),
             categories = setOf("Phones", "Headphones", "Computer"),

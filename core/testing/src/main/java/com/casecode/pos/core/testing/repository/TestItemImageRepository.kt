@@ -32,32 +32,25 @@ class TestItemImageRepository
 constructor() :
     BaseTestRepository(),
     ItemImageRepository {
-    override suspend fun uploadImage(
-        bitmap: Bitmap,
-        imageName: String,
-    ): UploadImage =
+    override suspend fun uploadImage(bitmap: Bitmap, imageName: String): UploadImage =
         if (shouldReturnError) {
             Resource.Companion.error(R.string.core_data_download_url_failure)
         } else {
             Resource.Companion.success("imageTest.com")
         }
 
-    override suspend fun replaceImage(
-        bitmap: Bitmap,
-        imageUrl: String,
-    ): ReplaceImage =
+    override suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): ReplaceImage =
         if (shouldReturnError) {
             Resource.Companion.error(R.string.core_data_replace_image_failure)
         } else {
             Resource.Companion.success("imageTest.com")
         }
 
-    override suspend fun deleteImage(imageUrl: String): DeleteImage =
-        if (shouldReturnError) {
-            Resource.Companion.error(R.string.core_data_delete_image_failure_generic)
-        } else {
-            Resource.Companion.success(true)
-        }
+    override suspend fun deleteImage(imageUrl: String): DeleteImage = if (shouldReturnError) {
+        Resource.Companion.error(R.string.core_data_delete_image_failure_generic)
+    } else {
+        Resource.Companion.success(true)
+    }
 
     override fun init() {}
 }

@@ -83,10 +83,7 @@ constructor(
             }
         }
 
-    suspend fun setLoginWithAdmin(
-        uid: String,
-        isCompleteSetupBusiness: Boolean,
-    ) {
+    suspend fun setLoginWithAdmin(uid: String, isCompleteSetupBusiness: Boolean) {
         try {
             loginPreferences.updateData {
                 it.copy {
@@ -105,10 +102,7 @@ constructor(
         }
     }
 
-    suspend fun setLoginByEmployee(
-        employee: EmployeeModel,
-        uid: String,
-    ) {
+    suspend fun setLoginByEmployee(employee: EmployeeModel, uid: String) {
         try {
             loginPreferences.updateData {
                 it.copy {
@@ -132,7 +126,8 @@ constructor(
     suspend fun restLogin() {
         try {
             loginPreferences.updateData {
-                it.toBuilder()
+                it
+                    .toBuilder()
                     .clearUid()
                     .clearEmployee()
                     .clearAuthState()

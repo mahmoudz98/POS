@@ -27,7 +27,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GetTodayInvoicesUseCaseTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 

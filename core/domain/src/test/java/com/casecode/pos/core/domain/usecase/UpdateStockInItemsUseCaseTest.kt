@@ -35,59 +35,54 @@ class UpdateStockInItemsUseCaseTest {
     private val updateStockInItemsUseCase = UpdateStockInItemsUseCase(testItemRepository)
 
     @Test
-    fun updateStockInItemsUseCase_whenItemUpdated_returnsSuccess() =
-        runTest {
-            // Given
-            val newItem = Item(
+    fun updateStockInItemsUseCase_whenItemUpdated_returnsSuccess() = runTest {
+        // Given
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-            val itemsUpdate = listOf(newItem)
-
-            // When
-            val result = updateStockInItemsUseCase(itemsUpdate)
-
-            // Then
-            assertEquals(result, (Resource.success(itemsUpdate)))
-        }
+        val itemsUpdate = listOf(newItem)
+        // When
+        val result = updateStockInItemsUseCase(itemsUpdate)
+        // Then
+        assertEquals(result, (Resource.success(itemsUpdate)))
+    }
 
     @Test
-    fun updateStockInItemsUseCase_whenEmptyItems_returnsMessageEmpty() =
-        runTest {
-            // Given
-            val emptyItems = listOf<Item>()
-
-            // When
-            val result = updateStockInItemsUseCase(emptyItems)
-
-            // Then
-            assertEquals(
-                result,
-                Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
-            )
-        }
+    fun updateStockInItemsUseCase_whenEmptyItems_returnsMessageEmpty() = runTest {
+        // Given
+        val emptyItems = listOf<Item>()
+        // When
+        val result = updateStockInItemsUseCase(emptyItems)
+        // Then
+        assertEquals(
+            result,
+            Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
+        )
+    }
 
     @Test
-    fun updateStockInItemsUseCase_whenHasError_returnMessageError() =
-        runTest {
-            // Given
-            val newItem = Item(
+    fun updateStockInItemsUseCase_whenHasError_returnMessageError() = runTest {
+        // Given
+        val newItem =
+            Item(
                 name = "New Item",
                 unitPrice = 10.0,
                 quantity = 22,
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
-            val itemsUpdate = listOf(newItem)
-            // When
-            testItemRepository setReturnError true
-            val resultUpdate = updateStockInItemsUseCase(itemsUpdate)
-            assertEquals(
-                resultUpdate,
-                (Resource.error(stringData.core_data_update_item_failure_generic)),
-            )
-        }
+        val itemsUpdate = listOf(newItem)
+        // When
+        testItemRepository setReturnError true
+        val resultUpdate = updateStockInItemsUseCase(itemsUpdate)
+        assertEquals(
+            resultUpdate,
+            (Resource.error(stringData.core_data_update_item_failure_generic)),
+        )
+    }
 }

@@ -66,53 +66,52 @@ constructor(
     private val deleteItemUseCase: DeleteItemUseCase,
     private val imageUseCase: ItemImageUseCase,
 ) : ViewModel() {
-
-    private val isOnline: StateFlow<Boolean> = networkMonitor.isOnline
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
-
+    private val isOnline: StateFlow<Boolean> =
+        networkMonitor.isOnline
+            .stateIn(viewModelScope, SharingStarted.Eagerly, false)
     var userMessage: MutableStateFlow<Int?> = MutableStateFlow(null)
         private set
-
     val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
-    val searchWidgetState = savedStateHandle.getStateFlow(
-        key = SEARCH_WIDGET_STATE,
-        initialValue = SearchWidgetState.CLOSED,
-    )
+    val searchWidgetState =
+        savedStateHandle.getStateFlow(
+            key = SEARCH_WIDGET_STATE,
+            initialValue = SearchWidgetState.CLOSED,
+        )
     val categoriesUiState: MutableStateFlow<Set<String>> = MutableStateFlow(emptySet())
-
     private val _filterUiState = MutableStateFlow(FilterUiState())
     val filterUiState = _filterUiState.asStateFlow()
-
-    val itemsUiState: StateFlow<ItemsUIState> = combine(
-        getItemsUseCase(),
-        searchQuery,
-        filterUiState,
-    ) { itemsResource, searchText, filterState ->
-        when (itemsResource) {
-            is Resource.Loading -> ItemsUIState.Loading
-            is Resource.Error -> {
-                showSnackbarMessage(itemsResource.message as Int)
-                ItemsUIState.Error
-            }
-
-            is Resource.Empty -> ItemsUIState.Empty
-            is Resource.Success -> {
-                val categories = itemsResource.data.mapNotNullTo(mutableSetOf()) {
-                    it.category.takeIf { category -> category.isNotBlank() }
+    val itemsUiState: StateFlow<ItemsUIState> =
+        combine(
+            getItemsUseCase(),
+            searchQuery,
+            filterUiState,
+        ) { itemsResource, searchText, filterState ->
+            when (itemsResource) {
+                is Resource.Loading -> ItemsUIState.Loading
+                is Resource.Error -> {
+                    showSnackbarMessage(itemsResource.message as Int)
+                    ItemsUIState.Error
                 }
-                categoriesUiState.update { categories }
-                processSuccessState(
-                    items = itemsResource.data,
-                    searchText = searchText,
-                    filterState = filterState,
-                )
+
+                is Resource.Empty -> ItemsUIState.Empty
+                is Resource.Success -> {
+                    val categories =
+                        itemsResource.data.mapNotNullTo(mutableSetOf()) {
+                            it.category.takeIf { category -> category.isNotBlank() }
+                        }
+                    categoriesUiState.update { categories }
+                    processSuccessState(
+                        items = itemsResource.data,
+                        searchText = searchText,
+                        filterState = filterState,
+                    )
+                }
             }
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000L),
-        initialValue = ItemsUIState.Loading,
-    )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = ItemsUIState.Loading,
+        )
 
     private fun processSuccessState(
         items: List<Item>,
@@ -120,14 +119,14 @@ constructor(
         filterState: FilterUiState,
     ): ItemsUIState {
         val itemsMap = items.associateBy { it.sku }
-
-        val filteredItems = itemsMap.values
-            .asSequence()
-            .filter { item -> matchesSearchCriteria(item, searchText) }
-            .filter { item -> matchesCategory(item, filterState.selectedCategories) }
-            .filter { item -> matchesStockFilter(item, filterState.stockFilter) }
-            .toList()
-            .let { sortItemsByPrice(it, filterState.sortPrice) }
+        val filteredItems =
+            itemsMap.values
+                .asSequence()
+                .filter { item -> matchesSearchCriteria(item, searchText) }
+                .filter { item -> matchesCategory(item, filterState.selectedCategories) }
+                .filter { item -> matchesStockFilter(item, filterState.stockFilter) }
+                .toList()
+                .let { sortItemsByPrice(it, filterState.sortPrice) }
 
         return ItemsUIState.Success(
             items = itemsMap,
@@ -137,10 +136,10 @@ constructor(
 
     private fun matchesSearchCriteria(item: Item, searchText: String): Boolean =
         searchText.isBlank() ||
-                with(searchText.lowercase()) {
-                    item.name.lowercase().contains(this) ||
-                            item.sku.contains(this)
-                }
+            with(searchText.lowercase()) {
+                item.name.lowercase().contains(this) ||
+                    item.sku.contains(this)
+            }
 
     private fun matchesCategory(item: Item, selectedCategories: Set<String>): Boolean =
         selectedCategories.isEmpty() || item.category in selectedCategories
@@ -206,8 +205,10 @@ constructor(
                 showSnackbarMessage(uiString.core_ui_error_network)
                 return@launch
             }
-            val isDuplicate = (itemsUiState.value as? ItemsUIState.Success)?.items
-                ?.containsKey(targetItem.sku) == true
+            val isDuplicate =
+                (itemsUiState.value as? ItemsUIState.Success)
+                    ?.items
+                    ?.containsKey(targetItem.sku) == true
             if (isDuplicate) {
                 showSnackbarMessage(R.string.feature_item_error_duplicate)
                 return@launch
@@ -216,10 +217,7 @@ constructor(
         }
     }
 
-    private suspend fun uploadImageAndAddItem(
-        targetItem: Item,
-        imageBitmap: Bitmap?,
-    ) {
+    private suspend fun uploadImageAndAddItem(targetItem: Item, imageBitmap: Bitmap?) {
         imageUseCase.uploadImage(bitmap = imageBitmap, imageName = targetItem.sku).collect {
             when (it) {
                 is Resource.Loading -> {}
@@ -246,10 +244,7 @@ constructor(
         this.itemImageChanged.value = true
     }
 
-    fun checkNetworkAndUpdateItem(
-        targetItem: Item,
-        imageBitmap: Bitmap?,
-    ) {
+    fun checkNetworkAndUpdateItem(targetItem: Item, imageBitmap: Bitmap?) {
         if (isOnline.value) {
             checkItemImageChangeAndItemUpdate(targetItem, imageBitmap)
         } else {
@@ -257,10 +252,7 @@ constructor(
         }
     }
 
-    private fun checkItemImageChangeAndItemUpdate(
-        targetItem: Item,
-        imageBitmap: Bitmap?,
-    ) {
+    private fun checkItemImageChangeAndItemUpdate(targetItem: Item, imageBitmap: Bitmap?) {
         if (itemImageChanged.value) {
             replaceImageAndUpdateItem(targetItem, imageBitmap)
             itemImageChanged.value = false
@@ -269,17 +261,14 @@ constructor(
         }
     }
 
-    private fun replaceImageAndUpdateItem(
-        targetItem: Item,
-        imageBitmap: Bitmap?,
-    ) {
+    private fun replaceImageAndUpdateItem(targetItem: Item, imageBitmap: Bitmap?) {
         viewModelScope.launch {
-            imageUseCase.replaceOrUploadImage(
-                imageBitmap,
-                itemSelected.value?.imageUrl,
-                targetItem.sku,
-            )
-                .collect {
+            imageUseCase
+                .replaceOrUploadImage(
+                    imageBitmap,
+                    itemSelected.value?.imageUrl,
+                    targetItem.sku,
+                ).collect {
                     when (it) {
                         is Resource.Loading -> {}
                         is Resource.Error -> {
@@ -298,9 +287,7 @@ constructor(
         }
     }
 
-    private fun updateItem(
-        targetItem: Item,
-    ) {
+    private fun updateItem(targetItem: Item) {
         viewModelScope.launch {
             val previousItem = itemSelected.value
             if (previousItem?.name != targetItem.name ||

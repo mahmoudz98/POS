@@ -45,9 +45,10 @@ data class Item(
     val imageUrl: String? = "",
     val deleted: Boolean = false,
 ) {
-
     fun isInStockAndTracked(): Boolean = !((quantity > 0) xor (isTrackStock()))
+
     fun isTrackStock(): Boolean = (reorderLevel != -1)
+
     fun hasLowLevelStock(): Boolean = reorderLevel >= quantity
 
     override fun equals(other: Any?): Boolean {

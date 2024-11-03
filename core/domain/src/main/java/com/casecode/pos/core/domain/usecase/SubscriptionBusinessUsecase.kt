@@ -35,7 +35,9 @@ class SetSubscriptionBusinessUseCase
 constructor(
     private val subscriptionsRep: SubscriptionsBusinessRepository,
 ) {
-    suspend operator fun invoke(subscriptionBusiness: SubscriptionBusiness): AddSubscriptionBusiness {
+    suspend operator fun invoke(
+        subscriptionBusiness: SubscriptionBusiness,
+    ): AddSubscriptionBusiness {
         if (subscriptionBusiness.type.isNullOrEmpty()) {
             return Resource.empty(R.string.core_domain_add_subscription_business_empty)
         }

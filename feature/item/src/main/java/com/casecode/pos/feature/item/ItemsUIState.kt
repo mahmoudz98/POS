@@ -37,6 +37,7 @@ sealed interface ItemsUIState {
     ) : ItemsUIState
 
     data object Error : ItemsUIState
+
     data object Empty : ItemsUIState
 }
 

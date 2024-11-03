@@ -62,17 +62,18 @@ class SignInScreenTest {
     }
 
     @Test
-    fun signInButton_whenClicked_isDisplayed() = runTest {
-        composeTestRule.setContent {
-            SignInScreen(
-                uiState = SignInActivityUiState(isLoading = false),
-                onSignInCLick = { },
-                onLoginEmployeeClick = {},
-                onMessageShown = {},
-            )
+    fun signInButton_whenClicked_isDisplayed() =
+        runTest {
+            composeTestRule.setContent {
+                SignInScreen(
+                    uiState = SignInActivityUiState(isLoading = false),
+                    onSignInCLick = { },
+                    onLoginEmployeeClick = {},
+                    onMessageShown = {},
+                )
+            }
+            composeTestRule.onNode(signInButtonMatcher).assertIsDisplayed().performClick()
         }
-        composeTestRule.onNode(signInButtonMatcher).assertIsDisplayed().performClick()
-    }
 
     @Test
     fun whenHasMessage_snackbarIsDisplayed() {
@@ -84,8 +85,9 @@ class SignInScreenTest {
                 onMessageShown = {},
             )
         }
-        composeTestRule.onNodeWithText(
-            composeTestRule.activity.resources.getString(com.casecode.pos.core.ui.R.string.core_ui_error_network),
-        ).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                composeTestRule.activity.resources.getString(com.casecode.pos.core.ui.R.string.core_ui_error_network),
+            ).assertIsDisplayed()
     }
 }

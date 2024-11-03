@@ -17,7 +17,6 @@ import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.powerassert.gradle.PowerAssertGradleExtension
 
-
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     override fun apply(target: Project) {

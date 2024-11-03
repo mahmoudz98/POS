@@ -32,7 +32,6 @@ import org.junit.Test
  * all asynchronous tasks are executed immediately.
  */
 class SubscriptionsRepositoryImplTest {
-
     private val testDispatcher = StandardTestDispatcher()
     private val testScope: TestScope = TestScope(testDispatcher)
 
