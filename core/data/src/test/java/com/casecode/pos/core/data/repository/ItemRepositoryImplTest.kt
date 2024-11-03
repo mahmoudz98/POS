@@ -21,39 +21,37 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertEquals
+import com.casecode.pos.core.data.R.string as stringData
 
 class ItemRepositoryImplTest {
     // Subject under test.
     private val testItemRepository: TestItemRepository = TestItemRepository()
 
     @Test
-    fun getItems_whenHasItems_returnsResourceSuccessItems() =
-        runTest {
-            // When - get items
-            val actualResult = testItemRepository.getItems().first()
-            // Then - assert that the result is success
-            assertEquals(Resource.Success(testItemRepository.itemsTest), actualResult)
-        }
+    fun getItems_whenHasItems_returnsResourceSuccessItems() = runTest {
+        testItemRepository.sendItems()
+        val actualResult = testItemRepository.getItems().first()
+
+        assertEquals(Resource.Success(testItemRepository.itemsTest), actualResult)
+    }
 
     @Test
-    fun getItems_whenNoItems_returnsResourceEmpty() =
-        runTest {
-            // Given - set return empty items
-            testItemRepository.setReturnEmpty(true)
-            // When - get items
-            val actualResult = testItemRepository.getItems().first()
-            // Then - assert that the result is success
-            assertEquals(Resource.empty(), actualResult)
-        }
+    fun getItems_whenNoItems_returnsResourceEmpty() = runTest {
+        // Given - set return empty items
+        testItemRepository.setReturnEmpty(true)
+        // When - get items
+        val actualResult = testItemRepository.getItems().first()
+        // Then - assert that the result is success
+        assertEquals(Resource.empty(), actualResult)
+    }
 
     @Test
-    fun getItems_whenError_returnsResourceError() =
-        runTest {
-            // Given - set return error
-            testItemRepository.setReturnError(true)
-            // When - get items
-            val actualResult = testItemRepository.getItems().first()
-            // Then - assert that the result is success
-            assertEquals(Resource.error("Error"), actualResult)
-        }
+    fun getItems_whenError_returnsResourceError() = runTest {
+        // Given - set return error
+        testItemRepository.setReturnError(true)
+        // When - get items
+        val actualResult = testItemRepository.getItems().first()
+        // Then - assert that the result is success
+        assertEquals(Resource.error(stringData.core_data_error_fetching_items), actualResult)
+    }
 }

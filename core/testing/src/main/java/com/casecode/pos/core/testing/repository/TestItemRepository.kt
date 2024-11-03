@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 import kotlin.text.isNotBlank
-import com.casecode.pos.core.data.R.string as DataResource
+import com.casecode.pos.core.data.R.string as stringData
 
 class TestItemRepository
 @Inject
@@ -65,39 +65,39 @@ constructor() :
 
     override fun setReturnError(value: Boolean) {
         super.setReturnError(value)
-        resourcesItemsFlow.tryEmit(Resource.error(DataResource.core_data_error_fetching_items))
+        resourcesItemsFlow.tryEmit(Resource.error(stringData.core_data_error_fetching_items))
     }
 
     override fun getItems(): Flow<ResourceItems> = resourcesItemsFlow
 
     override suspend fun addItem(item: Item): AddItem = if (shouldReturnError) {
-        Resource.Companion.error(DataResource.core_data_add_item_failure_generic)
+        Resource.Companion.error(stringData.core_data_add_item_failure_generic)
     } else {
         itemsTest.add(item)
         resourcesItemsFlow.tryEmit(Resource.success(itemsTest))
-        Resource.Success(DataResource.core_data_item_added_successfully)
+        Resource.Success(stringData.core_data_item_added_successfully)
     }
 
     override suspend fun updateItem(item: Item): UpdateItem {
         if (shouldReturnError) {
-            return Resource.Companion.error(DataResource.core_data_update_item_failure_generic)
+            return Resource.Companion.error(stringData.core_data_update_item_failure_generic)
         }
-        return Resource.Success(DataResource.core_data_item_updated_successfully)
+        return Resource.Success(stringData.core_data_item_updated_successfully)
     }
 
     override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
         println(shouldReturnError)
         if (shouldReturnError) {
-            return Resource.Companion.error(DataResource.core_data_update_item_failure_generic)
+            return Resource.Companion.error(stringData.core_data_update_item_failure_generic)
         }
         return Resource.Success(items)
     }
 
     override suspend fun deleteItem(item: Item): DeleteItem {
         if (shouldReturnError) {
-            return Resource.Companion.error(DataResource.core_data_delete_item_failure_generic)
+            return Resource.Companion.error(stringData.core_data_delete_item_failure_generic)
         }
         itemsTest.remove(item)
-        return Resource.success(DataResource.core_data_item_deleted_successfully)
+        return Resource.success(stringData.core_data_item_deleted_successfully)
     }
 }
