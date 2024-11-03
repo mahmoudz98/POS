@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.casecode.pos.feature.item.navigation.itemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
+import com.casecode.pos.feature.profile.profileScreen
 import com.casecode.pos.feature.sale.SaleRoute
 import com.casecode.pos.feature.sale.saleScreen
 import com.casecode.pos.feature.sales.report.navigateToSalesReportDetails
@@ -83,5 +84,6 @@ fun PosSaleNavHost(
             onSignOut = onSignOutClick,
             onDismiss = appState.navController::popBackStack,
         )
+        profileScreen { appState.navController.popBackStack() }
     }
 }

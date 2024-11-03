@@ -30,7 +30,6 @@ import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsSaleGraph
 import com.casecode.pos.feature.sale.SaleRoute
 import com.casecode.pos.feature.sale.navigateToSale
-import com.casecode.pos.feature.setting.SettingGraph
 import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.setting.navigateToSettings
 import com.casecode.pos.feature.statistics.ReportsRoute
@@ -93,6 +92,6 @@ enum class SaleTopLevelDestination(
         PosIcons.Settings,
         PosIcons.Settings,
         R.string.settings_title,
-        SettingGraph::class,
+        SettingRoute::class,
     ),
 }
