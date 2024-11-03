@@ -77,7 +77,7 @@ mockk-andrdoid = "1.13.12"
 
 # Gradle plugins
 ktlint-plugin = "10.3.0"
-spotless = "6.24.0"
+spotless = "6.25.0"
 junitJunit = "4.13.2"
 
 [bundles]
