@@ -73,7 +73,7 @@ androidxTestExt = "1.2.1"
 androidxTestRules = "1.6.1"
 androidxUiAutomator = "2.3.0"
 jacoco = "0.8.12"
-mockk-andrdoid = "1.13.12"
+mockk-andrdoid = "1.13.13"
 
 # Gradle plugins
 ktlint-plugin = "10.3.0"
