@@ -26,10 +26,12 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.process.ExecOperations
 import java.io.File
+import java.util.Locale
 import javax.inject.Inject
 
 @CacheableTask
 abstract class GenerateBadgingTask : DefaultTask() {
+
     @get:OutputFile
     abstract val badging: RegularFileProperty
 
