@@ -15,6 +15,16 @@
  */
 package com.casecode.pos.feature.sale
 
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,17 +56,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
@@ -64,39 +71,126 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
+import com.casecode.pos.core.designsystem.component.PosOutlinedButton
+import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
 import java.text.DecimalFormat
+@Composable
+internal fun SectionSaleItems(
+    modifier: Modifier = Modifier,
+    hasItemsSale: Boolean,
+    totalSaleItems: Double,
+    amountInput: String,
+    restOfAmount: Double,
+    onAmountChanged: (String) -> Unit,
+    onSaveInvoice: () -> Unit,
+) {
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = hasItemsSale,
+        enter = slideInVertically(initialOffsetY = { -40 }) +
+            expandVertically(expandFrom = Alignment.Top) +
+            scaleIn(
+                transformOrigin = TransformOrigin(0.5f, 0f),
+            ) + fadeIn(initialAlpha = 0.3f),
+        exit =
+        slideOutVertically() + shrinkVertically() + fadeOut() +
+            scaleOut(
+                targetScale = 1.2f,
+            ),
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            PosOutlinedTextField(
+                value = amountInput,
+                onValueChange = { onAmountChanged(it) },
+                label = stringResource(R.string.feature_sale_enter_amount_hint),
+                supportingText =
+                stringResource(
+                    R.string.feature_sale_total_price_text,
+                    totalSaleItems.toBigDecimal(),
+                ) + stringResource(
+                    R.string.feature_sale_sale_rest_amount_text,
+                    restOfAmount.toBigDecimal(),
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(0.7f),
+            )
+            PosOutlinedButton(
+                onClick = onSaveInvoice,
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .fillMaxWidth()
+                    .weight(0.3f)
+                    .align(Alignment.CenterVertically),
+            ) {
+                Text(stringResource(R.string.feature_sale_button_text))
+            }
+        }
+    }
+}
+
+@Composable
+internal fun ColumnScope.SectionCartItems(
+    searchItemsUiState: SearchItemsUiState,
+    items: Set<Item>,
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
+    onScan: () -> Unit,
+    onSearchItemClick: (Item) -> Unit,
+    onRemoveItem: (Item) -> Unit,
+    onUpdateQuantity: (Item) -> Unit,
+) {
+    ExposedDropdownMenuBoxSearch(
+        searchItemsUiState = searchItemsUiState,
+        searchQuery = searchQuery,
+        onSearchQueryChanged = onSearchQueryChanged,
+        onScan = onScan,
+        onSearchItemClick = onSearchItemClick,
+    )
+    if (items.isEmpty()) {
+        SaleItemsInvoiceEmpty()
+    } else {
+        SaleItems(
+            itemsInvoice = items,
+            onRemoveItem = onRemoveItem,
+            onUpdateQuantity = onUpdateQuantity,
+        )
+    }
+}
+
+@Composable
+fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean =
+    windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
+        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExposedDropdownMenuBoxSearch(
     modifier: Modifier = Modifier,
-    items: List<Item>,
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
+    searchItemsUiState: SearchItemsUiState,
     onScan: () -> Unit,
     onSearchItemClick: (Item) -> Unit,
 ) {
-    var searchQuery by rememberSaveable { mutableStateOf("") }
     val (allowExpanded, setExpanded) = remember { mutableStateOf(false) }
-    val filteredItems by remember(searchQuery, items) {
-        derivedStateOf {
-            if (searchQuery.isBlank()) {
-                emptyList()
-            } else {
-                items.filter {
-                    it.name.contains(searchQuery, ignoreCase = true) ||
-                        it.sku.contains(searchQuery) ||
-                        it.category.contains(searchQuery, ignoreCase = true) ||
-                        it.sku.contains(normalizeNumber(searchQuery), ignoreCase = true)
-                }
-            }
-        }
-    }
-    val expanded = allowExpanded || filteredItems.isNotEmpty()
+
+    val expanded = allowExpanded || searchItemsUiState is SearchItemsUiState.Success
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     ExposedDropdownMenuBox(
@@ -106,7 +200,7 @@ fun ExposedDropdownMenuBoxSearch(
     ) {
         OutlinedTextField(
             value = searchQuery,
-            onValueChange = { searchQuery = it },
+            onValueChange = onSearchQueryChanged,
             label = {
                 Text(
                     stringResource(R.string.feature_sale_sale_search_hint),
@@ -130,7 +224,7 @@ fun ExposedDropdownMenuBoxSearch(
             singleLine = true,
             trailingIcon = {
                 if (searchQuery.isNotEmpty()) {
-                    IconButton(onClick = { searchQuery = "" }) {
+                    IconButton(onClick = { onSearchQueryChanged("") }) {
                         Icon(
                             PosIcons.Close,
                             contentDescription = null,
@@ -155,42 +249,29 @@ fun ExposedDropdownMenuBoxSearch(
                 },
             ),
         )
-        if (filteredItems.isNotEmpty()) {
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { setExpanded(false) },
-            ) {
-                filteredItems.forEach { item ->
-                    DropdownMenuItem(
-                        text = { ItemDropMenuItem(item) },
-                        onClick = {
-                            onSearchItemClick(item)
-                            setExpanded(false)
-                            searchQuery = ""
-                        },
-                    )
+        when (searchItemsUiState) {
+            is SearchItemsUiState.Success -> {
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { setExpanded(false) },
+                ) {
+                    searchItemsUiState.items.forEach { item ->
+                        DropdownMenuItem(
+                            text = { ItemDropMenuItem(item) },
+                            onClick = {
+                                onSearchItemClick(item)
+                                setExpanded(false)
+                                onSearchQueryChanged("")
+                            },
+                        )
+                    }
                 }
             }
-        }
-    }
-}
-
-private fun normalizeNumber(input: String): String {
-    val arabicNumerals = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
-    val englishNumerals = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-    val sb = StringBuilder()
-    for (char in input) {
-        when (char) {
-            in englishNumerals -> sb.append(char)
-            in arabicNumerals -> {
-                val index = arabicNumerals.indexOf(char)
-                sb.append(englishNumerals[index])
+            else -> {
+                Text(stringResource(R.string.feature_sale_search_empty))
             }
-
-            else -> sb.append(char) // Append non-numeric characters as is
         }
     }
-    return sb.toString()
 }
 
 @Composable
@@ -204,12 +285,14 @@ fun ItemDropMenuItem(item: Item) {
             Text(item.name)
             Text(item.sku)
         }
-        Text(
-            stringResource(
-                com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format,
-                item.quantity,
-            ),
-        )
+        if (item.isTrackStock()) {
+            Text(
+                stringResource(
+                    com.casecode.pos.core.ui.R.string.core_ui_item_quantity_format,
+                    item.quantity,
+                ),
+            )
+        }
     }
 }
 
