@@ -16,6 +16,7 @@
 package com.casecode.pos.feature.sale
 
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.data.utils.NetworkMonitor
@@ -24,244 +25,236 @@ import com.casecode.pos.core.domain.usecase.GetItemsUseCase
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.model.data.users.addItemToInvoices
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val SEARCH_QUERY = "searchQuery"
 
 @HiltViewModel
 class SaleViewModel
 @Inject
 constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val getItemsUseCase: GetItemsUseCase,
+    networkMonitor: NetworkMonitor,
+    getItemsUseCase: GetItemsUseCase,
     private val addInvoiceUseCase: AddInvoiceUseCase,
     private val updateStockInItemsUseCase: UpdateStockInItemsUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(SaleUiState())
-    val uiState: StateFlow<SaleUiState> = _uiState.asStateFlow()
-    private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-    init {
-        fetchItems()
-        setupNetworkMonitor()
-    }
-
-    private fun setupNetworkMonitor() = viewModelScope.launch {
-        networkMonitor.isOnline.collect {
-            isOnline.value = it
-        }
-    }
-
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal fun fetchItems() {
-        viewModelScope.launch {
-            getItemsUseCase().collect {
-                when (it) {
-                    is Resource.Empty -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                invoiceState = InvoiceState.EmptyItems,
-                            )
-                        }
-                    }
+    val items = MutableStateFlow<MutableMap<String, Item>>(mutableMapOf())
+    val searchQuery = savedStateHandle.getStateFlow(SEARCH_QUERY, initialValue = "")
+    val itemsUiState: StateFlow<ItemsUiState> = getItemsUseCase().map { result ->
+        when (result) {
+            is Resource.Empty -> ItemsUiState.Empty
+            is Resource.Error -> {
+                showSnackbarMessage(result.message as Int)
+                ItemsUiState.Empty
+            }
 
-                    is Resource.Error -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                invoiceState = InvoiceState.EmptyItems,
-                            )
-                        }
-                    }
-
-                    Resource.Loading -> {
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                invoiceState = InvoiceState.Loading,
-                            )
-                        }
-                    }
-
-                    is Resource.Success -> {
-                        checkTouUpdateInvoiceState()
-                        _uiState.update { uiState ->
-                            uiState.copy(
-                                items = it.data,
-                            )
-                        }
-                    }
-                }
+            Resource.Loading -> ItemsUiState.Loading
+            is Resource.Success -> {
+                items.update { result.data.associateBy { it.sku }.toMutableMap() }
+                ItemsUiState.Success
             }
         }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000L),
+        ItemsUiState.Loading,
+    )
+    private val saleItemsUiState = SaleItemsUiState()
+    val saleItemsState get() = saleItemsUiState.items
+    val totalSaleItems get() = saleItemsUiState.totalSaleItems
+
+    private val _itemSelected = MutableStateFlow<Item?>(null)
+    val itemSelected = _itemSelected.asStateFlow()
+    private val _itemInvoiceSelected = MutableStateFlow<Item?>(null)
+    val itemInvoiceSelected = _itemInvoiceSelected.asStateFlow()
+    private val _amountInput = MutableStateFlow("")
+    val amountInput = _amountInput.asStateFlow()
+    val restOfAmount: StateFlow<Double> = _amountInput.map { amount ->
+        amount.toDoubleOrNull()?.let {
+            if (it == saleItemsUiState.totalSaleItems) {
+                0.0
+            } else {
+                it.minus(saleItemsUiState.totalSaleItems)
+            }
+        } ?: 0.0
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000L),
+        0.0,
+    )
+    val searchResultItemsUiState: StateFlow<SearchItemsUiState> = combine(
+        items,
+        searchQuery,
+    ) { items, query ->
+        if (query.isBlank()) {
+            SearchItemsUiState.Empty
+        } else {
+            val filteredItems = items.values
+                .asSequence()
+                .filter { matchesSearchCriteria(it, query) }
+                .toList()
+            SearchItemsUiState.Success(filteredItems)
+        }
+    }.catch { emit(SearchItemsUiState.LoadFailed) }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            SearchItemsUiState.Empty,
+        )
+    private val isOnline = networkMonitor.isOnline
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    private val _userMessage = MutableStateFlow<Int?>(null)
+    val userMessage = _userMessage.asStateFlow()
+
+    private fun matchesSearchCriteria(item: Item, searchText: String): Boolean =
+        with(searchText.lowercase()) {
+            item.name.lowercase().contains(this, ignoreCase = true) ||
+                item.sku.contains(this) ||
+                item.category.contains(this, ignoreCase = true) ||
+                item.sku.contains(normalizeNumber(this), ignoreCase = true)
+        }
+
+    private fun normalizeNumber(input: String): String {
+        val arabicNumerals = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+        val englishNumerals = listOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+        val sb = StringBuilder()
+        for (char in input) {
+            when (char) {
+                in englishNumerals -> sb.append(char)
+                in arabicNumerals -> {
+                    val index = arabicNumerals.indexOf(char)
+                    sb.append(englishNumerals[index])
+                }
+
+                else -> sb.append(char)
+            }
+        }
+        return sb.toString()
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        savedStateHandle[SEARCH_QUERY] = query
     }
 
     fun scanItem(sku: String) {
-        val item = uiState.value.items.find { it.sku == sku }
-        if (item != null) {
-            this.addItemInvoice(item)
-        } else {
-            showSnackbarMessage(R.string.feature_sale_error_sale_item_not_found)
-        }
+        items.value[sku]?.let {
+            addItemInvoice(it)
+        } ?: showSnackbarMessage(R.string.feature_sale_error_sale_item_not_found)
     }
 
     fun addItemInvoice(item: Item) {
         if (!item.isInStockAndTracked()) {
-            return showSnackbarMessage(R.string.feature_sale_item_out_of_stock_message)
+            showSnackbarMessage(R.string.feature_sale_item_out_of_stock_message)
+            return
         }
-        _uiState.update {
-            it.copy(
-                itemsInvoice = it.itemsInvoice.addItemToInvoices(item),
-            )
-        }
-        updateStockInItem(item, item.quantity.dec())
-        checkTouUpdateInvoiceState()
-    }
-
-    private fun checkTouUpdateInvoiceState() {
-        _uiState.update {
-            it.copy(
-                invoiceState = if (it.itemsInvoice.isEmpty()) InvoiceState.EmptyItemInvoice else InvoiceState.HasItems,
-            )
-        }
-    }
-
-    fun updateAmount(amount: String) {
-        _uiState.update {
-            it.copy(amountInput = amount)
-        }
+        saleItemsUiState.addItem(item)
+        updateStockInItem(item, item.quantity - 1)
     }
 
     private fun updateStockInItem(item: Item, quantity: Int) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                items =
-                currentState.items.map {
-                    if (it.sku == item.sku) {
-                        // TODO: Change quantity to val
-                        it.quantity = quantity
-                    }
-                    it
-                },
-            )
+        if (!item.isTrackStock()) return
+
+        items.update { current ->
+            current.apply {
+                put(item.sku, item.copy(quantity = quantity))
+            }
         }
     }
 
     fun deleteItemInvoice(item: Item) {
-        val itemInStock =
-            getItem(item.sku)
-                ?: return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
+        val itemInStock = getItem(item.sku) ?: run {
+            showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_unknown)
+            return
+        }
 
         updateStockInItem(
-            itemInStock,
-            item.quantity.plus(itemInStock.quantity),
+            item = itemInStock,
+            quantity = item.quantity + itemInStock.quantity,
         )
-        val newItemsInvoice = uiState.value.itemsInvoice.minus(item)
-        _uiState.update {
-            it.copy(itemsInvoice = newItemsInvoice.toMutableSet())
-        }
-        checkTouUpdateInvoiceState()
+        saleItemsUiState.removeItem(item)
     }
-
-    fun itemInvoiceSelected(item: Item) {
-        _uiState.update {
-            it.copy(itemInvoiceSelected = item)
-        }
-    }
-
-    fun updateQuantityItemSelected(item: Item) {
-        _uiState.update {
-            it.copy(itemSelected = getItem(item.sku), itemInvoiceSelected = item)
-        }
-    }
-
-    private fun getItem(itemSku: String): Item? = uiState.value.items.find { it.sku == itemSku }
 
     fun updateQuantityItemInvoice(newQuantity: Int) {
-        val updateItemInvoice =
-            _uiState.value.itemInvoiceSelected
-                ?: return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
-        val updateItemSelectedInStock =
-            getItem(updateItemInvoice.sku)
-                ?: return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
+        val updateItemInvoice = _itemInvoiceSelected.value ?: run {
+            showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
+            return
+        }
+        val updateItemSelectedInStock = getItem(updateItemInvoice.sku) ?: run {
+            showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
+            return
+        }
 
         if (newQuantity == updateItemInvoice.quantity) {
-            return showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
+            showSnackbarMessage(R.string.feature_sale_error_update_invoice_item_quantity)
+            return
         }
-        val newQuantityInStock =
-            newQuantity.minus(updateItemInvoice.quantity).minus(updateItemSelectedInStock.quantity)
+        val wholeStock = updateItemSelectedInStock.quantity + updateItemInvoice.quantity
+        val newQuantityInStock = wholeStock.minus(newQuantity)
+
         updateStockInItem(updateItemSelectedInStock, newQuantityInStock)
-        showSnackbarMessage(R.string.feature_sale_success_update_invoice_item_quantity)
-        _uiState.update {
-            it.copy(
-                itemsInvoice =
-                it.itemsInvoice
-                    .minus(updateItemInvoice)
-                    .plus(updateItemInvoice.copy(quantity = newQuantity)),
-            )
-        }
+        saleItemsUiState.updateItemQuantity(updateItemInvoice.sku, newQuantity)
     }
 
     fun updateStockAndAddItemInvoice() {
-        val saleItems = uiState.value.itemsInvoice.toList()
-
-        if (!isOnline.value) {
-            return showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_network)
-        }
         viewModelScope.launch {
-            when (val updateItems = updateStockInItemsUseCase(saleItems)) {
-                is Resource.Empty -> {
-                    showSnackbarMessage(updateItems.message as Int)
-                }
-
-                is Resource.Error -> {
-                    showSnackbarMessage(updateItems.message as Int)
-                }
-
+            if (!isOnline.value) {
+                showSnackbarMessage(com.casecode.pos.core.ui.R.string.core_ui_error_network)
+                return@launch
+            }
+            val saleItems = saleItemsState.toList()
+            when (val updateResult = updateStockInItemsUseCase(saleItems)) {
+                is Resource.Success -> addSaleInvoice(updateResult.data)
+                is Resource.Error -> showSnackbarMessage(updateResult.message as Int)
+                is Resource.Empty -> showSnackbarMessage(updateResult.message as Int)
                 Resource.Loading -> Unit
-                is Resource.Success -> {
-                    addInvoice(updateItems.data)
-                }
             }
         }
     }
 
-    private suspend fun addInvoice(saleItems: List<Item>) {
-        addInvoiceUseCase(saleItems).collect { resourceAddInvoice ->
-            when (resourceAddInvoice) {
-                is Resource.Empty -> {
-                    showSnackbarMessage(resourceAddInvoice.message as Int)
-                }
-
-                is Resource.Error -> {
-                    showSnackbarMessage(resourceAddInvoice.message as Int)
-                }
-
-                Resource.Loading -> {}
-                is Resource.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            itemsInvoice = mutableSetOf(),
-                            invoiceState = InvoiceState.EmptyItemInvoice,
-                        )
-                    }
-                }
+    private suspend fun addSaleInvoice(saleItems: List<Item>) {
+        addInvoiceUseCase(saleItems).collect { result ->
+            when (result) {
+                is Resource.Success -> saleItemsUiState.clear()
+                is Resource.Error -> showSnackbarMessage(result.message as Int)
+                is Resource.Empty -> showSnackbarMessage(result.message as Int)
+                Resource.Loading -> Unit
             }
         }
     }
+
+    fun updateAmount(amount: String) {
+        _amountInput.value = amount
+    }
+
+    fun itemInvoiceSelected(item: Item) {
+        _itemInvoiceSelected.value = item
+    }
+
+    fun updateQuantityItemSelected(item: Item) {
+        _itemInvoiceSelected.value = item
+        _itemSelected.value = getItem(item.sku)
+    }
+
+    private fun getItem(sku: String): Item? = items.value[sku]
 
     fun snackbarMessageShown() {
-        _uiState.update {
-            it.copy(userMessage = null)
-        }
+        _userMessage.value = null
     }
 
     fun showSnackbarMessage(message: Int) {
-        _uiState.update {
-            it.copy(userMessage = message)
-        }
+        _userMessage.update { message }
     }
 }
