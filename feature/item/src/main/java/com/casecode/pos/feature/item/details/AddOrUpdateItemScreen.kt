@@ -187,7 +187,11 @@ fun AddOrUpdateItemScreen(
     Scaffold(
         topBar = {
             PosTopAppBar(
-                titleRes = if (isUpdate) R.string.feature_item_update_item_title_text else R.string.feature_item_add_item_title_text,
+                titleRes = if (isUpdate) {
+                    R.string.feature_item_update_item_title_text
+                } else {
+                    R.string.feature_item_add_item_title_text
+                },
                 navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = null,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
