@@ -38,7 +38,7 @@ data class Item(
     val costPrice: Double = 0.0,
     val unitPrice: Double = 0.0,
     val reorderLevel: Int = -1,
-    var quantity: Int = 0,
+    val quantity: Int = 0,
     val qtyPerPack: Int = 0,
     val sku: String = "",
     val unitOfMeasurement: UnitOfMeasurement? = UnitOfMeasurement.PerPiece,
