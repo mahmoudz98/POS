@@ -20,16 +20,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.ui.R.string as uiString
 
@@ -37,12 +39,12 @@ import com.casecode.pos.core.ui.R.string as uiString
 fun QuantityDialog(
     oldQuantity: Int,
     inStock: Int,
+    isTrackingQuantity: Boolean,
     onDismiss: () -> Unit,
     onConfirm: (Int) -> Unit,
 ) {
-    val quantity =
-        rememberSaveable { mutableStateOf(oldQuantity.toString()) }
-    val quantityError = remember { mutableStateOf(false) }
+    var quantity by rememberSaveable { mutableStateOf(oldQuantity.toString()) }
+    val quantityError = remember { mutableStateOf<Int?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -50,37 +52,33 @@ fun QuantityDialog(
         text = {
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = quantity.value,
+                PosOutlinedTextField(
+                    modifier = Modifier,
+                    value = quantity,
                     onValueChange = {
-                        quantity.value = it
-
-                        quantityError.value =
-                            it.isEmpty() ||
-                            it.toDouble() > inStock ||
-                            it.toDouble() <= 0
+                        quantity = if (it.startsWith("0")) {
+                            "1"
+                        } else {
+                            it
+                        }
+                        quantityError.value = if (it.isBlank() || it == "0") {
+                            R.string.feature_sale_error_quantity_greater_than_zero
+                        } else if (isTrackingQuantity && it.toInt() > inStock) {
+                            R.string.feature_sale_error_quantity_less_than
+                        } else {
+                            null
+                        }
                     },
-                    isError = quantityError.value,
-                    label = { Text(text = stringResource(uiString.core_ui_item_quantity_label)) },
-                    supportingText = {
-                        Text(
-                            if (quantityError.value) {
-                                when {
-                                    quantity.value.toDouble() <= 0.0 ->
-                                        stringResource(
-                                            R.string.feature_sale_error_quantity_greater_than_zero,
-                                        )
-
-                                    quantity.value.toDouble() > inStock ->
-                                        stringResource(R.string.feature_sale_error_quantity_less_than) +
-                                            inStock
-
-                                    else -> ""
-                                }
+                    isError = quantityError.value != null,
+                    label = stringResource(uiString.core_ui_item_quantity_label),
+                    supportingText = quantityError.value?.let {
+                        stringResource(it).apply {
+                            this + if (it == R.string.feature_sale_error_quantity_less_than) {
+                                inStock
                             } else {
                                 ""
-                            },
-                        )
+                            }
+                        }
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
@@ -89,8 +87,8 @@ fun QuantityDialog(
         confirmButton = {
             PosTextButton(
                 onClick = {
-                    if (!quantityError.value) {
-                        onConfirm(quantity.value.toInt())
+                    if (quantityError.value == null) {
+                        onConfirm(quantity.toInt())
                     }
                 },
             ) {
