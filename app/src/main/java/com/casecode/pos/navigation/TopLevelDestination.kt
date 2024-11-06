@@ -28,8 +28,8 @@ import com.casecode.pos.feature.item.navigation.ItemsGraph
 import com.casecode.pos.feature.item.navigation.ItemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsSaleGraph
-import com.casecode.pos.feature.sale.SaleRoute
-import com.casecode.pos.feature.sale.navigateToSale
+import com.casecode.pos.feature.sale.navigation.SaleRoute
+import com.casecode.pos.feature.sale.navigation.navigateToSale
 import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.setting.navigateToSettings
 import com.casecode.pos.feature.statistics.ReportsRoute

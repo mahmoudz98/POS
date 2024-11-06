@@ -24,8 +24,8 @@ import com.casecode.pos.feature.employee.employeesScreen
 import com.casecode.pos.feature.item.navigation.itemsGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.profile.profileScreen
-import com.casecode.pos.feature.sale.SaleRoute
-import com.casecode.pos.feature.sale.saleScreen
+import com.casecode.pos.feature.sale.navigation.SaleRoute
+import com.casecode.pos.feature.sale.navigation.saleScreen
 import com.casecode.pos.feature.sales.report.navigateToSalesReport
 import com.casecode.pos.feature.sales.report.navigateToSalesReportDetails
 import com.casecode.pos.feature.sales.report.salesReportGraph

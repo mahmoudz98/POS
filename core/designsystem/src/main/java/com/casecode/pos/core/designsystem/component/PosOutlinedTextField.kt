@@ -77,7 +77,7 @@ fun PosOutlinedTextField(
         enabled = enabled,
         singleLine = true,
         supportingText = {
-            if (supportingText != null && isError) {
+            if (supportingText != null) {
                 Text(supportingText)
             }
         },

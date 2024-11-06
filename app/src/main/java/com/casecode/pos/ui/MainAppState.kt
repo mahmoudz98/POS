@@ -30,7 +30,7 @@ import androidx.navigation.navOptions
 import com.casecode.pos.MainAuthUiState
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.feature.profile.navigateToProfile
-import com.casecode.pos.feature.sale.SaleRoute
+import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.signout.SignOutRoute
 import com.casecode.pos.feature.statistics.ReportsRoute
