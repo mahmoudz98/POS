@@ -82,7 +82,7 @@ class SaleViewModelTest {
         // When - Add item to the invoice
         viewModel.addItemInvoice(itemToAdd)
         // Then - Verify item is added to the invoice with correct quantity
-        val addedInvoiceItem = viewModel.saleItemsState.items.firstOrNull {
+        val addedInvoiceItem = viewModel.saleItemsState.firstOrNull {
             it.sku == expectedSku
         }
         assertNotNull(addedInvoiceItem, "Item was not added to the invoice")
@@ -118,7 +118,7 @@ class SaleViewModelTest {
         // When
         viewModel.scanItem(itemRepository.itemsTest[0].sku)
         val expectedItem =
-            viewModel.saleItemsState.items.elementAt(0)
+            viewModel.saleItemsState.elementAt(0)
         val actualItem = itemRepository.itemsTest[0]
         // Then - check item added to invoice and check quantity is start by one
         assertEquals(expectedItem.sku, actualItem.sku)
@@ -148,7 +148,7 @@ class SaleViewModelTest {
         val item = viewModel.items.value.values.elementAt(0)
         viewModel.addItemInvoice(item)
         // When delete item
-        viewModel.deleteItemInvoice(viewModel.saleItemsState.items.elementAt(0))
+        viewModel.deleteItemInvoice(viewModel.saleItemsState.elementAt(0))
         // Then - check quantity item in stock
         val actual = viewModel.items.value.values.find { it.sku == item.sku }
         assertEquals(
@@ -165,12 +165,12 @@ class SaleViewModelTest {
         viewModel.addItemInvoice(viewModel.items.value.values.elementAt(0))
 
         // When - Update the quantity
-        viewModel.itemInvoiceSelected(viewModel.saleItemsState.items.elementAt(0))
+        viewModel.itemInvoiceSelected(viewModel.saleItemsState.elementAt(0))
         viewModel.updateQuantityItemInvoice(22)
 
         // Then update item in stock and in items invoice
         assertEquals(viewModel.items.value.values.elementAt(0).quantity, 1)
-        assertEquals(viewModel.saleItemsState.items.elementAt(0).quantity, 22)
+        assertEquals(viewModel.saleItemsState.elementAt(0).quantity, 22)
     }
 
     @Test
@@ -181,12 +181,12 @@ class SaleViewModelTest {
         viewModel.addItemInvoice(viewModel.items.value.values.elementAt(0))
 
         // When - Update the quantity
-        viewModel.itemInvoiceSelected(viewModel.saleItemsState.items.elementAt(0))
+        viewModel.itemInvoiceSelected(viewModel.saleItemsState.elementAt(0))
         viewModel.updateQuantityItemInvoice(23)
 
         // Then update item in stock and in items invoice
         assertEquals(viewModel.items.value.values.elementAt(0).quantity, 0)
-        assertEquals(viewModel.saleItemsState.items.elementAt(0).quantity, 23)
+        assertEquals(viewModel.saleItemsState.elementAt(0).quantity, 23)
     }
 
     @Test
@@ -282,7 +282,7 @@ class SaleViewModelTest {
                     sb.append(englishNumerals[index])
                 }
 
-                else -> sb.append(char) // Append non-numeric characters as is
+                else -> sb.append(char)
             }
         }
         return sb.toString()
