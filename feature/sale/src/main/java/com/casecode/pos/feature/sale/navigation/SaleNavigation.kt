@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.sale
+package com.casecode.pos.feature.sale.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.casecode.pos.feature.sale.SaleScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,7 +27,7 @@ data object SaleRoute
 
 fun NavGraphBuilder.saleScreen(onGoToItems: () -> Unit) {
     composable<SaleRoute> {
-        SaleRoute(onGoToItems = onGoToItems)
+        SaleScreen(onGoToItems = onGoToItems)
     }
 }
 
