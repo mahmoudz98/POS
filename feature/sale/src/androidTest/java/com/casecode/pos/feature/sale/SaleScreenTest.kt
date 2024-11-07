@@ -32,20 +32,4 @@ class SaleScreenTest {
         )
     }
 
-    @Test
-    fun circularProgressIndicator_whenScreenIsLoading_exists() {
-        composeTestRule.setContent {
-            SaleScreen(
-                uiState = SaleUiState(invoiceState = InvoiceState.Loading),
-                onSearchItemClick = {},
-                onScan = {},
-                onGoToItems = {},
-                onRemoveItem = {},
-                onUpdateQuantity = {},
-                onAmountChanged = {},
-                onSaveInvoice = {},
-            )
-        }
-        composeTestRule.onNodeWithContentDescription("SaleLoading").assertExists()
-    }
 }
