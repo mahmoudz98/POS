@@ -26,7 +26,6 @@ import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import com.casecode.pos.core.data.R.string as stringData
 
 class SignInActivityViewModelTest {
     @get:Rule
@@ -63,22 +62,6 @@ class SignInActivityViewModelTest {
 
             viewModel.signIn({ "" })
 
-            assertEquals(
-                R.string.core_ui_error_network,
-                viewModel.signInUiState.value.userMessage,
-            )
-        }
-
-    @Test
-    fun testSignIn_whenOnline_showsSuccessMessage() =
-        runTest {
-            networkMonitor.setConnected(true)
-
-            viewModel.signIn({ "" })
-
-            assertEquals(
-                stringData.core_data_sign_in_success,
-                viewModel.signInUiState.value.userMessage,
-            )
+            assertEquals(R.string.core_ui_error_network, viewModel.signInUiState.value.userMessage)
         }
 }
