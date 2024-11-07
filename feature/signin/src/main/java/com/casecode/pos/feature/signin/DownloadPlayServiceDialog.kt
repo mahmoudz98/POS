@@ -23,7 +23,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContextCompat.startActivity
 import com.casecode.pos.core.designsystem.component.PosTextButton
 
 @Composable
@@ -54,20 +53,12 @@ internal fun DownloadPlayServiceDialog(
 }
 
 private fun openGooglePlayStore(context: Context) {
-    val playStoreIntent =
-        Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
-        )
+    val url = "https://play.google.com/store/apps/details?id=com.google.android.gms"
+    val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     try {
-        startActivity(context, playStoreIntent, null)
+        context.startActivity(playStoreIntent, null)
     } catch (_: ActivityNotFoundException) {
-        // Handle the case where the Play Store app is not installed
-        val webIntent =
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms"),
-            )
-        startActivity(context, webIntent, null)
+        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        context.startActivity(webIntent, null)
     }
 }
