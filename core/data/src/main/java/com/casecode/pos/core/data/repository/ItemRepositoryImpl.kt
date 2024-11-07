@@ -54,7 +54,7 @@ import kotlin.coroutines.suspendCoroutine
  * Implementation of the [ItemRepository] interface for handling item-related operations using Firestore.
  *
  * @property ioDispatcher Coroutine dispatcher for performing operations asynchronously on IO-bound threads.
- * @constructor Creates an [ItemRepositoryImpl] with the provided [firestore] and [ioDispatcher].
+ * @constructor Creates an [ItemRepositoryImpl] with the provided [FirestoreService] and [ioDispatcher].
  */
 class ItemRepositoryImpl
 @Inject
@@ -200,16 +200,17 @@ constructor(
                             currentUserUid,
                             ITEMS_COLLECTION_PATH,
                         )
-
-                    items.forEach {
-                        val itemRef = collectionRef.document(it.sku)
+                    for (item in items) {
+                        if (!item.isTrackStock()) continue
+                        val itemRef = collectionRef.document(item.sku)
                         batch.update(
                             itemRef,
                             ITEM_QUANTITY_FIELD,
                             com.casecode.pos.core.firebase.services.FieldValue
-                                .increment(-it.quantity.toDouble()),
+                                .increment(-item.quantity.toDouble()),
                         )
                     }
+
                     batch
                         .commit()
                         .addOnSuccessListener {
