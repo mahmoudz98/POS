@@ -15,6 +15,9 @@
  */
 package com.casecode.pos.feature.sale
 
+/**
+ * Represents the UI state of the items screen.
+ */
 sealed interface ItemsUiState {
     data object Loading : ItemsUiState
     data object Empty : ItemsUiState

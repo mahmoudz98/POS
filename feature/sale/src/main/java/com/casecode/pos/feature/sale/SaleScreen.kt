@@ -19,18 +19,13 @@ import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.recalculateWindowInsets
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
@@ -42,7 +37,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -52,7 +46,6 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosBackground
-import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
@@ -111,10 +104,10 @@ internal fun SaleScreen(viewModel: SaleViewModel = hiltViewModel(), onGoToItems:
         QuantityDialog(
             oldQuantity = itemInvoiceSelected?.quantity ?: 0,
             inStock =
-            itemSelected?.quantity?.plus(
-                itemInvoiceSelected?.quantity ?: 0,
-            ) ?: 0,
-            isTrackingQuantity = itemSelected?.isTrackStock() ?: false,
+                itemSelected?.quantity?.plus(
+                    itemInvoiceSelected?.quantity ?: 0,
+                ) ?: 0,
+            isTrackingQuantity = itemSelected?.isTrackStock() == true,
             onDismiss = { showUpdateQuantityItem = false },
             onConfirm = {
                 viewModel.updateQuantityItemInvoice(it)
@@ -163,11 +156,11 @@ internal fun SaleScreen(
         if (!isExpended(windowSizeClass.windowSizeClass, configuration)) {
             Column(
                 modifier =
-                modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
-                    .navigationBarsPadding()
-                    .imePadding(),
+                    modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                        .navigationBarsPadding()
+                        .imePadding(),
             ) {
                 SaleContentPortrait(
                     itemsUiState = itemsUiState,
@@ -191,7 +184,7 @@ internal fun SaleScreen(
         } else {
             Row(
                 modifier = modifier
-                    .padding(12.dp)
+                    .padding(8.dp)
                     .navigationBarsPadding()
                     .imePadding(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -226,124 +219,36 @@ internal fun SaleScreen(
     }
 }
 
-@Composable
-private fun ColumnScope.SaleContentPortrait(
-    itemsUiState: ItemsUiState,
-    searchItemsUiState: SearchItemsUiState,
-    saleItems: Set<Item>,
-    totalSaleItems: Double,
-    searchQuery: String,
-    amountInput: String,
-    restOfAmount: Double,
-    onGoToItems: () -> Unit,
-    onSearchQueryChanged: (String) -> Unit,
-    onScan: () -> Unit,
-    onSearchItemClick: (Item) -> Unit,
-    onRemoveItem: (Item) -> Unit,
-    onUpdateQuantity: (Item) -> Unit,
-    hasItemsSale: Boolean,
-    onAmountChanged: (String) -> Unit,
-    onSaveInvoice: () -> Unit,
-) {
-    when (itemsUiState) {
-        ItemsUiState.Empty -> SaleItemsEmpty(modifier = Modifier.weight(1f), onGoToItems)
-        ItemsUiState.Loading -> {
-            PosLoadingWheel(
-                contentDesc = "SaleLoading",
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            )
-        }
-
-        ItemsUiState.Success -> {
-            SectionCartItems(
-                items = saleItems,
-                searchItemsUiState = searchItemsUiState,
-                searchQuery = searchQuery,
-                onSearchQueryChanged = onSearchQueryChanged,
-                onScan = onScan,
-                onSearchItemClick = onSearchItemClick,
-                onRemoveItem = onRemoveItem,
-                onUpdateQuantity = onUpdateQuantity,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            SectionSaleItems(
-                hasItemsSale = hasItemsSale,
-                totalSaleItems = totalSaleItems,
-                amountInput = amountInput,
-                restOfAmount = restOfAmount,
-                onAmountChanged = onAmountChanged,
-                onSaveInvoice = onSaveInvoice,
-            )
-        }
-    }
-}
-
-@Composable
-private fun RowScope.SaleContentLandscape(
-    itemsUiState: ItemsUiState,
-    saleItemsState: Set<Item>,
-    searchItemsUiState: SearchItemsUiState,
-    searchQuery: String,
-    onSearchQueryChanged: (String) -> Unit,
-    onScan: () -> Unit,
-    onSearchItemClick: (Item) -> Unit,
-    onRemoveItem: (Item) -> Unit,
-    onUpdateQuantity: (Item) -> Unit,
-    hasItemsSale: Boolean,
-    totalSaleItems: Double,
-    amountInput: String,
-    restOfAmount: Double,
-    onGoToItems: () -> Unit,
-    onAmountChanged: (String) -> Unit,
-    onSaveInvoice: () -> Unit,
-) {
-    when (itemsUiState) {
-        ItemsUiState.Empty -> SaleItemsEmpty(modifier = Modifier.weight(1f), onGoToItems)
-        ItemsUiState.Loading -> {
-            PosLoadingWheel(
-                contentDesc = "SaleLoading",
-                modifier = Modifier.align(Alignment.CenterVertically),
-            )
-        }
-
-        ItemsUiState.Success -> {
-            Column(Modifier.weight(0.5f)) {
-                SectionCartItems(
-                    items = saleItemsState,
-                    searchItemsUiState = searchItemsUiState,
-                    searchQuery = searchQuery,
-                    onSearchQueryChanged = onSearchQueryChanged,
-                    onScan = onScan,
-                    onSearchItemClick = onSearchItemClick,
-                    onRemoveItem = onRemoveItem,
-                    onUpdateQuantity = onUpdateQuantity,
-                )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            SectionSaleItems(
-                modifier = Modifier.weight(0.5f),
-                hasItemsSale = hasItemsSale,
-                totalSaleItems = totalSaleItems,
-                amountInput = amountInput,
-                restOfAmount = restOfAmount,
-                onAmountChanged = onAmountChanged,
-                onSaveInvoice = onSaveInvoice,
-            )
-        }
-    }
-}
 
 @DevicePreviews
 @Composable
-fun PosScreenPreview() {
+fun SaleScreenWithItemsSalePreview() {
     POSTheme {
         PosBackground {
             SaleScreen(
-                itemsUiState = ItemsUiState.Loading,
-                saleItemsState = setOf(Item(), Item(), Item()),
+                itemsUiState = ItemsUiState.Success,
+                saleItemsState = setOf(
+                    Item(
+                        name = "item1",
+                        unitPrice = 123.0,
+                        reorderLevel = 5,
+                        quantity = 10,
+                        sku = "242342343423",
+                    ), Item(
+                        name = "item3",
+                        unitPrice = 12312.0,
+                        quantity = 10,
+                        sku = "242342423423",
+                    ), Item(
+                        name = "item4",
+                        unitPrice = 12.0,
+                        reorderLevel = 5,
+                        quantity = 10,
+                        sku = "24233423423",
+                    )
+                ),
                 totalSaleItems = 0.0,
-                searchItemsUiState = SearchItemsUiState.Empty,
+                searchItemsUiState = SearchItemsUiState.EmptySearch,
                 searchQuery = "",
                 amountInput = "",
                 restOfAmount = 0.0,

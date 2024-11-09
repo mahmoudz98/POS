@@ -34,11 +34,13 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
@@ -52,7 +54,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -73,16 +74,129 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
+import com.casecode.pos.core.designsystem.component.PosBackground
+import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.ui.DeviceLandscapePreviews
+import com.casecode.pos.core.ui.ItemsPreviewParameterProvider
 import java.text.DecimalFormat
+
+@Composable
+internal fun ColumnScope.SaleContentPortrait(
+    itemsUiState: ItemsUiState,
+    searchItemsUiState: SearchItemsUiState,
+    saleItems: Set<Item>,
+    totalSaleItems: Double,
+    searchQuery: String,
+    amountInput: String,
+    restOfAmount: Double,
+    onGoToItems: () -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onScan: () -> Unit,
+    onSearchItemClick: (Item) -> Unit,
+    onRemoveItem: (Item) -> Unit,
+    onUpdateQuantity: (Item) -> Unit,
+    hasItemsSale: Boolean,
+    onAmountChanged: (String) -> Unit,
+    onSaveInvoice: () -> Unit,
+) {
+    when (itemsUiState) {
+        ItemsUiState.Empty -> SaleItemsEmpty(modifier = Modifier.weight(1f), onGoToItems)
+        ItemsUiState.Loading -> {
+            PosLoadingWheel(
+                contentDesc = "SaleLoading",
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            )
+        }
+
+        ItemsUiState.Success -> {
+            SectionCartItems(
+                items = saleItems,
+                searchItemsUiState = searchItemsUiState,
+                searchQuery = searchQuery,
+                onSearchQueryChanged = onSearchQueryChanged,
+                onScan = onScan,
+                onSearchItemClick = onSearchItemClick,
+                onRemoveItem = onRemoveItem,
+                onUpdateQuantity = onUpdateQuantity,
+            )
+
+            SectionSaleItems(
+                hasItemsSale = hasItemsSale,
+                totalSaleItems = totalSaleItems,
+                amountInput = amountInput,
+                restOfAmount = restOfAmount,
+                onAmountChanged = onAmountChanged,
+                onSaveInvoice = onSaveInvoice,
+            )
+        }
+    }
+}
+
+@Composable
+internal fun RowScope.SaleContentLandscape(
+    itemsUiState: ItemsUiState,
+    saleItemsState: Set<Item>,
+    searchItemsUiState: SearchItemsUiState,
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
+    onScan: () -> Unit,
+    onSearchItemClick: (Item) -> Unit,
+    onRemoveItem: (Item) -> Unit,
+    onUpdateQuantity: (Item) -> Unit,
+    hasItemsSale: Boolean,
+    totalSaleItems: Double,
+    amountInput: String,
+    restOfAmount: Double,
+    onGoToItems: () -> Unit,
+    onAmountChanged: (String) -> Unit,
+    onSaveInvoice: () -> Unit,
+) {
+    when (itemsUiState) {
+        ItemsUiState.Empty -> SaleItemsEmpty(modifier = Modifier.weight(1f), onGoToItems)
+        ItemsUiState.Loading -> {
+            PosLoadingWheel(
+                contentDesc = "SaleLoading",
+                modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically),
+            )
+        }
+
+        ItemsUiState.Success -> {
+            Column(Modifier.weight(0.5f)) {
+                SectionCartItems(
+                    items = saleItemsState,
+                    searchItemsUiState = searchItemsUiState,
+                    searchQuery = searchQuery,
+                    onSearchQueryChanged = onSearchQueryChanged,
+                    onScan = onScan,
+                    onSearchItemClick = onSearchItemClick,
+                    onRemoveItem = onRemoveItem,
+                    onUpdateQuantity = onUpdateQuantity,
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            SectionSaleItems(
+                modifier = Modifier.weight(0.5f),
+                hasItemsSale = hasItemsSale,
+                totalSaleItems = totalSaleItems,
+                amountInput = amountInput,
+                restOfAmount = restOfAmount,
+                onAmountChanged = onAmountChanged,
+                onSaveInvoice = onSaveInvoice,
+            )
+        }
+    }
+}
+
 @Composable
 internal fun SectionSaleItems(
     modifier: Modifier = Modifier,
@@ -97,15 +211,15 @@ internal fun SectionSaleItems(
         modifier = modifier,
         visible = hasItemsSale,
         enter = slideInVertically(initialOffsetY = { -40 }) +
-            expandVertically(expandFrom = Alignment.Top) +
-            scaleIn(
-                transformOrigin = TransformOrigin(0.5f, 0f),
-            ) + fadeIn(initialAlpha = 0.3f),
+                expandVertically(expandFrom = Alignment.Top) +
+                scaleIn(
+                    transformOrigin = TransformOrigin(0.5f, 0f),
+                ) + fadeIn(initialAlpha = 0.3f),
         exit =
-        slideOutVertically() + shrinkVertically() + fadeOut() +
-            scaleOut(
-                targetScale = 1.2f,
-            ),
+            slideOutVertically() + shrinkVertically() + fadeOut() +
+                    scaleOut(
+                        targetScale = 1.2f,
+                    ),
     ) {
         Row(
             Modifier.fillMaxWidth(),
@@ -117,18 +231,18 @@ internal fun SectionSaleItems(
                 onValueChange = { onAmountChanged(it) },
                 label = stringResource(R.string.feature_sale_enter_amount_hint),
                 supportingText =
-                stringResource(
-                    R.string.feature_sale_total_price_text,
-                    totalSaleItems.toBigDecimal(),
-                ) + stringResource(
-                    R.string.feature_sale_sale_rest_amount_text,
-                    restOfAmount.toBigDecimal(),
-                ),
+                    stringResource(
+                        R.string.feature_sale_total_price_text,
+                        totalSaleItems.toBigDecimal(),
+                    ) + stringResource(
+                        R.string.feature_sale_sale_rest_amount_text,
+                        restOfAmount.toBigDecimal(),
+                    ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .weight(0.7f),
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(0.7f),
             )
             PosOutlinedButton(
                 onClick = onSaveInvoice,
@@ -176,7 +290,7 @@ internal fun ColumnScope.SectionCartItems(
 @Composable
 fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean =
     windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
-        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -198,30 +312,23 @@ fun ExposedDropdownMenuBoxSearch(
         expanded = expanded,
         onExpandedChange = setExpanded,
     ) {
-        OutlinedTextField(
+        PosOutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchQueryChanged,
-            label = {
-                Text(
-                    stringResource(R.string.feature_sale_sale_search_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                )
-            },
+            label = stringResource(R.string.feature_sale_sale_search_hint),
             modifier =
-            Modifier
-                .menuAnchor(MenuAnchorType.PrimaryEditable)
-                .fillMaxWidth()
-                .focusRequester(focusRequester)
-                .onKeyEvent {
-                    if (it.key == Key.Enter) {
-                        keyboardController?.hide()
-                        true
-                    } else {
-                        false
-                    }
-                },
-            maxLines = 1,
-            singleLine = true,
+                Modifier
+                    .menuAnchor(MenuAnchorType.PrimaryEditable)
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .onKeyEvent {
+                        if (it.key == Key.Enter) {
+                            keyboardController?.hide()
+                            true
+                        } else {
+                            false
+                        }
+                    },
             trailingIcon = {
                 if (searchQuery.isNotEmpty()) {
                     IconButton(onClick = { onSearchQueryChanged("") }) {
@@ -242,12 +349,7 @@ fun ExposedDropdownMenuBoxSearch(
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions =
-            KeyboardActions(
-                onSearch = {
-                    keyboardController?.hide()
-                },
-            ),
+            keyboardActions = KeyboardActions(onSearch = { keyboardController?.hide() }),
         )
         when (searchItemsUiState) {
             is SearchItemsUiState.Success -> {
@@ -267,9 +369,18 @@ fun ExposedDropdownMenuBoxSearch(
                     }
                 }
             }
-            else -> {
-                Text(stringResource(R.string.feature_sale_search_empty))
+
+            is SearchItemsUiState.EmptyResult, is SearchItemsUiState.LoadFailed -> {
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { setExpanded(false) }) {
+                    Text(stringResource(R.string.feature_sale_search_empty))
+                }
             }
+
+            else -> Unit
+
+
         }
     }
 }
@@ -306,10 +417,9 @@ fun ColumnScope.SaleItems(
     val scrollableState = rememberLazyListState()
     LazyColumn(
         modifier =
-        Modifier
-            .weight(1f)
-            .imeNestedScroll()
-            .padding(horizontal = 8.dp),
+            Modifier
+                .weight(1f)
+                .padding(horizontal = 8.dp),
         contentPadding = PaddingValues(vertical = 8.dp),
         state = scrollableState,
     ) {
@@ -384,11 +494,10 @@ private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     if (topicImageUrl.isEmpty()) {
         Icon(
             modifier =
-            modifier
-                .background(Color.Transparent)
-                .padding(4.dp),
+                modifier
+                    .background(Color.Transparent)
+                    .padding(4.dp),
             imageVector = PosIcons.EmptyImage,
-            // decorative image
             contentDescription = null,
         )
     } else {
@@ -397,6 +506,98 @@ private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
             contentDescription = null,
             modifier = modifier,
         )
+    }
+}
+
+
+
+
+@Preview
+@Composable
+fun SaleContentPortraitPreview(
+    @PreviewParameter(ItemsPreviewParameterProvider::class) items: List<Item>,
+) {
+
+    POSTheme {
+        PosBackground {
+            Column {
+                SaleContentPortrait(
+                    itemsUiState = ItemsUiState.Success,
+                    searchItemsUiState = SearchItemsUiState.EmptySearch,
+                    saleItems = items.toSet(),
+                    searchQuery = "",
+                    onSearchQueryChanged = {},
+                    onScan = {},
+                    onSearchItemClick = {},
+                    onRemoveItem = {},
+                    onUpdateQuantity = {},
+                    hasItemsSale = false,
+                    totalSaleItems = 0.0,
+                    amountInput = "",
+                    restOfAmount = 0.0,
+                    onGoToItems = {},
+                    onAmountChanged = {},
+                    onSaveInvoice = {},
+                )
+            }
+        }
+    }
+}
+
+@DeviceLandscapePreviews
+@Composable
+fun SaleContentLandscapePreview(@PreviewParameter(ItemsPreviewParameterProvider::class) items: List<Item>) {
+    POSTheme {
+        PosBackground {
+            Row {
+                SaleContentLandscape(
+                    itemsUiState = ItemsUiState.Success,
+                    saleItemsState = items.toSet(),
+                    searchItemsUiState = SearchItemsUiState.EmptySearch,
+                    searchQuery = "",
+                    onSearchQueryChanged = {},
+                    onScan = {},
+                    onSearchItemClick = {},
+                    onRemoveItem = {},
+                    onUpdateQuantity = {},
+                    hasItemsSale = false,
+                    totalSaleItems = 0.0,
+                    amountInput = "",
+                    restOfAmount = 0.0,
+                    onGoToItems = {},
+                    onAmountChanged = {},
+                    onSaveInvoice = {},
+                )
+            }
+        }
+    }
+}
+@Preview
+@Composable
+fun SaleContentLandscapeLoadingPreview() {
+    POSTheme {
+        PosBackground {
+            Row {
+                SaleContentLandscape(
+                    itemsUiState = ItemsUiState.Loading,
+                    saleItemsState = emptySet<Item>(),
+                    searchItemsUiState = SearchItemsUiState.EmptySearch,
+                    searchQuery = "",
+                    onSearchQueryChanged = {},
+                    onScan = {},
+                    onSearchItemClick = {},
+                    onRemoveItem = {},
+                    onUpdateQuantity = {},
+                    hasItemsSale = false,
+                    totalSaleItems = 0.0,
+                    amountInput = "",
+                    restOfAmount = 0.0,
+                    onGoToItems = {},
+                    onAmountChanged = {},
+                    onSaveInvoice = {},
+                )
+            }
+        }
     }
 }
 
@@ -416,7 +617,17 @@ fun ItemDropMenuItemPreview() {
         )
     }
 }
-
+@Preview
+@Composable
+fun ExposedDropdownMenuBoxSearchPreview() {
+    ExposedDropdownMenuBoxSearch(
+        searchQuery = "",
+        onSearchQueryChanged = {},
+        searchItemsUiState = SearchItemsUiState.EmptyResult,
+        onScan = {},
+        onSearchItemClick = {},
+    )
+}
 @Preview
 @Composable
 fun SaleItemPreview() {

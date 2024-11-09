@@ -38,8 +38,19 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val SEARCH_QUERY = "searchQuery"
 
+/**
+ * ViewModel for the Sale screen.
+ *
+ * This ViewModel handles the logic for adding items to a sale, calculating totals,
+ * and managing the UI state of the sale screen.
+ *
+ * @param networkMonitor Monitors the network connection status.
+ * @param getItemsUseCase Use case for retrieving items data.
+ * @param addInvoiceUseCase Use case for adding a new invoice.
+ * @param updateStockInItemsUseCase Use case for updating the stock of items.
+ * @param savedStateHandle Used to restore UI state after process death.
+ */
 @HiltViewModel
 class SaleViewModel
 @Inject
@@ -100,19 +111,20 @@ constructor(
         searchQuery,
     ) { items, query ->
         if (query.isBlank()) {
-            SearchItemsUiState.Empty
+            SearchItemsUiState.EmptySearch
         } else {
             val filteredItems = items.values
                 .asSequence()
                 .filter { matchesSearchCriteria(it, query) }
                 .toList()
-            SearchItemsUiState.Success(filteredItems)
+            if (filteredItems.isEmpty()) SearchItemsUiState.EmptyResult
+            else SearchItemsUiState.Success(filteredItems)
         }
     }.catch { emit(SearchItemsUiState.LoadFailed) }
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
-            SearchItemsUiState.Empty,
+            SearchItemsUiState.EmptyResult,
         )
     private val isOnline = networkMonitor.isOnline
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
@@ -122,9 +134,9 @@ constructor(
     private fun matchesSearchCriteria(item: Item, searchText: String): Boolean =
         with(searchText.lowercase()) {
             item.name.lowercase().contains(this, ignoreCase = true) ||
-                item.sku.contains(this) ||
-                item.category.contains(this, ignoreCase = true) ||
-                item.sku.contains(normalizeNumber(this), ignoreCase = true)
+                    item.sku.contains(this) ||
+                    item.category.contains(this, ignoreCase = true) ||
+                    item.sku.contains(normalizeNumber(this), ignoreCase = true)
         }
 
     private fun normalizeNumber(input: String): String {
@@ -258,3 +270,4 @@ constructor(
         _userMessage.update { message }
     }
 }
+private const val SEARCH_QUERY = "searchQuery"

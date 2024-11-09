@@ -17,8 +17,12 @@ package com.casecode.pos.feature.sale
 
 import com.casecode.pos.core.model.data.users.Item
 
+/**
+ * Represents the UI state for the search items screen.
+ */
 sealed interface SearchItemsUiState {
-    data object Empty : SearchItemsUiState
+    data object EmptySearch : SearchItemsUiState
+    data object EmptyResult : SearchItemsUiState
     data object LoadFailed : SearchItemsUiState
     data class Success(val items: List<Item> = emptyList()) : SearchItemsUiState
 }

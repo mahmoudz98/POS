@@ -19,6 +19,13 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.snapshots.SnapshotStateSet
 import com.casecode.pos.core.model.data.users.Item
 
+/**
+ * Represents the UI state for a list of sale items.
+ *
+ * This class manages the list of items added to a sale, their quantities, and provides
+ * functionalities for adding, updating, removing, and clearing items. It also calculates
+ * the total value of the sale items.
+ */
 @Stable
 class SaleItemsUiState {
     private var _items = SnapshotStateSet<Item>()
