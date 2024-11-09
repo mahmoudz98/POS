@@ -16,6 +16,8 @@
 package com.casecode.pos.core.ui
 
 import android.content.Context
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
@@ -29,7 +31,6 @@ fun Context.scanOptions(
     onModuleDownloading: (Int) -> Unit,
     onModuleDownloaded: (Int) -> Unit,
 ) {
-    // issue: Scan failure: com.google.mlkit.common.MlKitException: Failed to scan code.
     val scanner = GmsBarcodeScanning.getClient(this)
     val moduleInstallRequest =
         ModuleInstallRequest
@@ -38,38 +39,46 @@ fun Context.scanOptions(
             .build()
     val moduleInstallClient = ModuleInstall.getClient(this)
 
-    moduleInstallClient
-        .installModules(moduleInstallRequest)
-        .addOnSuccessListener {
-            onModuleDownloaded(R.string.core_ui_scan_module_complete_downloading)
+    moduleInstallClient.areModulesAvailable(scanner).addOnSuccessListener { areModulesAvailable ->
+        if (areModulesAvailable.areModulesAvailable()) {
             startScanner(scanner, onResult, onFailure, onCancel)
-        }.addOnFailureListener { exception ->
+        } else {
             onModuleDownloading(R.string.core_ui_scan_module_downloading)
-            onFailure(R.string.core_ui_message_scan_error_open)
-            Timber.e("ModuleInstallClient failure: $exception")
+            moduleInstallClient
+                .installModules(moduleInstallRequest)
+                .addOnSuccessListener {
+                    onModuleDownloaded(R.string.core_ui_scan_module_complete_downloading)
+                    startScanner(scanner, onResult, onFailure, onCancel)
+                }.addOnFailureListener { exception ->
+                    if (exception is ApiException && exception.statusCode == CommonStatusCodes.NETWORK_ERROR) {
+                        onFailure(R.string.core_ui_scan_module_downloading_network_error)
+                    } else {
+                        onFailure(R.string.core_ui_message_scan_error_open)
+                    }
+                    Timber.e("ModuleInstallClient failure: $exception")
+                }
         }
+    }
 }
-
-private fun startScanner(
+ fun startScanner(
     scanner: GmsBarcodeScanner,
     onResult: (String) -> Unit,
     onFailure: (Int) -> Unit,
     onCancel: (Int) -> Unit,
 ) {
-    scanner
-        .startScan()
-        .addOnSuccessListener { result ->
-            val barcode = result.rawValue
-            if (barcode.isNullOrEmpty()) {
-                onFailure(R.string.core_ui_scan_result_empty)
-            } else {
-                onResult(barcode)
-            }
-        }.addOnFailureListener { exception ->
-            Timber.e("Scan failure: $exception")
-            onFailure(R.string.core_ui_scan_result_empty)
-        }.addOnCanceledListener {
-            // Handle scan cancellation
-            onCancel(R.string.core_ui_scan_result_empty)
-        }
-}
+     scanner
+         .startScan()
+         .addOnSuccessListener { result ->
+             val barcode = result.rawValue
+             if (barcode.isNullOrEmpty()) {
+                 onFailure(R.string.core_ui_scan_result_empty)
+             } else {
+                 onResult(barcode)
+             }
+         }.addOnFailureListener { exception ->
+             Timber.e("Scan failure: $exception")
+             onFailure(R.string.core_ui_scan_result_empty)
+         }.addOnCanceledListener {
+             onCancel(R.string.core_ui_scan_result_empty)
+         }
+ }

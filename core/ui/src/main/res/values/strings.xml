@@ -25,6 +25,7 @@
   <string name="core_ui_message_scan_complete">Scan completed.</string>
   <string name="core_ui_message_scan_error">Scan error: %s</string>
   <string name="core_ui_message_scan_error_open">Can\'t open Scan, wait until download completes</string>
+  <string name="core_ui_scan_module_downloading_network_error">Download failed, check your internet connection</string>
   <string name="core_ui_scan_result_empty">Scan Result is empty.</string>
   <string name="core_ui_scan_module_downloading">Downloading module…</string>
   <string name="core_ui_scan_module_complete_downloading">Go to Scanner…</string>
