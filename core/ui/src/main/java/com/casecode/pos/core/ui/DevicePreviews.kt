@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.core.ui
 
+import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 
 /**
@@ -36,3 +37,17 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(name = "foldable", device = "spec:shape=Normal,width=673,height=841,unit=dp,dpi=480")
 @Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 annotation class DevicePreviews
+
+@Preview(
+    name = "Phone - Landscape",
+    device = "spec:width=411dp,height=891dp,orientation=landscape,dpi=420",
+    showSystemUi = true
+)
+@Preview(
+    name = "Phone - Landscape - ar",
+    locale = "ar",
+    device = "spec:width=411dp,height=891dp,orientation=landscape,dpi=420",
+    showSystemUi = true
+)
+@Preview(name = "Tablet", device = TABLET, showSystemUi = true)
+annotation class DeviceLandscapePreviews
