@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <resources>
+    <string name="feature_reports_title">التقارير</string>
     <string name="feature_reports_sales_button_text">تقرير المبيعات</string>
     <string name="feature_reports_inventory_button_text">تقرير المخزون</string>
 

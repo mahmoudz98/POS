@@ -17,21 +17,15 @@ package com.casecode.pos.feature.statistics
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -78,38 +72,19 @@ internal fun ReportsScreen(
         PosTextButton(
             onClick = onSalesReportClick,
             modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = PosIcons.Reports,
-                    contentDescription = null,
-                )
-                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = stringResource(R.string.feature_reports_sales_button_text))
-            }
-        }
+            text = stringResource(R.string.feature_reports_sales_button_text),
+            leadingIcon = PosIcons.Reports,
+        )
         PosTextButton(
             onClick = onInventoryReportClick,
             modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = PosIcons.Invoices,
-                    contentDescription = null,
-                )
-                Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
-                Text(text = stringResource(R.string.feature_reports_inventory_button_text))
-            }
-        }
+            text = stringResource(R.string.feature_reports_inventory_button_text),
+            leadingIcon = PosIcons.Invoices,
+
+        )
         HorizontalDivider(Modifier.padding(top = 12.dp, end = 8.dp))
 
-        ReportsSalesTodayContent(
+        ReportsSalesTodaySection(
             isLoading = uiState.isLoading,
             isEmpty = uiState.isEmpty,
             totalSalesToday = uiState.totalInvoiceSalesToday,
@@ -119,7 +94,7 @@ internal fun ReportsScreen(
 }
 
 @Composable
-private fun ReportsSalesTodayContent(
+private fun ReportsSalesTodaySection(
     isLoading: Boolean,
     isEmpty: Boolean,
     totalSalesToday: Double,
@@ -191,7 +166,7 @@ fun ReportsScreenPreview() {
 fun ReportsSalesTodayContentPreview() {
     POSTheme {
         PosBackground {
-            ReportsSalesTodayContent(
+            ReportsSalesTodaySection(
                 isLoading = true,
                 isEmpty = false,
                 totalSalesToday = 0.0,
