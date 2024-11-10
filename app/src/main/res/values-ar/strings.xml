@@ -16,14 +16,4 @@
 <resources>
     <string name="app_name" translatable="false">POS</string>
     <string name="pos" translatable="false">نقطة البيع</string>
-
-
-    <!-- Main Menu -->
-    <string name="reports_title">التقارير</string>
-    <string name="menu_items">المنتجات</string>
-    <string name="menu_code_scanner">ماسح الرمز الشريطي</string>
-    <string name="settings_title">الإعدادات</string>
-    <string name="menu_sales">المبيعات</string>
-    <string name="menu_pay">الدفع</string>
-
 </resources>

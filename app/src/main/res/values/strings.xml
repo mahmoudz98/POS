@@ -16,14 +16,4 @@
 <resources>
     <string name="app_name" translatable="false">POS</string>
     <string name="pos" translatable="false">POS</string>
-
-
-    <!-- Main Menu -->
-    <string name="reports_title">Reports</string>
-    <string name="menu_items">Items</string>
-    <string name="menu_code_scanner">Code Scanner</string>
-    <string name="settings_title">Settings</string>
-    <string name="menu_sales">Sales</string>
-    <string name="menu_pay">Pay</string>
-
 </resources>
