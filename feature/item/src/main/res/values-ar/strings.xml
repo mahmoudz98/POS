@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <resources>
+    <string name="feature_item_title">المنتجات</string>
     <string name="feature_item_barcode_hint">الرمز الشريطي</string>
     <string name="feature_item_name_hint">الاسم</string>
     <string name="feature_item_category_hint">فئة</string>
