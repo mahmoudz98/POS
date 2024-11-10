@@ -15,6 +15,7 @@
 -->
 <resources>
     <!-- Settings -->
+    <string name="feature_setting_title">الإعدادات</string>
     <string name="feature_setting_language_title">اللغة</string>
     <string name="feature_settings_language_current_hint">اللغة الحالية</string>
     <string name="feature_setting_language_english">الإنجليزية</string>
