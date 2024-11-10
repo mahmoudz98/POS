@@ -18,21 +18,30 @@ package com.casecode.pos.core.designsystem.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
@@ -103,6 +112,36 @@ fun PosButton(
             leadingIcon = leadingIcon,
         )
     }
+}
+
+/**
+ * Point of sale TonalButton is a composable function that creates a filled tonal button.
+ * It is a wrapper around [FilledTonalButton] with default styling for point of sale.
+ *
+ * @param onClick The callback to be invoked when the button is clicked.
+ * @param modifier Modifier to be applied to the button.
+ * @param shape The shape of the button. Defaults to [ButtonDefaults.filledTonalShape].
+ * @param colors The colors of the button. Defaults to [ButtonDefaults.filledTonalButtonColors].
+ * @param elevation The elevation of the button. Defaults to [ButtonDefaults.filledTonalButtonElevation].
+ * @param content The content of the button, typically a [Text] composable.
+ */
+@Composable
+fun PosTonalButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    shape: Shape = ButtonDefaults.filledTonalShape,
+    colors: ButtonColors = ButtonDefaults.filledTonalButtonColors(),
+    elevation: ButtonElevation? = ButtonDefaults.filledTonalButtonElevation(),
+    content: @Composable RowScope.() -> Unit,
+) {
+    FilledTonalButton(
+        onClick = onClick,
+        modifier = modifier,
+        shape = shape,
+        colors = colors,
+        elevation = elevation,
+        content = content,
+    )
 }
 
 /**
@@ -211,6 +250,49 @@ fun PosTextButton(
             contentColor = MaterialTheme.colorScheme.onSurface,
         ),
         content = content,
+    )
+}
+
+/**
+ * Point of sale text button with generic content slot. Wraps Material 3 [TextButton].
+ *
+ * This button displays a text label and optionally a leading icon.
+ * It is designed to have a visual style suitable for point-of-sale applications.
+ *
+ * @param onClick The callback to be invoked when the button is clicked.
+ * @param modifier Modifier used to decorate the button.
+ * @param enabled Controls the enabled state of the button. When `false`, the button will not
+ * respond to user input and appear visually disabled. Defaults to `true`.
+ * @param text The text to be displayed on the button.
+ * @param leadingIcon An optional [ImageVector] to be displayed as a leading icon on the button.
+ */
+@Composable
+fun PosTextButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    text: String,
+    leadingIcon: ImageVector? = null,
+) {
+    PosTextButton(
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled,
+        content = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (leadingIcon != null) {
+                    Icon(
+                        imageVector = leadingIcon,
+                        contentDescription = null,
+                    )
+                    Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
+                }
+                Text(text = text)
+            }
+        },
     )
 }
 
@@ -326,7 +408,7 @@ fun PosButtonLeadingIconPreview() {
 }
 
 /**
- * Now in Android button default values.
+ * POS button default values.
  */
 object PosButtonDefaults {
     // TODO: File bug

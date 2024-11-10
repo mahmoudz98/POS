@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.HideImage
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.ImageSearch
+import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Phone
@@ -39,6 +40,7 @@ import androidx.compose.material.icons.filled.StackedLineChart
 import androidx.compose.material.icons.filled.Store
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.filled.SupervisorAccount
+import androidx.compose.material.icons.filled.SupportAgent
 import androidx.compose.material.icons.filled.TrackChanges
 import androidx.compose.material.icons.outlined.Print
 import androidx.compose.material.icons.rounded.Add
@@ -48,6 +50,7 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.FilterListOff
+import androidx.compose.material.icons.rounded.Inventory2
 import androidx.compose.material.icons.rounded.PointOfSale
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -66,6 +69,9 @@ object PosIcons {
     val ReportsBorder = Icons.Rounded.StackedLineChart
     val Invoices = Icons.Filled.Receipt
     val Items = Icons.Filled.Store
+    val Inventory = Icons.Filled.Inventory2
+    val InventoryBorder = Icons.Rounded.Inventory2
+    val Supplier = Icons.Filled.SupportAgent
     val Employee = Icons.Filled.SupervisorAccount
     val Settings = Icons.Filled.Settings
     val SettingsBorder = Icons.Rounded.Settings
