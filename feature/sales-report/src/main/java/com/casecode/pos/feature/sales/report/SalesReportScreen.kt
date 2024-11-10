@@ -150,6 +150,21 @@ fun SalesReportScreen(
                     .wrapContentHeight(Alignment.Top),
             )
         },
+        topBar = {
+            PosTopAppBar(
+                titleRes = R.string.feature_sales_report_title,
+                navigationIcon = PosIcons.ArrowBack,
+                navigationIconContentDescription = "",
+                onActionClick = { onActionClick() },
+                actionIconContentDescription = null,
+                actionIcon = PosIcons.Calender,
+                colors =
+                TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.Transparent,
+                ),
+                onNavigationClick = { onBackClick() },
+            )
+        },
         floatingActionButton = {
             AnimatedVisibility(
                 modifier = modifier,
@@ -175,20 +190,6 @@ fun SalesReportScreen(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            PosTopAppBar(
-                modifier = modifier,
-                titleRes = R.string.feature_sales_report_title,
-                navigationIcon = PosIcons.ArrowBack,
-                navigationIconContentDescription = "",
-                onActionClick = { onActionClick() },
-                actionIconContentDescription = null,
-                actionIcon = PosIcons.Calender,
-                colors =
-                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
-                onNavigationClick = { onBackClick() },
-            )
             AnimatedContent(
                 uiSalesReportState.resourceInvoiceGroups,
                 transitionSpec = {

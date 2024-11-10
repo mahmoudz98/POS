@@ -45,29 +45,27 @@ data object SalesReportDetailsRoute
 
 fun NavGraphBuilder.salesReportGraph(
     navController: NavController,
-    onBackClick: () -> Unit,
     onSalesReportDetailsClick: () -> Unit,
 ) {
     navigation<SalesReportGraph>(
         startDestination = SalesReportRoute,
     ) {
-        salesReportScreen(navController = navController, onBackClick = onBackClick) {
+        salesReportScreen(navController = navController) {
             onSalesReportDetailsClick()
         }
-        salesReportDetailsScreen(navController, onBackClick)
+        salesReportDetailsScreen(navController)
     }
 }
 
 private fun NavGraphBuilder.salesReportScreen(
     navController: NavController,
-    onBackClick: () -> Unit,
     onSalesReportDetailsClick: () -> Unit,
 ) {
     composable<SalesReportRoute> {
         val viewModel = it.sharedViewModel<SalesReportViewModel>(navController)
         SalesReportScreen(
             viewModel = viewModel,
-            onBackClick = onBackClick,
+            onBackClick = navController::popBackStack,
             onSalesReportDetailsClick = onSalesReportDetailsClick,
         )
     }
@@ -75,7 +73,6 @@ private fun NavGraphBuilder.salesReportScreen(
 
 private fun NavGraphBuilder.salesReportDetailsScreen(
     navController: NavController,
-    onBackClick: () -> Unit,
 ) {
     composable<SalesReportDetailsRoute>(
         enterTransition = {
@@ -108,7 +105,7 @@ private fun NavGraphBuilder.salesReportDetailsScreen(
         val viewModel = it.sharedViewModel<SalesReportViewModel>(navController)
         SalesReportDetailsRoute(
             viewModel,
-            onBackClick = onBackClick,
+            onBackClick = navController::popBackStack,
         )
     }
 }
