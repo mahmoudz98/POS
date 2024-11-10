@@ -60,25 +60,26 @@ fun Context.scanOptions(
         }
     }
 }
- fun startScanner(
+
+fun startScanner(
     scanner: GmsBarcodeScanner,
     onResult: (String) -> Unit,
     onFailure: (Int) -> Unit,
     onCancel: (Int) -> Unit,
 ) {
-     scanner
-         .startScan()
-         .addOnSuccessListener { result ->
-             val barcode = result.rawValue
-             if (barcode.isNullOrEmpty()) {
-                 onFailure(R.string.core_ui_scan_result_empty)
-             } else {
-                 onResult(barcode)
-             }
-         }.addOnFailureListener { exception ->
-             Timber.e("Scan failure: $exception")
-             onFailure(R.string.core_ui_scan_result_empty)
-         }.addOnCanceledListener {
-             onCancel(R.string.core_ui_scan_result_empty)
-         }
- }
+    scanner
+        .startScan()
+        .addOnSuccessListener { result ->
+            val barcode = result.rawValue
+            if (barcode.isNullOrEmpty()) {
+                onFailure(R.string.core_ui_scan_result_empty)
+            } else {
+                onResult(barcode)
+            }
+        }.addOnFailureListener { exception ->
+            Timber.e("Scan failure: $exception")
+            onFailure(R.string.core_ui_scan_result_empty)
+        }.addOnCanceledListener {
+            onCancel(R.string.core_ui_scan_result_empty)
+        }
+}

@@ -18,12 +18,6 @@ package com.casecode.pos.core.ui
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 
-/**
- * Multipreview annotation that represents various device sizes. Add this annotation to a composable
- * to render various devices.
- *     device = "spec:width=360dp,height=640dp,dpi=480,isRound=false,chinSize=0dp,orientation=landscape",
- *
- */
 @Preview(name = "phone", device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Preview(
     name = "phone - ar",
@@ -41,13 +35,13 @@ annotation class DevicePreviews
 @Preview(
     name = "Phone - Landscape",
     device = "spec:width=411dp,height=891dp,orientation=landscape,dpi=420",
-    showSystemUi = true
+    showSystemUi = true,
 )
 @Preview(
     name = "Phone - Landscape - ar",
     locale = "ar",
     device = "spec:width=411dp,height=891dp,orientation=landscape,dpi=420",
-    showSystemUi = true
+    showSystemUi = true,
 )
 @Preview(name = "Tablet", device = TABLET, showSystemUi = true)
 annotation class DeviceLandscapePreviews
