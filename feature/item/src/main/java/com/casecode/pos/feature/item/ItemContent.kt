@@ -71,6 +71,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
@@ -107,6 +108,7 @@ fun ItemTopAppBar(
     modifier: Modifier,
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
+    onBackClick: () -> Unit,
     onSearchClicked: () -> Unit,
     onCloseClicked: () -> Unit,
 ) {
@@ -123,6 +125,7 @@ fun ItemTopAppBar(
             SearchWidgetState.CLOSED -> {
                 DefaultAppBar(
                     modifier = modifier,
+                    onBackClick = onBackClick,
                     onSearchClicked = onSearchClicked,
                 )
             }
@@ -141,10 +144,16 @@ fun ItemTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultAppBar(onSearchClicked: () -> Unit, modifier: Modifier = Modifier) {
+fun DefaultAppBar(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
+    onSearchClicked: () -> Unit,
+) {
     PosTopAppBar(
         modifier = modifier,
+        navigationIcon = PosIcons.ArrowBack,
         titleRes = R.string.feature_item_header_title,
+        onNavigationClick = { onBackClick() },
         onActionClick = { onSearchClicked() },
         actionIconContentDescription = stringResource(R.string.feature_item_search_action_text),
         actionIcon = PosIcons.Search,
@@ -357,7 +366,7 @@ internal fun ItemsContent(
     Box(modifier = modifier.fillMaxWidth()) {
         val scrollableState = rememberLazyListState()
         LazyColumn(
-            modifier = modifier.padding(horizontal = 8.dp),
+            modifier = modifier.padding(horizontal = 8.dp).clipToBounds(),
             contentPadding = PaddingValues(vertical = 8.dp),
             state = scrollableState,
         ) {
@@ -551,6 +560,7 @@ private fun ItemIcon(itemImageUrl: String?, modifier: Modifier = Modifier) {
 @Composable
 private fun DefaultAppBarPreview() {
     DefaultAppBar(
+        onBackClick = {},
         onSearchClicked = {},
     )
 }

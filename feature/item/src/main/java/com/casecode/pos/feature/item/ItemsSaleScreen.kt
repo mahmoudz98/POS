@@ -52,6 +52,7 @@ import com.casecode.pos.core.ui.TrackScreenViewEvent
 @Composable
 fun ItemsSaleScreen(
     viewModel: ItemsViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
     onPrintItemClick: () -> Unit = {},
 ) {
     val uiState by viewModel.itemsUiState.collectAsStateWithLifecycle()
@@ -64,6 +65,7 @@ fun ItemsSaleScreen(
     ItemsSaleScreen(
         uiState = uiState,
         searchWidgetState = searchWidgetState,
+        onBackClick = onBackClick,
         onSearchClicked = viewModel::openSearchWidgetState,
         searchQuery = searchQuery,
         categories = categories,
@@ -90,6 +92,7 @@ internal fun ItemsSaleScreen(
     modifier: Modifier = Modifier,
     uiState: ItemsUIState,
     searchWidgetState: SearchWidgetState,
+    onBackClick: () -> Unit,
     onSearchClicked: () -> Unit,
     searchQuery: String = "",
     categories: Set<String>,
@@ -115,6 +118,7 @@ internal fun ItemsSaleScreen(
                 searchWidgetState = searchWidgetState,
                 searchQuery = searchQuery,
                 onSearchQueryChanged = onSearchQueryChanged,
+                onBackClick = onBackClick,
                 onSearchClicked = { onSearchClicked() },
                 onCloseClicked = { onClearRecentSearches() },
             )

@@ -73,6 +73,7 @@ fun NavGraphBuilder.itemsScreen(navController: NavController) {
 
         ItemsScreen(
             viewModel = viewModel,
+            onBackClick = navController::popBackStack,
             onAddItemClick = navController::navigateToAddItem,
             onItemClick = navController::navigateToUpdateUpdateItem,
             onPrintItemClick = navController::navigateToQRCodePrintItemDialog,
@@ -162,7 +163,7 @@ private fun NavGraphBuilder.qrCodePrintItemDialog(navController: NavController) 
     }
 }
 
-fun NavController.navigateToItemsGraph(navOptions: NavOptions) = navigate(ItemsGraph, navOptions)
+fun NavController.navigateToItemsGraph(navOptions: NavOptions? = null) = navigate(ItemsGraph, navOptions)
 
 private fun NavController.navigateToItems() = navigate(ItemsRoute)
 

@@ -60,6 +60,7 @@ import com.casecode.pos.feature.item.delete.DeleteItemDialog
 @Composable
 fun ItemsScreen(
     viewModel: ItemsViewModel,
+    onBackClick: () -> Unit,
     onAddItemClick: () -> Unit,
     onItemClick: () -> Unit,
     onPrintItemClick: () -> Unit = {},
@@ -74,6 +75,7 @@ fun ItemsScreen(
     ItemsScreen(
         uiState = uiState,
         searchWidgetState = searchWidgetState,
+        onBackClick = onBackClick,
         onSearchClicked = viewModel::openSearchWidgetState,
         searchQuery = searchQuery,
         categories = categories,
@@ -118,6 +120,7 @@ internal fun ItemsScreen(
     modifier: Modifier = Modifier,
     uiState: ItemsUIState,
     searchWidgetState: SearchWidgetState,
+    onBackClick: () -> Unit,
     onSearchClicked: () -> Unit,
     searchQuery: String = "",
     categories: Set<String>,
@@ -146,6 +149,7 @@ internal fun ItemsScreen(
                 searchWidgetState = searchWidgetState,
                 searchQuery = searchQuery,
                 onSearchQueryChanged = onSearchQueryChanged,
+                onBackClick = { onBackClick() },
                 onSearchClicked = { onSearchClicked() },
                 onCloseClicked = { onClearRecentSearches() },
             )
@@ -262,6 +266,7 @@ private fun ItemScreenSuccessPreview(
         ItemsScreen(
             uiState = ItemsUIState.Success(HashMap(items.associateBy { it.sku })),
             searchWidgetState = SearchWidgetState.CLOSED,
+            onBackClick = {},
             onSearchClicked = {},
             searchQuery = "",
             categories = emptySet(),
@@ -296,6 +301,7 @@ private fun ItemScreenSuccessWithSearchPreview(
             ),
             categories = setOf("Phones", "Headphones", "Computer"),
             filterUiState = FilterUiState(),
+            onBackClick = {},
             onCategorySelected = {},
             onCategoryUnselected = {},
             onFilterStockChange = {},
@@ -322,6 +328,7 @@ private fun ItemScreenLoadingPreview() {
         ItemsScreen(
             uiState = ItemsUIState.Loading,
             filterUiState = FilterUiState(),
+            onBackClick = {},
             onCategorySelected = {},
             onCategoryUnselected = {},
             categories = setOf(),
@@ -350,6 +357,7 @@ private fun ItemScreenEmptyPreview() {
             uiState = ItemsUIState.Empty,
             filterUiState = FilterUiState(),
             categories = setOf(),
+            onBackClick = {},
             onCategorySelected = {},
             onCategoryUnselected = {},
             onFilterStockChange = {},

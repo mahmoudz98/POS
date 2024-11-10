@@ -54,6 +54,7 @@ fun NavGraphBuilder.itemsSaleScreen(navController: NavController) {
 
         ItemsSaleScreen(
             parentViewModel,
+            onBackClick = navController::popBackStack,
             onPrintItemClick = navController::navigateToQRCodePrintItemDialogSale,
         )
     }
@@ -75,7 +76,7 @@ fun NavGraphBuilder.qrCodePrintItemSaleDialog(navController: NavController) {
     }
 }
 
-fun NavController.navigateToItemsSaleGraph(navOptions: NavOptions) = navigate(ItemsSaleGraph, navOptions)
+fun NavController.navigateToItemsSaleGraph(navOptions: NavOptions? = null) = navigate(ItemsSaleGraph, navOptions)
 
 fun NavController.navigateToItemsSale(navOptions: NavOptions) = navigate(ItemsSaleRoute, navOptions)
 

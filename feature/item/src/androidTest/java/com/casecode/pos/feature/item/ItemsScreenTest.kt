@@ -39,6 +39,7 @@ class ItemsScreenTest {
                 searchQuery = "",
                 categories = setOf<String>(),
                 filterUiState = FilterUiState(),
+                onBackClick = {},
                 onSearchQueryChanged = {},
                 onClearRecentSearches = {},
                 onFilterStockChange = {},
@@ -65,7 +66,7 @@ class ItemsScreenTest {
             ItemsScreen(
                 uiState = ItemsUIState.Empty,
                 searchWidgetState = SearchWidgetState.CLOSED,
-                onSearchClicked = {},
+                onSearchClicked = {},onBackClick = {},
                 searchQuery = "",
                 categories = setOf<String>(),
                 filterUiState = FilterUiState(),
@@ -97,7 +98,7 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Success(mapOf(), testItemsData),
-                searchWidgetState = SearchWidgetState.CLOSED,
+                searchWidgetState = SearchWidgetState.CLOSED,onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = "",
                 categories = setOf<String>(),
@@ -127,7 +128,7 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Error,
-                searchWidgetState = SearchWidgetState.CLOSED,
+                searchWidgetState = SearchWidgetState.CLOSED,onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = "",
                 categories = setOf<String>(),
@@ -159,7 +160,7 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Empty,
-                searchWidgetState = SearchWidgetState.OPENED,
+                searchWidgetState = SearchWidgetState.OPENED,onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = "",
                 categories = setOf<String>(),
@@ -189,7 +190,7 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Success(mapOf(), testItemsData),
-                searchWidgetState = SearchWidgetState.OPENED,
+                searchWidgetState = SearchWidgetState.OPENED,onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = searchItemNotExist,
                 categories = setOf<String>(),
