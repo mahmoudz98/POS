@@ -38,7 +38,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 /**
  * ViewModel for the Sale screen.
  *
@@ -117,8 +116,11 @@ constructor(
                 .asSequence()
                 .filter { matchesSearchCriteria(it, query) }
                 .toList()
-            if (filteredItems.isEmpty()) SearchItemsUiState.EmptyResult
-            else SearchItemsUiState.Success(filteredItems)
+            if (filteredItems.isEmpty()) {
+                SearchItemsUiState.EmptyResult
+            } else {
+                SearchItemsUiState.Success(filteredItems)
+            }
         }
     }.catch { emit(SearchItemsUiState.LoadFailed) }
         .stateIn(
@@ -134,9 +136,9 @@ constructor(
     private fun matchesSearchCriteria(item: Item, searchText: String): Boolean =
         with(searchText.lowercase()) {
             item.name.lowercase().contains(this, ignoreCase = true) ||
-                    item.sku.contains(this) ||
-                    item.category.contains(this, ignoreCase = true) ||
-                    item.sku.contains(normalizeNumber(this), ignoreCase = true)
+                item.sku.contains(this) ||
+                item.category.contains(this, ignoreCase = true) ||
+                item.sku.contains(normalizeNumber(this), ignoreCase = true)
         }
 
     private fun normalizeNumber(input: String): String {

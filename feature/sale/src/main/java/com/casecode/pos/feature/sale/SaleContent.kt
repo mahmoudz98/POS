@@ -166,7 +166,9 @@ internal fun RowScope.SaleContentLandscape(
         ItemsUiState.Loading -> {
             PosLoadingWheel(
                 contentDesc = "SaleLoading",
-                modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically),
             )
         }
 
@@ -211,15 +213,15 @@ internal fun SectionSaleItems(
         modifier = modifier,
         visible = hasItemsSale,
         enter = slideInVertically(initialOffsetY = { -40 }) +
-                expandVertically(expandFrom = Alignment.Top) +
-                scaleIn(
-                    transformOrigin = TransformOrigin(0.5f, 0f),
-                ) + fadeIn(initialAlpha = 0.3f),
+            expandVertically(expandFrom = Alignment.Top) +
+            scaleIn(
+                transformOrigin = TransformOrigin(0.5f, 0f),
+            ) + fadeIn(initialAlpha = 0.3f),
         exit =
-            slideOutVertically() + shrinkVertically() + fadeOut() +
-                    scaleOut(
-                        targetScale = 1.2f,
-                    ),
+        slideOutVertically() + shrinkVertically() + fadeOut() +
+            scaleOut(
+                targetScale = 1.2f,
+            ),
     ) {
         Row(
             Modifier.fillMaxWidth(),
@@ -231,18 +233,18 @@ internal fun SectionSaleItems(
                 onValueChange = { onAmountChanged(it) },
                 label = stringResource(R.string.feature_sale_enter_amount_hint),
                 supportingText =
-                    stringResource(
-                        R.string.feature_sale_total_price_text,
-                        totalSaleItems.toBigDecimal(),
-                    ) + stringResource(
-                        R.string.feature_sale_sale_rest_amount_text,
-                        restOfAmount.toBigDecimal(),
-                    ),
+                stringResource(
+                    R.string.feature_sale_total_price_text,
+                    totalSaleItems.toBigDecimal(),
+                ) + stringResource(
+                    R.string.feature_sale_sale_rest_amount_text,
+                    restOfAmount.toBigDecimal(),
+                ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(0.7f),
+                Modifier
+                    .fillMaxWidth()
+                    .weight(0.7f),
             )
             PosOutlinedButton(
                 onClick = onSaveInvoice,
@@ -290,7 +292,7 @@ internal fun ColumnScope.SectionCartItems(
 @Composable
 fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean =
     windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
-            configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -317,18 +319,18 @@ fun ExposedDropdownMenuBoxSearch(
             onValueChange = onSearchQueryChanged,
             label = stringResource(R.string.feature_sale_sale_search_hint),
             modifier =
-                Modifier
-                    .menuAnchor(MenuAnchorType.PrimaryEditable)
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-                    .onKeyEvent {
-                        if (it.key == Key.Enter) {
-                            keyboardController?.hide()
-                            true
-                        } else {
-                            false
-                        }
-                    },
+            Modifier
+                .menuAnchor(MenuAnchorType.PrimaryEditable)
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
+                .onKeyEvent {
+                    if (it.key == Key.Enter) {
+                        keyboardController?.hide()
+                        true
+                    } else {
+                        false
+                    }
+                },
             trailingIcon = {
                 if (searchQuery.isNotEmpty()) {
                     IconButton(onClick = { onSearchQueryChanged("") }) {
@@ -373,14 +375,13 @@ fun ExposedDropdownMenuBoxSearch(
             is SearchItemsUiState.EmptyResult, is SearchItemsUiState.LoadFailed -> {
                 ExposedDropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { setExpanded(false) }) {
+                    onDismissRequest = { setExpanded(false) },
+                ) {
                     Text(stringResource(R.string.feature_sale_search_empty))
                 }
             }
 
             else -> Unit
-
-
         }
     }
 }
@@ -417,9 +418,9 @@ fun ColumnScope.SaleItems(
     val scrollableState = rememberLazyListState()
     LazyColumn(
         modifier =
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
+        Modifier
+            .weight(1f)
+            .padding(horizontal = 8.dp),
         contentPadding = PaddingValues(vertical = 8.dp),
         state = scrollableState,
     ) {
@@ -494,9 +495,9 @@ private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     if (topicImageUrl.isEmpty()) {
         Icon(
             modifier =
-                modifier
-                    .background(Color.Transparent)
-                    .padding(4.dp),
+            modifier
+                .background(Color.Transparent)
+                .padding(4.dp),
             imageVector = PosIcons.EmptyImage,
             contentDescription = null,
         )
@@ -509,15 +510,11 @@ private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     }
 }
 
-
-
-
 @Preview
 @Composable
 fun SaleContentPortraitPreview(
     @PreviewParameter(ItemsPreviewParameterProvider::class) items: List<Item>,
 ) {
-
     POSTheme {
         PosBackground {
             Column {
@@ -572,6 +569,7 @@ fun SaleContentLandscapePreview(@PreviewParameter(ItemsPreviewParameterProvider:
         }
     }
 }
+
 @Preview
 @Composable
 fun SaleContentLandscapeLoadingPreview() {
@@ -617,6 +615,7 @@ fun ItemDropMenuItemPreview() {
         )
     }
 }
+
 @Preview
 @Composable
 fun ExposedDropdownMenuBoxSearchPreview() {
@@ -628,6 +627,7 @@ fun ExposedDropdownMenuBoxSearchPreview() {
         onSearchItemClick = {},
     )
 }
+
 @Preview
 @Composable
 fun SaleItemPreview() {

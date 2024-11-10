@@ -104,9 +104,9 @@ internal fun SaleScreen(viewModel: SaleViewModel = hiltViewModel(), onGoToItems:
         QuantityDialog(
             oldQuantity = itemInvoiceSelected?.quantity ?: 0,
             inStock =
-                itemSelected?.quantity?.plus(
-                    itemInvoiceSelected?.quantity ?: 0,
-                ) ?: 0,
+            itemSelected?.quantity?.plus(
+                itemInvoiceSelected?.quantity ?: 0,
+            ) ?: 0,
             isTrackingQuantity = itemSelected?.isTrackStock() == true,
             onDismiss = { showUpdateQuantityItem = false },
             onConfirm = {
@@ -156,11 +156,11 @@ internal fun SaleScreen(
         if (!isExpended(windowSizeClass.windowSizeClass, configuration)) {
             Column(
                 modifier =
-                    modifier
-                        .fillMaxSize()
-                        .padding(8.dp)
-                        .navigationBarsPadding()
-                        .imePadding(),
+                modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+                    .navigationBarsPadding()
+                    .imePadding(),
             ) {
                 SaleContentPortrait(
                     itemsUiState = itemsUiState,
@@ -219,7 +219,6 @@ internal fun SaleScreen(
     }
 }
 
-
 @DevicePreviews
 @Composable
 fun SaleScreenWithItemsSalePreview() {
@@ -234,18 +233,20 @@ fun SaleScreenWithItemsSalePreview() {
                         reorderLevel = 5,
                         quantity = 10,
                         sku = "242342343423",
-                    ), Item(
+                    ),
+                    Item(
                         name = "item3",
                         unitPrice = 12312.0,
                         quantity = 10,
                         sku = "242342423423",
-                    ), Item(
+                    ),
+                    Item(
                         name = "item4",
                         unitPrice = 12.0,
                         reorderLevel = 5,
                         quantity = 10,
                         sku = "24233423423",
-                    )
+                    ),
                 ),
                 totalSaleItems = 0.0,
                 searchItemsUiState = SearchItemsUiState.EmptySearch,
