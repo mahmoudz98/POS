@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.core.domain.usecase.item
 
+import com.casecode.pos.core.domain.usecase.AddItemUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.testing.repository.TestItemRepository
@@ -25,16 +26,16 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import com.casecode.pos.core.data.R.string as stringData
 
-class DeleteItemUseCaseTest {
+class AddItemUseCaseTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     // Subjects under test
     private val testItemRepository = TestItemRepository()
-    private val deleteItemUseCase = DeleteItemUseCase(testItemRepository)
+    private val addItemUseCase = AddItemUseCase(testItemRepository)
 
     @Test
-    fun deleteItem_whenItemDeleted_returnsSuccess() = runTest {
+    fun whenItemAdded_returnsSuccess() = runTest {
         // Given
         val newItem =
             Item(
@@ -45,16 +46,16 @@ class DeleteItemUseCaseTest {
                 imageUrl = "newItemImage",
             )
         // When
-        val result = deleteItemUseCase(newItem)
+        val result = addItemUseCase(newItem)
         // Then
         assertEquals(
-            result,
-            (Resource.success(stringData.core_data_item_deleted_successfully)),
+            Resource.success(stringData.core_data_item_added_successfully),
+            result
         )
     }
 
     @Test
-    fun deleteItem_whenHasError_returnsError() = runTest {
+    fun whenHasError_returnsError() = runTest {
         // Given
         testItemRepository.setReturnError(true)
         val newItem =
@@ -66,11 +67,8 @@ class DeleteItemUseCaseTest {
                 imageUrl = "newItemImage",
             )
         // When
-        val result = deleteItemUseCase(newItem)
+        val result = addItemUseCase(newItem)
         // Then
-        assertEquals(
-            result,
-            Resource.error(stringData.core_data_delete_item_failure_generic),
-        )
+        assertEquals(Resource.error(stringData.core_data_add_item_failure_generic), result)
     }
 }

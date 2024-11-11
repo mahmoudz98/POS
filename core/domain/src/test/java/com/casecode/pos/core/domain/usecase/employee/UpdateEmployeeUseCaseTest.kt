@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.core.domain.usecase.employee
 
+import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
@@ -26,7 +27,7 @@ class UpdateEmployeeUseCaseTest {
     private val updateEmployeeUseCase = UpdateEmployeesUseCase(testEmployeesBusinessRepository)
 
     @Test
-    fun `updateEmployeeUseCase when has error return Error`() = runTest {
+    fun `when has error return Error`() = runTest {
         val oldEmployee = Employee()
         val newEmployee =
             Employee(
@@ -44,7 +45,7 @@ class UpdateEmployeeUseCaseTest {
     }
 
     @Test
-    fun `updateEmployeeUseCase when has success return Success`() = runTest {
+    fun `when has success return Success`() = runTest {
         val oldEmployee = Employee()
         val newEmployee =
             Employee(

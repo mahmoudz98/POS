@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.core.domain.usecase.invoice
 
+import com.casecode.pos.core.domain.usecase.AddInvoiceUseCase
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.testing.data.invoicesGroupTestData
+import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.testing.data.itemsTestData
 import com.casecode.pos.core.testing.repository.TestInvoiceRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.flow.last
@@ -24,51 +26,56 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import com.casecode.pos.core.data.R.string as stringData
+import com.casecode.pos.core.domain.R.string as stringDomain
 
-class GetInvoiceUseCaseTest {
+class AddInvoiceUseCaseTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     // Subject under test
     private val testInvoiceRepository = TestInvoiceRepository()
-    private val getInvoicesUseCase = GetInvoicesUseCase(testInvoiceRepository)
+    private val addInvoiceUseCase = AddInvoiceUseCase(testInvoiceRepository)
 
     @Test
-    fun getInvoiceUseCase_hasInvoices_returnListOfInvoices() =
+    fun whenHasInvoices_returnMessageAddedInvoice() =
         runTest {
             // Given
-            val expected = Resource.success(invoicesGroupTestData)
-
             // When
-            val result = getInvoicesUseCase().last()
-
+            val result = addInvoiceUseCase(itemsTestData).last()
             // Then
-            assertEquals(expected, result)
+            assertEquals(
+                Resource.success(stringData.core_data_add_invoice_successfully),
+                result,
+            )
         }
 
     @Test
-    fun getInvoiceUseCase_whenHasError_returnError() =
+    fun whenInputEmptyItems_returnMessageEmptyItems() =
         runTest {
             // Given
-            testInvoiceRepository.setReturnError(true)
-
+            val items = listOf<Item>()
             // When
-            val result = getInvoicesUseCase().last()
-
+            val result = addInvoiceUseCase(items).last()
             // Then
-            assert(result is Resource.Error)
+            assertEquals(
+                Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
+                result,
+            )
         }
 
     @Test
-    fun getInvoiceUseCase_whenEmptyInvoices_returnEmpty() =
+    fun whenHasError_returnMessageError() =
         runTest {
             // Given
-            testInvoiceRepository.setReturnEmpty(true)
-
+            val items = itemsTestData
             // When
-            val result = getInvoicesUseCase().last()
-
+            testInvoiceRepository setReturnError true
+            val result = addInvoiceUseCase(items).last()
             // Then
-            assert(result is Resource.Empty)
+            assertEquals(
+                Resource.error(stringData.core_data_add_invoice_failure),
+                result,
+            )
         }
 }

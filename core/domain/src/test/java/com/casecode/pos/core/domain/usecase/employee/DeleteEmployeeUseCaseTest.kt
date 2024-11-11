@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.core.domain.usecase.employee
 
+import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
@@ -29,7 +30,7 @@ class DeleteEmployeeUseCaseTest {
         DeleteEmployeeUseCase(testEmployeesBusinessRepository)
 
     @Test
-    fun deleteEmployee_success() = runTest {
+    fun whenEmployeeDeleted_ReturnSuccess() = runTest {
         // Given
         val employee = Employee()
         // When
@@ -39,7 +40,7 @@ class DeleteEmployeeUseCaseTest {
     }
 
     @Test
-    fun deleteEmployee_error() = runTest {
+    fun whenHasError_returnError() = runTest {
         // Given
         val employee = Employee()
         testEmployeesBusinessRepository.setReturnError(true)

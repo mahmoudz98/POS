@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.core.domain.usecase.item
 
+import com.casecode.pos.core.domain.usecase.GetItemsUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
@@ -34,7 +35,7 @@ class GetItemsUseCaseTest {
     private val getItemsUseCase = GetItemsUseCase(testItemRepository)
 
     @Test
-    fun getItems_whenItemsExist_returnsItems() =
+    fun whenItemsExist_returnsItems() =
         runTest {
             val items = getItemsUseCase()
             testItemRepository.sendItems()
@@ -45,7 +46,7 @@ class GetItemsUseCaseTest {
         }
 
     @Test
-    fun getItems_whenHasError_returnsError() =
+    fun whenHasError_returnsError() =
         runTest {
             // Given
             testItemRepository.setReturnError(true)
@@ -56,7 +57,7 @@ class GetItemsUseCaseTest {
         }
 
     @Test
-    fun getItems_whenHasNoItems_returnsEmpty() =
+    fun whenHasNoItems_returnsEmpty() =
         runTest {
             // Given
             testItemRepository.setReturnEmpty(true)

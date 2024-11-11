@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.core.domain.usecase.employee
 
+import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
@@ -26,7 +27,7 @@ class AddEmployeeUseCaseTest {
     private val addEmployeeUseCase = AddEmployeeUseCase(testEmployeesBusinessRepository)
 
     @Test
-    fun `addEmployee should return Success when employees are not empty`() = runTest {
+    fun `should return Success when employees are not empty`() = runTest {
         // Given
         val employees =
             Employee(
@@ -43,7 +44,7 @@ class AddEmployeeUseCaseTest {
     }
 
     @Test
-    fun `addEmployee when has error return Error`() = runTest {
+    fun `when has error return Error`() = runTest {
         // Given
         val employees = Employee()
         // When

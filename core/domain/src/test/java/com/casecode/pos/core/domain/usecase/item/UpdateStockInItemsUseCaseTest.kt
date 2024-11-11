@@ -13,30 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.core.domain.usecase.item
 
+import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import com.casecode.pos.core.data.R.string as stringData
+import com.casecode.pos.core.domain.R.string as stringDomain
 
-class UpdateItemUseCaseTest {
+class UpdateStockInItemsUseCaseTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     // Subjects under test
     private val testItemRepository = TestItemRepository()
-    private val updateItemUseCase = UpdateItemUseCase(testItemRepository)
+    private val updateStockInItemsUseCase = UpdateStockInItemsUseCase(testItemRepository)
 
     @Test
-    fun updateItem_whenHasError_returnsError() = runTest {
+    fun whenItemUpdated_returnsSuccess() = runTest {
         // Given
-        testItemRepository.setReturnError(true)
         val newItem =
             Item(
                 name = "New Item",
@@ -45,17 +46,28 @@ class UpdateItemUseCaseTest {
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
+        val itemsUpdate = listOf(newItem)
         // When
-        val result = updateItemUseCase(newItem)
+        val result = updateStockInItemsUseCase(itemsUpdate)
+        // Then
+        assertEquals(Resource.success(itemsUpdate), result)
+    }
+
+    @Test
+    fun whenEmptyItems_returnsMessageEmpty() = runTest {
+        // Given
+        val emptyItems = listOf<Item>()
+        // When
+        val result = updateStockInItemsUseCase(emptyItems)
         // Then
         assertEquals(
+            Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
             result,
-            (Resource.error(stringData.core_data_update_item_failure_generic)),
         )
     }
 
     @Test
-    fun updateItem_whenItemUpdated_returnsSuccess() = runTest {
+    fun whenHasError_returnMessageError() = runTest {
         // Given
         val newItem =
             Item(
@@ -65,12 +77,14 @@ class UpdateItemUseCaseTest {
                 sku = "1212312",
                 imageUrl = "newItemImage",
             )
+        val itemsUpdate = listOf(newItem)
         // When
-        val result = updateItemUseCase(newItem)
-        // Then
+        testItemRepository setReturnError true
+        val resultUpdate = updateStockInItemsUseCase(itemsUpdate)
         assertEquals(
-            result,
-            (Resource.success(stringData.core_data_item_updated_successfully)),
-        )
+            Resource.error(stringData.core_data_update_item_failure_generic),
+            resultUpdate,
+
+            )
     }
 }
