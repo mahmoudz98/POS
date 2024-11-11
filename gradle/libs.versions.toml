@@ -53,7 +53,7 @@ play-services-auth = "21.2.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
 googleOssPlugin = "0.10.6"
-zxing-core = "3.4.1"
+zxing-core = "3.5.3"
 
 coreTesting = "2.2.0"
 truth = "1.4.2"
