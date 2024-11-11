@@ -50,7 +50,7 @@ class DeleteItemUseCaseTest {
         // Then
         assertEquals(
             Resource.success(stringData.core_data_item_deleted_successfully),
-            result
+            result,
         )
     }
 
@@ -71,7 +71,7 @@ class DeleteItemUseCaseTest {
         // Then
         assertEquals(
             Resource.error(stringData.core_data_delete_item_failure_generic),
-            result
+            result,
         )
     }
 }

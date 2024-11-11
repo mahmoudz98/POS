@@ -50,7 +50,7 @@ class AddItemUseCaseTest {
         // Then
         assertEquals(
             Resource.success(stringData.core_data_item_added_successfully),
-            result
+            result,
         )
     }
 

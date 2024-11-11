@@ -85,6 +85,6 @@ class UpdateStockInItemsUseCaseTest {
             Resource.error(stringData.core_data_update_item_failure_generic),
             resultUpdate,
 
-            )
+        )
     }
 }

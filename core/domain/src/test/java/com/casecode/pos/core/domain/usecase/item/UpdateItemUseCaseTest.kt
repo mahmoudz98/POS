@@ -51,7 +51,7 @@ class UpdateItemUseCaseTest {
         // Then
         assertEquals(
             (Resource.error(stringData.core_data_update_item_failure_generic)),
-            result
+            result,
         )
     }
 
