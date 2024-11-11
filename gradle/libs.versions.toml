@@ -56,7 +56,7 @@ googleOssPlugin = "0.10.6"
 zxing-core = "3.4.1"
 
 coreTesting = "2.2.0"
-truth = "1.4.2"
+truth = "1.4.4"
 power-assert = "2.0.20"
 # Debug Tools
 leakcanary = "2.11"
