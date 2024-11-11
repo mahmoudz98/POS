@@ -59,7 +59,7 @@ coreTesting = "2.2.0"
 truth = "1.4.2"
 power-assert = "2.0.20"
 # Debug Tools
-leakcanary = "2.11"
+leakcanary = "2.14"
 timber = "5.0.1"
 
 # AndroidX test
