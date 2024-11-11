@@ -13,8 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data.users
+package com.casecode.pos.core.domain.repository
 
-data class UsersResponse(
-    val users: List<User>,
-)
+import com.casecode.pos.core.domain.utils.OperationResult
+import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.users.Supplier
+import kotlinx.coroutines.flow.Flow
+
+interface SupplierRepository {
+    fun getSuppliers(): Flow<Resource<List<Supplier>>>
+    suspend fun addSupplier(supplier: Supplier): OperationResult
+    suspend fun updateSupplier(oldSupplier: Supplier, newSupplier: Supplier): OperationResult
+    suspend fun deleteSupplier(supplier: Supplier): OperationResult
+}
