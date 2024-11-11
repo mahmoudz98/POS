@@ -179,15 +179,22 @@ constructor(
         collection: String,
         documentId: String,
         collectionChild: String,
-        condition: Pair<String, Any>,
-        sortWithFieldName: String,
-    ) = firestore
-        .collection(collection)
-        .document(documentId)
-        .collection(collectionChild)
-        .whereEqualTo(condition.first, condition.second)
-        .orderBy(sortWithFieldName)
-        .snapshots()
+        condition: Pair<String, Any>? = null,
+        sortWithFieldName: String? = null,
+    ) =
+        firestore.collection(collection).document(documentId).collection(collectionChild).let { collectionRef ->
+            if (condition != null) {
+                collectionRef.whereEqualTo(condition.first, condition.second)
+            } else {
+                collectionRef
+            }
+        }.let { collectionRef ->
+            if (sortWithFieldName != null) {
+                collectionRef.orderBy(sortWithFieldName)
+            } else {
+                collectionRef
+            }
+        }.snapshots()
 
     fun batch() = firestore.batch()
 }
