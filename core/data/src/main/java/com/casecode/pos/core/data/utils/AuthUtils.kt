@@ -19,13 +19,13 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.utils.Resource
 
-suspend inline fun <T> AuthRepository.ensureUserExists(onUserNotFound: (Resource<T>) -> Unit) {
+suspend inline fun <T> AuthRepository.ensureUserExistsOrReturnError(onUserNotFound: (Resource<T>) -> Unit) {
     if (!this.hasUser()) {
         onUserNotFound(Resource.Error(R.string.core_data_uid_empty))
     }
 }
 
-suspend inline fun AuthRepository.checkUserNotFoundAndReturnMessage(onUserNotFound: (Int) -> Unit) {
+suspend inline fun AuthRepository.ensureUserExists(onUserNotFound: (Int) -> Unit) {
     if (!this.hasUser()) {
         onUserNotFound((R.string.core_data_uid_empty))
     }

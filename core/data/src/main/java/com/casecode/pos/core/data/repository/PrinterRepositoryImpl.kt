@@ -20,7 +20,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.model.asExternalModel
-import com.casecode.pos.core.data.utils.ensureUserExists
+import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.PrinterRepository
 import com.casecode.pos.core.domain.utils.Resource
@@ -47,7 +47,7 @@ constructor(
         return withContext(ioDispatcher) {
             try {
                 val uid = auth.currentUserId()
-                auth.ensureUserExists<List<PrinterInfo>> {
+                auth.ensureUserExistsOrReturnError<List<PrinterInfo>> {
                     return@withContext it
                 }
                 suspendCoroutine { continuation ->
@@ -90,7 +90,7 @@ constructor(
         return withContext(ioDispatcher) {
             try {
                 val uid = auth.currentUserId()
-                auth.ensureUserExists<Int> {
+                auth.ensureUserExistsOrReturnError<Int> {
                     return@withContext it
                 }
                 suspendCoroutine { continuation ->

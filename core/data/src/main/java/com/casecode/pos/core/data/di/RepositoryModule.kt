@@ -25,6 +25,7 @@ import com.casecode.pos.core.data.repository.ItemRepositoryImpl
 import com.casecode.pos.core.data.repository.PrinterRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsBusinessRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsRepositoryImpl
+import com.casecode.pos.core.data.repository.SupplierRepositoryImpl
 import com.casecode.pos.core.domain.repository.AccountRepository
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.BusinessRepository
@@ -35,6 +36,7 @@ import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.PrinterRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
+import com.casecode.pos.core.domain.repository.SupplierRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -45,37 +47,40 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds
-    internal abstract fun bindAccountRepository(accountServiceImpl: AccountRepositoryImpl): AccountRepository
+    internal abstract fun bindAccountRepository(impl: AccountRepositoryImpl): AccountRepository
 
     @Binds
-    internal abstract fun bindAuthRepository(authImpl: AuthRepositoryImpl): AuthRepository
+    internal abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
-    internal abstract fun bindBusinessRepo(businessRepositoryImpl: BusinessRepositoryImpl): BusinessRepository
+    internal abstract fun bindBusinessRepo(impl: BusinessRepositoryImpl): BusinessRepository
 
     @Binds
     internal abstract fun bindEmployeesBusinessRepo(
-        employeesBusinessRepositoryImpl: EmployeesBusinessRepositoryImpl,
+        impl: EmployeesBusinessRepositoryImpl,
     ): EmployeesBusinessRepository
 
     @Binds
     internal abstract fun bindSubscriptionsBusinessRepo(
-        subscriptionsBusinessRepositoryImpl: SubscriptionsBusinessRepositoryImpl,
+        impl: SubscriptionsBusinessRepositoryImpl,
     ): SubscriptionsBusinessRepository
 
     @Binds
-    internal abstract fun bindSubscriptionsRepo(subscriptionsRepositoryImpl: SubscriptionsRepositoryImpl): SubscriptionsRepository
+    internal abstract fun bindSubscriptionsRepo(impl: SubscriptionsRepositoryImpl): SubscriptionsRepository
 
     @Singleton
     @Binds
-    internal abstract fun bindItemRepo(itemRepositoryImpl: ItemRepositoryImpl): ItemRepository
+    internal abstract fun bindItemRepo(impl: ItemRepositoryImpl): ItemRepository
 
     @Binds
-    internal abstract fun bindImageRepo(itemImageRepositoryImpl: ItemImageRepositoryImpl): ItemImageRepository
+    internal abstract fun bindImageRepo(impl: ItemImageRepositoryImpl): ItemImageRepository
 
     @Binds
-    internal abstract fun bindInvoiceRepo(invoiceRepositoryImpl: InvoiceRepositoryImpl): InvoiceRepository
+    internal abstract fun bindInvoiceRepo(impl: InvoiceRepositoryImpl): InvoiceRepository
 
     @Binds
-    internal abstract fun bindPrinterRepo(printerRepositoryImpl: PrinterRepositoryImpl): PrinterRepository
+    internal abstract fun bindPrinterRepo(impl: PrinterRepositoryImpl): PrinterRepository
+
+    @Binds
+    internal abstract fun bindSupplierRepo(impl: SupplierRepositoryImpl): SupplierRepository
 }

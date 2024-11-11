@@ -20,7 +20,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asSubscriptionBusinessModel
 import com.casecode.pos.core.data.model.asSubscriptionRequest
-import com.casecode.pos.core.data.utils.ensureUserExists
+import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AddSubscriptionBusiness
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
@@ -54,7 +54,7 @@ constructor(
     ): AddSubscriptionBusiness {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExists<Boolean> {
+                auth.ensureUserExistsOrReturnError<Boolean> {
                     return@withContext it
                 }
                 val currentUID = auth.currentUserId()
@@ -94,7 +94,7 @@ constructor(
 
     override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> =
         flow<Resource<List<SubscriptionBusiness>>> {
-            auth.ensureUserExists<List<SubscriptionBusiness>> {
+            auth.ensureUserExistsOrReturnError<List<SubscriptionBusiness>> {
                 emit(it)
                 return@flow
             }

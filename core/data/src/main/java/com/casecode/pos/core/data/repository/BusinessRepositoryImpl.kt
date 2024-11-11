@@ -21,8 +21,8 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asEntityBusiness
 import com.casecode.pos.core.data.model.asExternalBranch
 import com.casecode.pos.core.data.model.asExternalBusiness
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnMessage
 import com.casecode.pos.core.data.utils.ensureUserExists
+import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AddBusiness
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.BusinessRepository
@@ -57,7 +57,7 @@ constructor(
     override suspend fun getBusiness(): BusinessResult {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnMessage {
+                auth.ensureUserExists {
                     return@withContext BusinessResult.Error(it)
                 }
                 val doc = db.getDocument(USERS_COLLECTION_PATH, auth.currentUserId())
@@ -78,7 +78,7 @@ constructor(
     override suspend fun setBusiness(business: Business): AddBusiness {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExists<Boolean> {
+                auth.ensureUserExistsOrReturnError<Boolean> {
                     return@withContext it
                 }
                 val currentUID = auth.currentUserId()

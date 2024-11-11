@@ -18,7 +18,7 @@ package com.casecode.pos.core.data.repository
 import android.graphics.Bitmap
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
-import com.casecode.pos.core.data.utils.ensureUserExists
+import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.DeleteImage
 import com.casecode.pos.core.domain.repository.ItemImageRepository
@@ -61,7 +61,7 @@ constructor(
     override suspend fun uploadImage(bitmap: Bitmap, imageName: String): UploadImage {
         return withContext(ioDispatcher) {
             try {
-                authService.ensureUserExists<String> { return@withContext it }
+                authService.ensureUserExistsOrReturnError<String> { return@withContext it }
                 val currentUserId =
                     authService.currentUserId()
                 // Get a reference to the Firebase Storage location
