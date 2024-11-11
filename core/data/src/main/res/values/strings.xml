@@ -90,6 +90,18 @@
   <string name="core_data_delete_image_failure_generic">Delete image failed, Please try again later.</string>
   <!-- ======================================================================================= -->
 
+  <!-- Supplier -->
+  <string name="core_data_error_fetching_suppliers">Error fetching all suppliers. Please try again later.</string>
+  <string name="core_data_add_supplier_failure_network">Unable to add supplier. Please check your internet
+        connection.</string>
+  <string name="core_data_add_supplier_failure_generic">Failed to add target supplier. Please try again later.</string>
+  <string name="core_data_update_supplier_failure_network">Unable to update supplier. Please check your internet
+        connection.</string>
+  <string name="core_data_update_supplier_failure_generic">Failed to update target supplier. Please try again later.</string>
+  <string name="core_data_delete_supplier_failure_network">Unable to delete supplier. Please check your internet
+        connection.</string>
+  <string name="core_data_delete_supplier_failure_generic">Failed to delete target supplier. Please try again later.</string>
+
   // Invoice
   <string name="core_data_add_invoice_failure_network">Unable to add invoice. Please check your internet
         connection.</string>
