@@ -219,7 +219,7 @@ baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacr
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-gradle-cache-fix = { id = "org.gradle.android.cache-fix", version = "3.0" }
+gradle-cache-fix = { id = "org.gradle.android.cache-fix", version = "3.0.1" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
