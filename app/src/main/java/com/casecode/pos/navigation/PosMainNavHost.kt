@@ -18,9 +18,11 @@ package com.casecode.pos.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.casecode.pos.feature.employee.employeesScreen
+import com.casecode.pos.feature.inventory.navigation.inventoryScreen
 import com.casecode.pos.feature.item.navigation.itemsGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.profile.profileScreen
@@ -33,6 +35,8 @@ import com.casecode.pos.feature.setting.settingsGraph
 import com.casecode.pos.feature.signout.navigateToSignOut
 import com.casecode.pos.feature.signout.signOutDialog
 import com.casecode.pos.feature.statistics.reportsScreen
+import com.casecode.pos.feature.supplier.navigation.navigateToSupplier
+import com.casecode.pos.feature.supplier.navigation.supplierScreen
 import com.casecode.pos.ui.MainAppState
 
 @Composable
@@ -48,23 +52,7 @@ fun PosMainNavHost(
     ) {
         saleScreen {
             appState.navController.navigateToItemsGraph(
-                navOptions {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
-                    popUpTo(
-                        appState.navController.graph
-                            .findStartDestination()
-                            .id,
-                    ) {
-                        saveState = true
-                    }
-                    // Avoid multiple copies of the same destination when
-                    // reselecting the same item
-                    launchSingleTop = true
-                    // Restore state when reselecting a previously selected item
-                    restoreState = true
-                },
+                defaultNavOptions(appState.navController.graph.findStartDestination().id),
             )
         }
         // TODO: invoke navigate to inventory report screen
@@ -74,12 +62,20 @@ fun PosMainNavHost(
         )
         salesReportGraph(
             navController = appState.navController,
-            onBackClick = { appState.navController.popBackStack() },
             onSalesReportDetailsClick = {
                 appState.navController.navigateToSalesReportDetails()
             },
         )
+        inventoryScreen(
+            onItemsScreenClick = {
+                appState.navController.navigateToItemsGraph()
+            },
+            onSupplierScreenClick = {
+                appState.navController.navigateToSupplier()
+            },
+        )
         itemsGraph(appState.navController)
+        supplierScreen { appState.navController.popBackStack() }
         employeesScreen()
         settingsGraph(
             appState.navController,
@@ -95,4 +91,12 @@ fun PosMainNavHost(
         )
         profileScreen { appState.navController.popBackStack() }
     }
+}
+
+private fun defaultNavOptions(idDestination: Int): NavOptions = navOptions {
+    popUpTo(idDestination) {
+        saveState = true
+    }
+    launchSingleTop = true
+    restoreState = true
 }

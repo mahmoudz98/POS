@@ -15,18 +15,14 @@
  */
 package com.casecode.pos.navigation
 
-import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import com.casecode.pos.R
-import com.casecode.pos.core.designsystem.icon.PosIcons
-import com.casecode.pos.core.ui.R.string.core_ui_employees_title
 import com.casecode.pos.feature.employee.EmployeesRoute
 import com.casecode.pos.feature.employee.navigateToEmployees
-import com.casecode.pos.feature.item.navigation.ItemsGraph
+import com.casecode.pos.feature.inventory.navigation.InventoryRoute
+import com.casecode.pos.feature.inventory.navigation.navigateToInventory
 import com.casecode.pos.feature.item.navigation.ItemsSaleGraph
-import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsSaleGraph
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.sale.navigation.navigateToSale
@@ -45,53 +41,18 @@ interface TopLevelDestination {
     fun navigate(navController: NavHostController, navOptions: NavOptions) {
         navigateTo(navController, navOptions)
     }
-}
-
-private fun TopLevelDestination.navigateTo(
-    navController: NavHostController,
-    navOptions: NavOptions,
-) {
-    when (this.route) {
-        SaleRoute::class -> navController.navigateToSale(navOptions)
-        ReportsRoute::class -> navController.navigateToReports(navOptions)
-        ItemsGraph::class -> navController.navigateToItemsGraph(navOptions)
-        ItemsSaleGraph::class -> navController.navigateToItemsSaleGraph(navOptions)
-        EmployeesRoute::class -> navController.navigateToEmployees(navOptions)
-        SettingRoute::class -> navController.navigateToSettings(navOptions)
+    private fun TopLevelDestination.navigateTo(
+        navController: NavHostController,
+        navOptions: NavOptions,
+    ) {
+        when (this.route) {
+            SaleRoute::class -> navController.navigateToSale(navOptions)
+            ReportsRoute::class -> navController.navigateToReports(navOptions)
+            InventoryRoute::class -> navController.navigateToInventory(navOptions)
+            // TODO: use move to sale nav host
+            ItemsSaleGraph::class -> navController.navigateToItemsSaleGraph(navOptions)
+            EmployeesRoute::class -> navController.navigateToEmployees(navOptions)
+            SettingRoute::class -> navController.navigateToSettings(navOptions)
+        }
     }
-}
-
-enum class AdminTopLevelDestination(
-    override val selectedIcon: ImageVector,
-    override val unselectedIcon: ImageVector,
-    override val titleTextId: Int,
-    override val route: KClass<*>,
-) : TopLevelDestination {
-    POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
-    REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title, ReportsRoute::class),
-    ITEMS(PosIcons.Items, PosIcons.Items, R.string.menu_items, ItemsGraph::class),
-    EMPLOYEES(PosIcons.Employee, PosIcons.Employee, core_ui_employees_title, EmployeesRoute::class),
-    SETTINGS(
-        PosIcons.Settings,
-        PosIcons.Settings,
-        R.string.settings_title,
-        SettingRoute::class,
-    ),
-}
-
-enum class SaleTopLevelDestination(
-    override val selectedIcon: ImageVector,
-    override val unselectedIcon: ImageVector,
-    @StringRes override val titleTextId: Int,
-    override val route: KClass<*>,
-) : TopLevelDestination {
-    POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
-    REPORTS(PosIcons.Reports, PosIcons.Reports, R.string.reports_title, ReportsRoute::class),
-    ITEMS(PosIcons.Items, PosIcons.Items, R.string.menu_items, ItemsSaleGraph::class),
-    SETTINGS(
-        PosIcons.Settings,
-        PosIcons.Settings,
-        R.string.settings_title,
-        SettingRoute::class,
-    ),
 }
