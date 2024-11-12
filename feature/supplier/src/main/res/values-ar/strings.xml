@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+  <string name="feature_supplier_title">الموردين</string>
+  <string name="feature_supplier_empty_title">لم يتم العثور على موردين.</string>
+  <string name="feature_supplier_empty_message">أضف موردين لإدارة عملك.</string>
+  <string name="feature_supplier_add_title">إضافة مورد</string>
+  <string name="feature_supplier_add_button_text">إضافة</string>
+  <string name="feature_supplier_update_button_text">تحديث</string>
+  <string name="feature_supplier_update_title">تحديث المورد</string>
+  <string name="feature_supplier_name_hint">الاسم</string>
+  <string name="feature_supplier_company_name_hint">اسم الشركة</string>
+  <string name="feature_supplier_phone_hint">الهاتف</string>
+  <string name="feature_supplier_email_hint">البريد الإلكتروني</string>
+  <string name="feature_supplier_address_hint">العنوان</string>
+  <string name="feature_supplier_category_hint">الفئة</string>
+  <string name="feature_supplier_error_name_empty">اسم المورد مطلوب</string>
+  <string name="feature_supplier_error_company_name_empty">اسم الشركة مطلوب</string>
+
+  <string name="feature_supplier_add_success_message">تمت إضافة المورد بنجاح</string>
+  <string name="feature_supplier_update_success_message">تم تحديث المورد بنجاح</string>
+  <string name="feature_supplier_update_error_message">فشل تحديث المورد</string>
+  <string name="feature_supplier_delete_success_message">تم حذف المورد بنجاح</string>
+
+</resources>
