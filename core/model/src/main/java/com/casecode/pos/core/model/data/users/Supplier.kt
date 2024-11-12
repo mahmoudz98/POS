@@ -16,11 +16,11 @@
 package com.casecode.pos.core.model.data.users
 
 data class Supplier(
-    val id: String,
-    val companyName: String,
-    val contactName: String,
-    val contactEmail: String,
-    val contactPhone: String,
-    val address: String,
-    val category: String,
+    val id: String = "",
+    val companyName: String = "",
+    val contactName: String = "",
+    val contactEmail: String = "",
+    val contactPhone: String = "",
+    val address: String = "",
+    val category: String = "",
 )
