@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.isNotBlank
 import com.casecode.pos.core.ui.R.string as uiString
 
 /**
