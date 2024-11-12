@@ -76,6 +76,8 @@ class TestSupplierRepository @Inject constructor() : BaseTestRepository(), Suppl
         if (shouldReturnError) {
             return OperationResult.Failure(stringData.core_data_delete_supplier_failure_generic)
         }
+        suppliersTest.remove(supplier)
+        resourcesSuppliersFlow.tryEmit(Resource.success(suppliersTest))
         return OperationResult.Success
     }
 }
