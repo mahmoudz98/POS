@@ -2,8 +2,8 @@
     <g class="graph">
         <path fill="#fff" d="M0 332V0h696.23v332H0z"/>
         <g class="node" transform="translate(4 328)">
-            <ellipse cx="192.06" cy="-306" fill="none" stroke="#000" rx="99.97" ry="18"/>
-            <text x="192.06" y="-300.95" font-family="Times,serif" font-size="14" text-anchor="middle">:feature:login-employee</text>
+            <ellipse cx="192.06" cy="-306" fill="none" stroke="#000" rx="76.94" ry="18"/>
+            <text x="192.06" y="-300.95" font-family="Times,serif" font-size="14" text-anchor="middle">:feature:inventory</text>
         </g>
         <g class="node" transform="translate(4 328)">
             <ellipse cx="192.06" cy="-234" fill="none" stroke="#000" rx="39.07" ry="18"/>
@@ -18,7 +18,7 @@
             <text x="82.06" y="-156.95" font-family="Times,serif" font-size="14" text-anchor="middle">:core:designsystem</text>
         </g>
         <g stroke="#000" class="edge">
-            <path fill="none" d="M179.48 40.18c-9.53 10.14-21.53 23.39-31.42 35.82-16.05 20.17-32.67 44.22-44.65 62.23"/>
+            <path fill="none" d="M179.93 39.7c-9.6 10.2-21.82 23.67-31.87 36.3-16.05 20.17-32.67 44.22-44.65 62.23"/>
             <path d="m106.35 140.12-8.42 6.42 2.58-10.27 5.84 3.85z"/>
         </g>
         <g class="node" transform="translate(4 328)">
@@ -26,8 +26,8 @@
             <text x="416.06" y="-228.95" font-family="Times,serif" font-size="14" text-anchor="middle">:core:data</text>
         </g>
         <g stroke="red" stroke-width="2" class="edge">
-            <path fill="none" d="M244.66 38.19C282.96 50.16 336 66.73 373.7 78.51"/>
-            <path fill="red" d="m373 74.63 8.5 6.32-10.59.36 2.09-6.68z"/>
+            <path fill="none" d="M240.85 37c38.43 12.01 93.61 29.25 132.57 41.42"/>
+            <path fill="red" d="m372.81 74.57 8.5 6.32-10.59.36 2.09-6.68z"/>
         </g>
         <g stroke="#000" class="edge">
             <path fill="none" d="M173.8 109.17c-15.15 9.64-35.51 22.59-52.8 33.6"/>
