@@ -20,6 +20,17 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 import timber.log.Timber
 
+fun formatPhoneNumber(phoneNumber: String, countryCode: String): String? {
+    val phoneNumberUtil = PhoneNumberUtil.getInstance()
+    return try {
+        val numberProto = phoneNumberUtil.parse(phoneNumber, countryCode)
+        phoneNumberUtil.format(numberProto, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+    } catch (e: Exception) {
+        Timber.e(e, "Error formatting phone number$phoneNumber")
+        null
+    }
+}
+
 fun validatePhoneNumber(
     phoneNumber: String,
     countryIsoCode: String,
