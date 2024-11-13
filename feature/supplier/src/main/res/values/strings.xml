@@ -29,6 +29,9 @@
   <string name="feature_supplier_category_hint">Category</string>
   <string name="feature_supplier_error_name_empty">Name supplier is required</string>
   <string name="feature_supplier_error_company_name_empty">Company Name is required</string>
+  <string name="feature_supplier_dialog_delete_title">Delete Supplier</string>
+  <string name="feature_supplier_dialog_delete_message">Are you sure you want to delete this Supplier?</string>
+
 
   <string name="feature_supplier_add_success_message">Added supplier successfully</string>
   <string name="feature_supplier_update_success_message">Update supplier successfully</string>

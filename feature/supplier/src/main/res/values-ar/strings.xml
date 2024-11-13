@@ -29,6 +29,8 @@
   <string name="feature_supplier_category_hint">الفئة</string>
   <string name="feature_supplier_error_name_empty">اسم المورد مطلوب</string>
   <string name="feature_supplier_error_company_name_empty">اسم الشركة مطلوب</string>
+  <string name="feature_supplier_dialog_delete_title">حذف المورد</string>
+  <string name="feature_supplier_dialog_delete_message">هل أنت متأكد أنك تريد حذف هذا المورد؟</string>
 
   <string name="feature_supplier_add_success_message">تمت إضافة المورد بنجاح</string>
   <string name="feature_supplier_update_success_message">تم تحديث المورد بنجاح</string>
