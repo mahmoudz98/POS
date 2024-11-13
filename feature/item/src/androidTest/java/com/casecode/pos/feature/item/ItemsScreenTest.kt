@@ -21,13 +21,13 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.testing.data.itemsTestData
 import org.junit.Rule
 import org.junit.Test
 
 class ItemsScreenTest {
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    @get:Rule val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
     fun circularProgressIndicator_whenScreenIsLoading_exists() {
@@ -55,9 +55,7 @@ class ItemsScreenTest {
                 onShownMessage = {},
             )
         }
-        composeTestRule
-            .onNodeWithContentDescription("LoadingItems")
-            .assertExists()
+        composeTestRule.onNodeWithContentDescription("LoadingItems").assertExists()
     }
 
     @Test
@@ -66,7 +64,8 @@ class ItemsScreenTest {
             ItemsScreen(
                 uiState = ItemsUIState.Empty,
                 searchWidgetState = SearchWidgetState.CLOSED,
-                onSearchClicked = {},onBackClick = {},
+                onSearchClicked = {},
+                onBackClick = {},
                 searchQuery = "",
                 categories = setOf<String>(),
                 filterUiState = FilterUiState(),
@@ -87,9 +86,9 @@ class ItemsScreenTest {
         }
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity
-                    .getString(R.string.feature_item_empty_items_title),
-            ).assertExists()
+                composeTestRule.activity.getString(R.string.feature_item_empty_items_title),
+            )
+            .assertExists()
     }
 
     @Test
@@ -98,7 +97,8 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Success(mapOf(), testItemsData),
-                searchWidgetState = SearchWidgetState.CLOSED,onBackClick = {},
+                searchWidgetState = SearchWidgetState.CLOSED,
+                onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = "",
                 categories = setOf<String>(),
@@ -128,7 +128,8 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Error,
-                searchWidgetState = SearchWidgetState.CLOSED,onBackClick = {},
+                searchWidgetState = SearchWidgetState.CLOSED,
+                onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = "",
                 categories = setOf<String>(),
@@ -150,9 +151,9 @@ class ItemsScreenTest {
         }
         composeTestRule
             .onNodeWithText(
-                composeTestRule.activity
-                    .getString(R.string.feature_item_empty_items_title),
-            ).assertExists()
+                composeTestRule.activity.getString(R.string.feature_item_empty_items_title),
+            )
+            .assertExists()
     }
 
     @Test
@@ -160,7 +161,8 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Empty,
-                searchWidgetState = SearchWidgetState.OPENED,onBackClick = {},
+                searchWidgetState = SearchWidgetState.OPENED,
+                onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = "",
                 categories = setOf<String>(),
@@ -190,7 +192,8 @@ class ItemsScreenTest {
         composeTestRule.setContent {
             ItemsScreen(
                 uiState = ItemsUIState.Success(mapOf(), testItemsData),
-                searchWidgetState = SearchWidgetState.OPENED,onBackClick = {},
+                searchWidgetState = SearchWidgetState.OPENED,
+                onBackClick = {},
                 onSearchClicked = {},
                 searchQuery = searchItemNotExist,
                 categories = setOf<String>(),
@@ -211,7 +214,9 @@ class ItemsScreenTest {
             )
         }
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_item_empty_items_filter_title))
+            .onNodeWithText(
+                composeTestRule.activity.getString(R.string.feature_item_empty_items_filter_title),
+            )
             .assertExists()
     }
 }
