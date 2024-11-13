@@ -45,7 +45,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 
-
 /**
  * A Composable function that provides a transition between a default TopAppBar and a search-focused TopAppBar.
  *
@@ -226,27 +225,28 @@ private fun PosTopAppBarPreview() {
         )
     }
 }
+
 @Preview
 @Composable
 fun SearchTopAppBarPreview() {
     SearchTopAppBar(
         searchWidgetState = SearchWidgetState.OPENED,
         defaultTopAppBar = {
-          PosTopAppBar(
-            titleRes = android.R.string.untitled,
-            navigationIcon = PosIcons.ArrowBack,
-            navigationIconContentDescription = "Navigation icon",
-            onActionClick = {},
-            actionIcon = PosIcons.MoreVert,
-            actionIconContentDescription = "Action icon",
-          )
+            PosTopAppBar(
+                titleRes = android.R.string.untitled,
+                navigationIcon = PosIcons.ArrowBack,
+                navigationIconContentDescription = "Navigation icon",
+                onActionClick = {},
+                actionIcon = PosIcons.MoreVert,
+                actionIconContentDescription = "Action icon",
+            )
         },
         searchTopAppBar = {
-          SearchToolbar(
-            searchQuery = "",
-            onSearchQueryChanged = {},
-            onCloseClicked = {},
-          )
+            SearchToolbar(
+                searchQuery = "",
+                onSearchQueryChanged = {},
+                onCloseClicked = {},
+            )
         },
     )
 }
