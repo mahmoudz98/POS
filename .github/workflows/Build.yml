@@ -175,7 +175,7 @@ jobs:
           gradle-home-cache-cleanup: true
 
       - name: Build projects and run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.33.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64
