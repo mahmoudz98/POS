@@ -21,8 +21,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.testing.data.suppliersTestData
-import kotlin.test.Test
 import org.junit.Rule
+import kotlin.test.Test
 
 class SupplierScreenTest {
     @get:Rule val composeTestRule = createAndroidComposeRule<ComponentActivity>()

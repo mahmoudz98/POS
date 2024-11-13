@@ -16,7 +16,6 @@
 package com.casecode.pos.feature.supplier
 
 import androidx.lifecycle.SavedStateHandle
-import com.casecode.pos.core.data.R.string as dataString
 import com.casecode.pos.core.domain.usecase.AddSupplierUseCase
 import com.casecode.pos.core.domain.usecase.DeleteSupplierUseCase
 import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
@@ -24,15 +23,16 @@ import com.casecode.pos.core.domain.usecase.UpdateSupplierUseCase
 import com.casecode.pos.core.testing.repository.TestSupplierRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
-import com.casecode.pos.core.ui.R.string as uiString
-import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import com.casecode.pos.core.data.R.string as dataString
+import com.casecode.pos.core.ui.R.string as uiString
 
 class SupplierViewModelTest {
     @get:Rule val mainDispatcherRule = MainDispatcherRule()
