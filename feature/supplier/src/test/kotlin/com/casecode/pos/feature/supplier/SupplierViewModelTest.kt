@@ -15,6 +15,8 @@
  */
 package com.casecode.pos.feature.supplier
 
+import androidx.lifecycle.SavedStateHandle
+import com.casecode.pos.core.data.R.string as dataString
 import com.casecode.pos.core.domain.usecase.AddSupplierUseCase
 import com.casecode.pos.core.domain.usecase.DeleteSupplierUseCase
 import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
@@ -22,20 +24,18 @@ import com.casecode.pos.core.domain.usecase.UpdateSupplierUseCase
 import com.casecode.pos.core.testing.repository.TestSupplierRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
+import com.casecode.pos.core.ui.R.string as uiString
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import com.casecode.pos.core.data.R.string as dataString
-import com.casecode.pos.core.ui.R.string as uiString
 
 class SupplierViewModelTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
+    @get:Rule val mainDispatcherRule = MainDispatcherRule()
 
     // Subject under test
     private lateinit var viewModel: SupplierViewModel
@@ -48,13 +48,15 @@ class SupplierViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = SupplierViewModel(
-            networkMonitor,
-            getSuppliers,
-            addSupplier,
-            updateSupplier,
-            deleteSupplier,
-        )
+        viewModel =
+            SupplierViewModel(
+                networkMonitor,
+                getSuppliers,
+                addSupplier,
+                updateSupplier,
+                deleteSupplier,
+                SavedStateHandle(),
+            )
     }
 
     @Test
@@ -84,18 +86,37 @@ class SupplierViewModelTest {
     }
 
     @Test
+    fun filterSuppliers_whenSearchQueryIsBlank_returnsAllSuppliers() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.suppliersUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.filteredSuppliers.collect() }
+        supplierRepository.sendSuppliers()
+        viewModel.onSearchQueryChanged("")
+        assertEquals(
+            supplierRepository.suppliersTest,
+            viewModel.filteredSuppliers.value,
+        )
+    }
+
+    @Test
+    fun filterSuppliers_whenSearchQueryHasMatch_returnsFilteredSuppliers() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.suppliersUiState.collect() }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.filteredSuppliers.collect() }
+        supplierRepository.sendSuppliers()
+        viewModel.onSearchQueryChanged("supplier A")
+        assertEquals(
+            listOf(supplierRepository.suppliersTest[0]),
+            viewModel.filteredSuppliers.value,
+        )
+    }
+
+    @Test
     fun addSupplier_whenHasSupplierAndNetworkAvailable_returnsSameSupplier() = runTest {
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            viewModel.suppliersUiState.collect()
-        }
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.suppliersUiState.collect() }
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.userMessage.collect() }
         val newSupplier = supplierRepository.suppliersTest[0]
         networkMonitor.setConnected(true)
         viewModel.addSupplier(newSupplier)
-        assertEquals(
-            viewModel.userMessage.value,
-            R.string.feature_supplier_add_success_message,
-        )
+        assertEquals(viewModel.userMessage.value, R.string.feature_supplier_add_success_message)
         assertEquals(
             (viewModel.suppliersUiState.value as SuppliersUiState.Success).suppliers.last(),
             newSupplier,
@@ -108,10 +129,7 @@ class SupplierViewModelTest {
         val newSupplier = supplierRepository.suppliersTest[0]
         networkMonitor.setConnected(false)
         viewModel.addSupplier(newSupplier)
-        assertEquals(
-            viewModel.userMessage.value,
-            uiString.core_ui_error_network,
-        )
+        assertEquals(viewModel.userMessage.value, uiString.core_ui_error_network)
     }
 
     @Test
@@ -121,10 +139,7 @@ class SupplierViewModelTest {
         supplierRepository.setReturnError(true)
         networkMonitor.setConnected(true)
         viewModel.addSupplier(newSupplier)
-        assertEquals(
-            viewModel.userMessage.value,
-            dataString.core_data_add_supplier_failure_generic,
-        )
+        assertEquals(viewModel.userMessage.value, dataString.core_data_add_supplier_failure_generic)
     }
 
     @Test
@@ -140,16 +155,10 @@ class SupplierViewModelTest {
         networkMonitor.setConnected(true)
         viewModel.updateSupplier(newSupplier)
 
-        assertEquals(
-            R.string.feature_supplier_update_success_message,
-            viewModel.userMessage.value,
-        )
+        assertEquals(R.string.feature_supplier_update_success_message, viewModel.userMessage.value)
         val actualSupplier =
             (viewModel.suppliersUiState.value as SuppliersUiState.Success).suppliers.last()
-        assertEquals(
-            newSupplier,
-            actualSupplier,
-        )
+        assertEquals(newSupplier, actualSupplier)
     }
 
     @Test
@@ -161,10 +170,7 @@ class SupplierViewModelTest {
         val newSupplier = oldSupplier.copy(contactName = "new supplier")
         networkMonitor.setConnected(false)
         viewModel.updateSupplier(newSupplier)
-        assertEquals(
-            uiString.core_ui_error_network,
-            viewModel.userMessage.value,
-        )
+        assertEquals(uiString.core_ui_error_network, viewModel.userMessage.value)
     }
 
     @Test
@@ -176,10 +182,7 @@ class SupplierViewModelTest {
         viewModel.onSelectSupplier(oldSupplier)
         networkMonitor.setConnected(true)
         viewModel.updateSupplier(oldSupplier.copy())
-        assertEquals(
-            R.string.feature_supplier_update_error_message,
-            viewModel.userMessage.value,
-        )
+        assertEquals(R.string.feature_supplier_update_error_message, viewModel.userMessage.value)
     }
 
     @Test
@@ -187,11 +190,9 @@ class SupplierViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.userMessage.collect() }
         val supplier = supplierRepository.suppliersTest[0]
         networkMonitor.setConnected(true)
-        viewModel.deleteSupplier(supplier)
-        assertEquals(
-            R.string.feature_supplier_delete_success_message,
-            viewModel.userMessage.value,
-        )
+        viewModel.onSelectSupplier(supplier)
+        viewModel.deleteSupplier()
+        assertEquals(R.string.feature_supplier_delete_success_message, viewModel.userMessage.value)
     }
 
     @Test
@@ -199,10 +200,8 @@ class SupplierViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.userMessage.collect() }
         val supplier = supplierRepository.suppliersTest[0]
         networkMonitor.setConnected(false)
-        viewModel.deleteSupplier(supplier)
-        assertEquals(
-            uiString.core_ui_error_network,
-            viewModel.userMessage.value,
-        )
+        viewModel.onSelectSupplier(supplier)
+        viewModel.deleteSupplier()
+        assertEquals(uiString.core_ui_error_network, viewModel.userMessage.value)
     }
 }
