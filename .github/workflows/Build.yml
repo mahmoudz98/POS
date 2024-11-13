@@ -114,7 +114,7 @@ jobs:
           path: '**/build/reports/lint-results-*.html'
 
       - name: Check badging
-        run: ./gradlew :app:checkReleaseBadging
+        run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest:
     runs-on: ubuntu-latest
