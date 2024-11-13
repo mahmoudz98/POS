@@ -18,11 +18,11 @@ package com.casecode.pos.feature.employee
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import com.casecode.pos.core.model.data.users.Branch
 import org.junit.Rule
 import kotlin.test.Test
@@ -92,83 +92,58 @@ class EmployeeDialogTest {
 
     @Test
     fun whenInputEmployeeValidate_thenAssertErrorValidationNotExist() {
+        val branches = listOf(Branch(1, "Branch 1"))
         composeTestRule.setContent {
             EmployeeDialog(
                 isUpdate = false,
                 employeeUpdate = null,
                 countryIsoCode = "EG",
-                branches = listOf(Branch(1, "Branch 1")),
-                onAddEmployee = { },
-                onUpdateEmployee = { },
+                branches = branches,
+                onAddEmployee = {},
+                onUpdateEmployee = {},
                 onDismiss = {},
             )
         }
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_add_employee_title))
-            .assertIsDisplayed()
-        composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_employee_name_hint))
-            .performTextInput("John Doe")
+            .performTextReplacement("John Doe")
         composeTestRule
             .onNodeWithText(
                 composeTestRule.activity.getString(uiString.core_ui_work_phone_number_hint),
             )
-            .performTextInput("1234567890")
+            .performTextReplacement("1234567890")
         composeTestRule
             .onNodeWithText(
                 composeTestRule.activity.getString(uiString.core_ui_employee_password_hint),
             )
-            .performTextInput("password123")
+            .performTextReplacement("password123")
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_branch_name_hint))
             .performClick()
-        composeTestRule.onNodeWithText("Branch 1").performClick()
+        composeTestRule.onNodeWithText(branches[0].branchName).assertIsDisplayed().performClick()
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_permissions_text))
             .performClick()
-        composeTestRule.onNodeWithText(adminPermission).performClick()
+        composeTestRule.onNodeWithText(adminPermission).assertIsDisplayed().performClick()
+
         composeTestRule
             .onNodeWithText(
                 composeTestRule.activity.getString(uiString.core_ui_add_employee_button_text),
             )
             .performClick()
-        composeTestRule
-            .onAllNodes(
-                hasText(
-                    composeTestRule.activity.getString(uiString.core_ui_error_employee_name_empty),
-                ),
-            ).assertCountEquals(0)
 
-        composeTestRule
-            .onAllNodes(
-                hasText(composeTestRule.activity.getString(uiString.core_ui_error_phone_invalid)),
-            ).assertCountEquals(0)
-
-        composeTestRule
-            .onAllNodes(
-                hasText(
-                    composeTestRule.activity.getString(
-                        uiString.core_ui_error_add_employee_password,
-                    ),
-                ),
-            ).assertCountEquals(0)
-
-        composeTestRule
-            .onAllNodes(
-                hasText(
-                    composeTestRule.activity.getString(
-                        uiString.core_ui_error_add_employee_branch_empty,
-                    ),
-                ),
-            ).assertCountEquals(0)
-
-        composeTestRule
-            .onAllNodes(
-                hasText(
-                    composeTestRule.activity.getString(
-                        uiString.core_ui_error_add_employee_permission_empty,
-                    ),
-                ),
-            ).assertCountEquals(0)
+        // Check for absence of validation errors
+        listOf(
+            uiString.core_ui_error_employee_name_empty,
+            uiString.core_ui_error_phone_invalid,
+            uiString.core_ui_error_add_employee_password,
+            uiString.core_ui_error_add_employee_branch_empty,
+            uiString.core_ui_error_add_employee_permission_empty,
+        )
+            .forEach { errorStringRes ->
+                composeTestRule
+                    .onAllNodesWithText(composeTestRule.activity.getString(errorStringRes))
+                    .assertCountEquals(0)
+            }
     }
 }
