@@ -20,6 +20,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.domain.usecase.AddItemUseCase
 import com.casecode.pos.core.domain.usecase.DeleteItemUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase

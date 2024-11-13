@@ -50,6 +50,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
@@ -149,9 +150,9 @@ internal fun ItemsScreen(
                 searchWidgetState = searchWidgetState,
                 searchQuery = searchQuery,
                 onSearchQueryChanged = onSearchQueryChanged,
-                onBackClick = { onBackClick() },
-                onSearchClicked = { onSearchClicked() },
-                onCloseClicked = { onClearRecentSearches() },
+                onBackClick = onBackClick,
+                onSearchClicked = onSearchClicked,
+                onCloseClicked = onClearRecentSearches,
             )
         },
         containerColor = Color.Transparent,

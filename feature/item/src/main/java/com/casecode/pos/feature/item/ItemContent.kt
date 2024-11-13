@@ -15,15 +15,10 @@
  */
 package com.casecode.pos.feature.item
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,7 +28,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -43,7 +37,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -51,9 +44,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -63,28 +53,16 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -92,6 +70,9 @@ import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.PosFilterChip
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
+import com.casecode.pos.core.designsystem.component.SearchToolbar
+import com.casecode.pos.core.designsystem.component.SearchTopAppBar
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
@@ -112,39 +93,29 @@ fun ItemTopAppBar(
     onSearchClicked: () -> Unit,
     onCloseClicked: () -> Unit,
 ) {
-    AnimatedContent(
-        targetState = searchWidgetState,
-        transitionSpec = {
-            slideInHorizontally(animationSpec = tween(150)) togetherWith
-                slideOutHorizontally(
-                    animationSpec = tween(150),
-                )
+    SearchTopAppBar(
+        searchWidgetState = searchWidgetState,
+        defaultTopAppBar = {
+            DefaultTopAppBar(
+                modifier = modifier,
+                onBackClick = onBackClick,
+                onSearchClicked = onSearchClicked,
+            )
         },
-    ) { targetState ->
-        when (targetState) {
-            SearchWidgetState.CLOSED -> {
-                DefaultAppBar(
-                    modifier = modifier,
-                    onBackClick = onBackClick,
-                    onSearchClicked = onSearchClicked,
-                )
-            }
-
-            SearchWidgetState.OPENED -> {
-                SearchToolbar(
-                    modifier = modifier,
-                    searchQuery = searchQuery,
-                    onSearchQueryChanged = onSearchQueryChanged,
-                    onCloseClicked = { onCloseClicked() },
-                )
-            }
-        }
-    }
+        searchTopAppBar = {
+            SearchToolbar(
+                modifier = modifier,
+                searchQuery = searchQuery,
+                onSearchQueryChanged = onSearchQueryChanged,
+                onCloseClicked = onCloseClicked,
+            )
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DefaultAppBar(
+fun DefaultTopAppBar(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onSearchClicked: () -> Unit,
@@ -153,120 +124,15 @@ fun DefaultAppBar(
         modifier = modifier,
         navigationIcon = PosIcons.ArrowBack,
         titleRes = R.string.feature_item_header_title,
+        actionIcon = PosIcons.Search,
         onNavigationClick = { onBackClick() },
         onActionClick = { onSearchClicked() },
         actionIconContentDescription = stringResource(R.string.feature_item_search_action_text),
-        actionIcon = PosIcons.Search,
         colors =
         TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Transparent,
         ),
     )
-}
-
-@Composable
-internal fun SearchToolbar(
-    searchQuery: String,
-    onSearchQueryChanged: (String) -> Unit,
-    onCloseClicked: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        SearchTextField(
-            modifier = modifier,
-            searchQuery = searchQuery,
-            onCloseClicked = onCloseClicked,
-            onSearchQueryChanged = onSearchQueryChanged,
-        )
-    }
-}
-
-@Composable
-private fun SearchTextField(
-    modifier: Modifier,
-    searchQuery: String,
-    onSearchQueryChanged: (String) -> Unit,
-    onCloseClicked: () -> Unit,
-) {
-    val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val onSearchExplicitlyTriggered = {
-        onCloseClicked()
-        keyboardController?.hide()
-    }
-
-    TextField(
-        colors =
-        TextFieldDefaults.colors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-        ),
-        leadingIcon = {
-            Icon(
-                imageVector = PosIcons.Search,
-                contentDescription =
-                stringResource(
-                    id = R.string.feature_item_search_action_text,
-                ),
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        trailingIcon = {
-            IconButton(
-                onClick = {
-                    if (searchQuery.isNotEmpty()) {
-                        onSearchQueryChanged("")
-                    } else {
-                        onCloseClicked()
-                    }
-                },
-            ) {
-                Icon(
-                    imageVector = PosIcons.Close,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
-            }
-        },
-        onValueChange = {
-            if ("\n" !in it) onSearchQueryChanged(it)
-        },
-        modifier =
-        modifier
-            .statusBarsPadding()
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp)
-            .focusRequester(focusRequester)
-            .onKeyEvent {
-                if (it.key == Key.Enter) {
-                    onSearchExplicitlyTriggered()
-                    true
-                } else {
-                    false
-                }
-            }.testTag("searchTextField"),
-        shape = RoundedCornerShape(32.dp),
-        value = searchQuery,
-        keyboardOptions =
-        KeyboardOptions(
-            imeAction = ImeAction.Search,
-        ),
-        keyboardActions =
-        KeyboardActions(
-            onSearch = {
-                onSearchExplicitlyTriggered()
-            },
-        ),
-        maxLines = 1,
-        singleLine = true,
-    )
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -559,19 +425,9 @@ private fun ItemIcon(itemImageUrl: String?, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun DefaultAppBarPreview() {
-    DefaultAppBar(
+    DefaultTopAppBar(
         onBackClick = {},
         onSearchClicked = {},
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun SearchToolbarPreview() {
-    SearchToolbar(
-        searchQuery = "",
-        onSearchQueryChanged = {},
-        onCloseClicked = {},
     )
 }
 

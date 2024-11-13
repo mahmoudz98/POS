@@ -18,23 +18,13 @@ package com.casecode.pos.feature.item
 import com.casecode.pos.core.model.data.users.Item
 
 /**
- * Represents the current state of the Search Widget.
- */
-enum class SearchWidgetState {
-    OPENED,
-    CLOSED,
-}
-
-/**
  * Represents the UI state for the items screen.
  */
 sealed interface ItemsUIState {
     data object Loading : ItemsUIState
 
-    data class Success(
-        val items: Map<String, Item>,
-        val filteredItems: List<Item> = emptyList(),
-    ) : ItemsUIState
+    data class Success(val items: Map<String, Item>, val filteredItems: List<Item> = emptyList()) :
+        ItemsUIState
 
     data object Error : ItemsUIState
 
