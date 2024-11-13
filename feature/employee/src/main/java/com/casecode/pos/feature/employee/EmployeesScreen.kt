@@ -57,6 +57,7 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Employee
+import com.casecode.pos.core.ui.DeleteDialog
 import com.casecode.pos.core.ui.EmployeeEmptyScreen
 import com.casecode.pos.core.ui.R.string as uiString
 
@@ -65,7 +66,7 @@ fun EmployeesScreen(viewModel: EmployeeViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showEmployeeDialog by remember { mutableStateOf(false) }
     var showUpdateEmployeeDialog by remember { mutableStateOf(false) }
-    var showDeleteDialogDelete by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
     var showUserAdminQrDialog by remember { mutableStateOf(false) }
 
     EmployeesScreen(
@@ -78,7 +79,7 @@ fun EmployeesScreen(viewModel: EmployeeViewModel = hiltViewModel()) {
         },
         onItemLongClick = {
             viewModel.setEmployeeSelected(it)
-            showDeleteDialogDelete = true
+            showDeleteDialog = true
         },
         onMessageShown = viewModel::snackbarMessageShown,
     )
@@ -95,13 +96,15 @@ fun EmployeesScreen(viewModel: EmployeeViewModel = hiltViewModel()) {
             viewModel = viewModel,
         )
     }
-    if (showDeleteDialogDelete) {
-        DeleteEmployeeDialog(
+    if (showDeleteDialog) {
+        DeleteDialog(
+            titleRes = R.string.feature_employee_dialog_delete_title,
+            messageRes = R.string.feature_employee_dialog_delete_message,
             onConfirm = {
                 viewModel.deleteEmployee()
-                showDeleteDialogDelete = false
+                showDeleteDialog = false
             },
-            onDismiss = { showDeleteDialogDelete = false },
+            onDismiss = { showDeleteDialog = false },
         )
     }
 }
@@ -123,16 +126,9 @@ fun EmployeesScreen(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        snackbarHost = {
-            SnackbarHost(hostState = snackState)
-        },
+        snackbarHost = { SnackbarHost(hostState = snackState) },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onAddClick()
-                },
-                modifier = Modifier.padding(16.dp),
-            ) {
+            FloatingActionButton(onClick = { onAddClick() }, modifier = Modifier.padding(16.dp)) {
                 Icon(
                     imageVector = PosIcons.Add,
                     contentDescription = stringResource(uiString.core_ui_add_employee_button_text),
@@ -140,12 +136,7 @@ fun EmployeesScreen(
             }
         },
     ) { padding ->
-        Column(
-            modifier =
-            modifier
-                .fillMaxSize()
-                .padding(padding),
-        ) {
+        Column(modifier = modifier.fillMaxSize().padding(padding)) {
             PosTopAppBar(
                 modifier = modifier,
                 titleRes = uiString.core_ui_employee_header_title,
@@ -167,10 +158,7 @@ fun EmployeesScreen(
 
                 Resource.Loading -> {
                     PosLoadingWheel(
-                        modifier =
-                        modifier
-                            .fillMaxSize()
-                            .wrapContentSize(Alignment.Center),
+                        modifier = modifier.fillMaxSize().wrapContentSize(Alignment.Center),
                         contentDesc = "LoadingEmployees",
                     )
                 }
@@ -200,9 +188,7 @@ private fun EmployeesContent(
     onEmployeeClick: (Employee) -> Unit,
     onEmployeeLongClick: (Employee) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier.padding(horizontal = 8.dp),
-    ) {
+    LazyColumn(modifier = Modifier.padding(horizontal = 8.dp)) {
         items(employees) { employee ->
             EmployeeItem(
                 employee = employee,
@@ -223,17 +209,9 @@ fun EmployeeItem(
 ) {
     ElevatedCard(modifier.padding(bottom = 8.dp)) {
         ListItem(
-            overlineContent = {
-                Text(
-                    text = employee.name,
-                )
-            },
+            overlineContent = { Text(text = employee.name) },
             headlineContent = { Text(employee.permission + " / " + employee.branchName) },
-            supportingContent = {
-                Text(
-                    text = employee.phoneNumber,
-                )
-            },
+            supportingContent = { Text(text = employee.phoneNumber) },
             colors =
             ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -244,10 +222,7 @@ fun EmployeeItem(
             modifier =
             modifier
                 .fillMaxWidth()
-                .combinedClickable(
-                    onClick = onItemClick,
-                    onLongClick = onItemLongClick,
-                ),
+                .combinedClickable(onClick = onItemClick, onLongClick = onItemLongClick),
         )
     }
 }
@@ -283,9 +258,8 @@ fun EmployeesScreenEmptyPreview() {
 fun EmployeesScreenErrorPreview() {
     POSTheme {
         EmployeesScreen(
-            uiState = UiEmployeesState(
-                resourceEmployees = Resource.error(uiString.core_ui_error_unknown),
-            ),
+            uiState =
+            UiEmployeesState(resourceEmployees = Resource.error(uiString.core_ui_error_unknown)),
             onAddClick = {},
             onEmployeeClick = {},
             onItemLongClick = {},
