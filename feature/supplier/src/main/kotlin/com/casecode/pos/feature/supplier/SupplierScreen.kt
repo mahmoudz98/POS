@@ -60,13 +60,13 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Supplier
 import com.casecode.pos.core.ui.DeleteDialog
 import com.casecode.pos.core.ui.DevicePreviews
-import com.casecode.pos.core.ui.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.R as uiR
+import com.casecode.pos.core.ui.SupplierPreviewParameterProvider
 
 @Composable
 fun SupplierScreen(viewModel: SupplierViewModel = hiltViewModel(), onBackClick: () -> Unit) {
     val supplierUiState by viewModel.suppliersUiState.collectAsStateWithLifecycle()
-    val filteredSuppliers by viewModel.filteredSuppliersUiState.collectAsStateWithLifecycle()
+    val filteredSuppliers by viewModel.filteredSuppliers.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val searchWidgetState by viewModel.searchWidgetState.collectAsStateWithLifecycle()
     val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()

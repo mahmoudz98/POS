@@ -27,7 +27,9 @@ import com.casecode.pos.core.domain.usecase.UpdateSupplierUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.ui.R.string as uiString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -37,8 +39,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import com.casecode.pos.core.ui.R.string as uiString
 
 /**
  * ViewModel for the Supplier screen.
@@ -93,7 +93,7 @@ constructor(
                 SharingStarted.WhileSubscribed(5000L),
                 SuppliersUiState.Loading,
             )
-    val filteredSuppliersUiState: StateFlow<List<Supplier>> = searchQuery
+    val filteredSuppliers: StateFlow<List<Supplier>> = searchQuery
         .combine(suppliersUiState) { query, uiState ->
             if (uiState is SuppliersUiState.Success) {
                 uiState.suppliers.filter { supplier ->
