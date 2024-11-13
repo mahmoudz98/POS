@@ -35,7 +35,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -55,34 +54,51 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
-import com.casecode.pos.core.designsystem.component.PosTopAppBar
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.ui.DeleteDialog
+import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.R as uiR
 
 @Composable
 fun SupplierScreen(viewModel: SupplierViewModel = hiltViewModel(), onBackClick: () -> Unit) {
     val supplierUiState by viewModel.suppliersUiState.collectAsStateWithLifecycle()
+    val filteredSuppliers by viewModel.filteredSuppliersUiState.collectAsStateWithLifecycle()
+    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val searchWidgetState by viewModel.searchWidgetState.collectAsStateWithLifecycle()
     val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
     var showSupplierDialog by remember { mutableStateOf(false) }
     var showUpdateSupplierDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
     val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     val countryIsoCode = telephonyManager.networkCountryIso.uppercase()
 
     SupplierScreen(
-        supplierUiState = supplierUiState,
         modifier = Modifier,
+        supplierUiState = supplierUiState,
+        filteredSuppliers = filteredSuppliers,
+        searchQuery = searchQuery,
+        searchWidgetState = searchWidgetState,
         userMessage = userMessage,
         countryIsoCode = countryIsoCode,
         onBackClick = onBackClick,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        onSearchClicked = viewModel::openSearchWidgetState,
+        onClearRecentSearches = viewModel::closeSearchWidgetState,
         onMessageShown = viewModel::snackbarMessageShown,
         onAddSupplierClick = { showSupplierDialog = true },
         onSupplierClick = {
             viewModel.onSelectSupplier(it)
             showUpdateSupplierDialog = true
+        },
+        onDeleteSupplierClick = {
+            viewModel.onSelectSupplier(it)
+            showDeleteDialog = true
         },
     )
     if (showSupplierDialog) {
@@ -95,19 +111,37 @@ fun SupplierScreen(viewModel: SupplierViewModel = hiltViewModel(), onBackClick: 
             onDismiss = { showUpdateSupplierDialog = false },
         )
     }
+    if (showDeleteDialog) {
+        DeleteDialog(
+            titleRes = R.string.feature_supplier_dialog_delete_title,
+            messageRes = R.string.feature_supplier_dialog_delete_message,
+            onConfirm = {
+                viewModel.deleteSupplier()
+                showDeleteDialog = false
+            },
+            onDismiss = { showDeleteDialog = false },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SupplierScreen(
-    supplierUiState: SuppliersUiState,
     modifier: Modifier = Modifier,
+    supplierUiState: SuppliersUiState,
+    filteredSuppliers: List<Supplier>,
+    searchWidgetState: SearchWidgetState = SearchWidgetState.CLOSED,
+    searchQuery: String,
     userMessage: Int?,
     countryIsoCode: String,
     onBackClick: () -> Unit,
+    onSearchClicked: () -> Unit,
+    onSearchQueryChanged: (String) -> Unit,
+    onClearRecentSearches: () -> Unit,
     onMessageShown: () -> Unit,
     onAddSupplierClick: () -> Unit,
     onSupplierClick: (Supplier) -> Unit,
+    onDeleteSupplierClick: (Supplier) -> Unit,
 ) {
     val snackState = remember { SnackbarHostState() }
     Scaffold(
@@ -115,13 +149,13 @@ fun SupplierScreen(
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
-            PosTopAppBar(
-                navigationIcon = PosIcons.ArrowBack,
-                titleRes = R.string.feature_supplier_title,
-                onNavigationClick = { onBackClick() },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+            SupplierTopAppBar(
+                searchWidgetState = searchWidgetState,
+                searchQuery = searchQuery,
+                onSearchQueryChanged = onSearchQueryChanged,
+                onBackClick = onBackClick,
+                onSearchClicked = onSearchClicked,
+                onCloseClicked = onClearRecentSearches,
             )
         },
         snackbarHost = {
@@ -149,7 +183,7 @@ fun SupplierScreen(
                         modifier
                             .fillMaxSize()
                             .wrapContentSize(Alignment.Center),
-                        contentDesc = "LoadingEmployees",
+                        contentDesc = "LoadingSuppliers",
                     )
                 }
 
@@ -158,9 +192,12 @@ fun SupplierScreen(
                 }
 
                 is SuppliersUiState.Success -> {
-                    SupplierCardList(supplierUiState.suppliers, countryIsoCode) {
-                        onSupplierClick(it)
-                    }
+                    SupplierCardList(
+                        filteredSuppliers,
+                        countryIsoCode,
+                        onSupplierClick = onSupplierClick,
+                        onSupplierDelete = onDeleteSupplierClick,
+                    )
                 }
             }
         }
@@ -208,7 +245,33 @@ fun SupplierEmptyScreen(modifier: Modifier = Modifier) {
 @ExperimentalMaterial3Api
 @Preview
 @Composable
-fun SupplierScreenPreview(
+fun SupplierScreenLoadingPreview() {
+    POSTheme {
+        PosBackground {
+            SupplierScreen(
+                supplierUiState = SuppliersUiState.Loading,
+                filteredSuppliers = emptyList(),
+                searchWidgetState = SearchWidgetState.CLOSED,
+                searchQuery = "",
+                userMessage = null,
+                countryIsoCode = "EG",
+                onBackClick = {},
+                onSearchClicked = {},
+                onSearchQueryChanged = {},
+                onClearRecentSearches = {},
+                onMessageShown = {},
+                onAddSupplierClick = {},
+                onSupplierClick = {},
+                onDeleteSupplierClick = {},
+            )
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
+@DevicePreviews
+@Composable
+fun SupplierScreenSuccessPreview(
     @PreviewParameter(SupplierPreviewParameterProvider::class)
     suppliers: List<Supplier>,
 ) {
@@ -216,12 +279,45 @@ fun SupplierScreenPreview(
         PosBackground {
             SupplierScreen(
                 supplierUiState = SuppliersUiState.Success(suppliers),
+                filteredSuppliers = suppliers,
+                searchWidgetState = SearchWidgetState.CLOSED,
                 userMessage = null,
-                countryIsoCode = "20",
+                searchQuery = "",
+                countryIsoCode = "EG",
                 onBackClick = {},
+                onSearchClicked = {},
+                onSearchQueryChanged = {},
+                onClearRecentSearches = {},
                 onMessageShown = {},
                 onAddSupplierClick = {},
                 onSupplierClick = {},
+                onDeleteSupplierClick = {},
+            )
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
+@Preview
+@Composable
+fun SupplierScreenEmptyPreview() {
+    POSTheme {
+        PosBackground {
+            SupplierScreen(
+                supplierUiState = SuppliersUiState.Empty,
+                filteredSuppliers = emptyList(),
+                searchWidgetState = SearchWidgetState.CLOSED,
+                searchQuery = "",
+                userMessage = null,
+                countryIsoCode = "EG",
+                onBackClick = {},
+                onSearchClicked = {},
+                onSearchQueryChanged = {},
+                onClearRecentSearches = {},
+                onMessageShown = {},
+                onAddSupplierClick = {},
+                onSupplierClick = {},
+                onDeleteSupplierClick = {},
             )
         }
     }

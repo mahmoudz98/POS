@@ -15,6 +15,8 @@
  */
 package com.casecode.pos.feature.supplier
 
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,50 +26,102 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.casecode.pos.core.designsystem.component.PosTopAppBar
+import com.casecode.pos.core.designsystem.component.SearchToolbar
+import com.casecode.pos.core.designsystem.component.SearchTopAppBar
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
+import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Supplier
 import com.casecode.pos.core.ui.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.formatPhoneNumber
 
 @Composable
+fun SupplierTopAppBar(
+    searchWidgetState: SearchWidgetState,
+    modifier: Modifier = Modifier,
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
+    onBackClick: () -> Unit,
+    onSearchClicked: () -> Unit,
+    onCloseClicked: () -> Unit,
+) {
+    SearchTopAppBar(
+        searchWidgetState = searchWidgetState,
+        defaultTopAppBar = {
+            SupplierDefaultTopAppBar(
+                modifier = modifier,
+                onBackClick = onBackClick,
+                onSearchClicked = onSearchClicked,
+            )
+        },
+        searchTopAppBar = {
+            SearchToolbar(
+                modifier = modifier,
+                searchQuery = searchQuery,
+                onSearchQueryChanged = onSearchQueryChanged,
+                onCloseClicked = onCloseClicked,
+            )
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SupplierDefaultTopAppBar(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
+    onSearchClicked: () -> Unit,
+) {
+    PosTopAppBar(
+        modifier = modifier,
+        navigationIcon = PosIcons.ArrowBack,
+        titleRes = R.string.feature_supplier_title,
+        actionIcon = PosIcons.Search,
+        onNavigationClick = { onBackClick() },
+        onActionClick = { onSearchClicked() },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+        ),
+    )
+}
+
+@Composable
 fun SupplierCardList(
     suppliers: List<Supplier>,
     countryIsoCode: String = "EG",
     onSupplierClick: (Supplier) -> Unit,
+    onSupplierDelete: (Supplier) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .clipToBounds(),
+        modifier = Modifier.padding(horizontal = 8.dp).clipToBounds(),
+        contentPadding = PaddingValues(vertical = 8.dp),
     ) {
-        items(suppliers) { supplier ->
-            key(supplier.id) {
-                SupplierCard(
-                    contactName = supplier.contactName,
-                    companyName = supplier.companyName,
-                    contactPhone = supplier.contactPhone,
-                    countryIsoCode = countryIsoCode,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .animateItem(),
-                    onSupplierClick = { onSupplierClick(supplier) },
-                )
-            }
+        items(suppliers, key = { it.id }) { supplier ->
+            SupplierCard(
+                contactName = supplier.contactName,
+                companyName = supplier.companyName,
+                contactPhone = supplier.contactPhone,
+                countryIsoCode = countryIsoCode,
+                modifier = Modifier.padding(8.dp).animateItem(),
+                onSupplierClick = { onSupplierClick(supplier) },
+                onSupplierDelete = { onSupplierDelete(supplier) },
+            )
         }
-        item {
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-        }
+        item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing)) }
     }
 }
 
@@ -79,10 +133,10 @@ fun SupplierCard(
     contactPhone: String,
     countryIsoCode: String,
     onSupplierClick: () -> Unit,
+    onSupplierDelete: () -> Unit,
 ) {
     ElevatedCard(
-        modifier = modifier,
-        onClick = onSupplierClick,
+        modifier.combinedClickable(onClick = onSupplierClick, onLongClick = onSupplierDelete),
     ) {
         ListItem(
             overlineContent = { Text(text = contactName) },
@@ -91,9 +145,10 @@ fun SupplierCard(
                 val phoneFormated = formatPhoneNumber(contactPhone, countryIsoCode) ?: contactPhone
                 Text(phoneFormated)
             },
-            colors = ListItemDefaults.colors(
+            colors =
+            ListItemDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                headlineColor = MaterialTheme.colorScheme.tertiaryContainer,
+                headlineColor = MaterialTheme.colorScheme.tertiary,
                 overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
@@ -105,19 +160,15 @@ fun SupplierCard(
 @Preview
 @Composable
 private fun SupplierCardListPreview(
-    @PreviewParameter(SupplierPreviewParameterProvider::class)
-    suppliers: List<Supplier>,
+    @PreviewParameter(SupplierPreviewParameterProvider::class) suppliers: List<Supplier>,
 ) {
-    POSTheme {
-        SupplierCardList(suppliers) { }
-    }
+    POSTheme { SupplierCardList(suppliers, "EG", {}, {}) }
 }
 
 @Preview
 @Composable
 private fun SupplierCardPreview(
-    @PreviewParameter(SupplierPreviewParameterProvider::class)
-    suppliers: List<Supplier>,
+    @PreviewParameter(SupplierPreviewParameterProvider::class) suppliers: List<Supplier>,
 ) {
     POSTheme {
         SupplierCard(
@@ -126,6 +177,7 @@ private fun SupplierCardPreview(
             contactPhone = suppliers[0].contactPhone,
             countryIsoCode = "EG",
             onSupplierClick = {},
+            onSupplierDelete = {},
         )
     }
 }

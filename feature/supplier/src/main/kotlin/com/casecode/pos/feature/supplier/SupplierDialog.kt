@@ -37,12 +37,17 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
+import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.ui.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.validatePhoneNumber
+import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun SupplierDialog(
@@ -92,14 +97,15 @@ fun SupplierDialog(
             companyNameError = companyName.isEmpty()
             phoneError = validatePhoneNumber
         } else {
-            val supplier = Supplier(
-                contactName = name,
-                companyName = companyName,
-                contactPhone = phone,
-                contactEmail = email,
-                address = address,
-                category = category,
-            )
+            val supplier =
+                Supplier(
+                    contactName = name,
+                    companyName = companyName,
+                    contactPhone = phone,
+                    contactEmail = email,
+                    address = address,
+                    category = category,
+                )
             if (isUpdate) {
                 onUpdateSupplier(supplier)
             } else {
@@ -134,19 +140,14 @@ fun SupplierDialog(
                     label = stringResource(R.string.feature_supplier_name_hint),
                     isError = nameError,
                     keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
-                    supportingText = if (nameError) {
+                    KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
+                    supportingText =
+                    if (nameError) {
                         stringResource(R.string.feature_supplier_error_name_empty)
                     } else {
                         null
                     },
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
+                    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
                 )
                 PosOutlinedTextField(
                     value = companyName,
@@ -154,11 +155,9 @@ fun SupplierDialog(
                     label = stringResource(R.string.feature_supplier_company_name_hint),
                     isError = companyNameError,
                     keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
-                    supportingText = if (companyNameError) {
+                    KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
+                    supportingText =
+                    if (companyNameError) {
                         stringResource(R.string.feature_supplier_error_company_name_empty)
                     } else {
                         null
@@ -168,13 +167,10 @@ fun SupplierDialog(
                 PosOutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
-                    label = stringResource(R.string.feature_supplier_phone_hint),
+                    label = stringResource(uiString.core_ui_work_phone_number_hint),
                     isError = phoneError != null,
                     keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Phone,
-                        imeAction = ImeAction.Next,
-                    ),
+                    KeyboardOptions(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
                     supportingText = phoneError?.let { stringResource(it) },
                     modifier = Modifier.fillMaxWidth(),
                 )
@@ -183,10 +179,7 @@ fun SupplierDialog(
                     onValueChange = { email = it },
                     label = stringResource(R.string.feature_supplier_email_hint),
                     keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next,
-                    ),
+                    KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                     modifier = Modifier.fillMaxWidth(),
                 )
                 PosOutlinedTextField(
@@ -194,10 +187,7 @@ fun SupplierDialog(
                     onValueChange = { address = it },
                     label = stringResource(R.string.feature_supplier_address_hint),
                     keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
+                    KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
                     modifier = Modifier.fillMaxWidth(),
                 )
                 PosOutlinedTextField(
@@ -205,10 +195,7 @@ fun SupplierDialog(
                     onValueChange = { category = it },
                     label = stringResource(R.string.feature_supplier_category_hint),
                     keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done,
-                    ),
+                    KeyboardOptions(keyboardType = KeyboardType.Text, imeAction = ImeAction.Done),
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -227,4 +214,36 @@ fun SupplierDialog(
             }
         },
     )
+}
+
+@Preview
+@Composable
+fun SupplierDialogPreview() {
+    POSTheme {
+        SupplierDialog(
+            isUpdate = false,
+            supplierUpdate = null,
+            countryIsoCode = "US",
+            onAddSupplier = {},
+            onUpdateSupplier = {},
+            onDismiss = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun UpdateSupplierDialogPreview(
+    @PreviewParameter(SupplierPreviewParameterProvider::class) suppliers: List<Supplier>,
+) {
+    POSTheme {
+        SupplierDialog(
+            isUpdate = true,
+            supplierUpdate = suppliers[0],
+            countryIsoCode = "US",
+            onAddSupplier = {},
+            onUpdateSupplier = {},
+            onDismiss = {},
+        )
+    }
 }
