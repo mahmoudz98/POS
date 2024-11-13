@@ -24,9 +24,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.casecode.pos.core.model.data.users.Branch
-import com.casecode.pos.core.ui.R.string as uiString
-import kotlin.test.Test
 import org.junit.Rule
+import kotlin.test.Test
+import com.casecode.pos.core.ui.R.string as uiString
 
 class EmployeeDialogTest {
     @get:Rule
@@ -103,7 +103,6 @@ class EmployeeDialogTest {
                 onDismiss = {},
             )
         }
-        // Verify that the dialog title is displayed
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_add_employee_title))
             .assertIsDisplayed()
