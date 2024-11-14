@@ -19,6 +19,7 @@ package com.casecode.pos.core.firebase.services
 const val USERS_COLLECTION_PATH = "users"
 const val ITEMS_COLLECTION_PATH = "items"
 const val SUPPLIERS_COLLECTION_PATH = "suppliers"
+const val SUPPLIER_INVOICES_COLLECTION_PATH = "suppliers_invoice"
 const val PRINTER_INFO_COLLECTION_PATH = "printerInfo"
 const val CUSTOMERS_COLLECTION_PATH = "customers"
 const val BUSINESS_FIELD = "business"
@@ -55,8 +56,7 @@ const val EMPLOYEE_PASSWORD_FIELD = "password"
 const val EMPLOYEE_BRANCH_NAME_FIELD = "branchName"
 const val EMPLOYEE_PERMISSION_FIELD = "permission"
 
-// fields in items.
-const val IMAGE_FIELDS = "image"
+// fields in invoiceItems.
 const val ITEM_NAME_FIELD = "name"
 const val ITEM_CATEGORY_FIELD = "category"
 const val ITEM_SUPPLIER_NAME_FIELD = "supplier_name"
@@ -80,13 +80,22 @@ const val SUPPLIER_CONTACT_PHONE_FIELD = "contactPhone"
 const val SUPPLIER_ADDRESS_FIELD = "address"
 const val SUPPLIER_CATEGORY_FIELD = "category"
 
+// Fields in supplier invoices
+const val SUPPLIER_INVOICE_ID_FIELD = "invoiceId"
+const val SUPPLIER_INVOICE_SUPPLIER_ID_FIELD = "supplierId"
+const val SUPPLIER_INVOICE_CREATED_AT_FIELD = "createdAt"
+const val SUPPLIER_INVOICE_CREATED_BY_FIELD = "createdBy"
+const val SUPPLIER_INVOICE_PURCHASE_AMOUNT_FIELD = "totalAmount"
+const val SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD = "paymentStatus"
+const val SUPPLIER_INVOICE_ITEMS_FIELD = "invoiceItems"
+
 // fields in Invoice.
 const val INVOICE_FIELD = "invoices"
 const val INVOICE_NAME_FIELD = "number"
 const val INVOICE_DATE_FIELD = "date"
 const val INVOICE_CREATED_BY_FIELD = "createdBy"
 const val INVOICE_CUSTOMER_FIELD = "customer"
-const val INVOICE_ITEMS_FIELD = "items"
+const val INVOICE_ITEMS_FIELD = "invoiceItems"
 
 const val ITEM_PATH_FIELD = "item"
 const val IMAGES_PATH_FIELD = "images"
