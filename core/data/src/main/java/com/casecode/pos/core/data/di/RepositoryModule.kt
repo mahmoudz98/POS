@@ -25,6 +25,7 @@ import com.casecode.pos.core.data.repository.ItemRepositoryImpl
 import com.casecode.pos.core.data.repository.PrinterRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsBusinessRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsRepositoryImpl
+import com.casecode.pos.core.data.repository.SupplierInvoiceRepositoryImpl
 import com.casecode.pos.core.data.repository.SupplierRepositoryImpl
 import com.casecode.pos.core.domain.repository.AccountRepository
 import com.casecode.pos.core.domain.repository.AuthRepository
@@ -36,6 +37,7 @@ import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.PrinterRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
+import com.casecode.pos.core.domain.repository.SupplierInvoiceRepository
 import com.casecode.pos.core.domain.repository.SupplierRepository
 import dagger.Binds
 import dagger.Module
@@ -66,7 +68,9 @@ abstract class RepositoryModule {
     ): SubscriptionsBusinessRepository
 
     @Binds
-    internal abstract fun bindSubscriptionsRepo(impl: SubscriptionsRepositoryImpl): SubscriptionsRepository
+    internal abstract fun bindSubscriptionsRepo(
+        impl: SubscriptionsRepositoryImpl,
+    ): SubscriptionsRepository
 
     @Singleton
     @Binds
@@ -83,4 +87,9 @@ abstract class RepositoryModule {
 
     @Binds
     internal abstract fun bindSupplierRepo(impl: SupplierRepositoryImpl): SupplierRepository
+
+    @Binds
+    internal abstract fun bindSupplierInvoiceRepo(
+        impl: SupplierInvoiceRepositoryImpl,
+    ): SupplierInvoiceRepository
 }
