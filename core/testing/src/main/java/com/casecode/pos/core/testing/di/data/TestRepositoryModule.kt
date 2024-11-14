@@ -25,6 +25,8 @@ import com.casecode.pos.core.domain.repository.ItemImageRepository
 import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
+import com.casecode.pos.core.domain.repository.SupplierInvoiceRepository
+import com.casecode.pos.core.domain.repository.SupplierRepository
 import com.casecode.pos.core.testing.repository.TestAccountRepository
 import com.casecode.pos.core.testing.repository.TestAuthRepository
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
@@ -34,6 +36,8 @@ import com.casecode.pos.core.testing.repository.TestItemImageRepository
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
+import com.casecode.pos.core.testing.repository.TestSupplierInvoicesRepository
+import com.casecode.pos.core.testing.repository.TestSupplierRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
@@ -59,7 +63,9 @@ interface TestRepositoryModule {
 
     @Singleton
     @Binds
-    fun bindTestEmployeesBusinessRepo(testEmployeesBusinessRepository: TestEmployeesBusinessRepository): EmployeesBusinessRepository
+    fun bindTestEmployeesBusinessRepo(
+        testEmployeesBusinessRepository: TestEmployeesBusinessRepository,
+    ): EmployeesBusinessRepository
 
     @Singleton
     @Binds
@@ -69,7 +75,9 @@ interface TestRepositoryModule {
 
     @Singleton
     @Binds
-    fun bindTestSubscriptionsRepo(testSubscriptionsRepository: TestSubscriptionsRepository): SubscriptionsRepository
+    fun bindTestSubscriptionsRepo(
+        testSubscriptionsRepository: TestSubscriptionsRepository,
+    ): SubscriptionsRepository
 
     @Singleton
     @Binds
@@ -82,4 +90,14 @@ interface TestRepositoryModule {
     @Singleton
     @Binds
     fun bindInvoiceRepo(invoiceRepositoryImpl: TestInvoiceRepository): InvoiceRepository
+
+    @Singleton
+    @Binds
+    fun bindTestSupplierRepo(testSupplierRepository: TestSupplierRepository): SupplierRepository
+
+    @Singleton
+    @Binds
+    fun bindTestSupplierInvoiceRepo(
+        testSupplierInvoiceRepository: TestSupplierInvoicesRepository,
+    ): SupplierInvoiceRepository
 }

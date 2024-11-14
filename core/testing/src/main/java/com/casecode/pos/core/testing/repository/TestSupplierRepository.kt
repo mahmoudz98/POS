@@ -45,7 +45,9 @@ class TestSupplierRepository @Inject constructor() : BaseTestRepository(), Suppl
 
     override fun setReturnError(value: Boolean) {
         super.setReturnError(value)
-        resourcesSuppliersFlow.tryEmit(Resource.error(stringData.core_data_error_fetching_suppliers))
+        resourcesSuppliersFlow.tryEmit(
+            Resource.error(stringData.core_data_error_fetching_suppliers),
+        )
     }
 
     override fun getSuppliers(): Flow<Resource<List<Supplier>>> = resourcesSuppliersFlow
