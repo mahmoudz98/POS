@@ -22,6 +22,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import com.casecode.pos.core.model.data.users.Branch
 import org.junit.Rule
@@ -48,7 +49,6 @@ class EmployeeDialogTest {
                 onDismiss = {},
             )
         }
-        // Click the Add button without entering any data
         composeTestRule
             .onNodeWithText(
                 composeTestRule.activity.getString(uiString.core_ui_add_employee_button_text),
@@ -59,10 +59,12 @@ class EmployeeDialogTest {
             .onNodeWithText(
                 composeTestRule.activity.getString(uiString.core_ui_error_employee_name_empty),
             )
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_error_phone_empty))
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
@@ -71,6 +73,7 @@ class EmployeeDialogTest {
                     uiString.core_ui_error_add_employee_password_empty,
                 ),
             )
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
@@ -79,6 +82,7 @@ class EmployeeDialogTest {
                     uiString.core_ui_error_add_employee_branch_empty,
                 ),
             )
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
@@ -87,6 +91,7 @@ class EmployeeDialogTest {
                     uiString.core_ui_error_add_employee_permission_empty,
                 ),
             )
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
@@ -111,20 +116,26 @@ class EmployeeDialogTest {
             .onNodeWithText(
                 composeTestRule.activity.getString(uiString.core_ui_work_phone_number_hint),
             )
+            .performScrollTo()
             .performTextReplacement("1234567890")
         composeTestRule
             .onNodeWithText(
                 composeTestRule.activity.getString(uiString.core_ui_employee_password_hint),
             )
+            .performScrollTo()
             .performTextReplacement("password123")
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_branch_name_hint))
+            .performScrollTo()
             .performClick()
-        composeTestRule.onNodeWithText(branches[0].branchName).assertIsDisplayed().performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText(branches[0].branchName).performClick()
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_permissions_text))
+            .performScrollTo()
             .performClick()
-        composeTestRule.onNodeWithText(adminPermission).assertIsDisplayed().performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText(adminPermission).performClick()
 
         composeTestRule
             .onNodeWithText(
