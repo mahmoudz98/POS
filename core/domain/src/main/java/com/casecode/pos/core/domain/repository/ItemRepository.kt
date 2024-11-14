@@ -26,13 +26,13 @@ typealias UpdateQuantityItems = Resource<List<Item>>
 typealias DeleteItem = Resource<Int>
 
 /**
- * An interface defining methods for CRUD operations on items.
+ * An interface defining methods for CRUD operations on invoiceItems.
  */
 interface ItemRepository {
     /**
-     * Retrieves items associated with the specified user ID.
+     * Retrieves invoiceItems associated with the specified user ID.
      *
-     * @return A [] resource containing the retrieved items.
+     * @return A [] resource containing the retrieved invoiceItems.
      */
     fun getItems(): Flow<Resource<List<Item>>>
 
