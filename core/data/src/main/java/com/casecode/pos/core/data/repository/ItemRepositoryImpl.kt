@@ -20,7 +20,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asDomainModel
 import com.casecode.pos.core.data.model.asExternalMapper
-import com.casecode.pos.core.data.utils.ensureUserExists
+import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AddItem
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.DeleteItem
@@ -68,38 +68,37 @@ constructor(
         delay(300)
         val uid = auth.currentUserId()
         Timber.e("uid: $uid")
-        auth.ensureUserExists<List<Item>> {
+        auth.ensureUserExistsOrReturnError<List<Item>> {
             emit(it)
             return@flow
         }
-        db
-            .listenToCollectionChild(
-                collection = USERS_COLLECTION_PATH,
-                documentId = uid,
-                collectionChild = ITEMS_COLLECTION_PATH,
-                condition = ITEM_DELETED_FIELD to false,
-                sortWithFieldName = ITEM_NAME_FIELD,
-            ).collect { snapshot ->
-                if (snapshot.metadata.hasPendingWrites()) {
-                    Timber.i("Data from LOCAL_DB")
-                } else if (snapshot.metadata.isFromCache) {
-                    Timber.i("Data from LOCAL_CACHE")
-                } else {
-                    Timber.i("Data from SERVER_DB")
-                }
-                val itemMutableList = mutableListOf<Item>()
-                snapshot.documents.mapNotNull { document ->
-                    document
-                        .toObject(ItemDataModel::class.java)
-                        ?.let { itemMutableList.add(it.asDomainModel()) }
-                }
-
-                if (itemMutableList.isEmpty()) {
-                    emit(Resource.empty())
-                } else {
-                    emit(Resource.success(itemMutableList))
-                }
+        db.listenToCollectionChild(
+            collection = USERS_COLLECTION_PATH,
+            documentId = uid,
+            collectionChild = ITEMS_COLLECTION_PATH,
+            condition = ITEM_DELETED_FIELD to false,
+            sortWithFieldName = ITEM_NAME_FIELD,
+        ).collect { snapshot ->
+            if (snapshot.metadata.hasPendingWrites()) {
+                Timber.i("Data from LOCAL_DB")
+            } else if (snapshot.metadata.isFromCache) {
+                Timber.i("Data from LOCAL_CACHE")
+            } else {
+                Timber.i("Data from SERVER_DB")
             }
+            val itemMutableList = mutableListOf<Item>()
+            snapshot.documents.mapNotNull { document ->
+                document
+                    .toObject(ItemDataModel::class.java)
+                    ?.let { itemMutableList.add(it.asDomainModel()) }
+            }
+
+            if (itemMutableList.isEmpty()) {
+                emit(Resource.empty())
+            } else {
+                emit(Resource.success(itemMutableList))
+            }
+        }
     }.catch { e ->
         Timber.e(e)
         emit(Resource.error(R.string.core_data_error_fetching_items))
@@ -108,7 +107,7 @@ constructor(
     override suspend fun addItem(item: Item): AddItem {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExists<Int> {
+                auth.ensureUserExistsOrReturnError<Int> {
                     return@withContext it
                 }
                 val currentUserId =
@@ -116,13 +115,12 @@ constructor(
                 suspendCoroutine { continuation ->
                     val itemMap = item.asExternalMapper()
                     val sku = item.sku
-                    db
-                        .getOrAddDocumentInChild(
-                            USERS_COLLECTION_PATH,
-                            currentUserId,
-                            ITEMS_COLLECTION_PATH,
-                            sku,
-                        ).set(itemMap)
+                    db.getOrAddDocumentInChild(
+                        USERS_COLLECTION_PATH,
+                        currentUserId,
+                        ITEMS_COLLECTION_PATH,
+                        sku,
+                    ).set(itemMap)
                         .addOnSuccessListener {
                             continuation.resume(
                                 Resource.Success(R.string.core_data_item_added_successfully),
@@ -146,7 +144,7 @@ constructor(
     override suspend fun updateItem(item: Item): UpdateItem {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExists<Int> {
+                auth.ensureUserExistsOrReturnError<Int> {
                     return@withContext it
                 }
                 val currentUserUid =
@@ -154,26 +152,25 @@ constructor(
                 suspendCoroutine { continuation ->
                     val itemMap = item.asExternalMapper()
                     val sku = item.sku
-                    db
-                        .getOrAddDocumentInChild(
-                            USERS_COLLECTION_PATH,
-                            currentUserUid,
-                            ITEMS_COLLECTION_PATH,
-                            sku,
-                        ).set(
-                            itemMap,
-                            SetOptions.merge(),
-                        ).addOnSuccessListener {
-                            continuation.resume(
-                                Resource.Success(R.string.core_data_item_updated_successfully),
-                            )
-                        }.addOnFailureListener { failure ->
-                            Timber.e(failure)
+                    db.getOrAddDocumentInChild(
+                        USERS_COLLECTION_PATH,
+                        currentUserUid,
+                        ITEMS_COLLECTION_PATH,
+                        sku,
+                    ).set(
+                        itemMap,
+                        SetOptions.merge(),
+                    ).addOnSuccessListener {
+                        continuation.resume(
+                            Resource.Success(R.string.core_data_item_updated_successfully),
+                        )
+                    }.addOnFailureListener { failure ->
+                        Timber.e(failure)
 
-                            continuation.resume(
-                                Resource.error(R.string.core_data_update_item_failure_generic),
-                            )
-                        }
+                        continuation.resume(
+                            Resource.error(R.string.core_data_update_item_failure_generic),
+                        )
+                    }
                 }
             } catch (_: UnknownHostException) {
                 Resource.error(R.string.core_data_update_item_failure_network)
@@ -187,7 +184,7 @@ constructor(
     override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExists<List<Item>> {
+                auth.ensureUserExistsOrReturnError<List<Item>> {
                     return@withContext it
                 }
                 val currentUserUid =
@@ -234,7 +231,7 @@ constructor(
     override suspend fun deleteItem(item: Item): DeleteItem {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExists<Int> {
+                auth.ensureUserExistsOrReturnError<Int> {
                     return@withContext it
                 }
                 val currentUserId =

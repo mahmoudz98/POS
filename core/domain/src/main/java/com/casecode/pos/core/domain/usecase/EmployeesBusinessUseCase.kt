@@ -65,7 +65,7 @@ constructor(
  * Use case for retrieving a list of employees.
  *
  * This use case interacts with the [EmployeesBusinessRepository] to fetch employee data
- * and returns the result as a [Flow] of [Resource].
+ * and returns the result as a [Flow] of [com.casecode.pos.core.data.utils.result.Resource].
  *
  * @property employeesRepo The repository responsible for fetching employee data.
  */

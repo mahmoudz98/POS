@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 

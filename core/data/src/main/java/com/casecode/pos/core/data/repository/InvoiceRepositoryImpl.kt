@@ -21,7 +21,7 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.model.toInvoicesGroup
-import com.casecode.pos.core.data.utils.ensureUserExists
+import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.InvoiceRepository
 import com.casecode.pos.core.domain.utils.Resource
@@ -50,7 +50,7 @@ constructor(
     override suspend fun addInvoice(invoice: Invoice): Resource<Int> {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExists<Int> {
+                auth.ensureUserExistsOrReturnError<Int> {
                     return@withContext it
                 }
                 val currentUID = auth.currentUserId()
@@ -105,8 +105,6 @@ constructor(
                 suspendCoroutine { continuation ->
                     db
                         .getCollectionChild(USERS_COLLECTION_PATH, currentUID, INVOICE_FIELD)
-                        /* firestore
-                             .getCollectionRefFromUser(currentUID, INVOICE_FIELD)*/
                         .whereGreaterThanOrEqualTo(INVOICE_DATE_FIELD, startTimestamp)
                         .whereLessThanOrEqualTo(INVOICE_DATE_FIELD, endTimestamp)
                         .get()
@@ -138,7 +136,7 @@ constructor(
 
     override suspend fun getInvoices(): Resource<List<InvoiceGroup>> {
         return withContext(ioDispatcher) {
-            auth.ensureUserExists<List<InvoiceGroup>> { return@withContext it }
+            auth.ensureUserExistsOrReturnError<List<InvoiceGroup>> { return@withContext it }
             try {
                 val currentUID = auth.currentUserId()
                 suspendCoroutine { continuation ->

@@ -71,7 +71,7 @@ constructor() :
     override fun getItems(): Flow<ResourceItems> = resourcesItemsFlow
 
     override suspend fun addItem(item: Item): AddItem = if (shouldReturnError) {
-        Resource.Companion.error(stringData.core_data_add_item_failure_generic)
+        Resource.error(stringData.core_data_add_item_failure_generic)
     } else {
         itemsTest.add(item)
         resourcesItemsFlow.tryEmit(Resource.success(itemsTest))

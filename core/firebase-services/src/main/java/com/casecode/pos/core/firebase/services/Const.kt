@@ -18,6 +18,7 @@ package com.casecode.pos.core.firebase.services
 // collection path
 const val USERS_COLLECTION_PATH = "users"
 const val ITEMS_COLLECTION_PATH = "items"
+const val SUPPLIERS_COLLECTION_PATH = "suppliers"
 const val PRINTER_INFO_COLLECTION_PATH = "printerInfo"
 const val CUSTOMERS_COLLECTION_PATH = "customers"
 const val BUSINESS_FIELD = "business"
@@ -69,6 +70,15 @@ const val ITEM_SKU_FIELD = "sku"
 const val ITEM_IMAGE_URL_FIELD = "image_url"
 const val ITEM_UNIT_OF_MEASUREMENT_FIELD = "unitOfMeasurement"
 const val ITEM_DELETED_FIELD = "deleted"
+
+// fields in suppliers.
+const val SUPPLIER_ID_FIELD = "id"
+const val SUPPLIER_COMPANY_NAME_FIELD = "companyName"
+const val SUPPLIER_CONTACT_NAME_FIELD = "contactName"
+const val SUPPLIER_CONTACT_EMAIL_FIELD = "contactEmail"
+const val SUPPLIER_CONTACT_PHONE_FIELD = "contactPhone"
+const val SUPPLIER_ADDRESS_FIELD = "address"
+const val SUPPLIER_CATEGORY_FIELD = "category"
 
 // fields in Invoice.
 const val INVOICE_FIELD = "invoices"

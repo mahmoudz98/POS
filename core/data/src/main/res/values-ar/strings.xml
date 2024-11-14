@@ -36,6 +36,7 @@
   <string name="core_data_add_employees_business_failure">فشل إضافة موظفين للعمل.</string>
   <string name="core_data_employee_update_business_failure">فشل فى تحديث بيانات الموظف</string>
   <string name="core_data_add_employees_business_network">فشل إضافة موظفين، يرجى التحقق من اتصال الإنترنت.</string>
+  <string name="core_data_employee_delete_business_success">تم حذف الموظف بنجاح</string>
 
   <string name="core_data_employee_delete_business_network">فشل فى حذف الموظف تخقق من اتصالك بالانترنت</string>
   <string name="core_data_add_product_network">فشل إضافة المنتج، يرجى التحقق من اتصال الإنترنت.</string>
@@ -47,7 +48,6 @@
 
   <!-- allItems -->
   <string name="core_data_error_fetching_items">حدث خطأ في استرجاع العناصر. يرجى المحاولة مرة أخرى لاحقًا.</string>
-
   <string name="core_data_item_deleted_successfully">تم حذف العنصر بنجاح</string>
   <string name="core_data_item_deleted_failure">فشل حذف العنصر</string>
   <string name="core_data_delete_item_failure_network">تعذر حذف العنصر. يرجى التحقق من اتصال الإنترنت الخاص بك.</string>
@@ -60,19 +60,25 @@
   <string name="core_data_item_added_successfully">تمت إضافة العنصر بنجاح</string>
   <string name="core_data_add_item_failure_network">تعذر إضافة العنصر. يرجى التحقق من اتصال الإنترنت الخاص بك.</string>
   <string name="core_data_add_item_failure_generic">فشل إضافة العنصر. يرجى المحاولة مرة أخرى لاحقًا.</string>
-
   <string name="core_data_upload_image_failure_network">فشل تحميل الصورة بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
   <string name="core_data_upload_image_failure">فشل تحميل الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
-
   <string name="core_data_replace_image_failure_network">فشل استبدال الصورة بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
   <string name="core_data_replace_image_failure">فشل استبدال الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
-
   <string name="core_data_download_url_failure_network">فشل استرداد عنوان URL التنزيل بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
   <string name="core_data_download_url_failure">فشل استرداد عنوان URL التنزيل. يرجى المحاولة مرة أخرى لاحقًا.</string>
-
   <string name="core_data_image_deleted_successfully">تم حذف الصورة بنجاح</string>
   <string name="core_data_delete_image_failure_network">فشل حذف الصورة بسبب مشكلات في الشبكة. يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى.</string>
   <string name="core_data_delete_image_failure_generic">فشل حذف الصورة. يرجى المحاولة مرة أخرى لاحقًا.</string>
+
+  <!-- Supplier -->
+  <string name="core_data_error_fetching_suppliers">حدث خطأ أثناء جلب كافة الموردين. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
+  <string name="core_data_add_supplier_failure_network">غير قادر على إضافة المورد. يرجى التحقق من اتصالك بالإنترنت.</string>
+  <string name="core_data_add_supplier_failure_generic">فشلت إضافة المورد. يرجى المحاولة مرة أخرى في وقت لاحق..</string>
+  <string name="core_data_update_supplier_failure_network">غير قادر على تحديث المورد. يرجى التحقق من الإنترنت الخاص بك.</string>
+  <string name="core_data_update_supplier_failure_generic">فشل تحديث المورد المستهدف. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
+  <string name="core_data_delete_supplier_failure_network">غير قادر على حذف المورد. يرجى التحقق من اتصالك بالإنترنت.</string>
+  <string name="core_data_delete_supplier_failure_generic">فشل في حذف المورد المستهدف. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
+
   <string name="core_data_sign_in_success">تم تسجيل الدخول بنحاخ</string>
   <string name="core_data_get_business_failure">فشل فى ايجاد بيانات العمل</string>
   <string name="core_data_add_branch_business_network">فشل فى اضافه فرع جديد نحقق من اتصالك بالانترنت</string>

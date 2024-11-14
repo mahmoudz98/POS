@@ -21,8 +21,8 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asEntityEmployees
 import com.casecode.pos.core.data.model.asExternalEmployee
 import com.casecode.pos.core.data.model.asExternalEmployees
-import com.casecode.pos.core.data.utils.checkUserNotFoundAndReturnMessage
 import com.casecode.pos.core.data.utils.ensureUserExists
+import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.EmployeesBusinessRepository
 import com.casecode.pos.core.domain.repository.ResourceEmployees
@@ -52,7 +52,7 @@ constructor(
 ) : EmployeesBusinessRepository {
     override fun getEmployees(): Flow<ResourceEmployees> = flow {
         emit(Resource.Loading)
-        auth.ensureUserExists<List<Employee>> {
+        auth.ensureUserExistsOrReturnError<List<Employee>> {
             emit(it)
             return@flow
         }
@@ -75,7 +75,7 @@ constructor(
     override suspend fun setEmployees(employees: List<Employee>): AddEmployeeResult {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnMessage {
+                auth.ensureUserExists {
                     return@withContext AddEmployeeResult.Error(it)
                 }
                 val uid = auth.currentUserId()
@@ -103,7 +103,7 @@ constructor(
     override suspend fun addEmployee(employees: Employee): AddEmployeeResult {
         return withContext(ioDispatcher) {
             try {
-                auth.checkUserNotFoundAndReturnMessage {
+                auth.ensureUserExists {
                     return@withContext AddEmployeeResult.Error(it)
                 }
                 val uid = auth.currentUserId()

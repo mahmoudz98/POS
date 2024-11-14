@@ -93,6 +93,20 @@ jobs:
       - name: Run local tests
         run: ./gradlew testDemoDebug :lint:test
 
+      - name: Setup GMD
+        run: ./gradlew :benchmark:pixel6Api33Setup
+            --info
+            -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
+      - name: Build all build type and flavor permutations
+        run: ./gradlew :app:assemble :benchmark:assemble -Pandroidx.baselineprofile.skipgeneration
+            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+            -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+            -Pandroid.experimental.androidTest.numManagedDeviceShards=1
+            -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
+            -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=5
+
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
         with:
@@ -114,7 +128,7 @@ jobs:
           path: '**/build/reports/lint-results-*.html'
 
       - name: Check badging
-        run: ./gradlew :app:checkReleaseBadging
+        run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest:
     runs-on: ubuntu-latest
@@ -161,7 +175,7 @@ jobs:
           gradle-home-cache-cleanup: true
 
       - name: Build projects and run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@v2.33.0
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86_64

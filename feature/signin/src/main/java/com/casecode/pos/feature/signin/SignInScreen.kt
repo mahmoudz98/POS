@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -52,7 +53,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -82,11 +82,9 @@ fun SignInScreen(viewModel: SignInActivityViewModel) {
             is LoginStateResult.NotCompleteBusiness -> {
                 moveToStepperActivity(context)
             }
-
             is LoginStateResult.EmployeeLogin, is LoginStateResult.SuccessLoginAdmin -> {
                 moveToMainActivity(context)
             }
-
             else -> {}
         }
         onDispose {}
@@ -133,100 +131,98 @@ internal fun SignInScreen(
     val snackState = remember { SnackbarHostState() }
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-    SnackbarHost(
-        hostState = snackState,
-        modifier
-            .padding(16.dp)
-            .zIndex(1f),
-    )
-    Box(
-        modifier =
-        modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (uiState.isLoading) {
-            PosLoadingWheel("SignInLoading")
-        }
-        Column(
+
+    Scaffold(snackbarHost = { SnackbarHost(snackState) }) { innerPadding ->
+        Box(
             modifier =
             modifier
                 .fillMaxSize()
-                .align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+                .padding(innerPadding)
+                .padding(16.dp),
+            contentAlignment = Alignment.Center,
         ) {
-            if (!isLandscape) {
-                Spacer(modifier = Modifier.height(64.dp))
+            if (uiState.isLoading) {
+                PosLoadingWheel("SignInLoading")
             }
-            Image(
-                painter = painterResource(id = uiR.drawable.core_ui_ic_point_of_sale_24),
-                contentDescription = null,
-                modifier = Modifier.wrapContentSize(),
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
             Column(
+                modifier =
+                modifier
+                    .fillMaxSize()
+                    .align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
             ) {
-                Text(
-                    text = stringResource(id = R.string.feature_signin_app_name),
-                    style = MaterialTheme.typography.headlineLarge,
-                    textAlign = TextAlign.Center,
-                )
                 if (!isLandscape) {
+                    Spacer(modifier = Modifier.height(64.dp))
+                }
+                Image(
+                    painter = painterResource(id = uiR.drawable.core_ui_ic_point_of_sale_24),
+                    contentDescription = null,
+                    modifier = Modifier.wrapContentSize(),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
                     Text(
-                        text = stringResource(id = R.string.feature_signin_pos),
-                        style = MaterialTheme.typography.labelMedium,
+                        text = stringResource(id = R.string.feature_signin_app_name),
+                        style = MaterialTheme.typography.headlineLarge,
                         textAlign = TextAlign.Center,
                     )
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.feature_signin_hint),
-                    style = MaterialTheme.typography.labelMedium,
-                    textAlign = TextAlign.Center,
-                )
-                Spacer(modifier = modifier.height(16.dp))
-                PosOutlinedButton(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    onClick = onSignInCLick,
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(uiR.drawable.core_ui_ic_google),
-                            contentDescription = null,
-                            modifier = Modifier.size(ButtonDefaults.IconSize),
+                    if (!isLandscape) {
+                        Text(
+                            text = stringResource(id = R.string.feature_signin_pos),
+                            style = MaterialTheme.typography.labelMedium,
+                            textAlign = TextAlign.Center,
                         )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(text = stringResource(id = R.string.feature_signin_google_title))
                     }
                 }
 
-                Spacer(modifier = modifier.height(8.dp))
+                Spacer(modifier = Modifier.weight(1f))
 
-                PosTextButton(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    onClick = onLoginEmployeeClick,
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text(stringResource(id = R.string.feature_signin_employee_option))
-                }
-            }
+                    Text(
+                        text = stringResource(id = R.string.feature_signin_hint),
+                        style = MaterialTheme.typography.labelMedium,
+                        textAlign = TextAlign.Center,
+                    )
+                    Spacer(modifier = modifier.height(16.dp))
+                    PosOutlinedButton(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally),
+                        onClick = onSignInCLick,
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(uiR.drawable.core_ui_ic_google),
+                                contentDescription = null,
+                                modifier = Modifier.size(ButtonDefaults.IconSize),
+                            )
+                            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(text = stringResource(id = R.string.feature_signin_google_title))
+                        }
+                    }
 
-            Spacer(modifier = Modifier.height(16.dp)) // Bottom padding
+                    Spacer(modifier = modifier.height(8.dp))
+
+                    PosTextButton(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.CenterHorizontally),
+                        onClick = onLoginEmployeeClick,
+                    ) {
+                        Text(stringResource(id = R.string.feature_signin_employee_option))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp)) // Bottom padding
+            }
         }
     }
     uiState.userMessage?.let { message ->
