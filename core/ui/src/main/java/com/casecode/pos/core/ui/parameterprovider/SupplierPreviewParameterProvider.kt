@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.ui
+package com.casecode.pos.core.ui.parameterprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.casecode.pos.core.model.data.users.Supplier
