@@ -18,14 +18,14 @@ package com.casecode.pos.navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.casecode.pos.R
 import com.casecode.pos.core.designsystem.icon.PosIcons
-import com.casecode.pos.feature.employee.EmployeesRoute
 import com.casecode.pos.feature.inventory.navigation.InventoryRoute
+import com.casecode.pos.feature.purchase.navigation.PurchaseRoute
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.statistics.ReportsRoute
 import kotlin.reflect.KClass
-import com.casecode.pos.core.ui.R as uiR
 import com.casecode.pos.feature.inventory.R as inventoryR
+import com.casecode.pos.feature.purchase.R as purchaseR
 import com.casecode.pos.feature.reports.R as reportsR
 import com.casecode.pos.feature.setting.R as settingR
 
@@ -42,12 +42,17 @@ enum class AdminTopLevelDestination(
         reportsR.string.feature_reports_title,
         ReportsRoute::class,
     ),
-    INVENTORY(PosIcons.Inventory, PosIcons.InventoryBorder, inventoryR.string.feature_inventory_title, InventoryRoute::class),
-    EMPLOYEES(
-        PosIcons.Employee,
-        PosIcons.Employee,
-        uiR.string.core_ui_employees_title,
-        EmployeesRoute::class,
+    INVENTORY(
+        PosIcons.Inventory,
+        PosIcons.InventoryBorder,
+        inventoryR.string.feature_inventory_title,
+        InventoryRoute::class,
+    ),
+    PURCHASES(
+        PosIcons.Purchase,
+        PosIcons.PurchaseBorder,
+        purchaseR.string.feature_purchase_title,
+        PurchaseRoute::class,
     ),
     SETTINGS(
         PosIcons.Settings,

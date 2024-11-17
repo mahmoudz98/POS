@@ -18,12 +18,12 @@ package com.casecode.pos.navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import com.casecode.pos.feature.employee.EmployeesRoute
-import com.casecode.pos.feature.employee.navigateToEmployees
 import com.casecode.pos.feature.inventory.navigation.InventoryRoute
 import com.casecode.pos.feature.inventory.navigation.navigateToInventory
 import com.casecode.pos.feature.item.navigation.ItemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsSaleGraph
+import com.casecode.pos.feature.purchase.navigation.PurchaseRoute
+import com.casecode.pos.feature.purchase.navigation.navigateToPurchase
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.sale.navigation.navigateToSale
 import com.casecode.pos.feature.setting.SettingRoute
@@ -49,9 +49,8 @@ interface TopLevelDestination {
             SaleRoute::class -> navController.navigateToSale(navOptions)
             ReportsRoute::class -> navController.navigateToReports(navOptions)
             InventoryRoute::class -> navController.navigateToInventory(navOptions)
-            // TODO: use move to sale nav host
             ItemsSaleGraph::class -> navController.navigateToItemsSaleGraph(navOptions)
-            EmployeesRoute::class -> navController.navigateToEmployees(navOptions)
+            PurchaseRoute::class -> navController.navigateToPurchase(navOptions)
             SettingRoute::class -> navController.navigateToSettings(navOptions)
         }
     }

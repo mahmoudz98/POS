@@ -33,7 +33,6 @@ import com.casecode.pos.feature.setting.settingsGraph
 import com.casecode.pos.feature.signout.navigateToSignOut
 import com.casecode.pos.feature.signout.signOutDialog
 import com.casecode.pos.feature.statistics.reportsScreen
-import com.casecode.pos.feature.supplier.navigation.navigateToSupplier
 import com.casecode.pos.feature.supplier.navigation.supplierScreen
 import com.casecode.pos.ui.MainAppState
 
@@ -80,13 +79,14 @@ fun PosSaleNavHost(
             onItemsScreenClick = {
                 appState.navController.navigateToItemsSaleGraph()
             },
-            onSupplierScreenClick = { appState.navController.navigateToSupplier() },
         )
 
         itemsSaleGraph(appState.navController)
         supplierScreen(onBackClick = { appState.navController.popBackStack() })
+        // TODO: remove employees button from setting with sales user
         settingsGraph(
             appState.navController,
+            onEmployeesScreenClick = {},
             onSignOutClick = {
                 appState.navController.navigateToSignOut()
             },
