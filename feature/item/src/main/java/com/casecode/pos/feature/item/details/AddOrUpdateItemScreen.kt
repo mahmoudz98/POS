@@ -200,7 +200,7 @@ fun AddOrUpdateItemScreen(
                 action = {
                     PosTextButton(
                         onClick = { onSaveTriggered() },
-                    ) { Text(text = stringResource(R.string.feature_item_save_action_text)) }
+                    ) { Text(text = stringResource(uiString.core_ui_save_action_text)) }
                 },
                 onNavigationClick = onNavigateBack,
             )

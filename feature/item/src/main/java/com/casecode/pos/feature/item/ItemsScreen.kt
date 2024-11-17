@@ -54,8 +54,8 @@ import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.ui.ItemsPreviewParameterProvider
 import com.casecode.pos.core.ui.TrackScreenViewEvent
+import com.casecode.pos.core.ui.parameterprovider.ItemsPreviewParameterProvider
 import com.casecode.pos.feature.item.delete.DeleteItemDialog
 
 @Composable

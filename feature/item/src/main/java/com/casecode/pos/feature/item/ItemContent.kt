@@ -79,7 +79,7 @@ import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.ui.ItemsPreviewParameterProvider
+import com.casecode.pos.core.ui.parameterprovider.ItemsPreviewParameterProvider
 import java.text.DecimalFormat
 import com.casecode.pos.core.ui.R.string as uiString
 

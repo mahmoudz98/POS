@@ -24,7 +24,6 @@
     <string name="feature_item_add_item_title_text">Add Item</string>
     <string name="feature_item_update_item_title_text">Update Item</string>
     <string name="feature_item_header_title">Items</string>
-    <string name="feature_item_save_action_text">Save</string>
     <string name="feature_item_error_update_item_message">Failed to update targetItem.</string>
     <string name="feature_item_dialog_delete_item_title">Delete Item</string>
     <string name="feature_item_dialog_delete_item_message">Are you sure you want to delete this targetItem?</string>

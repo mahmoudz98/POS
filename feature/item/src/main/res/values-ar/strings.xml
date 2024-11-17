@@ -24,7 +24,6 @@
     <string name="feature_item_add_item_title_text">إضافة منتج</string>
     <string name="feature_item_update_item_title_text">تحديث المنتج</string>
     <string name="feature_item_header_title">المنتجات</string>
-    <string name="feature_item_save_action_text">حفظ</string>
     <string name="feature_item_error_update_item_message">فشل تحديث المنتج.</string>
     <string name="feature_item_dialog_delete_item_title">حذف المنتج</string>
     <string name="feature_item_dialog_delete_item_message">هل أنت متأكد أنك تريد حذف هذا المنتج؟</string>
