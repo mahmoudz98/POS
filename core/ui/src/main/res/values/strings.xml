@@ -98,6 +98,8 @@
   <!-- String Arrays -->
   <string name="core_ui_dialog_cancel_button_text">Cancel</string>
 
+  <string name="core_ui_save_action_text">Save</string>
+
   <!-- Dialogs -->
   <string name="core_ui_dialog_delete_button_text">Delete</string>
   <string name="core_ui_dialog_ok_button_text">OK</string>

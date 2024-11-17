@@ -97,6 +97,8 @@
   <!-- String Arrays -->
   <string name="core_ui_dialog_cancel_button_text">إلغاء</string>
 
+  <string name="core_ui_save_action_text">حفظ</string>
+
   <!-- Dialogs -->
   <string name="core_ui_dialog_delete_button_text">حذف</string>
   <string name="core_ui_dialog_ok_button_text">موافق</string>
