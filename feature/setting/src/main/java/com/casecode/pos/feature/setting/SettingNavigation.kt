@@ -38,12 +38,14 @@ data object PrinterInfoRoute
 
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
+    onEmployeesScreenClick: () -> Unit,
     onSignOutClick: () -> Unit,
 ) {
     navigation<SettingGraph>(startDestination = SettingRoute) {
         settingScreen(
+            onEmployeesScreenClick = onEmployeesScreenClick,
+            onPrinterScreenClick = { navController.navigateToPrinter() },
             onSignOutClick = onSignOutClick,
-            onPrinterClick = { navController.navigateToPrinter() },
         )
         printerScreen(
             onBackClick = navController::popBackStack,
@@ -54,11 +56,16 @@ fun NavGraphBuilder.settingsGraph(
 }
 
 fun NavGraphBuilder.settingScreen(
+    onEmployeesScreenClick: () -> Unit,
+    onPrinterScreenClick: () -> Unit,
     onSignOutClick: () -> Unit,
-    onPrinterClick: () -> Unit,
 ) {
     composable<SettingRoute> {
-        SettingScreen(onSignOutClick = onSignOutClick, onPrinterClick = onPrinterClick)
+        SettingScreen(
+            onEmployeesScreenClick = onEmployeesScreenClick,
+            onPrinterScreenClick = onPrinterScreenClick,
+            onSignOutClick = onSignOutClick,
+        )
     }
 }
 

@@ -21,16 +21,13 @@ import android.os.Build
 import android.os.LocaleList
 import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,18 +49,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosExposeDropdownMenuBox
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
+import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.ui.R as uiR
 
 @Composable
 fun SettingScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
-    onPrinterClick: () -> Unit,
+    onEmployeesScreenClick: () -> Unit,
+    onPrinterScreenClick: () -> Unit,
     onSignOutClick: () -> Unit,
 ) {
     val user by viewModel.userUiState.collectAsStateWithLifecycle()
     SettingScreen(
-        onPrinterClick = onPrinterClick,
+        onEmployeesClick = onEmployeesScreenClick,
+        onPrintersClick = onPrinterScreenClick,
         onSignOutClick = onSignOutClick,
         emailUser = user?.email ?: "",
     )
@@ -71,9 +72,10 @@ fun SettingScreen(
 
 @Composable
 fun SettingScreen(
-    onPrinterClick: () -> Unit,
     modifier: Modifier = Modifier,
     emailUser: String,
+    onEmployeesClick: () -> Unit,
+    onPrintersClick: () -> Unit,
     onSignOutClick: () -> Unit,
 ) {
     Box(
@@ -85,22 +87,18 @@ fun SettingScreen(
         Column(modifier = Modifier.align(Alignment.TopStart)) {
             SectionLanguages()
             Spacer(modifier = modifier.height(16.dp))
-            Row(
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .clickable { onPrinterClick() },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    modifier = Modifier.padding(8.dp),
-                    imageVector = PosIcons.Print,
-                    contentDescription = null,
-                )
-                Text(
-                    text = stringResource(R.string.feature_settings_printer_title),
-                )
-            }
+            PosTextButton(
+                onClick = onEmployeesClick,
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(uiR.string.core_ui_employees_title),
+                leadingIcon = PosIcons.Employee,
+            )
+            PosTextButton(
+                onClick = onPrintersClick,
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.feature_settings_printer_title),
+                leadingIcon = PosIcons.Print,
+            )
         }
         Column(modifier = Modifier.align(Alignment.BottomStart)) {
             Text(text = emailUser, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
@@ -159,6 +157,11 @@ private fun setLanguage(context: Context, languageCode: String) {
 @Composable
 fun SettingPreview() {
     POSTheme {
-        SettingScreen(onPrinterClick = {}, onSignOutClick = {}, emailUser = "")
+        SettingScreen(
+            onEmployeesClick = {},
+            onPrintersClick = {},
+            onSignOutClick = {},
+            emailUser = "",
+        )
     }
 }
