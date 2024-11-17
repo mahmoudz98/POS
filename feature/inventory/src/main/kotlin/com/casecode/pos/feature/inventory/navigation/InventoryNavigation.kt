@@ -27,12 +27,10 @@ data object InventoryRoute
 
 fun NavGraphBuilder.inventoryScreen(
     onItemsScreenClick: () -> Unit,
-    onSupplierScreenClick: () -> Unit,
 ) {
     composable<InventoryRoute> {
         InventoryScreen(
             onItemsScreenClick = onItemsScreenClick,
-            onSupplierScreenClick = onSupplierScreenClick,
         )
     }
 }
