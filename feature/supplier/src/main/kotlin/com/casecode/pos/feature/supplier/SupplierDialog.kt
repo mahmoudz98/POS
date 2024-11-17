@@ -45,7 +45,7 @@ import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Supplier
-import com.casecode.pos.core.ui.SupplierPreviewParameterProvider
+import com.casecode.pos.core.ui.parameterprovider.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.validatePhoneNumber
 import com.casecode.pos.core.ui.R.string as uiString
 
