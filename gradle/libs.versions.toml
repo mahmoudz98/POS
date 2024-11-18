@@ -42,7 +42,7 @@ hilt-navigation = "1.2.0"
 # Annotations procesing
 ksp = "2.0.21-1.0.25"
 #  Services
-firebaseBom = "33.5.1"
+firebaseBom = "33.6.0"
 firebase-auth = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
 firebaseStorageKtx = "21.0.1"
