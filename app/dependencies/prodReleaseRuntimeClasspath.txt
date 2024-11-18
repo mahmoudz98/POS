@@ -58,7 +58,7 @@ androidx.compose.ui:ui-unit:1.8.0-alpha05
 androidx.compose.ui:ui-util-android:1.8.0-alpha05
 androidx.compose.ui:ui-util:1.8.0-alpha05
 androidx.compose.ui:ui:1.8.0-alpha05
-androidx.compose:compose-bom:2024.10.01
+androidx.compose:compose-bom:2024.11.00
 androidx.concurrent:concurrent-futures:1.1.0
 androidx.constraintlayout:constraintlayout-compose-android:1.1.0
 androidx.constraintlayout:constraintlayout-compose:1.1.0
