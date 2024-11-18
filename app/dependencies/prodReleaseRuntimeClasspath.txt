@@ -179,7 +179,7 @@ com.google.firebase:firebase-appcheck-interop:17.1.0
 com.google.firebase:firebase-appcheck:18.0.0
 com.google.firebase:firebase-auth-interop:20.0.0
 com.google.firebase:firebase-auth:23.1.0
-com.google.firebase:firebase-bom:33.5.1
+com.google.firebase:firebase-bom:33.6.0
 com.google.firebase:firebase-common-ktx:21.0.0
 com.google.firebase:firebase-common:21.0.0
 com.google.firebase:firebase-components:18.0.0
