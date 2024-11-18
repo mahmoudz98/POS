@@ -16,11 +16,13 @@
 package com.casecode.pos.core.ui.parameterprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentMethod
 import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierInvoice>> {
     override val values: Sequence<List<SupplierInvoice>>
@@ -36,7 +38,9 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                         paymentStatus = PaymentStatus.PENDING,
                         totalAmount = 100.0,
                         paymentDetails = emptyList(),
-                        invoiceItems = emptyList(),
+                        invoiceItems = listOf(
+                            Item(name = "Item 1", quantity = 10, costPrice = 10.0),
+                        ),
                     ),
                     SupplierInvoice(
                         invoiceId = "INV002",
@@ -55,7 +59,9 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                                 amountPaid = 100.0,
                             ),
                         ),
-                        invoiceItems = emptyList(),
+                        invoiceItems = listOf(
+                            Item(name = "Item 1", quantity = 10, costPrice = 10.0),
+                        ),
                     ),
                     SupplierInvoice(
                         invoiceId = "INV003",
@@ -65,8 +71,18 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                         dueDate = Clock.System.now(),
                         paymentStatus = PaymentStatus.PARTIALLY_PAID,
                         totalAmount = 100.0,
-                        paymentDetails = emptyList(),
-                        invoiceItems = emptyList(),
+                        paymentDetails = listOf(
+                            PaymentDetails(
+                                paymentId = "PAY002",
+                                paymentDate = Clock.System.now(),
+                                createdBy = "User B",
+                                paymentMethod = PaymentMethod.CREDIT_CARD,
+                                amountPaid = 50.0,
+                            ),
+                        ),
+                        invoiceItems = listOf(
+                            Item(name = "Item 1", quantity = 10, costPrice = 10.0),
+                        ),
                     ),
                     SupplierInvoice(
                         invoiceId = "INV004",
@@ -83,12 +99,16 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                         invoiceId = "INV005",
                         billNumber = "11223",
                         supplierId = "Supplier E",
-                        issueDate = Clock.System.now(),
-                        dueDate = Clock.System.now(),
+                        // March 18, 2023 12:00:00 AM
+                        issueDate = Instant.fromEpochMilliseconds(1679145600000),
+                        // e.g., 7 days later
+                        dueDate = Instant.fromEpochMilliseconds(1679750400000),
                         paymentStatus = PaymentStatus.OVERDUE,
                         totalAmount = 100.0,
                         paymentDetails = emptyList(),
-                        invoiceItems = emptyList(),
+                        invoiceItems = listOf(
+                            Item(name = "Item 1", quantity = 10, costPrice = 10.0),
+                        ),
                     ),
                 ),
 
