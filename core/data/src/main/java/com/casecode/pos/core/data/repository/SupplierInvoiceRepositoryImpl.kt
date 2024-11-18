@@ -27,13 +27,16 @@ import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.firebase.services.FirestoreService
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICES_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_CREATED_AT_FIELD
+import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_BILL_NUMBER_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_CREATED_BY_FIELD
+import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_DUE_DATE_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_ID_FIELD
+import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_ISSUE_DATE_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_ITEMS_FIELD
+import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PURCHASE_AMOUNT_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_SUPPLIER_ID_FIELD
+import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD
 import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
@@ -102,11 +105,17 @@ class SupplierInvoiceRepositoryImpl
                     doc.set(
                         mapOf(
                             SUPPLIER_INVOICE_ID_FIELD to doc.id,
+                            SUPPLIER_INVOICE_BILL_NUMBER_FIELD to invoice.billNumber,
                             SUPPLIER_INVOICE_SUPPLIER_ID_FIELD to invoice.supplierId,
-                            SUPPLIER_INVOICE_CREATED_AT_FIELD to invoice.createdAt,
+                            SUPPLIER_INVOICE_ISSUE_DATE_FIELD to invoice.issueDate,
+                            SUPPLIER_INVOICE_DUE_DATE_FIELD to invoice.dueDate,
                             SUPPLIER_INVOICE_CREATED_BY_FIELD to invoice.createdBy,
-                            SUPPLIER_INVOICE_PURCHASE_AMOUNT_FIELD to invoice.totalAmount,
+                            SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD to invoice.totalAmount,
                             SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to invoice.paymentStatus.name,
+                            SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD to invoice.paymentDetails
+                                .map { payment ->
+                                    payment.asExternalMapper()
+                                },
                             SUPPLIER_INVOICE_ITEMS_FIELD to invoice.invoiceItems.map { item ->
                                 item.asExternalMapper()
                             },
@@ -148,11 +157,17 @@ class SupplierInvoiceRepositoryImpl
                     doc.update(
                         mapOf(
                             SUPPLIER_INVOICE_ID_FIELD to doc.id,
+                            SUPPLIER_INVOICE_BILL_NUMBER_FIELD to invoice.billNumber,
                             SUPPLIER_INVOICE_SUPPLIER_ID_FIELD to invoice.supplierId,
-                            SUPPLIER_INVOICE_CREATED_AT_FIELD to invoice.createdAt,
+                            SUPPLIER_INVOICE_ISSUE_DATE_FIELD to invoice.issueDate,
+                            SUPPLIER_INVOICE_DUE_DATE_FIELD to invoice.dueDate,
                             SUPPLIER_INVOICE_CREATED_BY_FIELD to invoice.createdBy,
-                            SUPPLIER_INVOICE_PURCHASE_AMOUNT_FIELD to invoice.totalAmount,
+                            SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD to invoice.totalAmount,
                             SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to invoice.paymentStatus.name,
+                            SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD to invoice.paymentDetails
+                                .map { payment ->
+                                    payment.asExternalMapper()
+                                },
                             SUPPLIER_INVOICE_ITEMS_FIELD to invoice.invoiceItems.map { item ->
                                 item.asExternalMapper()
                             },
