@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.sales.report
+package com.casecode.pos.core.designsystem.component
 
+import androidx.annotation.StringRes
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,17 +26,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.ui.R
 
 @ExperimentalMaterial3Api
 @Composable
-fun DatePickerView(
+fun PosDatePickerDialog(
     modifier: Modifier = Modifier,
+    currentSelectedDate: Long?,
+    @StringRes confirmTextRes: Int,
+    @StringRes cancelTextRes: Int,
     onDataSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
-    currentSelectedDate: Long?,
 ) {
     val datePickerState =
         rememberDatePickerState(
@@ -58,7 +59,7 @@ fun DatePickerView(
                 },
             ) {
                 Text(
-                    text = stringResource(R.string.core_ui_dialog_ok_button_text),
+                    text = stringResource(confirmTextRes),
                 )
             }
         },
@@ -67,7 +68,7 @@ fun DatePickerView(
                 onClick = {
                     onDismiss()
                 },
-            ) { Text(text = stringResource(R.string.core_ui_dialog_cancel_button_text)) }
+            ) { Text(text = stringResource(cancelTextRes)) }
         },
     ) {
         DatePicker(
@@ -81,10 +82,12 @@ fun DatePickerView(
 @Composable
 fun DatePickerViewPreview() {
     POSTheme {
-        DatePickerView(
+        PosDatePickerDialog(
             onDataSelected = {},
             onDismiss = {},
             currentSelectedDate = null,
+            confirmTextRes = android.R.string.ok,
+            cancelTextRes = android.R.string.cancel,
         )
     }
 }
