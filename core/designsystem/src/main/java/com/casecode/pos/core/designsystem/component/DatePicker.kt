@@ -35,6 +35,7 @@ fun PosDatePickerDialog(
     currentSelectedDate: Long?,
     @StringRes confirmTextRes: Int,
     @StringRes cancelTextRes: Int,
+    isSelectableDate: (utcTimeMillis: Long) -> Boolean,
     onDataSelected: (Long?) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -44,7 +45,7 @@ fun PosDatePickerDialog(
             selectableDates =
             object : SelectableDates {
                 override fun isSelectableDate(utcTimeMillis: Long): Boolean =
-                    utcTimeMillis <= System.currentTimeMillis()
+                    isSelectableDate(utcTimeMillis)
             },
         )
 
@@ -83,11 +84,12 @@ fun PosDatePickerDialog(
 fun DatePickerViewPreview() {
     POSTheme {
         PosDatePickerDialog(
-            onDataSelected = {},
-            onDismiss = {},
             currentSelectedDate = null,
             confirmTextRes = android.R.string.ok,
             cancelTextRes = android.R.string.cancel,
+            isSelectableDate = { true },
+            onDataSelected = {},
+            onDismiss = {},
         )
     }
 }
