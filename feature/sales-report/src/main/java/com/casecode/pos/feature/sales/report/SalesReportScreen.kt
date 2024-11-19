@@ -93,6 +93,7 @@ import com.casecode.pos.core.model.data.users.Invoice
 import com.casecode.pos.core.model.data.users.InvoiceGroup
 import java.util.Date
 import com.casecode.pos.core.ui.R as uiR
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SalesReportScreen(
@@ -119,6 +120,7 @@ fun SalesReportScreen(
             currentSelectedDate = uiState.dateInvoiceSelected,
             confirmTextRes = uiR.string.core_ui_dialog_ok_button_text,
             cancelTextRes = uiR.string.core_ui_dialog_cancel_button_text,
+            isSelectableDate = { utcTimeMillis -> utcTimeMillis <= System.currentTimeMillis() },
             onDataSelected = {
                 viewModel.setDateInvoiceSelected(it)
             },
