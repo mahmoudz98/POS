@@ -115,6 +115,42 @@ fun PosButton(
 }
 
 /**
+ * PosTonalButton is a composable function that creates a button with a tonal background.
+ *
+ * This button can be customized with text, a leading icon, and an onClick action.
+ * It uses default padding values based on whether a leading icon is present.
+ *
+ * @param onClick A callback function that is executed when the button is clicked.
+ * @param modifier A [Modifier] that can be used to customize the button's appearance and behavior.
+ * @param text A composable function that provides the button's text content.
+ * @param leadingIcon A composable function that provides the button's leading icon, if any.
+ *                   If provided, the button will use padding appropriate for a button with an icon.
+ */
+@Composable
+fun PosTonalButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    text: @Composable () -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null,
+) {
+    PosTonalButton(
+        onClick = onClick,
+        modifier = modifier,
+        contentPadding =
+        if (leadingIcon != null) {
+            ButtonDefaults.ButtonWithIconContentPadding
+        } else {
+            ButtonDefaults.ContentPadding
+        },
+    ) {
+        PosButtonContent(
+            text = text,
+            leadingIcon = leadingIcon,
+        )
+    }
+}
+
+/**
  * Point of sale TonalButton is a composable function that creates a filled tonal button.
  * It is a wrapper around [FilledTonalButton] with default styling for point of sale.
  *
@@ -132,6 +168,7 @@ fun PosTonalButton(
     shape: Shape = ButtonDefaults.filledTonalShape,
     colors: ButtonColors = ButtonDefaults.filledTonalButtonColors(),
     elevation: ButtonElevation? = ButtonDefaults.filledTonalButtonElevation(),
+    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit,
 ) {
     FilledTonalButton(
@@ -140,6 +177,7 @@ fun PosTonalButton(
         shape = shape,
         colors = colors,
         elevation = elevation,
+        contentPadding = contentPadding,
         content = content,
     )
 }
@@ -388,6 +426,21 @@ fun PosOutlinedButtonPreview() {
     POSTheme {
         PosBackground(modifier = Modifier.size(150.dp, 50.dp)) {
             PosOutlinedButton(onClick = {}, text = { Text("Test button") })
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+private fun PosTonalButtonPreview() {
+    POSTheme {
+        PosBackground(modifier = Modifier.size(400.dp, 50.dp)) {
+            PosTonalButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier,
+            ) {
+                Text("Button")
+            }
         }
     }
 }
