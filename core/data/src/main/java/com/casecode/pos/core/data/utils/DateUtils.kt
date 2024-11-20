@@ -21,11 +21,31 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.format.MonthNames
+import kotlinx.datetime.format.char
+import kotlinx.datetime.toLocalDateTime
 
-fun Date.toFormattedDateTimeString(): String =
-    this.let {
-        SimpleDateFormat("MMM dd, yyyy hh:mm a ", Locale.getDefault()).format(this)
-    }
+fun Instant.toFormattedDateString(): String {
+    return this.toLocalDateTime(TimeZone.currentSystemDefault())
+        .date
+        .format(
+            LocalDate.Format {
+                dayOfMonth()
+                char(' ')
+                monthName(MonthNames.ENGLISH_ABBREVIATED)
+                char(' ')
+                year()
+            },
+        )
+}
+
+fun Date.toFormattedDateTimeString(): String = this.let {
+    SimpleDateFormat("MMM dd, yyyy hh:mm a ", Locale.getDefault()).format(this)
+}
 
 fun Date.toDateFormatString(): String {
     val dataFormated =
