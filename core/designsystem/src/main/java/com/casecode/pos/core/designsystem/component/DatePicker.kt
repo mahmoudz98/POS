@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.casecode.pos.core.designsystem.theme.POSTheme
@@ -51,6 +50,7 @@ fun PosDatePickerDialog(
         )
 
     DatePickerDialog(
+        modifier = modifier,
         onDismissRequest = { onDismiss() },
         confirmButton = {
             PosTextButton(
