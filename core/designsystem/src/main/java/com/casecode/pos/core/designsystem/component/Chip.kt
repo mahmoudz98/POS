@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
@@ -118,13 +119,17 @@ fun PosFilterChip(
 
 /**
  * POS Elevated filter chip with included leading checked icon as well as text content slot.
+ * This composable provides a styled ElevatedFilterChip that adheres to the Point of Sale design system.
+ * It is primarily used for filtering or selecting options in a POS context.
  *
  * @param selected Whether the chip is currently checked.
  * @param onSelectedChange Called when the user clicks the chip and toggles checked.
  * @param modifier Modifier to be applied to the chip.
  * @param enabled Controls the enabled state of the chip. When `false`, this chip will not be
  * clickable and will appear disabled to accessibility services.
- * @param label The text label content.
+ * @param selectedIcon The icon displayed when the chip is selected. Defaults to `PosIcons.Check`.
+ * @param unSelectedIcon The icon displayed when the chip is not selected. Defaults to `null` (no icon).
+ * @param label The text label content displayed within the chip. This should be a composable function.
  */
 @Composable
 fun PosElevatedFilterChip(
@@ -132,6 +137,8 @@ fun PosElevatedFilterChip(
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    selectedIcon: ImageVector = PosIcons.Check,
+    unSelectedIcon: ImageVector? = null,
     label: @Composable () -> Unit,
 ) {
     ElevatedFilterChip(
@@ -144,16 +151,19 @@ fun PosElevatedFilterChip(
         },
         modifier = modifier,
         enabled = enabled,
-        trailingIcon =
-        if (selected) {
-            {
+        trailingIcon = {
+            if (selected) {
                 Icon(
-                    imageVector = PosIcons.Check,
+                    imageVector = selectedIcon,
                     contentDescription = null,
                 )
+            } else {
+                if (unSelectedIcon != null) {
+                    Icon(imageVector = unSelectedIcon, contentDescription = null)
+                } else {
+                    null
+                }
             }
-        } else {
-            null
         },
         colors =
         FilterChipDefaults.filterChipColors(
@@ -185,19 +195,24 @@ fun PosElevatedFilterChip(
 
 /**
  * POS filter chip with included leading checked icon as well as text content slot.
+ * This chip uses a circular shape and custom styling for a POS-specific look.
  *
  * @param selected Whether the chip is currently checked.
- * @param onSelectedChange Called when the user clicks the chip and toggles checked.
+ * @param onSelectedChange Called when the user clicks the chip and toggles its checked state.
  * @param modifier Modifier to be applied to the chip.
- * @param enabled Controls the enabled state of the chip. When `false`, this chip will not be
- * clickable and will appear disabled to accessibility services.
- * @param label The text label content.
+ * @param selectedIcon The icon displayed when the chip is selected. Defaults to `PosIcons.Track`.
+ * @param unSelectedIcon The icon displayed when the chip is not selected. If null, no icon is shown when unselected.
+ * @param enabled Controls the enabled state of the chip. When `false`, the chip will not be
+ * clickable and will appear disabled to accessibility services. Defaults to `true`.
+ * @param label The text label content displayed within the chip.
  */
 @Composable
 fun PosInputChip(
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    selectedIcon: ImageVector = PosIcons.Track,
+    unSelectedIcon: ImageVector? = null,
     enabled: Boolean = true,
     label: @Composable () -> Unit,
 ) {
@@ -212,18 +227,21 @@ fun PosInputChip(
         modifier = modifier,
         enabled = enabled,
         avatar = {
-            Icon(imageVector = PosIcons.Track, contentDescription = null)
+            Icon(imageVector = selectedIcon, contentDescription = null)
         },
-        leadingIcon =
-        if (selected) {
-            {
+        leadingIcon = {
+            if (selected) {
                 Icon(
-                    imageVector = PosIcons.Close,
+                    imageVector = selectedIcon,
                     contentDescription = null,
                 )
+            } else {
+                if (unSelectedIcon != null) {
+                    Icon(imageVector = unSelectedIcon, contentDescription = null)
+                } else {
+                    null
+                }
             }
-        } else {
-            null
         },
         shape = CircleShape,
         border =
