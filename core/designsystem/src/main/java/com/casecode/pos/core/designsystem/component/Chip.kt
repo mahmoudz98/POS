@@ -226,9 +226,9 @@ fun PosInputChip(
         },
         modifier = modifier,
         enabled = enabled,
-        avatar = {
+      /*  avatar = {
             Icon(imageVector = selectedIcon, contentDescription = null)
-        },
+        },*/
         leadingIcon = {
             if (selected) {
                 Icon(

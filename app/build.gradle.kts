@@ -79,7 +79,7 @@ dependencies {
     implementation(projects.feature.item)
     implementation(projects.feature.purchase)
     implementation(projects.feature.supplier)
-    implementation(projects.feature.bills)
+    implementation(projects.feature.bill)
     implementation(projects.feature.profile)
     implementation(projects.feature.sale)
     implementation(projects.feature.setting)
