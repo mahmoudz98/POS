@@ -21,8 +21,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.casecode.pos.feature.bills.navigation.billsGraph
-import com.casecode.pos.feature.bills.navigation.navigateToBillsGraph
+import com.casecode.pos.feature.bill.navigation.billsGraph
+import com.casecode.pos.feature.bill.navigation.navigateToBillsGraph
 import com.casecode.pos.feature.employee.employeesScreen
 import com.casecode.pos.feature.employee.navigateToEmployees
 import com.casecode.pos.feature.inventory.navigation.inventoryScreen
