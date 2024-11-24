@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.ui
+package com.casecode.pos.core.ui.utils
 
 import android.util.Patterns
+import com.casecode.pos.core.ui.R
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 import timber.log.Timber
