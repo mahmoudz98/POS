@@ -41,7 +41,7 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.ui.BranchDialogContent
 import com.casecode.pos.core.ui.DevicePreviews
-import com.casecode.pos.core.ui.validatePhoneNumber
+import com.casecode.pos.core.ui.utils.validatePhoneNumber
 import com.casecode.pos.feature.stepper.StepperBusinessViewModel
 import com.casecode.pos.core.ui.R.string as uiString
 

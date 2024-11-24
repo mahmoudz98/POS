@@ -24,8 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.ui.moveToMainActivity
-import com.casecode.pos.core.ui.moveToSignInActivity
+import com.casecode.pos.core.ui.utils.moveToMainActivity
+import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -55,8 +55,8 @@ import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.ui.validateEmail
-import com.casecode.pos.core.ui.validatePhoneNumber
+import com.casecode.pos.core.ui.utils.validateEmail
+import com.casecode.pos.core.ui.utils.validatePhoneNumber
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
