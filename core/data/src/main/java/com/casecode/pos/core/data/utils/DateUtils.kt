@@ -58,4 +58,3 @@ fun Date.toDateFormatString(): String {
 
 fun Date.toTimeFormatedString(): String =
     SimpleDateFormat("hh:mm a", Locale.getDefault()).format(this)
-
