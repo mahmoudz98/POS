@@ -28,11 +28,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.ui.utils.MAX_CURRENCY_LENGTH_SIZE
+import com.casecode.pos.core.ui.utils.MAX_SKU_LENGTH_SIZE
+import com.casecode.pos.core.ui.utils.NOT_TRACKED_REORDER_LEVEL
+import com.casecode.pos.core.ui.utils.TRACKED_REORDER_LEVEL
+import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.item.R
-import com.casecode.pos.feature.item.utils.MAX_CURRENCY_LENGTH_SIZE
-import com.casecode.pos.feature.item.utils.MAX_SKU_LENGTH_SIZE
-import com.casecode.pos.feature.item.utils.NOT_TRACKED_REORDER_LEVEL
-import com.casecode.pos.feature.item.utils.TRACKED_REORDER_LEVEL
 
 @Composable
 fun rememberItemInputState(itemUpdated: Item?): ItemInputState =
@@ -88,8 +89,6 @@ class ItemInputState(
             selectedImageUri = item.imageUrl?.toUri() ?: Uri.EMPTY
         }
     }
-
-    private fun Double?.toFormattedString(): String = this?.toBigDecimal()?.stripTrailingZeros()?.toPlainString() ?: ""
 
     fun onNameChange(input: String) {
         this.name = input

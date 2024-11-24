@@ -35,7 +35,7 @@ import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Employee
 import com.casecode.pos.core.ui.EmployeeDialogContent
-import com.casecode.pos.core.ui.validatePhoneNumber
+import com.casecode.pos.core.ui.utils.validatePhoneNumber
 import com.casecode.pos.core.ui.R.string as uiString
 
 @OptIn(ExperimentalMaterial3Api::class)

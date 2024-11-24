@@ -218,13 +218,13 @@ fun AddOrUpdateItemScreen(
             modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .padding(horizontal = 16.dp)
                 .recalculateWindowInsets(),
         ) {
             Column(
                 modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
                     .navigationBarsPadding()
                     .imePadding()
                     .verticalScroll(rememberScrollState()),
