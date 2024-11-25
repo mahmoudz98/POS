@@ -63,7 +63,7 @@ import com.casecode.pos.core.designsystem.component.PosNavigationSuiteScope
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.theme.GradientColors
 import com.casecode.pos.core.designsystem.theme.LocalGradientColors
-import com.casecode.pos.core.ui.moveToSignInActivity
+import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import com.casecode.pos.feature.profile.R
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.navigation.PosMainNavHost

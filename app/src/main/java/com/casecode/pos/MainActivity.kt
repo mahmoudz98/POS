@@ -34,7 +34,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.ui.moveToSignInActivity
+import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import com.casecode.pos.ui.MainScreen
 import com.casecode.pos.ui.rememberMainAppState
 import dagger.hilt.android.AndroidEntryPoint
