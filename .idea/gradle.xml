@@ -41,10 +41,13 @@
             <option value="$PROJECT_DIR$/core/testing" />
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/bill" />
             <option value="$PROJECT_DIR$/feature/employee" />
+            <option value="$PROJECT_DIR$/feature/inventory" />
             <option value="$PROJECT_DIR$/feature/item" />
             <option value="$PROJECT_DIR$/feature/login-employee" />
             <option value="$PROJECT_DIR$/feature/profile" />
+            <option value="$PROJECT_DIR$/feature/purchase" />
             <option value="$PROJECT_DIR$/feature/reports" />
             <option value="$PROJECT_DIR$/feature/sale" />
             <option value="$PROJECT_DIR$/feature/sales-report" />
@@ -52,6 +55,7 @@
             <option value="$PROJECT_DIR$/feature/signin" />
             <option value="$PROJECT_DIR$/feature/signout" />
             <option value="$PROJECT_DIR$/feature/stepper" />
+            <option value="$PROJECT_DIR$/feature/supplier" />
             <option value="$PROJECT_DIR$/lint" />
             <option value="$PROJECT_DIR$/ui-test-hilt-manifest" />
           </set>
