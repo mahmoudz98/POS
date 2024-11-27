@@ -210,8 +210,8 @@ fun AddOrUpdateItemScreen(
         Modifier
             .focusRequester(focusRequester)
             .focusProperties {
-                enter = { focusRequester }
-                exit = { FocusRequester.Cancel }
+                onEnter = { focusRequester }
+                onExit = { FocusRequester.Cancel }
             },
     ) { innerPadding ->
         Box(
