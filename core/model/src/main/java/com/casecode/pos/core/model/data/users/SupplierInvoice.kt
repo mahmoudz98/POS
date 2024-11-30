@@ -20,17 +20,47 @@ import kotlinx.datetime.Instant
 
 data class SupplierInvoice(
     val invoiceId: String = "",
-    val supplierId: String = "",
-    val createdAt: Instant = Clock.System.now(),
+    val billNumber: String = "",
+    val supplierName: String = "",
+    val issueDate: Instant = Clock.System.now(),
+    val dueDate: Instant = Clock.System.now(),
     val createdBy: String = "",
+    val subTotal: Double = 0.0,
     val totalAmount: Double = 0.0,
+    val discountType: DiscountType = DiscountType.PERCENTAGE,
+    val amountDiscounted: Double = 0.0,
     val paymentStatus: PaymentStatus = PaymentStatus.PENDING,
+    val paymentDetails: List<PaymentDetails> = emptyList(),
     val invoiceItems: List<Item> = emptyList(),
-)
+){
+    val isPaid: Boolean
+        get() = paymentStatus == PaymentStatus.PAID
+    val dueAmount: Double
+        get() = totalAmount - paymentDetails.sumOf { it.amountPaid }
 
+}
+
+enum class DiscountType() {
+    PERCENTAGE,
+    FIXED,
+}
 enum class PaymentStatus {
     PENDING,
     PAID,
     PARTIALLY_PAID,
     OVERDUE,
+}
+
+data class PaymentDetails(
+    val paymentId: String = "",
+    val paymentDate: Instant = Clock.System.now(),
+    val createdBy: String = "",
+    val paymentMethod: PaymentMethod = PaymentMethod.CASH,
+    val amountPaid: Double = 0.0,
+)
+
+enum class PaymentMethod {
+    CASH,
+    CREDIT_CARD,
+    DIGITAL_PAYMENT,
 }
