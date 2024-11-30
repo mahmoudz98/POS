@@ -29,7 +29,6 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
-import kotlin.text.isNotBlank
 import com.casecode.pos.core.data.R.string as stringData
 
 class TestItemRepository
@@ -85,7 +84,10 @@ constructor() :
         return Resource.Success(stringData.core_data_item_updated_successfully)
     }
 
-    override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
+    override suspend fun updateQuantityInItems(
+        items: List<Item>,
+        isPlus: Boolean,
+    ): UpdateQuantityItems {
         println(shouldReturnError)
         if (shouldReturnError) {
             return Resource.Companion.error(stringData.core_data_update_item_failure_generic)
