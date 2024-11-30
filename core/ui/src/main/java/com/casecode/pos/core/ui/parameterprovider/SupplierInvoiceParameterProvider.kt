@@ -16,6 +16,7 @@
 package com.casecode.pos.core.ui.parameterprovider
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.casecode.pos.core.model.data.users.DiscountType
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentMethod
@@ -31,12 +32,15 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                 listOf(
                     SupplierInvoice(
                         invoiceId = "INV001",
-                        billNumber = "12345",
-                        supplierId = "Supplier A",
+                        billNumber = "12345324234",
+                        supplierName = "Supplier A",
                         issueDate = Clock.System.now(),
                         dueDate = Clock.System.now(),
                         paymentStatus = PaymentStatus.PENDING,
+                        subTotal = 200.0,
                         totalAmount = 100.0,
+                        discountType = DiscountType.PERCENTAGE,
+                        amountDiscounted = 50.0,
                         paymentDetails = emptyList(),
                         invoiceItems = listOf(
                             Item(name = "Item 1", quantity = 10, costPrice = 10.0),
@@ -44,19 +48,26 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                     ),
                     SupplierInvoice(
                         invoiceId = "INV002",
-                        billNumber = "67890",
-                        supplierId = "Supplier B",
+                        billNumber = "67842342334290",
+                        supplierName = "Supplier B",
                         issueDate = Clock.System.now(),
                         dueDate = Clock.System.now(),
                         paymentStatus = PaymentStatus.PAID,
                         totalAmount = 100.0,
                         paymentDetails = listOf(
                             PaymentDetails(
-                                paymentId = "PAY001",
+                                paymentId = "1",
                                 paymentDate = Clock.System.now(),
                                 createdBy = "User A",
                                 paymentMethod = PaymentMethod.CASH,
                                 amountPaid = 100.0,
+                            ),
+                            PaymentDetails(
+                                paymentId = "12",
+                                paymentDate = Clock.System.now(),
+                                createdBy = "User B",
+                                paymentMethod = PaymentMethod.CASH,
+                                amountPaid = 10.0,
                             ),
                         ),
                         invoiceItems = listOf(
@@ -65,8 +76,8 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                     ),
                     SupplierInvoice(
                         invoiceId = "INV003",
-                        billNumber = "13579",
-                        supplierId = "Supplier C",
+                        billNumber = "13572349",
+                        supplierName = "Supplier C",
                         issueDate = Clock.System.now(),
                         dueDate = Clock.System.now(),
                         paymentStatus = PaymentStatus.PARTIALLY_PAID,
@@ -86,8 +97,8 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                     ),
                     SupplierInvoice(
                         invoiceId = "INV004",
-                        billNumber = "24680",
-                        supplierId = "Supplier D",
+                        billNumber = "2460",
+                        supplierName = "Supplier D",
                         issueDate = Clock.System.now(),
                         dueDate = Clock.System.now(),
                         paymentStatus = PaymentStatus.PAID,
@@ -98,7 +109,7 @@ class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierI
                     SupplierInvoice(
                         invoiceId = "INV005",
                         billNumber = "11223",
-                        supplierId = "Supplier E",
+                        supplierName = "Supplier E",
                         // March 18, 2023 12:00:00 AM
                         issueDate = Instant.fromEpochMilliseconds(1679145600000),
                         // e.g., 7 days later
