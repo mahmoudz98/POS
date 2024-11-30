@@ -18,6 +18,8 @@ package com.casecode.pos.core.testing.repository
 import com.casecode.pos.core.domain.repository.SupplierInvoiceRepository
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.users.PaymentDetails
+import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.testing.base.BaseTestRepository
 import com.casecode.pos.core.testing.data.supplierInvoicesTestData
@@ -35,6 +37,7 @@ class TestSupplierInvoicesRepository @Inject constructor() :
     val supplierInvoicesTest = ArrayList(supplierInvoicesTestData)
 
     override fun init() = Unit
+
     fun sendSupplierInvoices() {
         resourcesSupplierInvoicesFlow.tryEmit(Resource.success(supplierInvoicesTest))
     }
@@ -75,5 +78,34 @@ class TestSupplierInvoicesRepository @Inject constructor() :
         supplierInvoicesTest.add(invoice)
         resourcesSupplierInvoicesFlow.tryEmit(Resource.success(supplierInvoicesTest))
         return OperationResult.Success
+    }
+
+    override suspend fun addPaymentDetails(
+        invoiceId: String,
+        paymentDetails: PaymentDetails,
+        paymentStatus: PaymentStatus,
+    ): OperationResult {
+        if (shouldReturnError) {
+            return OperationResult.Failure(
+                stringData.core_data_add_supplier_invoice_failure_generic,
+            )
+        }
+
+        val invoiceIndex = supplierInvoicesTest.indexOfFirst { it.invoiceId == invoiceId }
+
+        if (invoiceIndex != -1) {
+            val existingInvoice = supplierInvoicesTest[invoiceIndex]
+            val updatedInvoice = existingInvoice.copy(
+                paymentDetails = existingInvoice.paymentDetails + paymentDetails,
+                paymentStatus = paymentStatus,
+            )
+            supplierInvoicesTest[invoiceIndex] = updatedInvoice
+            resourcesSupplierInvoicesFlow.tryEmit(Resource.success(supplierInvoicesTest))
+            return OperationResult.Success
+        }
+
+        return OperationResult.Failure(
+            stringData.core_data_add_supplier_invoice_failure_generic,
+        )
     }
 }
