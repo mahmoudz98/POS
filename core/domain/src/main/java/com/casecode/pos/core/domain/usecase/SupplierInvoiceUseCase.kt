@@ -16,7 +16,12 @@
 package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.repository.SupplierInvoiceRepository
+import com.casecode.pos.core.domain.utils.OperationResult
+import com.casecode.pos.core.model.data.users.PaymentDetails
+import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import javax.inject.Inject
 
 /**
@@ -59,4 +64,46 @@ class UpdateSupplierInvoiceUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(invoice: SupplierInvoice) =
         supplierInvoiceRepository.updateInvoice(invoice)
+}
+
+/**
+ * Use case for adding payment details to a supplier invoice.
+ *
+ * This use case is responsible for:
+ * - Adding the payment details to the invoice.
+ * - Updating the payment status of the invoice based on the total amount paid and due date.
+ *
+ * @param supplierInvoiceRepository The repository for accessing and modifying supplier invoices.
+ */
+class AddPaymentDetailsUseCase @Inject constructor(
+    private val supplierInvoiceRepository: SupplierInvoiceRepository,
+) {
+    suspend operator fun invoke(
+        supplierInvoice: SupplierInvoice,
+        paymentDetails: PaymentDetails,
+    ): OperationResult {
+        val totalPaid =
+            supplierInvoice.paymentDetails.sumOf { it.amountPaid } + paymentDetails.amountPaid
+        val paymentStatus = determinePaymentStatus(
+            supplierInvoice.totalAmount,
+            totalPaid,
+            supplierInvoice.dueDate
+        )
+
+        return supplierInvoiceRepository.addPaymentDetails(
+            supplierInvoice.invoiceId,
+            paymentDetails,
+            paymentStatus,
+        )
+    }
+    private fun determinePaymentStatus(
+        totalAmount: Double,
+        totalPaid: Double,
+        dueDate: Instant
+    ): PaymentStatus = when {
+        totalPaid >= totalAmount -> PaymentStatus.PAID
+        Clock.System.now() > dueDate && totalPaid > 0 -> PaymentStatus.OVERDUE
+        totalPaid > 0 -> PaymentStatus.PARTIALLY_PAID
+        else -> PaymentStatus.PENDING
+    }
 }
