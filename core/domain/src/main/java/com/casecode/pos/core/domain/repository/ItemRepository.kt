@@ -52,7 +52,7 @@ interface ItemRepository {
      */
     suspend fun updateItem(item: Item): UpdateItem
 
-    suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems
+    suspend fun updateQuantityInItems(items: List<Item>, isPlus: Boolean): UpdateQuantityItems
 
     /**
      * Deletes an existing item from the repository.

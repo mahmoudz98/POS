@@ -51,13 +51,13 @@ class UpdateStockInItemsUseCase
 constructor(
     private val itemRepository: ItemRepository,
 ) {
-    suspend operator fun invoke(items: List<Item>?): UpdateQuantityItems {
+    suspend operator fun invoke(items: List<Item>?, isPlus: Boolean = false ): UpdateQuantityItems {
         if (items.isNullOrEmpty()) {
             return Resource.Companion.empty(
                 message = R.string.core_domain_invoice_items_empty,
             )
         }
-        return itemRepository.updateQuantityInItems(items)
+        return itemRepository.updateQuantityInItems(items,isPlus)
     }
 }
 

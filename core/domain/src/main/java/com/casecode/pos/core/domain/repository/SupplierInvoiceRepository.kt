@@ -17,6 +17,8 @@ package com.casecode.pos.core.domain.repository
 
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.users.PaymentDetails
+import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import kotlinx.coroutines.flow.Flow
 
@@ -28,4 +30,9 @@ interface SupplierInvoiceRepository {
     fun getInvoices(): Flow<Resource<List<SupplierInvoice>>>
     suspend fun addInvoice(invoice: SupplierInvoice): OperationResult
     suspend fun updateInvoice(invoice: SupplierInvoice): OperationResult
+    suspend fun addPaymentDetails(
+        invoiceId: String,
+        paymentDetails: PaymentDetails,
+        paymentStatus: PaymentStatus,
+        ): OperationResult
 }
