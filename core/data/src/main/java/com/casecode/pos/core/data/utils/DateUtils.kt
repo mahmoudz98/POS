@@ -17,6 +17,7 @@ package com.casecode.pos.core.data.utils
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
 import kotlinx.datetime.format.MonthNames
@@ -40,6 +41,25 @@ fun Instant.toFormattedDateString(): String {
                 year()
             },
         )
+}
+
+fun Instant.toFormattedDateTimeString(): String {
+    val localDateTime = this.toLocalDateTime(TimeZone.currentSystemDefault())
+    return localDateTime.format(
+        LocalDateTime.Format {
+            dayOfMonth()
+            char(' ')
+            monthName(MonthNames.ENGLISH_ABBREVIATED)
+            char(' ')
+            year()
+            char(' ')
+            amPmHour()
+            char(':')
+            minute()
+            char(' ')
+            amPmMarker("AM", "PM")
+        },
+    )
 }
 
 fun Date.toFormattedDateTimeString(): String = this.let {
