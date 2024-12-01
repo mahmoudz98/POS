@@ -18,6 +18,7 @@ package com.casecode.pos.core.data.repository
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
+import com.casecode.pos.core.data.model.asDomainModel
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
@@ -27,19 +28,13 @@ import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.firebase.services.FirestoreService
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICES_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_BILL_NUMBER_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_CREATED_BY_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_DUE_DATE_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_ID_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_ISSUE_DATE_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_ITEMS_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_SUPPLIER_ID_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD
 import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.google.firebase.firestore.FieldValue
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -73,9 +68,9 @@ class SupplierInvoiceRepositoryImpl
         ).collect { snapshot ->
             val invoices = mutableListOf<SupplierInvoice>()
             snapshot.documents.mapNotNull { document ->
-                document.toObject(SupplierInvoice::class.java)?.let { invoice ->
-                    invoices.add(invoice)
-                }
+                Timber.e("supplierInvoiceMap: ${document.data}")
+                val supplierInvoiceMap = document.data as Map<String, Any>
+                invoices.add(supplierInvoiceMap.asDomainModel())
             }
             if (invoices.isNotEmpty()) {
                 emit(Resource.Success(invoices))
@@ -95,6 +90,8 @@ class SupplierInvoiceRepositoryImpl
                     return@withContext OperationResult.Failure(message)
                 }
                 val uid = auth.currentUserId()
+                val currentUserName = auth.currentNameLogin()
+                val invoiceUpdated = invoice.copy(createdBy = currentUserName)
                 suspendCoroutine<OperationResult> { continuation ->
                     val doc =
                         db.getDocumentInChild(
@@ -103,23 +100,7 @@ class SupplierInvoiceRepositoryImpl
                             SUPPLIER_INVOICES_COLLECTION_PATH,
                         )
                     doc.set(
-                        mapOf(
-                            SUPPLIER_INVOICE_ID_FIELD to doc.id,
-                            SUPPLIER_INVOICE_BILL_NUMBER_FIELD to invoice.billNumber,
-                            SUPPLIER_INVOICE_SUPPLIER_ID_FIELD to invoice.supplierId,
-                            SUPPLIER_INVOICE_ISSUE_DATE_FIELD to invoice.issueDate,
-                            SUPPLIER_INVOICE_DUE_DATE_FIELD to invoice.dueDate,
-                            SUPPLIER_INVOICE_CREATED_BY_FIELD to invoice.createdBy,
-                            SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD to invoice.totalAmount,
-                            SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to invoice.paymentStatus.name,
-                            SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD to invoice.paymentDetails
-                                .map { payment ->
-                                    payment.asExternalMapper()
-                                },
-                            SUPPLIER_INVOICE_ITEMS_FIELD to invoice.invoiceItems.map { item ->
-                                item.asExternalMapper()
-                            },
-                        ),
+                        asExternalMapper(doc.id, invoiceUpdated),
                     ).addOnSuccessListener {
                         continuation.resume(OperationResult.Success)
                     }.addOnFailureListener {
@@ -155,23 +136,7 @@ class SupplierInvoiceRepositoryImpl
                             invoice.invoiceId,
                         )
                     doc.update(
-                        mapOf(
-                            SUPPLIER_INVOICE_ID_FIELD to doc.id,
-                            SUPPLIER_INVOICE_BILL_NUMBER_FIELD to invoice.billNumber,
-                            SUPPLIER_INVOICE_SUPPLIER_ID_FIELD to invoice.supplierId,
-                            SUPPLIER_INVOICE_ISSUE_DATE_FIELD to invoice.issueDate,
-                            SUPPLIER_INVOICE_DUE_DATE_FIELD to invoice.dueDate,
-                            SUPPLIER_INVOICE_CREATED_BY_FIELD to invoice.createdBy,
-                            SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD to invoice.totalAmount,
-                            SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to invoice.paymentStatus.name,
-                            SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD to invoice.paymentDetails
-                                .map { payment ->
-                                    payment.asExternalMapper()
-                                },
-                            SUPPLIER_INVOICE_ITEMS_FIELD to invoice.invoiceItems.map { item ->
-                                item.asExternalMapper()
-                            },
-                        ),
+                        asExternalMapper(doc.id, invoice),
                     ).addOnSuccessListener {
                         continuation.resume(OperationResult.Success)
                     }.addOnFailureListener {
@@ -191,9 +156,9 @@ class SupplierInvoiceRepositoryImpl
         }
     }
 
-    // TODO: Handle update payment status
-    suspend fun updateInvoicePaymentStatus(
+    override suspend fun addPaymentDetails(
         invoiceId: String,
+        paymentDetails: PaymentDetails,
         paymentStatus: PaymentStatus,
     ): OperationResult {
         return withContext(ioDispatcher) {
@@ -202,6 +167,10 @@ class SupplierInvoiceRepositoryImpl
                     return@withContext OperationResult.Failure(message)
                 }
                 val uid = auth.currentUserId()
+                val currentUserName = auth.currentNameLogin()
+                Timber.e("currentUsername: $currentUserName")
+                val paymentWithCreatedBy = paymentDetails.copy(createdBy = currentUserName)
+                Timber.e("paymentWithCreatedBy: $paymentWithCreatedBy")
                 suspendCoroutine<OperationResult> { continuation ->
                     val doc = db.getOrAddDocumentInChild(
                         USERS_COLLECTION_PATH,
@@ -209,27 +178,36 @@ class SupplierInvoiceRepositoryImpl
                         SUPPLIER_INVOICES_COLLECTION_PATH,
                         invoiceId,
                     )
-
-                    doc.update(
+                    val paymentMap =
                         mapOf(
-                            SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to paymentStatus.name,
-                        ),
+                            SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD to
+                                FieldValue.arrayUnion(paymentWithCreatedBy.asExternalMapper()),
+                        )
+                    doc.update(
+                        mapOf(SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to paymentStatus.name),
+                    )
+                    doc.update(
+                        paymentMap,
                     ).addOnSuccessListener {
                         continuation.resume(OperationResult.Success)
                     }.addOnFailureListener { exception ->
                         Timber.e(exception)
                         continuation.resume(
                             OperationResult.Failure(
-                                R.string.core_data_update_supplier_invoice_failure_generic,
+                                R.string.core_data_update_supplier_invoice_payment_failure_generic,
                             ),
                         )
                     }
                 }
             } catch (_: UnknownHostException) {
-                OperationResult.Failure(R.string.core_data_update_supplier_failure_network)
+                OperationResult.Failure(
+                    R.string.core_data_update_supplier_invoice_payment_failure_network,
+                )
             } catch (e: Exception) {
                 Timber.e(e)
-                OperationResult.Failure(R.string.core_data_update_supplier_failure_generic)
+                OperationResult.Failure(
+                    R.string.core_data_update_supplier_invoice_payment_failure_generic,
+                )
             }
         }
     }
