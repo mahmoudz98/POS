@@ -87,19 +87,19 @@ class AddPaymentDetailsUseCase @Inject constructor(
         val paymentStatus = determinePaymentStatus(
             supplierInvoice.totalAmount,
             totalPaid,
-            supplierInvoice.dueDate
+            supplierInvoice.dueDate,
         )
-
+        val id = supplierInvoice.paymentDetails.size.inc().toString()
         return supplierInvoiceRepository.addPaymentDetails(
             supplierInvoice.invoiceId,
-            paymentDetails,
+            paymentDetails.copy(paymentId = id),
             paymentStatus,
         )
     }
     private fun determinePaymentStatus(
         totalAmount: Double,
         totalPaid: Double,
-        dueDate: Instant
+        dueDate: Instant,
     ): PaymentStatus = when {
         totalPaid >= totalAmount -> PaymentStatus.PAID
         Clock.System.now() > dueDate && totalPaid > 0 -> PaymentStatus.OVERDUE
