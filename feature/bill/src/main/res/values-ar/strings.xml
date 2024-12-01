@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="feature_bill_header_title">الفواتير</string>
+    <string name="feature_bill_empty_title">لا توجد فواتير</string>
+    <string name="feature_bill_empty_message">أضف فواتير لإدارة عملك.</string>
+    <string name="feature_bill_payment_status_pending">معلق</string>
+    <string name="feature_bill_payment_status_paid">مدفوع</string>
+    <string name="feature_bill_payment_status_partially_paid">مدفوع جزئيًا</string>
+    <string name="feature_bill_payment_status_overdue">متأخر</string>
+    <string name="feature_bill_title_text">فاتورة</string>
+    <string name="feature_bill_tap_details_title_text">تفاصيل</string>
+    <string name="feature_bill_tap_payment_title_text">المدفوعات</string>
+    <string name="feature_bill_tap_history_title_text">السجلات</string>
+    <string name="feature_bill_subtotal_text">الإجمالي الفرعي</string>
+    <string name="feature_bill_total_text">الإجمالي</string>
+    <string name="feature_bill_payment_made_text">المدفوع</string>
+    <string name="feature_bill_rest_due_text">المتبقي</string>
+    <string name="feature_bill_tap_payment_text">الدفع</string>
+    <string name="feature_bill_add_payment_title">تسجيل الدفع</string>
+    <string name="feature_bill_payment_supplier_hint">اسم المورد</string>
+    <string name="feature_bill_payment_date_hint">تاريخ الدفع</string>
+    <string name="feature_bill_payment_method_hint">طريقة الدفع</string>
+    <string name="feature_bill_payment_method_cash">نقداً</string>
+    <string name="feature_bill_payment_method_card">بطاقة ائتمان</string>
+    <string name="feature_bill_payment_method_digital">دفع رقمي</string>
+    <string name="feature_bill_payment_empty_title">لم يتم إجراء أي دفعات في هذه الفاتورة</string>
+    <string name="feature_bill_payment_empty_message">أضف تسجيل الدفع لإدارة الفاتورة.</string>
+
+    <!-- creation bill -->
+    <string name="feature_bill_add_bill_title_text">إضافة فاتورة</string>
+    <string name="feature_bill_update_bill_title_text">تحديث الفاتورة</string>
+    <string name="feature_bill_add_bill_item_title_text">إضافة عنصر</string>
+    <string name="feature_bill_update_bill_item_title_text">تحديث العنصر</string>
+    <string name="feature_bill_discount_text">الخصم</string>
+    <string name="feature_bill_currency_discount_text">خصم نقدي</string>
+    <string name="feature_bill_percentage_discount_text">خصم بالنسبة المئوية</string>
+    <string name="feature_bill_supplier_hint">المورد</string>
+    <string name="feature_bill_number_hint">رقم الفاتورة</string>
+    <string name="feature_bill_issue_date_hint">تاريخ الإصدار</string>
+    <string name="feature_bill_due_date_hint">تاريخ الاستحقاق</string>
+    <string name="feature_bill_items_text">المنتجات</string>
+    <string name="feature_bill_items_amount_text">المبلغ</string>
+    <string name="feature_bill_search_supplier_empty_result_message">لم يتم العثور على مورد</string>
+    <string name="feature_bill_search_suppliers_failed_message">فشل في تحميل الموردين</string>
+    <string name="feature_bill_number_empty">رقم الفاتورة لا يمكن أن يكون فارغًا</string>
+    <string name="feature_bill_supplier_empty">المورد لا يمكن أن يكون فارغًا</string>
+    <string name="feature_bill_items_empty_message">يجب إضافة عنصر واحد على الأقل</string>
+    <string name="feature_bill_supplier_not_selected_message">يجب اختيار المورد</string>
+
+    <!-- creation item -->
+    <string name="feature_bill_add_item_hint">ابحث عن عنصر بالاسم أو SKU أو الفئة</string>
+    <string name="feature_bill_quantity_hint">الكمية</string>
+    <string name="feature_bill_cost_price_hint">سعر التكلفة</string>
+    <string name="feature_bill_item_not_selected_message">يجب اختيار المنتج</string>
+    <string name="feature_bill_item_error_price_empty">سعر التكلفة مطلوب</string>
+    <string name="feature_bill_item_error_price_size">يجب أن يكون السعر أقل من 999_999_999.</string>
+    <string name="feature_bill_item_error_quantity_empty">الكمية مطلوبة</string>
+    <string name="feature_bill_search_items_empty_result_message">لم يتم العثور على منتجات</string>
+    <string name="feature_bill_search_items_failed_message">فشل في تحميل المنتجات</string>
+</resources>
