@@ -58,22 +58,21 @@ import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.utils.MAX_CURRENCY_LENGTH_SIZE
 import com.casecode.pos.core.ui.utils.toFormattedString
-import com.casecode.pos.feature.bill.BillViewModel
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.SearchItemUiState
 import timber.log.Timber
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun AddOrUpdateBillItemScreen(
-    viewModel: BillViewModel = hiltViewModel(),
+fun BillItemFormScreen(
+    viewModel: BillCreationViewModel = hiltViewModel(),
     isUpdate: Boolean = false,
     onBackClick: () -> Unit,
 ) {
     val searchItem by viewModel.searchQueryItem.collectAsStateWithLifecycle()
     val filterItemState by viewModel.filterItemsUiState.collectAsStateWithLifecycle()
     val itemUpdated by viewModel.itemSelected.collectAsStateWithLifecycle()
-    AddOrUpdateBillItemScreen(
+    BillItemFormScreen(
         isUpdate = isUpdate,
         itemUpdated = itemUpdated,
         searchItemQuery = searchItem,
@@ -87,7 +86,7 @@ fun AddOrUpdateBillItemScreen(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun AddOrUpdateBillItemScreen(
+fun BillItemFormScreen(
     modifier: Modifier = Modifier,
     isUpdate: Boolean,
     itemUpdated: Item?,
@@ -183,7 +182,7 @@ fun AddOrUpdateBillItemScreen(
                 clearItemSelection = {
                     onItemTriggered("", "", "", "")
                 },
-                label = stringResource(R.string.feature_bill_item_text),
+                label = stringResource(R.string.feature_bill_add_item_hint),
                 isError = nameError,
             )
             PosOutlinedTextField(
@@ -271,7 +270,7 @@ fun ItemExposeDropdownMenuBox(
             } else if (filterItemUiState is SearchItemUiState.LoadFailed) {
                 stringResource(R.string.feature_bill_search_items_failed_message)
             } else if (isError) {
-                stringResource(R.string.feature_bill_search_items_not_selected_message)
+                stringResource(R.string.feature_bill_item_not_selected_message)
             } else {
                 null
             },

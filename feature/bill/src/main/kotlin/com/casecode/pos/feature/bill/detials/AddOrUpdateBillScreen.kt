@@ -88,7 +88,7 @@ import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun AddOrUpdateBillScreen(
-    viewModel: BillViewModel = hiltViewModel(),
+    viewModel: BillCreationViewModel = hiltViewModel(),
     isUpdate: Boolean = false,
     onBackClick: () -> Unit,
     onAddBillItem: () -> Unit,
@@ -112,7 +112,7 @@ fun AddOrUpdateBillScreen(
         onRemoveBillItem = {
             viewModel.removeItem(it)
         },
-        onAddBill = { viewModel.addBill() },
+        onAddBill = { viewModel.updateStockThenAddBill() },
         onUpdateBill = { },
     )
 }
@@ -290,7 +290,7 @@ fun AddOrUpdateBillScreen(
                                 text = {
                                     Text(
                                         text = stringResource(
-                                            R.string.feature_bill_add_item_button_text,
+                                            R.string.feature_bill_add_bill_item_title_text,
                                         ),
                                     )
                                 },
@@ -306,8 +306,8 @@ fun AddOrUpdateBillScreen(
                                     Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                 ) {
-                                    Text(stringResource(R.string.feature_bill_item_text))
-                                    Text(stringResource(R.string.feature_bill_item_amount))
+                                    Text(stringResource(R.string.feature_bill_items_text))
+                                    Text(stringResource(R.string.feature_bill_items_amount_text))
                                 }
                                 HorizontalDivider()
                                 billInputState.invoiceItems.forEach {
