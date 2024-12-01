@@ -181,14 +181,16 @@ constructor(
         }
     }
 
-    override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
+    override suspend fun updateQuantityInItems(
+        items: List<Item>,
+        isPlus: Boolean,
+    ): UpdateQuantityItems {
         return withContext(ioDispatcher) {
             try {
                 auth.ensureUserExistsOrReturnError<List<Item>> {
                     return@withContext it
                 }
-                val currentUserUid =
-                    auth.currentUserId()
+                val currentUserUid = auth.currentUserId()
                 suspendCoroutine { continuation ->
                     val batch = db.batch()
                     val collectionRef =
@@ -198,13 +200,15 @@ constructor(
                             ITEMS_COLLECTION_PATH,
                         )
                     for (item in items) {
-                        if (!item.isTrackStock()) continue
+                        if (!item.isTrackStock() && !isPlus) continue
                         val itemRef = collectionRef.document(item.sku)
+                        val quantity = (if (isPlus) 1 else -1).times(item.quantity)
+                        Timber.e("UpdateItem:quantity= $quantity")
                         batch.update(
                             itemRef,
                             ITEM_QUANTITY_FIELD,
                             com.casecode.pos.core.firebase.services.FieldValue
-                                .increment(-item.quantity.toDouble()),
+                                .increment(quantity.toLong()),
                         )
                     }
 
