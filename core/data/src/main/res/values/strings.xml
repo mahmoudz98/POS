@@ -110,6 +110,8 @@
     <string name="core_data_update_supplier_invocie_failure_network">Unable to update supplier invoice. Please check your internet
         connection.</string>
     <string name="core_data_update_supplier_invoice_failure_generic">Failed to update target supplier invoice. Please try again later.</string>
+    <string name="core_data_update_supplier_invoice_payment_failure_generic">Failed to add payment details to supplier invoice. Please try again later.</string>
+    <string name="core_data_update_supplier_invoice_payment_failure_network">Failed to add payment details to supplier invoice. Please check your internet.</string>
 
     // Invoice
     <string name="core_data_add_invoice_failure_network">Unable to add invoice. Please check your internet
