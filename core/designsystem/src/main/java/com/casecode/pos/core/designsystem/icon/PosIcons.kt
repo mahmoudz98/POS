@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material.icons.filled.PrintDisabled
@@ -49,9 +50,11 @@ import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.FilterListOff
 import androidx.compose.material.icons.rounded.Inventory2
+import androidx.compose.material.icons.rounded.Payment
 import androidx.compose.material.icons.rounded.PointOfSale
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
@@ -88,8 +91,10 @@ object PosIcons {
     val QrCodeError = Icons.Filled.QrCode2
     val Search = Icons.Rounded.Search
     val Add = Icons.Rounded.Add
+    val Edit = Icons.Rounded.Edit
     val Filter = Icons.Rounded.FilterList
     val FilterClear = Icons.Rounded.FilterListOff
+    val Payment = Icons.Rounded.Payment
 
     val Calender = Icons.Filled.CalendarToday
     val Delete = Icons.Filled.Delete
