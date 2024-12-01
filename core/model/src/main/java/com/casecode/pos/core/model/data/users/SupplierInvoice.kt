@@ -32,12 +32,11 @@ data class SupplierInvoice(
     val paymentStatus: PaymentStatus = PaymentStatus.PENDING,
     val paymentDetails: List<PaymentDetails> = emptyList(),
     val invoiceItems: List<Item> = emptyList(),
-){
+) {
     val isPaid: Boolean
         get() = paymentStatus == PaymentStatus.PAID
     val dueAmount: Double
         get() = totalAmount - paymentDetails.sumOf { it.amountPaid }
-
 }
 
 enum class DiscountType() {
