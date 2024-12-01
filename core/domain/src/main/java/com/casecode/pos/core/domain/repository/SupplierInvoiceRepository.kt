@@ -34,5 +34,5 @@ interface SupplierInvoiceRepository {
         invoiceId: String,
         paymentDetails: PaymentDetails,
         paymentStatus: PaymentStatus,
-        ): OperationResult
+    ): OperationResult
 }
