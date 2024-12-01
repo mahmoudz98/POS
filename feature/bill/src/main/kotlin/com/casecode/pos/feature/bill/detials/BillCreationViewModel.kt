@@ -23,7 +23,6 @@ import com.casecode.pos.core.domain.usecase.AddSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
 import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
-import com.casecode.pos.core.domain.usecase.UpdateSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item

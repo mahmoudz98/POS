@@ -66,7 +66,7 @@ import com.casecode.pos.core.ui.R.string as uiString
 @Composable
 fun AddBillPaymentScreen(viewModel: BillViewModel = hiltViewModel(), onNavigateBack: () -> Unit) {
     val invoice by viewModel.supplierInvoiceSelected.collectAsStateWithLifecycle()
-    if(invoice is InvoiceSelectionUiState.Success) {
+    if (invoice is InvoiceSelectionUiState.Success) {
         AddBillPaymentScreen(
             invoiceSelectionUiState = (invoice as InvoiceSelectionUiState.Success).supplierInvoice,
             onNavigateBack = onNavigateBack,

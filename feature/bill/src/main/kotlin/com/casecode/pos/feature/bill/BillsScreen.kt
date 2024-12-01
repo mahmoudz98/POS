@@ -243,7 +243,7 @@ internal fun BillsEmptyScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun BillsList(
-    bills: Map<String,SupplierInvoice>,
+    bills: Map<String, SupplierInvoice>,
     modifier: Modifier = Modifier,
     onBillClick: (String) -> Unit,
 ) {
@@ -351,7 +351,7 @@ fun BillsListPreview(
 ) {
     POSTheme {
         PosBackground {
-            BillsList(bills.associateBy{it.invoiceId}) {}
+            BillsList(bills.associateBy { it.invoiceId }) {}
         }
     }
 }

@@ -92,6 +92,7 @@ private fun BillPaymentEmpty(modifier: Modifier = Modifier) {
         )
     }
 }
+
 @Composable
 private fun BillPaymentItem(paymentDetails: PaymentDetails) {
     ListItem(

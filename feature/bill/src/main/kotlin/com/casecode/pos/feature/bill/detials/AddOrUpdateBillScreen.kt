@@ -80,7 +80,6 @@ import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.utils.toFormattedString
-import com.casecode.pos.feature.bill.BillViewModel
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.SearchSupplierUiState
 import kotlinx.datetime.Clock
