@@ -166,10 +166,10 @@ com.google.android.recaptcha:recaptcha:18.5.1
 com.google.android:annotations:4.1.1.4
 com.google.code.findbugs:jsr305:3.0.2
 com.google.code.gson:gson:2.10.1
-com.google.dagger:dagger-lint-aar:2.52
-com.google.dagger:dagger:2.52
-com.google.dagger:hilt-android:2.52
-com.google.dagger:hilt-core:2.52
+com.google.dagger:dagger-lint-aar:2.53
+com.google.dagger:dagger:2.53
+com.google.dagger:hilt-android:2.53
+com.google.dagger:hilt-core:2.53
 com.google.errorprone:error_prone_annotations:2.26.0
 com.google.firebase:firebase-abt:21.1.1
 com.google.firebase:firebase-analytics-ktx:22.1.2
@@ -234,10 +234,10 @@ org.checkerframework:checker-qual:3.37.0
 org.codehaus.mojo:animal-sniffer-annotations:1.23
 org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.9.22
 org.jetbrains.kotlin:kotlin-parcelize-runtime:1.9.22
-org.jetbrains.kotlin:kotlin-stdlib-common:2.0.21
+org.jetbrains.kotlin:kotlin-stdlib-common:2.1.0
 org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0
 org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0
-org.jetbrains.kotlin:kotlin-stdlib:2.0.21
+org.jetbrains.kotlin:kotlin-stdlib:2.1.0
 org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.8
 org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.8
 org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0
@@ -253,3 +253,4 @@ org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3
 org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.3
 org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3
 org.jetbrains:annotations:23.0.0
+org.jspecify:jspecify:1.0.0
