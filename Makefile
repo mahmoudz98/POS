@@ -76,6 +76,10 @@ updateProdReleaseBadging:
 	@echo "Run updateProdReleaseBadging"
 	./gradlew updateProdReleaseBadging
 
+updateDependency:
+	@echo "Run updateDependencyGuard"
+	./gradlew dependencyGuardBaseline
+
 #tests-screenshots:
 #	@echo "Verify all screenshots"
 #	./gradlew verifyPaparazziDebug
