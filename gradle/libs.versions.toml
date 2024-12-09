@@ -1,7 +1,7 @@
 [versions]
 # AGP and tools should be updated together
 agp = "8.7.2"
-androidTools = "31.7.2"
+androidTools = "31.7.3"
 billingKtx = "7.1.1"
 escposThermalprinterAndroid = "3.4.0"
 googleid = "1.1.1"
