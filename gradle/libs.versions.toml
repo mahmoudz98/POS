@@ -74,7 +74,7 @@ jacoco = "0.8.12"
 mockk-andrdoid = "1.13.12"
 
 # Gradle plugins
-ktlint-plugin = "10.3.0"
+ktlint-plugin = "12.1.2"
 spotless = "6.24.0"
 junitJunit = "4.13.2"
 
