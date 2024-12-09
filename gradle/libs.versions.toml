@@ -37,7 +37,7 @@ coil = "2.7.0"
 kotlinx-coroutines = "1.9.0"
 kotlinxSerializationJson = "1.7.3"
 # DI
-hilt = "2.52"
+hilt = "2.53"
 hilt-navigation = "1.2.0"
 # Annotations procesing
 ksp = "2.0.21-1.0.25"
