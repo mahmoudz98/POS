@@ -40,7 +40,7 @@ kotlinxSerializationJson = "1.7.3"
 hilt = "2.52"
 hilt-navigation = "1.2.0"
 # Annotations procesing
-ksp = "2.0.21-1.0.25"
+ksp = "2.1.0-1.0.29"
 #  Services
 firebaseBom = "33.5.1"
 firebase-auth = "23.1.0"
