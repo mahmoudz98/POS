@@ -181,8 +181,8 @@ constructor(
         collectionChild: String,
         condition: Pair<String, Any>? = null,
         sortWithFieldName: String? = null,
-    ) =
-        firestore.collection(collection).document(documentId).collection(collectionChild).let { collectionRef ->
+    ) = firestore.collection(collection).document(documentId)
+        .collection(collectionChild).let { collectionRef ->
             if (condition != null) {
                 collectionRef.whereEqualTo(condition.first, condition.second)
             } else {
