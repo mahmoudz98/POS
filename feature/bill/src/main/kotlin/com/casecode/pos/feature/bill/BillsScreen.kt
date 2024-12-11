@@ -15,10 +15,8 @@
  */
 package com.casecode.pos.feature.bill
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -55,7 +52,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,6 +61,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.data.utils.toFormattedDateString
 import com.casecode.pos.core.designsystem.component.PosBackground
+import com.casecode.pos.core.designsystem.component.PosEmptyScreen
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.component.SearchToolbar
@@ -84,7 +81,7 @@ import kotlinx.datetime.Instant
 
 @Composable
 fun BillsScreen(
-    viewModel: BillViewModel = hiltViewModel(),
+    viewModel: BillsViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onAddBillClick: () -> Unit,
     onBillClick: () -> Unit,
@@ -153,7 +150,12 @@ fun BillsScreen(
                 )
 
                 is BillsUiState.Error, is BillsUiState.Empty -> {
-                    BillsEmptyScreen()
+                    PosEmptyScreen(
+                        Modifier.align(Alignment.CenterHorizontally),
+                        com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120,
+                        R.string.feature_bill_empty_title,
+                        R.string.feature_bill_empty_message,
+                    )
                 }
             }
         }
@@ -209,36 +211,6 @@ fun DefaultTopAppBar(
             containerColor = Color.Transparent,
         ),
     )
-}
-
-@Composable
-internal fun BillsEmptyScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Image(
-            painter = painterResource(
-                id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120,
-            ),
-            contentDescription = null,
-            modifier = Modifier.size(120.dp),
-        )
-
-        Text(
-            text = stringResource(id = R.string.feature_bill_empty_title),
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.Black,
-            modifier = Modifier.padding(top = 16.dp),
-        )
-
-        Text(
-            text = stringResource(id = R.string.feature_bill_empty_message),
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.padding(top = 8.dp),
-        )
-    }
 }
 
 @Composable
