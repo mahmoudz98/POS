@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.bill.detials
+package com.casecode.pos.feature.bill.creation
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -32,16 +30,9 @@ import androidx.compose.foundation.layout.recalculateWindowInsets
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CurrencyPound
-import androidx.compose.material.icons.rounded.Percent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -53,7 +44,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -67,8 +57,6 @@ import com.casecode.pos.core.data.utils.toFormattedDateString
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosDatePickerDialog
 import com.casecode.pos.core.designsystem.component.PosElevatedCard
-import com.casecode.pos.core.designsystem.component.PosFilledTextField
-import com.casecode.pos.core.designsystem.component.PosInputChip
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.component.PosTonalButton
@@ -79,16 +67,14 @@ import com.casecode.pos.core.model.data.users.DiscountType
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
-import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.SearchSupplierUiState
 import kotlinx.datetime.Clock
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun AddOrUpdateBillScreen(
+fun AddBillScreen(
     viewModel: BillCreationViewModel = hiltViewModel(),
-    isUpdate: Boolean = false,
     onBackClick: () -> Unit,
     onAddBillItem: () -> Unit,
     onUpdateBillItem: () -> Unit,
@@ -96,8 +82,7 @@ fun AddOrUpdateBillScreen(
     val billInputState by viewModel.billInputState.collectAsStateWithLifecycle()
     val filterSupplierState by viewModel.filterSupplierState.collectAsStateWithLifecycle()
     val searchSupplier by viewModel.searchQuerySupplier.collectAsStateWithLifecycle()
-    AddOrUpdateBillScreen(
-        isUpdate = isUpdate,
+    AddBillScreen(
         billInputState = billInputState,
         searchSupplier = searchSupplier,
         filterSupplierState = filterSupplierState,
@@ -108,19 +93,15 @@ fun AddOrUpdateBillScreen(
             viewModel.onSelectedItem(it)
             onUpdateBillItem()
         },
-        onRemoveBillItem = {
-            viewModel.removeItem(it)
-        },
+        onRemoveBillItem = { viewModel.removeItem(it) },
         onAddBill = { viewModel.updateStockThenAddBill() },
-        onUpdateBill = { },
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddOrUpdateBillScreen(
+fun AddBillScreen(
     modifier: Modifier = Modifier,
-    isUpdate: Boolean,
     billInputState: BillInputState,
     searchSupplier: String,
     filterSupplierState: SearchSupplierUiState,
@@ -130,9 +111,8 @@ fun AddOrUpdateBillScreen(
     onUpdateBillItem: (Item) -> Unit,
     onRemoveBillItem: (Item) -> Unit,
     onAddBill: () -> Unit,
-    onUpdateBill: () -> Unit,
 ) {
-    TrackScreenViewEvent(screenName = "AddOrUpdateBill")
+    TrackScreenViewEvent(screenName = "AddBill")
     val snackbarHostState = remember { SnackbarHostState() }
     var showIssueDateDialog by rememberSaveable { mutableStateOf(false) }
     var showDueDateDialog by rememberSaveable { mutableStateOf(false) }
@@ -142,21 +122,13 @@ fun AddOrUpdateBillScreen(
             billInputState.billNumberError = billInputState.billNumber.isEmpty()
             return
         }
-        if (isUpdate) {
-            onUpdateBill()
-        } else {
-            onAddBill()
-        }
+        onAddBill()
         onNavigateBack()
     }
     Scaffold(
         topBar = {
             PosTopAppBar(
-                titleRes = if (isUpdate) {
-                    R.string.feature_bill_update_bill_title_text
-                } else {
-                    R.string.feature_bill_add_bill_title_text
-                },
+                titleRes = R.string.feature_bill_add_bill_title_text,
                 navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = null,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -368,138 +340,12 @@ fun AddOrUpdateBillScreen(
     }
 }
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
-@Composable
-private fun BillItemsTotalSection(
-    subTotal: Double,
-    discount: String,
-    discountTypeCurrency: Boolean,
-    total: Double,
-    onDiscountChange: (String) -> Unit,
-    onDiscountTypeChange: () -> Unit,
-) {
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
-    ) {
-        val quarterWidth = maxWidth / 4
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = "SubTotal",
-                    modifier = Modifier.padding(start = quarterWidth),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Text(
-                    text = subTotal.toFormattedString(),
-
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                PosInputChip(
-                    selected = discountTypeCurrency,
-                    onSelectedChange = { onDiscountTypeChange() },
-                    modifier = Modifier
-                        .padding(start = quarterWidth)
-                        .align(Alignment.Bottom),
-                    selectedIcon = Icons.Rounded.CurrencyPound,
-                    unSelectedIcon = Icons.Rounded.Percent,
-                ) {
-                    if (discountTypeCurrency) {
-                        Text(stringResource(R.string.feature_bill_currency_discount_text))
-                    } else {
-                        Text(stringResource(R.string.feature_bill_percentage_discount_text))
-                    }
-                }
-                PosFilledTextField(
-                    value = discount,
-                    onValueChange = {
-                        onDiscountChange(it)
-                    },
-                    keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done,
-                    ),
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                        .weight(0.4f),
-                )
-            }
-            HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = "Total",
-                    modifier = Modifier.padding(start = quarterWidth),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                Text(
-                    text = total.toFormattedString(),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun BillLineItem(
-    modifier: Modifier = Modifier,
-    name: String,
-    quantity: Int,
-    costPrice: Double,
-    sku: String,
-    onRemoveItem: () -> Unit,
-    onClickItem: () -> Unit,
-) {
-    ListItem(
-        leadingContent = {
-            IconButton(onClick = onRemoveItem) {
-                Icon(
-                    imageVector = PosIcons.Close,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error,
-                )
-            }
-        },
-        headlineContent = {
-            Text(name)
-        },
-        trailingContent = {
-            Text(quantity.times(costPrice).toBigDecimal().toString())
-        },
-        supportingContent = {
-            Column {
-                Text("$quantity x ${costPrice.toBigDecimal()}")
-                Text("SKU: $sku")
-            }
-        },
-        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-        modifier = modifier.clickable(onClick = onClickItem),
-    )
-}
-
 @DevicePreviews
 @Composable
-fun AddOrUpdateBillScreenPreview() {
-    val billInputState = BillInputState()
+fun AddBillScreenPreview() {
     POSTheme {
-        AddOrUpdateBillScreen(
-            isUpdate = false,
-            billInputState = billInputState,
+        AddBillScreen(
+            billInputState = BillInputState(),
             searchSupplier = "",
             filterSupplierState = SearchSupplierUiState.EmptyQuery,
             onSearchSupplierChange = {},
@@ -508,7 +354,6 @@ fun AddOrUpdateBillScreenPreview() {
             onUpdateBillItem = {},
             onRemoveBillItem = {},
             onAddBill = {},
-            onUpdateBill = {},
         )
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.bill.detials
+package com.casecode.pos.feature.bill.creation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -13,33 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.bill.detials
+package com.casecode.pos.feature.bill.creation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CurrencyPound
+import androidx.compose.material.icons.rounded.Percent
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
+import com.casecode.pos.core.designsystem.component.PosFilledTextField
+import com.casecode.pos.core.designsystem.component.PosInputChip
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.SearchSupplierUiState
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun SupplierExposeDropdownMenuBox(
+internal fun SupplierExposeDropdownMenuBox(
     modifier: Modifier = Modifier,
     searchSupplierText: String,
     currentSupplier: String,
@@ -49,6 +72,7 @@ fun SupplierExposeDropdownMenuBox(
     clearSupplierSelection: () -> Unit,
     label: String,
     isError: Boolean = false,
+    readonly: Boolean = false,
 ) {
     val (allowExpanded, setExpanded) = remember { mutableStateOf(false) }
     val expanded = allowExpanded || filterSupplierState is SearchSupplierUiState.Success &&
@@ -62,7 +86,7 @@ fun SupplierExposeDropdownMenuBox(
             modifier
                 .menuAnchor(MenuAnchorType.PrimaryEditable)
                 .fillMaxWidth(),
-            readOnly = currentSupplier.isNotBlank(),
+            readOnly = readonly || currentSupplier.isNotBlank(),
             label = label,
             value = if (currentSupplier.isNotBlank()) currentSupplier else searchSupplierText,
             supportingText =
@@ -116,7 +140,129 @@ fun SupplierExposeDropdownMenuBox(
         }
     }
 }
+@SuppressLint("UnusedBoxWithConstraintsScope")
+@Composable
+internal fun BillItemsTotalSection(
+    subTotal: Double,
+    discount: String,
+    discountTypeCurrency: Boolean,
+    total: Double,
+    onDiscountChange: (String) -> Unit,
+    onDiscountTypeChange: () -> Unit,
+) {
+    BoxWithConstraints(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
+    ) {
+        val quarterWidth = maxWidth / 4
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = "SubTotal",
+                    modifier = Modifier.padding(start = quarterWidth),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Text(
+                    text = subTotal.toFormattedString(),
 
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                PosInputChip(
+                    selected = discountTypeCurrency,
+                    onSelectedChange = { onDiscountTypeChange() },
+                    modifier = Modifier
+                        .padding(start = quarterWidth)
+                        .align(Alignment.Bottom),
+                    selectedIcon = Icons.Rounded.CurrencyPound,
+                    unSelectedIcon = Icons.Rounded.Percent,
+                ) {
+                    if (discountTypeCurrency) {
+                        Text(stringResource(R.string.feature_bill_currency_discount_text))
+                    } else {
+                        Text(stringResource(R.string.feature_bill_percentage_discount_text))
+                    }
+                }
+                PosFilledTextField(
+                    value = discount,
+                    onValueChange = {
+                        onDiscountChange(it)
+                    },
+                    keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done,
+                        ),
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .weight(0.4f),
+                )
+            }
+            HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(R.string.feature_bill_total_text),
+                    modifier = Modifier.padding(start = quarterWidth),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Text(
+                    text = total.toFormattedString(),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BillLineItem(
+    modifier: Modifier = Modifier,
+    name: String,
+    quantity: Int,
+    costPrice: Double,
+    sku: String,
+    onRemoveItem: () -> Unit,
+    onClickItem: () -> Unit,
+) {
+    ListItem(
+        leadingContent = {
+            IconButton(onClick = onRemoveItem) {
+                Icon(
+                    imageVector = PosIcons.Close,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error,
+                )
+            }
+        },
+        headlineContent = {
+            Text(name)
+        },
+        trailingContent = {
+            Text(quantity.times(costPrice).toBigDecimal().toString())
+        },
+        supportingContent = {
+            Column {
+                Text("$quantity x ${costPrice.toBigDecimal()}")
+                Text("SKU: $sku")
+            }
+        },
+        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+        modifier = modifier.clickable(onClick = onClickItem),
+    )
+}
 @Preview
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
