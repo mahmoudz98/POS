@@ -24,9 +24,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Circle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +35,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -45,9 +46,9 @@ import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentMethod
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
+import com.casecode.pos.feature.bill.R
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.Instant
-import timber.log.Timber
 
 @Composable
 fun BillHistoryTap(
@@ -57,7 +58,6 @@ fun BillHistoryTap(
     createdBy: String,
     paymentDetails: List<PaymentDetails>,
 ) {
-    Timber.e("paymentDetails: $paymentDetails")
     Column(modifier.fillMaxSize().padding(16.dp)) {
         BillHistoryFirstLine(issueDate, createdBy, total)
         paymentDetails.forEachIndexed { index, paymentDetail ->
@@ -69,13 +69,20 @@ fun BillHistoryTap(
 @Composable
 private fun BillHistoryFirstLine(issueDate: Instant, createdBy: String, subTotal: Double) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Max),
     ) {
         Column(
             modifier = Modifier.fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Icon(imageVector = Icons.Rounded.AddCircle, contentDescription = null)
+            Icon(
+                imageVector = Icons.Rounded.Circle,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.surfaceVariant,
+                modifier = Modifier.size(16.dp),
+            )
             VerticalDivider(
                 modifier = Modifier
                     .width(1.dp)
@@ -84,7 +91,7 @@ private fun BillHistoryFirstLine(issueDate: Instant, createdBy: String, subTotal
         }
         Spacer(modifier = Modifier.width(8.dp))
         Column(Modifier.padding(bottom = 16.dp)) {
-            Text(text = "Bill Created for $subTotal")
+            Text(text = stringResource(R.string.feature_bill_history_created_for_text, subTotal))
             Text(
                 text = createdBy,
                 style = MaterialTheme.typography.bodySmall,
@@ -100,13 +107,20 @@ private fun BillHistoryFirstLine(issueDate: Instant, createdBy: String, subTotal
 @Composable
 private fun BillHistoryLine(isLastStep: Boolean, paymentDetails: PaymentDetails) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Max),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Max),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxHeight(),
         ) {
-            Icon(imageVector = Icons.Rounded.Circle, contentDescription = null)
+            Icon(
+                imageVector = Icons.Rounded.Circle,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.surfaceVariant,
+                modifier = Modifier.size(16.dp),
+            )
             if (!isLastStep) {
                 VerticalDivider(
                     modifier = Modifier
@@ -117,8 +131,12 @@ private fun BillHistoryLine(isLastStep: Boolean, paymentDetails: PaymentDetails)
         }
         Spacer(modifier = Modifier.width(8.dp))
         Column(Modifier.padding(bottom = 8.dp)) {
-            Text(text = "Payment of ${paymentDetails.amountPaid} made")
-            Timber.e("CreatedBy: ${paymentDetails.createdBy}")
+            Text(
+                text = stringResource(
+                    R.string.feature_bill_history_payment_of_made_text,
+                    paymentDetails.amountPaid,
+                ),
+            )
             Text(
                 text = paymentDetails.createdBy,
                 style = MaterialTheme.typography.bodySmall,

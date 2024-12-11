@@ -15,26 +15,30 @@
  */
 package com.casecode.pos.feature.bill.detials
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ListItem
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.data.utils.toFormattedDateString
 import com.casecode.pos.core.designsystem.component.PosBackground
+import com.casecode.pos.core.designsystem.component.PosEmptyScreen
+import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentMethod
@@ -48,85 +52,68 @@ import kotlinx.datetime.Clock
 
 @Composable
 fun BillPaymentTap(modifier: Modifier = Modifier, paymentDetails: List<PaymentDetails>) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-    ) {
+    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         if (paymentDetails.isEmpty()) {
-            BillPaymentEmpty(Modifier.align(Alignment.CenterHorizontally))
+            PosEmptyScreen(
+                icon = PosIcons.Payment,
+                titleRes = R.string.feature_bill_payment_empty_title,
+                messageRes = R.string.feature_bill_payment_empty_message,
+            )
         } else {
-            paymentDetails.forEach { payment ->
-                BillPaymentItem(paymentDetails = payment)
+            LazyColumn(
+                modifier = Modifier.heightIn(max = Short.MAX_VALUE.toInt().dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(paymentDetails) { payment ->
+                    BillPaymentItem(
+                        modifier.fillMaxWidth(),
+                        paymentDetails = payment,
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun BillPaymentEmpty(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+private fun BillPaymentItem(modifier: Modifier = Modifier, paymentDetails: PaymentDetails) {
+    Row(
+        modifier = modifier,
     ) {
-        Image(
-            painter = painterResource(
-                id = com.casecode.pos.core.ui.R.drawable.core_ui_ic_outline_inventory_120,
-            ),
-            contentDescription = null,
-            modifier = Modifier.size(120.dp),
-        )
-
-        Text(
-            text = stringResource(id = R.string.feature_bill_payment_empty_title),
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.Black,
-            modifier = Modifier.padding(top = 16.dp),
-        )
-
-        Text(
-            text = stringResource(id = R.string.feature_bill_payment_empty_message),
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.padding(top = 8.dp),
-        )
-    }
-}
-
-@Composable
-private fun BillPaymentItem(paymentDetails: PaymentDetails) {
-    ListItem(
-        headlineContent = {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = stringResource(R.string.feature_bill_tap_payment_text) + paymentDetails.paymentId,
+                text = stringResource(R.string.feature_bill_tap_payment_text) +
+                    paymentDetails.paymentId,
                 style = MaterialTheme.typography.bodyMedium,
             )
-        },
-        supportingContent = {
             Text(
                 text = paymentDetails.paymentDate.toFormattedDateString(),
                 style = MaterialTheme.typography.labelSmall,
+                color = Color.Gray,
             )
-        },
-        trailingContent = {
-            Column {
-                Text(
-                    text = paymentDetails.amountPaid.toBigDecimalFormatted(),
-                    style = MaterialTheme.typography.labelSmall,
-                )
-                Text(text = stringResource(toPaymentMethodRes(paymentDetails.paymentMethod)))
-            }
-        },
-    )
+        }
+        Column(
+            Modifier.width(IntrinsicSize.Max),
+        ) {
+            Text(
+                text = paymentDetails.amountPaid.toBigDecimalFormatted(),
+                style = MaterialTheme.typography.labelSmall,
+            )
+            Text(text = stringResource(toPaymentMethodRes(paymentDetails.paymentMethod)))
+        }
+    }
 }
 
 @DevicePreviews
 @Composable
 fun BillPaymentTapPreview(
-    @PreviewParameter(SupplierInvoiceParameterProvider::class) invoiceSupplier: List<SupplierInvoice>,
+    @PreviewParameter(SupplierInvoiceParameterProvider::class)
+    invoiceSupplier: List<SupplierInvoice>,
 ) {
     POSTheme {
-        BillPaymentTap(paymentDetails = invoiceSupplier[1].paymentDetails)
+        PosBackground {
+            BillPaymentTap(paymentDetails = invoiceSupplier[1].paymentDetails)
+        }
     }
 }
 
@@ -147,8 +134,12 @@ fun BillPaymentItemPreview() {
         paymentId = "1234567890",
         paymentDate = Clock.System.now(),
         createdBy = "John Doe",
-        paymentMethod = PaymentMethod.CASH,
+        paymentMethod = PaymentMethod.DIGITAL_PAYMENT,
         amountPaid = 123.45,
     )
-    BillPaymentItem(paymentDetails)
+    POSTheme {
+        PosBackground {
+            BillPaymentItem(paymentDetails = paymentDetails)
+        }
+    }
 }

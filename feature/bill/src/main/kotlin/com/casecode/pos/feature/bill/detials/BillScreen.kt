@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -34,7 +35,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosBackground
+import com.casecode.pos.core.designsystem.component.PosEmptyScreen
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
@@ -61,8 +62,7 @@ import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
 import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
-import com.casecode.pos.feature.bill.BillViewModel
-import com.casecode.pos.feature.bill.InvoiceSelectionUiState
+import com.casecode.pos.feature.bill.BillsViewModel
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentRes
 import com.casecode.pos.feature.bill.toPaymentStatusColor
@@ -71,15 +71,14 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BillScreen(
-    viewModel: BillViewModel = hiltViewModel(),
+    viewModel: BillsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onEditBill: () -> Unit,
+    onEditBill: (String) -> Unit,
     onPaymentClick: () -> Unit,
 ) {
     val uiState by viewModel.supplierInvoiceSelected.collectAsStateWithLifecycle()
-
     BillScreenContent(
-        invoiceSelectionUiState = uiState,
+        billUiState = uiState,
         onNavigateBack = onNavigateBack,
         onEditBill = onEditBill,
         onAddNewPaymentClick = onPaymentClick,
@@ -90,9 +89,9 @@ fun BillScreen(
 @Composable
 fun BillScreenContent(
     modifier: Modifier = Modifier,
-    invoiceSelectionUiState: InvoiceSelectionUiState,
+    billUiState: BillDetailUiState,
     onNavigateBack: () -> Unit,
-    onEditBill: () -> Unit,
+    onEditBill: (String) -> Unit,
     onAddNewPaymentClick: () -> Unit,
 ) {
     TrackScreenViewEvent(screenName = "Bill")
@@ -102,64 +101,76 @@ fun BillScreenContent(
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Scaffold(
-        topBar = {
-            PosTopAppBar(
-                titleRes = R.string.feature_bill_title_text,
-                navigationIcon = PosIcons.ArrowBack,
-                navigationIconContentDescription = null,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
-                action = {
-                    IconButton(onClick = onEditBill) {
-                        Icon(imageVector = PosIcons.Edit, contentDescription = null)
-                    }
-                },
-                onNavigationClick = onNavigateBack,
-                scrollBehavior = scrollBehavior,
-            )
-        },
-        floatingActionButton = {
-            if (invoiceSelectionUiState is InvoiceSelectionUiState.Success &&
-                pagerState.currentPage == InvoicePagerTab.PAYMENTS.ordinal &&
-                invoiceSelectionUiState.supplierInvoice.isPaid.not()
-            ) {
-                FloatingActionButton(onClick = onAddNewPaymentClick) {
-                    Icon(imageVector = PosIcons.Payment, contentDescription = null)
-                }
+    Box(
+        Modifier.fillMaxSize(),
+    ) {
+        when (billUiState) {
+            is BillDetailUiState.Loading -> {
+                PosLoadingWheel(
+                    contentDesc = "BillLoading",
+                    Modifier.align(Alignment.Center),
+                )
             }
-        },
-    ) { innerPadding ->
-        Box(
-            Modifier.fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            when (invoiceSelectionUiState) {
-                is InvoiceSelectionUiState.Loading -> {
-                    PosLoadingWheel(contentDesc = "BillLoading", Modifier.align(Alignment.Center))
-                }
 
-                is InvoiceSelectionUiState.Error -> {
-                }
+            is BillDetailUiState.Error, is BillDetailUiState.EmptySelection -> {
+                PosEmptyScreen(
+                    Modifier.align(Alignment.Center),
+                    icon = PosIcons.Payment,
+                    titleRes = R.string.feature_bill_selection_empty_title,
+                    messageRes = R.string.feature_bill_selection_empty_title,
+                )
+            }
 
-                is InvoiceSelectionUiState.EmptySelection -> {
-                }
-
-                is InvoiceSelectionUiState.Success -> {
+            is BillDetailUiState.Success -> {
+                Column {
+                    PosTopAppBar(
+                        titleRes = R.string.feature_bill_title_text,
+                        navigationIcon = PosIcons.ArrowBack,
+                        navigationIconContentDescription = null,
+                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = Color.Transparent,
+                        ),
+                        action = {
+                            IconButton(
+                                onClick = { onEditBill(billUiState.supplierInvoice.invoiceId) },
+                            ) {
+                                Icon(imageVector = PosIcons.Edit, contentDescription = null)
+                            }
+                        },
+                        onNavigationClick = onNavigateBack,
+                        scrollBehavior = scrollBehavior,
+                    )
                     LazyColumn(
                         modifier = modifier
                             .fillMaxSize()
                             .nestedScroll(scrollBehavior.nestedScrollConnection),
                         contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.Top,
                     ) {
                         item {
-                            BillHeader(invoiceSelectionUiState.supplierInvoice)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            BillTabs(pagerState, coroutineScope)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            BillPager(pagerState, invoiceSelectionUiState.supplierInvoice)
+                            BillHeader(billUiState.supplierInvoice)
                         }
+                        item {
+                            BillTabs(pagerState, coroutineScope)
+                        }
+                        item {
+                            BillPager(
+                                pagerState = pagerState,
+                                invoice = billUiState.supplierInvoice,
+                            )
+                        }
+                    }
+                }
+                if (pagerState.currentPage == InvoicePagerTab.PAYMENTS.ordinal &&
+                    billUiState.supplierInvoice.isPaid.not()
+                ) {
+                    FloatingActionButton(
+                        onClick = onAddNewPaymentClick,
+                        Modifier
+                            .padding(16.dp)
+                            .align(Alignment.BottomEnd),
+                    ) {
+                        Icon(imageVector = PosIcons.Payment, contentDescription = null)
                     }
                 }
             }
@@ -191,10 +202,13 @@ private fun BillHeader(invoice: SupplierInvoice) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BillTabs(pagerState: PagerState, coroutineScope: CoroutineScope) {
-    TabRow(selectedTabIndex = pagerState.currentPage) {
-        InvoicePagerTab.entries.forEach { tab ->
+    TabRow(
+        selectedTabIndex = pagerState.currentPage,
+    ) {
+        InvoicePagerTab.entries.forEachIndexed { index, tab ->
             Tab(
                 selected = pagerState.currentPage == tab.ordinal,
                 onClick = {
@@ -209,9 +223,13 @@ private fun BillTabs(pagerState: PagerState, coroutineScope: CoroutineScope) {
 }
 
 @Composable
-private fun BillPager(pagerState: PagerState, invoice: SupplierInvoice) {
+private fun BillPager(
+    modifier: Modifier = Modifier,
+    pagerState: PagerState,
+    invoice: SupplierInvoice,
+) {
     HorizontalPager(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.wrapContentSize(),
         state = pagerState,
     ) { page ->
         when (InvoicePagerTab.entries[page]) {
@@ -242,7 +260,7 @@ fun BillScreenPreview(
     POSTheme {
         PosBackground {
             BillScreenContent(
-                invoiceSelectionUiState = InvoiceSelectionUiState.Success(bills[0]),
+                billUiState = BillDetailUiState.Success(bills[0]),
                 onNavigateBack = {},
                 onEditBill = {},
                 onAddNewPaymentClick = {},

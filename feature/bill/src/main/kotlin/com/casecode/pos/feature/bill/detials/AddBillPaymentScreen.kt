@@ -55,8 +55,7 @@ import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentMethod
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
-import com.casecode.pos.feature.bill.BillViewModel
-import com.casecode.pos.feature.bill.InvoiceSelectionUiState
+import com.casecode.pos.feature.bill.BillsViewModel
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentMethodRes
 import kotlinx.datetime.Clock
@@ -64,26 +63,31 @@ import kotlinx.datetime.Instant
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun AddBillPaymentScreen(viewModel: BillViewModel = hiltViewModel(), onNavigateBack: () -> Unit) {
-    val invoice by viewModel.supplierInvoiceSelected.collectAsStateWithLifecycle()
-    if (invoice is InvoiceSelectionUiState.Success) {
-        AddBillPaymentScreen(
-            invoiceSelectionUiState = (invoice as InvoiceSelectionUiState.Success).supplierInvoice,
-            onNavigateBack = onNavigateBack,
-            onAddPaymentDetails = { viewModel.addPaymentDetails(it) },
-        )
-    }
+internal fun AddBillPaymentScreen(
+    viewModel: BillsViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
+) {
+    val uiState by viewModel.supplierInvoiceSelected.collectAsStateWithLifecycle()
+    AddBillPaymentScreen(
+        uiState = uiState,
+        onNavigateBack = onNavigateBack,
+        onAddPaymentDetails = { viewModel.addPaymentDetails(it) },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddBillPaymentScreen(
-    invoiceSelectionUiState: SupplierInvoice,
+internal fun AddBillPaymentScreen(
+    uiState: BillDetailUiState,
     onNavigateBack: () -> Unit,
     onAddPaymentDetails: (PaymentDetails) -> Unit,
 ) {
     val restDue =
-        invoiceSelectionUiState.totalAmount - invoiceSelectionUiState.paymentDetails.sumOf { it.amountPaid }
+        (uiState as? BillDetailUiState.Success)?.supplierInvoice?.totalAmount ?: 0.0.minus(
+            (uiState as? BillDetailUiState.Success)?.supplierInvoice?.paymentDetails?.sumOf {
+                it.amountPaid
+            } ?: 0.0,
+        )
     var amountPaid by remember { mutableStateOf(restDue.toBigDecimalFormatted()) }
     var date by remember { mutableStateOf(Clock.System.now()) }
     var paymentModeSelected by remember { mutableStateOf(PaymentMethod.CASH) }
@@ -118,81 +122,89 @@ fun AddBillPaymentScreen(
             )
         },
     ) { innerPadding ->
-        Column(Modifier.padding(innerPadding).padding(16.dp)) {
-            PosOutlinedTextField(
-                value = invoiceSelectionUiState.supplierName,
-                onValueChange = {},
-                label = stringResource(R.string.feature_bill_payment_supplier_hint),
-                readOnly = true,
-                modifier =
-                Modifier
-                    .fillMaxWidth(),
-            )
-            PosOutlinedTextField(
-                value = amountPaid,
-                onValueChange = { amountPaid = it },
-                label = stringResource(R.string.feature_bill_payment_made_text),
-                keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next,
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            PosOutlinedTextField(
-                value = date.toFormattedDateString(),
-                onValueChange = {},
-                label = stringResource(R.string.feature_bill_payment_date_hint),
-                readOnly = true,
-                trailingIcon = {
-                    Icon(
-                        imageVector = PosIcons.Calender,
-                        modifier = Modifier.clickable(
-                            onClick = {
-                                showDateDialog = true
-                            },
-                        ),
-                        contentDescription = null,
+        when (uiState) {
+            is BillDetailUiState.Success -> {
+                Column(Modifier.padding(innerPadding).padding(16.dp)) {
+                    PosOutlinedTextField(
+                        value = uiState.supplierInvoice.supplierName,
+                        onValueChange = {},
+                        label = stringResource(R.string.feature_bill_payment_supplier_hint),
+                        readOnly = true,
+                        modifier =
+                        Modifier
+                            .fillMaxWidth(),
                     )
-                },
-                modifier = Modifier
-                    .fillMaxWidth(),
-            )
-            var paymentModeExpended by remember { mutableStateOf(false) }
-            ExposedDropdownMenuBox(
-                expanded = paymentModeExpended,
-                onExpandedChange = { paymentModeExpended = !paymentModeExpended },
-            ) {
-                PosOutlinedTextField(
-                    value = stringResource(toPaymentMethodRes(paymentModeSelected)),
-                    onValueChange = {},
-                    readOnly = true,
-                    label = stringResource(R.string.feature_bill_payment_method_hint),
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(
-                            expanded = paymentModeExpended,
-                        )
-                    },
-                    modifier =
-                    Modifier
-                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
-                        .fillMaxWidth(),
-                )
-                ExposedDropdownMenu(
-                    expanded = paymentModeExpended,
-                    onDismissRequest = { paymentModeExpended = false },
-                ) {
-                    PaymentMethod.entries.forEach { payment ->
-                        DropdownMenuItem(
-                            text = { Text(stringResource(toPaymentMethodRes(payment))) },
-                            onClick = {
-                                paymentModeSelected = payment
-                                paymentModeExpended = false
+                    PosOutlinedTextField(
+                        value = amountPaid,
+                        onValueChange = { amountPaid = it },
+                        label = stringResource(R.string.feature_bill_payment_made_text),
+                        keyboardOptions =
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next,
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    PosOutlinedTextField(
+                        value = date.toFormattedDateString(),
+                        onValueChange = {},
+                        label = stringResource(R.string.feature_bill_payment_date_hint),
+                        readOnly = true,
+                        trailingIcon = {
+                            Icon(
+                                imageVector = PosIcons.Calender,
+                                modifier = Modifier.clickable(
+                                    onClick = {
+                                        showDateDialog = true
+                                    },
+                                ),
+                                contentDescription = null,
+                            )
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                    var paymentModeExpended by remember { mutableStateOf(false) }
+                    ExposedDropdownMenuBox(
+                        expanded = paymentModeExpended,
+                        onExpandedChange = { paymentModeExpended = !paymentModeExpended },
+                    ) {
+                        PosOutlinedTextField(
+                            value = stringResource(toPaymentMethodRes(paymentModeSelected)),
+                            onValueChange = {},
+                            readOnly = true,
+                            label = stringResource(R.string.feature_bill_payment_method_hint),
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(
+                                    expanded = paymentModeExpended,
+                                )
                             },
+                            modifier =
+                            Modifier
+                                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                                .fillMaxWidth(),
                         )
+                        ExposedDropdownMenu(
+                            expanded = paymentModeExpended,
+                            onDismissRequest = { paymentModeExpended = false },
+                        ) {
+                            PaymentMethod.entries.forEach { payment ->
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(toPaymentMethodRes(payment))) },
+                                    onClick = {
+                                        paymentModeSelected = payment
+                                        paymentModeExpended = false
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
             }
+
+            is BillDetailUiState.Error -> {}
+            is BillDetailUiState.Loading -> {}
+            is BillDetailUiState.EmptySelection -> {}
         }
     }
     if (showDateDialog) {
@@ -220,7 +232,7 @@ fun AddBillPaymentScreenPreview() {
     POSTheme {
         PosBackground {
             AddBillPaymentScreen(
-                invoiceSelectionUiState = supplierInvoice,
+                uiState = BillDetailUiState.Success(supplierInvoice),
                 onNavigateBack = {},
                 onAddPaymentDetails = {},
             )
