@@ -83,6 +83,34 @@ class SupplierInvoiceRepositoryImpl
         emit(Resource.Error(R.string.core_data_error_fetching_supplier_invoices))
     }.flowOn(ioDispatcher)
 
+    override suspend fun getInvoiceDetails(invoiceId: String): Resource<SupplierInvoice> {
+        return withContext(ioDispatcher) {
+            try {
+                auth.ensureUserExistsOrReturnError<SupplierInvoice> {
+                    return@withContext it
+                }
+                val uid = auth.currentUserId()
+                suspendCoroutine<Resource<SupplierInvoice>> { continuation ->
+                    db.getOrAddDocumentInChild(
+                        collectionParent = USERS_COLLECTION_PATH,
+                        documentId = uid,
+                        collectionChild = SUPPLIER_INVOICES_COLLECTION_PATH,
+                        nameNewDocument = invoiceId,
+                    ).get().addOnSuccessListener {
+                        continuation.resume(Resource.Success(it.data!!.asDomainModel()))
+                    }.addOnFailureListener {
+                        continuation.resume(
+                            Resource.error(R.string.core_data_error_fetching_supplier_invoices),
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                Resource.error(R.string.core_data_error_fetching_supplier_invoices)
+            }
+        }
+    }
+
     override suspend fun addInvoice(invoice: SupplierInvoice): OperationResult {
         return withContext(ioDispatcher) {
             try {

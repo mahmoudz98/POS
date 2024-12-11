@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface SupplierInvoiceRepository {
     fun getInvoices(): Flow<Resource<List<SupplierInvoice>>>
+    suspend fun getInvoiceDetails(invoiceId: String): Resource<SupplierInvoice>
     suspend fun addInvoice(invoice: SupplierInvoice): OperationResult
     suspend fun updateInvoice(invoice: SupplierInvoice): OperationResult
     suspend fun addPaymentDetails(
