@@ -29,7 +29,7 @@
     <string name="feature_bill_rest_due_text">Rest due</string>
     <string name="feature_bill_tap_payment_title_text">Payments</string>
     <string name="feature_bill_payment_made_text">Payment made</string>
-    <string name="feature_bill_tap_payment_text">Payment</string>
+    <string name="feature_bill_tap_payment_text">Payment #</string>
     <string name="feature_bill_add_payment_title">Record payment</string>
     <string name="feature_bill_payment_supplier_hint">Supplier name</string>
     <string name="feature_bill_payment_date_hint">Payment date</string>
@@ -39,7 +39,11 @@
     <string name="feature_bill_payment_method_digital">Digital payment</string>
     <string name="feature_bill_payment_empty_title">No payment made in this bill</string>
     <string name="feature_bill_payment_empty_message">Add record payment to manage bill.</string>
-
+    <string name="feature_bill_selection_empty_title">No bill found</string>
+    <string name="feature_bill_empty_selection_message">Try again select bill.</string>
+    <string name="feature_bill_history_created_for_text">Bill Created for %1$s</string>
+    <string name="feature_bill_history_payment_of_made_text">Payment of %1$s made</string>
+    <string name="feature_bill_history_payment_created_by_text">CreatedBy: %1$s</string>
     <!--creation bill -->
     <string name="feature_bill_add_bill_title_text">Add bill</string>
     <string name="feature_bill_update_bill_title_text">Update bill</string>
@@ -72,6 +76,7 @@
     <string name="feature_bill_search_items_empty_result_message">No Items Found</string>
     <string name="feature_bill_search_items_failed_message">Failed to load items</string>
     <string name="feature_bill_minus_text" translatable="false">(-) \u0020</string>
+
 
 
 </resources>

@@ -29,7 +29,7 @@
     <string name="feature_bill_total_text">الإجمالي</string>
     <string name="feature_bill_payment_made_text">المدفوع</string>
     <string name="feature_bill_rest_due_text">المتبقي</string>
-    <string name="feature_bill_tap_payment_text">الدفع</string>
+    <string name="feature_bill_tap_payment_text">الدفع #</string>
     <string name="feature_bill_add_payment_title">تسجيل الدفع</string>
     <string name="feature_bill_payment_supplier_hint">اسم المورد</string>
     <string name="feature_bill_payment_date_hint">تاريخ الدفع</string>
@@ -39,7 +39,11 @@
     <string name="feature_bill_payment_method_digital">دفع رقمي</string>
     <string name="feature_bill_payment_empty_title">لم يتم إجراء أي دفعات في هذه الفاتورة</string>
     <string name="feature_bill_payment_empty_message">أضف تسجيل الدفع لإدارة الفاتورة.</string>
-
+    <string name="feature_bill_selection_empty_title">لم يتم العثور على فاتورة</string>
+    <string name="feature_bill_empty_selection_message">حاول تحديد الفاتورة مرة أخرى.</string>
+    <string name="feature_bill_history_created_for_text">تم إنشاء فاتورة لـ %1$s</string>
+    <string name="feature_bill_history_payment_of_made_text">تم دفع %1$s</string>
+    <string name="feature_bill_history_payment_created_by_text">تم الإنشاء بواسطة: %1$s</string>
     <!-- creation bill -->
     <string name="feature_bill_add_bill_title_text">إضافة فاتورة</string>
     <string name="feature_bill_update_bill_title_text">تحديث الفاتورة</string>
