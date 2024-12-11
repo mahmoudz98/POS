@@ -17,12 +17,15 @@ package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.repository.SupplierInvoiceRepository
 import com.casecode.pos.core.domain.utils.OperationResult
+import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
+import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import javax.inject.Inject
 
 /**
  * Use case for retrieving all supplier invoices.
@@ -36,6 +39,21 @@ class GetSupplierInvoicesUseCase @Inject constructor(
     private val supplierInvoiceRepository: SupplierInvoiceRepository,
 ) {
     operator fun invoke() = supplierInvoiceRepository.getInvoices()
+}
+
+class GetSupplierInvoiceDetailsUseCase @Inject constructor(
+    private val supplierInvoiceRepo: SupplierInvoiceRepository,
+) {
+    operator fun invoke(id: String?): Flow<Resource<SupplierInvoice>> {
+        return flow {
+            emit(Resource.loading())
+            if (id.isNullOrEmpty()) {
+                emit(Resource.empty())
+            } else {
+                emit(supplierInvoiceRepo.getInvoiceDetails(id))
+            }
+        }
+    }
 }
 
 /**
@@ -96,6 +114,7 @@ class AddPaymentDetailsUseCase @Inject constructor(
             paymentStatus,
         )
     }
+
     private fun determinePaymentStatus(
         totalAmount: Double,
         totalPaid: Double,
