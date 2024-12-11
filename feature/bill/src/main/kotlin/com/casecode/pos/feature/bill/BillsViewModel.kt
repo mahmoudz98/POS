@@ -25,29 +25,24 @@ import com.casecode.pos.core.domain.usecase.UpdateSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.PaymentDetails
-import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.ui.stateInWhileSubscribed
+import com.casecode.pos.feature.bill.detials.BillDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-sealed interface InvoiceSelectionUiState {
-    data object Loading : InvoiceSelectionUiState
-    data object Error : InvoiceSelectionUiState
-    data object EmptySelection : InvoiceSelectionUiState
-    data class Success(val supplierInvoice: SupplierInvoice) : InvoiceSelectionUiState
-}
-
 @HiltViewModel
-class BillViewModel @Inject constructor(
+class BillsViewModel @Inject constructor(
     networkMonitor: NetworkMonitor,
     getSupplierInvoicesUseCase: GetSupplierInvoicesUseCase,
     private val updateSupplierInvoiceUseCase: UpdateSupplierInvoiceUseCase,
@@ -58,59 +53,69 @@ class BillViewModel @Inject constructor(
     private val _userMessage = MutableStateFlow<Int?>(null)
     val userMessage = _userMessage.asStateFlow()
     val billsUiState: StateFlow<BillsUiState> =
-        getSupplierInvoicesUseCase().flatMapLatest { result ->
+        getSupplierInvoicesUseCase().map { result ->
             when (result) {
-                is Resource.Loading -> flowOf(BillsUiState.Loading)
+                is Resource.Loading -> BillsUiState.Loading
                 is Resource.Error -> {
                     showSnackbarMessage(result.message as Int)
-                    flowOf(BillsUiState.Error)
+                    BillsUiState.Error
                 }
 
                 is Resource.Empty -> {
-                    flowOf(BillsUiState.Empty)
+                    BillsUiState.Empty
                 }
 
                 is Resource.Success -> {
-                    flowOf(BillsUiState.Success(result.data.associateBy { it.invoiceId }))
+                    BillsUiState.Success(result.data.associateBy { it.invoiceId })
                 }
             }
-        }
-            .stateInWhileSubscribed(BillsUiState.Loading)
-    private val selectedInvoiceId = MutableStateFlow<String?>(null)
-
-    val supplierInvoiceSelected: StateFlow<InvoiceSelectionUiState> =
-        selectedInvoiceId.flatMapLatest { invoiceId ->
-            if (invoiceId.isNullOrEmpty()) {
-                flowOf(InvoiceSelectionUiState.EmptySelection)
-            } else {
-                billsUiState.map { uiState ->
-                    when {
-                        uiState is BillsUiState.Loading -> InvoiceSelectionUiState.Loading
-                        uiState is BillsUiState.Error -> InvoiceSelectionUiState.Error
-                        uiState is BillsUiState.Empty -> InvoiceSelectionUiState.EmptySelection
-                        uiState is BillsUiState.Success && invoiceId in uiState.supplierInvoices -> {
-                            InvoiceSelectionUiState.Loading
-                            delay(400)
-                            InvoiceSelectionUiState.Success(uiState.supplierInvoices[invoiceId]!!)
+        }.stateInWhileSubscribed(BillsUiState.Loading)
+    private val selectedBillId = savedStateHandle.getStateFlow(
+        key = SELECTED_BILL_ID_KEY,
+        initialValue = "",
+    )
+    val supplierInvoiceSelected: StateFlow<BillDetailUiState> =
+        selectedBillId
+            .flatMapLatest { invoiceId ->
+                Timber.e("InvoiceId: $invoiceId")
+                if (invoiceId.isEmpty()) {
+                    flowOf(BillDetailUiState.EmptySelection)
+                } else {
+                    billsUiState.flatMapLatest { uiState ->
+                        when (uiState) {
+                            is BillsUiState.Loading -> flowOf(BillDetailUiState.Loading)
+                            is BillsUiState.Error -> flowOf(BillDetailUiState.Error)
+                            is BillsUiState.Empty -> flowOf(BillDetailUiState.EmptySelection)
+                            is BillsUiState.Success -> {
+                                val selectedInvoice = uiState.supplierInvoices[invoiceId]
+                                if (selectedInvoice != null) {
+                                    flow {
+                                        emit(BillDetailUiState.Loading)
+                                        delay(400)
+                                        emit(BillDetailUiState.Success(selectedInvoice))
+                                    }
+                                } else {
+                                    flowOf(BillDetailUiState.Error)
+                                }
+                            }
+                            else -> flowOf(BillDetailUiState.Error)
                         }
-                        else -> InvoiceSelectionUiState.Error
                     }
                 }
-            }
-        }
-            .stateInWhileSubscribed(InvoiceSelectionUiState.Loading)
+            }.stateInWhileSubscribed(BillDetailUiState.Loading)
 
     fun onSupplierInvoiceIdSelected(invoiceId: String) {
-        selectedInvoiceId.value = invoiceId
+        savedStateHandle[SELECTED_BILL_ID_KEY] = invoiceId
     }
+
 
     fun addPaymentDetails(paymentDetails: PaymentDetails) {
         viewModelScope.launch {
-            if (supplierInvoiceSelected.value is InvoiceSelectionUiState.Success) {
+            if (supplierInvoiceSelected.value is BillDetailUiState.Success) {
                 val result = addPaymentDetailsUseCase(
                     (
                         supplierInvoiceSelected
-                            .value as InvoiceSelectionUiState.Success
+                            .value as BillDetailUiState.Success
                         ).supplierInvoice,
                     paymentDetails,
                 )
@@ -134,3 +139,4 @@ class BillViewModel @Inject constructor(
         _userMessage.value = null
     }
 }
+private const val SELECTED_BILL_ID_KEY = "selectedBillId"
