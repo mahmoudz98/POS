@@ -57,6 +57,16 @@ class TestSupplierInvoicesRepository @Inject constructor() :
     override fun getInvoices(): Flow<Resource<List<SupplierInvoice>>> =
         resourcesSupplierInvoicesFlow
 
+    override suspend fun getInvoiceDetails(invoiceId: String): Resource<SupplierInvoice> {
+        if(shouldReturnError){
+            return Resource.error(stringData.core_data_error_fetching_supplier_invoices)
+        }
+        val invoice = supplierInvoicesTest.find { it.invoiceId == invoiceId }
+        return if (invoice != null) {
+            Resource.success(invoice)
+        } else Resource.empty()
+    }
+
     override suspend fun addInvoice(invoice: SupplierInvoice): OperationResult {
         if (shouldReturnError) {
             return OperationResult.Failure(
