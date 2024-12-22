@@ -39,40 +39,37 @@ class ReportsViewModelTest : BaseTest() {
     }
 
     @Test
-    fun fetchInvoices_whenHasInvoices_shouldReturnInvoices() =
-        runTest {
-            val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
-            val expected = invoicesTestData
-            viewModel.fetchInvoices()
+    fun fetchInvoices_whenHasInvoices_shouldReturnInvoices() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+        val expected = invoicesTestData
+        viewModel.fetchInvoices()
 
-            val actual = viewModel.uiState.value.invoices
+        val actual = viewModel.uiState.value.invoices
 
-            assertSame(actual, expected)
-            collectJob.cancel()
-        }
-
-    @Test
-    fun fetchInvoices_whenError_returnErrorMessage() =
-        runTest {
-            val collectJob = launch { viewModel.uiState.collect() }
-            invoiceRepository.setReturnError(true)
-            viewModel.fetchInvoices()
-
-            assertEquals(
-                viewModel.uiState.value.userMessage,
-                R.string.core_data_get_invoice_failure,
-            )
-            collectJob.cancel()
-        }
+        assertSame(actual, expected)
+        collectJob.cancel()
+    }
 
     @Test
-    fun fetchInvoices_whenEmpty_returnEmpty() =
-        runTest {
-            val collectJob = launch { viewModel.uiState.collect() }
-            invoiceRepository.setReturnEmpty(true)
-            viewModel.fetchInvoices()
+    fun fetchInvoices_whenError_returnErrorMessage() = runTest {
+        val collectJob = launch { viewModel.uiState.collect() }
+        invoiceRepository.setReturnError(true)
+        viewModel.fetchInvoices()
 
-            assertTrue(viewModel.uiState.value.isEmpty)
-            collectJob.cancel()
-        }
+        assertEquals(
+            viewModel.uiState.value.userMessage,
+            R.string.core_data_get_invoice_failure,
+        )
+        collectJob.cancel()
+    }
+
+    @Test
+    fun fetchInvoices_whenEmpty_returnEmpty() = runTest {
+        val collectJob = launch { viewModel.uiState.collect() }
+        invoiceRepository.setReturnEmpty(true)
+        viewModel.fetchInvoices()
+
+        assertTrue(viewModel.uiState.value.isEmpty)
+        collectJob.cancel()
+    }
 }
