@@ -44,8 +44,7 @@ fun PosDatePickerDialog(
             currentSelectedDate,
             selectableDates =
             object : SelectableDates {
-                override fun isSelectableDate(utcTimeMillis: Long): Boolean =
-                    isSelectableDate(utcTimeMillis)
+                override fun isSelectableDate(utcTimeMillis: Long): Boolean = isSelectableDate(utcTimeMillis)
             },
         )
 
