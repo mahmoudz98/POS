@@ -44,7 +44,7 @@ constructor(
      * @return A [UploadImage] resource containing the URL of the uploaded image.
      */
     fun uploadImage(bitmap: Bitmap?, imageName: String?) = flow {
-        emit(Resource.Companion.loading())
+        emit(Resource.loading())
         emit(
             if (bitmap != null && imageName != null) {
                 imageRepository.uploadImage(bitmap, imageName)
@@ -72,7 +72,7 @@ constructor(
      * @return A [ReplaceImage] resource containing the URL of the replaced image.
      */
     private fun replaceImage(bitmap: Bitmap?, imageUrl: String?) = flow {
-        emit(Resource.Companion.loading())
+        emit(Resource.loading())
         emit(
             if (bitmap != null && imageUrl != null) {
                 imageRepository.replaceImage(bitmap, imageUrl)
@@ -88,11 +88,11 @@ constructor(
      * @param imageUrl The URL of the image to be deleted.
      * @return A [DeleteImage] resource indicating the success or failure of the deletion operation.
      */
-     fun deleteImage(imageUrl: String?) = flow {
-        emit(Resource.Companion.loading())
+    fun deleteImage(imageUrl: String?) = flow {
+        emit(Resource.loading())
         emit(
             if (imageUrl.isNullOrEmpty()) {
-                Resource.Companion.empty()
+                Resource.empty()
             } else {
                 imageRepository.deleteImage(imageUrl)
             },
