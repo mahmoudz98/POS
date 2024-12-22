@@ -30,5 +30,4 @@ fun NavGraphBuilder.profileScreen(onBackClick: () -> Unit) {
     }
 }
 
-fun NavController.navigateToProfile(navOptions: NavOptions? = null) =
-    navigate(ProfileRoute, navOptions)
+fun NavController.navigateToProfile(navOptions: NavOptions? = null) = navigate(ProfileRoute, navOptions)
