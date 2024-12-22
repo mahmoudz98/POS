@@ -49,47 +49,45 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
     @Binds
-    internal abstract fun bindAccountRepository(impl: AccountRepositoryImpl): AccountRepository
+    abstract fun bindAccountRepository(impl: AccountRepositoryImpl): AccountRepository
 
     @Binds
-    internal abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
-    internal abstract fun bindBusinessRepo(impl: BusinessRepositoryImpl): BusinessRepository
+    abstract fun bindBusinessRepo(impl: BusinessRepositoryImpl): BusinessRepository
 
     @Binds
-    internal abstract fun bindEmployeesBusinessRepo(
+    abstract fun bindEmployeesBusinessRepo(
         impl: EmployeesBusinessRepositoryImpl,
     ): EmployeesBusinessRepository
 
     @Binds
-    internal abstract fun bindSubscriptionsBusinessRepo(
+    abstract fun bindSubscriptionsBusinessRepo(
         impl: SubscriptionsBusinessRepositoryImpl,
     ): SubscriptionsBusinessRepository
 
     @Binds
-    internal abstract fun bindSubscriptionsRepo(
-        impl: SubscriptionsRepositoryImpl,
-    ): SubscriptionsRepository
+    abstract fun bindSubscriptionsRepo(impl: SubscriptionsRepositoryImpl): SubscriptionsRepository
 
     @Singleton
     @Binds
-    internal abstract fun bindItemRepo(impl: ItemRepositoryImpl): ItemRepository
+    abstract fun bindItemRepo(impl: ItemRepositoryImpl): ItemRepository
 
     @Binds
-    internal abstract fun bindImageRepo(impl: ItemImageRepositoryImpl): ItemImageRepository
+    abstract fun bindImageRepo(impl: ItemImageRepositoryImpl): ItemImageRepository
 
     @Binds
-    internal abstract fun bindInvoiceRepo(impl: InvoiceRepositoryImpl): InvoiceRepository
+    abstract fun bindInvoiceRepo(impl: InvoiceRepositoryImpl): InvoiceRepository
 
     @Binds
-    internal abstract fun bindPrinterRepo(impl: PrinterRepositoryImpl): PrinterRepository
+    abstract fun bindPrinterRepo(impl: PrinterRepositoryImpl): PrinterRepository
 
     @Binds
-    internal abstract fun bindSupplierRepo(impl: SupplierRepositoryImpl): SupplierRepository
+    abstract fun bindSupplierRepo(impl: SupplierRepositoryImpl): SupplierRepository
 
     @Binds
-    internal abstract fun bindSupplierInvoiceRepo(
+    abstract fun bindSupplierInvoiceRepo(
         impl: SupplierInvoiceRepositoryImpl,
     ): SupplierInvoiceRepository
 }

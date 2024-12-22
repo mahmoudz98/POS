@@ -44,22 +44,22 @@ import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import kotlinx.datetime.Instant
 
-internal fun asExternalMapper(docId: String, invoice: SupplierInvoice): Map<String?, Any> = mapOf(
-    SUPPLIER_INVOICE_ID_FIELD to docId,
-    SUPPLIER_INVOICE_BILL_NUMBER_FIELD to invoice.billNumber,
-    SUPPLIER_INVOICE_SUPPLIER_ID_FIELD to invoice.supplierName,
-    SUPPLIER_INVOICE_ISSUE_DATE_FIELD to invoice.issueDate.toEpochMilliseconds(),
-    SUPPLIER_INVOICE_DUE_DATE_FIELD to invoice.dueDate.toEpochMilliseconds(),
-    SUPPLIER_INVOICE_CREATED_BY_FIELD to invoice.createdBy,
-    SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD to invoice.totalAmount,
-    SUPPLIER_INVOICE_DISCOUNT_TYPE_FIELD to invoice.discountType.name,
-    SUPPLIER_INVOICE_AMOUNT_DISCOUNTED_FIELD to invoice.amountDiscounted,
-    SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to invoice.paymentStatus.name,
-    SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD to invoice.paymentDetails
+internal fun SupplierInvoice.asExternalMapper(): Map<String?, Any> = mapOf(
+    SUPPLIER_INVOICE_ID_FIELD to this.invoiceId,
+    SUPPLIER_INVOICE_BILL_NUMBER_FIELD to this.billNumber,
+    SUPPLIER_INVOICE_SUPPLIER_ID_FIELD to this.supplierName,
+    SUPPLIER_INVOICE_ISSUE_DATE_FIELD to this.issueDate.toEpochMilliseconds(),
+    SUPPLIER_INVOICE_DUE_DATE_FIELD to this.dueDate.toEpochMilliseconds(),
+    SUPPLIER_INVOICE_CREATED_BY_FIELD to this.createdBy,
+    SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD to this.totalAmount,
+    SUPPLIER_INVOICE_DISCOUNT_TYPE_FIELD to this.discountType.name,
+    SUPPLIER_INVOICE_AMOUNT_DISCOUNTED_FIELD to this.amountDiscounted,
+    SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD to this.paymentStatus.name,
+    SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD to this.paymentDetails
         .map { payment ->
             payment.asExternalMapper()
         },
-    SUPPLIER_INVOICE_ITEMS_FIELD to invoice.invoiceItems.map { item ->
+    SUPPLIER_INVOICE_ITEMS_FIELD to this.invoiceItems.map { item ->
         item.asExternalMapper()
     },
 )

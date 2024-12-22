@@ -30,6 +30,7 @@ import com.casecode.pos.core.firebase.services.FirestoreService
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICES_COLLECTION_PATH
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD
 import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD
+import com.casecode.pos.core.firebase.services.SetOptions
 import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentStatus
@@ -37,10 +38,12 @@ import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.google.firebase.firestore.FieldValue
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.net.UnknownHostException
@@ -83,33 +86,30 @@ class SupplierInvoiceRepositoryImpl
         emit(Resource.Error(R.string.core_data_error_fetching_supplier_invoices))
     }.flowOn(ioDispatcher)
 
-    override suspend fun getInvoiceDetails(invoiceId: String): Resource<SupplierInvoice> {
-        return withContext(ioDispatcher) {
-            try {
-                auth.ensureUserExistsOrReturnError<SupplierInvoice> {
-                    return@withContext it
-                }
-                val uid = auth.currentUserId()
-                suspendCoroutine<Resource<SupplierInvoice>> { continuation ->
-                    db.getOrAddDocumentInChild(
-                        collectionParent = USERS_COLLECTION_PATH,
-                        documentId = uid,
-                        collectionChild = SUPPLIER_INVOICES_COLLECTION_PATH,
-                        nameNewDocument = invoiceId,
-                    ).get().addOnSuccessListener {
-                        continuation.resume(Resource.Success(it.data!!.asDomainModel()))
-                    }.addOnFailureListener {
-                        continuation.resume(
-                            Resource.error(R.string.core_data_error_fetching_supplier_invoices),
-                        )
-                    }
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-                Resource.error(R.string.core_data_error_fetching_supplier_invoices)
-            }
+    override fun getInvoiceDetails(invoiceId: String): Flow<Resource<SupplierInvoice>> = flow {
+        auth.ensureUserExistsOrReturnError<SupplierInvoice> {
+            emit(it)
+            return@flow
         }
-    }
+        val uid = auth.currentUserId()
+        db.getDocumentInChild(
+            collectionParent = USERS_COLLECTION_PATH,
+            documentId = uid,
+            collectionChild = SUPPLIER_INVOICES_COLLECTION_PATH,
+            nameNewDocument = invoiceId,
+        ).map { documentResult ->
+            documentResult.data?.let {
+                Resource.Success(it.asDomainModel())
+            } ?: Resource.empty()
+        }.collect {
+            emit(Resource.Loading)
+            delay(300)
+            emit(it)
+        }
+    }.catch {
+        Timber.e("Error: ${it.message}")
+        emit(Resource.error(R.string.core_data_error_fetching_supplier_invoices))
+    }.flowOn(ioDispatcher)
 
     override suspend fun addInvoice(invoice: SupplierInvoice): OperationResult {
         return withContext(ioDispatcher) {
@@ -128,7 +128,7 @@ class SupplierInvoiceRepositoryImpl
                             SUPPLIER_INVOICES_COLLECTION_PATH,
                         )
                     doc.set(
-                        asExternalMapper(doc.id, invoiceUpdated),
+                        invoiceUpdated.copy(invoiceId = doc.id).asExternalMapper(),
                     ).addOnSuccessListener {
                         continuation.resume(OperationResult.Success)
                     }.addOnFailureListener {
@@ -154,6 +154,7 @@ class SupplierInvoiceRepositoryImpl
                 auth.ensureUserExists { message ->
                     return@withContext OperationResult.Failure(message)
                 }
+                Timber.e("Invoice: $invoice")
                 val uid = auth.currentUserId()
                 suspendCoroutine<OperationResult> { continuation ->
                     val doc =
@@ -163,8 +164,9 @@ class SupplierInvoiceRepositoryImpl
                             SUPPLIER_INVOICES_COLLECTION_PATH,
                             invoice.invoiceId,
                         )
-                    doc.update(
-                        asExternalMapper(doc.id, invoice),
+                    doc.set(
+                        invoice.asExternalMapper(),
+                        SetOptions.merge(),
                     ).addOnSuccessListener {
                         continuation.resume(OperationResult.Success)
                     }.addOnFailureListener {
