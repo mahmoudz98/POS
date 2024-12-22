@@ -28,7 +28,7 @@ import org.junit.Rule
 import org.junit.Test
 import com.casecode.pos.core.ui.R.string as uiString
 
-class AddOrUpdateBillScreenTest {
+class AddBillScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     private val saveButtonLabel by lazy {
