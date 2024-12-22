@@ -65,61 +65,55 @@ internal fun SupplierInvoice.asExternalMapper(): Map<String?, Any> = mapOf(
 )
 
 @Suppress("UNCHECKED_CAST")
-internal fun Map<String, Any>.asDomainModel(): SupplierInvoice {
-    return SupplierInvoice(
-        invoiceId = this[SUPPLIER_INVOICE_ID_FIELD] as? String ?: "",
-        billNumber = this[SUPPLIER_INVOICE_BILL_NUMBER_FIELD] as? String ?: "",
-        supplierName = this[SUPPLIER_INVOICE_SUPPLIER_ID_FIELD] as? String ?: "",
-        issueDate = Instant.fromEpochMilliseconds(this[SUPPLIER_INVOICE_ISSUE_DATE_FIELD] as Long),
-        dueDate = Instant.fromEpochMilliseconds(this[SUPPLIER_INVOICE_DUE_DATE_FIELD] as Long),
-        createdBy = this[SUPPLIER_INVOICE_CREATED_BY_FIELD] as? String ?: "",
-        totalAmount = this[SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD] as? Double ?: 0.0,
-        discountType = DiscountType.valueOf(
-            this[SUPPLIER_INVOICE_DISCOUNT_TYPE_FIELD] as? String ?: "",
+internal fun Map<String, Any>.asDomainModel(): SupplierInvoice = SupplierInvoice(
+    invoiceId = this[SUPPLIER_INVOICE_ID_FIELD] as? String ?: "",
+    billNumber = this[SUPPLIER_INVOICE_BILL_NUMBER_FIELD] as? String ?: "",
+    supplierName = this[SUPPLIER_INVOICE_SUPPLIER_ID_FIELD] as? String ?: "",
+    issueDate = Instant.fromEpochMilliseconds(this[SUPPLIER_INVOICE_ISSUE_DATE_FIELD] as Long),
+    dueDate = Instant.fromEpochMilliseconds(this[SUPPLIER_INVOICE_DUE_DATE_FIELD] as Long),
+    createdBy = this[SUPPLIER_INVOICE_CREATED_BY_FIELD] as? String ?: "",
+    totalAmount = this[SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD] as? Double ?: 0.0,
+    discountType = DiscountType.valueOf(
+        this[SUPPLIER_INVOICE_DISCOUNT_TYPE_FIELD] as? String ?: "",
+    ),
+    amountDiscounted = this[SUPPLIER_INVOICE_AMOUNT_DISCOUNTED_FIELD] as? Double ?: 0.0,
+    paymentStatus = PaymentStatus.valueOf(
+        this[SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD] as String,
+    ),
+    paymentDetails = (get(SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD) as? List<Map<String, Any>>)
+        ?.mapNotNull { map ->
+            map.asDomainPaymentDetailsModel()
+        } ?: emptyList(),
+    invoiceItems = (get(SUPPLIER_INVOICE_ITEMS_FIELD) as? List<Map<String, Any>>)
+        ?.mapNotNull { map ->
+            map.asDomainItemModel()
+        } ?: emptyList(),
+)
+
+internal fun Map<String, Any>.asDomainPaymentDetailsModel(): PaymentDetails? = try {
+    PaymentDetails(
+        paymentId = this[SUPPLIER_INVOICE_PAYMENT_DETAILS_ID_FIELD] as? String ?: "",
+        amountPaid = (this[SUPPLIER_INVOICE_PAYMENT_DETAILS_AMOUNT_PAID_FIELD] as? Double)
+            ?: 0.0,
+        paymentMethod = PaymentMethod.valueOf(
+            this[SUPPLIER_INVOICE_PAYMENT_DETAILS_METHOD_FIELD] as? String ?: "",
         ),
-        amountDiscounted = this[SUPPLIER_INVOICE_AMOUNT_DISCOUNTED_FIELD] as? Double ?: 0.0,
-        paymentStatus = PaymentStatus.valueOf(
-            this[SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD] as String,
+        createdBy = this[SUPPLIER_INVOICE_PAYMENT_DETAILS_CREATED_BY_FIELD] as? String ?: "",
+        paymentDate = Instant.fromEpochMilliseconds(
+            this[SUPPLIER_INVOICE_PAYMENT_DETAILS_DATE_FIELD] as Long,
         ),
-        paymentDetails = (get(SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD) as? List<Map<String, Any>>)
-            ?.mapNotNull { map ->
-                map.asDomainPaymentDetailsModel()
-            } ?: emptyList(),
-        invoiceItems = (get(SUPPLIER_INVOICE_ITEMS_FIELD) as? List<Map<String, Any>>)
-            ?.mapNotNull { map ->
-                map.asDomainItemModel()
-            } ?: emptyList(),
     )
+} catch (e: Exception) {
+    e.printStackTrace()
+    null
 }
 
-internal fun Map<String, Any>.asDomainPaymentDetailsModel(): PaymentDetails? {
-    return try {
-        PaymentDetails(
-            paymentId = this[SUPPLIER_INVOICE_PAYMENT_DETAILS_ID_FIELD] as? String ?: "",
-            amountPaid = (this[SUPPLIER_INVOICE_PAYMENT_DETAILS_AMOUNT_PAID_FIELD] as? Double)
-                ?: 0.0,
-            paymentMethod = PaymentMethod.valueOf(
-                this[SUPPLIER_INVOICE_PAYMENT_DETAILS_METHOD_FIELD] as? String ?: "",
-            ),
-            createdBy = this[SUPPLIER_INVOICE_PAYMENT_DETAILS_CREATED_BY_FIELD] as? String ?: "",
-            paymentDate = Instant.fromEpochMilliseconds(
-                this[SUPPLIER_INVOICE_PAYMENT_DETAILS_DATE_FIELD] as Long,
-            ),
-        )
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
-internal fun Map<String, Any>.asDomainItemModel(): Item {
-    return Item(
-        name = this[ITEM_NAME_FIELD] as String,
-        sku = this[ITEM_SKU_FIELD] as String,
-        quantity = (this[ITEM_QUANTITY_FIELD] as Long).toInt(),
-        costPrice = this[ITEM_COST_PRICE_FIELD] as Double,
-    )
-}
+internal fun Map<String, Any>.asDomainItemModel(): Item = Item(
+    name = this[ITEM_NAME_FIELD] as String,
+    sku = this[ITEM_SKU_FIELD] as String,
+    quantity = (this[ITEM_QUANTITY_FIELD] as Long).toInt(),
+    costPrice = this[ITEM_COST_PRICE_FIELD] as Double,
+)
 
 internal fun PaymentDetails.asExternalMapper(): Map<String, Comparable<*>> = mapOf(
     SUPPLIER_INVOICE_PAYMENT_DETAILS_ID_FIELD to this.paymentId,

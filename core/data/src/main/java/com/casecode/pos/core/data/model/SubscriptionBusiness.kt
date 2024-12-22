@@ -37,14 +37,13 @@ fun SubscriptionBusiness.asSubscriptionRequest(): HashMap<String, Any> {
     return hashMapOf(SUBSCRIPTIONS_COLLECTION_PATH to subscriptionRequest)
 }
 
-fun asSubscriptionBusinessModel(subscriptions: List<Map<String, Any>>): List<SubscriptionBusiness> =
-    subscriptions.map {
-        Timber.e("asSubscriptionBusinessModel: $it")
-        @Suppress("UNCHECKED_CAST")
-        SubscriptionBusiness(
-            it[SUBSCRIPTION_TYPE_FIELD] as? String,
-            it[SUBSCRIPTION_COST_FIELD] as? Long,
-            it[SUBSCRIPTION_DURATION_FIELD] as? Long,
-            it[SUBSCRIPTION_PERMISSIONS_FIELD] as? List<String>,
-        )
-    }
+fun asSubscriptionBusinessModel(subscriptions: List<Map<String, Any>>): List<SubscriptionBusiness> = subscriptions.map {
+    Timber.e("asSubscriptionBusinessModel: $it")
+    @Suppress("UNCHECKED_CAST")
+    SubscriptionBusiness(
+        it[SUBSCRIPTION_TYPE_FIELD] as? String,
+        it[SUBSCRIPTION_COST_FIELD] as? Long,
+        it[SUBSCRIPTION_DURATION_FIELD] as? Long,
+        it[SUBSCRIPTION_PERMISSIONS_FIELD] as? List<String>,
+    )
+}

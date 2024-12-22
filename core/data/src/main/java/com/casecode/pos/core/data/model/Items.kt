@@ -31,21 +31,20 @@ import com.casecode.pos.core.firebase.services.model.ItemDataModel
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.model.data.users.UnitOfMeasurement.Companion.toUnitOfMeasurement
 
-fun ItemDataModel.asDomainModel() =
-    Item(
-        name = this.name,
-        category = this.category,
-        supplierName = this.supplierName,
-        costPrice = this.costPrice,
-        unitPrice = this.price,
-        reorderLevel = this.reorderLevel,
-        quantity = this.quantity,
-        qtyPerPack = this.qtyPerPack,
-        sku = this.sku,
-        unitOfMeasurement = toUnitOfMeasurement(this.unitOfMeasurement),
-        imageUrl = this.imageUrl,
-        deleted = this.deleted,
-    )
+fun ItemDataModel.asDomainModel() = Item(
+    name = this.name,
+    category = this.category,
+    supplierName = this.supplierName,
+    costPrice = this.costPrice,
+    unitPrice = this.price,
+    reorderLevel = this.reorderLevel,
+    quantity = this.quantity,
+    qtyPerPack = this.qtyPerPack,
+    sku = this.sku,
+    unitOfMeasurement = toUnitOfMeasurement(this.unitOfMeasurement),
+    imageUrl = this.imageUrl,
+    deleted = this.deleted,
+)
 
 fun Item.asExternalMapper(): Map<String, Any?> {
     val itemNetwork =
