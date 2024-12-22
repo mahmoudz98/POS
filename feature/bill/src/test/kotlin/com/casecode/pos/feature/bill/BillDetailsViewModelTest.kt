@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.casecode.pos.feature.bill
 
 import androidx.lifecycle.SavedStateHandle
@@ -43,6 +44,7 @@ import kotlin.test.assertEquals
 import kotlin.time.Duration
 import com.casecode.pos.core.ui.R.string as uiString
 
+@Suppress("CONTEXT_RECEIVERS_DEPRECATED")
 class BillDetailsViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
@@ -177,7 +179,7 @@ class BillDetailsViewModelTest {
             sku = "3421423423",
         )
         val newItems = existingInvoice.invoiceItems.toMutableList()
-        newItems.removeLast()
+        newItems.removeLastOrNull()
         newItems.add(item)
         return existingInvoice.copy(
             invoiceItems = newItems,
@@ -192,6 +194,7 @@ class BillDetailsViewModelTest {
         collectState(viewModel.billInputState)
         collectState(viewModel.userMessage)
     }
+
     context(TestScope)
     private fun collectState(stateFlow: SharedFlow<*>) {
         backgroundScope.launch(UnconfinedTestDispatcher()) { stateFlow.collect() }
