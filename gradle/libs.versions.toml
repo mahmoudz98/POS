@@ -14,8 +14,8 @@ playServicesCodeScanner = "16.1.0"
 secrets = "2.0.1"
 dependencyGuard = "0.5.0"
 moduleGraph = "2.7.1"
-accompanist = "0.36.0"
-protobuf = "4.26.1"
+accompanist = "0.37.0"
+protobuf = "4.29.2"
 protobufPlugin = "0.9.4"
 cashe-fix = "3.0"
 dependency-analysis = "2.0.1"
@@ -59,7 +59,7 @@ googleOssPlugin = "0.10.6"
 zxing-core = "3.4.1"
 
 coreTesting = "2.2.0"
-truth = "1.4.2"
+truth = "1.4.4"
 power-assert = "2.0.20"
 # Debug Tools
 leakcanary = "2.11"
@@ -88,7 +88,7 @@ androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-tes
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxCompose" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
@@ -105,7 +105,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidLifecycle" }
-androidx-livedata-runtimeCompose = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "androidxCompose" }
+androidx-livedata-runtimeCompose = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "androidLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidLifecycle" }
 androidx-lifecycle-runtimeTesting = { group = "androidx.lifecycle", name = "lifecycle-runtime-testing", version.ref = "androidLifecycle" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
