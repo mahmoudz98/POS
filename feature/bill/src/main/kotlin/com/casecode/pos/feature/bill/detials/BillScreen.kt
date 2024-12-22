@@ -35,12 +35,16 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,7 +66,6 @@ import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
 import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
-import com.casecode.pos.feature.bill.BillsViewModel
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentRes
 import com.casecode.pos.feature.bill.toPaymentStatusColor
@@ -71,14 +74,19 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BillScreen(
-    viewModel: BillsViewModel = hiltViewModel(),
+    viewModel: BillDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onEditBill: (String) -> Unit,
+    onEditBill: () -> Unit,
     onPaymentClick: () -> Unit,
 ) {
-    val uiState by viewModel.supplierInvoiceSelected.collectAsStateWithLifecycle()
+    val uiState by viewModel.billDetailsUiState.collectAsStateWithLifecycle(
+        BillDetailUiState.Loading,
+    )
+    val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
     BillScreenContent(
         billUiState = uiState,
+        userMessage = userMessage,
+        onShownMessage = viewModel::snackbarMessageShown,
         onNavigateBack = onNavigateBack,
         onEditBill = onEditBill,
         onAddNewPaymentClick = onPaymentClick,
@@ -90,8 +98,10 @@ fun BillScreen(
 fun BillScreenContent(
     modifier: Modifier = Modifier,
     billUiState: BillDetailUiState,
+    userMessage: Int? = null,
+    onShownMessage: () -> Unit = {},
     onNavigateBack: () -> Unit,
-    onEditBill: (String) -> Unit,
+    onEditBill: () -> Unit,
     onAddNewPaymentClick: () -> Unit,
 ) {
     TrackScreenViewEvent(screenName = "Bill")
@@ -100,10 +110,14 @@ fun BillScreenContent(
     ) { InvoicePagerTab.entries.size }
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
+    val snackbarHostState = remember { SnackbarHostState() }
     Box(
         Modifier.fillMaxSize(),
     ) {
+        SnackbarHost(
+            snackbarHostState,
+            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+        )
         when (billUiState) {
             is BillDetailUiState.Loading -> {
                 PosLoadingWheel(
@@ -132,7 +146,7 @@ fun BillScreenContent(
                         ),
                         action = {
                             IconButton(
-                                onClick = { onEditBill(billUiState.supplierInvoice.invoiceId) },
+                                onClick = { onEditBill() },
                             ) {
                                 Icon(imageVector = PosIcons.Edit, contentDescription = null)
                             }
@@ -145,7 +159,7 @@ fun BillScreenContent(
                             .fillMaxSize()
                             .nestedScroll(scrollBehavior.nestedScrollConnection),
                         contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.Top,
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         item {
                             BillHeader(billUiState.supplierInvoice)
@@ -176,11 +190,18 @@ fun BillScreenContent(
             }
         }
     }
+    userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(message) {
+            snackbarHostState.showSnackbar(snackbarText)
+            onShownMessage()
+        }
+    }
 }
 
 @Composable
 private fun BillHeader(invoice: SupplierInvoice) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -193,7 +214,7 @@ private fun BillHeader(invoice: SupplierInvoice) {
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = invoice.supplierName, style = MaterialTheme.typography.bodyLarge)
+        Text(text = invoice.supplierName, style = MaterialTheme.typography.bodyMedium)
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = invoice.totalAmount.toBigDecimalFormatted(),

@@ -55,7 +55,6 @@ import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentMethod
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
-import com.casecode.pos.feature.bill.BillsViewModel
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentMethodRes
 import kotlinx.datetime.Clock
@@ -64,10 +63,12 @@ import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 internal fun AddBillPaymentScreen(
-    viewModel: BillsViewModel = hiltViewModel(),
+    viewModel: BillDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
 ) {
-    val uiState by viewModel.supplierInvoiceSelected.collectAsStateWithLifecycle()
+    val uiState by viewModel.billDetailsUiState.collectAsStateWithLifecycle(
+        BillDetailUiState.Loading,
+    )
     AddBillPaymentScreen(
         uiState = uiState,
         onNavigateBack = onNavigateBack,

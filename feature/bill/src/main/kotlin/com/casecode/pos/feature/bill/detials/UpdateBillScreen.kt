@@ -1,4 +1,19 @@
-package com.casecode.pos.feature.bill.creation
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.feature.bill.detials
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +39,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,36 +66,67 @@ import com.casecode.pos.core.designsystem.component.PosTonalButton
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.DiscountType
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.bill.R
-import com.casecode.pos.feature.bill.detials.BillDetailUiState
+import com.casecode.pos.feature.bill.creation.BillInputState
+import com.casecode.pos.feature.bill.creation.BillItemFormScreen
+import com.casecode.pos.feature.bill.creation.BillItemsTotalSection
+import com.casecode.pos.feature.bill.creation.BillLineItem
+import com.casecode.pos.feature.bill.creation.millisToStartOfDay
 import kotlinx.datetime.Clock
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun UpdateBillScreen(
-    viewModel: BillCreationViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    onAddBillItem: () -> Unit,
-    onUpdateBillItem: () -> Unit,
-) {
+fun UpdateBillScreen(viewModel: BillDetailsViewModel = hiltViewModel(), onBackClick: () -> Unit) {
     val billInputState by viewModel.billInputState.collectAsStateWithLifecycle()
-    val billDetailUiState by viewModel.billDetailsUiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.billDetailsUiState.collectAsStateWithLifecycle(
+        BillDetailUiState.Loading,
+    )
+    val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
+    val searchItem by viewModel.searchQueryItem.collectAsStateWithLifecycle()
+    val filterItemState by viewModel.filterItemsUiState.collectAsStateWithLifecycle()
+    val itemUpdated by viewModel.itemSelected.collectAsStateWithLifecycle()
+    var showAddItemFormScreen by rememberSaveable { mutableStateOf(false) }
+    var showUpdateItemFormScreen by rememberSaveable { mutableStateOf(false) }
     UpdateBillScreen(
         billInputState = billInputState,
-        billDetailUiState = billDetailUiState,
+        billDetailUiState = uiState,
+        userMessage = userMessage,
         onNavigateBack = onBackClick,
-        onAddBillItem = onAddBillItem,
+        onAddBillItem = { showAddItemFormScreen = true },
         onUpdateBillItem = {
             viewModel.onSelectedItem(it)
-            onUpdateBillItem()
+            showUpdateItemFormScreen = true
         },
         onRemoveBillItem = { viewModel.removeItem(it) },
-        onUpdateBill = { viewModel.updateStockThenAddBill() },
+        showSnackbarMessage = { viewModel.showSnackbarMessage(it) },
+        onShownMessage = { viewModel.snackbarMessageShown() },
+        onUpdateBill = { viewModel.updateStockThenUpdateBill() },
     )
+    if (showAddItemFormScreen) {
+        BillItemFormScreen(
+            isUpdate = false,
+            itemUpdated = null,
+            searchItemQuery = searchItem,
+            filterItemState = filterItemState,
+            onSearchItemChange = viewModel::onSearchQueryItemChanged,
+            onAddBillItem = { viewModel.addBillItem(it) },
+            onBackClick = { showAddItemFormScreen = false },
+        )
+    }
+    if (showUpdateItemFormScreen) {
+        BillItemFormScreen(
+            isUpdate = true,
+            itemUpdated = itemUpdated,
+            searchItemQuery = searchItem,
+            filterItemState = filterItemState,
+            onSearchItemChange = viewModel::onSearchQueryItemChanged,
+            onUpdateBillItem = { viewModel.updateBillItem(it) },
+            onBackClick = { showUpdateItemFormScreen = false },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,10 +135,13 @@ fun UpdateBillScreen(
     modifier: Modifier = Modifier,
     billInputState: BillInputState,
     billDetailUiState: BillDetailUiState,
+    userMessage: Int?,
     onNavigateBack: () -> Unit,
     onAddBillItem: () -> Unit,
     onUpdateBillItem: (Item) -> Unit,
     onRemoveBillItem: (Item) -> Unit,
+    showSnackbarMessage: (Int) -> Unit,
+    onShownMessage: () -> Unit,
     onUpdateBill: () -> Unit,
 ) {
     TrackScreenViewEvent(screenName = "updateBill")
@@ -102,6 +152,10 @@ fun UpdateBillScreen(
         if (billInputState.supplierName.isEmpty() || billInputState.billNumber.isEmpty()) {
             billInputState.supplierNameError = billInputState.supplierName.isEmpty()
             billInputState.billNumberError = billInputState.billNumber.isEmpty()
+            return
+        }
+        if (billInputState.invoiceItems.isEmpty()) {
+            showSnackbarMessage(R.string.feature_bill_items_empty_message)
             return
         }
         onUpdateBill()
@@ -290,12 +344,11 @@ fun UpdateBillScreen(
                                                 onClickItem = { onUpdateBillItem(it) },
                                             )
                                         }
-                                        val isFixed =
-                                            billInputState.discountTypeCurrency == DiscountType.FIXED
+
                                         BillItemsTotalSection(
                                             subTotal = billInputState.subTotal,
                                             discount = billInputState.discount,
-                                            discountTypeCurrency = isFixed,
+                                            discountTypeCurrency = billInputState.discountTypeCurrency,
                                             total = billInputState.total,
                                             onDiscountChange = billInputState::onDiscountChange,
                                             onDiscountTypeChange = billInputState::onDiscountTypeChange,
@@ -338,6 +391,13 @@ fun UpdateBillScreen(
             onDismiss = { showDueDateDialog = false },
         )
     }
+    userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(message) {
+            snackbarHostState.showSnackbar(snackbarText)
+            onShownMessage()
+        }
+    }
 }
 
 @Preview
@@ -347,10 +407,13 @@ fun UpdateBillScreenPreview() {
         UpdateBillScreen(
             billInputState = BillInputState(),
             billDetailUiState = BillDetailUiState.Success(SupplierInvoice()),
+            userMessage = null,
             onNavigateBack = {},
             onAddBillItem = {},
             onUpdateBillItem = {},
             onRemoveBillItem = {},
+            showSnackbarMessage = {},
+            onShownMessage = {},
             onUpdateBill = {},
         )
     }
