@@ -35,37 +35,34 @@ class GetItemsUseCaseTest {
     private val getItemsUseCase = GetItemsUseCase(testItemRepository)
 
     @Test
-    fun whenItemsExist_returnsItems() =
-        runTest {
-            val items = getItemsUseCase()
-            testItemRepository.sendItems()
-            assertEquals(
-                items.first(),
-                (Resource.success(testItemRepository.itemsTest)),
-            )
-        }
+    fun whenItemsExist_returnsItems() = runTest {
+        val items = getItemsUseCase()
+        testItemRepository.sendItems()
+        assertEquals(
+            items.first(),
+            (Resource.success(testItemRepository.itemsTest)),
+        )
+    }
 
     @Test
-    fun whenHasError_returnsError() =
-        runTest {
-            // Given
-            testItemRepository.setReturnError(true)
-            // When
-            val items = getItemsUseCase()
-            // Then
-            assertEquals(items.first(), Resource.error(stringData.core_data_error_fetching_items))
-        }
+    fun whenHasError_returnsError() = runTest {
+        // Given
+        testItemRepository.setReturnError(true)
+        // When
+        val items = getItemsUseCase()
+        // Then
+        assertEquals(items.first(), Resource.error(stringData.core_data_error_fetching_items))
+    }
 
     @Test
-    fun whenHasNoItems_returnsEmpty() =
-        runTest {
-            // Given
-            testItemRepository.setReturnEmpty(true)
+    fun whenHasNoItems_returnsEmpty() = runTest {
+        // Given
+        testItemRepository.setReturnEmpty(true)
 
-            // When
-            val items = getItemsUseCase()
+        // When
+        val items = getItemsUseCase()
 
-            // Then
-            assertEquals(items.first(), (Resource.empty()))
-        }
+        // Then
+        assertEquals(items.first(), (Resource.empty()))
+    }
 }

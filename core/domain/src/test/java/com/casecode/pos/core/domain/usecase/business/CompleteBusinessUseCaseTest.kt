@@ -32,24 +32,22 @@ class CompleteBusinessUseCaseTest {
     private val completeBusinessUseCase = CompleteBusinessUseCase(testBusinessRepository)
 
     @Test
-    fun `when completed business successfully then return resource success`() =
-        runTest {
-            // When
-            val result = completeBusinessUseCase()
+    fun `when completed business successfully then return resource success`() = runTest {
+        // When
+        val result = completeBusinessUseCase()
 
-            // Then
-            assert(result is Resource.Success)
-        }
+        // Then
+        assert(result is Resource.Success)
+    }
 
     @Test
-    fun `when completed business failed then return resource error`() =
-        runTest {
-            // given
-            testBusinessRepository.setReturnError(true)
-            // When
-            val result = completeBusinessUseCase()
+    fun `when completed business failed then return resource error`() = runTest {
+        // given
+        testBusinessRepository.setReturnError(true)
+        // When
+        val result = completeBusinessUseCase()
 
-            // Then
-            assert(result is Resource.Error)
-        }
+        // Then
+        assert(result is Resource.Error)
+    }
 }
