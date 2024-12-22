@@ -46,12 +46,11 @@ android {
         release {
             isMinifyEnabled = true
             applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
-            signingConfig = signingConfigs.getByName("debug")
-
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.named("debug").get()
             baselineProfile.automaticGenerationDuringBuild = true
         }
     }
@@ -85,7 +84,6 @@ dependencies {
     implementation(projects.feature.setting)
     implementation(projects.feature.signout)
     implementation(projects.feature.reports)
-
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
