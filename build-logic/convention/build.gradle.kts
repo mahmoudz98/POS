@@ -2,7 +2,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.android.lint)
 }
+
 group = "com.casecode.pos.buildlogic"
 
 java {
@@ -26,6 +28,7 @@ dependencies {
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.power.assert.plugin)
     implementation(libs.truth)
+    lintChecks(libs.androidx.lint.gradle)
 }
 
 tasks {
@@ -36,67 +39,64 @@ tasks {
 }
 
 gradlePlugin {
-    /**
-     * Register convention plugins so they are available in the build scripts of the application
-     */
     plugins {
         register("androidApplicationCompose") {
-            id = "pos.android.application.compose"
+            id = libs.plugins.pos.android.application.compose.get().pluginId
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
         register("androidApplication") {
-            id = "pos.android.application"
+            id = libs.plugins.pos.android.application.asProvider().get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidApplicationJacoco") {
-            id = "pos.android.application.jacoco"
+            id = libs.plugins.pos.android.application.jacoco.get().pluginId
             implementationClass = "AndroidApplicationJacocoConventionPlugin"
         }
         register("androidLibraryCompose") {
-            id = "pos.android.library.compose"
+            id = libs.plugins.pos.android.library.compose.get().pluginId
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("androidLibrary") {
-            id = "pos.android.library"
+            id = libs.plugins.pos.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidFeature") {
-            id = "pos.android.feature"
+            id = libs.plugins.pos.android.feature.get().pluginId
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("androidLibraryJacoco") {
-            id = "pos.android.library.jacoco"
+            id = libs.plugins.pos.android.library.jacoco.get().pluginId
             implementationClass = "AndroidLibraryJacocoConventionPlugin"
         }
         register("hilt") {
-            id = "pos.hilt"
+            id = libs.plugins.pos.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
         }
         register("androidFirebase") {
-            id = "pos.android.firebase"
+            id = libs.plugins.pos.android.firebase.asProvider().get().pluginId
             implementationClass = "AndroidApplicationFirebaseConventionPlugin"
         }
         register("androidFirebaseLibrary") {
-            id = "pos.android.firebase.library"
+            id = libs.plugins.pos.android.firebase.library.get().pluginId
             implementationClass = "AndroidFirebaseConventionPlugin"
         }
         register("androidFlavors") {
-            id = "pos.android.application.flavors"
+            id = libs.plugins.pos.android.application.flavors.get().pluginId
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
 
         register("androidTest") {
-            id = "pos.android.test"
+            id = libs.plugins.pos.android.test.get().pluginId
             implementationClass = "AndroidTestConventionPlugin"
         }
 
         register("androidLint") {
-            id = "pos.android.lint"
+            id = libs.plugins.pos.android.lint.get().pluginId
             implementationClass = "AndroidLintConventionPlugin"
         }
 
         register("jvmLibrary") {
-            id = "pos.jvm.library"
+            id = libs.plugins.pos.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
         }
     }
