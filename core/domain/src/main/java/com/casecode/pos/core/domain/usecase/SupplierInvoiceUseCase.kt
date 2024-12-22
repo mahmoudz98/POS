@@ -68,8 +68,7 @@ class GetSupplierInvoiceDetailsUseCase @Inject constructor(
 class AddSupplierInvoiceUseCase @Inject constructor(
     private val supplierInvoiceRepository: SupplierInvoiceRepository,
 ) {
-    suspend operator fun invoke(invoice: SupplierInvoice) =
-        supplierInvoiceRepository.addInvoice(invoice)
+    suspend operator fun invoke(invoice: SupplierInvoice) = supplierInvoiceRepository.addInvoice(invoice)
 }
 
 /**
@@ -82,8 +81,7 @@ class AddSupplierInvoiceUseCase @Inject constructor(
 class UpdateSupplierInvoiceUseCase @Inject constructor(
     private val supplierInvoiceRepository: SupplierInvoiceRepository,
 ) {
-    suspend operator fun invoke(invoice: SupplierInvoice) =
-        supplierInvoiceRepository.updateInvoice(invoice)
+    suspend operator fun invoke(invoice: SupplierInvoice) = supplierInvoiceRepository.updateInvoice(invoice)
 }
 
 /**

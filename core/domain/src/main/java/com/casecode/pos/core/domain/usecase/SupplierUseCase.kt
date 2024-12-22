@@ -28,8 +28,7 @@ class AddSupplierUseCase @Inject constructor(private val supplierRepository: Sup
 }
 
 class UpdateSupplierUseCase @Inject constructor(private val supplierRepository: SupplierRepository) {
-    suspend operator fun invoke(oldSupplier: Supplier, newSupplier: Supplier) =
-        supplierRepository.updateSupplier(oldSupplier, newSupplier)
+    suspend operator fun invoke(oldSupplier: Supplier, newSupplier: Supplier) = supplierRepository.updateSupplier(oldSupplier, newSupplier)
 }
 
 class DeleteSupplierUseCase @Inject constructor(private val supplierRepository: SupplierRepository) {

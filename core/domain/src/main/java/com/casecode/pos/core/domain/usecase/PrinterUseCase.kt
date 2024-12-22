@@ -27,8 +27,7 @@ class AddPrinterUseCase
 constructor(
     private val printerRepository: PrinterRepository,
 ) {
-    suspend operator fun invoke(printerInfo: PrinterInfo) =
-        printerRepository.addPrinter(printerInfo)
+    suspend operator fun invoke(printerInfo: PrinterInfo) = printerRepository.addPrinter(printerInfo)
 }
 
 class GetPrinterUseCase

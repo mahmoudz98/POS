@@ -57,8 +57,7 @@ class AddEmployeeUseCase
 constructor(
     private val employeesRepo: EmployeesBusinessRepository,
 ) {
-    suspend operator fun invoke(employee: Employee): AddEmployeeResult =
-        employeesRepo.addEmployee(employee)
+    suspend operator fun invoke(employee: Employee): AddEmployeeResult = employeesRepo.addEmployee(employee)
 }
 
 /**
@@ -89,8 +88,7 @@ class UpdateEmployeesUseCase
 constructor(
     private val employeesRepo: EmployeesBusinessRepository,
 ) {
-    suspend operator fun invoke(oldEmployee: Employee, newEmployee: Employee) =
-        employeesRepo.updateEmployee(oldEmployee, newEmployee)
+    suspend operator fun invoke(oldEmployee: Employee, newEmployee: Employee) = employeesRepo.updateEmployee(oldEmployee, newEmployee)
 }
 
 /**
