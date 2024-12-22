@@ -31,7 +31,6 @@ import com.casecode.pos.feature.bill.creation.BillInputState
 import com.casecode.pos.feature.bill.detials.BillDetailUiState
 import com.casecode.pos.feature.bill.detials.BillDetailsViewModel
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
