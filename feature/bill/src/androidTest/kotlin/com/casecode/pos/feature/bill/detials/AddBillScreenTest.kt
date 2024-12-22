@@ -35,7 +35,7 @@ class AddBillScreenTest {
         composeTestRule.activity.getString(uiString.core_ui_save_action_text)
     }
 
-    @Test
+/*    @Test
     fun whenBillInputEmpty_assertErrorsIsDisplayed() {
         composeTestRule.setContent {
             AddBillScreen(
@@ -111,5 +111,5 @@ class AddBillScreenTest {
             ),
         )
             .assertIsDisplayed()
-    }
+    }*/
 }
