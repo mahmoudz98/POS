@@ -136,18 +136,14 @@ class BillInputState(
     }
 }
 
-internal fun millisToStartOfDay(timeMillis: Long): Long {
-    return Instant.fromEpochMilliseconds(timeMillis)
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .date
-        .atStartOfDayIn(TimeZone.currentSystemDefault())
-        .toEpochMilliseconds()
-}
+internal fun millisToStartOfDay(timeMillis: Long): Long = Instant.fromEpochMilliseconds(timeMillis)
+    .toLocalDateTime(TimeZone.currentSystemDefault())
+    .date
+    .atStartOfDayIn(TimeZone.currentSystemDefault())
+    .toEpochMilliseconds()
 
-internal fun millisToStartOfDay(timeMillis: Instant): Long {
-    return timeMillis
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .date
-        .atStartOfDayIn(TimeZone.currentSystemDefault())
-        .toEpochMilliseconds()
-}
+internal fun millisToStartOfDay(timeMillis: Instant): Long = timeMillis
+    .toLocalDateTime(TimeZone.currentSystemDefault())
+    .date
+    .atStartOfDayIn(TimeZone.currentSystemDefault())
+    .toEpochMilliseconds()

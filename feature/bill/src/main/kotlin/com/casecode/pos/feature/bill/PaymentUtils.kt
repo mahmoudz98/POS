@@ -23,31 +23,25 @@ import com.casecode.pos.core.model.data.users.PaymentMethod
 import com.casecode.pos.core.model.data.users.PaymentStatus
 
 @StringRes
-internal fun toPaymentRes(status: PaymentStatus): Int {
-    return when (status) {
-        PaymentStatus.PENDING -> R.string.feature_bill_payment_status_pending
-        PaymentStatus.PAID -> R.string.feature_bill_payment_status_paid
-        PaymentStatus.PARTIALLY_PAID -> R.string.feature_bill_payment_status_partially_paid
-        PaymentStatus.OVERDUE -> R.string.feature_bill_payment_status_overdue
-    }
+internal fun toPaymentRes(status: PaymentStatus): Int = when (status) {
+    PaymentStatus.PENDING -> R.string.feature_bill_payment_status_pending
+    PaymentStatus.PAID -> R.string.feature_bill_payment_status_paid
+    PaymentStatus.PARTIALLY_PAID -> R.string.feature_bill_payment_status_partially_paid
+    PaymentStatus.OVERDUE -> R.string.feature_bill_payment_status_overdue
 }
 
 @StringRes
-internal fun toPaymentMethodRes(method: PaymentMethod): Int {
-    return when (method) {
-        PaymentMethod.CASH -> R.string.feature_bill_payment_method_cash
-        PaymentMethod.CREDIT_CARD -> R.string.feature_bill_payment_method_card
-        PaymentMethod.DIGITAL_PAYMENT -> R.string.feature_bill_payment_method_digital
-    }
+internal fun toPaymentMethodRes(method: PaymentMethod): Int = when (method) {
+    PaymentMethod.CASH -> R.string.feature_bill_payment_method_cash
+    PaymentMethod.CREDIT_CARD -> R.string.feature_bill_payment_method_card
+    PaymentMethod.DIGITAL_PAYMENT -> R.string.feature_bill_payment_method_digital
 }
 
-internal fun fromPaymentMethodRes(@StringRes resourceId: Int): PaymentMethod {
-    return when (resourceId) {
-        R.string.feature_bill_payment_method_cash -> PaymentMethod.CASH
-        R.string.feature_bill_payment_method_card -> PaymentMethod.CREDIT_CARD
-        R.string.feature_bill_payment_method_digital -> PaymentMethod.DIGITAL_PAYMENT
-        else -> throw IllegalArgumentException("Unknown payment method resource ID: $resourceId")
-    }
+internal fun fromPaymentMethodRes(@StringRes resourceId: Int): PaymentMethod = when (resourceId) {
+    R.string.feature_bill_payment_method_cash -> PaymentMethod.CASH
+    R.string.feature_bill_payment_method_card -> PaymentMethod.CREDIT_CARD
+    R.string.feature_bill_payment_method_digital -> PaymentMethod.DIGITAL_PAYMENT
+    else -> throw IllegalArgumentException("Unknown payment method resource ID: $resourceId")
 }
 
 @Composable

@@ -110,16 +110,14 @@ class BillDetailsViewModel @Inject constructor(
     private val _userMessage = MutableStateFlow<Int?>(null)
     val userMessage = _userMessage.asStateFlow()
 
-    private fun mapResourceToUiState(resource: Resource<SupplierInvoice>): BillDetailUiState {
-        return when (resource) {
-            is Resource.Loading -> BillDetailUiState.Loading
-            is Resource.Error -> BillDetailUiState.Error
-            is Resource.Success -> {
-                billInputState.update { BillInputState(resource.data) }
-                BillDetailUiState.Success(resource.data)
-            }
-            is Resource.Empty -> BillDetailUiState.EmptySelection
+    private fun mapResourceToUiState(resource: Resource<SupplierInvoice>): BillDetailUiState = when (resource) {
+        is Resource.Loading -> BillDetailUiState.Loading
+        is Resource.Error -> BillDetailUiState.Error
+        is Resource.Success -> {
+            billInputState.update { BillInputState(resource.data) }
+            BillDetailUiState.Success(resource.data)
         }
+        is Resource.Empty -> BillDetailUiState.EmptySelection
     }
     fun onSearchQueryItemChanged(query: String) {
         savedStateHandle[SEARCH_ITEM_QUERY] = query
@@ -223,7 +221,8 @@ class BillDetailsViewModel @Inject constructor(
         // Items to update: exist in both lists but with different quantities
         val itemsToUpdate = newItems.mapNotNull { newItem ->
             val oldItem = oldItemMap[newItem.hashCode()]
-            if (oldItem != null && (
+            if (oldItem != null &&
+                (
                     oldItem.quantity != newItem.quantity &&
                         oldItem.costPrice != newItem.costPrice
                     )

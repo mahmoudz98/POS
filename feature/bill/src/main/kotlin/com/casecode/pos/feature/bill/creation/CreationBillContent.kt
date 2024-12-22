@@ -75,7 +75,8 @@ internal fun SupplierExposeDropdownMenuBox(
     readonly: Boolean = false,
 ) {
     val (allowExpanded, setExpanded) = remember { mutableStateOf(false) }
-    val expanded = allowExpanded || filterSupplierState is SearchSupplierUiState.Success &&
+    val expanded = allowExpanded ||
+        filterSupplierState is SearchSupplierUiState.Success &&
         currentSupplier.isBlank()
     ExposedDropdownMenuBox(
         expanded = expanded,

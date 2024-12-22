@@ -137,8 +137,7 @@ fun NavGraphBuilder.updateBillScreen(navController: NavController) {
 
 fun NavController.navigateToBillsGraph() = navigate(BillsGraph.BillsNavigation)
 private fun NavController.navigateToBills() = navigate(BillsGraph.BillsRoute)
-private fun NavController.navigateToBillDetails(id: String?) =
-    navigate(BillsGraph.BillDetailsRoute(id))
+private fun NavController.navigateToBillDetails(id: String?) = navigate(BillsGraph.BillDetailsRoute(id))
 
 private fun NavController.navigateToBillPayment() = navigate(BillsGraph.BillPaymentRoute)
 private fun NavController.navigateToBillCreation() = navigate(BillsGraph.BillCreationRoute)
