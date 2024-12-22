@@ -290,9 +290,8 @@ internal fun ColumnScope.SectionCartItems(
 }
 
 @Composable
-fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean =
-    windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
-        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
+    configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

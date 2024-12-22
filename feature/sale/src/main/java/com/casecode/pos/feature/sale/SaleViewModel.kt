@@ -134,13 +134,12 @@ constructor(
     private val _userMessage = MutableStateFlow<Int?>(null)
     val userMessage = _userMessage.asStateFlow()
 
-    private fun matchesSearchCriteria(item: Item, searchText: String): Boolean =
-        with(searchText.lowercase()) {
-            item.name.lowercase().contains(this, ignoreCase = true) ||
-                item.sku.contains(this) ||
-                item.category.contains(this, ignoreCase = true) ||
-                item.sku.contains(normalizeNumber(this), ignoreCase = true)
-        }
+    private fun matchesSearchCriteria(item: Item, searchText: String): Boolean = with(searchText.lowercase()) {
+        item.name.lowercase().contains(this, ignoreCase = true) ||
+            item.sku.contains(this) ||
+            item.category.contains(this, ignoreCase = true) ||
+            item.sku.contains(normalizeNumber(this), ignoreCase = true)
+    }
 
     private fun normalizeNumber(input: String): String {
         val arabicNumerals = listOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
