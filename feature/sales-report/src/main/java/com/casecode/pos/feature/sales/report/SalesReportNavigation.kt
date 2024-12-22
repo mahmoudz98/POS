@@ -121,7 +121,6 @@ inline fun <reified VM : ViewModel> NavBackStackEntry.sharedViewModel(
     return hiltViewModel(parentEntry)
 }
 
-fun NavController.navigateToSalesReport(navOptions: NavOptions? = null) =
-    navigate(SalesReportGraph, navOptions)
+fun NavController.navigateToSalesReport(navOptions: NavOptions? = null) = navigate(SalesReportGraph, navOptions)
 
 fun NavController.navigateToSalesReportDetails() = navigate(SalesReportDetailsRoute)
