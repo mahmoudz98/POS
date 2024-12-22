@@ -59,10 +59,9 @@ object FirebaseModule {
      */
     @Provides
     @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore =
-        FirebaseFirestore.getInstance().apply {
-            firestoreSettings = setting
-        }
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance().apply {
+        firestoreSettings = setting
+    }
 
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
