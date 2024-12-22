@@ -55,8 +55,7 @@ class TestSupplierInvoicesRepository @Inject constructor() :
         )
     }
 
-    override fun getInvoices(): Flow<Resource<List<SupplierInvoice>>> =
-        resourcesSupplierInvoicesFlow
+    override fun getInvoices(): Flow<Resource<List<SupplierInvoice>>> = resourcesSupplierInvoicesFlow
 
     override fun getInvoiceDetails(invoiceId: String): Flow<Resource<SupplierInvoice>> = flow {
         emit(Resource.loading())

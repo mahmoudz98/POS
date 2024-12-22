@@ -27,7 +27,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import javax.inject.Inject
 import com.casecode.pos.core.data.R.string as stringData
 
-class TestSupplierRepository @Inject constructor() : BaseTestRepository(), SupplierRepository {
+class TestSupplierRepository @Inject constructor() :
+    BaseTestRepository(),
+    SupplierRepository {
     private val resourcesSuppliersFlow: MutableSharedFlow<Resource<List<Supplier>>> =
         MutableSharedFlow(replay = 2, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
