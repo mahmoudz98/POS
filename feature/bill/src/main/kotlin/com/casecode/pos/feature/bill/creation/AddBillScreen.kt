@@ -39,6 +39,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,39 +64,64 @@ import com.casecode.pos.core.designsystem.component.PosTonalButton
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.DiscountType
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.bill.R
-import com.casecode.pos.feature.bill.SearchSupplierUiState
 import kotlinx.datetime.Clock
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun AddBillScreen(
-    viewModel: BillCreationViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    onAddBillItem: () -> Unit,
-    onUpdateBillItem: () -> Unit,
-) {
+fun AddBillScreen(viewModel: BillCreationViewModel = hiltViewModel(), onBackClick: () -> Unit) {
     val billInputState by viewModel.billInputState.collectAsStateWithLifecycle()
     val filterSupplierState by viewModel.filterSupplierState.collectAsStateWithLifecycle()
     val searchSupplier by viewModel.searchQuerySupplier.collectAsStateWithLifecycle()
+    val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
+    val searchItem by viewModel.searchQueryItem.collectAsStateWithLifecycle()
+    val filterItemState by viewModel.filterItemsUiState.collectAsStateWithLifecycle()
+    val itemUpdated by viewModel.itemSelected.collectAsStateWithLifecycle()
+    var showAddItemFormScreen by rememberSaveable { mutableStateOf(false) }
+    var showUpdateItemFormScreen by rememberSaveable { mutableStateOf(false) }
     AddBillScreen(
         billInputState = billInputState,
         searchSupplier = searchSupplier,
         filterSupplierState = filterSupplierState,
+        userMessage = userMessage,
         onNavigateBack = onBackClick,
         onSearchSupplierChange = viewModel::onSearchQuerySupplierChanged,
-        onAddBillItem = onAddBillItem,
+        onAddBillItem = { showAddItemFormScreen = true },
         onUpdateBillItem = {
+            showUpdateItemFormScreen = true
             viewModel.onSelectedItem(it)
-            onUpdateBillItem()
+            // onUpdateBillItem()
         },
         onRemoveBillItem = { viewModel.removeItem(it) },
+        showSnackbarMessage = { viewModel.showSnackbarMessage(it) },
+        onShownMessage = { viewModel.snackbarMessageShown() },
         onAddBill = { viewModel.updateStockThenAddBill() },
     )
+    if (showAddItemFormScreen) {
+        BillItemFormScreen(
+            isUpdate = false,
+            itemUpdated = null,
+            searchItemQuery = searchItem,
+            filterItemState = filterItemState,
+            onSearchItemChange = viewModel::onSearchQueryItemChanged,
+            onAddBillItem = { viewModel.addBillItem(it) },
+            onBackClick = { showAddItemFormScreen = false },
+        )
+    }
+    if (showUpdateItemFormScreen) {
+        BillItemFormScreen(
+            isUpdate = true,
+            itemUpdated = itemUpdated,
+            searchItemQuery = searchItem,
+            filterItemState = filterItemState,
+            onSearchItemChange = viewModel::onSearchQueryItemChanged,
+            onUpdateBillItem = { viewModel.updateBillItem(it) },
+            onBackClick = { showUpdateItemFormScreen = false },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,11 +131,14 @@ fun AddBillScreen(
     billInputState: BillInputState,
     searchSupplier: String,
     filterSupplierState: SearchSupplierUiState,
+    userMessage: Int?,
     onSearchSupplierChange: (String) -> Unit,
     onNavigateBack: () -> Unit,
     onAddBillItem: () -> Unit,
     onUpdateBillItem: (Item) -> Unit,
     onRemoveBillItem: (Item) -> Unit,
+    showSnackbarMessage: (Int) -> Unit,
+    onShownMessage: () -> Unit,
     onAddBill: () -> Unit,
 ) {
     TrackScreenViewEvent(screenName = "AddBill")
@@ -117,9 +146,14 @@ fun AddBillScreen(
     var showIssueDateDialog by rememberSaveable { mutableStateOf(false) }
     var showDueDateDialog by rememberSaveable { mutableStateOf(false) }
     val onSaveTriggered = fun() {
+        // TODO:add show message when items empty
         if (billInputState.supplierName.isEmpty() || billInputState.billNumber.isEmpty()) {
             billInputState.supplierNameError = billInputState.supplierName.isEmpty()
             billInputState.billNumberError = billInputState.billNumber.isEmpty()
+            return
+        }
+        if (billInputState.invoiceItems.isEmpty()) {
+            showSnackbarMessage(R.string.feature_bill_items_empty_message)
             return
         }
         onAddBill()
@@ -292,12 +326,11 @@ fun AddBillScreen(
                                         onClickItem = { onUpdateBillItem(it) },
                                     )
                                 }
-                                val isFixed =
-                                    billInputState.discountTypeCurrency == DiscountType.FIXED
+
                                 BillItemsTotalSection(
                                     subTotal = billInputState.subTotal,
                                     discount = billInputState.discount,
-                                    discountTypeCurrency = isFixed,
+                                    discountTypeCurrency = billInputState.discountTypeCurrency,
                                     total = billInputState.total,
                                     onDiscountChange = billInputState::onDiscountChange,
                                     onDiscountTypeChange = billInputState::onDiscountTypeChange,
@@ -338,6 +371,13 @@ fun AddBillScreen(
             onDismiss = { showDueDateDialog = false },
         )
     }
+    userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(message) {
+            snackbarHostState.showSnackbar(snackbarText)
+            onShownMessage()
+        }
+    }
 }
 
 @DevicePreviews
@@ -348,11 +388,14 @@ fun AddBillScreenPreview() {
             billInputState = BillInputState(),
             searchSupplier = "",
             filterSupplierState = SearchSupplierUiState.EmptyQuery,
+            userMessage = null,
             onSearchSupplierChange = {},
             onNavigateBack = {},
             onAddBillItem = {},
             onUpdateBillItem = {},
             onRemoveBillItem = {},
+            showSnackbarMessage = {},
+            onShownMessage = {},
             onAddBill = {},
         )
     }

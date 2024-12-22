@@ -106,11 +106,11 @@ class BillInputState(
         dueDate = Instant.fromEpochMilliseconds(input)
     }
 
-    fun addItem(item: Item) {
+    internal fun addItem(item: Item) {
         _invoiceItems.add(item)
     }
 
-    fun updateItem(item: Item) {
+    internal fun updateItem(item: Item) {
         val existingItem = _invoiceItems.find { it.sku == item.sku } ?: return
         _invoiceItems.apply {
             remove(existingItem)
@@ -118,7 +118,7 @@ class BillInputState(
         }
     }
 
-    fun removeItem(item: Item) {
+    internal fun removeItem(item: Item) {
         _invoiceItems.remove(item)
     }
 

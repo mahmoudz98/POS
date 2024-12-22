@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.feature.bill.creation
 
 import androidx.lifecycle.SavedStateHandle
@@ -6,31 +21,23 @@ import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.domain.usecase.AddSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
-import com.casecode.pos.core.domain.usecase.GetSupplierInvoiceDetailsUseCase
 import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
-import com.casecode.pos.core.domain.usecase.UpdateSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.ui.stateInWhileSubscribed
 import com.casecode.pos.feature.bill.R
-import com.casecode.pos.feature.bill.SearchItemUiState
-import com.casecode.pos.feature.bill.SearchSupplierUiState
-import com.casecode.pos.feature.bill.detials.BillDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 import com.casecode.pos.core.ui.R.string as uiString
 
@@ -39,12 +46,11 @@ class BillCreationViewModel @Inject constructor(
     networkMonitor: NetworkMonitor,
     getItemsUseCase: GetItemsUseCase,
     getSuppliersUseCase: GetSuppliersUseCase,
-    private val getBillDetailsUseCase: GetSupplierInvoiceDetailsUseCase,
     private val addSupplierInvoiceUseCase: AddSupplierInvoiceUseCase,
-    private val updateSupplierInvoiceUseCase: UpdateSupplierInvoiceUseCase,
     private val updateStockInItemsUseCase: UpdateStockInItemsUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
     private val isOnline: StateFlow<Boolean> =
         networkMonitor.isOnline.stateIn(viewModelScope, SharingStarted.Companion.Eagerly, false)
 
@@ -99,29 +105,7 @@ class BillCreationViewModel @Inject constructor(
                 }
             }
         }.stateInWhileSubscribed(SearchItemUiState.EmptyQuery)
-    private val selectedBillId = savedStateHandle.getStateFlow(
-        key = SELECTED_BILL_ID_KEY,
-        initialValue = "",
-    )
-    val billDetailsUiState: StateFlow<BillDetailUiState> = selectedBillId.flatMapLatest { billId ->
-        Timber.e("billId: $billId")
-        if (billId.isEmpty()) {
-            flowOf(BillDetailUiState.EmptySelection)
-        } else {
-            getBillDetailsUseCase(billId).flatMapLatest {
-                when (it) {
-                    is Resource.Loading -> flowOf(BillDetailUiState.Loading)
-                    is Resource.Error -> flowOf(BillDetailUiState.Error)
-                    is Resource.Success -> {
-                        billInputState.update { current -> BillInputState(it.data) }
-                        flowOf(BillDetailUiState.Success(it.data))
-                    }
 
-                    is Resource.Empty -> flowOf(BillDetailUiState.EmptySelection)
-                }
-            }
-        }
-    }.stateInWhileSubscribed(BillDetailUiState.Loading)
     private val _itemSelected = MutableStateFlow<Item?>(null)
     val itemSelected = _itemSelected.asStateFlow()
     private val _userMessage = MutableStateFlow<Int?>(null)
@@ -138,21 +122,16 @@ class BillCreationViewModel @Inject constructor(
     fun addBillItem(item: Item) {
         billInputState.update { it.apply { addItem(item) } }
     }
+    fun updateBillItem(item: Item) {
+        billInputState.update { it.apply { updateItem(item) } }
+    }
 
     fun onSelectedItem(item: Item) {
         _itemSelected.value = item
     }
 
-    fun updateBillItem(item: Item) {
-        billInputState.update { it.apply { updateItem(item) } }
-    }
-
     fun removeItem(item: Item) {
         billInputState.update { it.apply { removeItem(item) } }
-    }
-
-    fun onBillIdChange(billId: String?) {
-        savedStateHandle[SELECTED_BILL_ID_KEY] = billId
     }
 
     fun updateStockThenAddBill() {
@@ -173,13 +152,11 @@ class BillCreationViewModel @Inject constructor(
                 invoiceItems = inputInvoice.invoiceItems,
             )
             when (val updateResult = updateStockInItemsUseCase(inputInvoice.invoiceItems, true)) {
-                is Resource.Success -> {
+                is OperationResult.Success -> {
                     addBill(supplierInvoice)
                 }
 
-                is Resource.Error -> showSnackbarMessage(updateResult.message as Int)
-                is Resource.Empty -> showSnackbarMessage(updateResult.message as Int)
-                Resource.Loading -> Unit
+                is OperationResult.Failure -> showSnackbarMessage(updateResult.message)
             }
         }
     }
@@ -189,62 +166,7 @@ class BillCreationViewModel @Inject constructor(
         when (billResult) {
             is OperationResult.Success -> {
                 billInputState.update { BillInputState() }
-            }
-
-            is OperationResult.Failure -> {
-                showSnackbarMessage(billResult.message)
-            }
-        }
-    }
-
-    fun updateStockThenUpdateBill() {
-        viewModelScope.launch {
-            if (!isOnline.value) {
-                showSnackbarMessage(uiString.core_ui_error_network)
-                return@launch
-            }
-            val oldInvoice =
-                (billDetailsUiState.value as? BillDetailUiState.Success)?.supplierInvoice
-            if (oldInvoice == null) {
-               // showSnackbarMessage(R.string.feature_bill_item_error_price_empty)
-                return@launch
-            }
-            val inputInvoice = billInputState.value
-            if (oldInvoice.invoiceItems == inputInvoice.invoiceItems &&
-                oldInvoice.dueDate == inputInvoice.dueDate &&
-                oldInvoice.issueDate == inputInvoice.issueDate
-            ) {
-
-                return@launch
-            }
-
-            val supplierInvoice = SupplierInvoice(
-                billNumber = inputInvoice.billNumber,
-                supplierName = inputInvoice.supplierName,
-                issueDate = inputInvoice.issueDate,
-                dueDate = inputInvoice.dueDate,
-                totalAmount = inputInvoice.total,
-                discountType = inputInvoice.discountTypeCurrency,
-                amountDiscounted = inputInvoice.discount.toDoubleOrNull() ?: 0.0,
-                invoiceItems = inputInvoice.invoiceItems,
-            )
-            when (val updateResult = updateStockInItemsUseCase(inputInvoice.invoiceItems, true)) {
-                is Resource.Success -> {
-                    updateBill(supplierInvoice)
-                }
-
-                is Resource.Error -> showSnackbarMessage(updateResult.message as Int)
-                is Resource.Empty -> showSnackbarMessage(updateResult.message as Int)
-                Resource.Loading -> Unit
-            }
-        }
-    }
-
-    private suspend fun updateBill(supplierInvoice: SupplierInvoice) {
-        val billResult = updateSupplierInvoiceUseCase(supplierInvoice)
-        when (billResult) {
-            is OperationResult.Success -> {
-                billInputState.update { BillInputState() }
+                showSnackbarMessage(R.string.feature_bill_added_successfully)
             }
 
             is OperationResult.Failure -> {
@@ -264,6 +186,5 @@ class BillCreationViewModel @Inject constructor(
     companion object {
         private const val SEARCH_SUPPLIER_QUERY = "searchQuerySupplier"
         private const val SEARCH_ITEM_QUERY = "searchQueryItem"
-        private const val SELECTED_BILL_ID_KEY = "selectedBillId"
     }
 }

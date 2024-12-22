@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.feature.bill.creation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,8 +48,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
@@ -59,29 +58,31 @@ import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.utils.MAX_CURRENCY_LENGTH_SIZE
 import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.bill.R
-import com.casecode.pos.feature.bill.SearchItemUiState
 import timber.log.Timber
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun BillItemFormScreen(
-    viewModel: BillCreationViewModel = hiltViewModel(),
     isUpdate: Boolean = false,
+    itemUpdated: Item?,
+    searchItemQuery: String,
+    filterItemState: SearchItemUiState,
+    onSearchItemChange: (String) -> Unit,
+    onAddBillItem: (Item) -> Unit = {},
+    onUpdateBillItem: (Item) -> Unit = {},
     onBackClick: () -> Unit,
 ) {
-    val searchItem by viewModel.searchQueryItem.collectAsStateWithLifecycle()
-    val filterItemState by viewModel.filterItemsUiState.collectAsStateWithLifecycle()
-    val itemUpdated by viewModel.itemSelected.collectAsStateWithLifecycle()
     BillItemFormScreen(
         isUpdate = isUpdate,
         itemUpdated = itemUpdated,
-        searchItemQuery = searchItem,
+        searchItemQuery = searchItemQuery,
         filterItemState = filterItemState,
         onNavigateBack = onBackClick,
-        onSearchItemChange = viewModel::onSearchQueryItemChanged,
-        onAddBillItem = { viewModel.addBillItem(it) },
-        onUpdateBillItem = { viewModel.updateBillItem(it) },
+        onSearchItemChange = onSearchItemChange,
+        onAddBillItem = onAddBillItem,
+        onUpdateBillItem = onUpdateBillItem,
     )
+    BackHandler(onBack = onBackClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)

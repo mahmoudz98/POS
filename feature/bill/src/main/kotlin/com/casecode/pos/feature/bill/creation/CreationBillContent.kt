@@ -56,9 +56,9 @@ import com.casecode.pos.core.designsystem.component.PosFilledTextField
 import com.casecode.pos.core.designsystem.component.PosInputChip
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.model.data.users.DiscountType
 import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.bill.R
-import com.casecode.pos.feature.bill.SearchSupplierUiState
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -140,16 +140,18 @@ internal fun SupplierExposeDropdownMenuBox(
         }
     }
 }
+
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 internal fun BillItemsTotalSection(
     subTotal: Double,
     discount: String,
-    discountTypeCurrency: Boolean,
+    discountTypeCurrency: DiscountType,
     total: Double,
     onDiscountChange: (String) -> Unit,
     onDiscountTypeChange: () -> Unit,
 ) {
+    val isFixed = discountTypeCurrency == DiscountType.FIXED
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
@@ -178,7 +180,7 @@ internal fun BillItemsTotalSection(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 PosInputChip(
-                    selected = discountTypeCurrency,
+                    selected = isFixed,
                     onSelectedChange = { onDiscountTypeChange() },
                     modifier = Modifier
                         .padding(start = quarterWidth)
@@ -186,7 +188,7 @@ internal fun BillItemsTotalSection(
                     selectedIcon = Icons.Rounded.CurrencyPound,
                     unSelectedIcon = Icons.Rounded.Percent,
                 ) {
-                    if (discountTypeCurrency) {
+                    if (isFixed) {
                         Text(stringResource(R.string.feature_bill_currency_discount_text))
                     } else {
                         Text(stringResource(R.string.feature_bill_percentage_discount_text))
@@ -198,10 +200,10 @@ internal fun BillItemsTotalSection(
                         onDiscountChange(it)
                     },
                     keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done,
-                        ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done,
+                    ),
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .weight(0.4f),
@@ -263,6 +265,7 @@ fun BillLineItem(
         modifier = modifier.clickable(onClick = onClickItem),
     )
 }
+
 @Preview
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
