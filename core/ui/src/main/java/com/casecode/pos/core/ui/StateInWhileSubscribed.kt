@@ -26,18 +26,16 @@ import kotlinx.coroutines.flow.stateIn
 
 context(ViewModel)
 @Suppress("CONTEXT_RECEIVERS_DEPRECATED")
-fun <T> Flow<T>.stateInWhileSubscribed(initialValue: T): StateFlow<T> =
-    stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = initialValue,
-    )
+fun <T> Flow<T>.stateInWhileSubscribed(initialValue: T): StateFlow<T> = stateIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(5_000),
+    initialValue = initialValue,
+)
 
 context(ViewModel)
 @Suppress("CONTEXT_RECEIVERS_DEPRECATED")
-fun <T> Flow<T>.shareInWhileSubscribed(replay: Int): SharedFlow<T> =
-    shareIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        replay = replay,
-    )
+fun <T> Flow<T>.shareInWhileSubscribed(replay: Int): SharedFlow<T> = shareIn(
+    scope = viewModelScope,
+    started = SharingStarted.WhileSubscribed(5_000),
+    replay = replay,
+)

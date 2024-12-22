@@ -23,8 +23,7 @@ package com.casecode.pos.core.ui.utils
  *
  * @return A formatted String representation of the Double, or an empty String if the Double is null.
  */
-fun Double?.toFormattedString(): String =
-    this?.toBigDecimal()?.stripTrailingZeros()?.toPlainString() ?: ""
+fun Double?.toFormattedString(): String = this?.toBigDecimal()?.stripTrailingZeros()?.toPlainString() ?: ""
 
 /**
  * Formats a Double to a String with a specified number of decimal places.
@@ -35,8 +34,7 @@ fun Double?.toFormattedString(): String =
  * @param decimalPlaces The number of decimal places to include in the formatted string. Defaults to 2.
  * @return The formatted string representation of the Double.
  */
-fun Double.toBigDecimalFormatted(decimalPlaces: Int = 2): String =
-    toBigDecimal()
-        .setScale(decimalPlaces, java.math.RoundingMode.HALF_UP)
-        .stripTrailingZeros()
-        .toPlainString()
+fun Double.toBigDecimalFormatted(decimalPlaces: Int = 2): String = toBigDecimal()
+    .setScale(decimalPlaces, java.math.RoundingMode.HALF_UP)
+    .stripTrailingZeros()
+    .toPlainString()
