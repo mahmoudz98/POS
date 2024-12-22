@@ -24,11 +24,10 @@ import androidx.navigation.navigation
 import com.casecode.pos.feature.bill.BillsScreen
 import com.casecode.pos.feature.bill.BillsViewModel
 import com.casecode.pos.feature.bill.creation.AddBillScreen
-import com.casecode.pos.feature.bill.creation.BillCreationViewModel
-import com.casecode.pos.feature.bill.creation.BillItemFormScreen
-import com.casecode.pos.feature.bill.creation.UpdateBillScreen
 import com.casecode.pos.feature.bill.detials.AddBillPaymentScreen
+import com.casecode.pos.feature.bill.detials.BillDetailsViewModel
 import com.casecode.pos.feature.bill.detials.BillScreen
+import com.casecode.pos.feature.bill.detials.UpdateBillScreen
 import com.casecode.pos.feature.bill.navigation.BillsGraph.BillsRoute
 import kotlinx.serialization.Serializable
 import timber.log.Timber
@@ -42,7 +41,7 @@ internal sealed class BillsGraph {
     data object BillsRoute : BillsGraph()
 
     @Serializable
-    data object BillDetailsRoute : BillsGraph()
+    data class BillDetailsRoute(val billId: String? = null) : BillsGraph()
 
     @Serializable
     data object BillPaymentRoute : BillsGraph()
@@ -51,13 +50,7 @@ internal sealed class BillsGraph {
     data object BillCreationRoute : BillsGraph()
 
     @Serializable
-    data object BillCreationItemRoute : BillsGraph()
-
-    @Serializable
-    data object BillEditingItemRoute : BillsGraph()
-
-    @Serializable
-    data class BillEditingRoute(val billId: String? = null) : BillsGraph()
+    data object BillEditingRoute : BillsGraph()
 }
 
 fun NavGraphBuilder.billsGraph(navController: NavController) {
@@ -65,10 +58,8 @@ fun NavGraphBuilder.billsGraph(navController: NavController) {
         billsScreen(navController)
         billScreen(navController)
         billPayment(navController)
-        addBillScreen(navController)
+        addBillScreen(navController::popBackStack)
         updateBillScreen(navController)
-        addBillItemScreen(navController)
-        updateBillItemScreen(navController)
     }
 }
 
@@ -94,7 +85,10 @@ fun NavGraphBuilder.billScreen(navController: NavController) {
         val parentEntry = remember(backStackEntry) {
             navController.getBackStackEntry(BillsGraph.BillsNavigation)
         }
-        val billDetailsViewModel: BillsViewModel = hiltViewModel(parentEntry)
+        val id = backStackEntry.arguments?.getString(BillsGraph.BillDetailsRoute::billId.name)
+        Timber.d("id: $id")
+        val billDetailsViewModel: BillDetailsViewModel = hiltViewModel(parentEntry)
+        billDetailsViewModel.onBillIdChange(id)
         BillScreen(
             viewModel = billDetailsViewModel,
             onNavigateBack = navController::popBackStack,
@@ -109,7 +103,7 @@ fun NavGraphBuilder.billPayment(navController: NavController) {
         val parentEntry = remember(backStackEntry) {
             navController.getBackStackEntry(BillsGraph.BillsNavigation)
         }
-        val billsViewModel: BillsViewModel = hiltViewModel(parentEntry)
+        val billsViewModel: BillDetailsViewModel = hiltViewModel(parentEntry)
 
         AddBillPaymentScreen(
             billsViewModel,
@@ -118,77 +112,34 @@ fun NavGraphBuilder.billPayment(navController: NavController) {
     }
 }
 
-fun NavGraphBuilder.addBillScreen(navController: NavController) {
+fun NavGraphBuilder.addBillScreen(onBackClick: () -> Unit) {
     composable<BillsGraph.BillCreationRoute> {
-        val billsGraphBackStackEntry =
-            remember(it) {
-                navController.getBackStackEntry(BillsGraph.BillsNavigation)
-            }
-        val billsViewModel: BillCreationViewModel = hiltViewModel(billsGraphBackStackEntry)
         AddBillScreen(
-            viewModel = billsViewModel,
-            onBackClick = navController::popBackStack,
-            onAddBillItem = navController::navigateToBillCreationItem,
-            onUpdateBillItem = navController::navigateToBillEditingItem,
-        )
-    }
-}
-
-fun NavGraphBuilder.addBillItemScreen(navController: NavController) {
-    composable<BillsGraph.BillCreationItemRoute> {
-        val billsGraphBackStackEntry =
-            remember(it) {
-                navController.getBackStackEntry(BillsGraph.BillsNavigation)
-            }
-        val billsViewModel: BillCreationViewModel = hiltViewModel(billsGraphBackStackEntry)
-        BillItemFormScreen(
-            viewModel = billsViewModel,
-            onBackClick = navController::popBackStack,
-        )
-    }
-}
-
-fun NavGraphBuilder.updateBillItemScreen(navController: NavController) {
-    composable<BillsGraph.BillEditingItemRoute> { backStackEntry ->
-        val billsGraphBackStackEntry =
-            remember(backStackEntry) {
-                navController.getBackStackEntry(BillsGraph.BillsNavigation)
-            }
-        val billsViewModel: BillCreationViewModel = hiltViewModel(billsGraphBackStackEntry)
-        BillItemFormScreen(
-            viewModel = billsViewModel,
-            isUpdate = true,
-            onBackClick = navController::popBackStack,
+            onBackClick = onBackClick,
         )
     }
 }
 
 fun NavGraphBuilder.updateBillScreen(navController: NavController) {
-    composable<BillsGraph.BillEditingRoute> {backStackEntry->
+    composable<BillsGraph.BillEditingRoute> { backStackEntry ->
         val billsGraphBackStackEntry =
             remember(backStackEntry) {
                 navController.getBackStackEntry(BillsGraph.BillsNavigation)
             }
-        val id = backStackEntry.arguments?.getString(BillsGraph.BillEditingRoute::billId.name)
-        val billsViewModel: BillCreationViewModel = hiltViewModel(billsGraphBackStackEntry)
-        billsViewModel.onBillIdChange(id)
+        val billsViewModel: BillDetailsViewModel = hiltViewModel(billsGraphBackStackEntry)
 
         UpdateBillScreen(
             viewModel = billsViewModel,
             onBackClick = navController::popBackStack,
-            onAddBillItem = navController::navigateToBillCreationItem,
-            onUpdateBillItem = navController::navigateToBillEditingItem,
         )
     }
 }
 
 fun NavController.navigateToBillsGraph() = navigate(BillsGraph.BillsNavigation)
 private fun NavController.navigateToBills() = navigate(BillsGraph.BillsRoute)
-private fun NavController.navigateToBillDetails() = navigate(BillsGraph.BillDetailsRoute)
+private fun NavController.navigateToBillDetails(id: String?) =
+    navigate(BillsGraph.BillDetailsRoute(id))
 
 private fun NavController.navigateToBillPayment() = navigate(BillsGraph.BillPaymentRoute)
 private fun NavController.navigateToBillCreation() = navigate(BillsGraph.BillCreationRoute)
-private fun NavController.navigateToBillCreationItem() = navigate(BillsGraph.BillCreationItemRoute)
-private fun NavController.navigateToBillEditingItem() = navigate(BillsGraph.BillEditingItemRoute)
-private fun NavController.navigateToBillEditing(id: String?) =
-    navigate(BillsGraph.BillEditingRoute(id))
+private fun NavController.navigateToBillEditing() = navigate(BillsGraph.BillEditingRoute)
