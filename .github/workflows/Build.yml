@@ -57,7 +57,7 @@ jobs:
 
       - name: Copy secrets to gradle.properties
         run: |
-            sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" local.defaults.properties > local.properties
+            sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" secrets.defaults.properties > local.properties
         env:
           WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
 
@@ -191,7 +191,7 @@ jobs:
 
       - name: Copy secrets to gradle.properties
         run: |
-          sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" local.defaults.properties > local.properties
+          sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" secrets.defaults.properties > local.properties
         env:
           WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
 
