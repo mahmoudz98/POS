@@ -29,7 +29,6 @@ enum class Permission(
     NONE("None", ""),
 }
 
-fun String.toPermission(): Permission? =
-    Permission.entries.find { type ->
-        type.arabicName == this || type.englishName.lowercase() == this.lowercase()
-    }
+fun String.toPermission(): Permission? = Permission.entries.find { type ->
+    type.arabicName == this || type.englishName.lowercase() == this.lowercase()
+}

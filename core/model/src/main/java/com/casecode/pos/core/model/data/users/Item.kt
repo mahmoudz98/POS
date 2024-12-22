@@ -57,6 +57,5 @@ data class Item(
         return name == other.name && category == other.category && sku == other.sku
     }
 
-    override fun hashCode(): Int =
-        31 * name.hashCode() + 31 * sku.hashCode() + costPrice.hashCode() + quantity.hashCode()
+    override fun hashCode(): Int = 31 * name.hashCode() + 31 * sku.hashCode() + costPrice.hashCode() + quantity.hashCode()
 }

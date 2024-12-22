@@ -24,7 +24,6 @@ enum class PrinterConnectionType(
     ETHERNET("Ethernet", "إيثرنت"),
 }
 
-fun String.toConnectionType(): PrinterConnectionType? =
-    PrinterConnectionType.entries.find { type ->
-        type.ar == this || type.en.lowercase() == this.lowercase()
-    }
+fun String.toConnectionType(): PrinterConnectionType? = PrinterConnectionType.entries.find { type ->
+    type.ar == this || type.en.lowercase() == this.lowercase()
+}

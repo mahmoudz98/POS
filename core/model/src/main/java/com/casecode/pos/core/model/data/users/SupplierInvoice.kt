@@ -39,7 +39,7 @@ data class SupplierInvoice(
         get() = totalAmount - paymentDetails.sumOf { it.amountPaid }
 }
 
-enum class DiscountType() {
+enum class DiscountType {
     PERCENTAGE,
     FIXED,
 }
