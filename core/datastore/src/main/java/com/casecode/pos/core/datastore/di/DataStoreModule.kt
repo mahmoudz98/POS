@@ -43,11 +43,10 @@ object DataStoreModule {
         @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
         loginPreferencesSerializer: LoginPreferencesSerializer,
-    ): DataStore<LoginPreferences> =
-        DataStoreFactory.create(
-            serializer = loginPreferencesSerializer,
-            scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
-        ) {
-            context.dataStoreFile("login_preferences.pb")
-        }
+    ): DataStore<LoginPreferences> = DataStoreFactory.create(
+        serializer = loginPreferencesSerializer,
+        scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
+    ) {
+        context.dataStoreFile("login_preferences.pb")
+    }
 }
