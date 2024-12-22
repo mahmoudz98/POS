@@ -76,9 +76,7 @@ object BluetoothUtils {
         }
     }
 
-    fun getAvailableBluetoothPrinters(): List<BluetoothConnection> =
-        BluetoothPrintersConnections().list?.toList() ?: emptyList()
+    fun getAvailableBluetoothPrinters(): List<BluetoothConnection> = BluetoothPrintersConnections().list?.toList() ?: emptyList()
 
-    fun connectToBluetoothPrinter(device: BluetoothDevice): BluetoothConnection =
-        BluetoothConnection(device)
+    fun connectToBluetoothPrinter(device: BluetoothDevice): BluetoothConnection = BluetoothConnection(device)
 }
