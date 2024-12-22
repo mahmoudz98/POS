@@ -53,8 +53,7 @@ class ExampleStartupBenchmark {
     )
 
     @Test
-    fun startupPrecompiledWithBaselineProfile() =
-        startup(CompilationMode.Partial(baselineProfileMode = Require))
+    fun startupPrecompiledWithBaselineProfile() = startup(CompilationMode.Partial(baselineProfileMode = Require))
 
     @Test
     fun startupFullyPrecompiled() = startup(CompilationMode.Full())
