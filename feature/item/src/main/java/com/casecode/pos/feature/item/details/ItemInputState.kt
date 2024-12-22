@@ -36,10 +36,9 @@ import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.item.R
 
 @Composable
-fun rememberItemInputState(itemUpdated: Item?): ItemInputState =
-    rememberSaveable(itemUpdated, saver = ItemInputState.Saver) {
-        ItemInputState(itemUpdated)
-    }
+fun rememberItemInputState(itemUpdated: Item?): ItemInputState = rememberSaveable(itemUpdated, saver = ItemInputState.Saver) {
+    ItemInputState(itemUpdated)
+}
 
 @Stable
 class ItemInputState(

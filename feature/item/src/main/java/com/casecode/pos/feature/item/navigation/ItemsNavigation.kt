@@ -81,31 +81,29 @@ fun NavGraphBuilder.itemsScreen(navController: NavController) {
     }
 }
 
-fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenTransition() =
-    slideIntoContainer(
-        animationSpec = tween(200, easing = EaseIn),
-        towards = AnimatedContentTransitionScope.SlideDirection.Start,
-    ) +
-        fadeIn(
-            animationSpec =
-            tween(
-                200,
-                easing = LinearEasing,
-            ),
-        )
+fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenTransition() = slideIntoContainer(
+    animationSpec = tween(200, easing = EaseIn),
+    towards = AnimatedContentTransitionScope.SlideDirection.Start,
+) +
+    fadeIn(
+        animationSpec =
+        tween(
+            200,
+            easing = LinearEasing,
+        ),
+    )
 
-fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenExitTransition() =
-    slideOutOfContainer(
-        animationSpec = tween(200, easing = EaseOut),
-        towards = AnimatedContentTransitionScope.SlideDirection.End,
-    ) +
-        fadeOut(
-            animationSpec =
-            tween(
-                200,
-                easing = LinearEasing,
-            ),
-        )
+fun AnimatedContentTransitionScope<NavBackStackEntry>.defaultItemScreenExitTransition() = slideOutOfContainer(
+    animationSpec = tween(200, easing = EaseOut),
+    towards = AnimatedContentTransitionScope.SlideDirection.End,
+) +
+    fadeOut(
+        animationSpec =
+        tween(
+            200,
+            easing = LinearEasing,
+        ),
+    )
 
 private fun NavGraphBuilder.addItemScreen(
     navController: NavController,
