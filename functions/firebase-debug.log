@@ -1,0 +1,1060 @@
+[debug] [2024-11-30T11:29:48.277Z] ----------------------------------------------------------------------
+[debug] [2024-11-30T11:29:48.281Z] Command:       /usr/bin/node-20 /usr/local/bin/firebase emulators:start --inspect-functions --only functions
+[debug] [2024-11-30T11:29:48.282Z] CLI Version:   13.27.0
+[debug] [2024-11-30T11:29:48.282Z] Platform:      linux
+[debug] [2024-11-30T11:29:48.283Z] Node Version:  v20.17.0
+[debug] [2024-11-30T11:29:48.283Z] Time:          Sat Nov 30 2024 13:29:48 GMT+0200 (Eastern European Standard Time)
+[debug] [2024-11-30T11:29:48.283Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-30T11:29:48.450Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-30T11:29:48.451Z] > authorizing via signed-in user (mahmoud99239@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2024-11-30T11:29:48.462Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-30T11:29:48.462Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4410},{"address":"::1","family":"IPv6","port":4410}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4010},{"address":"::1","family":"IPv6","port":4010}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4510}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-11-30T11:29:48.469Z] [hub] writing locator at /tmp/hub-point-of-sale-cc.json
+[debug] [2024-11-30T11:29:48.497Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-30T11:29:48.498Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-30T11:29:48.498Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-30T11:29:48.498Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4410},{"address":"::1","family":"IPv6","port":4410}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4010},{"address":"::1","family":"IPv6","port":4010}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4510}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5010}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9310}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9510}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: You are running the Functions emulator in debug mode. This means that functions will execute in sequence rather than in parallel. {"metadata":{"emulator":{"name":"functions"},"message":"You are running the Functions emulator in debug mode. This means that functions will execute in sequence rather than in parallel."}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2024-11-30T11:29:48.504Z] defaultcredentials: writing to file /home/mahmoudabdahafeez/.config/firebase/mahmoud99239_gmail_com_application_default_credentials.json
+[debug] [2024-11-30T11:29:48.507Z] Setting GAC to /home/mahmoudabdahafeez/.config/firebase/mahmoud99239_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /home/mahmoudabdahafeez/.config/firebase/mahmoud99239_gmail_com_application_default_credentials.json"}}
+[debug] [2024-11-30T11:29:48.509Z] Checked if tokens are valid: true, expires at: 1732968601699
+[debug] [2024-11-30T11:29:48.509Z] Checked if tokens are valid: true, expires at: 1732968601699
+[debug] [2024-11-30T11:29:48.511Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/point-of-sale-cc/adminSdkConfig [none]
+[debug] [2024-11-30T11:29:49.394Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/point-of-sale-cc/adminSdkConfig 200
+[debug] [2024-11-30T11:29:49.394Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/point-of-sale-cc/adminSdkConfig {"projectId":"point-of-sale-cc","databaseURL":"https://point-of-sale-cc-default-rtdb.firebaseio.com","storageBucket":"point-of-sale-cc.appspot.com","locationId":"us-central"}
+[info] i  functions: Watching "/home/mahmoudabdahafeez/Android/Projects/POS/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/home/mahmoudabdahafeez/Android/Projects/POS/functions\" for Cloud Functions..."}}
+[debug] [2024-11-30T11:29:49.432Z] Validating nodejs source
+[debug] [2024-11-30T11:29:50.435Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev": "npm run build && firebase emulators:start --inspect-functions --only functions ",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-11-30T11:29:50.435Z] Building nodejs source
+[debug] [2024-11-30T11:29:50.436Z] Failed to find version of module node: reached end of search path /home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-30T11:29:50.443Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-30T11:29:50.446Z] Found firebase-functions binary at '/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8804
+
+[debug] [2024-11-30T11:29:50.925Z] Got response from /__/functions.yaml {"endpoints":{"updateSupplierInvoiceStatus":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"eventTrigger":{"eventType":"google.cloud.firestore.document.v1.written","eventFilters":{"database":"(default)","namespace":"(default)"},"eventFilterPathPatterns":{"document":"users/{documentId}/supplierInvoice/{documentId}"},"retry":false},"entryPoint":"updateSupplierInvoiceStatus"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: updateSupplierInvoiceStatus. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: updateSupplierInvoiceStatus."}}
+[info] i  functions[us-central1-updateSupplierInvoiceStatus]: function ignored because the firestore emulator does not exist or is not running. {"metadata":{"emulator":{"name":"functions"},"message":"function ignored because the firestore emulator does not exist or is not running."}}
+[info] ✔  functions: Using debug port 9229 for functions codebase default {"metadata":{"emulator":{"name":"functions"},"message":"Using debug port 9229 for functions codebase default"}}
+[debug] [2024-11-30T11:29:55.978Z] [worker-pool] addWorker(~shared~) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(~shared~)"}}
+[debug] [2024-11-30T11:29:55.979Z] [worker-pool] Adding worker with key ~free~, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key ~free~, total=1"}}
+[info] >  Debugger listening on ws://127.0.0.1:9229/4b66dbc4-91ed-4f17-8e94-9ff5c4afd71c {"user":"Debugger listening on ws://127.0.0.1:9229/4b66dbc4-91ed-4f17-8e94-9ff5c4afd71c","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m Debugger listening on ws://127.0.0.1:9229/4b66dbc4-91ed-4f17-8e94-9ff5c4afd71c"}}
+[info] >  For help, see: https://nodejs.org/en/docs/inspector {"user":"For help, see: https://nodejs.org/en/docs/inspector","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m For help, see: https://nodejs.org/en/docs/inspector"}}
+[debug] [2024-11-30T11:29:57.256Z] [runtime-status] [16419] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T11:29:57.257Z] [runtime-status] [16419] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:29:57.258Z] [runtime-status] [16419] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-30T11:29:57.260Z] [runtime-status] [16419] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:29:57.484Z] [runtime-status] [16419] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-11-30T11:29:57.484Z] [runtime-status] [16419] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}}"}}
+[debug] [2024-11-30T11:29:57.486Z] [runtime-status] [16419] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:29:57.493Z] [runtime-status] [16419] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T11:29:57.495Z] [runtime-status] [16419] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:29:57.497Z] [runtime-status] [16419] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[warn] ⚠  functions: The Cloud Firestore emulator is not running, so calls to Firestore will affect production. {"metadata":{"emulator":{"name":"functions"},"message":"The Cloud Firestore emulator is not running, so calls to Firestore will affect production."}}
+[debug] [2024-11-30T11:29:57.501Z] [runtime-status] [16419] initializeApp(DEFAULT) {"storageBucket":"point-of-sale-cc.appspot.com","databaseURL":"https://point-of-sale-cc-default-rtdb.firebaseio.com","projectId":"point-of-sale-cc"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] initializeApp(DEFAULT) {\"storageBucket\":\"point-of-sale-cc.appspot.com\",\"databaseURL\":\"https://point-of-sale-cc-default-rtdb.firebaseio.com\",\"projectId\":\"point-of-sale-cc\"}"}}
+[debug] [2024-11-30T11:29:57.511Z] [runtime-status] [16419] Functions runtime initialized. {"cwd":"/home/mahmoudabdahafeez/Android/Projects/POS/functions","node_version":"20.17.0"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Functions runtime initialized. {\"cwd\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions\",\"node_version\":\"20.17.0\"}"}}
+[debug] [2024-11-30T11:29:57.513Z] [runtime-status] [16419] Listening to port: /tmp/fire_emu_2df3c0398a4d5214.sock {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16419] Listening to port: /tmp/fire_emu_2df3c0398a4d5214.sock"}}
+[debug] [2024-11-30T11:29:57.605Z] [worker-~free~-7f42eb5c-08fe-4399-b9e0-8aeef1761581]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-7f42eb5c-08fe-4399-b9e0-8aeef1761581]: IDLE"}}
+[debug] [2024-11-30T11:29:57.612Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4010/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5010 │ http://127.0.0.1:4010/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4410
+  Other reserved ports: 4510
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2024-11-30T11:32:12.380Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers"}}
+[debug] [2024-11-30T11:32:12.380Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers"}}
+[debug] [2024-11-30T11:32:13.381Z] Validating nodejs source
+[debug] [2024-11-30T11:32:14.520Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev": "npm run build && firebase emulators:start --inspect-functions --only functions ",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-11-30T11:32:14.521Z] Building nodejs source
+[debug] [2024-11-30T11:32:14.521Z] Failed to find version of module node: reached end of search path /home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-30T11:32:14.523Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-30T11:32:14.526Z] Found firebase-functions binary at '/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8855
+
+[debug] [2024-11-30T11:32:15.051Z] Got response from /__/functions.yaml {"endpoints":{"updateSupplierInvoiceStatus":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"eventTrigger":{"eventType":"google.cloud.firestore.document.v1.written","eventFilters":{"database":"(default)","namespace":"(default)"},"eventFilterPathPatterns":{"document":"users/{documentId}/supplierInvoice/{documentId}"},"retry":false},"entryPoint":"updateSupplierInvoiceStatus"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: updateSupplierInvoiceStatus. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: updateSupplierInvoiceStatus."}}
+[info] ✔  functions: Using debug port 9230 for functions codebase default. You may need to add manually add this port to your inspector. {"metadata":{"emulator":{"name":"functions"},"message":"Using debug port 9230 for functions codebase default. You may need to add manually add this port to your inspector."}}
+[debug] [2024-11-30T11:32:20.086Z] [worker-pool] addWorker(~shared~) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(~shared~)"}}
+[debug] [2024-11-30T11:32:20.087Z] [worker-pool] Adding worker with key ~free~, total=2 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key ~free~, total=2"}}
+[debug] [2024-11-30T11:32:20.091Z] [worker-~free~-7f42eb5c-08fe-4399-b9e0-8aeef1761581]: exited {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-7f42eb5c-08fe-4399-b9e0-8aeef1761581]: exited"}}
+[debug] [2024-11-30T11:32:20.091Z] [worker-~free~-7f42eb5c-08fe-4399-b9e0-8aeef1761581]: FINISHED {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-7f42eb5c-08fe-4399-b9e0-8aeef1761581]: FINISHED"}}
+[info] >  Debugger listening on ws://127.0.0.1:9230/0c996318-4859-4093-92ba-cce4920ae3ba {"user":"Debugger listening on ws://127.0.0.1:9230/0c996318-4859-4093-92ba-cce4920ae3ba","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m Debugger listening on ws://127.0.0.1:9230/0c996318-4859-4093-92ba-cce4920ae3ba"}}
+[info] >  For help, see: https://nodejs.org/en/docs/inspector {"user":"For help, see: https://nodejs.org/en/docs/inspector","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m For help, see: https://nodejs.org/en/docs/inspector"}}
+[debug] [2024-11-30T11:32:21.343Z] [runtime-status] [16802] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T11:32:21.345Z] [runtime-status] [16802] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:32:21.347Z] [runtime-status] [16802] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-30T11:32:21.348Z] [runtime-status] [16802] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:32:21.714Z] [runtime-status] [16802] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-11-30T11:32:21.714Z] [runtime-status] [16802] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}}"}}
+[debug] [2024-11-30T11:32:21.717Z] [runtime-status] [16802] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:32:21.722Z] [runtime-status] [16802] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T11:32:21.723Z] [runtime-status] [16802] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:32:21.723Z] [runtime-status] [16802] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2024-11-30T11:32:21.727Z] [runtime-status] [16802] initializeApp(DEFAULT) {"storageBucket":"point-of-sale-cc.appspot.com","databaseURL":"https://point-of-sale-cc-default-rtdb.firebaseio.com","projectId":"point-of-sale-cc"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] initializeApp(DEFAULT) {\"storageBucket\":\"point-of-sale-cc.appspot.com\",\"databaseURL\":\"https://point-of-sale-cc-default-rtdb.firebaseio.com\",\"projectId\":\"point-of-sale-cc\"}"}}
+[debug] [2024-11-30T11:32:21.740Z] [runtime-status] [16802] Functions runtime initialized. {"cwd":"/home/mahmoudabdahafeez/Android/Projects/POS/functions","node_version":"20.17.0"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Functions runtime initialized. {\"cwd\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions\",\"node_version\":\"20.17.0\"}"}}
+[debug] [2024-11-30T11:32:21.742Z] [runtime-status] [16802] Listening to port: /tmp/fire_emu_b9436c42e83e257c.sock {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [16802] Listening to port: /tmp/fire_emu_b9436c42e83e257c.sock"}}
+[debug] [2024-11-30T11:32:21.815Z] [worker-~free~-54563dfd-806d-4f68-9a4f-6a903dcd215b]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-54563dfd-806d-4f68-9a4f-6a903dcd215b]: IDLE"}}
+[debug] [2024-11-30T11:34:40.232Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers"}}
+[debug] [2024-11-30T11:34:40.233Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers"}}
+[debug] [2024-11-30T11:34:41.233Z] Validating nodejs source
+[debug] [2024-11-30T11:34:42.265Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev": "npm run build && firebase emulators:start --inspect-functions --only functions ",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-11-30T11:34:42.265Z] Building nodejs source
+[debug] [2024-11-30T11:34:42.265Z] Failed to find version of module node: reached end of search path /home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-30T11:34:42.268Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-30T11:34:42.270Z] Found firebase-functions binary at '/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8124
+
+[debug] [2024-11-30T11:34:42.753Z] Got response from /__/functions.yaml {"endpoints":{"updateSupplierInvoiceStatus":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"eventTrigger":{"eventType":"google.cloud.firestore.document.v1.written","eventFilters":{"database":"(default)","namespace":"(default)"},"eventFilterPathPatterns":{"document":"users/{documentId}/supplierInvoice/{documentId}"},"retry":false},"entryPoint":"updateSupplierInvoiceStatus"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: updateSupplierInvoiceStatus. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: updateSupplierInvoiceStatus."}}
+[info] ✔  functions: Using debug port 9229 for functions codebase default {"metadata":{"emulator":{"name":"functions"},"message":"Using debug port 9229 for functions codebase default"}}
+[debug] [2024-11-30T11:34:47.794Z] [worker-pool] addWorker(~shared~) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(~shared~)"}}
+[debug] [2024-11-30T11:34:47.794Z] [worker-pool] Adding worker with key ~free~, total=3 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key ~free~, total=3"}}
+[debug] [2024-11-30T11:34:47.797Z] [worker-~free~-54563dfd-806d-4f68-9a4f-6a903dcd215b]: exited {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-54563dfd-806d-4f68-9a4f-6a903dcd215b]: exited"}}
+[debug] [2024-11-30T11:34:47.797Z] [worker-~free~-54563dfd-806d-4f68-9a4f-6a903dcd215b]: FINISHED {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-54563dfd-806d-4f68-9a4f-6a903dcd215b]: FINISHED"}}
+[info] >  Debugger listening on ws://127.0.0.1:9229/c2cb9e36-16ff-4ceb-afe7-7873ae3bb337 {"user":"Debugger listening on ws://127.0.0.1:9229/c2cb9e36-16ff-4ceb-afe7-7873ae3bb337","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m Debugger listening on ws://127.0.0.1:9229/c2cb9e36-16ff-4ceb-afe7-7873ae3bb337"}}
+[info] >  For help, see: https://nodejs.org/en/docs/inspector {"user":"For help, see: https://nodejs.org/en/docs/inspector","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m For help, see: https://nodejs.org/en/docs/inspector"}}
+[debug] [2024-11-30T11:34:49.078Z] [runtime-status] [17069] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T11:34:49.081Z] [runtime-status] [17069] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:34:49.082Z] [runtime-status] [17069] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-30T11:34:49.083Z] [runtime-status] [17069] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:34:49.356Z] [runtime-status] [17069] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-11-30T11:34:49.357Z] [runtime-status] [17069] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}}"}}
+[debug] [2024-11-30T11:34:49.361Z] [runtime-status] [17069] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:34:49.368Z] [runtime-status] [17069] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T11:34:49.368Z] [runtime-status] [17069] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T11:34:49.368Z] [runtime-status] [17069] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2024-11-30T11:34:49.372Z] [runtime-status] [17069] initializeApp(DEFAULT) {"storageBucket":"point-of-sale-cc.appspot.com","databaseURL":"https://point-of-sale-cc-default-rtdb.firebaseio.com","projectId":"point-of-sale-cc"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] initializeApp(DEFAULT) {\"storageBucket\":\"point-of-sale-cc.appspot.com\",\"databaseURL\":\"https://point-of-sale-cc-default-rtdb.firebaseio.com\",\"projectId\":\"point-of-sale-cc\"}"}}
+[debug] [2024-11-30T11:34:49.387Z] [runtime-status] [17069] Functions runtime initialized. {"cwd":"/home/mahmoudabdahafeez/Android/Projects/POS/functions","node_version":"20.17.0"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Functions runtime initialized. {\"cwd\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions\",\"node_version\":\"20.17.0\"}"}}
+[debug] [2024-11-30T11:34:49.391Z] [runtime-status] [17069] Listening to port: /tmp/fire_emu_73aff1529a2c45b0.sock {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [17069] Listening to port: /tmp/fire_emu_73aff1529a2c45b0.sock"}}
+[debug] [2024-11-30T11:34:49.424Z] [worker-~free~-82dc847e-487c-4a33-beda-532580b24cdf]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-82dc847e-487c-4a33-beda-532580b24cdf]: IDLE"}}
+[debug] [2024-11-30T12:33:56.568Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/src/index.ts changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/src/index.ts changed, reloading triggers"}}
+[debug] [2024-11-30T12:33:57.020Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers"}}
+[debug] [2024-11-30T12:33:57.021Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers"}}
+[debug] [2024-11-30T12:33:58.023Z] Validating nodejs source
+[debug] [2024-11-30T12:33:59.265Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev": "npm run build && firebase emulators:start --inspect-functions --only functions ",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-11-30T12:33:59.265Z] Building nodejs source
+[debug] [2024-11-30T12:33:59.265Z] Failed to find version of module node: reached end of search path /home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-30T12:33:59.266Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-30T12:33:59.268Z] Found firebase-functions binary at '/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8933
+
+[debug] [2024-11-30T12:33:59.809Z] Got response from /__/functions.yaml {"endpoints":{"updateSupplierInvoiceStatus":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"eventTrigger":{"eventType":"google.cloud.firestore.document.v1.written","eventFilters":{"database":"(default)","namespace":"(default)"},"eventFilterPathPatterns":{"document":"users/{documentId}/supplierInvoice/{documentId}"},"retry":false},"entryPoint":"updateSupplierInvoiceStatus"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: updateSupplierInvoiceStatus. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: updateSupplierInvoiceStatus."}}
+[info] ✔  functions: Using debug port 9230 for functions codebase default. You may need to add manually add this port to your inspector. {"metadata":{"emulator":{"name":"functions"},"message":"Using debug port 9230 for functions codebase default. You may need to add manually add this port to your inspector."}}
+[debug] [2024-11-30T12:34:04.836Z] [worker-pool] addWorker(~shared~) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(~shared~)"}}
+[debug] [2024-11-30T12:34:04.837Z] [worker-pool] Adding worker with key ~free~, total=4 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key ~free~, total=4"}}
+[debug] [2024-11-30T12:34:04.840Z] [worker-~free~-82dc847e-487c-4a33-beda-532580b24cdf]: exited {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-82dc847e-487c-4a33-beda-532580b24cdf]: exited"}}
+[debug] [2024-11-30T12:34:04.840Z] [worker-~free~-82dc847e-487c-4a33-beda-532580b24cdf]: FINISHED {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-82dc847e-487c-4a33-beda-532580b24cdf]: FINISHED"}}
+[info] >  Debugger listening on ws://127.0.0.1:9230/27b4ee1c-eb25-40ef-9df3-ed03df2807ba {"user":"Debugger listening on ws://127.0.0.1:9230/27b4ee1c-eb25-40ef-9df3-ed03df2807ba","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m Debugger listening on ws://127.0.0.1:9230/27b4ee1c-eb25-40ef-9df3-ed03df2807ba"}}
+[info] >  For help, see: https://nodejs.org/en/docs/inspector {"user":"For help, see: https://nodejs.org/en/docs/inspector","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m For help, see: https://nodejs.org/en/docs/inspector"}}
+[debug] [2024-11-30T12:34:06.342Z] [runtime-status] [19163] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T12:34:06.344Z] [runtime-status] [19163] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T12:34:06.346Z] [runtime-status] [19163] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-30T12:34:06.346Z] [runtime-status] [19163] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T12:34:06.689Z] [runtime-status] [19163] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-11-30T12:34:06.689Z] [runtime-status] [19163] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}}"}}
+[debug] [2024-11-30T12:34:06.691Z] [runtime-status] [19163] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T12:34:06.696Z] [runtime-status] [19163] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T12:34:06.699Z] [runtime-status] [19163] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T12:34:06.703Z] [runtime-status] [19163] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2024-11-30T12:34:06.705Z] [runtime-status] [19163] initializeApp(DEFAULT) {"storageBucket":"point-of-sale-cc.appspot.com","databaseURL":"https://point-of-sale-cc-default-rtdb.firebaseio.com","projectId":"point-of-sale-cc"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] initializeApp(DEFAULT) {\"storageBucket\":\"point-of-sale-cc.appspot.com\",\"databaseURL\":\"https://point-of-sale-cc-default-rtdb.firebaseio.com\",\"projectId\":\"point-of-sale-cc\"}"}}
+[debug] [2024-11-30T12:34:06.716Z] [runtime-status] [19163] Functions runtime initialized. {"cwd":"/home/mahmoudabdahafeez/Android/Projects/POS/functions","node_version":"20.17.0"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Functions runtime initialized. {\"cwd\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions\",\"node_version\":\"20.17.0\"}"}}
+[debug] [2024-11-30T12:34:06.718Z] [runtime-status] [19163] Listening to port: /tmp/fire_emu_632862de2093ed26.sock {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [19163] Listening to port: /tmp/fire_emu_632862de2093ed26.sock"}}
+[debug] [2024-11-30T12:34:06.773Z] [worker-~free~-a5477b54-1f4d-4206-9cbf-bb2a9de83167]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-a5477b54-1f4d-4206-9cbf-bb2a9de83167]: IDLE"}}
+[debug] [2024-11-30T13:55:28.854Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/src/index.ts changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/src/index.ts changed, reloading triggers"}}
+[debug] [2024-11-30T13:55:29.569Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js.map changed, reloading triggers"}}
+[debug] [2024-11-30T13:55:29.571Z] File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /home/mahmoudabdahafeez/Android/Projects/POS/functions/lib/index.js changed, reloading triggers"}}
+[debug] [2024-11-30T13:55:30.573Z] Validating nodejs source
+[debug] [2024-11-30T13:55:32.352Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev": "npm run build && firebase emulators:start --inspect-functions --only functions ",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2024-11-30T13:55:32.353Z] Building nodejs source
+[debug] [2024-11-30T13:55:32.353Z] Failed to find version of module node: reached end of search path /home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-30T13:55:32.357Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-30T13:55:32.383Z] Found firebase-functions binary at '/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8973
+
+[debug] [2024-11-30T13:55:33.333Z] Got response from /__/functions.yaml {"endpoints":{"updateSupplierInvoiceStatus":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"eventTrigger":{"eventType":"google.cloud.firestore.document.v1.written","eventFilters":{"database":"(default)","namespace":"(default)"},"eventFilterPathPatterns":{"document":"users/{documentId}/supplierInvoice/{documentId}"},"retry":false},"entryPoint":"updateSupplierInvoiceStatus"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: updateSupplierInvoiceStatus. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: updateSupplierInvoiceStatus."}}
+[info] ✔  functions: Using debug port 9229 for functions codebase default {"metadata":{"emulator":{"name":"functions"},"message":"Using debug port 9229 for functions codebase default"}}
+[debug] [2024-11-30T13:55:38.377Z] [worker-pool] addWorker(~shared~) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(~shared~)"}}
+[debug] [2024-11-30T13:55:38.378Z] [worker-pool] Adding worker with key ~free~, total=5 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key ~free~, total=5"}}
+[debug] [2024-11-30T13:55:38.380Z] [worker-~free~-a5477b54-1f4d-4206-9cbf-bb2a9de83167]: exited {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-a5477b54-1f4d-4206-9cbf-bb2a9de83167]: exited"}}
+[debug] [2024-11-30T13:55:38.381Z] [worker-~free~-a5477b54-1f4d-4206-9cbf-bb2a9de83167]: FINISHED {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-a5477b54-1f4d-4206-9cbf-bb2a9de83167]: FINISHED"}}
+[info] >  Debugger listening on ws://127.0.0.1:9229/57c4ce97-d6ea-4ecf-8b19-c026da0b55a4 {"user":"Debugger listening on ws://127.0.0.1:9229/57c4ce97-d6ea-4ecf-8b19-c026da0b55a4","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m Debugger listening on ws://127.0.0.1:9229/57c4ce97-d6ea-4ecf-8b19-c026da0b55a4"}}
+[info] >  For help, see: https://nodejs.org/en/docs/inspector {"user":"For help, see: https://nodejs.org/en/docs/inspector","metadata":{"emulator":{"name":"functions"},"message":"\u001b[90m> \u001b[39m For help, see: https://nodejs.org/en/docs/inspector"}}
+[debug] [2024-11-30T13:55:40.705Z] [runtime-status] [22924] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T13:55:40.707Z] [runtime-status] [22924] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T13:55:40.709Z] [runtime-status] [22924] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-30T13:55:40.710Z] [runtime-status] [22924] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T13:55:41.086Z] [runtime-status] [22924] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Checked functions.config() {\"config\":{}}"}}
+[debug] [2024-11-30T13:55:41.086Z] [runtime-status] [22924] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}}"}}
+[debug] [2024-11-30T13:55:41.087Z] [runtime-status] [22924] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T13:55:41.095Z] [runtime-status] [22924] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2024-11-30T13:55:41.097Z] [runtime-status] [22924] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.1","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.1\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2024-11-30T13:55:41.098Z] [runtime-status] [22924] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2024-11-30T13:55:41.101Z] [runtime-status] [22924] initializeApp(DEFAULT) {"storageBucket":"point-of-sale-cc.appspot.com","databaseURL":"https://point-of-sale-cc-default-rtdb.firebaseio.com","projectId":"point-of-sale-cc"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] initializeApp(DEFAULT) {\"storageBucket\":\"point-of-sale-cc.appspot.com\",\"databaseURL\":\"https://point-of-sale-cc-default-rtdb.firebaseio.com\",\"projectId\":\"point-of-sale-cc\"}"}}
+[debug] [2024-11-30T13:55:41.111Z] [runtime-status] [22924] Functions runtime initialized. {"cwd":"/home/mahmoudabdahafeez/Android/Projects/POS/functions","node_version":"20.17.0"} {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Functions runtime initialized. {\"cwd\":\"/home/mahmoudabdahafeez/Android/Projects/POS/functions\",\"node_version\":\"20.17.0\"}"}}
+[debug] [2024-11-30T13:55:41.116Z] [runtime-status] [22924] Listening to port: /tmp/fire_emu_d1256d08b00875c9.sock {"metadata":{"emulator":{"name":"functions"},"message":"[runtime-status] [22924] Listening to port: /tmp/fire_emu_d1256d08b00875c9.sock"}}
+[debug] [2024-11-30T13:55:41.218Z] [worker-~free~-7ec131c5-7403-46b4-a2c0-3543862dbacd]: IDLE {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-7ec131c5-7403-46b4-a2c0-3543862dbacd]: IDLE"}}
+[debug] [2024-11-30T14:12:19.646Z] Received signal SIGHUP 1
+[info]  
+[info] i  emulators: Received SIGHUP for the first time. Starting a clean shutdown. 
+[info] i  emulators: Please wait for a clean shutdown or send the SIGHUP signal again to stop right now. 
+[debug] [2024-11-30T14:12:19.664Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.669Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.670Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.674Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.675Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.676Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.678Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.679Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.681Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.684Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.685Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.686Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.687Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.688Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.690Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.693Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.696Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.698Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.700Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.702Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.703Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.706Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.707Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.708Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.713Z] Ignoring signal SIGHUP due to short delay of 67ms
+[debug] [2024-11-30T14:12:19.713Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.714Z] [worker-~free~-7ec131c5-7403-46b4-a2c0-3543862dbacd]: exited {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-7ec131c5-7403-46b4-a2c0-3543862dbacd]: exited"}}
+[debug] [2024-11-30T14:12:19.716Z] [worker-~free~-7ec131c5-7403-46b4-a2c0-3543862dbacd]: FINISHED {"metadata":{"emulator":{"name":"functions"},"message":"[worker-~free~-7ec131c5-7403-46b4-a2c0-3543862dbacd]: FINISHED"}}
+[debug] [2024-11-30T14:12:19.717Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.722Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.724Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.725Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.728Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.729Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.730Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.731Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.732Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.732Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.733Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.734Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.738Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.739Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.740Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.740Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.741Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.744Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.746Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.746Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.751Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.752Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.752Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.753Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.756Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.757Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.758Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.769Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.770Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2024-11-30T14:12:19.771Z] Error: write EIO
+    at afterWriteDispatched (node:internal/stream_base_commons:161:15)
+    at writeGeneric (node:internal/stream_base_commons:152:3)
+    at Socket._writeGeneric (node:net:954:11)
+    at Socket._write (node:net:966:8)
+    at writeOrBuffer (node:internal/streams/writable:570:12)
+    at _write (node:internal/streams/writable:499:10)
+    at Writable.write (node:internal/streams/writable:508:10)
+    at Console.log (/usr/local/lib/node_modules/firebase-tools/node_modules/winston/lib/winston/transports/console.js:87:23)
+    at Console._write (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/modern.js:103:17)
+    at doWrite (/usr/local/lib/node_modules/firebase-tools/node_modules/winston-transport/node_modules/readable-stream/lib/_stream_writable.js:390:139)
