@@ -32,6 +32,7 @@ fun <T> Flow<T>.stateInWhileSubscribed(initialValue: T): StateFlow<T> =
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = initialValue,
     )
+
 context(ViewModel)
 @Suppress("CONTEXT_RECEIVERS_DEPRECATED")
 fun <T> Flow<T>.shareInWhileSubscribed(replay: Int): SharedFlow<T> =
