@@ -29,19 +29,17 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
-fun Instant.toFormattedDateString(): String {
-    return this.toLocalDateTime(TimeZone.currentSystemDefault())
-        .date
-        .format(
-            LocalDate.Format {
-                dayOfMonth()
-                char(' ')
-                monthName(MonthNames.ENGLISH_ABBREVIATED)
-                char(' ')
-                year()
-            },
-        )
-}
+fun Instant.toFormattedDateString(): String = this.toLocalDateTime(TimeZone.currentSystemDefault())
+    .date
+    .format(
+        LocalDate.Format {
+            dayOfMonth()
+            char(' ')
+            monthName(MonthNames.ENGLISH_ABBREVIATED)
+            char(' ')
+            year()
+        },
+    )
 
 fun Instant.toFormattedDateTimeString(): String {
     val localDateTime = this.toLocalDateTime(TimeZone.currentSystemDefault())
@@ -76,5 +74,4 @@ fun Date.toDateFormatString(): String {
     return dataFormated
 }
 
-fun Date.toTimeFormatedString(): String =
-    SimpleDateFormat("hh:mm a", Locale.getDefault()).format(this)
+fun Date.toTimeFormatedString(): String = SimpleDateFormat("hh:mm a", Locale.getDefault()).format(this)

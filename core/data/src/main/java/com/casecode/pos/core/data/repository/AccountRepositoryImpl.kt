@@ -67,22 +67,21 @@ constructor(
     private val credentialManager: CredentialManager = CredentialManager.create(context)
 
     // TODO: refactor use activityContext with HILT and refactor this method
-    override suspend fun signIn(idToken: suspend () -> String): SignInGoogleState =
-        withContext(ioDispatcher) {
-            try {
-                val googleIdToken = idToken()
-                val googleCredentials = buildGoogleAuthCredential(googleIdToken)
-                val authResult = signInWithGoogleCredentials(googleCredentials)
+    override suspend fun signIn(idToken: suspend () -> String): SignInGoogleState = withContext(ioDispatcher) {
+        try {
+            val googleIdToken = idToken()
+            val googleCredentials = buildGoogleAuthCredential(googleIdToken)
+            val authResult = signInWithGoogleCredentials(googleCredentials)
 
-                if (authResult.user != null) {
-                    SignInGoogleState.Success
-                } else {
-                    SignInGoogleState.Error(R.string.core_data_sign_in_failure)
-                }
-            } catch (e: Exception) {
-                handleSignInException(e)
+            if (authResult.user != null) {
+                SignInGoogleState.Success
+            } else {
+                SignInGoogleState.Error(R.string.core_data_sign_in_failure)
             }
+        } catch (e: Exception) {
+            handleSignInException(e)
         }
+    }
 
     private fun handleSignInException(e: Exception): SignInGoogleState = when (e) {
         is GetCredentialCancellationException -> {
@@ -121,11 +120,9 @@ constructor(
         return resultCode == ConnectionResult.SUCCESS
     }
 
-    private fun buildGoogleAuthCredential(googleIdToken: String): AuthCredential =
-        GoogleAuthProvider.getCredential(googleIdToken, null)
+    private fun buildGoogleAuthCredential(googleIdToken: String): AuthCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
 
-    private suspend fun signInWithGoogleCredentials(credentials: AuthCredential): AuthResult =
-        firebaseAuth.signInWithCredential(credentials).await()
+    private suspend fun signInWithGoogleCredentials(credentials: AuthCredential): AuthResult = firebaseAuth.signInWithCredential(credentials).await()
 
     override suspend fun checkUserLogin() {
         withContext(ioDispatcher) {
@@ -139,42 +136,40 @@ constructor(
      * If user complete step business return true,
      * else false
      */
-    private suspend fun isUserCompleteStep(currentUid: String): Boolean =
-        withContext(ioDispatcher) {
-            try {
-                val docRef = db.getDocument(USERS_COLLECTION_PATH, currentUid)
+    private suspend fun isUserCompleteStep(currentUid: String): Boolean = withContext(ioDispatcher) {
+        try {
+            val docRef = db.getDocument(USERS_COLLECTION_PATH, currentUid)
 
-                if (docRef.exists()) {
-                    val data =
-                        docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
-                    val isCompletedStep = data as? Boolean == true
-                    isCompletedStep
-                } else {
-                    false
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
+            if (docRef.exists()) {
+                val data =
+                    docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
+                val isCompletedStep = data as? Boolean == true
+                isCompletedStep
+            } else {
                 false
             }
+        } catch (e: Exception) {
+            Timber.e(e)
+            false
         }
+    }
 
-    override suspend fun checkRegistration(email: String): Resource<Boolean> =
-        withContext(ioDispatcher) {
-            try {
-                // Create a temporary user with a generic password
-                firebaseAuth.createUserWithEmailAndPassword(email, "temporary_password")
-                // Account creation succeeded, email is available
-                Timber.i("checkRegistration: email is created before :true")
-                Resource.Success(true)
-            } catch (_: FirebaseAuthUserCollisionException) {
-                Timber.i("checkRegistration: email is created before :false")
-                // Email already exists
-                Resource.Success(false) // Assuming password-based sign-in
-            } catch (e: Exception) {
-                // Other errors
-                Resource.Error(e.message)
-            }
+    override suspend fun checkRegistration(email: String): Resource<Boolean> = withContext(ioDispatcher) {
+        try {
+            // Create a temporary user with a generic password
+            firebaseAuth.createUserWithEmailAndPassword(email, "temporary_password")
+            // Account creation succeeded, email is available
+            Timber.i("checkRegistration: email is created before :true")
+            Resource.Success(true)
+        } catch (_: FirebaseAuthUserCollisionException) {
+            Timber.i("checkRegistration: email is created before :false")
+            // Email already exists
+            Resource.Success(false) // Assuming password-based sign-in
+        } catch (e: Exception) {
+            // Other errors
+            Resource.Error(e.message)
         }
+    }
 
     override suspend fun employeeLogOut() {
         posPreferencesDataSource.restLogin()
