@@ -52,7 +52,7 @@ import kotlinx.datetime.Clock
 
 @Composable
 fun BillPaymentTap(modifier: Modifier = Modifier, paymentDetails: List<PaymentDetails>) {
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = modifier.fillMaxSize().padding(horizontal = 8.dp)) {
         if (paymentDetails.isEmpty()) {
             PosEmptyScreen(
                 icon = PosIcons.Payment,

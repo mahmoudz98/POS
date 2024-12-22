@@ -58,7 +58,7 @@ fun BillHistoryTap(
     createdBy: String,
     paymentDetails: List<PaymentDetails>,
 ) {
-    Column(modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier.fillMaxSize().padding(horizontal = 8.dp)) {
         BillHistoryFirstLine(issueDate, createdBy, total)
         paymentDetails.forEachIndexed { index, paymentDetail ->
             BillHistoryLine(isLastStep = index == paymentDetails.lastIndex, paymentDetail)

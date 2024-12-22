@@ -30,6 +30,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -51,7 +52,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(horizontal = 8.dp),
     ) {
         Row(
             Modifier.fillMaxWidth(),
@@ -122,6 +123,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                             .fillMaxWidth()
                             .padding(top = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
                             text = stringResource(R.string.feature_bill_discount_text),
@@ -141,6 +143,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = stringResource(R.string.feature_bill_total_text),
@@ -156,6 +159,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = stringResource(R.string.feature_bill_payment_made_text),
@@ -175,6 +179,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = stringResource(R.string.feature_bill_rest_due_text),

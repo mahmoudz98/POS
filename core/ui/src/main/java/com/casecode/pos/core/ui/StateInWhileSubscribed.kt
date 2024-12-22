@@ -18,8 +18,10 @@ package com.casecode.pos.core.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 
 context(ViewModel)
@@ -29,4 +31,12 @@ fun <T> Flow<T>.stateInWhileSubscribed(initialValue: T): StateFlow<T> =
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = initialValue,
+    )
+context(ViewModel)
+@Suppress("CONTEXT_RECEIVERS_DEPRECATED")
+fun <T> Flow<T>.shareInWhileSubscribed(replay: Int): SharedFlow<T> =
+    shareIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        replay = replay,
     )
