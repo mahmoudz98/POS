@@ -48,20 +48,18 @@ class SignInActivityViewModelTest {
     }
 
     @Test
-    fun testSetNetworkMonitor() =
-        runTest {
-            networkMonitor.setConnected(true)
+    fun testSetNetworkMonitor() = runTest {
+        networkMonitor.setConnected(true)
 
-            assertTrue(viewModel.signInUiState.value.isOnline)
-        }
+        assertTrue(viewModel.signInUiState.value.isOnline)
+    }
 
     @Test
-    fun testSignIn_whenOffline_showsNetworkError() =
-        runTest {
-            networkMonitor.setConnected(false)
+    fun testSignIn_whenOffline_showsNetworkError() = runTest {
+        networkMonitor.setConnected(false)
 
-            viewModel.signIn({ "" })
+        viewModel.signIn({ "" })
 
-            assertEquals(R.string.core_ui_error_network, viewModel.signInUiState.value.userMessage)
-        }
+        assertEquals(R.string.core_ui_error_network, viewModel.signInUiState.value.userMessage)
+    }
 }
