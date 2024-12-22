@@ -70,5 +70,8 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             ),
         )
+        freeCompilerArgs.add(
+            "-Xconsistent-data-class-copy-visibility"
+        )
     }
 }

@@ -33,10 +33,10 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
         }
         dependencies {
             val bom = libs.findLibrary("androidx-compose-bom").get()
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
-            add("implementation", libs.findLibrary("androidx-compose-ui-tooling-preview").get())
-            add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
+            "implementation"(platform(bom))
+            "androidTestImplementation"(platform(bom))
+            "implementation"(libs.findLibrary("androidx-compose-ui-tooling-preview").get())
+            "debugImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
         }
     }
     extensions.configure<ComposeCompilerGradlePluginExtension> {
@@ -58,8 +58,7 @@ internal fun Project.configureAndroidCompose(commonExtension: CommonExtension<*,
             .relativeToRootProject("compose-reports")
             .let(reportsDestination::set)
 
-        stabilityConfigurationFiles.add(
-            rootProject.layout.projectDirectory.file("compose_compiler_config.conf"),
-        )
+        stabilityConfigurationFiles
+            .add(rootProject.layout.projectDirectory.file("compose_compiler_config.conf"))
     }
 }

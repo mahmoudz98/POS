@@ -3,12 +3,13 @@ package com.casecode.pos
 import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ScopedArtifacts
+import com.android.build.api.variant.SourceDirectories
 import org.gradle.api.Project
 import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.testing.Test
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
@@ -58,7 +59,6 @@ internal fun Project.configureJacoco(
                 "create${variant.name.capitalize()}CombinedCoverageReport",
                 JacocoReport::class,
             ) {
-
                 classDirectories.setFrom(
                     allJars,
                     allDirectories.map { dirs ->
@@ -68,27 +68,31 @@ internal fun Project.configureJacoco(
                     },
                 )
                 reports {
-                    xml.required = true
-                    html.required = true
+                    xml.required.set(true)
+                    html.required.set(true)
                 }
 
-                // TODO: This is missing files in src/debug/, src/prod, src/demo, src/demoDebug...
+                fun SourceDirectories.Flat?.toFilePaths(): Provider<List<String>> = this
+                    ?.all
+                    ?.map { directories -> directories.map { it.asFile.path } }
+                    ?: provider { emptyList() }
                 sourceDirectories.setFrom(
                     files(
-                        "$projectDir/src/main/java",
-                        "$projectDir/src/main/kotlin",
+                        variant.sources.java.toFilePaths(),
+                        variant.sources.kotlin.toFilePaths(),
                     ),
                 )
 
                 executionData.setFrom(
-                    project.fileTree("$buildDir/outputs/unit_test_code_coverage/${variant.name}UnitTest")
+                    project.fileTree(
+                        "$buildDir/outputs/unit_test_code_coverage/${variant.name}UnitTest",
+                    )
                         .matching { include("**/*.exec") },
 
                     project.fileTree("$buildDir/outputs/code_coverage/${variant.name}AndroidTest")
                         .matching { include("**/*.ec") },
                 )
             }
-
 
         variant.artifacts.forScope(ScopedArtifacts.Scope.PROJECT)
             .use(reportTask)
