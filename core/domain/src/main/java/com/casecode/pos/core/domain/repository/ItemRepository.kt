@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.core.domain.repository
 
+import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,6 @@ import kotlinx.coroutines.flow.Flow
 typealias ResourceItems = Resource<List<Item>>
 typealias AddItem = Resource<Int>
 typealias UpdateItem = Resource<Int>
-typealias UpdateQuantityItems = Resource<List<Item>>
 typealias DeleteItem = Resource<Int>
 
 /**
@@ -52,7 +52,7 @@ interface ItemRepository {
      */
     suspend fun updateItem(item: Item): UpdateItem
 
-    suspend fun updateQuantityInItems(items: List<Item>, isPlus: Boolean): UpdateQuantityItems
+    suspend fun updateQuantityInItems(items: List<Item>, isIncrement: Boolean): OperationResult
 
     /**
      * Deletes an existing item from the repository.

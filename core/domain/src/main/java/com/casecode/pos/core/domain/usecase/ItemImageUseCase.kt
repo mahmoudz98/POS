@@ -88,7 +88,7 @@ constructor(
      * @param imageUrl The URL of the image to be deleted.
      * @return A [DeleteImage] resource indicating the success or failure of the deletion operation.
      */
-    suspend fun deleteImage(imageUrl: String?) = flow {
+     fun deleteImage(imageUrl: String?) = flow {
         emit(Resource.Companion.loading())
         emit(
             if (imageUrl.isNullOrEmpty()) {

@@ -17,8 +17,7 @@ package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.R
 import com.casecode.pos.core.domain.repository.ItemRepository
-import com.casecode.pos.core.domain.repository.UpdateQuantityItems
-import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.model.data.users.Item
 import javax.inject.Inject
 
@@ -51,13 +50,16 @@ class UpdateStockInItemsUseCase
 constructor(
     private val itemRepository: ItemRepository,
 ) {
-    suspend operator fun invoke(items: List<Item>?, isPlus: Boolean = false): UpdateQuantityItems {
+    suspend operator fun invoke(
+        items: List<Item>?,
+        isIncrement: Boolean = false,
+    ): OperationResult {
         if (items.isNullOrEmpty()) {
-            return Resource.Companion.empty(
+            return OperationResult.Failure(
                 message = R.string.core_domain_invoice_items_empty,
             )
         }
-        return itemRepository.updateQuantityInItems(items, isPlus)
+        return itemRepository.updateQuantityInItems(items, isIncrement)
     }
 }
 

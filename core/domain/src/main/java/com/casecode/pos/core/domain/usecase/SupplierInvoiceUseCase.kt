@@ -21,11 +21,13 @@ import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import javax.inject.Inject
 
 /**
  * Use case for retrieving all supplier invoices.
@@ -44,15 +46,15 @@ class GetSupplierInvoicesUseCase @Inject constructor(
 class GetSupplierInvoiceDetailsUseCase @Inject constructor(
     private val supplierInvoiceRepo: SupplierInvoiceRepository,
 ) {
-    operator fun invoke(id: String?): Flow<Resource<SupplierInvoice>> {
-        return flow {
-            emit(Resource.loading())
-            if (id.isNullOrEmpty()) {
-                emit(Resource.empty())
-            } else {
-                emit(supplierInvoiceRepo.getInvoiceDetails(id))
-            }
+    operator fun invoke(id: String?): Flow<Resource<SupplierInvoice>> = flow {
+        if (id.isNullOrEmpty()) {
+            emit(Resource.empty())
+        } else {
+            emitAll(supplierInvoiceRepo.getInvoiceDetails(id))
         }
+    }.onEach {
+        Resource.Loading
+        it
     }
 }
 
