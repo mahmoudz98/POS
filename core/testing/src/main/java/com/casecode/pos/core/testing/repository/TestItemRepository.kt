@@ -20,7 +20,7 @@ import com.casecode.pos.core.domain.repository.DeleteItem
 import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.ResourceItems
 import com.casecode.pos.core.domain.repository.UpdateItem
-import com.casecode.pos.core.domain.repository.UpdateQuantityItems
+import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.testing.base.BaseTestRepository
@@ -86,13 +86,13 @@ constructor() :
 
     override suspend fun updateQuantityInItems(
         items: List<Item>,
-        isPlus: Boolean,
-    ): UpdateQuantityItems {
+        isIncrement: Boolean,
+    ): OperationResult {
         println(shouldReturnError)
         if (shouldReturnError) {
-            return Resource.Companion.error(stringData.core_data_update_item_failure_generic)
+            return OperationResult.Failure(stringData.core_data_update_item_failure_generic)
         }
-        return Resource.Success(items)
+        return OperationResult.Success
     }
 
     override suspend fun deleteItem(item: Item): DeleteItem {

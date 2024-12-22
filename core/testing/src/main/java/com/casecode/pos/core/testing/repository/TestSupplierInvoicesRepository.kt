@@ -26,6 +26,7 @@ import com.casecode.pos.core.testing.data.supplierInvoicesTestData
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import com.casecode.pos.core.data.R.string as stringData
 
@@ -57,14 +58,17 @@ class TestSupplierInvoicesRepository @Inject constructor() :
     override fun getInvoices(): Flow<Resource<List<SupplierInvoice>>> =
         resourcesSupplierInvoicesFlow
 
-    override suspend fun getInvoiceDetails(invoiceId: String): Resource<SupplierInvoice> {
-        if(shouldReturnError){
-            return Resource.error(stringData.core_data_error_fetching_supplier_invoices)
+    override fun getInvoiceDetails(invoiceId: String): Flow<Resource<SupplierInvoice>> = flow {
+        emit(Resource.loading())
+        if (shouldReturnError) {
+            emit(Resource.error(stringData.core_data_error_fetching_supplier_invoices))
         }
         val invoice = supplierInvoicesTest.find { it.invoiceId == invoiceId }
-        return if (invoice != null) {
-            Resource.success(invoice)
-        } else Resource.empty()
+        if (invoice != null) {
+            emit(Resource.success(invoice))
+        } else {
+            emit(Resource.empty())
+        }
     }
 
     override suspend fun addInvoice(invoice: SupplierInvoice): OperationResult {
