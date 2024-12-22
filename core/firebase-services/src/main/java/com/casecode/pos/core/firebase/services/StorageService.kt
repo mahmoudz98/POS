@@ -25,6 +25,7 @@ import com.google.firebase.firestore.ListenSource
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.SnapshotListenOptions
 import com.google.firebase.firestore.snapshots
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
@@ -84,6 +85,20 @@ constructor(
                 .document(documentId)
                 .collection(collectionChild)
                 .document(nameNewDocument)
+        }
+    }
+    fun getDocumentInChild(
+        collectionParent: String,
+        documentId: String,
+        collectionChild: String,
+        nameNewDocument: String,
+    ): Flow<DocumentSnapshot> {
+        trace(collectionChild) {
+            return firestore
+                .collection(collectionParent)
+                .document(documentId)
+                .collection(collectionChild)
+                .document(nameNewDocument).snapshots()
         }
     }
 

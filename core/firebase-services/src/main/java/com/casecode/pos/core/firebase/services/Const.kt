@@ -19,7 +19,7 @@ package com.casecode.pos.core.firebase.services
 const val USERS_COLLECTION_PATH = "users"
 const val ITEMS_COLLECTION_PATH = "items"
 const val SUPPLIERS_COLLECTION_PATH = "suppliers"
-const val SUPPLIER_INVOICES_COLLECTION_PATH = "suppliers_invoice"
+const val SUPPLIER_INVOICES_COLLECTION_PATH = "suppliersInvoice"
 const val PRINTER_INFO_COLLECTION_PATH = "printerInfo"
 const val CUSTOMERS_COLLECTION_PATH = "customers"
 const val BUSINESS_FIELD = "business"
