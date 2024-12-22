@@ -16,16 +16,8 @@
 package com.casecode.pos.feature.bill.detials
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import com.casecode.pos.feature.bill.R
-import com.casecode.pos.feature.bill.creation.AddBillScreen
-import com.casecode.pos.feature.bill.creation.BillInputState
-import com.casecode.pos.feature.bill.creation.SearchSupplierUiState
 import org.junit.Rule
-import org.junit.Test
 import com.casecode.pos.core.ui.R.string as uiString
 
 class AddBillScreenTest {

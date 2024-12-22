@@ -256,135 +256,131 @@ class StepperBusinessViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `addEmployee with new employee should update employees list and return message`() =
-        runTest {
-            val collectJob =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
-            val collectJob2 =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
+    fun `addEmployee with new employee should update employees list and return message`() = runTest {
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
+        val collectJob2 =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
 
-            // Arrange
-            val name = "mahmoud"
-            val phone = "12345"
-            val password = "12345m"
-            val branchName = "Branch 1"
-            val permission = "Admin"
-            val employee = Employee(name, phone, password, branchName, permission)
-            val employeesValue = ArrayList<Employee>()
+        // Arrange
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        val employee = Employee(name, phone, password, branchName, permission)
+        val employeesValue = ArrayList<Employee>()
 
-            // Act
-            businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        // Act
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
 
-            // Assert
-            assertThat(
-                businessViewModel.uiState.value.employees,
-                `is`(employeesValue.plus(employee)),
-            )
-            assertThat(
-                businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_success_add_employee_message),
-            )
-            collectJob.cancel()
-            collectJob2.cancel()
-        }
-
-    @Test
-    fun `addEmployee() with existing employee name should not update employees list and return message duplicate`() =
-        runTest {
-            // Arrange
-            val collectJob =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
-            val collectJob2 =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
-
-            val name = "mahmoud"
-            val phone = "12345"
-            val password = "12345m"
-            val branchName = "Branch 1"
-            val permission = "Admin"
-            val employee = Employee(name, phone, password, branchName, permission)
-            val employeesValue = ArrayList<Employee>()
-            employeesValue.add(employee)
-
-            // Act
-            businessViewModel.addEmployee(name, phone, password, branchName, permission)
-            businessViewModel.addEmployee(name, phone, password, branchName, permission)
-
-            // Assert
-            assertThat(
-                businessViewModel.uiState.value.employees,
-                `is`(employeesValue),
-            )
-            assertThat(
-                businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_error_employee_name_duplicate),
-            )
-            collectJob.cancel()
-            collectJob2.cancel()
-        }
+        // Assert
+        assertThat(
+            businessViewModel.uiState.value.employees,
+            `is`(employeesValue.plus(employee)),
+        )
+        assertThat(
+            businessViewModel.userMessage.value,
+            `is`(uiString.core_ui_success_add_employee_message),
+        )
+        collectJob.cancel()
+        collectJob2.cancel()
+    }
 
     @Test
-    fun `updateEmployee() with different employee should update employees list and return message updated`() =
-        runTest {
-            // Arrange
-            val collectJob1 =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
-            val collectJob2 =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
-            val name = "mahmoud"
-            val phone = "12345"
-            val password = "12345m"
-            val branchName = "Branch 1"
-            val permission = "Admin"
-            businessViewModel.addEmployee(name, phone, password, branchName, permission)
-            businessViewModel.setEmployeeSelected(
-                businessViewModel.uiState.value.employees
-                    .first(),
-            )
-            // Act - when update employee
-            businessViewModel.updateEmployee("nameUpdated", phone, password, branchName, permission)
+    fun `addEmployee() with existing employee name should not update employees list and return message duplicate`() = runTest {
+        // Arrange
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
+        val collectJob2 =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
 
-            // Assert
-            assertThat(
-                businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_success_update_employee_message),
-            )
-            collectJob1.cancel()
-            collectJob2.cancel()
-        }
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        val employee = Employee(name, phone, password, branchName, permission)
+        val employeesValue = ArrayList<Employee>()
+        employeesValue.add(employee)
+
+        // Act
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+
+        // Assert
+        assertThat(
+            businessViewModel.uiState.value.employees,
+            `is`(employeesValue),
+        )
+        assertThat(
+            businessViewModel.userMessage.value,
+            `is`(uiString.core_ui_error_employee_name_duplicate),
+        )
+        collectJob.cancel()
+        collectJob2.cancel()
+    }
 
     @Test
-    fun `updateEmployee() with same name employee shouldn't update employees list and return message duplicate`() =
-        runTest {
-            // Arrange
-            val collectJob1 =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
-            val collectJob2 =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
-            val name = "mahmoud"
-            val phone = "12345"
-            val password = "12345m"
-            val branchName = "Branch 1"
-            val permission = "Admin"
-            businessViewModel.addEmployee(name, phone, password, branchName, permission)
-            businessViewModel.addEmployee("name2", phone, password, branchName, permission)
-            businessViewModel.addEmployee("name3", phone, password, branchName, permission)
-            businessViewModel.setEmployeeSelected(
-                businessViewModel.uiState.value.employees
-                    .first(),
-            )
+    fun `updateEmployee() with different employee should update employees list and return message updated`() = runTest {
+        // Arrange
+        val collectJob1 =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
+        val collectJob2 =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.setEmployeeSelected(
+            businessViewModel.uiState.value.employees
+                .first(),
+        )
+        // Act - when update employee
+        businessViewModel.updateEmployee("nameUpdated", phone, password, branchName, permission)
 
-            // Act - when update employee
-            businessViewModel.updateEmployee("name2", "121231423", password, branchName, permission)
+        // Assert
+        assertThat(
+            businessViewModel.userMessage.value,
+            `is`(uiString.core_ui_success_update_employee_message),
+        )
+        collectJob1.cancel()
+        collectJob2.cancel()
+    }
 
-            // Assert
-            assertThat(
-                businessViewModel.userMessage.value,
-                `is`(uiString.core_ui_error_employee_name_duplicate),
-            )
-            collectJob1.cancel()
-            collectJob2.cancel()
-        }
+    @Test
+    fun `updateEmployee() with same name employee shouldn't update employees list and return message duplicate`() = runTest {
+        // Arrange
+        val collectJob1 =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
+        val collectJob2 =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.uiState.collect() }
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.addEmployee("name2", phone, password, branchName, permission)
+        businessViewModel.addEmployee("name3", phone, password, branchName, permission)
+        businessViewModel.setEmployeeSelected(
+            businessViewModel.uiState.value.employees
+                .first(),
+        )
+
+        // Act - when update employee
+        businessViewModel.updateEmployee("name2", "121231423", password, branchName, permission)
+
+        // Assert
+        assertThat(
+            businessViewModel.userMessage.value,
+            `is`(uiString.core_ui_error_employee_name_duplicate),
+        )
+        collectJob1.cancel()
+        collectJob2.cancel()
+    }
 
     @Test
     fun `updateEmployee() with same employee shouldn't update employees list and `() {
@@ -432,29 +428,28 @@ class StepperBusinessViewModelTest : BaseTest() {
     }
 
     @Test
-    fun setEmployeesBusiness_whenNetworkIsAvailable_thenReturnsMessageCompleteBusinessStepSuccess() =
-        runTest {
-            val collectJob1 =
-                launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
-            // Given
-            val name = "mahmoud"
-            val phone = "12345"
-            val password = "12345m"
-            val branchName = "Branch 1"
-            val permission = "Admin"
-            businessViewModel.addEmployee(name, phone, password, branchName, permission)
-            businessViewModel.setConnected(true)
+    fun setEmployeesBusiness_whenNetworkIsAvailable_thenReturnsMessageCompleteBusinessStepSuccess() = runTest {
+        val collectJob1 =
+            launch(UnconfinedTestDispatcher()) { businessViewModel.userMessage.collect() }
+        // Given
+        val name = "mahmoud"
+        val phone = "12345"
+        val password = "12345m"
+        val branchName = "Branch 1"
+        val permission = "Admin"
+        businessViewModel.addEmployee(name, phone, password, branchName, permission)
+        businessViewModel.setConnected(true)
 
-            // When
-            businessViewModel.checkNetworkThenSetEmployees()
+        // When
+        businessViewModel.checkNetworkThenSetEmployees()
 
-            assertThat(
-                businessViewModel.userMessage.value,
-                `is`(R.string.feature_stepper_success_complete_business_setup_message),
-            )
+        assertThat(
+            businessViewModel.userMessage.value,
+            `is`(R.string.feature_stepper_success_complete_business_setup_message),
+        )
 
-            collectJob1.cancel()
-        }
+        collectJob1.cancel()
+    }
 
     @Test
     fun setEmployeesBusiness_whenNetworkUnavailable_thenReturnMessageNetworkError() = runTest {

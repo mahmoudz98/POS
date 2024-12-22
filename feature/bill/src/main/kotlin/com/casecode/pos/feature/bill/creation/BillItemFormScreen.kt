@@ -248,7 +248,8 @@ fun ItemExposeDropdownMenuBox(
     isError: Boolean,
 ) {
     val (allowExpanded, setExpanded) = remember { mutableStateOf(false) }
-    val expanded = allowExpanded || filterItemUiState is SearchItemUiState.Success &&
+    val expanded = allowExpanded ||
+        filterItemUiState is SearchItemUiState.Success &&
         currentNameItem.isBlank()
     Timber.e("expended: $expanded")
     Timber.e("filterItemUiState: $filterItemUiState")

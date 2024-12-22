@@ -81,19 +81,18 @@ class TestMethodNameDetector :
     }
 
     companion object {
-        private fun issue(id: String, briefDescription: String, explanation: String): Issue =
-            Issue.create(
-                id = id,
-                briefDescription = briefDescription,
-                explanation = explanation,
-                category = TESTING,
-                priority = 5,
-                severity = WARNING,
-                implementation = Implementation(
-                    TestMethodNameDetector::class.java,
-                    EnumSet.of(JAVA_FILE, TEST_SOURCES),
-                ),
-            )
+        private fun issue(id: String, briefDescription: String, explanation: String): Issue = Issue.create(
+            id = id,
+            briefDescription = briefDescription,
+            explanation = explanation,
+            category = TESTING,
+            priority = 5,
+            severity = WARNING,
+            implementation = Implementation(
+                TestMethodNameDetector::class.java,
+                EnumSet.of(JAVA_FILE, TEST_SOURCES),
+            ),
+        )
 
         @JvmField
         val PREFIX: Issue = issue(
