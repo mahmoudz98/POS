@@ -75,4 +75,8 @@
     <string name="feature_bill_item_error_quantity_empty">الكمية مطلوبة</string>
     <string name="feature_bill_search_items_empty_result_message">لم يتم العثور على منتجات</string>
     <string name="feature_bill_search_items_failed_message">فشل في تحميل المنتجات</string>
+    <string name="feature_bill_added_successfully">تمت إضافة الفاتورة بنجاح</string>
+    <string name="feature_bill_updated_successfully">تم تحديث الفاتورة بنجاح</string>
+    <string name="feature_bill_updated_failure_duplicate">لم يتم تحديث الفاتورة </string>
+    <string name="feature_bill_updated_failure_generic">فشل تحديث الفاتورة</string>
 </resources>

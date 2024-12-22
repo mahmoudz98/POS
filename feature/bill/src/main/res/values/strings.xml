@@ -77,6 +77,9 @@
     <string name="feature_bill_search_items_failed_message">Failed to load items</string>
     <string name="feature_bill_minus_text" translatable="false">(-) \u0020</string>
 
-
+    <string name="feature_bill_added_successfully">Bill added successfully</string>
+    <string name="feature_bill_updated_successfully">Bill updated successfully</string>
+    <string name="feature_bill_updated_failure_duplicate">Bill updated is same </string>
+    <string name="feature_bill_updated_failure_generic">Bill updated failed</string>
 
 </resources>
