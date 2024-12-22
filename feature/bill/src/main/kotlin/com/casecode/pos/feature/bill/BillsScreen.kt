@@ -84,7 +84,7 @@ fun BillsScreen(
     viewModel: BillsViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onAddBillClick: () -> Unit,
-    onBillClick: () -> Unit,
+    onBillClick: (String) -> Unit,
 ) {
     val uiState = viewModel.billsUiState.collectAsStateWithLifecycle()
     BillsScreen(
@@ -92,8 +92,7 @@ fun BillsScreen(
         onBackClick = onBackClick,
         onAddBillClick = onAddBillClick,
         onBillClick = {
-            viewModel.onSupplierInvoiceIdSelected(it)
-            onBillClick()
+            onBillClick(it)
         },
     )
 }
