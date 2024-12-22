@@ -35,24 +35,22 @@ class LoginEmployeeViewModelTest : BaseTest() {
     }
 
     @Test
-    fun testLoginByEmployee_whenOffline_showsNetworkError() =
-        runTest {
-            networkMonitor.setConnected(false)
+    fun testLoginByEmployee_whenOffline_showsNetworkError() = runTest {
+        networkMonitor.setConnected(false)
 
-            viewModel.loginByEmployee("uid", "name", "password")
+        viewModel.loginByEmployee("uid", "name", "password")
 
-            assertEquals(
-                com.casecode.pos.core.ui.R.string.core_ui_error_network,
-                viewModel.loginEmployeeUiState.value.userMessage,
-            )
-        }
+        assertEquals(
+            com.casecode.pos.core.ui.R.string.core_ui_error_network,
+            viewModel.loginEmployeeUiState.value.userMessage,
+        )
+    }
 
     @Test
-    fun testLoginByEmployee_whenSuccess_returnProgressFalse() =
-        runTest {
-            networkMonitor.setConnected(true)
+    fun testLoginByEmployee_whenSuccess_returnProgressFalse() = runTest {
+        networkMonitor.setConnected(true)
 
-            viewModel.loginByEmployee("uid", "name", "password")
-            assertFalse(viewModel.loginEmployeeUiState.value.inProgressLoginEmployee)
-        }
+        viewModel.loginByEmployee("uid", "name", "password")
+        assertFalse(viewModel.loginEmployeeUiState.value.inProgressLoginEmployee)
+    }
 }
