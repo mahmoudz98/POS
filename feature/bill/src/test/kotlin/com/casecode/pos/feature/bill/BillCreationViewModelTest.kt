@@ -18,16 +18,16 @@ package com.casecode.pos.feature.bill
 import androidx.lifecycle.SavedStateHandle
 import com.casecode.pos.core.domain.usecase.AddSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
-import com.casecode.pos.core.domain.usecase.GetSupplierInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
-import com.casecode.pos.core.domain.usecase.UpdateSupplierInvoiceUseCase
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.repository.TestSupplierInvoicesRepository
 import com.casecode.pos.core.testing.repository.TestSupplierRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
-import com.casecode.pos.feature.bill.detials.BillCreationViewModel
+import com.casecode.pos.feature.bill.creation.BillCreationViewModel
+import com.casecode.pos.feature.bill.creation.SearchItemUiState
+import com.casecode.pos.feature.bill.creation.SearchSupplierUiState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -43,14 +43,13 @@ class BillCreationViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
     private val itemRepository = TestItemRepository()
     private val supplierRepository = TestSupplierRepository()
-    private val invoiceSuppliers = TestSupplierInvoicesRepository()
+    private val invoiceSuppliersRepo = TestSupplierInvoicesRepository()
 
     private val getItemsUseCase: GetItemsUseCase = GetItemsUseCase(itemRepository)
     private val getSuppliers = GetSuppliersUseCase(supplierRepository)
-    private val getSupplierInvoices = GetSupplierInvoicesUseCase(invoiceSuppliers)
-    private val addSupplierInvoice = AddSupplierInvoiceUseCase(invoiceSuppliers)
-    private val updateSupplierInvoice = UpdateSupplierInvoiceUseCase(invoiceSuppliers)
-    private val updateStockInItemsUseCase: UpdateStockInItemsUseCase = UpdateStockInItemsUseCase(itemRepository)
+    private val addSupplierInvoice = AddSupplierInvoiceUseCase(invoiceSuppliersRepo)
+    private val updateStockInItemsUseCase: UpdateStockInItemsUseCase =
+        UpdateStockInItemsUseCase(itemRepository)
     private val networkMonitor = TestNetworkMonitor()
     private lateinit var viewModel: BillCreationViewModel
 
