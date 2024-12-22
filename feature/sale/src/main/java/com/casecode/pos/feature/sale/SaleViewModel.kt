@@ -23,6 +23,7 @@ import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.domain.usecase.AddInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
+import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -230,10 +231,8 @@ constructor(
             }
             val saleItems = saleItemsState.toList()
             when (val updateResult = updateStockInItemsUseCase(saleItems)) {
-                is Resource.Success -> addSaleInvoice(updateResult.data)
-                is Resource.Error -> showSnackbarMessage(updateResult.message as Int)
-                is Resource.Empty -> showSnackbarMessage(updateResult.message as Int)
-                Resource.Loading -> Unit
+                is OperationResult.Success -> addSaleInvoice(saleItems)
+                is OperationResult.Failure -> showSnackbarMessage(updateResult.message)
             }
         }
     }
