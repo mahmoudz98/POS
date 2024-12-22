@@ -56,10 +56,10 @@ jobs:
           gradle-home-cache-cleanup: true
 
       - name: Copy secrets to gradle.properties
-        env:
-          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
         run: |
             sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" local.defaults.properties > local.properties
+        env:
+          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -190,10 +190,10 @@ jobs:
           gradle-home-cache-cleanup: true
 
       - name: Copy secrets to gradle.properties
-        env:
-          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
         run: |
           sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" local.defaults.properties > local.properties
+        env:
+          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
 
       - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2.33.0
