@@ -50,20 +50,19 @@ fun rememberMainAppState(
     mainAuthUiState: MainAuthUiState,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-): MainAppState =
-    remember(
-        navController,
-        coroutineScope,
-        networkMonitor,
-        mainAuthUiState,
-    ) {
-        MainAppState(
-            navController = navController,
-            coroutineScope = coroutineScope,
-            networkMonitor = networkMonitor!!,
-            mainAuthUiState = mainAuthUiState,
-        )
-    }
+): MainAppState = remember(
+    navController,
+    coroutineScope,
+    networkMonitor,
+    mainAuthUiState,
+) {
+    MainAppState(
+        navController = navController,
+        coroutineScope = coroutineScope,
+        networkMonitor = networkMonitor!!,
+        mainAuthUiState = mainAuthUiState,
+    )
+}
 
 @Stable
 class MainAppState(
@@ -100,8 +99,7 @@ class MainAppState(
 
     @SuppressLint("RestrictedApi")
     @Composable
-    private fun getCurrentTopLevelDestination(destinations: List<TopLevelDestination>): TopLevelDestination? =
-        destinations.firstOrNull { currentDestination?.hasRoute(it.route) == true }
+    private fun getCurrentTopLevelDestination(destinations: List<TopLevelDestination>): TopLevelDestination? = destinations.firstOrNull { currentDestination?.hasRoute(it.route) == true }
 
     val currentAdminTopLevelDestination: TopLevelDestination?
         @Composable get() = getCurrentTopLevelDestination(topLevelDestinations)
