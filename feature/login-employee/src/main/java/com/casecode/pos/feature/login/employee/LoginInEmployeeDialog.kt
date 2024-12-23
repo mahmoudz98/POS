@@ -69,22 +69,22 @@ fun LoginInEmployeeDialog(
 ) {
     val uiState by viewModel.loginEmployeeUiState.collectAsStateWithLifecycle()
     LoginInEmployeeDialog(
-        uiState,
-        viewModel::showMessageLoginEmployee,
-        viewModel::snackbarMessageShownLoginEmployee,
-        viewModel::loginByEmployee,
+        uiState = uiState,
+        showMessage = viewModel::showMessageLoginEmployee,
+        onShowMessage = viewModel::snackbarMessageShownLoginEmployee,
+        onLoginEmployeeClick = viewModel::loginByEmployee,
         onDismiss = onDismiss,
     )
 }
 
 @Composable
 fun LoginInEmployeeDialog(
+    modifier: Modifier = Modifier,
     uiState: LoginEmployeeUiState,
     showMessage: (Int) -> Unit,
     onShowMessage: () -> Unit,
     onLoginEmployeeClick: (String, String, String) -> Unit,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
 ) {
     val isCompact = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT
@@ -283,7 +283,8 @@ fun LoginInEmployeeDialog(
                 enabled = uiState.inProgressLoginEmployee.not(),
                 onClick = {
                     if (name.value.isEmpty() ||
-                        userAdmin.value.isEmpty() || password.value.isEmpty()
+                        userAdmin.value.isEmpty() ||
+                        password.value.isEmpty()
                     ) {
                         nameError.value = name.value.isEmpty()
                         userAdminError.value = userAdmin.value.isBlank()
