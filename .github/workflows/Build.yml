@@ -247,5 +247,4 @@ jobs:
           appId: ${{secrets.APP_ID}}
           serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
           groups: testers
-
-          file: '**/build/outputs/apk/prod/release/app-prod-release.apk'
+          file: /build/outputs/apk/prod/release/app-prod-release.apk
