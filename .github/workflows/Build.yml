@@ -122,6 +122,14 @@ jobs:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
+      - name: Upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+          groups: testers
+          file: app/build/outputs/apk/prod/release/app-prod-release.apk
+
       - name: Upload JVM local results (XML)
         if: always()
         uses: actions/upload-artifact@v4
@@ -241,10 +249,4 @@ jobs:
             overwrite: false
             path: '**/build/reports/jacoco/'
 
-      - name: Upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.APP_ID}}
-          serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
-          groups: testers
-          file: app/build/outputs/apk/prod/release/app-prod-release.apk
+
