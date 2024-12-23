@@ -123,7 +123,7 @@ jobs:
           appId: ${{secrets.APP_ID}}
           serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
           groups: testers
-          file: app/build/outputs/apk/prod/release/app-prod-release.apk
+          file: app/build/outputs/apk/demo/release/app-demo-release.apk
 
       - name: Upload JVM local results (XML)
         if: always()
