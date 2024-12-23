@@ -29,6 +29,7 @@ import android.hardware.usb.UsbManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -355,7 +356,7 @@ fun PrinterInfoScreen(
                 }
 
                 PrinterConnectionType.USB -> {
-                    UsbContent(applicationContext, isUsbDeviceInvalid)
+                  //  UsbContent(applicationContext, isUsbDeviceInvalid)
                 }
 
                 else -> {
@@ -387,7 +388,7 @@ fun PrinterInfoScreen(
                     supportingText =
                     if (isPaperWidthInvalid) {
                         stringResource(
-                            R.string.feature_setting_printer_info_error_papper_width_empty,
+                            R.string.feature_setting_printer_info_error_paper_width_empty,
                         )
                     } else {
                         null
@@ -472,6 +473,7 @@ fun PrinterInfoScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun UsbContent(applicationContext: Context, isUsbDeviceInvalid: Boolean) {
