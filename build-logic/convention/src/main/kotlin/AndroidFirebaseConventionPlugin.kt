@@ -2,6 +2,7 @@ import com.casecode.pos.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 
 class AndroidFirebaseConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -15,7 +16,10 @@ class AndroidFirebaseConventionPlugin : Plugin<Project> {
                 "api"(libs.findLibrary("firebase.storage").get())
                 "implementation"(libs.findLibrary("firebase.analytics").get())
                 "implementation"(libs.findLibrary("firebase.crashlytics").get())
-                "implementation"(libs.findLibrary("firebase.performance").get())
+                "implementation"(libs.findLibrary("firebase.performance").get()) {
+                    exclude(group = "com.google.protobuf", module = "protobuf-javalite")
+                    exclude(group = "com.google.firebase", module = "protolite-well-known-types")
+                }
             }
         }
     }
