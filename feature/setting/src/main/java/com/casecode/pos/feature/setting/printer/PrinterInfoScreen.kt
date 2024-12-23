@@ -356,7 +356,7 @@ fun PrinterInfoScreen(
                 }
 
                 PrinterConnectionType.USB -> {
-                  //  UsbContent(applicationContext, isUsbDeviceInvalid)
+                    //  UsbContent(applicationContext, isUsbDeviceInvalid)
                 }
 
                 else -> {
