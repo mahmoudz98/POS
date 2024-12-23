@@ -109,12 +109,7 @@ jobs:
             -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - name: Build all build type and flavor permutations
-        run: ./gradlew :app:assemble :benchmark:assemble -Pandroidx.baselineprofile.skipgeneration
-            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-            -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-            -Pandroid.experimental.androidTest.numManagedDeviceShards=1
-            -Pandroid.experimental.testOptions.managedDevices.maxConcurrentDevices=1
-            -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=5
+        run: ./gradlew :app:assemble
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
@@ -143,6 +138,22 @@ jobs:
         with:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
+
+      - name: Check lint
+        run: ./gradlew :app:lintProdRelease :lint:lint
+
+      - name: Upload lint reports (HTML)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-reports
+          path: '**/build/reports/lint-results-*.html'
+
+      - name: Upload lint reports (SARIF)
+        if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+            sarif_file: './'
 
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
@@ -221,7 +232,7 @@ jobs:
         run: ./gradlew createDemoDebugCombinedCoverageReport
 
       - name: Upload test reports
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
