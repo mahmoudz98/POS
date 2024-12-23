@@ -54,9 +54,9 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Copy secrets to gradle.properties
+      - name: Update web_client_id in secrets.defaults.properties
         run: |
-            sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" secrets.defaults.properties > local.properties
+          sed -i "s|web_client_id=.*|web_client_id=${WEB_CLIENT_ID}|g" secrets.defaults.properties
         env:
           WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
 
@@ -206,9 +206,9 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Copy secrets to gradle.properties
+      - name: Update web_client_id in secrets.defaults.properties
         run: |
-          sed "s|WEB_CLIENT_ID|WEB_CLIENT_ID|g;" secrets.defaults.properties > local.properties
+          sed -i "s|web_client_id=.*|web_client_id=${WEB_CLIENT_ID}|g" secrets.defaults.properties
         env:
           WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
 
