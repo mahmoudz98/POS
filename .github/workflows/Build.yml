@@ -49,6 +49,11 @@ jobs:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo $DATA | base64 -di > app/google-services.json
 
+      - name: Print google-services.json
+        run: |
+            echo "Content of google-services.json:"
+            cat app/google-services.json
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
