@@ -18,6 +18,7 @@ package com.casecode.pos.feature.bill
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.domain.usecase.GetSupplierInvoicesUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.ui.stateInWhileSubscribed
@@ -25,7 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -38,12 +39,18 @@ class BillsViewModel @Inject constructor(
 
     private val _userMessage = MutableStateFlow<Int?>(null)
     val userMessage = _userMessage.asStateFlow()
+    val searchQuery = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
+    val searchWidgetState =
+        savedStateHandle.getStateFlow(
+            key = SEARCH_WIDGET_STATE,
+            initialValue = SearchWidgetState.CLOSED,
+        )
     val billsUiState: StateFlow<BillsUiState> =
-        getSupplierInvoicesUseCase().map { result ->
-            when (result) {
+        combine(getSupplierInvoicesUseCase(), searchQuery) { billsResource, searchText ->
+            when (billsResource) {
                 is Resource.Loading -> BillsUiState.Loading
                 is Resource.Error -> {
-                    showSnackbarMessage(result.message as Int)
+                    showSnackbarMessage(billsResource.message as Int)
                     BillsUiState.Error
                 }
 
@@ -52,10 +59,31 @@ class BillsViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    BillsUiState.Success(result.data.associateBy { it.invoiceId })
+                    val bills = billsResource.data.associateBy { it.invoiceId }
+                    if (searchText.isNotBlank()) {
+                        val filteredBills = bills.filter {
+                            it.value.supplierName.contains(searchText) ||
+                                it.value.billNumber.contains(searchText)
+                        }
+                        BillsUiState.Success(filteredBills)
+                    } else {
+                        BillsUiState.Success(bills)
+                    }
                 }
             }
         }.stateInWhileSubscribed(BillsUiState.Loading)
+
+    fun closeSearchWidgetState() {
+        savedStateHandle[SEARCH_WIDGET_STATE] = SearchWidgetState.CLOSED
+    }
+
+    fun openSearchWidgetState() {
+        savedStateHandle[SEARCH_WIDGET_STATE] = SearchWidgetState.OPENED
+    }
+
+    fun onSearchQueryChanged(searchText: String) {
+        savedStateHandle[SEARCH_QUERY] = searchText
+    }
 
     fun showSnackbarMessage(message: Int) {
         _userMessage.update { message }
@@ -66,6 +94,7 @@ class BillsViewModel @Inject constructor(
     }
 
     companion object {
-        private const val SELECTED_BILL_ID_KEY = "selectedBillId"
+        private const val SEARCH_QUERY = "searchQuery"
+        private const val SEARCH_WIDGET_STATE = "searchWidgetState"
     }
 }
