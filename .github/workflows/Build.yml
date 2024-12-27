@@ -63,6 +63,24 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Decode debug.keystore
+        run: |
+          echo "${{ secrets.ANDROID_DEBUG_KEYSTORE }}" | base64 --decode > ~/.android/debug.keystore
+
+      - name: Verify keystore
+        run: |
+          keytool -list -v \
+            -keystore ~/.android/debug.keystore \
+            -storepass android \
+            -alias androiddebugkey
+
+      - name: Get keystore fingerprints
+        run: |
+          keytool -list -v \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -alias androiddebugkey | grep -A 1 "Certificate fingerprints"
+
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
@@ -99,32 +117,14 @@ jobs:
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
-      - name: Decode debug.keystore
-        run: |
-          echo "${{ secrets.ANDROID_DEBUG_KEYSTORE }}" | base64 --decode > ~/.android/debug.keystore
-
-      - name: Verify keystore
-        run: |
-          keytool -list -v \
-            -keystore ~/.android/debug.keystore \
-            -storepass android \
-            -alias androiddebugkey
-
-      - name: Get keystore fingerprints
-        run: |
-          keytool -list -v \
-            -keystore ~/.android/debug.keystore \
-            -storepass android \
-            -alias androiddebugkey | grep -A 1 "Certificate fingerprints"
-
       - name: Run local tests
         run: ./gradlew testDemoDebug :lint:test
 
       - name: Setup GMD
         run: ./gradlew :benchmark:pixel6Api33Setup
-            --info
-            -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+          --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
 
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble
@@ -171,7 +171,7 @@ jobs:
         if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
         uses: github/codeql-action/upload-sarif@v3
         with:
-            sarif_file: './'
+          sarif_file: './'
 
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
@@ -181,7 +181,7 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [26, 34]
+        api-level: [ 26, 34 ]
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -197,11 +197,11 @@ jobs:
 
       - name: Enable KVM group perms
         run: |
-            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-            sudo udevadm control --reload-rules
-            sudo udevadm trigger --name-match=kvm
-            ls /dev/kvm
-      
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -273,10 +273,10 @@ jobs:
         if: matrix.api-level == 30
         uses: actions/upload-artifact@v4
         with:
-            name: coverage-reports
-            if-no-files-found: error
-            compression-level: 1
-            overwrite: false
-            path: '**/build/reports/jacoco/'
+          name: coverage-reports
+          if-no-files-found: error
+          compression-level: 1
+          overwrite: false
+          path: '**/build/reports/jacoco/'
 
 
