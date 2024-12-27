@@ -103,6 +103,20 @@ jobs:
         run: |
           echo "${{ secrets.ANDROID_DEBUG_KEYSTORE }}" | base64 --decode > ~/.android/debug.keystore
 
+      - name: Verify keystore
+        run: |
+          keytool -list -v \
+            -keystore ~/.android/debug.keystore \
+            -storepass android \
+            -alias androiddebugkey
+
+      - name: Get keystore fingerprints
+        run: |
+          keytool -list -v \
+            -keystore ~/.android/debug.keystore \
+            -storepass android \
+            -alias androiddebugkey | grep -A 1 "Certificate fingerprints"
+
       - name: Run local tests
         run: ./gradlew testDemoDebug :lint:test
 
