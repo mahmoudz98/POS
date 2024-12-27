@@ -51,7 +51,14 @@ object FirebaseModule {
      */
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+    fun provideFirebaseAuth(): FirebaseAuth {
+        val auth = FirebaseAuth.getInstance()
+        val options =  auth.app.options
+        Timber.e("apiKey:${options.apiKey}")
+        Timber.e("projectId:${options.projectId}")
+        Timber.e("databaseUrl:${options.databaseUrl}")
+        return auth
+    }
 
     /**
      * Provides an instance of FirebaseFirestore.
