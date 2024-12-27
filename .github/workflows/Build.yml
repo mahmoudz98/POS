@@ -65,6 +65,7 @@ jobs:
 
       - name: Decode debug.keystore
         run: |
+          mkdir -p ~/.android
           echo "${{ secrets.ANDROID_DEBUG_KEYSTORE }}" | base64 --decode > ~/.android/debug.keystore
 
       - name: Verify keystore
