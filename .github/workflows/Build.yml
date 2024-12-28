@@ -64,11 +64,23 @@ jobs:
         uses: android-actions/setup-android@v3
 
         # Enhanced keystore and signing verification section
-      - name: Decode debug.keystore
+      - name: Setup debug keystore
         run: |
-          mkdir -p ~/.android
-          echo "${{ secrets.ANDROID_DEBUG_KEYSTORE }}" | base64 --decode > ~/.android/debug.keystore
-          chmod 600 ~/.android/debug.keystore
+          # Create both possible Android directories to be safe
+          mkdir -p /home/runner/.android
+          mkdir -p /home/runner/.config/.android
+
+          # Decode keystore
+          echo "${{ secrets.ANDROID_DEBUG_KEYSTORE }}" | base64 --decode > /home/runner/.config/.android/debug.keystore
+
+          # Set proper permissions
+          chmod 600 /home/runner/.config/.android/debug.keystore
+
+          # Verify keystore location and permissions
+          ls -la /home/runner/.config/.android/debug.keystore
+
+          # Create a symlink for compatibility
+          ln -s /home/runner/.config/.android/debug.keystore /home/runner/.android/debug.keystore
 
       - name: Generate detailed signing report
         run: |
