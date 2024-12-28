@@ -82,49 +82,6 @@ jobs:
           # Create a symlink for compatibility
           ln -s /home/runner/.config/.android/debug.keystore /home/runner/.android/debug.keystore
 
-      - name: Generate detailed signing report
-        run: |
-            echo "=== Gradle Signing Report ==="
-            ./gradlew :app:signingReport > signing-report.txt
-            cat signing-report.txt
-          
-            echo "=== Debug Keystore Details ==="
-            keytool -list -v \
-              -keystore ~/.android/debug.keystore \
-              -storepass android \
-              -alias androiddebugkey
-          
-            echo "=== Firebase-relevant fingerprints ==="
-            keytool -list -v \
-              -keystore ~/.android/debug.keystore \
-              -storepass android \
-              -alias androiddebugkey | grep -A 2 "Certificate fingerprints"
-          
-            # Store SHA-1 for Firebase verification
-            SHA1=$(keytool -list -v \
-              -keystore ~/.android/debug.keystore \
-              -storepass android \
-              -alias androiddebugkey | grep "SHA1" | cut -d ":" -f2 | tr -d ' ')
-            echo "SHA1=$SHA1" >> $GITHUB_ENV
-
-      - name: Verify Firebase Configuration
-        run: |
-            echo "=== Verifying Firebase Configuration ==="
-            # Extract package name from google-services.json
-            FIREBASE_PACKAGE=$(jq -r '.client[0].client_info.android_client_info.package_name' app/google-services.json)
-            echo "Firebase Package Name: $FIREBASE_PACKAGE"
-          
-            # Extract package name from build.gradle
-            GRADLE_PACKAGE=$(grep "applicationId" app/build.gradle* | grep -o '"[^"]*"' || echo "Not found")
-            echo "Gradle Package Name: $GRADLE_PACKAGE"
-          
-            echo "SHA-1 for Firebase Console: $SHA1"
-          
-            # Verify package name matching
-            if [ "$FIREBASE_PACKAGE" != "$GRADLE_PACKAGE" ]; then
-              echo "⚠️ Warning: Package name mismatch between Firebase and Gradle"
-            fi
-
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
