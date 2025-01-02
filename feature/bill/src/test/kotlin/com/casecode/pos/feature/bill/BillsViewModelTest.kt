@@ -55,9 +55,9 @@ class BillsViewModelTest {
         assertEquals(BillsUiState.Loading, viewModel.billsUiState.value)
         testRepo.sendSupplierInvoices()
         val expected = testRepo.supplierInvoicesTest.associateBy { it.invoiceId }
-        val actual = viewModel.billsUiState.value
+        val actual = viewModel.billsUiState.value as BillsUiState.Success
 
-        assertEquals(BillsUiState.Success(expected), actual)
+        assertEquals(expected, actual.supplierInvoices)
     }
 
     @Test
