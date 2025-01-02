@@ -17,6 +17,7 @@
     <string name="feature_bill_header_title">الفواتير</string>
     <string name="feature_bill_empty_title">لا توجد فواتير</string>
     <string name="feature_bill_empty_message">أضف فواتير لإدارة عملك.</string>
+    <string name="feature_bill_empty_filter_message">لم يتم العثور على فواتير.</string>
     <string name="feature_bill_payment_status_pending">معلق</string>
     <string name="feature_bill_payment_status_paid">مدفوع</string>
     <string name="feature_bill_payment_status_partially_paid">مدفوع جزئيًا</string>
@@ -44,6 +45,19 @@
     <string name="feature_bill_history_created_for_text">تم إنشاء فاتورة لـ %1$s</string>
     <string name="feature_bill_history_payment_of_made_text">تم دفع %1$s</string>
     <string name="feature_bill_history_payment_created_by_text">تم الإنشاء بواسطة: %1$s</string>
+    <string name="feature_bill_filter_payment_status_label">حسب حالة الدفع</string>
+    <string name="feature_bill_sort_label">ترتيب حسب</string>
+    <string name="feature_bill_filter_supplier_label">الموردين</string>
+    <string name="feature_bill_filter_all_label">الكل</string>
+    <string name="feature_bill_filter_paid_label">مدفوع</string>
+    <string name="feature_bill_filter_pending_label">قيد الانتظار</string>
+    <string name="feature_bill_filter_partially_paid_label">مدفوع جزئيًا</string>
+    <string name="feature_bill_filter_overdue_label">متأخر</string>
+    <string name="feature_bill_sort_new_to_old_label">من الجديد إلى القديم</string>
+    <string name="feature_bill_sort_old_to_new_label">من القديم إلى الجديد</string>
+    <string name="feature_bill_sort_high_to_low_label">من الأعلى إلى الأقل</string>
+    <string name="feature_bill_sort_low_to_high_label">من الأقل إلى الأعلى</string>
+
     <!-- creation bill -->
     <string name="feature_bill_add_bill_title_text">إضافة فاتورة</string>
     <string name="feature_bill_update_bill_title_text">تحديث الفاتورة</string>

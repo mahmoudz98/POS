@@ -17,6 +17,7 @@
     <string name="feature_bill_header_title">Bills</string>
     <string name="feature_bill_empty_title">No bills found</string>
     <string name="feature_bill_empty_message">Add bills to manage your business.</string>
+    <string name="feature_bill_empty_filter_message">no bills found with filter.</string>
     <string name="feature_bill_payment_status_pending">Pending</string>
     <string name="feature_bill_payment_status_paid">Paid</string>
     <string name="feature_bill_payment_status_partially_paid">Partially Paid</string>
@@ -44,6 +45,21 @@
     <string name="feature_bill_history_created_for_text">Bill Created for %1$s</string>
     <string name="feature_bill_history_payment_of_made_text">Payment of %1$s made</string>
     <string name="feature_bill_history_payment_created_by_text">CreatedBy: %1$s</string>
+    <!-- filter and sort-->
+    <string name="feature_bill_filter_payment_status_label">By payment status</string>
+    <string name="feature_bill_sort_label">Sort by</string>
+    <string name="feature_bill_filter_supplier_label">Suppliers</string>
+    <string name="feature_bill_filter_all_label">All</string>
+    <string name="feature_bill_filter_paid_label">Paid</string>
+    <string name="feature_bill_filter_pending_label">Pending</string>
+    <string name="feature_bill_filter_partially_paid_label">Partially paid</string>
+    <string name="feature_bill_filter_overdue_label">Overdue</string>
+
+    <string name="feature_bill_sort_new_to_old_label">New to old</string>
+    <string name="feature_bill_sort_old_to_new_label">Old to new</string>
+    <string name="feature_bill_sort_high_to_low_label">High to low</string>
+    <string name="feature_bill_sort_low_to_high_label">Low to high</string>
+
     <!--creation bill -->
     <string name="feature_bill_add_bill_title_text">Add bill</string>
     <string name="feature_bill_update_bill_title_text">Update bill</string>
@@ -81,5 +97,6 @@
     <string name="feature_bill_updated_successfully">Bill updated successfully</string>
     <string name="feature_bill_updated_failure_duplicate">Bill updated is same </string>
     <string name="feature_bill_updated_failure_generic">Bill updated failed</string>
+
 
 </resources>
