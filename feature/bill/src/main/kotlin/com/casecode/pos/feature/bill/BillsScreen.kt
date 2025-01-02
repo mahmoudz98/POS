@@ -205,8 +205,8 @@ fun BillsScreen(
 @Composable
 @DevicePreviews
 private fun BillsScreenPreview(
-    @PreviewParameter(SupplierInvoiceParameterProvider::class) supplierInvoices:
-    List<SupplierInvoice>,
+    @PreviewParameter(SupplierInvoiceParameterProvider::class)
+    supplierInvoices: List<SupplierInvoice>,
 ) {
     val supplierInvoiceMap = supplierInvoices.associateBy { it.invoiceId }
     POSTheme {
