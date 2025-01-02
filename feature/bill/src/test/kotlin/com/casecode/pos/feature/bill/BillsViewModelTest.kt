@@ -16,9 +16,8 @@
 package com.casecode.pos.feature.bill
 
 import androidx.lifecycle.SavedStateHandle
-import com.casecode.pos.core.domain.usecase.AddPaymentDetailsUseCase
+import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.domain.usecase.GetSupplierInvoicesUseCase
-import com.casecode.pos.core.domain.usecase.UpdateSupplierInvoiceUseCase
 import com.casecode.pos.core.testing.repository.TestSupplierInvoicesRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
@@ -30,8 +29,9 @@ import org.junit.Before
 import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class BillViewModelTest {
+class BillsViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -39,8 +39,6 @@ class BillViewModelTest {
     private val testRepo = TestSupplierInvoicesRepository()
     private val networkMonitor = TestNetworkMonitor()
     private val getSupplierInvoicesUseCase = GetSupplierInvoicesUseCase(testRepo)
-    private val updateSupplierInvoiceUseCase = UpdateSupplierInvoiceUseCase(testRepo)
-    private val addPaymentDetailsUseCase = AddPaymentDetailsUseCase(testRepo)
 
     @Before
     fun setup() {
@@ -56,10 +54,10 @@ class BillViewModelTest {
         backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.billsUiState.collect() }
         assertEquals(BillsUiState.Loading, viewModel.billsUiState.value)
         testRepo.sendSupplierInvoices()
-        val actual = viewModel.billsUiState.value
         val expected = testRepo.supplierInvoicesTest.associateBy { it.invoiceId }
+        val actual = viewModel.billsUiState.value
 
-        assertEquals(BillsUiState.Success(expected), viewModel.billsUiState.value)
+        assertEquals(BillsUiState.Success(expected), actual)
     }
 
     @Test
@@ -78,5 +76,55 @@ class BillViewModelTest {
         testRepo.setReturnError(true)
         val actual = viewModel.billsUiState.value
         assertEquals(BillsUiState.Error, actual)
+    }
+
+    @Test
+    fun searchWidgetState_defaultValueIsClosed() = runTest {
+        assertEquals(SearchWidgetState.CLOSED, viewModel.searchWidgetState.value)
+    }
+
+    @Test
+    fun searchWidgetState_togglesBetweenStates() = runTest {
+        // Initial state is CLOSED
+        assertEquals(SearchWidgetState.CLOSED, viewModel.searchWidgetState.value)
+
+        // Open search
+        viewModel.onBillsUiEvent(BillsUiEvent.SearchClicked)
+        assertEquals(SearchWidgetState.OPENED, viewModel.searchWidgetState.value)
+
+        // Close search
+        viewModel.onBillsUiEvent(BillsUiEvent.ClearRecentSearches)
+        assertEquals(SearchWidgetState.CLOSED, viewModel.searchWidgetState.value)
+    }
+
+    @Test
+    fun searchQuery_filtersSuppliersByNameAndBillNumber() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.billsUiState.collect() }
+
+        // Send initial data
+        testRepo.sendSupplierInvoices()
+
+        // Search by supplier name
+        viewModel.onBillsUiEvent(BillsUiEvent.SearchQueryChanged("Supplier1"))
+        var state = viewModel.billsUiState.value as BillsUiState.Success
+        assertTrue(
+            state.supplierInvoices.values.all {
+                it.supplierName.contains("Supplier1", ignoreCase = true)
+            },
+        )
+
+        // Search by bill number
+        viewModel.onBillsUiEvent(BillsUiEvent.SearchQueryChanged("BILL001"))
+        state = viewModel.billsUiState.value as BillsUiState.Success
+        assertTrue(
+            state.supplierInvoices.values.all {
+                it.billNumber.contains("BILL001", ignoreCase = true)
+            },
+        )
+
+        // Empty search returns all bills
+        viewModel.onBillsUiEvent(BillsUiEvent.SearchQueryChanged(""))
+        state = viewModel.billsUiState.value as BillsUiState.Success
+        assertEquals(testRepo.supplierInvoicesTest.size, state.supplierInvoices.size)
     }
 }
