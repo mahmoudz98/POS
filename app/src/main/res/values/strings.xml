@@ -1,143 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <resources>
-    <string name="app_name">POS</string>
-    <string name="default_web_client_id" translatable="false">578787836284-1ha2u4nugqtbj3qkvnaioqfbei14trji.apps.googleusercontent.com</string>
-    <string name="extra_uid">EXTRA_UID</string>
-    <string name="extra_display_name">EXTRA_DISPLAY_NAME</string>
-    <string name="extra_email">EXTRA_EMAIL</string>
-    <string name="extra_phone_number">EXTRA_PHONE_NUMBER</string>
-    <string name="extra_photo_url">EXTRA_PHOTO_URL</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="menu_statistics">Statistics</string>
-    <string name="menu_pos">Point of sale</string>
-    <string name="menu_invoices">Invoices</string>
-    <string name="menu_products">Products</string>
-    <string name="menu_code_scanner">Code scanner</string>
-    <string name="menu_users">Users</string>
-    <string name="menu_settings">Settings</string>
-
-    <string name="google_sign_in">Google Sign In</string>
-    <string name="sales_services">Sales services</string>
-    <string name="permissions_and_settings">Permissions and settings</string>
-    <string name="products_services">Products services</string>
-    <string name="profile_title">Profile</string>
-    <string name="business_plans_title">Business plans</string>
-    <string name="business_info_title">Business info</string>
-
-    <string name="store_type">Store type</string>
-    <string name="work_mail">Work mail</string>
-    <string name="work_phone_number">Work phone number</string>
-    <string name="pay_title">Pay</string>
-    <string name="storage_and_data">Storage and Data</string>
-    <string name="plans">Plans</string>
-    <string name="used">Used</string>
-    <string name="menu_sign_out">Sign out</string>
-    <string name="sign_out">Sign out</string>
-    <string name="branches">Branches</string>
-    <string name="branch_name">Name:&#32;</string>
-    <string name="add">Add</string>
-    <string name="update">Update</string>
-    <string name="phone_number_branch">Phone number branch</string>
-    <string name="add_branch">Add a branch</string>
-    <string name="update_branch">Update a branch</string>
-
-
-
-    <!-- collection -->
-    <string name="COLLECTION_CUSTOMER" translatable="false">Customer</string>
-    <string name="COLLECTION_BRANCHES" translatable="false">Branches</string>
-    <string name="business_subscription">Subscription</string>
-    <string name="business_info">Business info</string>
-    <string name="done">Done</string>
-    <string name="document_successfully_deleted">Document successfully deleted, %1$s</string>
-
-
-    // business
-    <string name="add_business_empty">Please add your data correctly</string>
-    <string name="add_business_store_type_empty">Please add type of your business</string>
-    <string name="add_business_email_invalid">Enter valid email</string>
-    <string name="add_business_email_empty">Email is empty</string>
-    <string name="add_business_phone_empty">Phone is empty</string>
-    <string name="add_business_phone_invalid">Enter valid phone number</string>
-    <string name="add_business_failed">Failure when add new business, please try again</string>
-    <string name="add_business_success">Business added is Successfully.</string>
-
-    // types of store
-    <string name="store_type_clothes">Clothes</string>
-    <string name="store_type_hyper">Hyper</string>
-    <string name="store_type_coffee">Coffee</string>
-
-
-
-
-    //Branch
-    <string name="branches_title">Branches</string>
-    <string name="add_branch_success">Branch Added success.</string>
-    <string name="add_branch_fail">Branch Added failed.</string>
-    <string name="update_branch_success">Branch updated success.</string>
-    <string name="update_branch_fail">Branch updated failed.</string>
-    <string name="add_branch_empty">Please add your data correctly</string>
-    <string name="add_branch_name_empty">Name branch is empty</string>
-    <string name="all_phone_empty">Phone is empty</string>
-    <string name="all_phone_invalid">Enter valid phone number</string>
-
-    // Subscription
-    <string name="subscription_title">Subscription</string>
-    <string name="plan_trxn">\u0020TRXN</string>
-    <string name="subscription_price_currency">EGP</string>
-    <string name="subscription_price_month">\u0020month</string>
-    <string name="add_subscription_failed">Failure when add new Subscription, please try again</string>
-    <string name="add_subscription_success">Subscription added is Successfully.</string>
-
-    // Network labels
-    <string name="network_error">Check your internet connection Please</string>
-    <string name="network_available">back online</string>
-
-
-
-    // Employees
-    <string name="employees_title">Employees</string>
-    <string name="employees">Employees</string>
-    <string name="add_employee">Add a employee</string>
-    <string name="update_employee">Update a employee</string>
-    <string name="employee_name">Name:&#32;</string>
-    <string name="phone_number">Phone number</string>
-    <string name="employee_branch_name">Branch name</string>
-    <string name="password">Password</string>
-    <string name="employee_permissions">Employee permissions</string>
-
-    // Add Employee
-    <string name="add_employee_name_empty">Name employee is empty</string>
-    <string name="add_employee_password_empty">Password employee is empty</string>
-    <string name="add_employee_branch_empty">Branch employee is empty</string>
-    <string name="add_employee_permission_empty">Permission employee is empty</string>
-
-    <string name="add_employee_password_error">Password must be at least 6 characters. </string>
-
-    <string name="add_employees_success">Employees Added success, Go on.</string>
-    <string name="add_employee_success">Employee Added success.</string>
-    <string name="add_employee_fail">Employee Added failed.</string>
-    <string name="update_employee_success">Employee updated success.</string>
-    <string name="update_employee_fail">Employee updated failed.</string>
-
-    // Permission
-    <string name="permission_admin">Admin</string>
-    <string name="permission_sales">Sales</string>
-    <string name="permission_non">Non</string>
-
-    <string name="all_error_save">Something went wrong!</string>
-
-    // add product
-    <string name="barcode">Barcode</string>
-    <string name="product_name">Product name</string>
-    <string name="price">Price</string>
-    <string name="quantity">Quantity</string>
-    <string name="add_a_branches">Add a product</string>
-
+    <string name="app_name" translatable="false">POS</string>
+    <string name="pos" translatable="false">POS</string>
 </resources>

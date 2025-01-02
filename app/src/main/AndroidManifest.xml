@@ -1,48 +1,145 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <dist:module dist:instant="true" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" /> <!-- For versions below Android 10 -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="true" />
+
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:required="true" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_CONNECT"
+        android:required="true" />
+
+
+    <!--
+  Firebase automatically adds these AD_ID and ADSERVICES permissions, even though we don't use them.
+  If you use these permissions you must declare how you're using them to Google Play, otherwise the
+  app will be rejected when publishing it. To avoid this we remove the permissions entirely.
+  -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" tools:node="remove"/>
+    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" tools:node="remove"/>
+
+    <queries>
+
+        <!-- Declare that your app needs access to camera -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <!-- Declare that your app needs access to the gallery -->
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+
+            <data android:mimeType="image/*" />
+        </intent>
+    </queries>
 
     <application
-        android:name="com.casecode.pos.POSApp"
+        android:name=".POSApp"
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
-        android:theme="@style/Theme.POS"
-        android:usesCleartextTraffic="true"
-        tools:targetApi="s">
+        android:theme="@style/Theme.Pos.Splash">
         <profileable
             android:shell="true"
-            tools:targetApi="29" />
+            tools:targetApi="q" />
+
 
         <activity
-            android:name="com.casecode.pos.ui.stepper.StepperActivity"
-            android:exported="true">
+            android:name="com.casecode.pos.MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
         </activity>
-        <activity android:name="com.casecode.pos.ui.main.MainActivity" />
-        <activity
-            android:name="com.casecode.pos.ui.signIn.SignInActivity"
-            android:exported="true"
-            android:label="Google Sign In"></activity>
+
+        <!-- Let AndroidX handle auto-store locales for pre-T devices to hold the user's selected locale -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
+            android:name="firebase_performance_logcat_enabled"
+            android:value="true" />
+
+        <!-- Disable Firebase analytics by default. This setting is overwritten for the `prod`
+     flavor -->
+        <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
+        <!-- Disable collection of AD_ID for all build variants -->
+        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+        <!-- Firebase automatically adds the following property which we don't use so remove it -->
+        <property
+          android:name="android.adservices.AD_SERVICES_CONFIG"
+          tools:node="remove" />
     </application>
 
 </manifest>

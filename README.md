@@ -1,74 +1,150 @@
-# Point-of-Sale (POS)
+# Point-of-Sale (POS) App
 
-## Overview
+The **Point-of-Sale (POS) App** is designed to simplify and streamline sales transactions for
+businesses. It functions as a digital cash register, enabling businesses to accept payments, manage
+inventory, and generate sales reports. The app focuses on usability, security, and efficiency,
+providing an excellent experience for both customers and business owners.
 
-### Purpose of the POS App
-The purpose of the Point-of-Sale (POS) app is to streamline sales transactions for businesses. It serves as a digital cash register, enabling businesses to accept payments from customers and efficiently manage inventory. The app is designed to enhance the overall sales process by providing a user-friendly interface for both customers and business owners.
+## Key Features
 
-### Technology Stack
-- Language: Kotlin
-- Dependency Injection: Dagger Hilt
-- Asynchronous Operations: Kotlin Coroutines
-- Testing: hamcrest, MockK, Fake Data, Espresso, testing with hilt
+- **Sales Management**: Process sales, accept multiple payment methods, and print receipts.
+- **Inventory Management**: Track stock levels, add new products, and receive low-stock
+  notifications.
+- **Cloud Sync**: Synchronize sales and inventory data in real-time across devices.
+- **Secure Authentication**: Protect user accounts with Firebase Authentication.
+- **Offline Support**: Operate seamlessly offline; the app syncs data when back online.
+- **Multi-language Support**: Supports English and Arabic for localized transactions.
 
-## Project Structure
+## Technology Stack
 
-The project follows a modular architecture with the following modules:
+| **Feature**             | **Technology**          | **Description**                                                |
+|-------------------------|-------------------------|----------------------------------------------------------------|
+| Programming Language    | Kotlin                  | Modern, concise, and feature-rich for Android development.     |
+| Dependency Injection    | Dagger Hilt             | Ensures compile-time safe dependency management.               |
+| Asynchronous Operations | Kotlin Coroutines       | Manages async programming and enhances app responsiveness.     |
+| Local Storage           | Datastore-proto         | Persistent storage for offline user data.                      |
+| Cloud Storage           | Firebase Firestore      | Real-time cloud database for data storage and synchronization. |
+| Authentication          | Firebase Authentication | Secure user login and account management.                      |
+| Image Storage           | Firebase Storage        | Handles cloud storage for images and media files.              |
+| Testing                 | JUnit, MockK, Espresso  | Testing frameworks for unit, mock, and UI testing.             |
 
-- `app`: User interface and presentation logic.
-- `data`: Data sources, repositories, and data models.
-- `domain`: Business logic and use cases.
-- `di`: Dependency Injection setup using Hilt.
-- `testing`: Test setup and utilities.
+## Architecture and Project Structure
 
-## Firebase Authentication
+The app follows a **modular architecture** designed for scalability and maintainability, with clear
+separation between the core functionality and specific features.
 
-### User Creation
-Firebase Authentication is used to create and manage user accounts securely. This is particularly important for business owners and employees who need secure access to the POS system.
+| **Module**              | **Description**                                                                         |
+|-------------------------|-----------------------------------------------------------------------------------------|
+| `build-logic`           | Defines project-specific conventions and plugins, maintaining configurations centrally. |
+| `app`                   | Main application logic resides here, integrating all the features and UI components.    |
+| `feature`               | Contains screens and functionality that are modularized as features.                    |
+| `core`                  | Reusable modules providing utilities and core business logic.                           |
+| `ui-test-hilt-manifest` | Used for testing UI components with Hilt for dependency injection.                      |
 
-## Firestore Integration
+## The features include:
 
-### Data Storage
-Firestore is utilized as the database to store and retrieve crucial POS data. The `data` module handles interactions with Firestore, including managing inventory and sales data.
+## Use Cases
 
-## Dependency Injection
+### 1. **Business Owner**
 
-### Dagger Hilt
-Dependency injection is implemented using Dagger Hilt. The `di` module provides the necessary setup for dependency injection throughout the project, ensuring scalable and maintainable code.
+A business owner logs in to manage their store's daily transactions, view sales reports, and update
+product inventory.
 
-## Asynchronous Operations
+- **Login**: The owner securely logs in using Firebase Authentication.
+- **Inventory Updates**: Add, remove, or update product details in the inventory.
+- **Sales Reporting**: View reports showing total sales, top-selling products, and transaction
+  history.
 
-### Kotlin Coroutines
-Kotlin Coroutines are employed for handling asynchronous operations, enhancing the responsiveness and efficiency of the POS app.
+### 2. **Cashier**
+
+The cashier uses the POS system to handle customer purchases and print receipts during checkout.
+
+- **Process Sales**: Scan product barcodes or select products from the menu to process sales.
+- **Payments**: Accept payments via cash, card, or digital payment methods.
+- **Print Receipts**: Print a receipt for the customer after completing the transaction.
+
+# Screenshots
+
+<h2>Sign in Screen</h2>
+<table>
+<tr>
+
+</tr>
+</table>
+<h2>Admin Owner screens</h2>
+<table>
+  <tr>
+    <td><img src="docs/screenshots/home_screen.png" alt="Home Screen" width="250"/></td>
+  </tr>
+<tr>
+    <td colspan="4" align="center">*Inventory*</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/inventory/items_screen.jpeg" alt="Items Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/items_filter_screen.jpeg" alt="Items Filter Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/items_filter2_screen.jpeg" alt="Items Filter Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/items_filtered_screen.jpeg" alt="Items filtered Screen" width="250"/></td>
+  </tr>
+ <tr>
+    <td><img src="docs/screenshots/inventory/add_item_screen.jpeg" alt="Add item Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/update_item_screen.jpeg" alt="Update Item Screen" width="250"/></td>
+    <td><img src="docs/screenshots/inventory/print_item_screen.jpeg" alt="Print Item Screen" width="250"/></td>
+  </tr>
+
+<tr>
+    <td colspan="3" align="center">*Profile*</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/profile_screen.png" alt="Profile Screen" width="250"/></td>
+    <td><img src="docs/screenshots/profile_branches_screen.png" alt="Profile Branches Screen" width="250"/></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center">*Reports*</td>
+  </tr>
+   <tr>
+    <td><img src="docs/screenshots/report_screen.png" alt="Reports Screen" width="250"/></td>
+    <td><img src="docs/screenshots/sales_report_screen.png" alt="Sales Report Screen" width="250"/></td>
+    <td><img src="docs/screenshots/sales_report_info_screen.png" alt="Sales Report Info Screen" width="250"/></td>
+  </tr>
+
+  <tr>
+    <td colspan="3" align="center">*Settings*</td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/setting_screen.png" alt="Setting Screen" width="250"/></td>
+    <td><img src="docs/screenshots/setting_sign_out.png" alt="Setting Sign Out Screen" width="250"/></td>
+  </tr>
+</table>
+
+
+<h2>Cashier screens</h2>
+<table>
+<tr>
+<td><img src="docs/screenshots/home_screen_cashier.png"alt="Sale Screen" width="250"/></td>
+<td><img src="docs/screenshots/home_screen_cashier_landscape.png"alt="Sale Screen(landscape)" width="400"/></td>
+</tr>
+</table>
+
+## Modularization
+
+The project uses a modular approach to structure the app, ensuring flexibility and ease of
+maintenance.
+
+- **App Module**: Main entry point of the application.
+- **Feature Module**: Encapsulates all the features, such as `sales`, `inventory`, and `reports`.
+- **Core Module**: Contains utilities, models, and other shared components.
 
 ## Testing
 
-### Assertion Library
-hamcrest is used as the assertion library for testing. It provides convenient and expressive assertions for validating the correctness of POS app functionalities.
+We follow a **Test-Driven Development (TDD)** approach and ensure robust testing coverage using the
+following frameworks:
 
-### Mocking Framework
-MockK is employed for mocking objects in tests, making it easier to isolate components for unit testing and ensuring the reliability of the POS app.
+- **Unit Testing**: JUnit and MockK for testing core business logic.
+- **UI Testing**: Espresso for testing user interface and interaction.
+- **Integration Testing**: Conducted across features to ensure the app's overall stability.
 
-### Fake Data Technique
-Fake data techniques are used in testing to simulate realistic scenarios without relying on actual data. This approach ensures controlled and reproducible test cases.
+## Download APK
 
-## Getting Started
-
-To get started with the POS app, follow these steps:
-
-1. Clone the repository.
-2. Open the project in Android Studio.
-3. Build and run the app on an emulator or a physical device.
-
-### Download
-*  Check out for the [POS APK from githubAction](https://github.com/Case-Code/POS/actions) 
-    
-## Contributing
-
-If you would like to contribute to the project, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make your changes and submit a pull request.
-
-
+You can download the latest APK from the [GitHub Actions](https://github.com/Case-Code/POS/actions)
+page.
+Simply download and install the APK on your Android device to get started.

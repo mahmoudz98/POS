@@ -16,21 +16,50 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/benchmark" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
-            <option value="$PROJECT_DIR$/data" />
-            <option value="$PROJECT_DIR$/di" />
-            <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/testing" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/analytics" />
+            <option value="$PROJECT_DIR$/core/common" />
+            <option value="$PROJECT_DIR$/core/data" />
+            <option value="$PROJECT_DIR$/core/datastore" />
+            <option value="$PROJECT_DIR$/core/datastore-test" />
+            <option value="$PROJECT_DIR$/core/datastore_proto" />
+            <option value="$PROJECT_DIR$/core/designsystem" />
+            <option value="$PROJECT_DIR$/core/domain" />
+            <option value="$PROJECT_DIR$/core/firebase-services" />
+            <option value="$PROJECT_DIR$/core/model" />
+            <option value="$PROJECT_DIR$/core/printer" />
+            <option value="$PROJECT_DIR$/core/testing" />
+            <option value="$PROJECT_DIR$/core/ui" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/bill" />
+            <option value="$PROJECT_DIR$/feature/employee" />
+            <option value="$PROJECT_DIR$/feature/inventory" />
+            <option value="$PROJECT_DIR$/feature/item" />
+            <option value="$PROJECT_DIR$/feature/login-employee" />
+            <option value="$PROJECT_DIR$/feature/profile" />
+            <option value="$PROJECT_DIR$/feature/purchase" />
+            <option value="$PROJECT_DIR$/feature/reports" />
+            <option value="$PROJECT_DIR$/feature/sale" />
+            <option value="$PROJECT_DIR$/feature/sales-report" />
+            <option value="$PROJECT_DIR$/feature/setting" />
+            <option value="$PROJECT_DIR$/feature/signin" />
+            <option value="$PROJECT_DIR$/feature/signout" />
+            <option value="$PROJECT_DIR$/feature/stepper" />
+            <option value="$PROJECT_DIR$/feature/supplier" />
+            <option value="$PROJECT_DIR$/lint" />
+            <option value="$PROJECT_DIR$/ui-test-hilt-manifest" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+  <string name="core_printer_info_connection_ethernet">Ethernet</string>
+  <string name="core_printer_info_connection_bluetooth">Bluetooth</string>
+  <string name="core_printer_info_connection_usb">Usb</string>
+
+  <string name="core_printer_info_paper_width_48">48 mm</string>
+  <string name="core_printer_info_paper_width_72">72 mm</string>
+  <string name="core_printer_info_paper_width_80">80 mm</string>
+
+  <string name="core_printer_state_message_printing_in_progress">Printing in progress…</string>
+  <string name="core_printer_state_message_connecting">Connecting printer…</string>
+  <string name="core_printer_state_message_connected">Printer is connected</string>
+  <string name="core_printer_state_message_printing">Printer is printing</string>">
+  <string name="core_printer_state_message_finished">Printer has finished</string>">
+  <string name="core_printer_state_result_message_finish_success">Congratulation ! The texts are printed !</string>
+  <string name="core_printer_state_result_message_finish_no_printer">The application can\'t find any printer connected.</string>
+  <string name="core_printer_state_result_message_finish_printer_disconnected">Unable to connect the printer.</string>
+  <string name="core_printer_state_result_message_finish_parser_error">It seems to be an invalid syntax problem.</string>
+  <string name="core_printer_state_result_message_finish_encoding_error">The selected encoding character returning an error.</string>
+  <string name="core_printer_state_result_message_finish_barcode_error">Data sent to be converted to barcode or QR code seems to be invalid.></string>
+  <string name="core_printer_state_result_message_finish_unknown_error">Unknown error.></string>
+
+
+  <string name="core_printer_state_bluetooth_message_error">Device doesn\'t support Bluetooth.></string>
+  <string name="core_printer_state_bluetooth_message_error_not_enabled">Bluetooth is not enabled></string>
+  <string name="core_printer_state_bluetooth_message_error_invalid_mac_address">Invalid MAC address.></string>
+
+
+  <!-- String Arrays -->
+  <string-array name="core_printer_info_connection">
+    <item>@string/core_printer_info_connection_ethernet</item>
+    <item>@string/core_printer_info_connection_bluetooth</item>
+    <item>@string/core_printer_info_connection_usb</item>
+  </string-array>
+
+  <string-array name="core_printer_info_paper_width">
+    <item>@string/core_printer_info_paper_width_48</item>
+    <item>@string/core_printer_info_paper_width_72</item>
+    <item>@string/core_printer_info_paper_width_80</item>
+
+  </string-array>
+</resources>

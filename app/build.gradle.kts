@@ -1,242 +1,138 @@
-﻿import com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask
-import org.gradle.configurationcache.extensions.capitalized
-import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import com.casecode.pos.PosBuildType
 
 plugins {
-   alias(libs.plugins.pos.android.application)
-   alias(libs.plugins.pos.android.hilt)
-   alias(libs.plugins.kotlin.kapt)
-   alias(libs.plugins.pos.android.firebase)
-   
+    alias(libs.plugins.pos.android.application)
+    alias(libs.plugins.pos.android.application.compose)
+    alias(libs.plugins.pos.android.application.flavors)
+    alias(libs.plugins.pos.android.application.jacoco)
+    alias(libs.plugins.pos.android.firebase)
+    alias(libs.plugins.pos.hilt)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
-   
-   defaultConfig {
-      applicationId = "com.casecode.pos"
-      versionCode = com.casecode.pos.Configuration.versionCode
-      versionName = com.casecode.pos.Configuration.versionName
-      
-      resourceConfigurations.addAll(listOf("en", "ar"))
-      
-      // add the AndroidJUnitRunner, then connect JUnit 5 to the runner
-      testInstrumentationRunner = "com.casecode.testing.PosTestRunner"
-      
-   }
-   
-   
-   buildTypes {
-      debug {
-         //   isPseudoLocalesEnabled = true
-         isDebuggable = true
-         // enableAndroidTestCoverage = true
-      }
-    
-      val release by getting {
-         isMinifyEnabled = true
-         signingConfig = signingConfigs.getByName("debug")
-         
-         proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro",
-                      )
-         
-      }
-      
-   }
-   
-   
-   /*     if (project.hasProperty("debug"))
-      {
-         splits.abi.isEnable = false
-         splits.density.isEnable = false
-         aaptOptions.cruncherEnabled = false
-      } */
-   
-   
-   @Suppress("UnstableApiUsage")
-   testOptions {
-      
-      animationsDisabled = true
-      
-      unitTests {
-         
-         isIncludeAndroidResources = true
-      }
-   }
-   
-   hilt {
-      enableAggregatingTask = true
-   }
-   
-   buildFeatures {
-      
-      dataBinding = true
-      viewBinding = true
-      buildConfig = true
-   }
-   lint {
-      abortOnError = false
-   }
-   
-   packaging {
-      
-      resources {
-         excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-         excludes.add("/META-INF/NOTICE.md")
-         excludes.add ("/META-INF/licenses/**")
-         excludes.add ("META-INF/LICENSE.md")
-         excludes.add ("META-INF/LICENSE-notice.md")
-         excludes.add("DebugProbesKt.bin")
-      }
-   }
-   
-   namespace = "com.casecode.pos"
-}
+    defaultConfig {
+        applicationId = "com.casecode.pos"
+        versionCode = com.casecode.pos.Configuration.VERSION_CODE
+        versionName = com.casecode.pos.Configuration.VERSION_NAME
 
+        resourceConfigurations.addAll(listOf("en", "ar"))
+        testInstrumentationRunner = "com.casecode.pos.core.testing.PosTestRunner"
+    }
 
-androidComponents {
-   
-   onVariants(selector().all()) { variant ->
-      afterEvaluate {
-         val dataBindingTask =
-            project.tasks.findByName("dataBindingGenBaseClasses" + variant.name.capitalized()) as? DataBindingGenBaseClassesTask
-         if (dataBindingTask != null)
-         {
-            project.tasks.getByName("ksp" + variant.name.capitalized() + "Kotlin") {
-               (this as AbstractKotlinCompileTool<*>).setSource(dataBindingTask.sourceOutFolder)
+    buildTypes {
+        debug {
+            applicationIdSuffix = PosBuildType.DEBUG.applicationIdSuffix
+            vcsInfo {
+                include = true
             }
-         }
-      }
-   }
-}
+        }
+        release {
+            isMinifyEnabled = true
+            applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            signingConfig = signingConfigs.named("debug").get()
+            baselineProfile.automaticGenerationDuringBuild = true
+        }
+    }
+    packaging {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
+    }
 
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
+    namespace = "com.casecode.pos"
+}
 
 dependencies {
-   
-   implementation(projects.data)
-   implementation(projects.domain)
-   implementation(projects.di)
-   // implementation(projects.testing)
-   
-   testImplementation(projects.domain)
-   testImplementation(projects.data)
-   testImplementation(projects.di)
-   testImplementation(projects.testing)
-   
-   // androidTestImplementation(projects.data)
-   androidTestImplementation(projects.domain)
-   // androidTestImplementation(projects.di)
-   androidTestImplementation(projects.testing)
-   
-   // AndroidX
-   implementation(libs.core)
-   implementation(libs.activity)
-   
-   implementation(libs.appcompat)
-   implementation(libs.lifecycle.viewmodel)
-   implementation(libs.recyclerview)
-   implementation(libs.slidingpanelayout)
-   implementation(libs.window)
-   
-   
-   // UI tools
-   implementation(libs.material)
-   implementation(libs.android.stepper)
-   implementation(libs.coil)
-   
-   testImplementation(libs.coil.test)
-   
-   testImplementation(libs.fragment.testing)
-   
-   
-   
-   implementation(libs.navigation.fragment)
-   implementation(libs.navigation.ui)
-   
-   
-   // coroutines
-   implementation(libs.kotlinx.coroutines.android)
-   
-   debugCompileOnly(libs.kotlinx.coroutines.debug)
-   
-   
-   // Debug tools
-   // debugImplementation(libs.leakcanary)
-   implementation(libs.timber)
-   
-   
-   // ******* UNIT TESTING ******************************************************
-   // use for testing live data
-   testImplementation(libs.core.testing)
-   
-   // jvm test - Hilt
-   kspTest(libs.hilt.compiler)
-   
-   // assertion
-   testImplementation(libs.test.hamcrest)
-   testImplementation(libs.test.hamcrest.library)
-   
-   // mockito with kotlin
-   // testImplementation(libs.test.mockk)
-   
-   // coroutines unit test
-   testImplementation(libs.coroutines.test)
-   testImplementation(libs.coroutines.android.test)
-   
-   
-   // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
-   debugImplementation(libs.fragment.testing)
-   implementation(libs.fragment.ktx)
-   /*    implementation(libs.test.core)
-      implementation(libs.test.ext.junit) */
-   
-   
-   // ******* ANDROID TESTING ***************************************************
-   implementation(libs.test.espresso.idlingResource)
-   
-   androidTestImplementation(libs.window.testing)
-   
-   // Resolve conflicts between main and test APK:
-   androidTestImplementation(libs.appcompat)
-   androidTestImplementation(libs.material)
-   androidTestImplementation(libs.androidx.annotation)
-   
-   
-   
-   androidTestImplementation(libs.test.core)
-   androidTestImplementation(libs.test.ext.junit)
-   androidTestImplementation(libs.test.ext.junit.ktx)
-   androidTestImplementation(libs.test.core.ktx)
-   androidTestImplementation(libs.test.monitor)
-   androidTestImplementation(libs.test.orchestrator)
-   androidTestImplementation(libs.test.rules)
-   androidTestImplementation(libs.core.testing)
-   
-   androidTestImplementation(libs.test.hamcrest)
-   androidTestImplementation(libs.test.hamcrest.library)
-   
-   androidTestImplementation(libs.mockk.android)
-   // androidTestImplementation(libs.test.mockk)
-   
-   androidTestImplementation(libs.navigation.testing)
-   androidTestImplementation(libs.test.espresso.core)
-   androidTestImplementation(libs.test.espresso.idlingResource)
-   androidTestImplementation(libs.test.espresso.idling.concurrent)
-   androidTestImplementation(libs.test.espresso.accessibility) {
-      exclude(module = "protobuf-lite")
-      
-   }
-   androidTestImplementation(libs.test.espresso.contrib) {
-      exclude(module = "protobuf-lite")
-   }
-   
-   // AndroidX Test - Hilt testing
-   kspAndroidTest(libs.hilt.compiler)
-   androidTestImplementation(libs.hilt.android.testing)
-   
-   //implementation(kotlin("reflect"))
-   //  androidTestImplementation(kotlin("reflect"))
-   
-   
+    implementation(projects.feature.signin)
+    implementation(projects.feature.stepper)
+    implementation(projects.feature.employee)
+    implementation(projects.feature.salesReport)
+    implementation(projects.feature.inventory)
+    implementation(projects.feature.item)
+    implementation(projects.feature.purchase)
+    implementation(projects.feature.supplier)
+    implementation(projects.feature.bill)
+    implementation(projects.feature.profile)
+    implementation(projects.feature.sale)
+    implementation(projects.feature.setting)
+    implementation(projects.feature.signout)
+    implementation(projects.feature.reports)
+    implementation(projects.core.ui)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.data)
+    // AndroidX
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.appcompat)
+    implementation(libs.core.splashscreen)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.adaptive.layout)
+    implementation(libs.androidx.compose.material3.adaptive.navigation)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.runtime.tracing)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.tracing.ktx)
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.compose)
+
+    ksp(libs.hilt.compiler)
+
+    debugCompileOnly(libs.kotlinx.coroutines.debug)
+    // debugImplementation(libs.leakcanary)
+    implementation(libs.timber)
+    // ******* UNIT TESTING ******************************************************
+    debugImplementation(projects.uiTestHiltManifest)
+    testImplementation(projects.core.testing)
+
+    kspTest(libs.hilt.compiler)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.coroutines.android)
+
+    androidTestImplementation(projects.core.testing)
+    androidTestImplementation(libs.firebase.testlab)
+    androidTestImplementation(libs.coil.test)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.hilt.android.testing)
+
+    baselineProfile(projects.benchmark)
+}
+baselineProfile {
+    // Don't build on every iteration of a full assemble.
+    // Instead enable generation directly for the release build variant.
+    automaticGenerationDuringBuild = false
+    dexLayoutOptimization = true
+}
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
 }

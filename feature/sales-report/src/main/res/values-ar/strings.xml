@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="feature_sales_report_title">الفواتير</string>
+    <string name="feature_sales_report_empty">لا توجد فواتير بعد.</string>
+    <string name="feature_sales_report_empty_message">قم بإنشاء فاتورة عن طريق إضافة منتجات في قسم المبيعات.</string>
+    <string name="feature_sales_report_group_total">الإجمالي: $%s</string>
+    <string name="feature_sales_report_price_format">$%s</string>
+    <string name="feature_sales_report_select_date_action_text">اختيار التاريخ</string>
+    <string name="feature_sales_report_clear_date_filter_action_text">مسح تصفية التاريخ</string>
+    <string name="feature_sales_report_print_action_text">طباعة الفاتورة</string>
+    <string name="feature_sales_report_details_title">تفاصيل الفاتورة</string>
+
+</resources>

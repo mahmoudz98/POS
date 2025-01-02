@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+
+    <!-- Employee Login -->
+    <string name="feature_login_employee_title">تسجيل دخول الموظف</string>
+    <string name="feature_login_employee_hint_scan_admin_id">مسح هوية المدير</string>
+
+    <string name="feature_login_employee_login_error_uid_empty">يجب عليك مسح هوية المدير لتسجيل الدخول كموظف.</string>
+    <string name="feature_login_employee_login_error_employee_incorrect">اسم المستخدم أو كلمة المرور غير صحيحة.</string>
+    <string name="feature_login_employee_login_error_login">حدث خطأ أثناء تسجيل الدخول. الرجاء المحاولة مرة أخرى.</string>
+    <string name="feature_login_employee_login_action_login">تسجيل الدخول</string>
+
+    <string name="feature_login_employee_error_name_empty">يجب ادخال اسم الموظف</string>
+    <string name="feature_login_employee_error_password_empty">يجب ادخال كلمه سر للموظف</string>
+</resources>

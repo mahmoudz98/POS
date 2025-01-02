@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <!-- Settings -->
+    <string name="feature_setting_title">الإعدادات</string>
+    <string name="feature_setting_language_title">اللغة</string>
+    <string name="feature_settings_language_current_hint">اللغة الحالية</string>
+    <string name="feature_setting_language_english">الإنجليزية</string>
+    <string name="feature_setting_language_arabic">العربية</string>
+    <string name="feature_settings_printer_title">الطابعة</string>
+    <string name="feature_settings_printer_info_title">معلومات الطابعه</string>
+
+    <string name="feature_setting_add_printer">إضافة طابعة</string>
+    <string name="feature_setting_current_printer">الطابعة الحالية</string>
+    <string name="feature_setting_sign_out_button_text">تسجيل الخروج</string>
+
+    <!-- Setting language -->
+    <string-array name="feature_setting_language">
+        <item>@string/feature_setting_language_english</item>
+        <item>@string/feature_setting_language_arabic</item>
+    </string-array>
+
+    <string name="feature_setting_printer_info_name_label">اسم الطابعة</string>
+    <string name="feature_setting_printer_info_interface_connection_label">نوع الاتصال</string>
+    <string name="feature_setting_printer_info_interface_connection_ethernet_ip_address">عنوان IP للطابعة</string>
+    <string name="feature_setting_printer_info_interface_connection_ethernet_port">المنفذ</string>
+    <string name="feature_setting_printer_info_interface_connection_bluetooth_name_label">طابعة بلوتوث</string>
+    <string name="feature_setting_printer_info_interface_connection_usb_name_label">طابعة USB</string>
+    <string name="feature_setting_printer_connection_bluetooth_search_button_text">بحث</string>
+    <string name="feature_setting_printer_info_papper_width_label">عرض الورق</string>
+    <string name="feature_setting_printer_info_test_button_text">اختبار</string>
+    <string name="feature_setting_printer_info_save_button_text">حفظ</string>
+
+    // Error message
+    <string name="feature_setting_printer_info_error_name_empty">اسم الطابعة مطلوب.</string>
+    <string name="feature_setting_printer_info_error_interface_connection_empty">نوع الاتصال مطلوب.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_empty">عنوان IP مطلوب.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_invalid">عنوان IP غير صالح.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_invalid_segment">يجب أن يكون كل جزء بين 0 و 255.</string>
+    <string name="feature_setting_printer_info_error_ethernet_port_empty">المنفذ مطلوب.</string>
+    <string name="feature_setting_printer_info_error_ethernet_port_invalid">المنفذ مع عنوان IP غير صالح.</string>
+    <string name="feature_setting_printer_info_error_bluetooth_name_empty">اسم بلوتوث مطلوب.</string>
+    <string name="feature_setting_printer_info_error_usb_name_empty">اسم USB مطلوب.</string>
+    <string name="feature_setting_printer_info_error_paper_width_empty">عرض الورق مطلوب.</string>
+
+
+    <string name="feature_setting_printer_dialog_bluetooth_devices_title">أجهزة بلوتوث</string>
+    <string name="feature_setting_printer_dialog_bluetooth_devices_message_empty">لم يتم العثور على طابعات بلوتوث.</string>
+    <string name="feature_setting_need_permission_for_bluetooth">مطلوب إذن للبلوتوث</string>
+    >
+
+</resources>

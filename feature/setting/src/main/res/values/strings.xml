@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <!-- Settings -->
+    <string name="feature_setting_title">Settings</string>
+    <string name="feature_setting_language_title">Language</string>
+    <string name="feature_settings_language_current_hint">Current Language</string>
+    <string name="feature_settings_printer_title">Printers</string>
+    <string name="feature_settings_printer_info_title">Printer info</string>
+    <string name="feature_setting_add_printer">Add Printer</string>
+    <string name="feature_setting_current_printer">Current Printer</string>
+    <string name="feature_setting_sign_out_button_text">Sign Out</string>
+
+    <!-- Setting language -->
+    <string name="feature_setting_language_english">English</string>
+    <string name="feature_setting_language_arabic">Arabic</string>
+    <string-array name="feature_setting_language">
+        <item>@string/feature_setting_language_english</item>
+        <item>@string/feature_setting_language_arabic</item>
+    </string-array>
+
+    <string name="feature_setting_printer_info_name_label">Printer name</string>
+    <string name="feature_setting_printer_info_interface_connection_label">Interface connection</string>
+    <string name="feature_setting_printer_info_interface_connection_ethernet_ip_address">Printer ip address</string>
+    <string name="feature_setting_printer_info_interface_connection_ethernet_port">Port</string>
+    <string name="feature_setting_printer_info_interface_connection_bluetooth_name_label">Bluetooth printer</string>
+    <string name="feature_setting_printer_info_interface_connection_usb_name_label">Usb printer</string>
+    <string name="feature_setting_printer_connection_bluetooth_search_button_text">Search</string>
+    <string name="feature_setting_printer_info_papper_width_label">Paper width</string>
+    <string name="feature_setting_printer_info_test_button_text">Test</string>
+    <string name="feature_setting_printer_info_save_button_text">Save</string>
+
+    // Error message
+    <string name="feature_setting_printer_info_error_name_empty">Printer name is required.</string>
+    <string name="feature_setting_printer_info_error_interface_connection_empty">Type connection is required.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_empty">Ip address is required.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_invalid">Ip address is not valid.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_invalid_segment">Each segment must be between 0 and 255.</string>
+    <string name="feature_setting_printer_info_error_ethernet_port_empty">Ip address is required.</string>
+    <string name="feature_setting_printer_info_error_ethernet_port_invalid">Port with ip is not valid.</string>
+    <string name="feature_setting_printer_info_error_bluetooth_name_empty">Bluetooth name is required.</string>
+    <string name="feature_setting_printer_info_error_usb_name_empty">Usb name is required.</string>
+    <string name="feature_setting_printer_info_error_paper_width_empty">Printer width is required.</string>
+
+
+    <string name="feature_setting_printer_dialog_bluetooth_devices_title">Bluetooth devices</string>
+    <string name="feature_setting_printer_dialog_bluetooth_devices_message_empty">No Bluetooth devices printer found.</string>
+    <string name="feature_setting_need_permission_for_bluetooth">Need permission for bluetooth</string>
+
+
+
+</resources>

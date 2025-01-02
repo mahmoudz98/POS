@@ -23,15 +23,11 @@
 -dontoptimize
 
 # Some methods are only called from tests, so make sure the shrinker keeps them.
--keep class com.example.android.architecture.blueprints.** { *; }
+
 
 -keep class androidx.drawerlayout.widget.DrawerLayout { *; }
 -keep class androidx.test.espresso.**
-# keep the class and specified members from being removed or renamed
--keep class androidx.test.espresso.IdlingRegistry { *; }
--keep class androidx.test.espresso.IdlingResource { *; }
 
--keep class com.google.common.base.Preconditions { *; }
 
 -keep class android.arch.** { *; }
 
@@ -48,3 +44,10 @@
 -dontwarn org.hamcrest.**
 # Uncomment this if you use Mockito
 #-dontwarn org.mockito.**
+
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {*;
+}
+# Keep custom model classes
+-keep class com.casecode.pos.core.model.data.** { *; }
+-keep class com.casecode.pos.core.firebase.services.model.** { *; }

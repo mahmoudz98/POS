@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+
+    <!-- Sales -->
+    <string name="feature_sale_sale_search_hint">البحث عن طريق اسم المنتج أو الرمز الشريطي…</string>
+    <string name="feature_sale_error_sale_item_not_found">لم يتم العثور على المنتج.</string>
+    <string name="feature_sale_item_out_of_stock_message">هذا المنتج غير متوفر بالمخزون.</string>
+    <string name="feature_sale_empty_title">سلة التسوق فارغة.</string>
+    <string name="feature_sale_empty_message">أضف منتجات من قائمة المنتجات.</string>
+    <string name="feature_sale_go_to_items_button_text">الذهاب إلى المنتجات</string>
+    <string name="feature_sale_no_invoice_items_title">لا توجد منتجات في الفاتورة.</string>
+    <string name="feature_sale_no_invoice_items_message">حدد المنتجات التي تريد بيعها وأضفها إلى الفاتورة.</string>
+    <string name="feature_sale_dialog_delete_invoice_item_title">إزالة المنتج من الفاتورة</string>
+    <string name="feature_sale_dialog_change_quantity_title">تغيير الكمية</string>
+    <string name="feature_sale_error_quantity_less_than">يجب أن تكون الكمية أقل من %s.</string>
+    <string name="feature_sale_error_quantity_greater_than_zero">يجب أن تكون الكمية أكبر من 0.</string>
+    <string name="feature_sale_error_add_item_to_invoice">فشل إضافة المنتج إلى الفاتورة.</string>
+    <string name="feature_sale_error_update_invoice_item_quantity">فشل تحديث كمية المنتج.</string>
+    <string name="feature_sale_success_update_invoice_item_quantity">تم تحديث كمية المنتج بنجاح.</string>
+    <string name="feature_sale_button_text">بيع</string>
+    <string name="feature_sale_total_price_text">إجمالي السعر: %s</string>
+    <string name="feature_sale_sale_rest_amount_text">, المتبقي: %s</string>
+    <string name="feature_sale_enter_amount_hint">أدخل المبلغ</string>
+    <string name="feature_sale_items_empty_title">لم يتم العثور على منتجات.</string>
+    <string name="feature_sale_items_empty_message">لا توجد منتجات متاحة حاليًا.</string>
+    <string name="feature_sale_scan_item_text">البحث باستخدام الباركود</string>
+    <string name="feature_sale_search_empty">لا يمكن العثور على أي منتجات</string>
+
+</resources>

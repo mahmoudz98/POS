@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - master
+      - develop
   pull_request:
+    branches:
+      - develop
 
 concurrency:
   group: build-${{ github.ref }}
@@ -17,6 +20,7 @@ jobs:
 
     permissions:
       contents: write
+      pull-requests: write
 
     timeout-minutes: 60
 
@@ -24,8 +28,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
@@ -36,8 +44,46 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Load Google Service file
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA | base64 -di > app/google-services.json
+
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Update web_client_id in secrets.defaults.properties
+        run: |
+          sed -i "s|web_client_id=.*|web_client_id=${WEB_CLIENT_ID}|g" secrets.defaults.properties
+        env:
+          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+        # Enhanced keystore and signing verification section
+      - name: Setup debug keystore
+        run: |
+          # Create both possible Android directories to be safe
+          mkdir -p /home/runner/.android
+          mkdir -p /home/runner/.config/.android
+
+          # Decode keystore
+          echo "${{ secrets.ANDROID_DEBUG_KEYSTORE }}" | base64 --decode > /home/runner/.config/.android/debug.keystore
+
+          # Set proper permissions
+          chmod 600 /home/runner/.config/.android/debug.keystore
+
+          # Verify keystore location and permissions
+          ls -la /home/runner/.config/.android/debug.keystore
+
+          # Create a symlink for compatibility
+          ln -s /home/runner/.config/.android/debug.keystore /home/runner/.android/debug.keystore
+
+      - name: Accept licenses
+        run: yes | sdkmanager --licenses || true
 
       - name: Check build-logic
         run: ./gradlew check -p build-logic
@@ -45,21 +91,65 @@ jobs:
       - name: Check spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
+      - name: Check Dependency Guard
+        id: dependencyguard_verify
+        continue-on-error: true
+        run: ./gradlew dependencyGuard
+
+      - name: Prevent updating Dependency Guard baselines if this is a fork
+        id: checkfork_dependencyguard
+        continue-on-error: false
+        if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
+
+        # Runs if previous job failed
+      - name: Generate new Dependency Guard baselines if verification failed and it's a PR
+        id: dependencyguard_baseline
+        if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
+        run: |
+          ./gradlew dependencyGuardBaseline
+
+      - name: Push new Dependency Guard baselines if available
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: steps.dependencyguard_baseline.outcome == 'success'
+        with:
+          file_pattern: '**/dependencies/*.txt'
+          disable_globbing: true
+          commit_message: "🤖 Updates baselines for Dependency Guard"
+
+      - name: Run local tests
+        run: ./gradlew testDemoDebug :lint:test
+
+      - name: Setup GMD
+        run: ./gradlew :benchmark:pixel6Api33Setup
+          --info
+          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
+          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
+
+      - name: Build all build type and flavor permutations
+        run: ./gradlew :app:assemble
+
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4
         with:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
-      - name: Upload test results (XML)
+      - name: Upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+          groups: testers
+          file: app/build/outputs/apk/demo/release/app-demo-release.apk
+
+      - name: Upload JVM local results (XML)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: '**/build/test-results/test*UnitTest/**.xml'
-
-      - name: Check lint
-        run: ./gradlew :app:lintRelease  :lint:lint
 
       - name: Upload lint reports (HTML)
         if: always()
@@ -68,23 +158,51 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
+      - name: Check lint
+        run: ./gradlew :app:lintProdRelease :lint:lint
+
+      - name: Upload lint reports (HTML)
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-reports
+          path: '**/build/reports/lint-results-*.html'
+
+      - name: Upload lint reports (SARIF)
+        if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: './'
+
       - name: Check badging
-        run: ./gradlew :app:checkReleaseBadging
+        run: ./gradlew :app:checkProdReleaseBadging
 
   androidTest:
     runs-on: ubuntu-latest
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [26, 30]
+        api-level: [ 26, 34 ]
 
     steps:
+      - name: Delete unnecessary tools 🔧
+        uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          android: false # Don't remove Android tools
+          tool-cache: true # Remove image tool cache - rm -rf "$AGENT_TOOLSDIRECTORY"
+          dotnet: true # rm -rf /usr/share/dotnet
+          haskell: true # rm -rf /opt/ghc...
+          swap-storage: true # rm -f /mnt/swapfile (4GiB)
+          docker-images: false # Takes 16s, enable if needed in the future
+          large-packages: false # includes google-cloud-sdk and it's slow
+
       - name: Enable KVM group perms
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
           ls /dev/kvm
+
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -98,13 +216,23 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Load Google Service file
+        env:
+          DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: echo $DATA | base64 -di > app/google-services.json
+
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Build projects before running emulator
-        run: ./gradlew packageDebug packageDebugAndroidTest
+      - name: Update web_client_id in secrets.defaults.properties
+        run: |
+          sed -i "s|web_client_id=.*|web_client_id=${WEB_CLIENT_ID}|g" secrets.defaults.properties
+        env:
+          WEB_CLIENT_ID: ${{ secrets.WEB_CLIENT_ID }}
 
-      - name: Run instrumentation tests
+      - name: Build projects and run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -112,11 +240,44 @@ jobs:
           disable-animations: true
           disk-size: 6000M
           heap-size: 600M
-          script: ./gradlew connectedDebugAndroidTest --daemon
+          script: ./gradlew connectedDemoDebugAndroidTest --daemon
+
+      - name: Run local tests for the combined coverage report (only API 30)
+        if: matrix.api-level == 30
+        run: ./gradlew testDemoDebugUnitTest
+
+        # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
+      - name: Generate coverage reports for Debug variants (only API 30)
+        if: matrix.api-level == 30
+        run: ./gradlew createDemoDebugCombinedCoverageReport
 
       - name: Upload test reports
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
+
+      - name: Display local test coverage (only API 30)
+        if: matrix.api-level == 30
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.7.0
+        with:
+          title: Combined test coverage report
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+          paths: |
+            ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload local coverage reports (XML + HTML) (only API 30)
+        if: matrix.api-level == 30
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          if-no-files-found: error
+          compression-level: 1
+          overwrite: false
+          path: '**/build/reports/jacoco/'
+
+

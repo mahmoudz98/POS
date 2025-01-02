@@ -8,12 +8,13 @@
 # Java class files
 *.class
 
+
 # generated files
 bin/
 gen/
 out/
 build/
-
+generated/
 # Local configuration file (sdk path, etc)
 local.properties
 
@@ -38,8 +39,15 @@ local.properties
 # Gradle cache
 .gradle
 
+
 # Sandbox stuff
 _sandbox
 
 # Android Studio captures folder
 captures/
+
+.kotlin
+# Ignore the secrets.defaults.properties file
+secrets.defaults.properties
+
+app/google-services.json
