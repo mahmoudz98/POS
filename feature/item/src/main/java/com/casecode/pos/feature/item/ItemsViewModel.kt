@@ -134,30 +134,26 @@ constructor(
         )
     }
 
-    private fun matchesSearchCriteria(item: Item, searchText: String): Boolean =
-        searchText.isBlank() ||
-            with(searchText.lowercase()) {
-                item.name.lowercase().contains(this) ||
-                    item.sku.contains(this)
-            }
-
-    private fun matchesCategory(item: Item, selectedCategories: Set<String>): Boolean =
-        selectedCategories.isEmpty() || item.category in selectedCategories
-
-    private fun matchesStockFilter(item: Item, stockFilter: FilterStockState): Boolean =
-        when (stockFilter) {
-            FilterStockState.All -> true
-            FilterStockState.InStock -> item.isInStockAndTracked()
-            FilterStockState.OutOfStock -> !item.isInStockAndTracked()
-            FilterStockState.LowLevelStock -> item.hasLowLevelStock()
+    private fun matchesSearchCriteria(item: Item, searchText: String): Boolean = searchText.isBlank() ||
+        with(searchText.lowercase()) {
+            item.name.lowercase().contains(this) ||
+                item.sku.contains(this)
         }
 
-    private fun sortItemsByPrice(items: List<Item>, sortPrice: SortPriceState): List<Item> =
-        when (sortPrice) {
-            SortPriceState.LowToHigh -> items.sortedBy { it.unitPrice }
-            SortPriceState.HighToLow -> items.sortedByDescending { it.unitPrice }
-            SortPriceState.None -> items
-        }
+    private fun matchesCategory(item: Item, selectedCategories: Set<String>): Boolean = selectedCategories.isEmpty() || item.category in selectedCategories
+
+    private fun matchesStockFilter(item: Item, stockFilter: FilterStockState): Boolean = when (stockFilter) {
+        FilterStockState.All -> true
+        FilterStockState.InStock -> item.isInStockAndTracked()
+        FilterStockState.OutOfStock -> !item.isInStockAndTracked()
+        FilterStockState.LowLevelStock -> item.hasLowLevelStock()
+    }
+
+    private fun sortItemsByPrice(items: List<Item>, sortPrice: SortPriceState): List<Item> = when (sortPrice) {
+        SortPriceState.LowToHigh -> items.sortedBy { it.unitPrice }
+        SortPriceState.HighToLow -> items.sortedByDescending { it.unitPrice }
+        SortPriceState.None -> items
+    }
 
     private val _itemSelected = MutableStateFlow<Item?>(null)
     val itemSelected: StateFlow<Item?> = _itemSelected

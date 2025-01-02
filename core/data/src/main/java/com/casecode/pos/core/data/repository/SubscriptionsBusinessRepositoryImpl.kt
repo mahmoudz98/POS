@@ -92,26 +92,25 @@ constructor(
         }
     }
 
-    override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> =
-        flow<Resource<List<SubscriptionBusiness>>> {
-            auth.ensureUserExistsOrReturnError<List<SubscriptionBusiness>> {
-                emit(it)
-                return@flow
+    override fun getSubscriptionsBusiness(): Flow<Resource<List<SubscriptionBusiness>>> = flow<Resource<List<SubscriptionBusiness>>> {
+        auth.ensureUserExistsOrReturnError<List<SubscriptionBusiness>> {
+            emit(it)
+            return@flow
+        }
+        val currentUID = auth.currentUserId()
+        db.listenToCollection(USERS_COLLECTION_PATH, currentUID).collect { snapshot ->
+            @Suppress("UNCHECKED_CAST")
+            val subscriptionBusinessMap =
+                snapshot.get(
+                    SUBSCRIPTION_BUSINESS_FIELD,
+                ) as? List<Map<String, Any>>
+            if (subscriptionBusinessMap.isNullOrEmpty()) {
+                emit(Resource.empty())
+            } else {
+                emit(Resource.success(asSubscriptionBusinessModel(subscriptionBusinessMap)))
             }
-            val currentUID = auth.currentUserId()
-            db.listenToCollection(USERS_COLLECTION_PATH, currentUID).collect { snapshot ->
-                @Suppress("UNCHECKED_CAST")
-                val subscriptionBusinessMap =
-                    snapshot.get(
-                        SUBSCRIPTION_BUSINESS_FIELD,
-                    ) as? List<Map<String, Any>>
-                if (subscriptionBusinessMap.isNullOrEmpty()) {
-                    emit(Resource.empty())
-                } else {
-                    emit(Resource.success(asSubscriptionBusinessModel(subscriptionBusinessMap)))
-                }
-            }
-        }.catch {
-            emit(Resource.error(R.string.core_data_add_subscription_business_failure))
-        }.flowOn(ioDispatcher)
+        }
+    }.catch {
+        emit(Resource.error(R.string.core_data_add_subscription_business_failure))
+    }.flowOn(ioDispatcher)
 }

@@ -49,56 +49,52 @@ class SetBusinessUseCaseTest {
     private val setBusinessUseCase: SetBusinessUseCase = SetBusinessUseCase(testBusinessRepository)
 
     @Test
-    fun `when valid data should add new business and return Resource of success true`() =
-        runTest {
-            // When add new business in use case
-            val addBusiness = setBusinessUseCase(business)
+    fun `when valid data should add new business and return Resource of success true`() = runTest {
+        // When add new business in use case
+        val addBusiness = setBusinessUseCase(business)
 
-            // Then check if result in  business repo and business use case is same.
-            assertEquals(addBusiness.last(), (Resource.success(true)))
-        }
-
-    @Test
-    fun `when empty business branches should return Resource with BRANCHES_EMPTY error`() =
-        runTest {
-            // When add business and business branches are empty
-            val emptyBranchBusiness = Business()
-
-            // Then check if the result is empty business branches,
-            val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(emptyBranchBusiness)
-            assertEquals(
-                isAddBusiness.last(),
-                (Resource.empty(R.string.core_domain_branches_empty)),
-            )
-        }
+        // Then check if result in  business repo and business use case is same.
+        assertEquals(addBusiness.last(), (Resource.success(true)))
+    }
 
     @Test
-    fun `when empty phone should return Resource with PHONE_BUSINESS_EMPTY error`() =
-        runTest {
-            // When add business and phone is empty
-            val businessWithEmptyPhone =
-                Business(StoreType.Clothes, "mahmoud@gmail.com", "", false, listOf(Branch()))
+    fun `when empty business branches should return Resource with BRANCHES_EMPTY error`() = runTest {
+        // When add business and business branches are empty
+        val emptyBranchBusiness = Business()
 
-            // Then check if the result is empty phone,
-            val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyPhone)
-            assertEquals(
-                isAddBusiness.last(),
-                (Resource.empty(R.string.core_domain_phone_business_empty)),
-            )
-        }
+        // Then check if the result is empty business branches,
+        val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(emptyBranchBusiness)
+        assertEquals(
+            isAddBusiness.last(),
+            (Resource.empty(R.string.core_domain_branches_empty)),
+        )
+    }
 
     @Test
-    fun `when empty email should return Resource with EMAIL_BUSINESS_EMPTY error`() =
-        runTest {
-            // When add business and email is empty
-            val businessWithEmptyEmail =
-                Business(StoreType.Clothes, "", "1234", false, listOf(Branch()))
+    fun `when empty phone should return Resource with PHONE_BUSINESS_EMPTY error`() = runTest {
+        // When add business and phone is empty
+        val businessWithEmptyPhone =
+            Business(StoreType.Clothes, "mahmoud@gmail.com", "", false, listOf(Branch()))
 
-            // Then check if the result is empty email,
-            val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyEmail)
-            assertEquals(
-                isAddBusiness.last(),
-                (Resource.empty(R.string.core_domain_email_business_empty)),
-            )
-        }
+        // Then check if the result is empty phone,
+        val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyPhone)
+        assertEquals(
+            isAddBusiness.last(),
+            (Resource.empty(R.string.core_domain_phone_business_empty)),
+        )
+    }
+
+    @Test
+    fun `when empty email should return Resource with EMAIL_BUSINESS_EMPTY error`() = runTest {
+        // When add business and email is empty
+        val businessWithEmptyEmail =
+            Business(StoreType.Clothes, "", "1234", false, listOf(Branch()))
+
+        // Then check if the result is empty email,
+        val isAddBusiness: Flow<AddBusiness> = setBusinessUseCase(businessWithEmptyEmail)
+        assertEquals(
+            isAddBusiness.last(),
+            (Resource.empty(R.string.core_domain_email_business_empty)),
+        )
+    }
 }

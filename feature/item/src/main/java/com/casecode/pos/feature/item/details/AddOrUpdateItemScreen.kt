@@ -200,7 +200,7 @@ fun AddOrUpdateItemScreen(
                 action = {
                     PosTextButton(
                         onClick = { onSaveTriggered() },
-                    ) { Text(text = stringResource(R.string.feature_item_save_action_text)) }
+                    ) { Text(text = stringResource(uiString.core_ui_save_action_text)) }
                 },
                 onNavigationClick = onNavigateBack,
             )
@@ -210,21 +210,21 @@ fun AddOrUpdateItemScreen(
         Modifier
             .focusRequester(focusRequester)
             .focusProperties {
-                enter = { focusRequester }
-                exit = { FocusRequester.Cancel }
+                onEnter = { focusRequester }
+                onExit = { FocusRequester.Cancel }
             },
     ) { innerPadding ->
         Box(
             modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .padding(horizontal = 16.dp)
                 .recalculateWindowInsets(),
         ) {
             Column(
                 modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
                     .navigationBarsPadding()
                     .imePadding()
                     .verticalScroll(rememberScrollState()),

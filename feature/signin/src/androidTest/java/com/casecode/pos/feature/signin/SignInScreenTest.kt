@@ -62,18 +62,17 @@ class SignInScreenTest {
     }
 
     @Test
-    fun signInButton_whenClicked_isDisplayed() =
-        runTest {
-            composeTestRule.setContent {
-                SignInScreen(
-                    uiState = SignInActivityUiState(isLoading = false),
-                    onSignInCLick = { },
-                    onLoginEmployeeClick = {},
-                    onMessageShown = {},
-                )
-            }
-            composeTestRule.onNode(signInButtonMatcher).assertIsDisplayed().performClick()
+    fun signInButton_whenClicked_isDisplayed() = runTest {
+        composeTestRule.setContent {
+            SignInScreen(
+                uiState = SignInActivityUiState(isLoading = false),
+                onSignInCLick = { },
+                onLoginEmployeeClick = {},
+                onMessageShown = {},
+            )
         }
+        composeTestRule.onNode(signInButtonMatcher).assertIsDisplayed().performClick()
+    }
 
     @Test
     fun whenHasMessage_snackbarIsDisplayed() {

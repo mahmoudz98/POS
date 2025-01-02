@@ -52,8 +52,7 @@ class BluetoothConnectionImpl(
      *
      * @return true if connected
      */
-    override fun isConnected(): Boolean =
-        this.mmSocket != null && this.mmSocket!!.isConnected && super.isConnected
+    override fun isConnected(): Boolean = this.mmSocket != null && this.mmSocket!!.isConnected && super.isConnected
 
     @Throws(EscPosConnectionException::class)
     override fun connect(): DeviceConnection? {

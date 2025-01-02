@@ -35,41 +35,38 @@ class GetInvoiceUseCaseTest {
     private val getInvoicesUseCase = GetInvoicesUseCase(testInvoiceRepository)
 
     @Test
-    fun whenHasInvoices_returnListOfInvoices() =
-        runTest {
-            // Given
-            val expected = Resource.success(invoicesGroupTestData)
+    fun whenHasInvoices_returnListOfInvoices() = runTest {
+        // Given
+        val expected = Resource.success(invoicesGroupTestData)
 
-            // When
-            val result = getInvoicesUseCase().last()
+        // When
+        val result = getInvoicesUseCase().last()
 
-            // Then
-            assertEquals(expected, result)
-        }
-
-    @Test
-    fun whenHasError_returnError() =
-        runTest {
-            // Given
-            testInvoiceRepository.setReturnError(true)
-
-            // When
-            val result = getInvoicesUseCase().last()
-
-            // Then
-            assert(result is Resource.Error)
-        }
+        // Then
+        assertEquals(expected, result)
+    }
 
     @Test
-    fun whenEmptyInvoices_returnEmpty() =
-        runTest {
-            // Given
-            testInvoiceRepository.setReturnEmpty(true)
+    fun whenHasError_returnError() = runTest {
+        // Given
+        testInvoiceRepository.setReturnError(true)
 
-            // When
-            val result = getInvoicesUseCase().last()
+        // When
+        val result = getInvoicesUseCase().last()
 
-            // Then
-            assert(result is Resource.Empty)
-        }
+        // Then
+        assert(result is Resource.Error)
+    }
+
+    @Test
+    fun whenEmptyInvoices_returnEmpty() = runTest {
+        // Given
+        testInvoiceRepository.setReturnEmpty(true)
+
+        // When
+        val result = getInvoicesUseCase().last()
+
+        // Then
+        assert(result is Resource.Empty)
+    }
 }

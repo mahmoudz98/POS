@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.core.domain.repository
 
+import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Item
 import kotlinx.coroutines.flow.Flow
@@ -22,17 +23,16 @@ import kotlinx.coroutines.flow.Flow
 typealias ResourceItems = Resource<List<Item>>
 typealias AddItem = Resource<Int>
 typealias UpdateItem = Resource<Int>
-typealias UpdateQuantityItems = Resource<List<Item>>
 typealias DeleteItem = Resource<Int>
 
 /**
- * An interface defining methods for CRUD operations on items.
+ * An interface defining methods for CRUD operations on invoiceItems.
  */
 interface ItemRepository {
     /**
-     * Retrieves items associated with the specified user ID.
+     * Retrieves invoiceItems associated with the specified user ID.
      *
-     * @return A [] resource containing the retrieved items.
+     * @return A [] resource containing the retrieved invoiceItems.
      */
     fun getItems(): Flow<Resource<List<Item>>>
 
@@ -52,7 +52,7 @@ interface ItemRepository {
      */
     suspend fun updateItem(item: Item): UpdateItem
 
-    suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems
+    suspend fun updateQuantityInItems(items: List<Item>, isIncrement: Boolean): OperationResult
 
     /**
      * Deletes an existing item from the repository.

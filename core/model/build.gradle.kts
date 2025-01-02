@@ -16,3 +16,6 @@
 plugins {
     alias(libs.plugins.pos.jvm.library)
 }
+dependencies {
+    api(libs.kotlinx.datetime)
+}

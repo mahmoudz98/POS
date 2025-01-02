@@ -49,10 +49,9 @@ object PrinterModule {
         bluetoothPrinterConnection: BluetoothEscPosPrint,
         tcpPrinterConnection: TcpEscPosPrint,
         usbPrinterConnection: UsbEscPosPrint,
-    ): PrinterConnectionFactory =
-        PrinterConnectionFactory(
-            bluetoothPrinterConnection,
-            tcpPrinterConnection,
-            usbPrinterConnection,
-        )
+    ): PrinterConnectionFactory = PrinterConnectionFactory(
+        bluetoothPrinterConnection,
+        tcpPrinterConnection,
+        usbPrinterConnection,
+    )
 }

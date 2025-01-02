@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material.icons.filled.PrintDisabled
@@ -36,6 +37,7 @@ import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Receipt
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.StackedLineChart
 import androidx.compose.material.icons.filled.Store
 import androidx.compose.material.icons.filled.SupervisedUserCircle
@@ -48,12 +50,15 @@ import androidx.compose.material.icons.rounded.Bookmark
 import androidx.compose.material.icons.rounded.BookmarkBorder
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.FilterList
 import androidx.compose.material.icons.rounded.FilterListOff
 import androidx.compose.material.icons.rounded.Inventory2
+import androidx.compose.material.icons.rounded.Payment
 import androidx.compose.material.icons.rounded.PointOfSale
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.ShoppingBag
 import androidx.compose.material.icons.rounded.StackedLineChart
 import androidx.compose.material.icons.rounded.ViewDay
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -72,6 +77,9 @@ object PosIcons {
     val Inventory = Icons.Filled.Inventory2
     val InventoryBorder = Icons.Rounded.Inventory2
     val Supplier = Icons.Filled.SupportAgent
+    val Purchase = Icons.Filled.ShoppingBag
+    val PurchaseBorder = Icons.Rounded.ShoppingBag
+    val Bill = Icons.Filled.Receipt
     val Employee = Icons.Filled.SupervisorAccount
     val Settings = Icons.Filled.Settings
     val SettingsBorder = Icons.Rounded.Settings
@@ -83,8 +91,10 @@ object PosIcons {
     val QrCodeError = Icons.Filled.QrCode2
     val Search = Icons.Rounded.Search
     val Add = Icons.Rounded.Add
+    val Edit = Icons.Rounded.Edit
     val Filter = Icons.Rounded.FilterList
     val FilterClear = Icons.Rounded.FilterListOff
+    val Payment = Icons.Rounded.Payment
 
     val Calender = Icons.Filled.CalendarToday
     val Delete = Icons.Filled.Delete

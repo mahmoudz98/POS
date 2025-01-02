@@ -36,5 +36,4 @@ fun MutableList<Subscription>.asEntitySubscriptions(document: DocumentSnapshot) 
     add(Subscription(cost, duration, permissions, type))
 }
 
-fun Subscription.asSubscriptionBusiness(): SubscriptionBusiness =
-    SubscriptionBusiness(type, cost, duration, permissions)
+fun Subscription.asSubscriptionBusiness(): SubscriptionBusiness = SubscriptionBusiness(type, cost, duration, permissions)

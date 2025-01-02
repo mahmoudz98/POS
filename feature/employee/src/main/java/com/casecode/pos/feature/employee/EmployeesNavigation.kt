@@ -30,4 +30,4 @@ fun NavGraphBuilder.employeesScreen() {
     }
 }
 
-fun NavController.navigateToEmployees(navOptions: NavOptions) = navigate(EmployeesRoute, navOptions)
+fun NavController.navigateToEmployees(navOptions: NavOptions? = null) = navigate(EmployeesRoute, navOptions)

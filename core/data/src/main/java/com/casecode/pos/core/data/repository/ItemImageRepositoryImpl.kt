@@ -113,46 +113,45 @@ constructor(
      * @param imageUrl URL of the existing image to replace.
      * @return [ReplaceImage] representing the result of the replacement operation.
      */
-    override suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): ReplaceImage =
-        withContext(ioDispatcher) {
-            try {
-                // Convert bitmap to byte array
-                val data = compressImage(bitmap)
-                // Get a reference to the Firebase Storage location using the existing image URL
-                val storageRef = firebaseStorage.getReferenceFromUrl(imageUrl)
+    override suspend fun replaceImage(bitmap: Bitmap, imageUrl: String): ReplaceImage = withContext(ioDispatcher) {
+        try {
+            // Convert bitmap to byte array
+            val data = compressImage(bitmap)
+            // Get a reference to the Firebase Storage location using the existing image URL
+            val storageRef = firebaseStorage.getReferenceFromUrl(imageUrl)
 
-                suspendCoroutine { continuation ->
-                    // Replace image to Firebase Storage
-                    storageRef
-                        .putBytes(data)
-                        .addOnSuccessListener {
-                            // Get download URL
-                            storageRef.downloadUrl
-                                .addOnSuccessListener { uri ->
-                                    val downloadUrl = uri.toString()
-                                    continuation.resume(Resource.success(downloadUrl))
-                                }.addOnFailureListener { downloadUrlFailure ->
-                                    Timber.e(downloadUrlFailure)
-                                    continuation.resume(
-                                        Resource.error(
-                                            StringResource.core_data_download_url_failure,
-                                        ),
-                                    )
-                                }
-                        }.addOnFailureListener { replaceFailure ->
-                            Timber.e(replaceFailure)
-                            continuation.resume(
-                                Resource.error(StringResource.core_data_replace_image_failure),
-                            )
-                        }
-                }
-            } catch (e: UnknownHostException) {
-                Resource.error(StringResource.core_data_replace_image_failure_network)
-            } catch (e: Exception) {
-                Timber.e(e)
-                Resource.error(StringResource.core_data_replace_image_failure)
+            suspendCoroutine { continuation ->
+                // Replace image to Firebase Storage
+                storageRef
+                    .putBytes(data)
+                    .addOnSuccessListener {
+                        // Get download URL
+                        storageRef.downloadUrl
+                            .addOnSuccessListener { uri ->
+                                val downloadUrl = uri.toString()
+                                continuation.resume(Resource.success(downloadUrl))
+                            }.addOnFailureListener { downloadUrlFailure ->
+                                Timber.e(downloadUrlFailure)
+                                continuation.resume(
+                                    Resource.error(
+                                        StringResource.core_data_download_url_failure,
+                                    ),
+                                )
+                            }
+                    }.addOnFailureListener { replaceFailure ->
+                        Timber.e(replaceFailure)
+                        continuation.resume(
+                            Resource.error(StringResource.core_data_replace_image_failure),
+                        )
+                    }
             }
+        } catch (e: UnknownHostException) {
+            Resource.error(StringResource.core_data_replace_image_failure_network)
+        } catch (e: Exception) {
+            Timber.e(e)
+            Resource.error(StringResource.core_data_replace_image_failure)
         }
+    }
 
     /**
      * Deletes an image from Firebase Storage.

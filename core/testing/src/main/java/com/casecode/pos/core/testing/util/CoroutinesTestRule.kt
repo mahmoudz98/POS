@@ -30,17 +30,16 @@ class CoroutinesTestRule(
     override fun apply(
         base: Statement?,
         description: Description?,
-    ): Statement =
-        object : Statement() {
-            override fun evaluate() {
-                beforeEach()
-                try {
-                    base?.evaluate()
-                } finally {
-                    afterEach()
-                }
+    ): Statement = object : Statement() {
+        override fun evaluate() {
+            beforeEach()
+            try {
+                base?.evaluate()
+            } finally {
+                afterEach()
             }
         }
+    }
 
     private fun beforeEach() {
         Dispatchers.setMain(dispatcher)

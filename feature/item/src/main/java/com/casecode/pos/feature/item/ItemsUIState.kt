@@ -23,8 +23,7 @@ import com.casecode.pos.core.model.data.users.Item
 sealed interface ItemsUIState {
     data object Loading : ItemsUIState
 
-    data class Success(val items: Map<String, Item>, val filteredItems: List<Item> = emptyList()) :
-        ItemsUIState
+    data class Success(val items: Map<String, Item>, val filteredItems: List<Item> = emptyList()) : ItemsUIState
 
     data object Error : ItemsUIState
 

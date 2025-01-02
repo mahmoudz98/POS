@@ -53,13 +53,13 @@
     <string name="feature_setting_printer_info_error_ethernet_port_invalid">Port with ip is not valid.</string>
     <string name="feature_setting_printer_info_error_bluetooth_name_empty">Bluetooth name is required.</string>
     <string name="feature_setting_printer_info_error_usb_name_empty">Usb name is required.</string>
-    <string name="feature_setting_printer_info_error_papper_width_empty">Printer width is required.</string>
+    <string name="feature_setting_printer_info_error_paper_width_empty">Printer width is required.</string>
 
 
     <string name="feature_setting_printer_dialog_bluetooth_devices_title">Bluetooth devices</string>
     <string name="feature_setting_printer_dialog_bluetooth_devices_message_empty">No Bluetooth devices printer found.</string>
     <string name="feature_setting_need_permission_for_bluetooth">Need permission for bluetooth</string>
-    >
+
 
 
 </resources>

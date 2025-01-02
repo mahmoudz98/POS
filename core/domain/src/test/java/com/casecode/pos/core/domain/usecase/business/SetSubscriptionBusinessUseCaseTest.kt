@@ -41,27 +41,25 @@ class SetSubscriptionBusinessUseCaseTest {
         SetSubscriptionBusinessUseCase(testSubscriptionsBusinessRepository)
 
     @Test
-    fun setSubscriptionBusinessUseCase_shouldAddNewSubscriptionBusiness_returnTrue() =
-        runTest {
-            // When
-            val resultIsAddSubscriptionBusiness = setSubscriptionBusinessUseCase(subscription)
+    fun setSubscriptionBusinessUseCase_shouldAddNewSubscriptionBusiness_returnTrue() = runTest {
+        // When
+        val resultIsAddSubscriptionBusiness = setSubscriptionBusinessUseCase(subscription)
 
-            // Then
-            val isAddSubscriptionBusiness = Resource.success(true)
-            assertEquals(isAddSubscriptionBusiness, (resultIsAddSubscriptionBusiness))
-        }
+        // Then
+        val isAddSubscriptionBusiness = Resource.success(true)
+        assertEquals(isAddSubscriptionBusiness, (resultIsAddSubscriptionBusiness))
+    }
 
     @Test
-    fun setSubscriptionBusinessUseCase_emptyBusiness_returnEmptyTypeOfSubscription() =
-        runTest {
-            // When subscription business fields is empty
-            val resultEmptySubscriptionBusiness =
-                setSubscriptionBusinessUseCase(SubscriptionBusiness())
+    fun setSubscriptionBusinessUseCase_emptyBusiness_returnEmptyTypeOfSubscription() = runTest {
+        // When subscription business fields is empty
+        val resultEmptySubscriptionBusiness =
+            setSubscriptionBusinessUseCase(SubscriptionBusiness())
 
-            // Then - return Resource of empty data
-            assertEquals(
-                resultEmptySubscriptionBusiness,
-                (Resource.empty(R.string.core_domain_add_subscription_business_empty)),
-            )
-        }
+        // Then - return Resource of empty data
+        assertEquals(
+            resultEmptySubscriptionBusiness,
+            (Resource.empty(R.string.core_domain_add_subscription_business_empty)),
+        )
+    }
 }

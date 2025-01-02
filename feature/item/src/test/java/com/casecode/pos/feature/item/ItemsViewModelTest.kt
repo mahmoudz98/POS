@@ -233,90 +233,86 @@ class ItemsViewModelTest {
     }
 
     @Test
-    fun checkNetworkAndAddItem_whenHasItemAndNetworkAvailable_returnsSameItemAndMessageItemAdded() =
-        runTest {
-            // Given
-            backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
-            val newItem =
-                Item(
-                    name = "Iphone 1",
-                    unitPrice = 10.0,
-                    quantity = 22,
-                    sku = "1212312",
-                    imageUrl = "newItemImage",
-                )
-            val itemImageBitmap = null
-            // When - check to add item
-            networkMonitor.setConnected(true)
-            viewModel.checkNetworkAndAddItem(newItem, itemImageBitmap)
-            // Then
-            assertEquals(itemRepository.itemsTest.last(), newItem)
-            assertEquals(
-                viewModel.userMessage.value,
-                (ResourcesData.core_data_item_added_successfully),
+    fun checkNetworkAndAddItem_whenHasItemAndNetworkAvailable_returnsSameItemAndMessageItemAdded() = runTest {
+        // Given
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
+        val newItem =
+            Item(
+                name = "Iphone 1",
+                unitPrice = 10.0,
+                quantity = 22,
+                sku = "1212312",
+                imageUrl = "newItemImage",
             )
-        }
+        val itemImageBitmap = null
+        // When - check to add item
+        networkMonitor.setConnected(true)
+        viewModel.checkNetworkAndAddItem(newItem, itemImageBitmap)
+        // Then
+        assertEquals(itemRepository.itemsTest.last(), newItem)
+        assertEquals(
+            viewModel.userMessage.value,
+            (ResourcesData.core_data_item_added_successfully),
+        )
+    }
 
     @Test
-    fun checkNetworkAndAddItem_whenHasItemAndNetworkUnavailable_returnsFalseAndMessageNetworkUnavailable() =
-        runTest {
-            // Given new Item and no network available
-            backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
+    fun checkNetworkAndAddItem_whenHasItemAndNetworkUnavailable_returnsFalseAndMessageNetworkUnavailable() = runTest {
+        // Given new Item and no network available
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
 
-            networkMonitor.setConnected(false)
-            val newItem =
-                Item(
-                    name = "Iphone 1",
-                    unitPrice = 10.0,
-                    quantity = 22,
-                    sku = "1212312",
-                    imageUrl = "newItemImage",
-                )
-            val bitmap = null
-            // When - check to add item
-            viewModel.checkNetworkAndAddItem(newItem, bitmap)
-            // Then - assert item not add and has message network error .
-            assertEquals(
-                viewModel.userMessage.value,
-                (com.casecode.pos.core.ui.R.string.core_ui_error_network),
+        networkMonitor.setConnected(false)
+        val newItem =
+            Item(
+                name = "Iphone 1",
+                unitPrice = 10.0,
+                quantity = 22,
+                sku = "1212312",
+                imageUrl = "newItemImage",
             )
-        }
-
-    @Test
-    fun `checkNetworkAndAddItem when duplicate item and network available then show error duplicate`() =
-        runTest {
-            backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
-            itemRepository.sendItems()
-            // Given: A duplicate item with the same SKU
-            val duplicateItem = itemRepository.itemsTest[0]
-            networkMonitor.setConnected(true)
-            // When: Attempting to add the duplicate item and has Items in itemsUiState
-            assert(viewModel.itemsUiState.value is ItemsUIState.Success)
-            viewModel.checkNetworkAndAddItem(duplicateItem, bitmapMock)
-            // Then: Error message should indicate the duplicate issue
-            assertEquals(
-                viewModel.userMessage.value,
-                (R.string.feature_item_error_duplicate),
-            )
-        }
+        val bitmap = null
+        // When - check to add item
+        viewModel.checkNetworkAndAddItem(newItem, bitmap)
+        // Then - assert item not add and has message network error .
+        assertEquals(
+            viewModel.userMessage.value,
+            (com.casecode.pos.core.ui.R.string.core_ui_error_network),
+        )
+    }
 
     @Test
-    fun `checkNetworkAndAddItem when duplicate item and items empty and network available then show error duplicate`() =
-        runTest {
-            backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
-            itemRepository.setReturnEmpty(true)
-            // Given: A duplicate item with the same SKU
-            val duplicateItem = itemRepository.itemsTest[0]
-            networkMonitor.setConnected(true)
-            // When: Attempting to add the duplicate item and has Items in itemsUiState
-            assert(viewModel.itemsUiState.value is ItemsUIState.Empty)
-            viewModel.checkNetworkAndAddItem(duplicateItem, bitmapMock)
-            // Then: Error message should indicate the duplicate issue
-            assertEquals(
-                viewModel.userMessage.value,
-                ResourcesData.core_data_item_added_successfully,
-            )
-        }
+    fun `checkNetworkAndAddItem when duplicate item and network available then show error duplicate`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
+        itemRepository.sendItems()
+        // Given: A duplicate item with the same SKU
+        val duplicateItem = itemRepository.itemsTest[0]
+        networkMonitor.setConnected(true)
+        // When: Attempting to add the duplicate item and has Items in itemsUiState
+        assert(viewModel.itemsUiState.value is ItemsUIState.Success)
+        viewModel.checkNetworkAndAddItem(duplicateItem, bitmapMock)
+        // Then: Error message should indicate the duplicate issue
+        assertEquals(
+            viewModel.userMessage.value,
+            (R.string.feature_item_error_duplicate),
+        )
+    }
+
+    @Test
+    fun `checkNetworkAndAddItem when duplicate item and items empty and network available then show error duplicate`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
+        itemRepository.setReturnEmpty(true)
+        // Given: A duplicate item with the same SKU
+        val duplicateItem = itemRepository.itemsTest[0]
+        networkMonitor.setConnected(true)
+        // When: Attempting to add the duplicate item and has Items in itemsUiState
+        assert(viewModel.itemsUiState.value is ItemsUIState.Empty)
+        viewModel.checkNetworkAndAddItem(duplicateItem, bitmapMock)
+        // Then: Error message should indicate the duplicate issue
+        assertEquals(
+            viewModel.userMessage.value,
+            ResourcesData.core_data_item_added_successfully,
+        )
+    }
 
     @Test
     fun checkNetworkAndAddItem_whenHasItemAndItemImageBitmap_returnMessageItemAdded() = runTest {
@@ -348,28 +344,27 @@ class ItemsViewModelTest {
     }
 
     @Test
-    fun checkNetworkAndUpdateItem_whenChangedItemAndNetworkAvailable_returnMessageItemUpdated() =
-        runTest {
-            // Given change Item
-            backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
-            val newItem =
-                Item(
-                    name = "Iphone 1",
-                    unitPrice = 10.0,
-                    quantity = 22,
-                    sku = "1212312",
-                    imageUrl = "newItemImage",
-                )
-            viewModel.setItemSelected(itemRepository.itemsTest[0])
-            // When
-            networkMonitor.setConnected(true)
-            viewModel.checkNetworkAndUpdateItem(newItem, null)
-            // Then - assert message updated item.
-            assertEquals(
-                viewModel.userMessage.value,
-                (ResourcesData.core_data_item_updated_successfully),
+    fun checkNetworkAndUpdateItem_whenChangedItemAndNetworkAvailable_returnMessageItemUpdated() = runTest {
+        // Given change Item
+        backgroundScope.launch(UnconfinedTestDispatcher()) { viewModel.itemsUiState.collect() }
+        val newItem =
+            Item(
+                name = "Iphone 1",
+                unitPrice = 10.0,
+                quantity = 22,
+                sku = "1212312",
+                imageUrl = "newItemImage",
             )
-        }
+        viewModel.setItemSelected(itemRepository.itemsTest[0])
+        // When
+        networkMonitor.setConnected(true)
+        viewModel.checkNetworkAndUpdateItem(newItem, null)
+        // Then - assert message updated item.
+        assertEquals(
+            viewModel.userMessage.value,
+            (ResourcesData.core_data_item_updated_successfully),
+        )
+    }
 
     @Test
     fun checkNetworkAndUpdateItem_whenNotChangeItem_ReturnMessageItemFail() = runTest {
@@ -386,32 +381,30 @@ class ItemsViewModelTest {
     }
 
     @Test
-    fun checkNetworkAndDeleteItem_whenHasItemAndNetworkAvailable_ReturnsMessageItemDeleted() =
-        runTest {
-            // Given
-            viewModel.setItemSelected(itemRepository.itemsTest[0])
-            // When
-            networkMonitor.setConnected(true)
-            viewModel.checkNetworkAndDeleteItem()
-            // Then
-            assertEquals(
-                viewModel.userMessage.value,
-                (ResourcesData.core_data_item_deleted_successfully),
-            )
-        }
+    fun checkNetworkAndDeleteItem_whenHasItemAndNetworkAvailable_ReturnsMessageItemDeleted() = runTest {
+        // Given
+        viewModel.setItemSelected(itemRepository.itemsTest[0])
+        // When
+        networkMonitor.setConnected(true)
+        viewModel.checkNetworkAndDeleteItem()
+        // Then
+        assertEquals(
+            viewModel.userMessage.value,
+            (ResourcesData.core_data_item_deleted_successfully),
+        )
+    }
 
     @Test
-    fun checkNetworkAndDeleteItem_whenHasItemDeletedAndNetworkUnavailable_ReturnsMessageNetworkError() =
-        runTest {
-            // Given
-            networkMonitor.setConnected(false)
-            viewModel.setItemSelected(itemRepository.itemsTest[0])
-            // When -
-            viewModel.checkNetworkAndDeleteItem()
-            // Then
-            assertEquals(
-                viewModel.userMessage.value,
-                (com.casecode.pos.core.ui.R.string.core_ui_error_network),
-            )
-        }
+    fun checkNetworkAndDeleteItem_whenHasItemDeletedAndNetworkUnavailable_ReturnsMessageNetworkError() = runTest {
+        // Given
+        networkMonitor.setConnected(false)
+        viewModel.setItemSelected(itemRepository.itemsTest[0])
+        // When -
+        viewModel.checkNetworkAndDeleteItem()
+        // Then
+        assertEquals(
+            viewModel.userMessage.value,
+            (com.casecode.pos.core.ui.R.string.core_ui_error_network),
+        )
+    }
 }

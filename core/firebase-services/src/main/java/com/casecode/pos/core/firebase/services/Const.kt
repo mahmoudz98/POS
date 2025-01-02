@@ -19,6 +19,7 @@ package com.casecode.pos.core.firebase.services
 const val USERS_COLLECTION_PATH = "users"
 const val ITEMS_COLLECTION_PATH = "items"
 const val SUPPLIERS_COLLECTION_PATH = "suppliers"
+const val SUPPLIER_INVOICES_COLLECTION_PATH = "suppliersInvoice"
 const val PRINTER_INFO_COLLECTION_PATH = "printerInfo"
 const val CUSTOMERS_COLLECTION_PATH = "customers"
 const val BUSINESS_FIELD = "business"
@@ -55,8 +56,7 @@ const val EMPLOYEE_PASSWORD_FIELD = "password"
 const val EMPLOYEE_BRANCH_NAME_FIELD = "branchName"
 const val EMPLOYEE_PERMISSION_FIELD = "permission"
 
-// fields in items.
-const val IMAGE_FIELDS = "image"
+// fields in item.
 const val ITEM_NAME_FIELD = "name"
 const val ITEM_CATEGORY_FIELD = "category"
 const val ITEM_SUPPLIER_NAME_FIELD = "supplier_name"
@@ -71,7 +71,7 @@ const val ITEM_IMAGE_URL_FIELD = "image_url"
 const val ITEM_UNIT_OF_MEASUREMENT_FIELD = "unitOfMeasurement"
 const val ITEM_DELETED_FIELD = "deleted"
 
-// fields in suppliers.
+// fields in supplier.
 const val SUPPLIER_ID_FIELD = "id"
 const val SUPPLIER_COMPANY_NAME_FIELD = "companyName"
 const val SUPPLIER_CONTACT_NAME_FIELD = "contactName"
@@ -80,13 +80,34 @@ const val SUPPLIER_CONTACT_PHONE_FIELD = "contactPhone"
 const val SUPPLIER_ADDRESS_FIELD = "address"
 const val SUPPLIER_CATEGORY_FIELD = "category"
 
+// Fields in supplier invoices
+const val SUPPLIER_INVOICE_ID_FIELD = "invoiceId"
+const val SUPPLIER_INVOICE_BILL_NUMBER_FIELD = "billNumber"
+const val SUPPLIER_INVOICE_SUPPLIER_ID_FIELD = "supplierId"
+const val SUPPLIER_INVOICE_ISSUE_DATE_FIELD = "issueDate"
+const val SUPPLIER_INVOICE_DUE_DATE_FIELD = "dueDate"
+const val SUPPLIER_INVOICE_CREATED_BY_FIELD = "createdBy"
+const val SUPPLIER_INVOICE_TOTAL_AMOUNT_FIELD = "totalAmount"
+const val SUPPLIER_INVOICE_DISCOUNT_TYPE_FIELD = "discountType"
+const val SUPPLIER_INVOICE_AMOUNT_DISCOUNTED_FIELD = "amountDiscount"
+const val SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD = "paymentDetails"
+const val SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD = "paymentStatus"
+const val SUPPLIER_INVOICE_ITEMS_FIELD = "invoiceItems"
+
+// fields in payment details of supplier invoice
+const val SUPPLIER_INVOICE_PAYMENT_DETAILS_ID_FIELD = "paymentId"
+const val SUPPLIER_INVOICE_PAYMENT_DETAILS_DATE_FIELD = "paymentDate"
+const val SUPPLIER_INVOICE_PAYMENT_DETAILS_CREATED_BY_FIELD = "createdBy"
+const val SUPPLIER_INVOICE_PAYMENT_DETAILS_METHOD_FIELD = "paymentMethod"
+const val SUPPLIER_INVOICE_PAYMENT_DETAILS_AMOUNT_PAID_FIELD = "amountPaid"
+
 // fields in Invoice.
 const val INVOICE_FIELD = "invoices"
 const val INVOICE_NAME_FIELD = "number"
 const val INVOICE_DATE_FIELD = "date"
 const val INVOICE_CREATED_BY_FIELD = "createdBy"
 const val INVOICE_CUSTOMER_FIELD = "customer"
-const val INVOICE_ITEMS_FIELD = "items"
+const val INVOICE_ITEMS_FIELD = "invoiceItems"
 
 const val ITEM_PATH_FIELD = "item"
 const val IMAGES_PATH_FIELD = "images"

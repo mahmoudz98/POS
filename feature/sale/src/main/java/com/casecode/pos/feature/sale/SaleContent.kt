@@ -87,7 +87,7 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.ui.DeviceLandscapePreviews
-import com.casecode.pos.core.ui.ItemsPreviewParameterProvider
+import com.casecode.pos.core.ui.parameterprovider.ItemsPreviewParameterProvider
 import java.text.DecimalFormat
 
 @Composable
@@ -290,9 +290,8 @@ internal fun ColumnScope.SectionCartItems(
 }
 
 @Composable
-fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean =
-    windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
-        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
+    configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

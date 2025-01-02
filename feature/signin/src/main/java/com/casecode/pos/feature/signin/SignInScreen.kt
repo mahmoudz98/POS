@@ -63,8 +63,8 @@ import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.LoginStateResult
 import com.casecode.pos.core.ui.DevicePreviews
-import com.casecode.pos.core.ui.moveToMainActivity
-import com.casecode.pos.core.ui.moveToStepperActivity
+import com.casecode.pos.core.ui.utils.moveToMainActivity
+import com.casecode.pos.core.ui.utils.moveToStepperActivity
 import com.casecode.pos.feature.login.employee.LoginInEmployeeDialog
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential

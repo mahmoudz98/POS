@@ -44,7 +44,7 @@ constructor(
         loginPreferences.data.map {
             when (it.authState) {
                 AuthState.LOGIN_ADMIN -> {
-                    AuthState.LOGIN_ADMIN.name
+                    "Admin"
                 }
 
                 AuthState.LOGIN_EMPLOYEE -> {

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.casecode.pos.core.ui.BranchDialogContent
-import com.casecode.pos.core.ui.validatePhoneNumber
+import com.casecode.pos.core.ui.utils.validatePhoneNumber
 
 @Composable
 fun AddBranchDialog(

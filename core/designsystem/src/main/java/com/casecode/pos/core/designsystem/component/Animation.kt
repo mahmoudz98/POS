@@ -30,8 +30,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.ui.Alignment
 
 @OptIn(ExperimentalAnimationApi::class)
-fun scaleAndExpandVertically(): EnterTransition =
-    scaleIn() + expandVertically(expandFrom = Alignment.Top)
+fun scaleAndExpandVertically(): EnterTransition = scaleIn() + expandVertically(expandFrom = Alignment.Top)
 
 @OptIn(ExperimentalAnimationApi::class)
 fun scaleAndShrinkVertically(): ExitTransition = scaleOut() + shrinkVertically()

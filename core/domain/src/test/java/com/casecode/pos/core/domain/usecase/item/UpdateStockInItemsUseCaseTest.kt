@@ -16,7 +16,7 @@
 package com.casecode.pos.core.domain.usecase.item
 
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
-import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
@@ -50,7 +50,7 @@ class UpdateStockInItemsUseCaseTest {
         // When
         val result = updateStockInItemsUseCase(itemsUpdate)
         // Then
-        assertEquals(Resource.success(itemsUpdate), result)
+        assertEquals(OperationResult.Success, result)
     }
 
     @Test
@@ -61,7 +61,7 @@ class UpdateStockInItemsUseCaseTest {
         val result = updateStockInItemsUseCase(emptyItems)
         // Then
         assertEquals(
-            Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
+            OperationResult.Failure(message = stringDomain.core_domain_invoice_items_empty),
             result,
         )
     }
@@ -82,7 +82,7 @@ class UpdateStockInItemsUseCaseTest {
         testItemRepository setReturnError true
         val resultUpdate = updateStockInItemsUseCase(itemsUpdate)
         assertEquals(
-            Resource.error(stringData.core_data_update_item_failure_generic),
+            OperationResult.Failure(stringData.core_data_update_item_failure_generic),
             resultUpdate,
 
         )

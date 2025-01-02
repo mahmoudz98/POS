@@ -46,6 +46,8 @@
 #-dontwarn org.mockito.**
 
 -if class androidx.credentials.CredentialManager
--keep class androidx.credentials.playservices.** {
-  *;
+-keep class androidx.credentials.playservices.** {*;
 }
+# Keep custom model classes
+-keep class com.casecode.pos.core.model.data.** { *; }
+-keep class com.casecode.pos.core.firebase.services.model.** { *; }

@@ -21,7 +21,6 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -58,14 +57,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.PosFilterChip
@@ -73,13 +69,15 @@ import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.component.SearchToolbar
 import com.casecode.pos.core.designsystem.component.SearchTopAppBar
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
+import com.casecode.pos.core.designsystem.component.diagonalGradientBorder
 import com.casecode.pos.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.ui.ItemsPreviewParameterProvider
+import com.casecode.pos.core.ui.FilterSharedElementKey
+import com.casecode.pos.core.ui.parameterprovider.ItemsPreviewParameterProvider
 import java.text.DecimalFormat
 import com.casecode.pos.core.ui.R.string as uiString
 
@@ -134,84 +132,6 @@ fun DefaultTopAppBar(
         ),
     )
 }
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-internal fun CategoryFilterChips(
-    filterScreenVisible: Boolean,
-    onShowFilters: () -> Unit,
-    sharedTransitionScope: SharedTransitionScope,
-    categories: Set<String>,
-    selectedCategories: Set<String>,
-    onCategorySelected: (String) -> Unit,
-    onCategoryUnselected: (String) -> Unit,
-) {
-    with(sharedTransitionScope) {
-        LazyRow(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(start = 12.dp, end = 8.dp),
-            modifier = Modifier.heightIn(min = 56.dp),
-        ) {
-            item {
-                AnimatedVisibility(visible = !filterScreenVisible) {
-                    IconButton(
-                        onClick = onShowFilters,
-                        modifier =
-                        Modifier
-                            .sharedBounds(
-                                rememberSharedContentState(FilterSharedElementKey),
-                                animatedVisibilityScope = this@AnimatedVisibility,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
-                            ),
-                    ) {
-                        Icon(
-                            imageVector = PosIcons.Filter,
-                            tint = MaterialTheme.colorScheme.primary,
-                            contentDescription = stringResource(R.string.feature_item_filter_label),
-                            modifier =
-                            Modifier.diagonalGradientBorder(
-                                colors =
-                                listOf(
-                                    MaterialTheme.colorScheme.primary,
-                                    MaterialTheme.colorScheme.primaryContainer,
-                                    MaterialTheme.colorScheme.secondaryContainer,
-                                ),
-                                shape = CircleShape,
-                            ),
-                        )
-                    }
-                }
-            }
-            categories.forEach { category ->
-                val isSelected = selectedCategories.contains(category)
-                item(category) {
-                    PosFilterChip(
-                        selected = isSelected,
-                        onSelectedChange = {
-                            if (isSelected) {
-                                onCategoryUnselected(category)
-                            } else {
-                                onCategorySelected(category)
-                            }
-                        },
-                        label = { Text(text = category) },
-                    )
-                }
-            }
-        }
-    }
-}
-
-private fun Modifier.diagonalGradientBorder(
-    colors: List<Color>,
-    borderSize: Dp = 2.dp,
-    shape: Shape,
-) = border(
-    width = borderSize,
-    brush = Brush.linearGradient(colors),
-    shape = shape,
-)
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -292,6 +212,74 @@ internal fun ItemsContent(
                 itemsAvailable = items.size,
             ),
         )
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+internal fun CategoryFilterChips(
+    filterScreenVisible: Boolean,
+    onShowFilters: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+    categories: Set<String>,
+    selectedCategories: Set<String>,
+    onCategorySelected: (String) -> Unit,
+    onCategoryUnselected: (String) -> Unit,
+) {
+    with(sharedTransitionScope) {
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(start = 12.dp, end = 8.dp),
+            modifier = Modifier.heightIn(min = 56.dp),
+        ) {
+            item {
+                AnimatedVisibility(visible = !filterScreenVisible) {
+                    IconButton(
+                        onClick = onShowFilters,
+                        modifier =
+                        Modifier
+                            .sharedBounds(
+                                rememberSharedContentState(FilterSharedElementKey),
+                                animatedVisibilityScope = this@AnimatedVisibility,
+                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
+                            ),
+                    ) {
+                        Icon(
+                            imageVector = PosIcons.Filter,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = null,
+                            modifier =
+                            Modifier.diagonalGradientBorder(
+                                colors =
+                                listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.primaryContainer,
+                                    MaterialTheme.colorScheme.secondaryContainer,
+                                ),
+                                shape = CircleShape,
+                            ),
+                        )
+                    }
+                }
+            }
+            categories.forEach { category ->
+                val isSelected = selectedCategories.contains(category)
+                item(category) {
+                    PosFilterChip(
+                        selected = isSelected,
+                        onSelectedChange = {
+                            if (isSelected) {
+                                onCategoryUnselected(category)
+                            } else {
+                                onCategorySelected(category)
+                            }
+                        },
+                        label = { Text(text = category) },
+                    )
+                }
+            }
+        }
     }
 }
 

@@ -26,23 +26,13 @@ import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.icon.PosIcons
 
 @Composable
-fun InventoryScreen(
-    modifier: Modifier = Modifier,
-    onItemsScreenClick: () -> Unit = {},
-    onSupplierScreenClick: () -> Unit = {},
-) {
+fun InventoryScreen(modifier: Modifier = Modifier, onItemsScreenClick: () -> Unit) {
     Column(modifier = modifier.padding(16.dp)) {
         PosTextButton(
             onClick = onItemsScreenClick,
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.feature_inventory_items_button_text),
             leadingIcon = PosIcons.Items,
-        )
-        PosTextButton(
-            onClick = onSupplierScreenClick,
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.feature_inventory_suppliers_button_text),
-            leadingIcon = PosIcons.Supplier,
         )
     }
 }

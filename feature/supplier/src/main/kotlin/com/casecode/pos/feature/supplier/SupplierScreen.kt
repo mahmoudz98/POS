@@ -60,7 +60,7 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Supplier
 import com.casecode.pos.core.ui.DeleteDialog
 import com.casecode.pos.core.ui.DevicePreviews
-import com.casecode.pos.core.ui.SupplierPreviewParameterProvider
+import com.casecode.pos.core.ui.parameterprovider.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.R as uiR
 
 @Composable

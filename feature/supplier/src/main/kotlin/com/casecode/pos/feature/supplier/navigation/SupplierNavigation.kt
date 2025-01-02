@@ -31,5 +31,4 @@ fun NavGraphBuilder.supplierScreen(onBackClick: () -> Unit) {
     }
 }
 
-fun NavController.navigateToSupplier(navOptions: NavOptions? = null) =
-    navigate(SupplierRoute, navOptions)
+fun NavController.navigateToSupplier(navOptions: NavOptions? = null) = navigate(SupplierRoute, navOptions)

@@ -25,9 +25,8 @@ enum class StoreType(
     ;
 
     companion object {
-        fun toStoreType(store: String): StoreType? =
-            StoreType.entries.find { type ->
-                type.arabicName == store || type.englishName.lowercase() == store.lowercase()
-            }
+        fun toStoreType(store: String): StoreType? = StoreType.entries.find { type ->
+            type.arabicName == store || type.englishName.lowercase() == store.lowercase()
+        }
     }
 }

@@ -41,11 +41,10 @@ internal object TestDataStoreModule {
         @ApplicationScope scope: CoroutineScope,
         loginPreferencesSerializer: LoginPreferencesSerializer,
         tmpFolder: TemporaryFolder,
-    ): DataStore<LoginPreferences> =
-        tmpFolder.testLoginPreferencesDataStore(
-            coroutineScope = scope,
-            loginPreferencesSerializer = loginPreferencesSerializer,
-        )
+    ): DataStore<LoginPreferences> = tmpFolder.testLoginPreferencesDataStore(
+        coroutineScope = scope,
+        loginPreferencesSerializer = loginPreferencesSerializer,
+    )
 }
 
 fun TemporaryFolder.testLoginPreferencesDataStore(

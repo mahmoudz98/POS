@@ -39,8 +39,7 @@ constructor() : AccountRepository {
 
     override suspend fun checkUserLogin() {}
 
-    override suspend fun checkRegistration(email: String): Resource<Boolean> =
-        Resource.Success(true)
+    override suspend fun checkRegistration(email: String): Resource<Boolean> = Resource.Success(true)
 
     override suspend fun employeeLogOut() {
     }

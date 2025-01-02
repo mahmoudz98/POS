@@ -31,6 +31,7 @@ import com.casecode.pos.MainAuthUiState
 import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.feature.inventory.navigation.InventoryRoute
 import com.casecode.pos.feature.profile.navigateToProfile
+import com.casecode.pos.feature.purchase.navigation.PurchaseRoute
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.signout.SignOutRoute
@@ -49,20 +50,19 @@ fun rememberMainAppState(
     mainAuthUiState: MainAuthUiState,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-): MainAppState =
-    remember(
-        navController,
-        coroutineScope,
-        networkMonitor,
-        mainAuthUiState,
-    ) {
-        MainAppState(
-            navController = navController,
-            coroutineScope = coroutineScope,
-            networkMonitor = networkMonitor!!,
-            mainAuthUiState = mainAuthUiState,
-        )
-    }
+): MainAppState = remember(
+    navController,
+    coroutineScope,
+    networkMonitor,
+    mainAuthUiState,
+) {
+    MainAppState(
+        navController = navController,
+        coroutineScope = coroutineScope,
+        networkMonitor = networkMonitor!!,
+        mainAuthUiState = mainAuthUiState,
+    )
+}
 
 @Stable
 class MainAppState(
@@ -88,6 +88,7 @@ class MainAppState(
                 SaleRoute::class,
                 ReportsRoute::class,
                 InventoryRoute::class,
+                PurchaseRoute::class,
                 SettingRoute::class,
                 SignOutRoute::class,
             )
@@ -98,8 +99,7 @@ class MainAppState(
 
     @SuppressLint("RestrictedApi")
     @Composable
-    private fun getCurrentTopLevelDestination(destinations: List<TopLevelDestination>): TopLevelDestination? =
-        destinations.firstOrNull { currentDestination?.hasRoute(it.route) == true }
+    private fun getCurrentTopLevelDestination(destinations: List<TopLevelDestination>): TopLevelDestination? = destinations.firstOrNull { currentDestination?.hasRoute(it.route) == true }
 
     val currentAdminTopLevelDestination: TopLevelDestination?
         @Composable get() = getCurrentTopLevelDestination(topLevelDestinations)

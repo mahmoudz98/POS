@@ -21,11 +21,15 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.casecode.pos.feature.bill.navigation.billsGraph
+import com.casecode.pos.feature.bill.navigation.navigateToBillsGraph
 import com.casecode.pos.feature.employee.employeesScreen
+import com.casecode.pos.feature.employee.navigateToEmployees
 import com.casecode.pos.feature.inventory.navigation.inventoryScreen
 import com.casecode.pos.feature.item.navigation.itemsGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
 import com.casecode.pos.feature.profile.profileScreen
+import com.casecode.pos.feature.purchase.navigation.purchaseScreen
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.sale.navigation.saleScreen
 import com.casecode.pos.feature.sales.report.navigateToSalesReport
@@ -70,19 +74,28 @@ fun PosMainNavHost(
             onItemsScreenClick = {
                 appState.navController.navigateToItemsGraph()
             },
-            onSupplierScreenClick = {
-                appState.navController.navigateToSupplier()
-            },
         )
         itemsGraph(appState.navController)
         supplierScreen { appState.navController.popBackStack() }
-        employeesScreen()
+        purchaseScreen(
+            onSupplierScreenClick = {
+                appState.navController.navigateToSupplier()
+            },
+            onBillsScreenClick = {
+                appState.navController.navigateToBillsGraph()
+            },
+        )
+        billsGraph(appState.navController)
         settingsGraph(
             appState.navController,
+            onEmployeesScreenClick = {
+                appState.navController.navigateToEmployees()
+            },
             onSignOutClick = {
                 appState.navController.navigateToSignOut()
             },
         )
+        employeesScreen()
         signOutDialog(
             onSignOut = {
                 onSignOutClick()

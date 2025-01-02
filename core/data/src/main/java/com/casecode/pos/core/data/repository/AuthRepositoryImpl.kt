@@ -76,8 +76,7 @@ constructor(
                 awaitClose { auth.removeAuthStateListener(listener) }
             }
 
-    override suspend fun hasEmployeeLogin(): Boolean =
-        loginData.last() is LoginStateResult.EmployeeLogin
+    override suspend fun hasEmployeeLogin(): Boolean = loginData.last() is LoginStateResult.EmployeeLogin
 
     override suspend fun hasUser(): Boolean = currentUserId().isNotBlank()
 }

@@ -33,7 +33,7 @@ class AddOrUpdateItemScreenTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     private val saveButtonLabel by lazy {
-        composeTestRule.activity.getString(string.feature_item_save_action_text)
+        composeTestRule.activity.getString(uiString.core_ui_save_action_text)
     }
     private val trackStockChipLabel by lazy {
         composeTestRule.activity.getString(string.feature_item_not_track_stock_chip_label)

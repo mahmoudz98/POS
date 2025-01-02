@@ -1,4 +1,3 @@
-
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.casecode.pos.Configuration
@@ -54,9 +53,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", libs.findLibrary("timber").get())
-                add("androidTestImplementation", kotlin("test"))
-                add("testImplementation", kotlin("test"))
+                "implementation"(libs.findLibrary("timber").get())
+                "androidTestImplementation"(kotlin("test"))
+                "testImplementation"(kotlin("test"))
             }
         }
     }

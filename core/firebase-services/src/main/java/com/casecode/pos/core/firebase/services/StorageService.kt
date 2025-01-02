@@ -25,6 +25,7 @@ import com.google.firebase.firestore.ListenSource
 import com.google.firebase.firestore.MetadataChanges
 import com.google.firebase.firestore.SnapshotListenOptions
 import com.google.firebase.firestore.snapshots
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
@@ -86,6 +87,20 @@ constructor(
                 .document(nameNewDocument)
         }
     }
+    fun getDocumentInChild(
+        collectionParent: String,
+        documentId: String,
+        collectionChild: String,
+        nameNewDocument: String,
+    ): Flow<DocumentSnapshot> {
+        trace(collectionChild) {
+            return firestore
+                .collection(collectionParent)
+                .document(documentId)
+                .collection(collectionChild)
+                .document(nameNewDocument).snapshots()
+        }
+    }
 
     fun getCollection(collection: String): CollectionReference = firestore.collection(collection)
 
@@ -98,17 +113,16 @@ constructor(
         .document(documentId)
         .collection(collectionChild)
 
-    suspend fun setDocument(collection: String, documentId: String, data: Map<String, Any>): Void =
-        try {
-            firestore
-                .collection(collection)
-                .document(documentId)
-                .set(data)
-                .await()
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to set document")
-            throw e
-        }
+    suspend fun setDocument(collection: String, documentId: String, data: Map<String, Any>): Void = try {
+        firestore
+            .collection(collection)
+            .document(documentId)
+            .set(data)
+            .await()
+    } catch (e: Exception) {
+        Timber.e(e, "Failed to set document")
+        throw e
+    }
 
     fun setDocumentWithTask(
         collection: String,
@@ -172,8 +186,7 @@ constructor(
             }
     }
 
-    fun listenToCollection(collection: String, documentId: String) =
-        firestore.collection(collection).document(documentId).snapshots()
+    fun listenToCollection(collection: String, documentId: String) = firestore.collection(collection).document(documentId).snapshots()
 
     fun listenToCollectionChild(
         collection: String,
@@ -181,8 +194,8 @@ constructor(
         collectionChild: String,
         condition: Pair<String, Any>? = null,
         sortWithFieldName: String? = null,
-    ) =
-        firestore.collection(collection).document(documentId).collection(collectionChild).let { collectionRef ->
+    ) = firestore.collection(collection).document(documentId)
+        .collection(collectionChild).let { collectionRef ->
             if (condition != null) {
                 collectionRef.whereEqualTo(condition.first, condition.second)
             } else {

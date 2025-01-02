@@ -1,29 +1,31 @@
 [versions]
 # AGP and tools should be updated together
-agp = "8.7.2"
-androidTools = "31.7.2"
+agp = "8.7.3"
+androidTools = "31.7.3"
 billingKtx = "7.1.1"
 escposThermalprinterAndroid = "3.4.0"
 googleid = "1.1.1"
 credentials = "1.3.0"
-kotlin = "2.0.21"
-androidDesugarJdkLibs = "2.1.2"
+kotlin = "2.1.0"
+androidDesugarJdkLibs = "2.1.4"
 libphonenumber = "8.12.31"
 playServicesBase = "18.5.0"
 playServicesCodeScanner = "16.1.0"
 secrets = "2.0.1"
 dependencyGuard = "0.5.0"
 moduleGraph = "2.7.1"
-accompanist = "0.36.0"
+accompanist = "0.37.0"
 protobuf = "4.26.1"
 protobufPlugin = "0.9.4"
-# Androidx
-androidxCompose = "1.8.0-alpha05"
-androidxComposeBom = "2024.10.01"
-androidxComposeRuntimeTracing = "1.7.5"
+cashe-fix = "3.0"
+dependency-analysis = "2.0.1"
+
+androidxCompose = "1.8.0-alpha07"
+androidxComposeBom = "2024.12.01"
+androidxComposeRuntimeTracing = "1.7.6"
 androidxHiltNavigationCompose = "1.2.0"
 androidxDataStore = "1.1.1"
-androidxActivity = "1.10.0-alpha03"
+androidxActivity = "1.10.0-rc01"
 androidxAppcompat = "1.7.0"
 androidxCoreSplashscreen = "1.0.1"
 core = "1.15.0"
@@ -31,32 +33,33 @@ androidLifecycle = "2.8.7"
 androidxTracing = "1.3.0-alpha02"
 androidxMetrics = "1.0.0-beta01"
 constraintlayout = "1.1.0"
-navigation = "2.8.3"
+navigation = "2.8.5"
+androidxLintGradle = "1.0.0-alpha03"
 androidxMacroBenchmark = "1.3.3"
 coil = "2.7.0"
-kotlinx-coroutines = "1.9.0"
+kotlinx-coroutines = "1.10.1"
 kotlinxSerializationJson = "1.7.3"
+kotlinxDatetime = "0.6.1"
 # DI
-hilt = "2.52"
+hilt = "2.53.1"
 hilt-navigation = "1.2.0"
-# Annotations procesing
-ksp = "2.0.21-1.0.25"
+ksp = "2.1.0-1.0.29"
 #  Services
-firebaseBom = "33.5.1"
+firebaseBom = "33.7.0"
 firebase-auth = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
 firebaseStorageKtx = "21.0.1"
 testlab = "0.2"
 firebaseMessaging = "24.0.0"
 google-services = "4.4.2"
-play-services-auth = "21.2.0"
+play-services-auth = "21.3.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
 googleOssPlugin = "0.10.6"
 zxing-core = "3.4.1"
 
 coreTesting = "2.2.0"
-truth = "1.4.2"
+truth = "1.4.4"
 power-assert = "2.0.20"
 # Debug Tools
 leakcanary = "2.11"
@@ -76,7 +79,6 @@ mockk-andrdoid = "1.13.12"
 # Gradle plugins
 ktlint-plugin = "10.3.0"
 spotless = "6.24.0"
-junitJunit = "4.13.2"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -84,7 +86,6 @@ androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-tes
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
-
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxCompose" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
@@ -103,7 +104,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidLifecycle" }
-androidx-livedata-runtimeCompose = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "androidxCompose" }
+androidx-livedata-runtimeCompose = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "androidLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidLifecycle" }
 androidx-lifecycle-runtimeTesting = { group = "androidx.lifecycle", name = "lifecycle-runtime-testing", version.ref = "androidLifecycle" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
@@ -112,13 +113,10 @@ androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", ve
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigation" }
-
 billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
 core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
-
-
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 escpos-thermalprinter-android = { module = "com.github.DantSu:ESCPOS-ThermalPrinter-Android", version.ref = "escposThermalprinterAndroid" }
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
@@ -142,29 +140,24 @@ kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.3.8" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 # DI
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 degger-android = { module = "com.google.dagger:dagger", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
-
 lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "androidTools" }
 lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "androidTools" }
 lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "androidTools" }
 javax-inject = { module = "javax.inject:javax.inject", version = "1" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
-
 android-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-navigation" }
 hilt-navigation = { module = "androidx.hilt:hilt-navigation", version.ref = "hilt-navigation" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+androidx-lint-gradle = { group = "androidx.lint", name = "lint-gradle", version.ref = "androidxLintGradle" }
 
-
-
-# Debug Tools
-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 # Service
 google-oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "googleOssPlugin" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
@@ -190,6 +183,9 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk-andrdoid" }
 mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk-andrdoid" }
 
+# Debug Tools
+leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "testespresso" }
@@ -215,11 +211,12 @@ power-assert-plugin = { group = "org.jetbrains.kotlin.plugin.power-assert", name
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
+android-lint = { id = "com.android.lint", version.ref = "agp" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-gradle-cache-fix = { id = "org.gradle.android.cache-fix", version = "3.0" }
+gradle-cache-fix = { id = "org.gradle.android.cache-fix", version.ref = "cashe-fix" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 gms-google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
@@ -230,13 +227,13 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
-dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version = "2.0.1" }
+dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependency-analysis" }
 module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 power-assert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "kotlin" }
 # Plugins defined by this project
-pos-android-application-compose = { id = "pos.android.application.compose", version = "unspecified" }
 pos-android-application = { id = "pos.android.application", version = "unspecified" }
+pos-android-application-compose = { id = "pos.android.application.compose", version = "unspecified" }
 pos-android-application-flavors = { id = "pos.android.application.flavors", version = "unspecified" }
 pos-android-application-jacoco = { id = "pos.android.application.jacoco", version = "unspecified" }
 pos-android-library = { id = "pos.android.library", version = "unspecified" }

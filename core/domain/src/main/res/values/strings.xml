@@ -29,7 +29,7 @@
   <string name="core_domain_employees_empty">Employees are empty</string>
 
   // Invoices
-  <string name="core_domain_invoice_items_empty">Invoice allItems are empty</string>
+  <string name="core_domain_invoice_items_empty">Invoice Items are empty</string>
 
 
 </resources>

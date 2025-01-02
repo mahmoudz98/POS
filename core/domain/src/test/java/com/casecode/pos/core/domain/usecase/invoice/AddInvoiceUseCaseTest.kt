@@ -38,44 +38,41 @@ class AddInvoiceUseCaseTest {
     private val addInvoiceUseCase = AddInvoiceUseCase(testInvoiceRepository)
 
     @Test
-    fun whenHasInvoices_returnMessageAddedInvoice() =
-        runTest {
-            // Given
-            // When
-            val result = addInvoiceUseCase(itemsTestData).last()
-            // Then
-            assertEquals(
-                Resource.success(stringData.core_data_add_invoice_successfully),
-                result,
-            )
-        }
+    fun whenHasInvoices_returnMessageAddedInvoice() = runTest {
+        // Given
+        // When
+        val result = addInvoiceUseCase(itemsTestData).last()
+        // Then
+        assertEquals(
+            Resource.success(stringData.core_data_add_invoice_successfully),
+            result,
+        )
+    }
 
     @Test
-    fun whenInputEmptyItems_returnMessageEmptyItems() =
-        runTest {
-            // Given
-            val items = listOf<Item>()
-            // When
-            val result = addInvoiceUseCase(items).last()
-            // Then
-            assertEquals(
-                Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
-                result,
-            )
-        }
+    fun whenInputEmptyItems_returnMessageEmptyItems() = runTest {
+        // Given
+        val items = listOf<Item>()
+        // When
+        val result = addInvoiceUseCase(items).last()
+        // Then
+        assertEquals(
+            Resource.empty(message = stringDomain.core_domain_invoice_items_empty),
+            result,
+        )
+    }
 
     @Test
-    fun whenHasError_returnMessageError() =
-        runTest {
-            // Given
-            val items = itemsTestData
-            // When
-            testInvoiceRepository setReturnError true
-            val result = addInvoiceUseCase(items).last()
-            // Then
-            assertEquals(
-                Resource.error(stringData.core_data_add_invoice_failure),
-                result,
-            )
-        }
+    fun whenHasError_returnMessageError() = runTest {
+        // Given
+        val items = itemsTestData
+        // When
+        testInvoiceRepository setReturnError true
+        val result = addInvoiceUseCase(items).last()
+        // Then
+        assertEquals(
+            Resource.error(stringData.core_data_add_invoice_failure),
+            result,
+        )
+    }
 }

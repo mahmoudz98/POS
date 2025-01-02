@@ -23,14 +23,13 @@ import com.casecode.pos.core.firebase.services.EMPLOYEE_PERMISSION_FIELD
 import com.casecode.pos.core.firebase.services.EMPLOYEE_PHONE_NUMBER_FIELD
 import com.casecode.pos.core.model.data.users.Employee
 
-fun Map<String, Any>.asExternalModel(): Employee =
-    Employee(
-        name = this[EMPLOYEE_NAME_FIELD] as String,
-        phoneNumber = this[EMPLOYEE_PHONE_NUMBER_FIELD] as String,
-        password = this[EMPLOYEE_PASSWORD_FIELD] as String,
-        branchName = this[EMPLOYEE_BRANCH_NAME_FIELD] as String,
-        permission = this[EMPLOYEE_PERMISSION_FIELD] as String,
-    )
+fun Map<String, Any>.asExternalModel(): Employee = Employee(
+    name = this[EMPLOYEE_NAME_FIELD] as String,
+    phoneNumber = this[EMPLOYEE_PHONE_NUMBER_FIELD] as String,
+    password = this[EMPLOYEE_PASSWORD_FIELD] as String,
+    branchName = this[EMPLOYEE_BRANCH_NAME_FIELD] as String,
+    permission = this[EMPLOYEE_PERMISSION_FIELD] as String,
+)
 
 fun List<Employee>.asExternalEmployees(): HashMap<String, MutableList<Map<String, Any?>>> {
     val employeesRequest = mutableListOf<Map<String, Any?>>()
@@ -48,14 +47,13 @@ fun List<Employee>.asExternalEmployees(): HashMap<String, MutableList<Map<String
     return hashMapOf(EMPLOYEES_FIELD to employeesRequest)
 }
 
-fun Employee.asExternalEmployee(): Map<String, Any?> =
-    hashMapOf(
-        EMPLOYEE_NAME_FIELD to this.name,
-        EMPLOYEE_PHONE_NUMBER_FIELD to this.phoneNumber,
-        EMPLOYEE_PASSWORD_FIELD to this.password,
-        EMPLOYEE_BRANCH_NAME_FIELD to this.branchName,
-        EMPLOYEE_PERMISSION_FIELD to this.permission,
-    )
+fun Employee.asExternalEmployee(): Map<String, Any?> = hashMapOf(
+    EMPLOYEE_NAME_FIELD to this.name,
+    EMPLOYEE_PHONE_NUMBER_FIELD to this.phoneNumber,
+    EMPLOYEE_PASSWORD_FIELD to this.password,
+    EMPLOYEE_BRANCH_NAME_FIELD to this.branchName,
+    EMPLOYEE_PERMISSION_FIELD to this.permission,
+)
 
 fun List<Map<String, Any>>.asEntityEmployees(): List<Employee> {
     val employees = mutableListOf<Employee>()

@@ -49,3 +49,5 @@ captures/
 .kotlin
 # Ignore the secrets.defaults.properties file
 secrets.defaults.properties
+
+app/google-services.json

@@ -48,8 +48,7 @@ object TestFirebaseModule {
     }
 
     @Provides
-    fun provideFirebaseFirestore(): FirebaseFirestore =
-        Firebase.firestore.also { it.useEmulator(HOST, FIRESTORE_PORT) }
+    fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore.also { it.useEmulator(HOST, FIRESTORE_PORT) }
 
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage

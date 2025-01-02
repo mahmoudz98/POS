@@ -44,68 +44,64 @@ class SubscriptionsRepositoryImplTest {
      * A test that verifies that the getSubscriptions() method returns a list of plans when successful.
      */
     @Test
-    fun getSubscriptions_shouldReturnListOfSubscriptions_whenSuccessful() =
-        runTest {
-            // Given
-            val actualSubscriptions = subscriptionsFake()
+    fun getSubscriptions_shouldReturnListOfSubscriptions_whenSuccessful() = runTest {
+        // Given
+        val actualSubscriptions = subscriptionsFake()
 
-            // when and  send some test Subscriptions and get followed state
-            repository.sendSubscriptions(actualSubscriptions)
-            val expectedSubscriptions = repository.getSubscriptions()
+        // when and  send some test Subscriptions and get followed state
+        repository.sendSubscriptions(actualSubscriptions)
+        val expectedSubscriptions = repository.getSubscriptions()
 
-            // Then
-            assertThat(expectedSubscriptions, equalTo(Resource.Success(actualSubscriptions)))
-        }
+        // Then
+        assertThat(expectedSubscriptions, equalTo(Resource.Success(actualSubscriptions)))
+    }
 
     /**
      * A test that verifies that the getSubscriptions() method returns an error when there are errors.
      */
     @Test
-    fun getSubscriptions_shouldReturnError_whenErrors() =
-        runTest {
-            // Given
-            repository.setReturnError(true)
+    fun getSubscriptions_shouldReturnError_whenErrors() = runTest {
+        // Given
+        repository.setReturnError(true)
 
-            // when  send some test error and get followed state
-            val actualError = repository.getSubscriptions()
+        // when  send some test error and get followed state
+        val actualError = repository.getSubscriptions()
 
-            // Then
-            assert(actualError is Resource.Error)
-        }
+        // Then
+        assert(actualError is Resource.Error)
+    }
 
     /**
      * A test that verifies that the getSubscriptions() method returns an empty list when there are no plans.
      */
     @Test
-    fun getSubscriptions_shouldReturnEmptyList() =
-        runTest {
-            // When send plans is empty
-            repository.setReturnEmpty(true)
-            val subscriptionsResponse = repository.getSubscriptions()
+    fun getSubscriptions_shouldReturnEmptyList() = runTest {
+        // When send plans is empty
+        repository.setReturnEmpty(true)
+        val subscriptionsResponse = repository.getSubscriptions()
 
-            // Then
-            assertThat(subscriptionsResponse, equalTo(Resource.empty("Empty")))
-        }
+        // Then
+        assertThat(subscriptionsResponse, equalTo(Resource.empty("Empty")))
+    }
 
-    private fun subscriptionsFake(): List<Subscription> =
-        listOf(
-            Subscription(
-                duration = 30,
-                cost = 0,
-                type = "basic",
-                permissions = listOf("write", "read", "admin"),
-            ),
-            Subscription(
-                duration = 30,
-                cost = 20,
-                type = "pro",
-                permissions = listOf("write", "read", "admin"),
-            ),
-            Subscription(
-                duration = 90,
-                cost = 60,
-                type = "premium",
-                permissions = listOf("write", "read", "admin"),
-            ),
-        )
+    private fun subscriptionsFake(): List<Subscription> = listOf(
+        Subscription(
+            duration = 30,
+            cost = 0,
+            type = "basic",
+            permissions = listOf("write", "read", "admin"),
+        ),
+        Subscription(
+            duration = 30,
+            cost = 20,
+            type = "pro",
+            permissions = listOf("write", "read", "admin"),
+        ),
+        Subscription(
+            duration = 90,
+            cost = 60,
+            type = "premium",
+            permissions = listOf("write", "read", "admin"),
+        ),
+    )
 }

@@ -34,39 +34,36 @@ class GetSubscriptionsUseCaseTest {
     private val getSubscriptionsUseCase = GetSubscriptionsUseCase(testSubscriptionsRepository)
 
     @Test
-    fun `getSubscriptionsUseCase return resource success of subscriptions`() =
-        runTest {
-            // 1- Given
-            val expectedSubscriptions = subscriptionsFake()
-            testSubscriptionsRepository.sendSubscriptions(expectedSubscriptions)
+    fun `getSubscriptionsUseCase return resource success of subscriptions`() = runTest {
+        // 1- Given
+        val expectedSubscriptions = subscriptionsFake()
+        testSubscriptionsRepository.sendSubscriptions(expectedSubscriptions)
 
-            // 2- When
-            val actualSubscriptions = getSubscriptionsUseCase()
+        // 2- When
+        val actualSubscriptions = getSubscriptionsUseCase()
 
-            // 3- Then
-            assertEquals(
-                expected = Resource.success(expectedSubscriptions),
-                actual = actualSubscriptions,
-            )
-        }
+        // 3- Then
+        assertEquals(
+            expected = Resource.success(expectedSubscriptions),
+            actual = actualSubscriptions,
+        )
+    }
 
     @Test
-    fun `getSubscriptionsUseCase when no subscriptions available returns Resource Empty`() =
-        runTest {
-            // 1- Given
-            testSubscriptionsRepository.setReturnEmpty(true)
+    fun `getSubscriptionsUseCase when no subscriptions available returns Resource Empty`() = runTest {
+        // 1- Given
+        testSubscriptionsRepository.setReturnEmpty(true)
 
-            // 2- When
-            val actualSubscriptions = getSubscriptionsUseCase()
+        // 2- When
+        val actualSubscriptions = getSubscriptionsUseCase()
 
-            // 3- Then
-            assert(actualSubscriptions is Resource.Empty)
-        }
+        // 3- Then
+        assert(actualSubscriptions is Resource.Empty)
+    }
 
-    private fun subscriptionsFake(): List<Subscription> =
-        mutableListOf(
-            Subscription(0, 30, listOf("admin", "non"), "basic"),
-            Subscription(20, 30, listOf("admin", "non"), "Pro"),
-            Subscription(60, 60, listOf("admin", "non"), "premium"),
-        )
+    private fun subscriptionsFake(): List<Subscription> = mutableListOf(
+        Subscription(0, 30, listOf("admin", "non"), "basic"),
+        Subscription(20, 30, listOf("admin", "non"), "Pro"),
+        Subscription(60, 60, listOf("admin", "non"), "premium"),
+    )
 }

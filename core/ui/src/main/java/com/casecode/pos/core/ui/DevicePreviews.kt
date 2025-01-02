@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
     name = "phone - ar",
     locale = "ar",
     device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480",
+    uiMode = android.content.res.Configuration.SCREENLAYOUT_LAYOUTDIR_RTL,
 )
 @Preview(
     name = "phone - landscape",
@@ -35,13 +36,12 @@ annotation class DevicePreviews
 @Preview(
     name = "Phone - Landscape",
     device = "spec:width=411dp,height=891dp,orientation=landscape,dpi=420",
-    showSystemUi = true,
 )
 @Preview(
     name = "Phone - Landscape - ar",
     locale = "ar",
     device = "spec:width=411dp,height=891dp,orientation=landscape,dpi=420",
-    showSystemUi = true,
+    uiMode = android.content.res.Configuration.SCREENLAYOUT_LAYOUTDIR_RTL,
 )
 @Preview(name = "Tablet", device = TABLET, showSystemUi = true)
 annotation class DeviceLandscapePreviews

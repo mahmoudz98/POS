@@ -20,13 +20,14 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asDomainModel
 import com.casecode.pos.core.data.model.asExternalMapper
+import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AddItem
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.repository.DeleteItem
 import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.UpdateItem
-import com.casecode.pos.core.domain.repository.UpdateQuantityItems
+import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.firebase.services.FirestoreService
 import com.casecode.pos.core.firebase.services.ITEMS_COLLECTION_PATH
@@ -181,15 +182,17 @@ constructor(
         }
     }
 
-    override suspend fun updateQuantityInItems(items: List<Item>): UpdateQuantityItems {
+    override suspend fun updateQuantityInItems(
+        items: List<Item>,
+        isIncrement: Boolean,
+    ): OperationResult {
         return withContext(ioDispatcher) {
             try {
-                auth.ensureUserExistsOrReturnError<List<Item>> {
-                    return@withContext it
+                auth.ensureUserExists {
+                    return@withContext OperationResult.Failure(it)
                 }
-                val currentUserUid =
-                    auth.currentUserId()
-                suspendCoroutine { continuation ->
+                val currentUserUid = auth.currentUserId()
+                suspendCoroutine<OperationResult> { continuation ->
                     val batch = db.batch()
                     val collectionRef =
                         db.getCollectionChild(
@@ -198,32 +201,35 @@ constructor(
                             ITEMS_COLLECTION_PATH,
                         )
                     for (item in items) {
-                        if (!item.isTrackStock()) continue
+                        if (!item.isTrackStock() && !isIncrement) continue
                         val itemRef = collectionRef.document(item.sku)
+                        val quantity = (if (isIncrement) 1 else -1).times(item.quantity)
                         batch.update(
                             itemRef,
                             ITEM_QUANTITY_FIELD,
                             com.casecode.pos.core.firebase.services.FieldValue
-                                .increment(-item.quantity.toDouble()),
+                                .increment(quantity.toLong()),
                         )
                     }
 
                     batch
                         .commit()
                         .addOnSuccessListener {
-                            continuation.resume(Resource.Success(items))
+                            continuation.resume(OperationResult.Success)
                         }.addOnFailureListener {
                             Timber.e(it)
                             continuation.resume(
-                                Resource.error(R.string.core_data_update_item_failure_generic),
+                                OperationResult.Failure(
+                                    R.string.core_data_update_item_failure_generic,
+                                ),
                             )
                         }
                 }
             } catch (_: UnknownHostException) {
-                Resource.error(R.string.core_data_update_item_failure_network)
+                OperationResult.Failure(R.string.core_data_update_item_failure_network)
             } catch (e: Exception) {
                 Timber.e(e)
-                Resource.error(R.string.core_data_update_item_failure_generic)
+                OperationResult.Failure(R.string.core_data_update_item_failure_generic)
             }
         }
     }

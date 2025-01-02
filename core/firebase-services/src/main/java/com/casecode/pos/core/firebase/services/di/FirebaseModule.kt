@@ -27,6 +27,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import timber.log.Timber
 import java.security.MessageDigest
 import java.util.UUID
 import javax.inject.Singleton
@@ -59,10 +60,9 @@ object FirebaseModule {
      */
     @Provides
     @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore =
-        FirebaseFirestore.getInstance().apply {
-            firestoreSettings = setting
-        }
+    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance().apply {
+        firestoreSettings = setting
+    }
 
     @Provides
     fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
@@ -71,6 +71,8 @@ object FirebaseModule {
     fun provideSignInRequest(): GetGoogleIdOption {
         val hashedNonce = createHashedNonce()
         val webClient = BuildConfig.web_client_id
+        Timber.e("webClient:$webClient")
+        println("webClient:$webClient")
         return GetGoogleIdOption
             .Builder()
             .setFilterByAuthorizedAccounts(false)

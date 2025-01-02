@@ -39,20 +39,19 @@ class DesignSystemDetector :
         UQualifiedReferenceExpression::class.java,
     )
 
-    override fun createUastHandler(context: JavaContext): UElementHandler =
-        object : UElementHandler() {
-            override fun visitCallExpression(node: UCallExpression) {
-                val name = node.methodName ?: return
-                val preferredName = METHOD_NAMES[name] ?: return
-                reportIssue(context, node, name, preferredName)
-            }
-
-            override fun visitQualifiedReferenceExpression(node: UQualifiedReferenceExpression) {
-                val name = node.receiver.asRenderString()
-                val preferredName = RECEIVER_NAMES[name] ?: return
-                reportIssue(context, node, name, preferredName)
-            }
+    override fun createUastHandler(context: JavaContext): UElementHandler = object : UElementHandler() {
+        override fun visitCallExpression(node: UCallExpression) {
+            val name = node.methodName ?: return
+            val preferredName = METHOD_NAMES[name] ?: return
+            reportIssue(context, node, name, preferredName)
         }
+
+        override fun visitQualifiedReferenceExpression(node: UQualifiedReferenceExpression) {
+            val name = node.receiver.asRenderString()
+            val preferredName = RECEIVER_NAMES[name] ?: return
+            reportIssue(context, node, name, preferredName)
+        }
+    }
 
     companion object {
         @JvmField
@@ -60,11 +59,9 @@ class DesignSystemDetector :
             Issue.create(
                 id = "DesignSystem",
                 briefDescription = "Design system",
-                explanation =
-                """This check highlights calls in code that use Compose
-                   Material composables instead of equivalents
-                   from the POS design system module.
-                """.trimMargin(),
+                explanation = "This check highlights calls in code that use Compose Material " +
+                    "composables instead of equivalents from the Now in Android design system " +
+                    "module.",
                 category = Category.CUSTOM_LINT_CHECKS,
                 priority = 7,
                 severity = Severity.ERROR,

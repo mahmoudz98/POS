@@ -79,6 +79,16 @@
   <string name="core_data_delete_supplier_failure_network">غير قادر على حذف المورد. يرجى التحقق من اتصالك بالإنترنت.</string>
   <string name="core_data_delete_supplier_failure_generic">فشل في حذف المورد المستهدف. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
 
+  <!-- Supplier invoices -->
+  <string name="core_data_error_fetching_supplier_invoices">حدث خطأ أثناء جلب جميع فواتير الموردين. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
+  <string name="core_data_add_supplier_invocie_failure_network">غير قادر على إضافة فاتورة المورد. يرجى التحقق</string>
+  <string name="core_data_add_supplier_invoice_failure_generic">فشلت إضافة فاتورة المورد المستهدف. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
+  <string name="core_data_update_supplier_invocie_failure_network">غير قادر على تحديث فاتورة المورد. يرجى التحقق من اتصالك بالإنترنت.</string>
+  <string name="core_data_update_supplier_invoice_failure_generic">فشل تحديث فاتورة المورد المستهدف. يرجى المحاولة مرة أخرى في وقت لاحق.</string>
+  <string name="core_data_update_supplier_invoice_payment_failure_generic">فشل في إضافة تفاصيل الدفع إلى فاتورة المورد. يرجى المحاولة مرة أخرى في وقت لاحق</string>
+  <string name="core_data_update_supplier_invoice_payment_failure_network">فشل في إضافة تفاصيل الدفع إلى فاتورة المورد. يرجى التحقق من الإنترنت الخاص بك.</string>
+
+
   <string name="core_data_sign_in_success">تم تسجيل الدخول بنحاخ</string>
   <string name="core_data_get_business_failure">فشل فى ايجاد بيانات العمل</string>
   <string name="core_data_add_branch_business_network">فشل فى اضافه فرع جديد نحقق من اتصالك بالانترنت</string>

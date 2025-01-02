@@ -33,5 +33,33 @@
         <item>@string/feature_setting_language_arabic</item>
     </string-array>
 
+    <string name="feature_setting_printer_info_name_label">اسم الطابعة</string>
+    <string name="feature_setting_printer_info_interface_connection_label">نوع الاتصال</string>
+    <string name="feature_setting_printer_info_interface_connection_ethernet_ip_address">عنوان IP للطابعة</string>
+    <string name="feature_setting_printer_info_interface_connection_ethernet_port">المنفذ</string>
+    <string name="feature_setting_printer_info_interface_connection_bluetooth_name_label">طابعة بلوتوث</string>
+    <string name="feature_setting_printer_info_interface_connection_usb_name_label">طابعة USB</string>
+    <string name="feature_setting_printer_connection_bluetooth_search_button_text">بحث</string>
+    <string name="feature_setting_printer_info_papper_width_label">عرض الورق</string>
+    <string name="feature_setting_printer_info_test_button_text">اختبار</string>
+    <string name="feature_setting_printer_info_save_button_text">حفظ</string>
+
+    // Error message
+    <string name="feature_setting_printer_info_error_name_empty">اسم الطابعة مطلوب.</string>
+    <string name="feature_setting_printer_info_error_interface_connection_empty">نوع الاتصال مطلوب.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_empty">عنوان IP مطلوب.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_invalid">عنوان IP غير صالح.</string>
+    <string name="feature_setting_printer_info_error_ethernet_ip_address_invalid_segment">يجب أن يكون كل جزء بين 0 و 255.</string>
+    <string name="feature_setting_printer_info_error_ethernet_port_empty">المنفذ مطلوب.</string>
+    <string name="feature_setting_printer_info_error_ethernet_port_invalid">المنفذ مع عنوان IP غير صالح.</string>
+    <string name="feature_setting_printer_info_error_bluetooth_name_empty">اسم بلوتوث مطلوب.</string>
+    <string name="feature_setting_printer_info_error_usb_name_empty">اسم USB مطلوب.</string>
+    <string name="feature_setting_printer_info_error_paper_width_empty">عرض الورق مطلوب.</string>
+
+
+    <string name="feature_setting_printer_dialog_bluetooth_devices_title">أجهزة بلوتوث</string>
+    <string name="feature_setting_printer_dialog_bluetooth_devices_message_empty">لم يتم العثور على طابعات بلوتوث.</string>
+    <string name="feature_setting_need_permission_for_bluetooth">مطلوب إذن للبلوتوث</string>
+    >
 
 </resources>
