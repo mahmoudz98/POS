@@ -197,27 +197,26 @@ class BillsViewModel @Inject constructor(
         PaymentStatusFilter.All -> true
         PaymentStatusFilter.Paid -> invoice.paymentStatus == PaymentStatus.PAID
         PaymentStatusFilter.Pending -> invoice.paymentStatus == PaymentStatus.PENDING
-        PaymentStatusFilter.PartiallyPaid -> invoice.paymentStatus == PaymentStatus.PARTIALLY_PAID
+        PaymentStatusFilter.PartiallyPaid -> {
+            invoice.paymentStatus == PaymentStatus.PARTIALLY_PAID
+        }
         PaymentStatusFilter.Overdue -> isOverdue(invoice)
     }
 
-    private fun isOverdue(invoice: SupplierInvoice): Boolean {
-        return invoice.paymentStatus == PaymentStatus.OVERDUE ||
-            (invoice.dueDate < Clock.System.now() && invoice.dueAmount > 0)
-    }
+    private fun isOverdue(invoice: SupplierInvoice): Boolean = invoice.paymentStatus == PaymentStatus.OVERDUE ||
+        (invoice.dueDate < Clock.System.now() && invoice.dueAmount > 0)
 
     private fun applyDateRangeFilter(bill: SupplierInvoice, dateRange: DateRange?): Boolean {
         if (dateRange == null) return true
         return bill.issueDate >= dateRange.startDate && bill.issueDate <= dateRange.endDate
     }
 
-    private fun getSortComparator(sortType: InvoiceSortType): Comparator<SupplierInvoice> =
-        when (sortType) {
-            InvoiceSortType.DateNewToOld -> compareByDescending { it.issueDate }
-            InvoiceSortType.DateOldToNew -> compareBy { it.issueDate }
-            InvoiceSortType.AmountHighToLow -> compareByDescending { it.totalAmount }
-            InvoiceSortType.AmountLowToHigh -> compareBy { it.totalAmount }
-        }
+    private fun getSortComparator(sortType: InvoiceSortType): Comparator<SupplierInvoice> = when (sortType) {
+        InvoiceSortType.DateNewToOld -> compareByDescending { it.issueDate }
+        InvoiceSortType.DateOldToNew -> compareBy { it.issueDate }
+        InvoiceSortType.AmountHighToLow -> compareByDescending { it.totalAmount }
+        InvoiceSortType.AmountLowToHigh -> compareBy { it.totalAmount }
+    }
 
     companion object {
         private const val SEARCH_QUERY = "searchQuery"
