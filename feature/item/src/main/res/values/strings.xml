@@ -55,7 +55,6 @@
     <string name="feature_item_need_permission_for_camera">Need permission for camera.</string>
     <string name="feature_item_tracked_stock_chip_label">Tracked stock</string>
     <string name="feature_item_not_track_stock_chip_label">NOT Track stock</string>
-    <string name="feature_item_filter_label">Filters</string>
     <string name="feature_item_rest_filter_label">Rest filter default</string>
     <string name="feature_item_filter_stock_label">By Stock</string>
     <string name="feature_item_filter_all_label">All</string>

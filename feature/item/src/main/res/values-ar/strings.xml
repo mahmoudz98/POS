@@ -57,7 +57,6 @@
     <string name="feature_item_need_permission_for_camera">بحاجة إلى إذن للكاميرا.</string>
     <string name="feature_item_tracked_stock_chip_label">تتبع المخزون</string>
     <string name="feature_item_not_track_stock_chip_label">لا تتبع المخزون</string>
-    <string name="feature_item_filter_label">تصفيه</string>
     <string name="feature_item_rest_filter_label">إعادة ضبط التصفيه</string>
     <string name="feature_item_filter_stock_label">حسب المخزون</string>
     <string name="feature_item_filter_all_label">الكل</string>
