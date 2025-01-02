@@ -21,6 +21,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      security-events: write
 
     timeout-minutes: 60
 
@@ -168,11 +169,18 @@ jobs:
           name: lint-reports
           path: '**/build/reports/lint-results-*.html'
 
-      - name: Upload lint reports (SARIF)
+      - name: Combine SARIF files
         if: ${{ !cancelled() && hashFiles('**/*.sarif') != '' }}
+        run: |
+          mkdir -p combined-sarif
+          jq -s 'add' app/build/reports/lint-results-prodRelease.sarif lint/build/reports/lint-results.sarif > combined-sarif/combined-results.sarif
+
+      - name: Upload lint reports (SARIF)
+        if: ${{ !cancelled() && hashFiles('combined-sarif/*.sarif') != '' }}
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: './'
+          sarif_file: combined-sarif/combined-results.sarif
+          category: lint-results
 
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
