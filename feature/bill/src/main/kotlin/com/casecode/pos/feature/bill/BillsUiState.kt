@@ -21,5 +21,8 @@ sealed interface BillsUiState {
     object Loading : BillsUiState
     object Error : BillsUiState
     object Empty : BillsUiState
-    data class Success(val supplierInvoices: Map<String, SupplierInvoice>) : BillsUiState
+    data class Success(
+        val supplierInvoices: Map<String, SupplierInvoice>,
+        val suppliers: Set<String> = emptySet(),
+    ) : BillsUiState
 }

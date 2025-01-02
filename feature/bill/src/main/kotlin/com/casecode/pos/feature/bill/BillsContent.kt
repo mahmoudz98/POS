@@ -15,8 +15,13 @@
  */
 package com.casecode.pos.feature.bill
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +29,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBars
@@ -31,9 +37,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
@@ -51,10 +62,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.data.utils.toFormattedDateString
 import com.casecode.pos.core.designsystem.component.PosBackground
+import com.casecode.pos.core.designsystem.component.PosEmptyScreen
+import com.casecode.pos.core.designsystem.component.PosFilterChip
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.component.SearchToolbar
 import com.casecode.pos.core.designsystem.component.SearchTopAppBar
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
+import com.casecode.pos.core.designsystem.component.diagonalGradientBorder
 import com.casecode.pos.core.designsystem.component.scrollbar.DraggableScrollbar
 import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableScroller
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
@@ -62,6 +76,7 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.ui.FilterSharedElementKey
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
 import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
 import kotlinx.datetime.Clock
@@ -118,15 +133,21 @@ fun DefaultTopAppBar(
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun BillsList(
-    bills: Map<String, SupplierInvoice>,
+internal fun BillsContent(
     modifier: Modifier = Modifier,
+    filterScreenVisible: Boolean,
+    bills: Map<String, SupplierInvoice>,
+    suppliers: Set<String>,
+    selectedSuppliers: Set<String>,
+    onBillsUiEvent: (BillsUiEvent) -> Unit,
+    onShowFilters: () -> Unit,
     onBillClick: (String) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
         val scrollableState = rememberLazyListState()
-
         LazyColumn(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
@@ -134,17 +155,38 @@ fun BillsList(
             contentPadding = PaddingValues(vertical = 8.dp),
             state = scrollableState,
         ) {
-            items(bills.values.toList(), key = { it.invoiceId }) { bill ->
-                BillItem(
-                    modifier = Modifier.animateItem(),
-                    billNumber = bill.billNumber,
-                    supplierName = bill.supplierName,
-                    issueDate = bill.issueDate,
-                    status = bill.paymentStatus,
-                    amount = bill.totalAmount,
-                    dueAmount = bill.dueAmount,
-                ) {
-                    onBillClick(bill.invoiceId)
+            item {
+                BillsFilteredSection(
+                    filterScreenVisible = filterScreenVisible,
+                    suppliers = suppliers,
+                    selectedSuppliers = selectedSuppliers,
+                    onBillsUiEvent = onBillsUiEvent,
+                    onShowFilterScreen = onShowFilters,
+                    sharedTransitionScope = sharedTransitionScope,
+                )
+                HorizontalDivider(Modifier.padding(bottom = 4.dp))
+            }
+            if (bills.isEmpty()) {
+                item {
+                    PosEmptyScreen(
+                        icon = PosIcons.EmptySearch,
+                        titleRes = R.string.feature_bill_empty_title,
+                        messageRes = R.string.feature_bill_empty_filter_message,
+                    )
+                }
+            } else {
+                items(bills.values.toList(), key = { it.invoiceId }) { bill ->
+                    BillItem(
+                        modifier = Modifier.animateItem(),
+                        billNumber = bill.billNumber,
+                        supplierName = bill.supplierName,
+                        issueDate = bill.issueDate,
+                        status = bill.paymentStatus,
+                        amount = bill.totalAmount,
+                        dueAmount = bill.dueAmount,
+                    ) {
+                        onBillClick(bill.invoiceId)
+                    }
                 }
             }
             item {
@@ -172,8 +214,76 @@ fun BillsList(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun BillItem(
+private fun BillsFilteredSection(
+    modifier: Modifier = Modifier,
+    filterScreenVisible: Boolean,
+    suppliers: Set<String>,
+    selectedSuppliers: Set<String>,
+    onShowFilterScreen: () -> Unit,
+    onBillsUiEvent: (BillsUiEvent) -> Unit,
+    sharedTransitionScope: SharedTransitionScope,
+) {
+    with(sharedTransitionScope) {
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(start = 12.dp, end = 8.dp),
+            modifier = modifier.heightIn(min = 56.dp),
+        ) {
+            item {
+                AnimatedVisibility(visible = !filterScreenVisible) {
+                    IconButton(
+                        onClick = onShowFilterScreen,
+                        modifier =
+                        Modifier
+                            .sharedBounds(
+                                rememberSharedContentState(FilterSharedElementKey),
+                                animatedVisibilityScope = this@AnimatedVisibility,
+                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
+                            ),
+                    ) {
+                        Icon(
+                            imageVector = PosIcons.Filter,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = null,
+                            modifier =
+                            Modifier.diagonalGradientBorder(
+                                colors =
+                                listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.primaryContainer,
+                                    MaterialTheme.colorScheme.secondaryContainer,
+                                ),
+                                shape = CircleShape,
+                            ),
+                        )
+                    }
+                }
+            }
+            suppliers.forEach { supplier ->
+                val isSelected = selectedSuppliers.contains(supplier)
+                item(supplier) {
+                    PosFilterChip(
+                        selected = isSelected,
+                        onSelectedChange = {
+                            if (isSelected) {
+                                onBillsUiEvent(BillsUiEvent.SupplierUnselected(supplier))
+                            } else {
+                                onBillsUiEvent(BillsUiEvent.SupplierSelected(supplier))
+                            }
+                        },
+                        label = { Text(text = supplier) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun BillItem(
     modifier: Modifier = Modifier,
     billNumber: String,
     supplierName: String,
@@ -221,6 +331,7 @@ fun BillItem(
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun BillsListPreview(
@@ -228,7 +339,18 @@ fun BillsListPreview(
 ) {
     POSTheme {
         PosBackground {
-            BillsList(bills.associateBy { it.invoiceId }) {}
+            SharedTransitionLayout {
+                BillsContent(
+                    filterScreenVisible = false,
+                    onShowFilters = {},
+                    sharedTransitionScope = this,
+                    bills = bills.associateBy { it.invoiceId },
+                    suppliers = bills.map { it.supplierName }.toSet(),
+                    selectedSuppliers = emptySet(),
+                    onBillsUiEvent = {},
+                    onBillClick = {},
+                )
+            }
         }
     }
 }
