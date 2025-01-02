@@ -116,5 +116,6 @@
     <item>@string/core_ui_permission_sales_text</item>
     <item>@string/core_ui_permission_none_text</item>
   </string-array>
+  <string name="core_ui_filter_label">Filters</string>
 
 </resources>
