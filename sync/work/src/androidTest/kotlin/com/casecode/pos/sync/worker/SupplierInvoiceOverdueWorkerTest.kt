@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.sync.workers
+package com.casecode.pos.sync.worker
 
 import android.util.Log
 import androidx.test.platform.app.InstrumentationRegistry
@@ -22,6 +22,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.testing.SynchronousExecutor
 import androidx.work.testing.WorkManagerTestInitHelper
+import com.casecode.pos.sync.workers.SupplierInvoiceOverdueWorker
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before
@@ -51,9 +52,9 @@ class SupplierInvoiceOverdueWorkerTest {
     @Test
     fun testSupplierInvoiceOverdueWork() {
         // Create request
-        val request = SupplierInvoiceOverdueWorker.startPeriodicSupplierInvoiceOverdueWork()
+        val request = SupplierInvoiceOverdueWorker.Companion.startPeriodicSupplierInvoiceOverdueWork()
 
-        val workManager = WorkManager.getInstance(context)
+        val workManager = WorkManager.Companion.getInstance(context)
         val testDriver = WorkManagerTestInitHelper.getTestDriver(context)!!
 
         // Enqueue and wait for result.
