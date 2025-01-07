@@ -2,8 +2,8 @@
     <g class="graph">
         <path fill="#fff" d="M0 260V0h573.23v260H0z"/>
         <g class="node" transform="translate(4 256)">
-            <ellipse cx="247.06" cy="-234" fill="none" stroke="#000" rx="99.97" ry="18"/>
-            <text x="247.06" y="-228.95" font-family="Times,serif" font-size="14" text-anchor="middle">:feature:login-employee</text>
+            <ellipse cx="247.06" cy="-234" fill="none" stroke="#000" rx="53.91" ry="18"/>
+            <text x="247.06" y="-228.95" font-family="Times,serif" font-size="14" text-anchor="middle">:feature:bill</text>
         </g>
         <g class="node" transform="translate(4 256)">
             <ellipse cx="247.06" cy="-162" fill="none" stroke="#000" rx="39.07" ry="18"/>
@@ -18,16 +18,16 @@
             <text x="82.06" y="-84.95" font-family="Times,serif" font-size="14" text-anchor="middle">:core:designsystem</text>
         </g>
         <g stroke="#000" class="edge">
-            <path fill="none" d="M231.16 40.13c-29.27 25.19-84.04 72.32-117.28 100.93"/>
-            <path d="m116.53 143.39-9.86 3.87 5.29-9.17 4.57 5.3z"/>
+            <path fill="none" d="M232.13 39.29c-28.98 24.94-84.53 72.75-118.15 101.68"/>
+            <path d="m116.54 143.39-9.86 3.87 5.29-9.18 4.57 5.31z"/>
         </g>
         <g class="node" transform="translate(4 256)">
             <ellipse cx="378.06" cy="-162" fill="none" stroke="#000" rx="60.05" ry="18"/>
             <text x="378.06" y="-156.95" font-family="Times,serif" font-size="14" text-anchor="middle">:core:domain</text>
         </g>
         <g stroke="red" stroke-width="2" class="edge">
-            <path fill="none" d="M282.11 39.59c18.34 9.8 41.72 22.29 61.26 32.73"/>
-            <path fill="red" d="m343.64 68.5 7.17 7.8-10.47-1.63 3.3-6.17z"/>
+            <path fill="none" d="M278.84 37.85c18.89 10.09 44.13 23.57 64.92 34.69"/>
+            <path fill="red" d="m344.03 68.71 7.17 7.8-10.47-1.63 3.3-6.17z"/>
         </g>
         <g stroke="#000" class="edge">
             <path fill="none" d="M223.07 106.87c-24.65 10.46-61.05 25.9-90.13 38.24"/>
