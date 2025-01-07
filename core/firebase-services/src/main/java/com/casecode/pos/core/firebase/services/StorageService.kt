@@ -110,17 +110,16 @@ class FirestoreService @Inject constructor(private val firestore: FirebaseFirest
         .document(documentId)
         .collection(collectionChild)
 
-    suspend fun setDocument(collection: String, documentId: String, data: Map<String, Any>): Void =
-        try {
-            firestore
-                .collection(collection)
-                .document(documentId)
-                .set(data)
-                .await()
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to set document")
-            throw e
-        }
+    suspend fun setDocument(collection: String, documentId: String, data: Map<String, Any>): Void = try {
+        firestore
+            .collection(collection)
+            .document(documentId)
+            .set(data)
+            .await()
+    } catch (e: Exception) {
+        Timber.e(e, "Failed to set document")
+        throw e
+    }
 
     fun setDocumentWithTask(
         collection: String,

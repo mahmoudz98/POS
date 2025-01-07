@@ -32,8 +32,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import com.casecode.pos.ui.MainScreen
 import com.casecode.pos.ui.rememberMainAppState
