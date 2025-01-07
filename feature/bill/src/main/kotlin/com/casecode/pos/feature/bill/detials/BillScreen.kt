@@ -62,10 +62,10 @@ import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.utils.toBigDecimalFormatted
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
-import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentRes
 import com.casecode.pos.feature.bill.toPaymentStatusColor
@@ -254,7 +254,7 @@ private fun BillPager(
         state = pagerState,
     ) { page ->
         when (InvoicePagerTab.entries[page]) {
-            InvoicePagerTab.DETAILS -> BillDetailsTap(invoiceSupplier = invoice)
+            InvoicePagerTab.DETAILS -> BillDetailsTap(supplierInvoice = invoice)
             InvoicePagerTab.PAYMENTS -> BillPaymentTap(paymentDetails = invoice.paymentDetails)
             InvoicePagerTab.HISTORY -> BillHistoryTap(
                 issueDate = invoice.issueDate,

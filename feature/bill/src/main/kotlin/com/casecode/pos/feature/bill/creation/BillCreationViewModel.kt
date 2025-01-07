@@ -18,7 +18,7 @@ package com.casecode.pos.feature.bill.creation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.usecase.AddSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
 import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase

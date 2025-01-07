@@ -17,7 +17,7 @@ package com.casecode.pos.feature.bill
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.domain.usecase.GetSupplierInvoicesUseCase
 import com.casecode.pos.core.domain.utils.Resource
@@ -200,6 +200,7 @@ class BillsViewModel @Inject constructor(
         PaymentStatusFilter.PartiallyPaid -> {
             invoice.paymentStatus == PaymentStatus.PARTIALLY_PAID
         }
+
         PaymentStatusFilter.Overdue -> isOverdue(invoice)
     }
 

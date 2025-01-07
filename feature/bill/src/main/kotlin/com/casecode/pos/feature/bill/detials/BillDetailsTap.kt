@@ -36,19 +36,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.casecode.pos.core.data.utils.toFormattedDateString
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.utils.toBigDecimalFormatted
+import com.casecode.pos.core.model.utils.toFormattedDateString
+import com.casecode.pos.core.model.utils.toFormattedString
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
-import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
-import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.bill.R
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoice) {
+fun BillDetailsTap(modifier: Modifier = Modifier, supplierInvoice: SupplierInvoice) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -62,7 +62,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                 modifier = Modifier.weight(1f),
             )
             Text(
-                text = invoiceSupplier.issueDate.toFormattedDateString(),
+                text = supplierInvoice.issueDate.toFormattedDateString(),
                 modifier = Modifier.weight(2f),
             )
         }
@@ -74,7 +74,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                 modifier = Modifier.weight(1f),
             )
             Text(
-                text = invoiceSupplier.dueDate.toFormattedDateString(),
+                text = supplierInvoice.dueDate.toFormattedDateString(),
                 modifier = Modifier.weight(2f),
             )
         }
@@ -87,7 +87,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
             Text(stringResource(R.string.feature_bill_items_amount_text))
         }
         HorizontalDivider()
-        invoiceSupplier.invoiceItems.forEach {
+        supplierInvoice.invoiceItems.forEach {
             BillItem(
                 name = it.name,
                 quantity = it.quantity,
@@ -113,11 +113,11 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Text(
-                        text = invoiceSupplier.subTotal.toFormattedString(),
+                        text = supplierInvoice.subTotal.toFormattedString(),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
-                if (invoiceSupplier.amountDiscounted > 0) {
+                if (supplierInvoice.amountDiscounted > 0) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -132,7 +132,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                         )
                         Text(
                             text = stringResource(R.string.feature_bill_minus_text) +
-                                invoiceSupplier.totalAmount.minus(invoiceSupplier.subTotal)
+                                supplierInvoice.totalAmount.minus(supplierInvoice.subTotal)
                                     .toFormattedString(),
                             color = MaterialTheme.colorScheme.errorContainer,
                         )
@@ -151,7 +151,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Text(
-                        text = invoiceSupplier.totalAmount.toBigDecimalFormatted(),
+                        text = supplierInvoice.totalAmount.toBigDecimalFormatted(),
                     )
                 }
                 Row(
@@ -168,7 +168,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                     )
                     Text(
                         text = stringResource(R.string.feature_bill_minus_text) +
-                            invoiceSupplier.paymentDetails.sumOf { it.amountPaid }
+                            supplierInvoice.paymentDetails.sumOf { it.amountPaid }
                                 .toBigDecimalFormatted(),
                         color = MaterialTheme.colorScheme.errorContainer,
 
@@ -187,9 +187,7 @@ fun BillDetailsTap(modifier: Modifier = Modifier, invoiceSupplier: SupplierInvoi
                         style = MaterialTheme.typography.bodyMedium,
                     )
                     Text(
-                        text = invoiceSupplier.totalAmount.minus(
-                            invoiceSupplier.paymentDetails.sumOf { it.amountPaid },
-                        ).toBigDecimalFormatted(),
+                        text = supplierInvoice.restDueAmount.toBigDecimalFormatted(),
                     )
                 }
             }
@@ -228,13 +226,14 @@ fun BillItem(
 @DevicePreviews
 @Composable
 fun BillDetailsTapPreview(
-    @PreviewParameter(SupplierInvoiceParameterProvider::class) invoiceSupplier: List<SupplierInvoice>,
+    @PreviewParameter(SupplierInvoiceParameterProvider::class)
+    invoiceSupplier: List<SupplierInvoice>,
 ) {
     POSTheme {
         PosBackground {
             LazyColumn {
                 item {
-                    BillDetailsTap(invoiceSupplier = invoiceSupplier[0])
+                    BillDetailsTap(supplierInvoice = invoiceSupplier[0])
                 }
             }
         }
