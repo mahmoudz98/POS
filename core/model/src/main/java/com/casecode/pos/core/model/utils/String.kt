@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.ui.utils
+package com.casecode.pos.core.model.utils
+
+import java.math.RoundingMode
 
 /**
  * Converts a nullable Double to a formatted String.
@@ -35,6 +37,6 @@ fun Double?.toFormattedString(): String = this?.toBigDecimal()?.stripTrailingZer
  * @return The formatted string representation of the Double.
  */
 fun Double.toBigDecimalFormatted(decimalPlaces: Int = 2): String = toBigDecimal()
-    .setScale(decimalPlaces, java.math.RoundingMode.HALF_UP)
+    .setScale(decimalPlaces, RoundingMode.HALF_UP)
     .stripTrailingZeros()
     .toPlainString()

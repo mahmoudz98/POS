@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.data.utils
+package com.casecode.pos.core.model.utils
 
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
