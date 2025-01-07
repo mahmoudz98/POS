@@ -35,9 +35,7 @@ typealias FieldValue = com.google.firebase.firestore.FieldValue
 typealias SetOptions = com.google.firebase.firestore.SetOptions
 
 @Singleton
-class FirestoreService
-@Inject
-constructor(private val firestore: FirebaseFirestore) {
+class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
     private val optionsCache by lazy {
         SnapshotListenOptions
             .Builder()
