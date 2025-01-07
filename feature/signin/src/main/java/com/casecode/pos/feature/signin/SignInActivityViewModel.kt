@@ -17,7 +17,7 @@ package com.casecode.pos.feature.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.repository.AccountRepository
 import com.casecode.pos.core.domain.repository.AuthRepository
 import com.casecode.pos.core.domain.utils.SignInGoogleState

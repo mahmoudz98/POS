@@ -24,8 +24,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
-
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.core.testing)
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)

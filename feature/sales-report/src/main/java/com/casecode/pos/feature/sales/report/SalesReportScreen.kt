@@ -77,8 +77,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.data.utils.toDateFormatString
-import com.casecode.pos.core.data.utils.toTimeFormatedString
 import com.casecode.pos.core.designsystem.component.PosDatePickerDialog
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
@@ -91,6 +89,8 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Invoice
 import com.casecode.pos.core.model.data.users.InvoiceGroup
+import com.casecode.pos.core.model.utils.toDateFormatString
+import com.casecode.pos.core.model.utils.toTimeFormatedString
 import java.util.Date
 import com.casecode.pos.core.ui.R as uiR
 
