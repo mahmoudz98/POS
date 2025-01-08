@@ -123,7 +123,7 @@ jobs:
         run: ./gradlew testDemoDebug :lint:test
 
       - name: Setup GMD
-        run: ./gradlew :benchmark:pixel6Api33Setup
+        run: ./gradlew :benchmarks:pixel6Api33Setup
           --info
           -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
           -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
@@ -143,7 +143,7 @@ jobs:
           appId: ${{secrets.APP_ID}}
           serviceCredentialsFileContent: ${{secrets.GOOGLE_APPLICATION_CREDENTIALS}}
           groups: testers
-          file: app/build/outputs/apk/demo/release/app-demo-release.apk
+          file: app/build/outputs/apk/prod/benchmarkRelease/app-prod-benchmarkRelease.apk
 
       - name: Upload JVM local results (XML)
         if: always()
@@ -250,13 +250,13 @@ jobs:
           heap-size: 600M
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
-      - name: Run local tests for the combined coverage report (only API 30)
-        if: matrix.api-level == 30
+      - name: Run local tests for the combined coverage report (only API 34)
+        if: matrix.api-level == 34
         run: ./gradlew testDemoDebugUnitTest
 
         # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
-      - name: Generate coverage reports for Debug variants (only API 30)
-        if: matrix.api-level == 30
+      - name: Generate coverage reports for Debug variants (only API 34)
+        if: matrix.api-level == 34
         run: ./gradlew createDemoDebugCombinedCoverageReport
 
       - name: Upload test reports
@@ -266,8 +266,8 @@ jobs:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
 
-      - name: Display local test coverage (only API 30)
-        if: matrix.api-level == 30
+      - name: Display local test coverage (only API 34)
+        if: matrix.api-level == 34
         id: jacoco
         uses: madrapps/jacoco-report@v1.7.0
         with:
@@ -278,8 +278,8 @@ jobs:
             ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload local coverage reports (XML + HTML) (only API 30)
-        if: matrix.api-level == 30
+      - name: Upload local coverage reports (XML + HTML) (only API 34)
+        if: matrix.api-level == 34
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
