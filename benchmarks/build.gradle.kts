@@ -21,10 +21,10 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.benchmark"
+    namespace = "com.casecode.pos.benchmarks"
 
     defaultConfig {
-        minSdk = 27
+        minSdk = 28
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "APP_BUILD_TYPE_SUFFIX", "\"\"")
     }
@@ -33,7 +33,7 @@ android {
     }
     // Use the same flavor dimensions as the application to allow generating Baseline Profiles on prod,
     // which is more close to what will be shipped to users (no fake data), but has ability to run the
-    // benchmarks on demo, so we benchmark on stable data.
+    // benchmarks on demo, so we benchmarks on stable data.
     configureFlavors(this) { flavor ->
         buildConfigField(
             "String",

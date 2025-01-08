@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.benchmark
+package com.casecode.pos.benchmarks
 
 import androidx.benchmark.macro.BaselineProfileMode.Disable
 import androidx.benchmark.macro.BaselineProfileMode.Require
@@ -28,15 +28,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * This is an example startup benchmark.
+ * This is an example startup benchmarks.
  *
  * It navigates to the device's home screen, and launches the default activity.
  *
- * Before running this benchmark:
+ * Before running this benchmarks:
  * 1) switch your app's active build variant in the Studio (affects Studio runs only)
  * 2) add `<profileable android:shell="true" />` to your app's manifest, within the `<application>` tag
  *
- * Run this benchmark from Studio to see startup measurements, and captured system traces
+ * Run this benchmarks from Studio to see startup measurements, and captured system traces
  * for investigating your app's performance.
  */
 @RunWith(AndroidJUnit4ClassRunner::class)

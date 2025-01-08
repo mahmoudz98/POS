@@ -34,7 +34,7 @@ dependencyResolutionManagement {
 rootProject.name = "POS"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
-include(":benchmark")
+include(":benchmarks")
 include(":core:analytics")
 include(":core:domain")
 include(":core:model")
