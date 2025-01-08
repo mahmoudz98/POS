@@ -25,6 +25,7 @@ android {
 
 dependencies {
     implementation(projects.core.domain)
+    implementation(libs.accompanist.permissions)
 
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.core.testing)
