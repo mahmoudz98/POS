@@ -84,6 +84,7 @@ dependencies {
     implementation(projects.feature.setting)
     implementation(projects.feature.signout)
     implementation(projects.feature.reports)
+
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
@@ -126,7 +127,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
 
-    baselineProfile(projects.benchmark)
+    baselineProfile(projects.benchmarks)
 }
 baselineProfile {
     // Don't build on every iteration of a full assemble.
@@ -134,6 +135,7 @@ baselineProfile {
     automaticGenerationDuringBuild = false
     dexLayoutOptimization = true
 }
+
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
 }
