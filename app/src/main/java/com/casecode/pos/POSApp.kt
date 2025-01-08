@@ -16,7 +16,6 @@
 package com.casecode.pos
 
 import android.app.Application
-import com.casecode.pos.sync.initializers.Sync
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -27,8 +26,6 @@ class POSApp : Application() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        Sync.initialize(context = this)
-
         Timber.plant(DebugTree())
     }
 }
