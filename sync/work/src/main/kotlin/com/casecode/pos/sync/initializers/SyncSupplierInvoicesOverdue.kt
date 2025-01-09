@@ -26,7 +26,7 @@ object SyncSupplierInvoicesOverdue {
             enqueueUniquePeriodicWork(
                 SUPPLIER_INVOICE_OVERDUE_WORK_NAME,
                 ExistingPeriodicWorkPolicy.UPDATE,
-                SupplierInvoiceOverdueWorker.startPeriodicSupplierInvoiceOverdueWork(),
+                SupplierInvoiceOverdueWorker.startPeriodicOverdueWork(),
             )
         }
     }

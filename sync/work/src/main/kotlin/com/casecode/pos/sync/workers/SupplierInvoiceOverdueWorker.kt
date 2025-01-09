@@ -85,12 +85,14 @@ internal class SupplierInvoiceOverdueWorker @AssistedInject constructor(
          *
          * @return A [androidx.work.PeriodicWorkRequest] configured for the overdue supplier invoice task.
          */
-        fun startPeriodicSupplierInvoiceOverdueWork() =
-            PeriodicWorkRequestBuilder<DelegatingWorker>(24, TimeUnit.HOURS)
-                .setInitialDelay(calculateInitialDelay(), TimeUnit.MILLISECONDS)
-                .setConstraints(SyncSupplierInvoicesOverdueConstraints)
-                .setInputData(SupplierInvoiceOverdueWorker::class.delegatedData())
-                .build()
+        fun startPeriodicOverdueWork() = PeriodicWorkRequestBuilder<DelegatingWorker>(
+            24,
+            TimeUnit.HOURS,
+        )
+            .setInitialDelay(calculateInitialDelay(), TimeUnit.MILLISECONDS)
+            .setConstraints(SyncSupplierInvoicesOverdueConstraints)
+            .setInputData(SupplierInvoiceOverdueWorker::class.delegatedData())
+            .build()
 
         private fun calculateInitialDelay(): Long {
             val now = Clock.System.now()
