@@ -224,6 +224,22 @@ com.google.protobuf:protobuf-javalite:4.26.1
 com.google.protobuf:protobuf-kotlin-lite:4.26.1
 com.google.zxing:core:3.4.1
 com.googlecode.libphonenumber:libphonenumber:8.12.31
+com.itextpdf:barcodes:9.0.0
+com.itextpdf:bouncy-castle-connector:9.0.0
+com.itextpdf:commons:9.0.0
+com.itextpdf:font-asian:9.0.0
+com.itextpdf:forms:9.0.0
+com.itextpdf:hyph:9.0.0
+com.itextpdf:io:9.0.0
+com.itextpdf:itext-core:9.0.0
+com.itextpdf:itext7-core:9.0.0
+com.itextpdf:kernel:9.0.0
+com.itextpdf:layout:9.0.0
+com.itextpdf:pdfa:9.0.0
+com.itextpdf:pdfua:9.0.0
+com.itextpdf:sign:9.0.0
+com.itextpdf:styled-xml-parser:9.0.0
+com.itextpdf:svg:9.0.0
 com.jakewharton.timber:timber:5.0.1
 com.squareup.okhttp3:okhttp:4.12.0
 com.squareup.okio:okio-jvm:3.9.0
@@ -267,3 +283,4 @@ org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.8.0
 org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0
 org.jetbrains:annotations:23.0.0
 org.jspecify:jspecify:1.0.0
+org.slf4j:slf4j-api:2.0.16
