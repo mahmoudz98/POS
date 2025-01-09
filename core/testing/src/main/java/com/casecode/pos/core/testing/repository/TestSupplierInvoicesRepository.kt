@@ -57,6 +57,10 @@ class TestSupplierInvoicesRepository @Inject constructor() :
 
     override fun getInvoices(): Flow<Resource<List<SupplierInvoice>>> = resourcesSupplierInvoicesFlow
 
+    override suspend fun getOverdueInvoices(): List<SupplierInvoice> = supplierInvoicesTestData.filter {
+        it.paymentStatus != PaymentStatus.PENDING
+    }
+
     override fun getInvoiceDetails(invoiceId: String): Flow<Resource<SupplierInvoice>> = flow {
         emit(Resource.loading())
         if (shouldReturnError) {

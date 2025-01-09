@@ -43,6 +43,19 @@ class GetSupplierInvoicesUseCase @Inject constructor(
     operator fun invoke() = supplierInvoiceRepository.getInvoices()
 }
 
+/**
+ * Use case for retrieving overdue supplier invoices.
+ *
+ * This use case interacts with the `SupplierInvoiceRepository` to fetch overdue
+ *
+ * @property supplierInvoiceRepository The repository responsible for accessing supplier invoice data.
+ */
+class GetSupplierInvoicesOverdueUseCase @Inject constructor(
+    private val supplierInvoiceRepository: SupplierInvoiceRepository,
+) {
+    suspend operator fun invoke() = supplierInvoiceRepository.getOverdueInvoices()
+}
+
 class GetSupplierInvoiceDetailsUseCase @Inject constructor(
     private val supplierInvoiceRepo: SupplierInvoiceRepository,
 ) {

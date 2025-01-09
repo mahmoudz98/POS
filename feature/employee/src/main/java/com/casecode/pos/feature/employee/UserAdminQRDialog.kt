@@ -38,10 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.data.utils.encodeAsBitmap
 import com.casecode.pos.core.designsystem.component.DynamicAsyncQrCodeImage
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.ui.utils.encodeAsBitmap
 
 @Composable
 fun UserAdminQrDialog(

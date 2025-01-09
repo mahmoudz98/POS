@@ -26,11 +26,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel
-@Inject
-constructor(
-    authRepository: AuthRepository,
-) : ViewModel() {
+class MainActivityViewModel @Inject constructor(authRepository: AuthRepository) : ViewModel() {
     val mainAuthUiState: StateFlow<MainAuthUiState> =
         authRepository.loginData.map {
             when (it) {

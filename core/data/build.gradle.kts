@@ -37,13 +37,10 @@ dependencies {
     implementation(projects.core.firebaseServices)
 
     implementation(libs.coroutines.android)
-
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     // implementation(libs.billing.ktx)
-
     implementation(libs.hilt.android)
-    implementation(libs.zxing.generate.barcode)
 
     testImplementation(projects.core.testing)
     testImplementation(libs.coroutines.test)

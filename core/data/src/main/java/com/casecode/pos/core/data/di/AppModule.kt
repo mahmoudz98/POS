@@ -18,7 +18,7 @@ package com.casecode.pos.core.data.di
 import android.content.Context
 import com.casecode.pos.core.common.di.ApplicationScope
 import com.casecode.pos.core.data.utils.ConnectivityManagerNetworkMonitor
-import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

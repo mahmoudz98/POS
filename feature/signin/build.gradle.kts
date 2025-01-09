@@ -23,7 +23,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
+    implementation(projects.core.domain)
     implementation(projects.feature.loginEmployee)
 
     implementation(libs.googleid)

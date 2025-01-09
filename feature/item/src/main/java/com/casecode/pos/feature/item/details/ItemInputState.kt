@@ -28,11 +28,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.model.utils.toFormattedString
 import com.casecode.pos.core.ui.utils.MAX_CURRENCY_LENGTH_SIZE
 import com.casecode.pos.core.ui.utils.MAX_SKU_LENGTH_SIZE
 import com.casecode.pos.core.ui.utils.NOT_TRACKED_REORDER_LEVEL
 import com.casecode.pos.core.ui.utils.TRACKED_REORDER_LEVEL
-import com.casecode.pos.core.ui.utils.toFormattedString
 import com.casecode.pos.feature.item.R
 
 @Composable

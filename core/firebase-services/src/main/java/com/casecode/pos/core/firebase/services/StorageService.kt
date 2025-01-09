@@ -35,11 +35,7 @@ typealias FieldValue = com.google.firebase.firestore.FieldValue
 typealias SetOptions = com.google.firebase.firestore.SetOptions
 
 @Singleton
-class FirestoreService
-@Inject
-constructor(
-    private val firestore: FirebaseFirestore,
-) {
+class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
     private val optionsCache by lazy {
         SnapshotListenOptions
             .Builder()
@@ -87,6 +83,7 @@ constructor(
                 .document(nameNewDocument)
         }
     }
+
     fun getDocumentInChild(
         collectionParent: String,
         documentId: String,
@@ -186,7 +183,10 @@ constructor(
             }
     }
 
-    fun listenToCollection(collection: String, documentId: String) = firestore.collection(collection).document(documentId).snapshots()
+    fun listenToCollection(collection: String, documentId: String) = firestore
+        .collection(collection)
+        .document(documentId)
+        .snapshots()
 
     fun listenToCollectionChild(
         collection: String,
@@ -208,6 +208,27 @@ constructor(
                 collectionRef
             }
         }.snapshots()
+
+    fun getCollectionChild(
+        collection: String,
+        documentId: String,
+        collectionChild: String,
+        condition: Pair<String, Any>? = null,
+        sortWithFieldName: String? = null,
+    ) = firestore.collection(collection).document(documentId)
+        .collection(collectionChild).let { collectionRef ->
+            if (condition != null) {
+                collectionRef.whereEqualTo(condition.first, condition.second)
+            } else {
+                collectionRef
+            }
+        }.let { collectionRef ->
+            if (sortWithFieldName != null) {
+                collectionRef.orderBy(sortWithFieldName)
+            } else {
+                collectionRef
+            }
+        }.get()
 
     fun batch() = firestore.batch()
 }

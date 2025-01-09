@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
+    implementation(projects.core.domain)
 
     implementation(libs.accompanist.permissions)
     testImplementation(libs.hilt.android.testing)

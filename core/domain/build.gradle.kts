@@ -25,6 +25,7 @@ android {
 
 dependencies {
     api(projects.core.model)
+    api(projects.core.notifications)
     implementation(libs.javax.inject)
     implementation(libs.coroutines.core)
     testImplementation(libs.coroutines.test)

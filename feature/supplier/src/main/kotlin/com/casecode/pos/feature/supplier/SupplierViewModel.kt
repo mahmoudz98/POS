@@ -18,12 +18,12 @@ package com.casecode.pos.feature.supplier
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.domain.usecase.AddSupplierUseCase
 import com.casecode.pos.core.domain.usecase.DeleteSupplierUseCase
 import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
 import com.casecode.pos.core.domain.usecase.UpdateSupplierUseCase
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.users.Supplier

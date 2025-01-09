@@ -27,14 +27,13 @@ dependencies {
 
     api(projects.core.data)
     api(projects.core.firebaseServices)
-
+    api(projects.core.notifications)
     implementation(libs.googleid)
-
     api(libs.coroutines.test)
-
     api(libs.mockk.android) {
         exclude(group = "org.junit.jupiter", module = "junit-jupiter")
     }
+
     // implementation(libs.mockk.agent)
     implementation(libs.androidx.test.runner)
     implementation(libs.androidx.test.rules)

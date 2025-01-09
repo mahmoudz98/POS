@@ -158,7 +158,6 @@ fun BillsScreen(
                                 contentDesc = "LoadingBills",
                             )
                         }
-
                         is BillsUiState.Success -> {
                             BillsContent(
                                 filterScreenVisible = filtersVisible,

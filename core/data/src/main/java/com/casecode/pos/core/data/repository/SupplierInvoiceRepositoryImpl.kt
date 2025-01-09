@@ -44,7 +44,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Clock
 import timber.log.Timber
 import java.net.UnknownHostException
 import kotlin.coroutines.resume
@@ -73,7 +75,11 @@ class SupplierInvoiceRepositoryImpl
             snapshot.documents.mapNotNull { document ->
                 Timber.e("supplierInvoiceMap: ${document.data}")
                 val supplierInvoiceMap = document.data as Map<String, Any>
-                invoices.add(supplierInvoiceMap.asDomainModel())
+                val invoice = supplierInvoiceMap.asDomainModel()
+                invoices.add(invoice)
+                if (invoice.paymentStatus != PaymentStatus.PENDING && isInvoiceOverdue(invoice)) {
+                    updateInvoiceStateAsOverdue(invoice, uid)
+                }
             }
             if (invoices.isNotEmpty()) {
                 emit(Resource.Success(invoices))
@@ -86,6 +92,59 @@ class SupplierInvoiceRepositoryImpl
         emit(Resource.Error(R.string.core_data_error_fetching_supplier_invoices))
     }.flowOn(ioDispatcher)
 
+    private fun isInvoiceOverdue(invoice: SupplierInvoice): Boolean {
+        val currentDate = Clock.System.now()
+        return invoice.dueDate < currentDate
+    }
+
+    private suspend fun updateInvoiceStateAsOverdue(invoice: SupplierInvoice, uid: String) {
+        withContext(ioDispatcher) {
+            try {
+                val updatedInvoice = invoice.copy(paymentStatus = PaymentStatus.OVERDUE)
+                db.getOrAddDocumentInChild(
+                    USERS_COLLECTION_PATH,
+                    uid,
+                    SUPPLIER_INVOICES_COLLECTION_PATH,
+                    invoice.invoiceId,
+                ).set(updatedInvoice.asExternalMapper(), SetOptions.merge())
+            } catch (e: Exception) {
+                Timber.e("Failed to update overdue invoice state: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun getOverdueInvoices(): List<SupplierInvoice> {
+        // Ensure the user exists, or throw an exception if not.
+
+        val uid = auth.currentUserId()
+
+        return suspendCancellableCoroutine { continuation ->
+            db.getCollectionChild(
+                collection = USERS_COLLECTION_PATH,
+                documentId = uid,
+                collectionChild = SUPPLIER_INVOICES_COLLECTION_PATH,
+            ).addOnSuccessListener { snapshot ->
+                val overdueInvoices = snapshot.documents.mapNotNull { document ->
+                    val supplierInvoiceMap = document.data as? Map<String, Any>
+                    val invoice = supplierInvoiceMap?.asDomainModel()
+                    if (invoice != null && invoice.paymentStatus != PaymentStatus.PENDING && isInvoiceOverdue(invoice)) {
+                        // Optionally update the invoice state as overdue
+                        // updateInvoiceStateAsOverdue(invoice, uid)
+                        invoice
+                    } else {
+                        null
+                    }
+                }
+
+                // Resume the coroutine with the list of overdue invoices
+                continuation.resume(overdueInvoices)
+            }.addOnFailureListener { exception ->
+                // Log the error and resume the coroutine with an empty list or throw an exception
+                Timber.e(exception, "Failed to fetch overdue invoices")
+                continuation.resume(emptyList())
+            }
+        }
+    }
     override fun getInvoiceDetails(invoiceId: String): Flow<Resource<SupplierInvoice>> = flow {
         auth.ensureUserExistsOrReturnError<SupplierInvoice> {
             emit(it)

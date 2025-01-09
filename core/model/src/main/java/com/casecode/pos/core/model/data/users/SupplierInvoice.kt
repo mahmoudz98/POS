@@ -37,12 +37,17 @@ data class SupplierInvoice(
         get() = paymentStatus == PaymentStatus.PAID
     val dueAmount: Double
         get() = totalAmount - paymentDetails.sumOf { it.amountPaid }
+    val restDueAmount: Double
+        get() = this.totalAmount.minus(
+            this.paymentDetails.sumOf { it.amountPaid },
+        )
 }
 
 enum class DiscountType {
     PERCENTAGE,
     FIXED,
 }
+
 enum class PaymentStatus {
     PENDING,
     PAID,
