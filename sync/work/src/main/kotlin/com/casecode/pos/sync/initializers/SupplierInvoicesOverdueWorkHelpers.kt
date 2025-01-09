@@ -26,12 +26,11 @@ import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import com.casecode.pos.sync.R
 
-const val OVERDUE_SUPPLIER_INVOICES = "overdue_supplier_invoices"
 private const val OVERDUE_NOTIFICATION_ID = 0
 private const val OVERDUE_NOTIFICATION_CHANNEL_ID = "OverdueNotifications"
 
 // All sync work needs an internet connectionS
-val SyncConstraints
+val SyncSupplierInvoicesOverdueConstraints
     get() = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()

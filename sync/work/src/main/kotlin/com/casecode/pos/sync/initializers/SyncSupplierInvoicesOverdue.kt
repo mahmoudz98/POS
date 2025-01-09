@@ -20,12 +20,12 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.WorkManager
 import com.casecode.pos.sync.workers.SupplierInvoiceOverdueWorker
 
-object Sync {
+object SyncSupplierInvoicesOverdue {
     fun initialize(context: Context) {
         WorkManager.getInstance(context).apply {
             enqueueUniquePeriodicWork(
                 SUPPLIER_INVOICE_OVERDUE_WORK_NAME,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 SupplierInvoiceOverdueWorker.startPeriodicSupplierInvoiceOverdueWork(),
             )
         }
