@@ -39,13 +39,12 @@ import com.casecode.pos.core.analytics.LocalAnalyticsHelper
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.ui.utils.moveToSignInActivity
-import com.casecode.pos.sync.initializers.Sync
+import com.casecode.pos.sync.initializers.SyncSupplierInvoicesOverdue
 import com.casecode.pos.ui.MainScreen
 import com.casecode.pos.ui.rememberMainAppState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -77,8 +76,7 @@ class MainActivity : ComponentActivity() {
                             is MainAuthUiState.LoginByAdmin,
                             is MainAuthUiState.LoginByAdminEmployee,
                             -> {
-                                Timber.e("Sync initialized")
-                                Sync.initialize(context = this@MainActivity)
+                                SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
                             }
 
                             is MainAuthUiState.ErrorLogin -> {
