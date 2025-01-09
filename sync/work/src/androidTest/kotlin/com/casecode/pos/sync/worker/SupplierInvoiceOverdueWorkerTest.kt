@@ -52,7 +52,7 @@ class SupplierInvoiceOverdueWorkerTest {
     @Test
     fun testSupplierInvoiceOverdueWork() {
         // Create request
-        val request = SupplierInvoiceOverdueWorker.Companion.startPeriodicSupplierInvoiceOverdueWork()
+        val request = SupplierInvoiceOverdueWorker.startPeriodicOverdueWork()
 
         val workManager = WorkManager.Companion.getInstance(context)
         val testDriver = WorkManagerTestInitHelper.getTestDriver(context)!!
