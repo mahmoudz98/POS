@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import com.casecode.pos.configureFlavors
+import com.casecode.pos.Configuration.APPLICATION_ID
 
 plugins {
     alias(libs.plugins.baselineprofile)
@@ -21,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.benchmarks"
+    namespace = "$APPLICATION_ID.benchmarks"
 
     defaultConfig {
         minSdk = 28

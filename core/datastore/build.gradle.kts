@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.casecode.pos.Configuration.APPLICATION_ID
+
 plugins {
     alias(libs.plugins.pos.android.library)
     alias(libs.plugins.pos.android.library.jacoco)
@@ -23,7 +25,7 @@ android {
     defaultConfig {
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
-    namespace = "com.casecode.pos.core.datastore"
+    namespace = "$APPLICATION_ID.core.datastore"
     testOptions {
         unitTests {
             isReturnDefaultValues = true

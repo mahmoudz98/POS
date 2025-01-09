@@ -15,6 +15,8 @@
  */
 
 import com.casecode.pos.PosBuildType
+import com.casecode.pos.Configuration
+import com.casecode.pos.Configuration.APPLICATION_ID
 
 plugins {
     alias(libs.plugins.pos.android.application)
@@ -28,12 +30,12 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId = "com.casecode.pos"
-        versionCode = com.casecode.pos.Configuration.VERSION_CODE
-        versionName = com.casecode.pos.Configuration.VERSION_NAME
+        applicationId = APPLICATION_ID
+        versionCode = Configuration.VERSION_CODE
+        versionName = Configuration.VERSION_NAME
 
         resourceConfigurations.addAll(listOf("en", "ar"))
-        testInstrumentationRunner = "com.casecode.pos.core.testing.PosTestRunner"
+        testInstrumentationRunner = "$APPLICATION_ID.core.testing.PosTestRunner"
     }
 
     buildTypes {
@@ -66,7 +68,7 @@ android {
         }
     }
 
-    namespace = "com.casecode.pos"
+    namespace = APPLICATION_ID
 }
 
 dependencies {

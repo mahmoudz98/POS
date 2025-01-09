@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.casecode.pos.Configuration.APPLICATION_ID
+
 plugins {
     alias(libs.plugins.pos.android.library)
     alias(libs.plugins.pos.android.library.compose)
@@ -20,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.core.ui"
+    namespace = "$APPLICATION_ID.core.ui"
 }
 
 dependencies {
@@ -36,6 +38,6 @@ dependencies {
     implementation(libs.zxing.generate.barcode)
 
     implementation(libs.play.services.code.scanner)
-
+    implementation("com.itextpdf:itext7-core:9.0.0")
     // api(libs.zxing.android.embedded)
 }
