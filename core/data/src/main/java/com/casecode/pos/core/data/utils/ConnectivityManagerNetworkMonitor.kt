@@ -33,11 +33,8 @@ import kotlinx.coroutines.flow.conflate
 import timber.log.Timber
 import javax.inject.Inject
 
-class ConnectivityManagerNetworkMonitor
-@Inject
-constructor(
+class ConnectivityManagerNetworkMonitor @Inject constructor(
     @ApplicationContext private val context: Context,
-    val coroutineScope: CoroutineScope,
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> =
         callbackFlow {
