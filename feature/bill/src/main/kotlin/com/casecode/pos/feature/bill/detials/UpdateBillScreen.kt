@@ -90,6 +90,8 @@ fun UpdateBillScreen(viewModel: BillDetailsViewModel = hiltViewModel(), onBackCl
     val itemUpdated by viewModel.itemSelected.collectAsStateWithLifecycle()
     var showAddItemFormScreen by rememberSaveable { mutableStateOf(false) }
     var showUpdateItemFormScreen by rememberSaveable { mutableStateOf(false) }
+    TrackScreenViewEvent(screenName = "UpdateBill")
+
     UpdateBillScreen(
         billInputState = billInputState,
         billDetailUiState = uiState,
