@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
-import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material.icons.filled.PrintDisabled
@@ -99,7 +98,7 @@ object PosIcons {
     val Filter = Icons.Rounded.FilterList
     val FilterClear = Icons.Rounded.FilterListOff
     val Payment = Icons.Rounded.Payment
-
+    val Pdf = Icons.Filled.Pdf
     val Calender = Icons.Filled.CalendarToday
     val Delete = Icons.Filled.Delete
     val PrinterDisabled = Icons.Filled.PrintDisabled
