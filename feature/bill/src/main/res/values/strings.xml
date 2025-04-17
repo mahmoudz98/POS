@@ -97,6 +97,7 @@
     <string name="feature_bill_updated_successfully">Bill updated successfully</string>
     <string name="feature_bill_updated_failure_duplicate">Bill updated is same </string>
     <string name="feature_bill_updated_failure_generic">Bill updated failed</string>
+    <string name="feature_bill_need_permission_for_storage">Need permission for access files to create bill document</string>
 
 
 </resources>
