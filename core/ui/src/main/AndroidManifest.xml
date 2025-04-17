@@ -19,9 +19,13 @@
     <meta-data
       android:name="com.google.mlkit.vision.DEPENDENCIES"
       android:value="barcode_ui">
-
     </meta-data>
   </application>
 
-
+  <queries>
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:mimeType="application/pdf" />
+    </intent>
+  </queries>
 </manifest>
