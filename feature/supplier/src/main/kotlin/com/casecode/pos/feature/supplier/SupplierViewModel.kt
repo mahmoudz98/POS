@@ -98,7 +98,7 @@ constructor(
             if (uiState is SuppliersUiState.Success) {
                 uiState.suppliers.filter { supplier ->
                     supplier.contactName.contains(query, ignoreCase = true) ||
-                            supplier.companyName.contains(query, ignoreCase = true)
+                        supplier.companyName.contains(query, ignoreCase = true)
                 }
             } else {
                 emptyList()
