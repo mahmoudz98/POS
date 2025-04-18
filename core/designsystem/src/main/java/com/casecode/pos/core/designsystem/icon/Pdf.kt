@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.casecode.pos.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
@@ -11,7 +26,6 @@ import androidx.compose.ui.graphics.StrokeJoin.Companion.Miter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 
-
 internal val Icons.Filled.Pdf: ImageVector
     get() {
         if (_pdf != null) {
@@ -20,9 +34,13 @@ internal val Icons.Filled.Pdf: ImageVector
         _pdf =
             materialIcon(name = "Pdf") {
                 path(
-                    fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF200E32)),
-                    strokeLineWidth = 2.0f, strokeLineCap = Round, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero,
+                    fill = SolidColor(Color(0x00000000)),
+                    stroke = SolidColor(Color(0xFF200E32)),
+                    strokeLineWidth = 2.0f,
+                    strokeLineCap = Round,
+                    strokeLineJoin = Miter,
+                    strokeLineMiter = 4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(4.0f, 4.0f)
                     curveTo(4.0f, 3.448f, 4.448f, 3.0f, 5.0f, 3.0f)
@@ -39,22 +57,28 @@ internal val Icons.Filled.Pdf: ImageVector
                     close()
                 }
                 path(
-                    fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF200E32)),
-                    strokeLineWidth = 2.0f, strokeLineCap = Round,
+                    fill = SolidColor(Color(0x00000000)),
+                    stroke = SolidColor(Color(0xFF200E32)),
+                    strokeLineWidth = 2.0f,
+                    strokeLineCap = Round,
                     strokeLineJoin =
-                        StrokeJoin.Companion.Round,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero,
+                    StrokeJoin.Companion.Round,
+                    strokeLineMiter = 4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(20.0f, 8.0f)
                     horizontalLineTo(15.0f)
                     verticalLineTo(3.0f)
                 }
                 path(
-                    fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF200E32)),
-                    strokeLineWidth = 1.5f, strokeLineCap = Round,
+                    fill = SolidColor(Color(0x00000000)),
+                    stroke = SolidColor(Color(0xFF200E32)),
+                    strokeLineWidth = 1.5f,
+                    strokeLineCap = Round,
                     strokeLineJoin =
-                        StrokeJoin.Companion.Round,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero,
+                    StrokeJoin.Companion.Round,
+                    strokeLineMiter = 4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(11.5f, 13.0f)
                     horizontalLineTo(11.0f)
@@ -65,32 +89,41 @@ internal val Icons.Filled.Pdf: ImageVector
                     close()
                 }
                 path(
-                    fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF200E32)),
-                    strokeLineWidth = 1.5f, strokeLineCap = Round,
+                    fill = SolidColor(Color(0x00000000)),
+                    stroke = SolidColor(Color(0xFF200E32)),
+                    strokeLineWidth = 1.5f,
+                    strokeLineCap = Round,
                     strokeLineJoin =
-                        StrokeJoin.Companion.Round,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero,
+                    StrokeJoin.Companion.Round,
+                    strokeLineMiter = 4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(15.5f, 17.0f)
                     verticalLineTo(13.0f)
                     lineTo(17.5f, 13.0f)
                 }
                 path(
-                    fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF200E32)),
-                    strokeLineWidth = 1.5f, strokeLineCap = Round,
+                    fill = SolidColor(Color(0x00000000)),
+                    stroke = SolidColor(Color(0xFF200E32)),
+                    strokeLineWidth = 1.5f,
+                    strokeLineCap = Round,
                     strokeLineJoin =
-                        StrokeJoin.Companion.Round,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero,
+                    StrokeJoin.Companion.Round,
+                    strokeLineMiter = 4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(16.0f, 15.0f)
                     horizontalLineTo(17.0f)
                 }
                 path(
-                    fill = SolidColor(Color(0x00000000)), stroke = SolidColor(Color(0xFF200E32)),
-                    strokeLineWidth = 1.5f, strokeLineCap = Round,
+                    fill = SolidColor(Color(0x00000000)),
+                    stroke = SolidColor(Color(0xFF200E32)),
+                    strokeLineWidth = 1.5f,
+                    strokeLineCap = Round,
                     strokeLineJoin =
-                        StrokeJoin.Companion.Round,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero,
+                    StrokeJoin.Companion.Round,
+                    strokeLineMiter = 4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(7.0f, 17.0f)
                     lineTo(7.0f, 15.5f)
