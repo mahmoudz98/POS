@@ -219,9 +219,11 @@ private fun BillHeader(invoice: SupplierInvoice) {
     val context = LocalContext.current
     var openPdf by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 8.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -245,12 +247,12 @@ private fun BillHeader(invoice: SupplierInvoice) {
                 style = MaterialTheme.typography.titleMedium,
             )
             Image(
-                imageVector = PosIcons.Pdf, contentDescription = null,
+                imageVector = PosIcons.Pdf,
+                contentDescription = null,
                 modifier = Modifier
                     .size(36.dp)
                     .clickable {
                         openPdf = true
-
                     },
             )
         }
@@ -267,8 +269,6 @@ private fun BillHeader(invoice: SupplierInvoice) {
             openPdf = false
         },
     )
-
-
 }
 
 @Composable
@@ -310,11 +310,9 @@ fun HandlePdfExport(
             } else {
                 permissionState.launchMultiplePermissionRequest()
             }
-
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
