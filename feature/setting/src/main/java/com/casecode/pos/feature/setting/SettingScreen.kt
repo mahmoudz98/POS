@@ -15,11 +15,6 @@
  */
 package com.casecode.pos.feature.setting
 
-import android.app.LocaleManager
-import android.content.Context
-import android.os.Build
-import android.os.LocaleList
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -80,9 +74,9 @@ fun SettingScreen(
 ) {
     Box(
         modifier =
-        modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
         Column(modifier = Modifier.align(Alignment.TopStart)) {
             SectionLanguages()
@@ -123,13 +117,13 @@ private fun SectionLanguages() {
         ConfigurationCompat.getLocales(LocalConfiguration.current)[0]?.toLanguageTag() ?: ""
     val currentFind = localeOptions.entries.find { it.value == currentLanguageTag.take(2) }?.key
     var currentLanguage by remember { mutableStateOf(currentFind ?: "") }
-    val context = LocalContext.current
-
     PosExposeDropdownMenuBox(
         currentItemSelected = currentLanguage,
         items = localeOptions.keys.toList(),
         onClickItem = {
-            setLanguage(context, localeOptions[it] ?: "")
+            AppCompatDelegate.setApplicationLocales(
+                LocaleListCompat.forLanguageTags(localeOptions[it]),
+            )
         },
         label = stringResource(R.string.feature_settings_language_current_hint),
     )
@@ -138,18 +132,6 @@ private fun SectionLanguages() {
         val newLanguageTag = currentLocale?.toLanguageTag() ?: ""
         val newLanguage = localeOptions.entries.find { it.value == newLanguageTag.take(2) }?.key
         currentLanguage = newLanguage ?: currentLanguage
-    }
-}
-
-private fun setLanguage(context: Context, languageCode: String) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        context.getSystemService(LocaleManager::class.java).applicationLocales =
-            LocaleList.forLanguageTags(languageCode)
-    } else {
-        AppCompatDelegate.setApplicationLocales(
-            LocaleListCompat.forLanguageTags(languageCode),
-        )
-        (context as? ComponentActivity)?.recreate()
     }
 }
 
