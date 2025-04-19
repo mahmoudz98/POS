@@ -33,7 +33,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
     configureKotlin<KotlinAndroidProjectExtension>()
 
     dependencies {
-        add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
+        "coreLibraryDesugaring"(libs.findLibrary("android.desugarJdkLibs").get())
     }
 }
 
@@ -54,14 +54,16 @@ internal fun Project.configureKotlinJvm() {
 private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() = configure<T> {
     // Treat all Kotlin warnings as errors (disabled by default)
     // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
-    val warningsAsErrors: String? by project
+    val warningsAsErrors = providers.gradleProperty("warningsAsErrors").map {
+        it.toBoolean()
+    }.orElse(false)
     when (this) {
         is KotlinAndroidProjectExtension -> compilerOptions
         is KotlinJvmProjectExtension -> compilerOptions
         else -> TODO("Unsupported project extension $this ${T::class}")
     }.apply {
         jvmTarget.set(JvmTarget.JVM_17)
-        allWarningsAsErrors.set(warningsAsErrors.toBoolean())
+        allWarningsAsErrors.set(warningsAsErrors)
 
         freeCompilerArgs.set(
             freeCompilerArgs.getOrElse(emptyList()) + listOf(

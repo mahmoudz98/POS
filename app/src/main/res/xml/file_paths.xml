@@ -13,8 +13,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<paths>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
     <cache-path
         name="photos"
         path="photos/" />
+    <external-path
+        name="bills"
+        path="Documents/Pos/Bills" />
 </paths>

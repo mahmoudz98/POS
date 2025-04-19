@@ -120,6 +120,7 @@ constructor(
     fun onSearchQueryChanged(searchText: String) {
         savedStateHandle[SEARCH_QUERY] = searchText
     }
+
     fun addSupplier(supplier: Supplier) {
         viewModelScope.launch {
             if (!isOnline.value) {

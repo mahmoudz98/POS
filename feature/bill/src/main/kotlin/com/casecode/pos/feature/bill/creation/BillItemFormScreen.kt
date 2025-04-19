@@ -72,6 +72,8 @@ fun BillItemFormScreen(
     onUpdateBillItem: (Item) -> Unit = {},
     onBackClick: () -> Unit,
 ) {
+    TrackScreenViewEvent(screenName = "BillItem")
+
     BillItemFormScreen(
         isUpdate = isUpdate,
         itemUpdated = itemUpdated,

@@ -92,7 +92,8 @@ class BillDetailsViewModel @Inject constructor(
                 }
             }
         }.stateInWhileSubscribed(SearchItemUiState.EmptyQuery)
-    private val selectedBillId = savedStateHandle.getStateFlow(
+
+    internal val selectedBillId = savedStateHandle.getStateFlow(
         key = SELECTED_BILL_ID_KEY,
         initialValue = "",
     )

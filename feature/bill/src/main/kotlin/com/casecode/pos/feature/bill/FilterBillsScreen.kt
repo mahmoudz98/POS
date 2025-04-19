@@ -41,6 +41,7 @@ import com.casecode.pos.core.designsystem.component.PosFilterChip
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.PosFilterScreen
+import com.casecode.pos.core.ui.TrackScreenViewEvent
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -52,6 +53,7 @@ internal fun FilterBillsScreenOverlay(
     onBillsUiEvent: (BillsUiEvent) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    TrackScreenViewEvent(screenName = "FilterBillsScreen")
     AnimatedVisibility(visible = isVisible, enter = fadeIn(), exit = fadeOut()) {
         FilterBillsScreen(
             sharedTransitionScope = sharedTransitionScope,

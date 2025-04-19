@@ -55,6 +55,7 @@ import com.casecode.pos.core.model.data.users.PaymentMethod
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.model.utils.toBigDecimalFormatted
 import com.casecode.pos.core.model.utils.toFormattedDateString
+import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentMethodRes
 import kotlinx.datetime.Clock
@@ -105,6 +106,7 @@ internal fun AddBillPaymentScreen(
         )
         onNavigateBack()
     }
+    TrackScreenViewEvent(screenName = "AddBillPayment")
     Scaffold(
         topBar = {
             PosTopAppBar(

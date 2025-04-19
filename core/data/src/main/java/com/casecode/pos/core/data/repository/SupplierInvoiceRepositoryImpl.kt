@@ -114,10 +114,8 @@ class SupplierInvoiceRepositoryImpl
     }
 
     override suspend fun getOverdueInvoices(): List<SupplierInvoice> {
-        // Ensure the user exists, or throw an exception if not.
-
         val uid = auth.currentUserId()
-
+        if (uid.isEmpty()) return emptyList()
         return suspendCancellableCoroutine { continuation ->
             db.getCollectionChild(
                 collection = USERS_COLLECTION_PATH,
@@ -125,26 +123,25 @@ class SupplierInvoiceRepositoryImpl
                 collectionChild = SUPPLIER_INVOICES_COLLECTION_PATH,
             ).addOnSuccessListener { snapshot ->
                 val overdueInvoices = snapshot.documents.mapNotNull { document ->
-                    val supplierInvoiceMap = document.data as? Map<String, Any>
+                    val supplierInvoiceMap = document.data
                     val invoice = supplierInvoiceMap?.asDomainModel()
-                    if (invoice != null && invoice.paymentStatus != PaymentStatus.PENDING && isInvoiceOverdue(invoice)) {
-                        // Optionally update the invoice state as overdue
-                        // updateInvoiceStateAsOverdue(invoice, uid)
+                    if (invoice != null &&
+                        invoice.paymentStatus != PaymentStatus.PENDING &&
+                        isInvoiceOverdue(invoice)
+                    ) {
                         invoice
                     } else {
                         null
                     }
                 }
-
-                // Resume the coroutine with the list of overdue invoices
                 continuation.resume(overdueInvoices)
             }.addOnFailureListener { exception ->
-                // Log the error and resume the coroutine with an empty list or throw an exception
                 Timber.e(exception, "Failed to fetch overdue invoices")
                 continuation.resume(emptyList())
             }
         }
     }
+
     override fun getInvoiceDetails(invoiceId: String): Flow<Resource<SupplierInvoice>> = flow {
         auth.ensureUserExistsOrReturnError<SupplierInvoice> {
             emit(it)

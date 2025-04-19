@@ -34,10 +34,11 @@ android {
         versionCode = Configuration.VERSION_CODE
         versionName = Configuration.VERSION_NAME
 
-        resourceConfigurations.addAll(listOf("en", "ar"))
         testInstrumentationRunner = "$APPLICATION_ID.core.testing.PosTestRunner"
     }
-
+    androidResources {
+        localeFilters += listOf("en", "ar")
+    }
     buildTypes {
         debug {
             applicationIdSuffix = PosBuildType.DEBUG.applicationIdSuffix
