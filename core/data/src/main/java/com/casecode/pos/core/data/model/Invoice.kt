@@ -15,7 +15,6 @@
  */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.data.utils.toDateFormatString
 import com.casecode.pos.core.firebase.services.INVOICE_CREATED_BY_FIELD
 import com.casecode.pos.core.firebase.services.INVOICE_CUSTOMER_FIELD
 import com.casecode.pos.core.firebase.services.INVOICE_DATE_FIELD
@@ -24,6 +23,7 @@ import com.casecode.pos.core.firebase.services.INVOICE_NAME_FIELD
 import com.casecode.pos.core.firebase.services.model.InvoiceDataModel
 import com.casecode.pos.core.model.data.users.Invoice
 import com.casecode.pos.core.model.data.users.InvoiceGroup
+import com.casecode.pos.core.model.utils.toDateFormatString
 import com.google.firebase.firestore.DocumentReference
 
 fun Invoice.asExternalMapper(

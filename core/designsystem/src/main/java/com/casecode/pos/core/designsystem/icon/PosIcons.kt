@@ -29,7 +29,8 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Inventory2
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Payment
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PointOfSale
 import androidx.compose.material.icons.filled.PrintDisabled
@@ -80,6 +81,8 @@ object PosIcons {
     val Purchase = Icons.Filled.ShoppingBag
     val PurchaseBorder = Icons.Rounded.ShoppingBag
     val Bill = Icons.Filled.Receipt
+    val Notification = Icons.Filled.Notifications
+    val NotificationNone = Icons.Filled.NotificationsNone
     val Employee = Icons.Filled.SupervisorAccount
     val Settings = Icons.Filled.Settings
     val SettingsBorder = Icons.Rounded.Settings
@@ -95,7 +98,7 @@ object PosIcons {
     val Filter = Icons.Rounded.FilterList
     val FilterClear = Icons.Rounded.FilterListOff
     val Payment = Icons.Rounded.Payment
-
+    val Pdf = Icons.Filled.Pdf
     val Calender = Icons.Filled.CalendarToday
     val Delete = Icons.Filled.Delete
     val PrinterDisabled = Icons.Filled.PrintDisabled

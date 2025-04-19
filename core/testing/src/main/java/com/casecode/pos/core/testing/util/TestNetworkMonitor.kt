@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.core.testing.util
 
-import com.casecode.pos.core.data.utils.NetworkMonitor
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

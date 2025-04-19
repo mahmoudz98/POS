@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.casecode.pos.Configuration.APPLICATION_ID
+
 plugins {
     alias(libs.plugins.pos.android.library)
     alias(libs.plugins.pos.hilt)
 }
 android {
-    namespace = "com.casecode.pos.uitesthiltmanifest"
+    namespace = "$APPLICATION_ID.uitesthiltmanifest"
 }

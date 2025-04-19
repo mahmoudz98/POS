@@ -54,7 +54,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.data.utils.toFormattedDateString
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosDatePickerDialog
 import com.casecode.pos.core.designsystem.component.PosElevatedCard
@@ -65,6 +64,7 @@ import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.model.utils.toFormattedDateString
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.bill.R
@@ -82,6 +82,8 @@ fun AddBillScreen(viewModel: BillCreationViewModel = hiltViewModel(), onBackClic
     val itemUpdated by viewModel.itemSelected.collectAsStateWithLifecycle()
     var showAddItemFormScreen by rememberSaveable { mutableStateOf(false) }
     var showUpdateItemFormScreen by rememberSaveable { mutableStateOf(false) }
+    TrackScreenViewEvent(screenName = "AddBill")
+
     AddBillScreen(
         billInputState = billInputState,
         searchSupplier = searchSupplier,

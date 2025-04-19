@@ -73,7 +73,6 @@ fun PosEmptyScreen(
         Text(
             text = stringResource(id = titleRes),
             style = MaterialTheme.typography.titleMedium,
-            color = Color.Black,
             modifier = Modifier.padding(top = 16.dp),
         )
 

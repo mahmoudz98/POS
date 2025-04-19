@@ -1,12 +1,13 @@
 [versions]
 # AGP and tools should be updated together
-agp = "8.7.3"
-androidTools = "31.7.3"
+agp = "8.9.1"
+androidTools = "31.9.1"
 billingKtx = "7.1.1"
 escposThermalprinterAndroid = "3.4.0"
 googleid = "1.1.1"
 credentials = "1.3.0"
-kotlin = "2.1.0"
+itext7Core = "7.2.5"
+kotlin = "2.1.10"
 androidDesugarJdkLibs = "2.1.4"
 libphonenumber = "8.12.31"
 playServicesBase = "18.5.0"
@@ -33,17 +34,19 @@ androidLifecycle = "2.8.7"
 androidxTracing = "1.3.0-alpha02"
 androidxMetrics = "1.0.0-beta01"
 constraintlayout = "1.1.0"
+androidxWork = "2.10.0"
 navigation = "2.8.5"
 androidxLintGradle = "1.0.0-alpha03"
 androidxMacroBenchmark = "1.3.3"
 coil = "2.7.0"
-kotlinx-coroutines = "1.10.1"
-kotlinxSerializationJson = "1.7.3"
+kotlinxCoroutines = "1.10.1"
+kotlinxSerializationJson = "1.8.0"
 kotlinxDatetime = "0.6.1"
 # DI
-hilt = "2.53.1"
+hilt = "2.54"
+hiltExt = "1.2.0"
 hilt-navigation = "1.2.0"
-ksp = "2.1.0-1.0.29"
+ksp = "2.1.10-1.0.31"
 #  Services
 firebaseBom = "33.7.0"
 firebase-auth = "23.1.0"
@@ -122,20 +125,19 @@ escpos-thermalprinter-android = { module = "com.github.DantSu:ESCPOS-ThermalPrin
 googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
-# AndroidX
-libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
-
-# UI Tools
+androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "androidxWork" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
-# Multithreading
-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
-coroutines-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "kotlinx-coroutines" }
-
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+itext7-core = { module = "com.itextpdf:itext7-core", version.ref = "itext7Core" }
+kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
+coroutines-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-debug = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-debug", version.ref = "kotlinxCoroutines" }
+libphonenumber = { module = "com.googlecode.libphonenumber:libphonenumber", version.ref = "libphonenumber" }
 # Kotlin libraries
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.3.8" }
@@ -147,13 +149,14 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 degger-android = { module = "com.google.dagger:dagger", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
+hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
+hilt-navigation = { module = "androidx.hilt:hilt-navigation", version.ref = "hilt-navigation" }
+hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
+hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
+javax-inject = { module = "javax.inject:javax.inject", version = "1" }
 lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "androidTools" }
 lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "androidTools" }
 lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "androidTools" }
-javax-inject = { module = "javax.inject:javax.inject", version = "1" }
-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
-android-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-navigation" }
-hilt-navigation = { module = "androidx.hilt:hilt-navigation", version.ref = "hilt-navigation" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 androidx-lint-gradle = { group = "androidx.lint", name = "lint-gradle", version.ref = "androidxLintGradle" }
@@ -232,17 +235,17 @@ module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "module
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 power-assert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "kotlin" }
 # Plugins defined by this project
-pos-android-application = { id = "pos.android.application", version = "unspecified" }
-pos-android-application-compose = { id = "pos.android.application.compose", version = "unspecified" }
-pos-android-application-flavors = { id = "pos.android.application.flavors", version = "unspecified" }
-pos-android-application-jacoco = { id = "pos.android.application.jacoco", version = "unspecified" }
-pos-android-library = { id = "pos.android.library", version = "unspecified" }
-pos-android-library-compose = { id = "pos.android.library.compose", version = "unspecified" }
-pos-android-library-jacoco = { id = "pos.android.library.jacoco", version = "unspecified" }
-pos-android-feature = { id = "pos.android.feature", version = "unspecified" }
-pos-hilt = { id = "pos.hilt", version = "unspecified" }
-pos-android-firebase = { id = "pos.android.firebase", version = "unspecified" }
-pos-android-firebase-library = { id = "pos.android.firebase.library", version = "unspecified" }
-pos-android-test = { id = "pos.android.test", version = "unspecified" }
-pos-android-lint = { id = "pos.android.lint", version = "unspecified" }
-pos-jvm-library = { id = "pos.jvm.library", version = "unspecified" }
+pos-android-application = { id = "pos.android.application" }
+pos-android-application-compose = { id = "pos.android.application.compose" }
+pos-android-application-flavors = { id = "pos.android.application.flavors" }
+pos-android-application-jacoco = { id = "pos.android.application.jacoco" }
+pos-android-library = { id = "pos.android.library" }
+pos-android-library-compose = { id = "pos.android.library.compose" }
+pos-android-library-jacoco = { id = "pos.android.library.jacoco" }
+pos-android-feature = { id = "pos.android.feature" }
+pos-hilt = { id = "pos.hilt" }
+pos-android-firebase = { id = "pos.android.firebase" }
+pos-android-firebase-library = { id = "pos.android.firebase.library" }
+pos-android-test = { id = "pos.android.test" }
+pos-android-lint = { id = "pos.android.lint" }
+pos-jvm-library = { id = "pos.jvm.library"}

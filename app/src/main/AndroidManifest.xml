@@ -104,7 +104,12 @@
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
-
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="www.pos.casecode.com"/>
+            </intent-filter>
         </activity>
 
         <!-- Let AndroidX handle auto-store locales for pre-T devices to hold the user's selected locale -->
@@ -129,7 +134,7 @@
 
         <meta-data
             android:name="firebase_performance_logcat_enabled"
-            android:value="true" />
+            android:value="false" />
 
         <!-- Disable Firebase analytics by default. This setting is overwritten for the `prod`
      flavor -->

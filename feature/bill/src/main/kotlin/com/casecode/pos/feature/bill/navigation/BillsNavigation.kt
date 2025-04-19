@@ -20,7 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import com.casecode.pos.core.notifications.DEEP_LINK_URI_PATTERN
 import com.casecode.pos.feature.bill.BillsScreen
 import com.casecode.pos.feature.bill.BillsViewModel
 import com.casecode.pos.feature.bill.creation.AddBillScreen
@@ -81,14 +83,18 @@ fun NavGraphBuilder.billsScreen(navController: NavController) {
 }
 
 fun NavGraphBuilder.billScreen(navController: NavController) {
-    composable<BillsGraph.BillDetailsRoute> { backStackEntry ->
+    composable<BillsGraph.BillDetailsRoute>(
+        deepLinks = listOf(
+            navDeepLink { uriPattern = DEEP_LINK_URI_PATTERN },
+        ),
+    ) { backStackEntry ->
         val parentEntry = remember(backStackEntry) {
             navController.getBackStackEntry(BillsGraph.BillsNavigation)
         }
-        val id = backStackEntry.arguments?.getString(BillsGraph.BillDetailsRoute::billId.name)
-        Timber.d("id: $id")
+        val billId = backStackEntry.arguments?.getString(BillsGraph.BillDetailsRoute::billId.name)
+        Timber.d("id: $billId")
         val billDetailsViewModel: BillDetailsViewModel = hiltViewModel(parentEntry)
-        billDetailsViewModel.onBillIdChange(id)
+        billDetailsViewModel.onBillIdChange(billId)
         BillScreen(
             viewModel = billDetailsViewModel,
             onNavigateBack = navController::popBackStack,

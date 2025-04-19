@@ -18,6 +18,7 @@ package com.casecode.pos.core.testing.repository
 import com.casecode.pos.core.domain.repository.AddSubscriptionBusiness
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
 import kotlinx.coroutines.flow.Flow
 import org.junit.Before
@@ -36,7 +37,7 @@ constructor() : SubscriptionsBusinessRepository {
     }
 
     override suspend fun setSubscriptionBusiness(
-        subscriptionBusiness: SubscriptionBusiness,
+        subscriptionBusiness: Subscription,
     ): AddSubscriptionBusiness = if (shouldReturnError) {
         Resource.Error("Exception")
     } else {

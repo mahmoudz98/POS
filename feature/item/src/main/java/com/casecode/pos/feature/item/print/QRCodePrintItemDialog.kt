@@ -44,12 +44,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.data.utils.encodeAsBitmap
 import com.casecode.pos.core.designsystem.component.DynamicAsyncQrCodeImage
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.ui.utils.encodeAsBitmap
 import com.casecode.pos.feature.item.ItemsViewModel
 import com.casecode.pos.feature.item.R
 

@@ -15,6 +15,8 @@
  */
 
 import com.casecode.pos.PosBuildType
+import com.casecode.pos.Configuration
+import com.casecode.pos.Configuration.APPLICATION_ID
 
 plugins {
     alias(libs.plugins.pos.android.application)
@@ -28,14 +30,15 @@ plugins {
 
 android {
     defaultConfig {
-        applicationId = "com.casecode.pos"
-        versionCode = com.casecode.pos.Configuration.VERSION_CODE
-        versionName = com.casecode.pos.Configuration.VERSION_NAME
+        applicationId = APPLICATION_ID
+        versionCode = Configuration.VERSION_CODE
+        versionName = Configuration.VERSION_NAME
 
-        resourceConfigurations.addAll(listOf("en", "ar"))
-        testInstrumentationRunner = "com.casecode.pos.core.testing.PosTestRunner"
+        testInstrumentationRunner = "$APPLICATION_ID.core.testing.PosTestRunner"
     }
-
+    androidResources {
+        localeFilters += listOf("en", "ar")
+    }
     buildTypes {
         debug {
             applicationIdSuffix = PosBuildType.DEBUG.applicationIdSuffix
@@ -66,7 +69,7 @@ android {
         }
     }
 
-    namespace = "com.casecode.pos"
+    namespace = APPLICATION_ID
 }
 
 dependencies {
@@ -84,9 +87,11 @@ dependencies {
     implementation(projects.feature.setting)
     implementation(projects.feature.signout)
     implementation(projects.feature.reports)
+
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
+    implementation(projects.sync.work)
     // AndroidX
     implementation(libs.androidx.activity.compose)
     implementation(libs.appcompat)
@@ -125,7 +130,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.hilt.android.testing)
 
-    baselineProfile(projects.benchmark)
+    baselineProfile(projects.benchmarks)
 }
 baselineProfile {
     // Don't build on every iteration of a full assemble.
@@ -133,6 +138,7 @@ baselineProfile {
     automaticGenerationDuringBuild = false
     dexLayoutOptimization = true
 }
+
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
 }

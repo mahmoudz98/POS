@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.casecode.pos.Configuration.APPLICATION_ID
 
 plugins {
     alias(libs.plugins.pos.android.library)
@@ -20,21 +21,20 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.core.testing"
+    namespace = "$APPLICATION_ID.core.testing"
 }
 
 dependencies {
 
     api(projects.core.data)
     api(projects.core.firebaseServices)
-
+    api(projects.core.notifications)
     implementation(libs.googleid)
-
     api(libs.coroutines.test)
-
     api(libs.mockk.android) {
         exclude(group = "org.junit.jupiter", module = "junit-jupiter")
     }
+
     // implementation(libs.mockk.agent)
     implementation(libs.androidx.test.runner)
     implementation(libs.androidx.test.rules)

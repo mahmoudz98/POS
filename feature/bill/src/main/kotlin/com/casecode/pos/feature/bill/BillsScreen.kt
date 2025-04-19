@@ -57,6 +57,7 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.SupplierInvoice
 import com.casecode.pos.core.ui.DevicePreviews
+import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
 import com.casecode.pos.core.ui.R as uiR
 
@@ -72,6 +73,8 @@ fun BillsScreen(
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
     val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
     val filterUiState by viewModel.filterUiState.collectAsStateWithLifecycle()
+    TrackScreenViewEvent(screenName = "Bills")
+
     BillsScreen(
         uiState = uiState,
         searchQuery = searchQuery,
@@ -158,7 +161,6 @@ fun BillsScreen(
                                 contentDesc = "LoadingBills",
                             )
                         }
-
                         is BillsUiState.Success -> {
                             BillsContent(
                                 filterScreenVisible = filtersVisible,

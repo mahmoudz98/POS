@@ -18,6 +18,7 @@ package com.casecode.pos.core.data.repository
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
+import com.casecode.pos.core.data.model.asSubscriptionBusiness
 import com.casecode.pos.core.data.model.asSubscriptionBusinessModel
 import com.casecode.pos.core.data.model.asSubscriptionRequest
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
@@ -28,6 +29,7 @@ import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.firebase.services.FirestoreService
 import com.casecode.pos.core.firebase.services.SUBSCRIPTION_BUSINESS_FIELD
 import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.CoroutineDispatcher
@@ -50,7 +52,7 @@ constructor(
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SubscriptionsBusinessRepository {
     override suspend fun setSubscriptionBusiness(
-        subscriptionBusiness: SubscriptionBusiness,
+        subscriptionBusiness: Subscription,
     ): AddSubscriptionBusiness {
         return withContext(ioDispatcher) {
             try {
@@ -61,7 +63,7 @@ constructor(
 
                 suspendCoroutine<AddSubscriptionBusiness> { continuation ->
                     val addSubscriptionBusinessRequest =
-                        subscriptionBusiness.asSubscriptionRequest()
+                        subscriptionBusiness.asSubscriptionBusiness().asSubscriptionRequest()
                     db
                         .updateDocumentWithTask(
                             USERS_COLLECTION_PATH,

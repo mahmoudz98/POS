@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.casecode.pos.Configuration.APPLICATION_ID
+
 plugins {
     alias(libs.plugins.pos.android.library)
     alias(libs.plugins.pos.android.library.compose)
@@ -20,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.core.ui"
+    namespace = "$APPLICATION_ID.core.ui"
 }
 
 dependencies {
@@ -33,8 +35,8 @@ dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.libphonenumber)
     implementation(libs.play.services.base)
+    implementation(libs.zxing.generate.barcode)
+    implementation(libs.itext7.core)
 
     implementation(libs.play.services.code.scanner)
-
-    // api(libs.zxing.android.embedded)
 }

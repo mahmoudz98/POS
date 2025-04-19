@@ -43,7 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.casecode.pos.core.data.utils.toFormattedDateString
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosDatePickerDialog
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
@@ -54,7 +53,9 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentMethod
 import com.casecode.pos.core.model.data.users.SupplierInvoice
-import com.casecode.pos.core.ui.utils.toBigDecimalFormatted
+import com.casecode.pos.core.model.utils.toBigDecimalFormatted
+import com.casecode.pos.core.model.utils.toFormattedDateString
+import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentMethodRes
 import kotlinx.datetime.Clock
@@ -105,6 +106,7 @@ internal fun AddBillPaymentScreen(
         )
         onNavigateBack()
     }
+    TrackScreenViewEvent(screenName = "AddBillPayment")
     Scaffold(
         topBar = {
             PosTopAppBar(

@@ -18,8 +18,6 @@ package com.casecode.pos.feature.stepper
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.data.model.asSubscriptionBusiness
-import com.casecode.pos.core.data.utils.NetworkMonitor
 import com.casecode.pos.core.domain.repository.AccountRepository
 import com.casecode.pos.core.domain.usecase.AddEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.CompleteBusinessUseCase
@@ -27,6 +25,7 @@ import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
+import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.model.data.users.Branch
@@ -235,7 +234,7 @@ constructor(
 
         when (
             val resourceAddSubscription =
-                setSubscriptionsBusinessUseCase(subscription.asSubscriptionBusiness())
+                setSubscriptionsBusinessUseCase(subscription)
         ) {
             is Resource.Loading -> {
                 _uiState.update { it.copy(isLoading = true) }

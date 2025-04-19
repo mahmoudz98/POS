@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.casecode.pos.Configuration.APPLICATION_ID
+
 plugins {
     alias(libs.plugins.pos.android.feature)
     alias(libs.plugins.pos.android.library.compose)
     alias(libs.plugins.pos.android.library.jacoco)
 }
 android {
-    namespace = "com.casecode.pos.feature.signin"
+    namespace = "$APPLICATION_ID.feature.signin"
 }
 
 dependencies {
-    implementation(projects.core.data)
+    implementation(projects.core.domain)
     implementation(projects.feature.loginEmployee)
 
     implementation(libs.googleid)

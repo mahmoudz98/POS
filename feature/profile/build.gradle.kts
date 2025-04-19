@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.casecode.pos.Configuration.APPLICATION_ID
+
 plugins {
     alias(libs.plugins.pos.android.feature)
     alias(libs.plugins.pos.android.library.compose)
@@ -20,11 +22,11 @@ plugins {
 }
 
 android {
-    namespace = "com.casecode.pos.feature.profile"
+    namespace = "$APPLICATION_ID.feature.profile"
 }
 
 dependencies {
-    implementation(projects.core.data)
+    implementation(projects.core.domain)
 
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.core.testing)

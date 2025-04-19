@@ -93,4 +93,7 @@
     <string name="feature_bill_updated_successfully">تم تحديث الفاتورة بنجاح</string>
     <string name="feature_bill_updated_failure_duplicate">لم يتم تحديث الفاتورة </string>
     <string name="feature_bill_updated_failure_generic">فشل تحديث الفاتورة</string>
+    <string name="feature_bill_need_permission_for_storage">بحاجة إلى إذن للوصول إلى الملفات لإنشاء مستند الفاتورة
+</string>
+
 </resources>

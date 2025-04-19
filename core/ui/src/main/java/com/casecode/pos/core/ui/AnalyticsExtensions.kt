@@ -39,14 +39,14 @@ fun AnalyticsHelper.logScreenView(screenName: String) {
     )
 }
 
-fun AnalyticsHelper.logNewsResourceOpened(newsResourceId: String) {
+fun AnalyticsHelper.logBillDetails(billId: String) {
     logEvent(
         event =
         AnalyticsEvent(
-            type = "news_resource_opened",
+            type = "bill_details_opened",
             extras =
             listOf(
-                Param("opened_news_resource", newsResourceId),
+                Param("opened_bill_id", billId),
             ),
         ),
     )

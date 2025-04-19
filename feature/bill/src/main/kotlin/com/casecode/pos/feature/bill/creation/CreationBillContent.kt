@@ -57,7 +57,7 @@ import com.casecode.pos.core.designsystem.component.PosInputChip
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.model.data.users.DiscountType
-import com.casecode.pos.core.ui.utils.toFormattedString
+import com.casecode.pos.core.model.utils.toFormattedString
 import com.casecode.pos.feature.bill.R
 
 @Composable

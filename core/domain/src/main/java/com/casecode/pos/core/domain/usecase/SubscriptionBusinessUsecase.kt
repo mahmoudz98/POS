@@ -19,7 +19,7 @@ import com.casecode.pos.core.domain.R
 import com.casecode.pos.core.domain.repository.AddSubscriptionBusiness
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.SubscriptionBusiness
+import com.casecode.pos.core.model.data.subscriptions.Subscription
 import javax.inject.Inject
 
 class GetSubscriptionBusinessUseCase
@@ -36,7 +36,7 @@ constructor(
     private val subscriptionsRep: SubscriptionsBusinessRepository,
 ) {
     suspend operator fun invoke(
-        subscriptionBusiness: SubscriptionBusiness,
+        subscriptionBusiness: Subscription,
     ): AddSubscriptionBusiness {
         if (subscriptionBusiness.type.isNullOrEmpty()) {
             return Resource.empty(R.string.core_domain_add_subscription_business_empty)

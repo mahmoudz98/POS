@@ -18,7 +18,7 @@ package com.casecode.pos.core.domain.usecase.business
 import com.casecode.pos.core.domain.R
 import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.SubscriptionBusiness
+import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.pos.core.testing.util.CoroutinesTestRule
 import kotlinx.coroutines.test.runTest
@@ -31,8 +31,12 @@ class SetSubscriptionBusinessUseCaseTest {
     val coroutineTestRule = CoroutinesTestRule()
 
     // Given uid and subscription
-    private val subscription: SubscriptionBusiness =
-        SubscriptionBusiness(type = "Pro", cost = 20L, duration = 60, listOf("admin"))
+    private val subscription = Subscription(
+        cost = 20L,
+        duration = 60L,
+        listOf("admin"),
+        type = "Pro",
+    )
 
     // subject under test
     private val testSubscriptionsBusinessRepository: TestSubscriptionsBusinessRepository =
@@ -54,7 +58,7 @@ class SetSubscriptionBusinessUseCaseTest {
     fun setSubscriptionBusinessUseCase_emptyBusiness_returnEmptyTypeOfSubscription() = runTest {
         // When subscription business fields is empty
         val resultEmptySubscriptionBusiness =
-            setSubscriptionBusinessUseCase(SubscriptionBusiness())
+            setSubscriptionBusinessUseCase(Subscription())
 
         // Then - return Resource of empty data
         assertEquals(
