@@ -14,10 +14,12 @@
      limitations under the License.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="NightAdjusted.Theme.Pos" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="NightAdjusted.Theme.Pos" parent="Theme.AppCompat.DayNight.NoActionBar"/>
 
     <!-- The final theme we use -->
-    <style name="Theme.Pos" parent="NightAdjusted.Theme.Pos" />
+    <style name="Theme.Pos" parent="NightAdjusted.Theme.Pos" >
+        <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
+    </style>
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
