@@ -72,10 +72,6 @@ spotlessCheck:
 	@echo "Run spotless check"
 	./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
 
-spotlessApply:
-	@echo "Run spotless apply"
-	./gradlew spotlessApply
-
 updateProdReleaseBadging:
 	@echo "Run updateProdReleaseBadging"
 	./gradlew updateProdReleaseBadging

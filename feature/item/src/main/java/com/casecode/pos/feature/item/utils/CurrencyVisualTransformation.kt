@@ -37,18 +37,15 @@ import java.util.Locale
 private class CurrencyVisualTransformation(
     locale: Locale,
 ) : VisualTransformation {
-    // Issue: fix error in the currency 
     /**
      * Currency formatter. Uses default Locale but there is an option to set
      * any Locale we want e.g. NumberFormat.getCurrencyInstance(Locale.ENGLISH)
      */
     private val numberFormatter =
         NumberFormat.getCurrencyInstance().apply {
-            // TODO: remove hardcode currency
-            currency = Currency.getInstance("EGP")
+            currency = Currency.getInstance(locale)
+            maximumFractionDigits = 0
             maximumIntegerDigits = 9
-            maximumFractionDigits = currency?.defaultFractionDigits!!
-            minimumFractionDigits = currency?.defaultFractionDigits!!
         }
 
     override fun filter(text: AnnotatedString): TransformedText {
@@ -82,12 +79,11 @@ private class CurrencyVisualTransformation(
         }
         /**
          * Here is our TextField value transformation to formatted value.
-         * EditText operates on String so we have to change it to Big decimal.
+         * EditText operates on String so we have to change it to Int.
          * It's safe at this point because we eliminated cases where
          * value is empty or contains non-digits characters.
          */
-        val amount = originalText.toBigDecimal()
-        val formattedText = numberFormatter.format(amount)
+        val formattedText = numberFormatter.format(originalText.toInt())
         /**
          * CurrencyOffsetMapping is where the magic happens. See you there :)
          */
@@ -199,7 +195,7 @@ class CurrencyOffsetMapping(
             Timber.e(e)
             return 0
         } finally {
-            Timber.i("indexes = ${indexes.map { it.toString() }}")
+            Timber.e("indexes = ${indexes.map { it.toString() }}")
         }
     }
 
