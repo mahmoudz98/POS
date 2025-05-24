@@ -29,6 +29,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,7 +44,7 @@ import javax.inject.Inject
  * @property authRepository Service for authentication.
  */
 @HiltViewModel
-class SignInActivityViewModel
+class SignInViewModel
 @Inject
 constructor(
     private val networkMonitor: NetworkMonitor,
@@ -52,7 +54,11 @@ constructor(
     @Inject
     lateinit var googleIdOption: GetGoogleIdOption
     private val _signInUiState = MutableStateFlow(SignInActivityUiState())
-    val signInUiState = _signInUiState.asStateFlow()
+    val signInUiState = _signInUiState.onStart {
+        checkIfRegistrationAndBusinessCompleted()
+    }.stateIn(scope = viewModelScope,
+        initialValue = _signInUiState.value,
+        started = SharingStarted.WhileSubscribed(5_000))
     val loginStateResult: StateFlow<LoginStateResult> =
         authRepository.loginData.stateIn(
             scope = viewModelScope,

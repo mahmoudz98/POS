@@ -55,6 +55,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
@@ -68,28 +69,34 @@ import com.casecode.pos.core.ui.utils.moveToStepperActivity
 import com.casecode.pos.feature.login.employee.LoginInEmployeeDialog
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import timber.log.Timber
+import java.util.Timer
 import com.casecode.pos.core.ui.R as uiR
 
 @Composable
-fun SignInScreen(viewModel: SignInActivityViewModel) {
+fun SignInScreen(viewModel: SignInViewModel = hiltViewModel(),
+                 onSignInSuccessNavigateToMain: () -> Unit,
+                 onSignInSuccessNavigateToStepper: () -> Unit,) {
     val uiState by viewModel.signInUiState.collectAsStateWithLifecycle()
     val signUiState by viewModel.loginStateResult.collectAsStateWithLifecycle()
     var showDialogLoginEmployee by rememberSaveable { mutableStateOf(false) }
     var showDownloadGooglePlay by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    DisposableEffect(signUiState) {
+    LaunchedEffect(signUiState) {
         when (signUiState) {
             is LoginStateResult.NotCompleteBusiness -> {
-                moveToStepperActivity(context)
+                //moveToStepperActivity(context)
+                onSignInSuccessNavigateToStepper()
             }
             is LoginStateResult.EmployeeLogin, is LoginStateResult.SuccessLoginAdmin -> {
-                moveToMainActivity(context)
+              //  moveToMainActivity(context)
+                onSignInSuccessNavigateToMain()
             }
-            else -> {}
+            else -> Unit
         }
-        onDispose {}
     }
-
+    Timber.e("uiState: $uiState")
+    Timber.e("Here I'm here")
     SignInScreen(
         uiState = uiState,
         onSignInCLick = {
