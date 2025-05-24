@@ -27,7 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.casecode.pos.MainAuthUiState
+import com.casecode.pos.InitialDestinationState
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.feature.inventory.navigation.InventoryRoute
 import com.casecode.pos.feature.profile.navigateToProfile
@@ -47,29 +47,32 @@ import kotlinx.coroutines.flow.stateIn
 @Composable
 fun rememberMainAppState(
     networkMonitor: NetworkMonitor? = null,
-    mainAuthUiState: MainAuthUiState,
+    initialDestinationState: InitialDestinationState,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    rootNavController: NavHostController = rememberNavController(),
     navController: NavHostController = rememberNavController(),
 ): MainAppState = remember(
     navController,
     coroutineScope,
     networkMonitor,
-    mainAuthUiState,
+    initialDestinationState,
 ) {
     MainAppState(
+        rootNavController =rootNavController,
         navController = navController,
         coroutineScope = coroutineScope,
         networkMonitor = networkMonitor!!,
-        mainAuthUiState = mainAuthUiState,
+        initialDestinationState = initialDestinationState,
     )
 }
 
 @Stable
 class MainAppState(
     val navController: NavHostController,
+    val rootNavController: NavHostController,
     val coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
-    val mainAuthUiState: MainAuthUiState,
+    val initialDestinationState: InitialDestinationState,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination

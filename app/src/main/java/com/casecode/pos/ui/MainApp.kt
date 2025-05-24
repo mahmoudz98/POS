@@ -16,7 +16,7 @@
 package com.casecode.pos.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -46,7 +46,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -55,7 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.casecode.pos.MainAuthUiState
+import com.casecode.pos.InitialDestinationState
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosGradientBackground
 import com.casecode.pos.core.designsystem.component.PosNavigationSuiteScaffold
@@ -63,15 +62,20 @@ import com.casecode.pos.core.designsystem.component.PosNavigationSuiteScope
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.theme.GradientColors
 import com.casecode.pos.core.designsystem.theme.LocalGradientColors
-import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import com.casecode.pos.feature.profile.R
 import com.casecode.pos.feature.sale.navigation.SaleRoute
+import com.casecode.pos.feature.signin.navigation.navigateToSignIn
 import com.casecode.pos.navigation.PosMainNavHost
 import com.casecode.pos.navigation.PosSaleNavHost
 import com.casecode.pos.navigation.TopLevelDestination
+import com.casecode.pos.navigation.defaultSingleTopNavOptions
 import kotlin.reflect.KClass
 import com.casecode.pos.core.ui.R.string as uiString
 
+@Composable
+fun MainAppScreen(appState: MainAppState){
+
+}
 @SuppressLint("RestrictedApi")
 @Composable
 fun MainScreen(appState: MainAppState, modifier: Modifier = Modifier) {
@@ -113,24 +117,31 @@ internal fun MainApp(
 ) {
     // TODO: Change to use [PosScaffoldNavigation], when have custom layout with custom
     val currentDestination = appState.currentDestination
-    val context = LocalContext.current
-    val mainAuthUiState = appState.mainAuthUiState
+    val mainAuthUiState = appState.initialDestinationState
+    val activity = LocalActivity.current
+
     when (mainAuthUiState) {
-        MainAuthUiState.Loading -> {}
-        MainAuthUiState.ErrorLogin -> {
+        InitialDestinationState.Loading -> Unit
+        InitialDestinationState.ErrorLogin -> {
             // TODO: handle when error login to sign out and login again
-            moveToSignInActivity(context = context)
+            //activity?.moveToSignInActivity()
+            appState.navController.navigateToSignIn(
+                defaultSingleTopNavOptions(),
+            )
+
         }
 
-        MainAuthUiState.LoginByAdmin, MainAuthUiState.LoginByAdminEmployee -> {
-            AdminScreens(appState, currentDestination, snackbarHostState, modifier, context)
+        InitialDestinationState.LoginByAdmin, InitialDestinationState.LoginByAdminEmployee -> {
+            AdminScreens(appState, currentDestination, snackbarHostState, modifier)
         }
 
-        MainAuthUiState.LoginBySaleEmployee -> {
-            SaleEmployeeScreens(appState, currentDestination, modifier, snackbarHostState, context)
+        InitialDestinationState.LoginBySaleEmployee -> {
+            AdminScreens(appState, currentDestination, snackbarHostState, modifier)
+            // TODO: test for sale screens is work correctly or what!
+           // SaleEmployeeScreens(appState, currentDestination, modifier, snackbarHostState)
         }
 
-        MainAuthUiState.LoginByNoneEmployee -> {
+        else -> {
             // TODO:handle with not permission for employee
         }
     }
@@ -142,7 +153,6 @@ fun AdminScreens(
     currentDestination: NavDestination?,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier,
-    context: Context,
 ) {
     val windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo()
 
@@ -162,11 +172,8 @@ fun AdminScreens(
             snackbarHostState = snackbarHostState,
             topLevelDestination = appState.currentAdminTopLevelDestination,
         ) {
-            PosMainNavHost(
+          PosMainNavHost(
                 appState = appState,
-                onSignOutClick = {
-                    moveToSignInActivity(context = context)
-                },
             )
         }
     }
@@ -178,7 +185,6 @@ fun SaleEmployeeScreens(
     currentDestination: NavDestination?,
     modifier: Modifier,
     snackbarHostState: SnackbarHostState,
-    context: Context,
 ) {
     val windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo()
 
@@ -200,9 +206,7 @@ fun SaleEmployeeScreens(
         ) {
             PosSaleNavHost(
                 appState = appState,
-                onSignOutClick = {
-                    moveToSignInActivity(context = context)
-                },
+
             )
         }
     }

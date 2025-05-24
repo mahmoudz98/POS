@@ -30,6 +30,7 @@ import com.casecode.pos.feature.setting.SettingRoute
 import com.casecode.pos.feature.setting.navigateToSettings
 import com.casecode.pos.feature.statistics.ReportsRoute
 import com.casecode.pos.feature.statistics.navigateToReports
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 interface TopLevelDestination {
@@ -55,3 +56,5 @@ interface TopLevelDestination {
         }
     }
 }
+
+

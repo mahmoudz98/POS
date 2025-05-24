@@ -36,6 +36,7 @@ import com.casecode.pos.feature.sales.report.navigateToSalesReport
 import com.casecode.pos.feature.sales.report.navigateToSalesReportDetails
 import com.casecode.pos.feature.sales.report.salesReportGraph
 import com.casecode.pos.feature.setting.settingsGraph
+import com.casecode.pos.feature.signin.navigation.navigateToSignIn
 import com.casecode.pos.feature.signout.navigateToSignOut
 import com.casecode.pos.feature.signout.signOutDialog
 import com.casecode.pos.feature.statistics.reportsScreen
@@ -43,17 +44,18 @@ import com.casecode.pos.feature.supplier.navigation.navigateToSupplier
 import com.casecode.pos.feature.supplier.navigation.supplierScreen
 import com.casecode.pos.ui.MainAppState
 
+
 @Composable
 fun PosMainNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
-    onSignOutClick: () -> Unit,
 ) {
     NavHost(
         navController = appState.navController,
         startDestination = SaleRoute,
         modifier = modifier,
     ) {
+
         saleScreen {
             appState.navController.navigateToItemsGraph(
                 defaultNavOptions(appState.navController.graph.findStartDestination().id),
@@ -98,7 +100,11 @@ fun PosMainNavHost(
         employeesScreen()
         signOutDialog(
             onSignOut = {
-                onSignOutClick()
+                appState.rootNavController.navigateToSignIn(
+                    defaultSingleTopNavOptions(),
+                )
+                // activity?.moveToSignInActivity()
+                //onSignOutClick()
             },
             onDismiss = appState.navController::popBackStack,
         )
@@ -106,10 +112,18 @@ fun PosMainNavHost(
     }
 }
 
-private fun defaultNavOptions(idDestination: Int): NavOptions = navOptions {
+
+fun defaultNavOptions(idDestination: Int): NavOptions = navOptions {
     popUpTo(idDestination) {
         saveState = true
     }
+    launchSingleTop = true
+    restoreState = true
+}
+
+
+fun defaultSingleTopNavOptions(): NavOptions = navOptions {
+
     launchSingleTop = true
     restoreState = true
 }

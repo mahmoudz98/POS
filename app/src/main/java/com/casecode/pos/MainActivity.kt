@@ -38,9 +38,8 @@ import com.casecode.pos.core.analytics.AnalyticsHelper
 import com.casecode.pos.core.analytics.LocalAnalyticsHelper
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.NetworkMonitor
-import com.casecode.pos.core.ui.utils.moveToSignInActivity
+import com.casecode.pos.navigation.PosRootNavHost
 import com.casecode.pos.sync.initializers.SyncSupplierInvoicesOverdue
-import com.casecode.pos.ui.MainScreen
 import com.casecode.pos.ui.rememberMainAppState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
@@ -67,31 +66,32 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        var authUiState: MainAuthUiState by mutableStateOf(MainAuthUiState.Loading)
+        var authUiState: InitialDestinationState by mutableStateOf(InitialDestinationState.Loading)
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.mainAuthUiState.onEach { authUiState = it }.collect { state ->
+                viewModel.initialDestinationState.onEach { authUiState = it }.collect { state ->
                     trace("posMainAuthState") {
+                        splashScreen.setKeepOnScreenCondition {
+                            state == InitialDestinationState.Loading
+                        }
                         when (state) {
-                            is MainAuthUiState.LoginByAdmin,
-                            is MainAuthUiState.LoginByAdminEmployee,
-                            -> {
+                            is InitialDestinationState.LoginByAdmin,
+                            is InitialDestinationState.LoginByAdminEmployee,
+                                -> {
                                 SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
                             }
 
-                            is MainAuthUiState.ErrorLogin -> {
-                                moveToSignInActivity(this@MainActivity)
+                            is InitialDestinationState.ErrorLogin -> {
+                                //  this@MainActivity.moveToSignInActivity()
                             }
 
-                            else -> {}
+                            else -> Unit
                         }
                     }
                 }
             }
         }
-        splashScreen.setKeepOnScreenCondition {
-            authUiState == MainAuthUiState.Loading
-        }
+
 
         enableEdgeToEdge()
         setContent {
@@ -114,13 +114,13 @@ class MainActivity : AppCompatActivity() {
             val appState =
                 rememberMainAppState(
                     networkMonitor = networkMonitor,
-                    mainAuthUiState = authUiState,
+                    initialDestinationState = authUiState,
                 )
             CompositionLocalProvider(
                 LocalAnalyticsHelper provides analyticsHelper,
             ) {
                 POSTheme {
-                    MainScreen(appState = appState)
+                    PosRootNavHost(appState = appState)
                 }
             }
         }

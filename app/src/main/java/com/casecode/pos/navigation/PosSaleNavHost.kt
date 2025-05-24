@@ -15,11 +15,14 @@
  */
 package com.casecode.pos.navigation
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import com.casecode.pos.feature.inventory.navigation.inventoryScreen
 import com.casecode.pos.feature.item.navigation.itemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
@@ -40,8 +43,8 @@ import com.casecode.pos.ui.MainAppState
 fun PosSaleNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
-    onSignOutClick: () -> Unit,
 ) {
+    val activity = LocalActivity.current
     NavHost(
         navController = appState.navController,
         startDestination = SaleRoute,
@@ -49,23 +52,7 @@ fun PosSaleNavHost(
     ) {
         saleScreen {
             appState.navController.navigateToItemsGraph(
-                navOptions {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
-                    popUpTo(
-                        appState.navController.graph
-                            .findStartDestination()
-                            .id,
-                    ) {
-                        saveState = true
-                    }
-                    // Avoid multiple copies of the same destination when
-                    // reselecting the same item
-                    launchSingleTop = true
-                    // Restore state when reselecting a previously selected item
-                    restoreState = true
-                },
+                defaultNavOptions(appState.navController.graph.findStartDestination().id)
             )
         }
         reportsScreen(onSalesReportClick = {}, onInventoryReportClick = {})
@@ -92,7 +79,9 @@ fun PosSaleNavHost(
             },
         )
         signOutDialog(
-            onSignOut = onSignOutClick,
+            onSignOut = {
+               // activity?.moveToSignInActivity()
+            },
             onDismiss = appState.navController::popBackStack,
         )
         profileScreen { appState.navController.popBackStack() }
