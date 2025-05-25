@@ -11,6 +11,8 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.plugin.compose")
+                apply("org.jetbrains.kotlin.plugin.serialization")
+
             }
 
             val extension = extensions.getByType<ApplicationExtension>()
