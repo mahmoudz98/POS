@@ -106,10 +106,7 @@ fun SalesReportDetailsScreen(
                 R.string.feature_sales_report_print_action_text,
             ),
             actionIcon = PosIcons.Print,
-            colors =
-            TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-            ),
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             onNavigationClick = { onBackClick() },
         )
         when (uiSalesReportDetails) {
