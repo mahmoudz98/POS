@@ -102,10 +102,8 @@ fun ProfileScreen(
             stringResource(
                 id = com.casecode.pos.core.ui.R.string.core_ui_dialog_cancel_button_text,
             ),
-            colors =
-            TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-            ),
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+
             onNavigationClick = { onBackClick() },
         )
         if (uiState.isLoading) {
