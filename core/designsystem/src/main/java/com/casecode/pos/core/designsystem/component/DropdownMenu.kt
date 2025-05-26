@@ -105,7 +105,7 @@ fun PosExposeDropdownMenuBox(
     items: List<String>,
     onClickItem: (String) -> Unit,
     label: String,
-    menuAnchorType:ExposedDropdownMenuAnchorType = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
+    menuAnchorType: ExposedDropdownMenuAnchorType = ExposedDropdownMenuAnchorType.PrimaryNotEditable,
     readOnly: Boolean = false,
     keyboardOption: KeyboardOptions = KeyboardOptions.Default,
     onKeyboardAction: () -> Unit,
