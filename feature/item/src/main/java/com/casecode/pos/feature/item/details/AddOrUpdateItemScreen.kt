@@ -51,9 +51,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -73,7 +73,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -194,9 +193,8 @@ fun AddOrUpdateItemScreen(
                 },
                 navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = null,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+
                 action = {
                     PosTextButton(
                         onClick = { onSaveTriggered() },
@@ -274,7 +272,7 @@ fun AddOrUpdateItemScreen(
                     currentText = itemInputState.category,
                     items = categories.toList(),
                     onClickItem = itemInputState::onCategoryChange,
-                    menuAnchorType = MenuAnchorType.PrimaryEditable,
+                    menuAnchorType = ExposedDropdownMenuAnchorType.PrimaryEditable,
                     readOnly = false,
                     keyboardOption =
                     KeyboardOptions(
@@ -383,9 +381,8 @@ private fun PriceItemContent(
     onPriceChange: (String) -> Unit,
     onCostPriceChange: (String) -> Unit,
 ) {
-    val configuration = LocalConfiguration.current
     val currencyVisualTransformation =
-        rememberCurrencyVisualTransformation(configuration.locales[0])
+        rememberCurrencyVisualTransformation()
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
