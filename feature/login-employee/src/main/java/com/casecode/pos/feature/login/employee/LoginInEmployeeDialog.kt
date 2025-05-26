@@ -38,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -51,7 +50,6 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
@@ -87,8 +85,8 @@ fun LoginInEmployeeDialog(
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onDismiss: () -> Unit,
 ) {
-    val isCompact = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT
-    val configuration = LocalConfiguration.current
+    val isCompact = windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
+
     val context = LocalContext.current
     val userAdmin = rememberSaveable { mutableStateOf("") }
     val name = rememberSaveable { mutableStateOf("") }
@@ -97,10 +95,9 @@ fun LoginInEmployeeDialog(
     val nameError = remember { mutableStateOf(false) }
     val passwordError = remember { mutableStateOf(false) }
     val snackState = remember { SnackbarHostState() }
-
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        modifier = modifier.widthIn(max = configuration.screenWidthDp.dp - 40.dp),
+        modifier = modifier.widthIn(max = windowSizeClass.minWidthDp.dp - 40.dp),
         onDismissRequest = { onDismiss() },
         title = {
             Text(
