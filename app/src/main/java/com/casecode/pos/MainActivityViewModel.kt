@@ -47,7 +47,6 @@ class MainActivityViewModel @Inject constructor(authRepository: AuthRepository) 
         }.stateInWhileSubscribed(InitialDestinationState.Loading)
 }
 
-
 sealed interface InitialDestinationState {
     data object Loading : InitialDestinationState
 
