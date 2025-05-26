@@ -15,7 +15,6 @@
  */
 package com.casecode.pos.feature.sale
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -47,13 +46,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -77,7 +76,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
@@ -167,9 +165,9 @@ internal fun RowScope.SaleContentLandscape(
             PosLoadingWheel(
                 contentDesc = "SaleLoading",
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterVertically),
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically),
             )
         }
 
@@ -214,16 +212,16 @@ internal fun SectionSaleItems(
         modifier = modifier,
         visible = hasItemsSale,
         enter =
-            slideInVertically(initialOffsetY = { -40 }) +
-                expandVertically(expandFrom = Alignment.Top) +
-                scaleIn(
-                    transformOrigin = TransformOrigin(0.5f, 0f),
-                ) + fadeIn(initialAlpha = 0.3f),
+        slideInVertically(initialOffsetY = { -40 }) +
+            expandVertically(expandFrom = Alignment.Top) +
+            scaleIn(
+                transformOrigin = TransformOrigin(0.5f, 0f),
+            ) + fadeIn(initialAlpha = 0.3f),
         exit =
-            slideOutVertically() + shrinkVertically() + fadeOut() +
-                scaleOut(
-                    targetScale = 1.2f,
-                ),
+        slideOutVertically() + shrinkVertically() + fadeOut() +
+            scaleOut(
+                targetScale = 1.2f,
+            ),
     ) {
         Row(
             Modifier.fillMaxWidth(),
@@ -235,28 +233,28 @@ internal fun SectionSaleItems(
                 onValueChange = { onAmountChanged(it) },
                 label = stringResource(R.string.feature_sale_enter_amount_hint),
                 supportingText =
+                stringResource(
+                    R.string.feature_sale_total_price_text,
+                    totalSaleItems.toBigDecimal(),
+                ) +
                     stringResource(
-                        R.string.feature_sale_total_price_text,
-                        totalSaleItems.toBigDecimal(),
-                    ) +
-                        stringResource(
-                            R.string.feature_sale_sale_rest_amount_text,
-                            restOfAmount.toBigDecimal(),
-                        ),
+                        R.string.feature_sale_sale_rest_amount_text,
+                        restOfAmount.toBigDecimal(),
+                    ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(0.7f),
+                Modifier
+                    .fillMaxWidth()
+                    .weight(0.7f),
             )
             PosOutlinedButton(
                 onClick = onSaveInvoice,
                 modifier =
-                    Modifier
-                        .padding(start = 4.dp)
-                        .fillMaxWidth()
-                        .weight(0.3f)
-                        .align(Alignment.CenterVertically),
+                Modifier
+                    .padding(start = 4.dp)
+                    .fillMaxWidth()
+                    .weight(0.3f)
+                    .align(Alignment.CenterVertically),
             ) {
                 Text(stringResource(R.string.feature_sale_button_text))
             }
@@ -294,9 +292,13 @@ internal fun ColumnScope.SectionCartItems(
 }
 
 @Composable
-fun isExpended(windowSizeClass: WindowSizeClass, configuration: Configuration): Boolean =
-    windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED ||
-        configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+fun isExpended(windowSizeClass: WindowSizeClass): Boolean =
+    windowSizeClass.isWidthAtLeastBreakpoint(
+        WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND,
+    ) ||
+        windowSizeClass.isHeightAtLeastBreakpoint(
+            WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND,
+        )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -323,18 +325,18 @@ fun ExposedDropdownMenuBoxSearch(
             onValueChange = onSearchQueryChanged,
             label = stringResource(R.string.feature_sale_sale_search_hint),
             modifier =
-                Modifier
-                    .menuAnchor(MenuAnchorType.PrimaryEditable)
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-                    .onKeyEvent {
-                        if (it.key == Key.Enter) {
-                            keyboardController?.hide()
-                            true
-                        } else {
-                            false
-                        }
-                    },
+            Modifier
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
+                .onKeyEvent {
+                    if (it.key == Key.Enter) {
+                        keyboardController?.hide()
+                        true
+                    } else {
+                        false
+                    }
+                },
             trailingIcon = {
                 if (searchQuery.isNotEmpty()) {
                     IconButton(onClick = { onSearchQueryChanged("") }) {
@@ -348,9 +350,9 @@ fun ExposedDropdownMenuBoxSearch(
                         Icon(
                             PosIcons.QrCodeScanner,
                             contentDescription =
-                                stringResource(
-                                    R.string.feature_sale_scan_item_text,
-                                ),
+                            stringResource(
+                                R.string.feature_sale_scan_item_text,
+                            ),
                         )
                     }
                 }
@@ -423,9 +425,9 @@ fun ColumnScope.SaleItems(
     val scrollableState = rememberLazyListState()
     LazyColumn(
         modifier =
-            Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
+        Modifier
+            .weight(1f)
+            .padding(horizontal = 8.dp),
         contentPadding = PaddingValues(vertical = 8.dp),
         state = scrollableState,
     ) {
@@ -484,9 +486,9 @@ internal fun ItemSale(
                 Icon(
                     imageVector = PosIcons.Delete,
                     contentDescription =
-                        stringResource(
-                            R.string.feature_sale_dialog_delete_invoice_item_title,
-                        ),
+                    stringResource(
+                        R.string.feature_sale_dialog_delete_invoice_item_title,
+                    ),
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
             }
@@ -501,9 +503,9 @@ private fun ItemIcon(topicImageUrl: String, modifier: Modifier = Modifier) {
     if (topicImageUrl.isEmpty()) {
         Icon(
             modifier =
-                modifier
-                    .background(Color.Transparent)
-                    .padding(4.dp),
+            modifier
+                .background(Color.Transparent)
+                .padding(4.dp),
             imageVector = PosIcons.EmptyImage,
             contentDescription = null,
         )
