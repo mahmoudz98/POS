@@ -15,14 +15,10 @@
  */
 package com.casecode.pos.navigation
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.activity
 import androidx.navigation.compose.NavHost
-import androidx.navigation.navOptions
-import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import com.casecode.pos.feature.inventory.navigation.inventoryScreen
 import com.casecode.pos.feature.item.navigation.itemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
@@ -44,7 +40,6 @@ fun PosSaleNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
 ) {
-    val activity = LocalActivity.current
     NavHost(
         navController = appState.navController,
         startDestination = SaleRoute,
@@ -52,7 +47,7 @@ fun PosSaleNavHost(
     ) {
         saleScreen {
             appState.navController.navigateToItemsGraph(
-                defaultNavOptions(appState.navController.graph.findStartDestination().id)
+                defaultNavOptions(appState.navController.graph.findStartDestination().id),
             )
         }
         reportsScreen(onSalesReportClick = {}, onInventoryReportClick = {})
@@ -80,7 +75,7 @@ fun PosSaleNavHost(
         )
         signOutDialog(
             onSignOut = {
-               // activity?.moveToSignInActivity()
+                // activity?.moveToSignInActivity()
             },
             onDismiss = appState.navController::popBackStack,
         )

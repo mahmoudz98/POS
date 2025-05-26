@@ -44,7 +44,6 @@ import com.casecode.pos.feature.supplier.navigation.navigateToSupplier
 import com.casecode.pos.feature.supplier.navigation.supplierScreen
 import com.casecode.pos.ui.MainAppState
 
-
 @Composable
 fun PosMainNavHost(
     appState: MainAppState,
@@ -55,7 +54,6 @@ fun PosMainNavHost(
         startDestination = SaleRoute,
         modifier = modifier,
     ) {
-
         saleScreen {
             appState.navController.navigateToItemsGraph(
                 defaultNavOptions(appState.navController.graph.findStartDestination().id),
@@ -104,14 +102,13 @@ fun PosMainNavHost(
                     defaultSingleTopNavOptions(),
                 )
                 // activity?.moveToSignInActivity()
-                //onSignOutClick()
+                // onSignOutClick()
             },
             onDismiss = appState.navController::popBackStack,
         )
         profileScreen { appState.navController.popBackStack() }
     }
 }
-
 
 fun defaultNavOptions(idDestination: Int): NavOptions = navOptions {
     popUpTo(idDestination) {
@@ -121,9 +118,7 @@ fun defaultNavOptions(idDestination: Int): NavOptions = navOptions {
     restoreState = true
 }
 
-
 fun defaultSingleTopNavOptions(): NavOptions = navOptions {
-
     launchSingleTop = true
     restoreState = true
 }
