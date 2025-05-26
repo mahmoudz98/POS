@@ -40,10 +40,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -156,9 +156,7 @@ fun BillScreenContent(
                         titleRes = R.string.feature_bill_title_text,
                         navigationIcon = PosIcons.ArrowBack,
                         navigationIconContentDescription = null,
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            containerColor = Color.Transparent,
-                        ),
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                         action = {
                             IconButton(
                                 onClick = { onEditBill() },
@@ -317,7 +315,7 @@ fun HandlePdfExport(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BillTabs(pagerState: PagerState, coroutineScope: CoroutineScope) {
-    TabRow(
+    SecondaryTabRow(
         selectedTabIndex = pagerState.currentPage,
     ) {
         InvoicePagerTab.entries.forEachIndexed { index, tab ->
