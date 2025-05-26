@@ -58,7 +58,7 @@ fun rememberMainAppState(
     initialDestinationState,
 ) {
     MainAppState(
-        rootNavController =rootNavController,
+        rootNavController = rootNavController,
         navController = navController,
         coroutineScope = coroutineScope,
         networkMonitor = networkMonitor!!,

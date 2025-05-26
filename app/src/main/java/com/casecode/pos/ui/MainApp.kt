@@ -73,9 +73,9 @@ import kotlin.reflect.KClass
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun MainAppScreen(appState: MainAppState){
-
+fun MainAppScreen(appState: MainAppState) {
 }
+
 @SuppressLint("RestrictedApi")
 @Composable
 fun MainScreen(appState: MainAppState, modifier: Modifier = Modifier) {
@@ -124,11 +124,10 @@ internal fun MainApp(
         InitialDestinationState.Loading -> Unit
         InitialDestinationState.ErrorLogin -> {
             // TODO: handle when error login to sign out and login again
-            //activity?.moveToSignInActivity()
+            // activity?.moveToSignInActivity()
             appState.navController.navigateToSignIn(
                 defaultSingleTopNavOptions(),
             )
-
         }
 
         InitialDestinationState.LoginByAdmin, InitialDestinationState.LoginByAdminEmployee -> {
@@ -138,7 +137,7 @@ internal fun MainApp(
         InitialDestinationState.LoginBySaleEmployee -> {
             AdminScreens(appState, currentDestination, snackbarHostState, modifier)
             // TODO: test for sale screens is work correctly or what!
-           // SaleEmployeeScreens(appState, currentDestination, modifier, snackbarHostState)
+            // SaleEmployeeScreens(appState, currentDestination, modifier, snackbarHostState)
         }
 
         else -> {
@@ -172,7 +171,7 @@ fun AdminScreens(
             snackbarHostState = snackbarHostState,
             topLevelDestination = appState.currentAdminTopLevelDestination,
         ) {
-          PosMainNavHost(
+            PosMainNavHost(
                 appState = appState,
             )
         }
@@ -270,9 +269,7 @@ fun ScreenContent(
                     onActionClick = { appState.navigateToProfile() },
                     actionIconContentDescription = stringResource(R.string.feature_profile_title),
                     actionIcon = Icons.Default.Person,
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent,
-                    ),
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 )
             }
             Box(
