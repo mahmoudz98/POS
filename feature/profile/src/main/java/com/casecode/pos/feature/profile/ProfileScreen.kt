@@ -27,6 +27,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
@@ -119,7 +120,7 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(8.dp))
             val coroutineScope = rememberCoroutineScope()
 
-            TabRow(selectedTabIndex = pagerState.currentPage) {
+            SecondaryTabRow(selectedTabIndex = pagerState.currentPage) {
                 ProfileTab(
                     title = stringResource(
                         com.casecode.pos.core.ui.R.string.core_ui_menu_business_info_title,
