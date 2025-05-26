@@ -17,7 +17,6 @@ package com.casecode.pos.feature.signin
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,8 +36,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +46,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,6 +55,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.window.core.layout.WindowSizeClass
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
@@ -64,19 +63,17 @@ import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.data.LoginStateResult
 import com.casecode.pos.core.ui.DevicePreviews
-import com.casecode.pos.core.ui.utils.moveToMainActivity
-import com.casecode.pos.core.ui.utils.moveToStepperActivity
 import com.casecode.pos.feature.login.employee.LoginInEmployeeDialog
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import timber.log.Timber
-import java.util.Timer
 import com.casecode.pos.core.ui.R as uiR
 
 @Composable
-fun SignInScreen(viewModel: SignInViewModel = hiltViewModel(),
-                 onSignInSuccessNavigateToMain: () -> Unit,
-                 onSignInSuccessNavigateToStepper: () -> Unit,) {
+fun SignInScreen(
+    viewModel: SignInViewModel = hiltViewModel(),
+    onSignInSuccessNavigateToMain: () -> Unit,
+    onSignInSuccessNavigateToStepper: () -> Unit,
+) {
     val uiState by viewModel.signInUiState.collectAsStateWithLifecycle()
     val signUiState by viewModel.loginStateResult.collectAsStateWithLifecycle()
     var showDialogLoginEmployee by rememberSaveable { mutableStateOf(false) }
@@ -85,18 +82,16 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel(),
     LaunchedEffect(signUiState) {
         when (signUiState) {
             is LoginStateResult.NotCompleteBusiness -> {
-                //moveToStepperActivity(context)
                 onSignInSuccessNavigateToStepper()
             }
+
             is LoginStateResult.EmployeeLogin, is LoginStateResult.SuccessLoginAdmin -> {
-              //  moveToMainActivity(context)
                 onSignInSuccessNavigateToMain()
             }
+
             else -> Unit
         }
     }
-    Timber.e("uiState: $uiState")
-    Timber.e("Here I'm here")
     SignInScreen(
         uiState = uiState,
         onSignInCLick = {
@@ -131,18 +126,19 @@ fun SignInScreen(viewModel: SignInViewModel = hiltViewModel(),
 internal fun SignInScreen(
     modifier: Modifier = Modifier,
     uiState: SignInActivityUiState,
+    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onSignInCLick: () -> Unit,
     onLoginEmployeeClick: () -> Unit,
     onMessageShown: () -> Unit,
 ) {
     val snackState = remember { SnackbarHostState() }
-    val configuration = LocalConfiguration.current
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isCompact = windowSizeClass.isHeightAtLeastBreakpoint(
+        WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND,
+    )
 
     Scaffold(snackbarHost = { SnackbarHost(snackState) }) { innerPadding ->
         Box(
-            modifier =
-            modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
@@ -152,14 +148,13 @@ internal fun SignInScreen(
                 PosLoadingWheel("SignInLoading")
             }
             Column(
-                modifier =
-                modifier
+                modifier = modifier
                     .fillMaxSize()
                     .align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                if (!isLandscape) {
+                if (isCompact) {
                     Spacer(modifier = Modifier.height(64.dp))
                 }
                 Image(
@@ -177,7 +172,7 @@ internal fun SignInScreen(
                         style = MaterialTheme.typography.headlineLarge,
                         textAlign = TextAlign.Center,
                     )
-                    if (!isLandscape) {
+                    if (isCompact) {
                         Text(
                             text = stringResource(id = R.string.feature_signin_pos),
                             style = MaterialTheme.typography.labelMedium,
@@ -198,8 +193,7 @@ internal fun SignInScreen(
                     )
                     Spacer(modifier = modifier.height(16.dp))
                     PosOutlinedButton(
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentWidth(Alignment.CenterHorizontally),
                         onClick = onSignInCLick,
@@ -218,8 +212,7 @@ internal fun SignInScreen(
                     Spacer(modifier = modifier.height(8.dp))
 
                     PosTextButton(
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .fillMaxWidth()
                             .wrapContentWidth(Alignment.CenterHorizontally),
                         onClick = onLoginEmployeeClick,

@@ -28,8 +28,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -56,9 +54,11 @@ constructor(
     private val _signInUiState = MutableStateFlow(SignInActivityUiState())
     val signInUiState = _signInUiState.onStart {
         checkIfRegistrationAndBusinessCompleted()
-    }.stateIn(scope = viewModelScope,
+    }.stateIn(
+        scope = viewModelScope,
         initialValue = _signInUiState.value,
-        started = SharingStarted.WhileSubscribed(5_000))
+        started = SharingStarted.WhileSubscribed(5_000),
+    )
     val loginStateResult: StateFlow<LoginStateResult> =
         authRepository.loginData.stateIn(
             scope = viewModelScope,
