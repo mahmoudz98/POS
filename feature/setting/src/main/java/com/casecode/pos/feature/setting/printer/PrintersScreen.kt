@@ -94,9 +94,7 @@ fun PrinterScreen(
             navigationIcon = PosIcons.ArrowBack,
             navigationIconContentDescription = null,
             colors =
-            TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-            ),
+            TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             onNavigationClick = onBackClick,
         )
         Box(
