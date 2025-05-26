@@ -22,10 +22,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -113,9 +113,7 @@ internal fun AddBillPaymentScreen(
                 titleRes = R.string.feature_bill_add_payment_title,
                 navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = null,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 action = {
                     PosTextButton(
                         onClick = { onSaveTriggered() },
@@ -127,7 +125,11 @@ internal fun AddBillPaymentScreen(
     ) { innerPadding ->
         when (uiState) {
             is BillDetailUiState.Success -> {
-                Column(Modifier.padding(innerPadding).padding(16.dp)) {
+                Column(
+                    Modifier
+                        .padding(innerPadding)
+                        .padding(16.dp),
+                ) {
                     PosOutlinedTextField(
                         value = uiState.supplierInvoice.supplierName,
                         onValueChange = {},
@@ -184,7 +186,7 @@ internal fun AddBillPaymentScreen(
                             },
                             modifier =
                             Modifier
-                                .menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                                 .fillMaxWidth(),
                         )
                         ExposedDropdownMenu(
