@@ -126,10 +126,7 @@ fun DefaultTopAppBar(
         onNavigationClick = { onBackClick() },
         onActionClick = { onSearchClicked() },
         actionIconContentDescription = stringResource(R.string.feature_item_search_action_text),
-        colors =
-        TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent,
-        ),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
     )
 }
 
@@ -152,7 +149,9 @@ internal fun ItemsContent(
     Box(modifier = modifier.fillMaxWidth()) {
         val scrollableState = rememberLazyListState()
         LazyColumn(
-            modifier = modifier.padding(horizontal = 8.dp).clipToBounds(),
+            modifier = modifier
+                .padding(horizontal = 8.dp)
+                .clipToBounds(),
             contentPadding = PaddingValues(vertical = 8.dp),
             state = scrollableState,
         ) {
