@@ -26,7 +26,6 @@ import androidx.core.text.isDigitsOnly
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.Currency
-import java.util.Locale
 
 /**
  * Visual filter for currency values. Formats values without fractions
@@ -34,18 +33,19 @@ import java.util.Locale
  * based on the provided currency code and default Locale.
  * @param locale the ISO 4217 code of the currency
  */
-private class CurrencyVisualTransformation(
-    locale: Locale,
-) : VisualTransformation {
+private class CurrencyVisualTransformation() : VisualTransformation {
+    // Issue: fix error in the currency
     /**
      * Currency formatter. Uses default Locale but there is an option to set
      * any Locale we want e.g. NumberFormat.getCurrencyInstance(Locale.ENGLISH)
      */
     private val numberFormatter =
         NumberFormat.getCurrencyInstance().apply {
-            currency = Currency.getInstance(locale)
-            maximumFractionDigits = 0
+            // TODO: remove hardcode currency
+            currency = Currency.getInstance("EGP")
             maximumIntegerDigits = 9
+            maximumFractionDigits = currency?.defaultFractionDigits!!
+            minimumFractionDigits = currency?.defaultFractionDigits!!
         }
 
     override fun filter(text: AnnotatedString): TransformedText {
@@ -79,11 +79,12 @@ private class CurrencyVisualTransformation(
         }
         /**
          * Here is our TextField value transformation to formatted value.
-         * EditText operates on String so we have to change it to Int.
+         * EditText operates on String so we have to change it to Big decimal.
          * It's safe at this point because we eliminated cases where
          * value is empty or contains non-digits characters.
          */
-        val formattedText = numberFormatter.format(originalText.toInt())
+        val amount = originalText.toBigDecimal()
+        val formattedText = numberFormatter.format(amount)
         /**
          * CurrencyOffsetMapping is where the magic happens. See you there :)
          */
@@ -102,13 +103,13 @@ private class CurrencyVisualTransformation(
  * so that's how you could deal with it by returning VisualTransformation.None
  */
 @Composable
-fun rememberCurrencyVisualTransformation(locale: Locale): VisualTransformation {
+fun rememberCurrencyVisualTransformation(): VisualTransformation {
     val inspectionMode = LocalInspectionMode.current
-    return remember(locale) {
+    return remember {
         if (inspectionMode) {
             VisualTransformation.None
         } else {
-            CurrencyVisualTransformation(locale)
+            CurrencyVisualTransformation()
         }
     }
 }
@@ -195,7 +196,7 @@ class CurrencyOffsetMapping(
             Timber.e(e)
             return 0
         } finally {
-            Timber.e("indexes = ${indexes.map { it.toString() }}")
+            Timber.i("indexes = ${indexes.map { it.toString() }}")
         }
     }
 
