@@ -35,6 +35,7 @@ import java.util.Currency
  */
 private class CurrencyVisualTransformation() : VisualTransformation {
     // Issue: fix error in the currency
+
     /**
      * Currency formatter. Uses default Locale but there is an option to set
      * any Locale we want e.g. NumberFormat.getCurrencyInstance(Locale.ENGLISH)
