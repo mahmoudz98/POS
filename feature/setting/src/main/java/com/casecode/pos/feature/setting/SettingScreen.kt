@@ -73,10 +73,9 @@ fun SettingScreen(
     onSignOutClick: () -> Unit,
 ) {
     Box(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
     ) {
         Column(modifier = Modifier.align(Alignment.TopStart)) {
             SectionLanguages()

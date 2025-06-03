@@ -160,7 +160,7 @@ internal fun SaleScreen(
             .fillMaxSize()
             .recalculateWindowInsets(),
     ) {
-        if (!isExpended(windowSizeClass.windowSizeClass, configuration)) {
+        if (!isExpended(windowSizeClass.windowSizeClass)) {
             Column(
                 modifier =
                 modifier

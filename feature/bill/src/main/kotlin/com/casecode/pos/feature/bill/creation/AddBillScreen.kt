@@ -167,9 +167,7 @@ fun AddBillScreen(
                 titleRes = R.string.feature_bill_add_bill_title_text,
                 navigationIcon = PosIcons.ArrowBack,
                 navigationIconContentDescription = null,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 action = {
                     PosTextButton(
                         onClick = { onSaveTriggered() },

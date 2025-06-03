@@ -24,27 +24,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.tracing.trace
 import com.casecode.pos.core.analytics.AnalyticsHelper
 import com.casecode.pos.core.analytics.LocalAnalyticsHelper
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.NetworkMonitor
-import com.casecode.pos.core.ui.utils.moveToSignInActivity
 import com.casecode.pos.sync.initializers.SyncSupplierInvoicesOverdue
-import com.casecode.pos.ui.MainScreen
+import com.casecode.pos.ui.MainApp
 import com.casecode.pos.ui.rememberMainAppState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -67,60 +60,48 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        var authUiState: MainAuthUiState by mutableStateOf(MainAuthUiState.Loading)
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.mainAuthUiState.onEach { authUiState = it }.collect { state ->
-                    trace("posMainAuthState") {
-                        when (state) {
-                            is MainAuthUiState.LoginByAdmin,
-                            is MainAuthUiState.LoginByAdminEmployee,
-                            -> {
-                                SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
-                            }
-
-                            is MainAuthUiState.ErrorLogin -> {
-                                moveToSignInActivity(this@MainActivity)
-                            }
-
-                            else -> {}
-                        }
-                    }
-                }
-            }
-        }
         splashScreen.setKeepOnScreenCondition {
-            authUiState == MainAuthUiState.Loading
+            viewModel.initialDestinationState.value.shouldKeepSplashScreen()
         }
-
-        enableEdgeToEdge()
         setContent {
             val darkTheme = isSystemInDarkTheme()
-            DisposableEffect(darkTheme) {
+            LaunchedEffect(darkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle =
-                        SystemBarStyle.auto(
-                            Color.TRANSPARENT,
-                            Color.TRANSPARENT,
-                        ) { darkTheme },
+                    SystemBarStyle.auto(
+                        Color.TRANSPARENT,
+                        Color.TRANSPARENT,
+                    ) { darkTheme },
                     navigationBarStyle =
-                        SystemBarStyle.auto(
-                            lightScrim,
-                            darkScrim,
-                        ) { darkTheme },
+                    SystemBarStyle.auto(
+                        lightScrim,
+                        darkScrim,
+                    ) { darkTheme },
                 )
-                onDispose {}
+            }
+            val currentAuthUiState by viewModel.initialDestinationState.collectAsStateWithLifecycle()
+            LaunchedEffect(currentAuthUiState) {
+                trace("posMainAuthStateSideEffects") {
+                    if (currentAuthUiState is InitialDestinationState.LoginByAdmin ||
+                        currentAuthUiState is InitialDestinationState.LoginByAdminEmployee ||
+                        currentAuthUiState is InitialDestinationState.LoginBySaleEmployee
+                    ) {
+                        SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
+                    }
+                }
             }
             val appState =
                 rememberMainAppState(
                     networkMonitor = networkMonitor,
-                    mainAuthUiState = authUiState,
+                    initialDestinationState = currentAuthUiState,
                 )
             CompositionLocalProvider(
                 LocalAnalyticsHelper provides analyticsHelper,
             ) {
-                POSTheme {
-                    MainScreen(appState = appState)
+                if (currentAuthUiState != InitialDestinationState.Loading) {
+                    POSTheme {
+                        MainApp(appState = appState)
+                    }
                 }
             }
         }

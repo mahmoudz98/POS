@@ -27,35 +27,39 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(authRepository: AuthRepository) : ViewModel() {
-    val mainAuthUiState: StateFlow<MainAuthUiState> =
+    val initialDestinationState: StateFlow<InitialDestinationState> =
         authRepository.loginData.map {
             when (it) {
-                LoginStateResult.Loading -> MainAuthUiState.Loading
+                LoginStateResult.Loading -> InitialDestinationState.Loading
+                LoginStateResult.Error, LoginStateResult.NotSignIn -> InitialDestinationState.ErrorLogin
+                is LoginStateResult.NotCompleteBusiness -> InitialDestinationState.NotCompleteBusiness
+
                 is LoginStateResult.EmployeeLogin -> {
                     when (it.employee.permission) {
-                        Permission.ADMIN -> MainAuthUiState.LoginByAdminEmployee
-                        Permission.SALE -> MainAuthUiState.LoginBySaleEmployee
-                        Permission.NONE -> MainAuthUiState.ErrorLogin
+                        Permission.ADMIN -> InitialDestinationState.LoginByAdminEmployee
+                        Permission.SALE -> InitialDestinationState.LoginBySaleEmployee
+                        Permission.NONE -> InitialDestinationState.ErrorLogin
                     }
                 }
 
-                LoginStateResult.Error, LoginStateResult.NotSignIn -> MainAuthUiState.ErrorLogin
-                is LoginStateResult.NotCompleteBusiness -> MainAuthUiState.ErrorLogin
-                is LoginStateResult.SuccessLoginAdmin -> MainAuthUiState.LoginByAdmin
+                is LoginStateResult.SuccessLoginAdmin -> InitialDestinationState.LoginByAdmin
             }
-        }.stateInWhileSubscribed(MainAuthUiState.Loading)
+        }.stateInWhileSubscribed(InitialDestinationState.Loading)
 }
 
-sealed interface MainAuthUiState {
-    data object Loading : MainAuthUiState
+sealed interface InitialDestinationState {
+    data object Loading : InitialDestinationState
 
-    data object LoginByAdmin : MainAuthUiState
+    data object ErrorLogin : InitialDestinationState
+    data object NotCompleteBusiness : InitialDestinationState
 
-    data object LoginByAdminEmployee : MainAuthUiState
+    data object LoginByAdmin : InitialDestinationState
 
-    data object LoginBySaleEmployee : MainAuthUiState
+    data object LoginByAdminEmployee : InitialDestinationState
 
-    data object LoginByNoneEmployee : MainAuthUiState
+    data object LoginBySaleEmployee : InitialDestinationState
 
-    data object ErrorLogin : MainAuthUiState
+    data object LoginByNoneEmployee : InitialDestinationState
+
+    fun shouldKeepSplashScreen() = this is Loading
 }

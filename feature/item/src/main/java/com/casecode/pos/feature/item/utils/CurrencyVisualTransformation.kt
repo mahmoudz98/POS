@@ -26,7 +26,6 @@ import androidx.core.text.isDigitsOnly
 import timber.log.Timber
 import java.text.NumberFormat
 import java.util.Currency
-import java.util.Locale
 
 /**
  * Visual filter for currency values. Formats values without fractions
@@ -34,10 +33,9 @@ import java.util.Locale
  * based on the provided currency code and default Locale.
  * @param locale the ISO 4217 code of the currency
  */
-private class CurrencyVisualTransformation(
-    locale: Locale,
-) : VisualTransformation {
-    // Issue: fix error in the currency 
+private class CurrencyVisualTransformation() : VisualTransformation {
+    // Issue: fix error in the currency
+
     /**
      * Currency formatter. Uses default Locale but there is an option to set
      * any Locale we want e.g. NumberFormat.getCurrencyInstance(Locale.ENGLISH)
@@ -106,13 +104,13 @@ private class CurrencyVisualTransformation(
  * so that's how you could deal with it by returning VisualTransformation.None
  */
 @Composable
-fun rememberCurrencyVisualTransformation(locale: Locale): VisualTransformation {
+fun rememberCurrencyVisualTransformation(): VisualTransformation {
     val inspectionMode = LocalInspectionMode.current
-    return remember(locale) {
+    return remember {
         if (inspectionMode) {
             VisualTransformation.None
         } else {
-            CurrencyVisualTransformation(locale)
+            CurrencyVisualTransformation()
         }
     }
 }

@@ -58,19 +58,19 @@ import com.casecode.pos.core.ui.R.string as uiString
 @Composable
 fun StepperScreen(
     viewModel: StepperBusinessViewModel = hiltViewModel(),
-    onMoveToMainActivity: () -> Unit,
-    onMoveToSignInActivity: () -> Unit,
+    onStepperCompleteToHome: () -> Unit,
+    onBackToSignIn: () -> Unit,
 ) {
-    val pagerState = rememberPagerState(pageCount = { 4 })
+    val pagerState = rememberPagerState(pageCount = { TOTAL_STEP_COUNT })
     val coroutineScope = rememberCoroutineScope()
     var showClosingDialog by remember { mutableStateOf(false) }
     val userMessage by viewModel.userMessage.collectAsStateWithLifecycle()
     val buttonStepState by viewModel.buttonStepState.collectAsStateWithLifecycle()
 
     BackHandler {
-        if (pagerState.currentPage > 0) {
+        if (pagerState.currentPage > BUSINESS_INFO_STEP) {
             coroutineScope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                pagerState.animateScrollToPage(pagerState.currentPage.unaryMinus())
             }
         } else {
             showClosingDialog = true
@@ -83,7 +83,7 @@ fun StepperScreen(
                     val signOutJob = viewModel.signOut()
                     signOutJob.join()
                     if (signOutJob.isCompleted) {
-                        onMoveToSignInActivity()
+                        onBackToSignIn()
                     }
                 }
                 showClosingDialog = false
@@ -97,18 +97,18 @@ fun StepperScreen(
     LaunchedEffect(buttonStepState) {
         if (buttonStepState.buttonNextStep) {
             coroutineScope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                pagerState.animateScrollToPage(pagerState.currentPage.unaryPlus())
             }
             viewModel.restNextStep()
         }
         if (buttonStepState.buttonPreviousStep) {
             coroutineScope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                pagerState.animateScrollToPage(pagerState.currentPage.unaryMinus())
             }
             viewModel.restPreviousStep()
         }
         if (buttonStepState.buttonCompletedSteps) {
-            onMoveToMainActivity()
+            onStepperCompleteToHome()
         }
     }
 
@@ -118,7 +118,7 @@ fun StepperScreen(
 @Composable
 private fun StepperScreen(
     userMessage: Int?,
-    pagerState: PagerState = rememberPagerState(pageCount = { 4 }),
+    pagerState: PagerState,
     viewModel: StepperBusinessViewModel,
 ) {
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -210,3 +210,4 @@ private const val BUSINESS_INFO_STEP = 0
 private const val BRANCHES_STEP = 1
 private const val SUBSCRIPTION_STEP = 2
 private const val EMPLOYEES_STEP = 3
+private const val TOTAL_STEP_COUNT = 4

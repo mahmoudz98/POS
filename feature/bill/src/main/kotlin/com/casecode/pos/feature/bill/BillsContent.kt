@@ -126,10 +126,8 @@ fun DefaultTopAppBar(
         actionIcon = PosIcons.Search,
         onNavigationClick = { onBackClick() },
         onActionClick = { onSearchClicked() },
-        colors =
-        TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.Transparent,
-        ),
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+
     )
 }
 

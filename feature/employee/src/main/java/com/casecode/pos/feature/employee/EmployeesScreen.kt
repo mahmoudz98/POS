@@ -143,9 +143,7 @@ fun EmployeesScreen(
                 onActionClick = { onActionClick() },
                 actionIconContentDescription = null,
                 actionIcon = PosIcons.UserAdman,
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             )
             when (uiState.resourceEmployees) {
                 is Resource.Empty -> {

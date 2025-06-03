@@ -15,101 +15,140 @@
  */
 package com.casecode.pos.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.casecode.pos.feature.bill.navigation.billsGraph
-import com.casecode.pos.feature.bill.navigation.navigateToBillsGraph
-import com.casecode.pos.feature.employee.employeesScreen
-import com.casecode.pos.feature.employee.navigateToEmployees
-import com.casecode.pos.feature.inventory.navigation.inventoryScreen
-import com.casecode.pos.feature.item.navigation.itemsGraph
-import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
-import com.casecode.pos.feature.profile.profileScreen
-import com.casecode.pos.feature.purchase.navigation.purchaseScreen
-import com.casecode.pos.feature.sale.navigation.SaleRoute
-import com.casecode.pos.feature.sale.navigation.saleScreen
-import com.casecode.pos.feature.sales.report.navigateToSalesReport
-import com.casecode.pos.feature.sales.report.navigateToSalesReportDetails
-import com.casecode.pos.feature.sales.report.salesReportGraph
-import com.casecode.pos.feature.setting.settingsGraph
-import com.casecode.pos.feature.signout.navigateToSignOut
-import com.casecode.pos.feature.signout.signOutDialog
-import com.casecode.pos.feature.statistics.reportsScreen
-import com.casecode.pos.feature.supplier.navigation.navigateToSupplier
-import com.casecode.pos.feature.supplier.navigation.supplierScreen
+import com.casecode.pos.InitialDestinationState
+import com.casecode.pos.feature.signin.navigation.SignInRoute
+import com.casecode.pos.feature.signin.navigation.navigateToSignIn
+import com.casecode.pos.feature.signin.navigation.signInScreen
+import com.casecode.pos.feature.stepper.navigation.StepperRoute
+import com.casecode.pos.feature.stepper.navigation.navigateToStepper
+import com.casecode.pos.feature.stepper.navigation.stepperScreen
 import com.casecode.pos.ui.MainAppState
 
 @Composable
-fun PosMainNavHost(
-    appState: MainAppState,
-    modifier: Modifier = Modifier,
-    onSignOutClick: () -> Unit,
-) {
+fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
+    val navController = appState.navController
     NavHost(
-        navController = appState.navController,
-        startDestination = SaleRoute,
-        modifier = modifier,
+        navController = navController,
+        startDestination = startGraphDestination,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
     ) {
-        saleScreen {
-            appState.navController.navigateToItemsGraph(
-                defaultNavOptions(appState.navController.graph.findStartDestination().id),
-            )
-        }
-        // TODO: invoke navigate to inventory report screen
-        reportsScreen(
-            onSalesReportClick = { appState.navController.navigateToSalesReport() },
-            onInventoryReportClick = {},
-        )
-        salesReportGraph(
-            navController = appState.navController,
-            onSalesReportDetailsClick = {
-                appState.navController.navigateToSalesReportDetails()
+        signInScreen(
+            onSignInSuccessNavigateToMain = {
+                navController.navigateToMainGraph(
+                    navOptions {
+                        popUpTo(SignInRoute) { inclusive = true }
+                        launchSingleTop = true
+                    },
+                )
+            },
+            onSignInSuccessNavigateToStepper = {
+                navController.navigateToStepper(
+                    navOptions {
+                        popUpTo(SignInRoute) { inclusive = true }
+                        launchSingleTop = true
+                    },
+                )
+            },
+            enterTransition = {
+                when (targetState.destination.route) {
+                    StepperRoute.toString() -> slideInHorizontally(
+                        initialOffsetX = { -it },
+                        animationSpec = defaultTween(),
+                    )
+
+                    else -> fadeIn(animationSpec = slowTween())
+                }
+            },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    StepperRoute.toString() -> slideOutHorizontally(
+                        targetOffsetX = { it },
+                        animationSpec = defaultTween(),
+                    )
+
+                    else -> contextShiftExit()
+                }
             },
         )
-        inventoryScreen(
-            onItemsScreenClick = {
-                appState.navController.navigateToItemsGraph()
+
+        stepperScreen(
+            onStepperCompleteToHome = {
+                navController.navigateToMainGraph(
+                    navOptions {
+                        popUpTo(StepperRoute) { inclusive = true }
+                        launchSingleTop = true
+                    },
+                )
+            },
+            onBackToSignIn = {
+                navController.navigateToSignIn(
+                    navOptions {
+                        popUpTo(StepperRoute) { inclusive = true }
+                        launchSingleTop = true
+                    },
+                )
+            },
+            enterTransition = { flowTransition() },
+            exitTransition = {
+                when (targetState.destination.route) {
+                    SignInRoute.toString() -> slideOutVertically(
+                        targetOffsetY = { it },
+                        animationSpec = defaultTween(),
+                    )
+
+                    else -> fadeOut(animationSpec = slowTween())
+                }
             },
         )
-        itemsGraph(appState.navController)
-        supplierScreen { appState.navController.popBackStack() }
-        purchaseScreen(
-            onSupplierScreenClick = {
-                appState.navController.navigateToSupplier()
-            },
-            onBillsScreenClick = {
-                appState.navController.navigateToBillsGraph()
-            },
-        )
-        billsGraph(appState.navController)
-        settingsGraph(
-            appState.navController,
-            onEmployeesScreenClick = {
-                appState.navController.navigateToEmployees()
-            },
-            onSignOutClick = {
-                appState.navController.navigateToSignOut()
+
+        homeAdminGraph(
+            appState = appState,
+            enterTransition = { contextShiftEnter() },
+            exitTransition = {
+                if (targetState.destination.route == SignInRoute.toString()) {
+                    null
+                } else {
+                    contextShiftExit()
+                }
             },
         )
-        employeesScreen()
-        signOutDialog(
-            onSignOut = {
-                onSignOutClick()
+        homeSaleGraph(
+            appState = appState,
+            enterTransition = { contextShiftEnter() },
+            exitTransition = {
+                if (targetState.destination.route == SignInRoute.toString()) {
+                    null
+                } else {
+                    contextShiftExit()
+                }
             },
-            onDismiss = appState.navController::popBackStack,
         )
-        profileScreen { appState.navController.popBackStack() }
     }
 }
 
-private fun defaultNavOptions(idDestination: Int): NavOptions = navOptions {
-    popUpTo(idDestination) {
-        saveState = true
+fun InitialDestinationState.determineStartGraph(): Any {
+    return when (this) {
+        InitialDestinationState.Loading -> SignInRoute
+        InitialDestinationState.ErrorLogin,
+        InitialDestinationState.LoginByNoneEmployee,
+        -> SignInRoute
+
+        is InitialDestinationState.NotCompleteBusiness -> StepperRoute
+        is InitialDestinationState.LoginByAdmin,
+        is InitialDestinationState.LoginByAdminEmployee,
+        -> AdminHomeGraphRoute
+
+        is InitialDestinationState.LoginBySaleEmployee -> SaleHomeGraphRoute
     }
-    launchSingleTop = true
-    restoreState = true
 }

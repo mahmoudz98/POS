@@ -32,7 +32,7 @@ class SignInActivityViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     // Subject under test
-    private lateinit var viewModel: SignInActivityViewModel
+    private lateinit var viewModel: SignInViewModel
     private val networkMonitor = TestNetworkMonitor()
     private val accountService = TestAccountRepository()
     private val authService = TestAuthRepository()
@@ -40,7 +40,7 @@ class SignInActivityViewModelTest {
     @Before
     fun init() {
         viewModel =
-            SignInActivityViewModel(
+            SignInViewModel(
                 networkMonitor,
                 accountService,
                 authService,

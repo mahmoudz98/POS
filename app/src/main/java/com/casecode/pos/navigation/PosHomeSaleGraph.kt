@@ -15,11 +15,14 @@
  */
 package com.casecode.pos.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.navOptions
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.navigation
 import com.casecode.pos.feature.inventory.navigation.inventoryScreen
 import com.casecode.pos.feature.item.navigation.itemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
@@ -35,37 +38,24 @@ import com.casecode.pos.feature.signout.signOutDialog
 import com.casecode.pos.feature.statistics.reportsScreen
 import com.casecode.pos.feature.supplier.navigation.supplierScreen
 import com.casecode.pos.ui.MainAppState
+import kotlinx.serialization.Serializable
 
-@Composable
-fun PosSaleNavHost(
+@Serializable
+object SaleHomeGraphRoute
+
+fun NavGraphBuilder.homeSaleGraph(
     appState: MainAppState,
-    modifier: Modifier = Modifier,
-    onSignOutClick: () -> Unit,
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
 ) {
-    NavHost(
-        navController = appState.navController,
+    navigation<SaleHomeGraphRoute>(
         startDestination = SaleRoute,
-        modifier = modifier,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
     ) {
         saleScreen {
             appState.navController.navigateToItemsGraph(
-                navOptions {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
-                    popUpTo(
-                        appState.navController.graph
-                            .findStartDestination()
-                            .id,
-                    ) {
-                        saveState = true
-                    }
-                    // Avoid multiple copies of the same destination when
-                    // reselecting the same item
-                    launchSingleTop = true
-                    // Restore state when reselecting a previously selected item
-                    restoreState = true
-                },
+                defaultNavOptions(),
             )
         }
         reportsScreen(onSalesReportClick = {}, onInventoryReportClick = {})
@@ -92,9 +82,14 @@ fun PosSaleNavHost(
             },
         )
         signOutDialog(
-            onSignOut = onSignOutClick,
+            onSignOut = {
+                appState.signOut()
+            },
             onDismiss = appState.navController::popBackStack,
         )
         profileScreen { appState.navController.popBackStack() }
     }
 }
+
+fun NavController.navigateToHomeSaleGraph(navOptions: NavOptions? = null) =
+    navigate(SaleHomeGraphRoute, navOptions)

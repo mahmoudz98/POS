@@ -164,9 +164,7 @@ fun SalesReportScreen(
                 actionIconContentDescription = null,
                 actionIcon = PosIcons.Calender,
                 colors =
-                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.Transparent,
-                ),
+                TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 onNavigationClick = { onBackClick() },
             )
         },

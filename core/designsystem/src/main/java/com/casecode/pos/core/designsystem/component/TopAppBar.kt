@@ -144,7 +144,7 @@ fun PosTopAppBar(
     actionIcon: ImageVector? = null,
     actionIconContentDescription: String? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     onNavigationClick: () -> Unit = {},
     onActionClick: () -> Unit = {},
 ) {
@@ -186,7 +186,7 @@ fun PosTopAppBar(
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     onNavigationClick: () -> Unit = {},
     action: @Composable RowScope.() -> Unit = {},
 ) {

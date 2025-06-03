@@ -35,7 +35,7 @@ enum class AdminTopLevelDestination(
     override val titleTextId: Int,
     override val route: KClass<*>,
 ) : TopLevelDestination {
-    POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
+    SALE(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
     REPORTS(
         PosIcons.Reports,
         PosIcons.Reports,
@@ -48,7 +48,7 @@ enum class AdminTopLevelDestination(
         inventoryR.string.feature_inventory_title,
         InventoryRoute::class,
     ),
-    PURCHASES(
+    PURCHASE(
         PosIcons.Purchase,
         PosIcons.PurchaseBorder,
         purchaseR.string.feature_purchase_title,
