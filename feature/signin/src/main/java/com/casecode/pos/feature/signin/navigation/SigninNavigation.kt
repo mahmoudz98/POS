@@ -15,6 +15,10 @@
  */
 package com.casecode.pos.feature.signin.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -28,8 +32,13 @@ data object SignInRoute
 fun NavGraphBuilder.signInScreen(
     onSignInSuccessNavigateToMain: () -> Unit,
     onSignInSuccessNavigateToStepper: () -> Unit,
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
 ) {
-    composable<SignInRoute> {
+    composable<SignInRoute>(
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
+    ) {
         SignInScreen(
             onSignInSuccessNavigateToMain = onSignInSuccessNavigateToMain,
             onSignInSuccessNavigateToStepper = onSignInSuccessNavigateToStepper,
