@@ -34,7 +34,7 @@ enum class SaleTopLevelDestination(
     @StringRes override val titleTextId: Int,
     override val route: KClass<*>,
 ) : TopLevelDestination {
-    POS(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
+    SALE(PosIcons.Pos, PosIcons.Pos, R.string.pos, SaleRoute::class),
     REPORTS(
         PosIcons.Reports,
         PosIcons.Reports,
