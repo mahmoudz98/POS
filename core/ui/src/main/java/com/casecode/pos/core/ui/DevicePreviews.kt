@@ -35,7 +35,6 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(name = "tablet", device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480")
 @Preview(name = "Tablet - Landscape", device = TABLET, showSystemUi = true)
 @Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
-
 annotation class DevicePreviews
 
 @Preview(

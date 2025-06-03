@@ -15,6 +15,10 @@
  */
 package com.casecode.pos.feature.stepper.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -28,8 +32,13 @@ data object StepperRoute
 fun NavGraphBuilder.stepperScreen(
     onStepperCompleteToHome: () -> Unit,
     onBackToSignIn: () -> Unit,
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards EnterTransition?)? = null,
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards ExitTransition?)? = null,
 ) {
-    composable<StepperRoute> {
+    composable<StepperRoute>(
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
+    ) {
         StepperScreen(
             onStepperCompleteToHome = onStepperCompleteToHome,
             onBackToSignIn = onBackToSignIn,
