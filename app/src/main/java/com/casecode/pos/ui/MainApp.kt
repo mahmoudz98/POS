@@ -15,8 +15,6 @@
  */
 package com.casecode.pos.ui
 
-import android.annotation.SuppressLint
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -40,6 +38,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldValue
+import androidx.compose.material3.adaptive.navigationsuite.rememberNavigationSuiteScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,31 +54,28 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.casecode.pos.InitialDestinationState
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosGradientBackground
 import com.casecode.pos.core.designsystem.component.PosNavigationSuiteScaffold
-import com.casecode.pos.core.designsystem.component.PosNavigationSuiteScope
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.theme.GradientColors
 import com.casecode.pos.core.designsystem.theme.LocalGradientColors
 import com.casecode.pos.feature.profile.R
 import com.casecode.pos.feature.sale.navigation.SaleRoute
-import com.casecode.pos.feature.signin.navigation.navigateToSignIn
+import com.casecode.pos.navigation.AdminHomeGraphRoute
 import com.casecode.pos.navigation.PosMainNavHost
-import com.casecode.pos.navigation.PosSaleNavHost
-import com.casecode.pos.navigation.TopLevelDestination
-import com.casecode.pos.navigation.defaultSingleTopNavOptions
+import com.casecode.pos.navigation.SaleHomeGraphRoute
+import com.casecode.pos.navigation.determineStartGraph
 import kotlin.reflect.KClass
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
-fun MainAppScreen(appState: MainAppState) {
-}
+fun MainApp(
+    appState: MainAppState,
+    modifier: Modifier = Modifier,
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 
-@SuppressLint("RestrictedApi")
-@Composable
-fun MainScreen(appState: MainAppState, modifier: Modifier = Modifier) {
+) {
     val shouldShowGradientBackground =
         appState.currentDestination?.hasRoute(SaleRoute::class) == true
     PosBackground(modifier = modifier) {
@@ -104,193 +101,125 @@ fun MainScreen(appState: MainAppState, modifier: Modifier = Modifier) {
             MainApp(
                 appState = appState,
                 snackbarHostState = snackbarHostState,
+                windowAdaptiveInfo = windowAdaptiveInfo,
             )
         }
-    }
-}
-
-@Composable
-internal fun MainApp(
-    appState: MainAppState,
-    snackbarHostState: SnackbarHostState,
-    modifier: Modifier = Modifier,
-) {
-    // TODO: Change to use [PosScaffoldNavigation], when have custom layout with custom
-    val currentDestination = appState.currentDestination
-    val mainAuthUiState = appState.initialDestinationState
-    val activity = LocalActivity.current
-
-    when (mainAuthUiState) {
-        InitialDestinationState.Loading -> Unit
-        InitialDestinationState.ErrorLogin -> {
-            // TODO: handle when error login to sign out and login again
-            // activity?.moveToSignInActivity()
-            appState.navController.navigateToSignIn(
-                defaultSingleTopNavOptions(),
-            )
-        }
-
-        InitialDestinationState.LoginByAdmin, InitialDestinationState.LoginByAdminEmployee -> {
-            AdminScreens(appState, currentDestination, snackbarHostState, modifier)
-        }
-
-        InitialDestinationState.LoginBySaleEmployee -> {
-            AdminScreens(appState, currentDestination, snackbarHostState, modifier)
-            // TODO: test for sale screens is work correctly or what!
-            // SaleEmployeeScreens(appState, currentDestination, modifier, snackbarHostState)
-        }
-
-        else -> {
-            // TODO:handle with not permission for employee
-        }
-    }
-}
-
-@Composable
-fun AdminScreens(
-    appState: MainAppState,
-    currentDestination: NavDestination?,
-    snackbarHostState: SnackbarHostState,
-    modifier: Modifier,
-) {
-    val windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo()
-
-    PosNavigationSuiteScaffold(
-        navigationSuiteItems = {
-            navigationSuiteItems(
-                destinations = appState.topLevelDestinations,
-                currentDestination = currentDestination,
-                onDestinationClick = { appState.navigateToTopLevelDestination(it) },
-            )
-        },
-        windowAdaptiveInfo = windowAdaptiveInfo,
-    ) {
-        ScreenContent(
-            appState = appState,
-            modifier = modifier,
-            snackbarHostState = snackbarHostState,
-            topLevelDestination = appState.currentAdminTopLevelDestination,
-        ) {
-            PosMainNavHost(
-                appState = appState,
-            )
-        }
-    }
-}
-
-@Composable
-fun SaleEmployeeScreens(
-    appState: MainAppState,
-    currentDestination: NavDestination?,
-    modifier: Modifier,
-    snackbarHostState: SnackbarHostState,
-) {
-    val windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo()
-
-    PosNavigationSuiteScaffold(
-        navigationSuiteItems = {
-            navigationSuiteItems(
-                destinations = appState.saleTopLevelDestinations,
-                currentDestination = currentDestination,
-                onDestinationClick = { appState.navigateToTopLevelDestination(it) },
-            )
-        },
-        windowAdaptiveInfo = windowAdaptiveInfo,
-    ) {
-        ScreenContent(
-            appState = appState,
-            modifier = modifier,
-            snackbarHostState = snackbarHostState,
-            topLevelDestination = appState.currentSaleTopLevelDestination,
-        ) {
-            PosSaleNavHost(
-                appState = appState,
-
-            )
-        }
-    }
-}
-
-fun PosNavigationSuiteScope.navigationSuiteItems(
-    destinations: List<TopLevelDestination>,
-    currentDestination: NavDestination?,
-    onDestinationClick: (TopLevelDestination) -> Unit,
-) {
-    destinations.forEach { destination ->
-        val selected = currentDestination.isRouteInHierarchy(destination.route)
-        item(
-            selected = selected,
-            onClick = { onDestinationClick(destination) },
-            icon = {
-                Icon(
-                    imageVector = destination.unselectedIcon,
-                    contentDescription = null,
-                )
-            },
-            selectedIcon = {
-                Icon(
-                    imageVector = destination.selectedIcon,
-                    contentDescription = null,
-                )
-            },
-            label = { Text(stringResource(destination.titleTextId)) },
-            modifier = Modifier.testTag(destination.toString()),
-        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenContent(
+internal fun MainApp(
     appState: MainAppState,
-    modifier: Modifier,
     snackbarHostState: SnackbarHostState,
-    topLevelDestination: TopLevelDestination?,
-    content: @Composable () -> Unit,
+    windowAdaptiveInfo: WindowAdaptiveInfo,
+    modifier: Modifier = Modifier,
 ) {
-    Scaffold(
-        modifier = modifier.semantics { testTagsAsResourceId = true },
-        containerColor = Color.Transparent,
-        contentColor = MaterialTheme.colorScheme.onBackground,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-    ) { padding ->
-        Column(
-            Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
-        ) {
-            val hasProfileAction = appState.hasProfileActionBar(appState.currentDestination)
-            if (hasProfileAction && topLevelDestination != null) {
-                PosTopAppBar(
-                    titleRes = topLevelDestination.titleTextId,
-                    onActionClick = { appState.navigateToProfile() },
-                    actionIconContentDescription = stringResource(R.string.feature_profile_title),
-                    actionIcon = Icons.Default.Person,
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+    val startGraphDestination = appState.initialDestinationState.determineStartGraph()
+    val currentTopLevelDestination =
+        if (startGraphDestination == AdminHomeGraphRoute) {
+            appState.currentAdminTopLevelDestination
+        } else {
+            appState.currentSaleTopLevelDestination
+        }
+    val topLevelDestinations =
+        if (startGraphDestination == AdminHomeGraphRoute) {
+            appState.adminTopLevelDestinations
+        } else {
+            appState.saleTopLevelDestinations
+        }
+
+    val isMainRoleGraph =
+        startGraphDestination == AdminHomeGraphRoute || startGraphDestination == SaleHomeGraphRoute
+    val navSuiteState = rememberNavigationSuiteScaffoldState(
+        if (isMainRoleGraph) {
+            NavigationSuiteScaffoldValue.Visible
+        } else {
+            NavigationSuiteScaffoldValue.Hidden
+        },
+    )
+    val currentDestination = appState.currentDestination
+
+    PosNavigationSuiteScaffold(
+        state = navSuiteState,
+        navigationSuiteItems = {
+            topLevelDestinations.forEach { destination ->
+                val selected = currentDestination.isRouteInHierarchy(destination.route)
+                item(
+                    selected = selected,
+                    onClick = { appState.navigateToTopLevelDestination(destination) },
+                    icon = {
+                        Icon(
+                            imageVector = destination.unselectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = destination.selectedIcon,
+                            contentDescription = null,
+                        )
+                    },
+                    label = { Text(stringResource(destination.titleTextId)) },
+                    modifier = Modifier.testTag(destination.toString()),
                 )
             }
-            Box(
-                modifier =
+        },
+        windowAdaptiveInfo = windowAdaptiveInfo,
+    ) {
+        Scaffold(
+            modifier = modifier.semantics { testTagsAsResourceId = true },
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        ) { padding ->
+            Column(
                 Modifier
-                    .weight(1f)
-                    .consumeWindowInsets(
-                        if (hasProfileAction) {
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                        } else {
-                            WindowInsets(0, 0, 0, 0)
-                        },
-                    ),
+                    .fillMaxSize()
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)),
             ) {
-                content()
+                val hasProfileAction = appState.hasProfileActionBar(appState.currentDestination)
+                if (hasProfileAction && currentTopLevelDestination != null) {
+                    PosTopAppBar(
+                        titleRes = currentTopLevelDestination.titleTextId,
+                        onActionClick = { appState.navigateToProfile() },
+                        actionIconContentDescription = stringResource(R.string.feature_profile_title),
+                        actionIcon = Icons.Default.Person,
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                    )
+                }
+                Box(
+                    modifier =
+                    Modifier
+                        .weight(1f)
+                        .consumeWindowInsets(
+                            if (hasProfileAction) {
+                                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                            } else {
+                                WindowInsets(0, 0, 0, 0)
+                            },
+                        ),
+                ) {
+                    PosMainNavHost(
+                        appState = appState,
+                        startGraphDestination = startGraphDestination,
+                    )
+                }
             }
+        }
+    }
+    LaunchedEffect(isMainRoleGraph) {
+        if (isMainRoleGraph) {
+            navSuiteState.show()
+        } else {
+            navSuiteState.hide()
         }
     }
 }
 
-@SuppressLint("RestrictedApi")
 private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) = this?.hierarchy?.any {
     it.hasRoute(route)
 } == true

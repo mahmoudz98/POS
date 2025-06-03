@@ -34,8 +34,10 @@ import com.casecode.pos.feature.profile.navigateToProfile
 import com.casecode.pos.feature.purchase.navigation.PurchaseRoute
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.setting.SettingRoute
+import com.casecode.pos.feature.signin.navigation.navigateToSignIn
 import com.casecode.pos.feature.signout.SignOutRoute
 import com.casecode.pos.feature.statistics.ReportsRoute
+import com.casecode.pos.navigation.AdminHomeGraphRoute
 import com.casecode.pos.navigation.AdminTopLevelDestination
 import com.casecode.pos.navigation.SaleTopLevelDestination
 import com.casecode.pos.navigation.TopLevelDestination
@@ -49,7 +51,6 @@ fun rememberMainAppState(
     networkMonitor: NetworkMonitor? = null,
     initialDestinationState: InitialDestinationState,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    rootNavController: NavHostController = rememberNavController(),
     navController: NavHostController = rememberNavController(),
 ): MainAppState = remember(
     navController,
@@ -58,7 +59,6 @@ fun rememberMainAppState(
     initialDestinationState,
 ) {
     MainAppState(
-        rootNavController = rootNavController,
         navController = navController,
         coroutineScope = coroutineScope,
         networkMonitor = networkMonitor!!,
@@ -69,9 +69,8 @@ fun rememberMainAppState(
 @Stable
 class MainAppState(
     val navController: NavHostController,
-    val rootNavController: NavHostController,
     val coroutineScope: CoroutineScope,
-    networkMonitor: NetworkMonitor,
+    val networkMonitor: NetworkMonitor,
     val initialDestinationState: InitialDestinationState,
 ) {
     val currentDestination: NavDestination?
@@ -81,8 +80,26 @@ class MainAppState(
      * Map of top level destinations to be used in the TopBar. The key is the
      * route.
      */
-    val topLevelDestinations: List<AdminTopLevelDestination> by lazy { AdminTopLevelDestination.entries }
+    val adminTopLevelDestinations: List<AdminTopLevelDestination> by lazy { AdminTopLevelDestination.entries }
     val saleTopLevelDestinations: List<SaleTopLevelDestination> by lazy { SaleTopLevelDestination.entries }
+
+    @Composable
+    private fun getCurrentTopLevelDestination(
+        destinations: List<TopLevelDestination>,
+    ): TopLevelDestination? = destinations.firstOrNull {
+        currentDestination?.hasRoute(it.route) == true
+    }
+
+    val currentAdminTopLevelDestination: TopLevelDestination?
+        @Composable get() = getCurrentTopLevelDestination(adminTopLevelDestinations)
+    val currentSaleTopLevelDestination: TopLevelDestination?
+        @Composable get() = getCurrentTopLevelDestination(saleTopLevelDestinations)
+    val isOffline =
+        networkMonitor.isOnline.map(Boolean::not).stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false,
+        )
 
     @SuppressLint("RestrictedApi")
     fun hasProfileActionBar(currentDestination: NavDestination?): Boolean {
@@ -100,21 +117,6 @@ class MainAppState(
 
     fun navigateToProfile() = navController.navigateToProfile()
 
-    @SuppressLint("RestrictedApi")
-    @Composable
-    private fun getCurrentTopLevelDestination(destinations: List<TopLevelDestination>): TopLevelDestination? = destinations.firstOrNull { currentDestination?.hasRoute(it.route) == true }
-
-    val currentAdminTopLevelDestination: TopLevelDestination?
-        @Composable get() = getCurrentTopLevelDestination(topLevelDestinations)
-    val currentSaleTopLevelDestination: TopLevelDestination?
-        @Composable get() = getCurrentTopLevelDestination(saleTopLevelDestinations)
-    val isOffline =
-        networkMonitor.isOnline.map(Boolean::not).stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false,
-        )
-
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
      * only one copy of the destination of the back stack, and save and restore state whenever you
@@ -123,14 +125,23 @@ class MainAppState(
      * @param topLevelDestination: The destination the app needs to navigate to.
      */
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-        val navOptions =
+        topLevelDestination.navigate(
+            navController,
             navOptions {
                 popUpTo(navController.graph.findStartDestination().id) {
                     saveState = true
                 }
                 launchSingleTop = true
                 restoreState = true
-            }
-        topLevelDestination.navigate(navController, navOptions)
+            },
+        )
+    }
+    fun signOut() {
+        navController.navigateToSignIn(
+            navOptions {
+                popUpTo(AdminHomeGraphRoute) { inclusive = true }
+                launchSingleTop = true
+            },
+        )
     }
 }
