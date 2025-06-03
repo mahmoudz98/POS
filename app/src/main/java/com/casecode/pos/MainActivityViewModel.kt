@@ -60,4 +60,6 @@ sealed interface InitialDestinationState {
     data object LoginBySaleEmployee : InitialDestinationState
 
     data object LoginByNoneEmployee : InitialDestinationState
+
+    fun shouldKeepSplashScreen() = this is Loading
 }
