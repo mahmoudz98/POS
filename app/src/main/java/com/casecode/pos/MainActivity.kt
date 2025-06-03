@@ -24,10 +24,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.metrics.performance.JankStats
@@ -36,8 +34,8 @@ import com.casecode.pos.core.analytics.AnalyticsHelper
 import com.casecode.pos.core.analytics.LocalAnalyticsHelper
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.NetworkMonitor
-import com.casecode.pos.navigation.PosRootScreen
 import com.casecode.pos.sync.initializers.SyncSupplierInvoicesOverdue
+import com.casecode.pos.ui.MainApp
 import com.casecode.pos.ui.rememberMainAppState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -61,38 +59,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        splashScreen.setKeepOnScreenCondition { true }
 
-  /*      var authUiState: InitialDestinationState by mutableStateOf(InitialDestinationState.Loading)
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.initialDestinationState.onEach { authUiState = it }.collect { state ->
-                    trace("posMainAuthState") {
-                        splashScreen.setKeepOnScreenCondition {
-                            state == InitialDestinationState.Loading
-                        }
-                        when (state) {
-                            is InitialDestinationState.LoginByAdmin,
-                            is InitialDestinationState.LoginByAdminEmployee,
-                                -> {
-                                SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
-                            }
-
-                            is InitialDestinationState.ErrorLogin -> {
-                                //  this@MainActivity.moveToSignInActivity()
-                            }
-
-                            else -> Unit
-                        }
-                    }
-                }
-            }
-        }*/
-
-        enableEdgeToEdge()
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.initialDestinationState.value.shouldKeepSplashScreen()
+        }
         setContent {
             val darkTheme = isSystemInDarkTheme()
-            DisposableEffect(darkTheme) {
+            LaunchedEffect(darkTheme) {
                 enableEdgeToEdge(
                     statusBarStyle =
                     SystemBarStyle.auto(
@@ -105,43 +78,29 @@ class MainActivity : AppCompatActivity() {
                         darkScrim,
                     ) { darkTheme },
                 )
-                onDispose {}
             }
             val currentAuthUiState by viewModel.initialDestinationState.collectAsStateWithLifecycle()
             LaunchedEffect(currentAuthUiState) {
-                splashScreen.setKeepOnScreenCondition {
-                    // Keep splash on screen ONLY when the state is strictly Loading
-                    currentAuthUiState == InitialDestinationState.Loading
-                }
-
-                // Handle other side-effects based on the state
-                trace("posMainAuthStateSideEffects") { // Added trace here for clarity
-                    when (currentAuthUiState) {
-                        is InitialDestinationState.LoginByAdmin,
-                        is InitialDestinationState.LoginByAdminEmployee,
-                        -> {
-                            SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
-                        }
-                        is InitialDestinationState.ErrorLogin -> {
-                            // Consider if navigation to SignIn should happen here
-                            // or be handled by the NavHost based on this state.
-                            // If NavHost handles it, this branch might just be for logging or other side effects.
-                        }
-                        else -> Unit
+                trace("posMainAuthStateSideEffects") {
+                    if (currentAuthUiState is InitialDestinationState.LoginByAdmin ||
+                        currentAuthUiState is InitialDestinationState.LoginByAdminEmployee ||
+                        currentAuthUiState is InitialDestinationState.LoginBySaleEmployee
+                    ) {
+                        SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
                     }
                 }
             }
-            if (currentAuthUiState != InitialDestinationState.Loading) {
-                val appState =
-                    rememberMainAppState(
-                        networkMonitor = networkMonitor,
-                        initialDestinationState = currentAuthUiState,
-                    )
-                CompositionLocalProvider(
-                    LocalAnalyticsHelper provides analyticsHelper,
-                ) {
+            val appState =
+                rememberMainAppState(
+                    networkMonitor = networkMonitor,
+                    initialDestinationState = currentAuthUiState,
+                )
+            CompositionLocalProvider(
+                LocalAnalyticsHelper provides analyticsHelper,
+            ) {
+                if (currentAuthUiState != InitialDestinationState.Loading) {
                     POSTheme {
-                        PosRootScreen(appState = appState)
+                        MainApp(appState = appState)
                     }
                 }
             }
