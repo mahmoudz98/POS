@@ -15,10 +15,14 @@
  */
 package com.casecode.pos.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.navigation
 import com.casecode.pos.feature.inventory.navigation.inventoryScreen
 import com.casecode.pos.feature.item.navigation.itemsSaleGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
@@ -34,20 +38,24 @@ import com.casecode.pos.feature.signout.signOutDialog
 import com.casecode.pos.feature.statistics.reportsScreen
 import com.casecode.pos.feature.supplier.navigation.supplierScreen
 import com.casecode.pos.ui.MainAppState
+import kotlinx.serialization.Serializable
 
-@Composable
-fun PosSaleNavHost(
+@Serializable
+object SaleHomeGraphRoute
+
+fun NavGraphBuilder.homeSaleGraph(
     appState: MainAppState,
-    modifier: Modifier = Modifier,
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
 ) {
-    NavHost(
-        navController = appState.navController,
+    navigation<SaleHomeGraphRoute>(
         startDestination = SaleRoute,
-        modifier = modifier,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
     ) {
         saleScreen {
             appState.navController.navigateToItemsGraph(
-                defaultNavOptions(appState.navController.graph.findStartDestination().id),
+                defaultNavOptions(),
             )
         }
         reportsScreen(onSalesReportClick = {}, onInventoryReportClick = {})
@@ -75,10 +83,13 @@ fun PosSaleNavHost(
         )
         signOutDialog(
             onSignOut = {
-                // activity?.moveToSignInActivity()
+                appState.signOut()
             },
             onDismiss = appState.navController::popBackStack,
         )
         profileScreen { appState.navController.popBackStack() }
     }
 }
+
+fun NavController.navigateToHomeSaleGraph(navOptions: NavOptions? = null) =
+    navigate(SaleHomeGraphRoute, navOptions)
