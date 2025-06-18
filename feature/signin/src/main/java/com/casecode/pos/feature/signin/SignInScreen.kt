@@ -17,7 +17,9 @@ package com.casecode.pos.feature.signin
 
 import android.app.Activity
 import android.content.Context
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +30,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,16 +48,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_MEDIUM_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
@@ -126,16 +134,20 @@ fun SignInScreen(
 internal fun SignInScreen(
     modifier: Modifier = Modifier,
     uiState: SignInActivityUiState,
-    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
+    windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
     onSignInCLick: () -> Unit,
     onLoginEmployeeClick: () -> Unit,
     onMessageShown: () -> Unit,
 ) {
     val snackState = remember { SnackbarHostState() }
-    val isCompact = windowSizeClass.isHeightAtLeastBreakpoint(
-        WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND,
-    )
+    val isCompact = windowAdaptiveInfo.windowSizeClass.isAtLeastBreakpoint(
+        WIDTH_DP_MEDIUM_LOWER_BOUND,
+        HEIGHT_DP_MEDIUM_LOWER_BOUND,
+    ).not()
 
+    val imageColor by animateColorAsState(
+        if (isSystemInDarkTheme()) Color.White else Color.Black,
+    )
     Scaffold(snackbarHost = { SnackbarHost(snackState) }) { innerPadding ->
         Box(
             modifier = modifier
@@ -155,12 +167,15 @@ internal fun SignInScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
                 if (isCompact) {
-                    Spacer(modifier = Modifier.height(64.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
                 }
+
                 Image(
                     painter = painterResource(id = uiR.drawable.core_ui_ic_point_of_sale_24),
                     contentDescription = null,
-                    modifier = Modifier.wrapContentSize(),
+                    modifier = Modifier.size(if (isCompact) 32.dp else 48.dp),
+                    colorFilter = ColorFilter.tint(imageColor),
+
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -230,6 +245,22 @@ internal fun SignInScreen(
         LaunchedEffect(snackState, uiState, message, snackbarText) {
             snackState.showSnackbar(snackbarText)
             onMessageShown()
+        }
+    }
+}
+
+fun processWindowSizeClassWidthOnly(sizeClass: WindowSizeClass): Dp {
+    return when {
+        sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND) -> {
+            48.dp
+        }
+
+        sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) -> {
+            40.dp
+        }
+
+        else -> {
+            32.dp
         }
     }
 }
