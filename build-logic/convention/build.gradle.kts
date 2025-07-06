@@ -25,6 +25,7 @@ dependencies {
     compileOnly(libs.firebase.crashlytics.gradlePlugin)
     compileOnly(libs.firebase.performance.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.room.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.power.assert.plugin)
     implementation(libs.truth)
@@ -71,6 +72,10 @@ gradlePlugin {
         register("hilt") {
             id = libs.plugins.pos.hilt.get().pluginId
             implementationClass = "HiltConventionPlugin"
+        }
+        register("androidRoom") {
+            id = libs.plugins.pos.android.room.get().pluginId
+            implementationClass = "AndroidRoomConventionPlugin"
         }
         register("androidFirebase") {
             id = libs.plugins.pos.android.firebase.asProvider().get().pluginId
