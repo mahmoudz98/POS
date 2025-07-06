@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<defaultsMap>
+    <entry>
+        <key>supported_currencies_json</key>
+        <value>
+            [{"code":"USD","name":"United States Dollar","symbol":"$","decimalPlaces":2},
+            {"code":"EUR","name":"Euro","symbol":"€","decimalPlaces":2},
+            {"code":"EGP","name":"Egyptian Pound","symbol":"E£","decimalPlaces":2},
+            {"code":"SAR","name":"Saudi Riyal","symbol":"﷼","decimalPlaces":2},
+            {"code":"AED","name":"United Arab Emirates Dirham","symbol":"د.إ","decimalPlaces":2}]
+        </value>
+    </entry>
+    <entry>
+        <key>subscription_plans</key>
+        <value>
+            [{"id":"free_tier_2024","name":"Free Plan","price":0.00,"isFree":true,"features":["Up to
+            2 Employees","1 Branch Location","Basic Sales
+            Reporting"],"limits":{"maxBranches":1,"maxEmployees":2,"maxItems":100,"initialCredits":1000}},{"id":"standard_monthly_usd","name":"Standard
+            Plan","price":19.99,"isFree":false,"features":["Up to 10 Employees","Up to 3
+            Branches","Advanced Inventory Control","Detailed Sales
+            Analytics"],"limits":{"maxBranches":3,"maxEmployees":10,"maxItems":5000,"initialCredits":10000}},{"id":"pro_monthly_usd","name":"Pro
+            Plan","price":49.99,"isFree":false,"features":["Unlimited Employees &amp; Branches","All
+            Standard Features","API Access for Integrations","Priority
+            Support"],"limits":{"maxBranches":-1,"maxEmployees":-1,"maxItems":-1,"initialCredits":25000}}]
+        </value>
+    </entry>
+</defaultsMap>

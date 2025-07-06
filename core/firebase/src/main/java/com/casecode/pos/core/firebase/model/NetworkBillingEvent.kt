@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services
+package com.casecode.pos.core.firebase.model
 
-import com.google.firebase.perf.metrics.Trace
-import com.google.firebase.perf.trace
+import com.casecode.pos.core.model.data.business.BillingEventType
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.Date
 
-/**
- * Trace a block with Firebase performance.
- *
- * Supports both suspend and regular methods.
- */
-inline fun <T> trace(
-    name: String,
-    block: Trace.() -> T,
-): T = Trace.create(name).trace(block)
+data class NetworkBillingEvent(
+    @DocumentId val id: String = "",
+    val eventType: BillingEventType? = null,
+    val description: String? = null,
+    val amount: Double? = null,
+    val currencyCode: String? = null,
+    val creditsChange: Long? = 0L,
+    @ServerTimestamp val eventDate: Date? = null,
+    val paymentProviderTransactionId: String? = null,
+)

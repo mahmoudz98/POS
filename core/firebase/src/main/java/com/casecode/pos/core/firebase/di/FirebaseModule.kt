@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services.di
+package com.casecode.pos.core.firebase.di
 
-import com.casecode.pos.core.firebase.services.BuildConfig
+import com.casecode.pos.core.firebase.BuildConfig
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -27,7 +27,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import timber.log.Timber
 import java.security.MessageDigest
 import java.util.UUID
 import javax.inject.Singleton
@@ -71,8 +70,6 @@ object FirebaseModule {
     fun provideSignInRequest(): GetGoogleIdOption {
         val hashedNonce = createHashedNonce()
         val webClient = BuildConfig.web_client_id
-        Timber.e("webClient:$webClient")
-        println("webClient:$webClient")
         return GetGoogleIdOption
             .Builder()
             .setFilterByAuthorizedAccounts(false)

@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services.model
+package com.casecode.pos.core.firebase.model
 
-import com.casecode.pos.core.firebase.services.ITEM_COST_PRICE_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_IMAGE_URL_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_QTY_PER_PACK_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_REORDER_LEVEL_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_SUPPLIER_NAME_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_UNIT_OF_MEASUREMENT_FIELD
+import com.casecode.pos.core.firebase.ITEM_COST_PRICE_FIELD
+import com.casecode.pos.core.firebase.ITEM_IMAGE_URL_FIELD
+import com.casecode.pos.core.firebase.ITEM_QTY_PER_PACK_FIELD
+import com.casecode.pos.core.firebase.ITEM_REORDER_LEVEL_FIELD
+import com.casecode.pos.core.firebase.ITEM_SUPPLIER_NAME_FIELD
+import com.casecode.pos.core.firebase.ITEM_UNIT_OF_MEASUREMENT_FIELD
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 

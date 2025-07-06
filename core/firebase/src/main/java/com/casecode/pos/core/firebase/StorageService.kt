@@ -13,16 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services
+package com.casecode.pos.core.firebase
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenSource
 import com.google.firebase.firestore.MetadataChanges
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.SnapshotListenOptions
 import com.google.firebase.firestore.snapshots
 import kotlinx.coroutines.flow.Flow
@@ -31,8 +33,8 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
-typealias FieldValue = com.google.firebase.firestore.FieldValue
-typealias SetOptions = com.google.firebase.firestore.SetOptions
+typealias FieldValue = FieldValue
+typealias SetOptions = SetOptions
 
 @Singleton
 class FirestoreService @Inject constructor(private val firestore: FirebaseFirestore) {
