@@ -27,7 +27,7 @@ android {
 
 dependencies {
     implementation(projects.core.model)
-    implementation(projects.core.firebaseServices)
+    implementation(projects.core.firebase)
     implementation(projects.core.common)
     api(libs.escpos.thermalprinter.android)
 
