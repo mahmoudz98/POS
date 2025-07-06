@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import com.casecode.pos.PosBuildType
 import com.casecode.pos.Configuration
 import com.casecode.pos.Configuration.APPLICATION_ID
+import com.casecode.pos.PosBuildType
 
 plugins {
     alias(libs.plugins.pos.android.application)
@@ -73,7 +73,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.signin)
+    implementation(projects.feature.login)
     implementation(projects.feature.stepper)
     implementation(projects.feature.employee)
     implementation(projects.feature.salesReport)
@@ -110,6 +110,7 @@ dependencies {
     implementation(libs.coil.kt.compose)
 
     ksp(libs.hilt.compiler)
+    implementation(libs.revenuecat.purchases)
 
     debugCompileOnly(libs.kotlinx.coroutines.debug)
     // debugImplementation(libs.leakcanary)
@@ -123,12 +124,14 @@ dependencies {
     testImplementation(libs.coroutines.android)
 
     androidTestImplementation(projects.core.testing)
+    androidTestImplementation(kotlin("test"))
+    kspAndroidTest(libs.hilt.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.firebase.testlab)
     androidTestImplementation(libs.coil.test)
-    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.hilt.android.testing)
 
     baselineProfile(projects.benchmarks)
 }
