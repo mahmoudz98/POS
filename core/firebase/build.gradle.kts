@@ -23,10 +23,26 @@ plugins {
 }
 
 android {
-    namespace = "$APPLICATION_ID.core.firebase.services"
+    namespace = "$APPLICATION_ID.core.firebase"
+    defaultConfig{
+        testInstrumentationRunner = "$APPLICATION_ID.core.testing.PosTestRunner"
+    }
+    
     buildFeatures {
         buildConfig = true
     }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+    packaging {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+            excludes.add("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+        }
+    }
+
 }
 secrets {
     propertiesFileName = "local.properties"
@@ -36,7 +52,8 @@ secrets {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.datastore)
-
     implementation(libs.coroutines.android)
     implementation(libs.googleid)
+    implementation(libs.kotlinx.serialization.json)
+
 }
