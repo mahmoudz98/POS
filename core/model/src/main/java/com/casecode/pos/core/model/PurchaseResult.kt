@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data.stores
+package com.casecode.pos.core.model
 
-import com.casecode.pos.core.model.data.users.Item
-
-data class Store(
-    var basicItems: MutableList<Item>? = null,
-    val storeCode: Long? = null,
-    val storeType: String? = null,
+data class PurchaseResult(
+    val providerTransactionId: String,
+    val wasSuccessful: Boolean,
 )

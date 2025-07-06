@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data.permissions
+package com.casecode.pos.core.model.data.business
 
-enum class Permission(
-    val englishName: String,
-    val arabicName: String,
-) {
-    ADMIN("Admin", ""),
-    SALE("Sales", ""),
-    NONE("None", ""),
-}
+import kotlinx.serialization.Serializable
 
-fun String.toPermission(): Permission? = Permission.entries.find { type ->
-    type.arabicName == this || type.englishName.lowercase() == this.lowercase()
-}
+@Serializable
+data class OnboardingConfig(
+    val plans: List<SubscriptionPlan>,
+    val currencies: List<Currency>,
+)

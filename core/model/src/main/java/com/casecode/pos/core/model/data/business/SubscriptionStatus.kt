@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data.permissions
+package com.casecode.pos.core.model.data.business
 
-enum class Permission(
-    val englishName: String,
-    val arabicName: String,
-) {
-    ADMIN("Admin", ""),
-    SALE("Sales", ""),
-    NONE("None", ""),
-}
+enum class SubscriptionStatus(val value: Int) {
+    ACTIVE(0),
+    TRIAL(1),
+    PAST_DUE(2),
+    CANCELED(3),
+    ;
 
-fun String.toPermission(): Permission? = Permission.entries.find { type ->
-    type.arabicName == this || type.englishName.lowercase() == this.lowercase()
+    companion object {
+        fun fromValue(value: Int): SubscriptionStatus = entries.first { it.value == value }
+    }
 }

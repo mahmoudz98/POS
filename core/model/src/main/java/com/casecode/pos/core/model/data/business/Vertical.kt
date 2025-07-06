@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data.users
+package com.casecode.pos.core.model.data.business
 
-data class FirebaseUser(
-    val email: String?,
-    val displayName: String?,
-    val photoUrl: String?,
-)
+enum class Vertical(val value: Int) {
+    RETAIL(0),
+    FOOD_AND_BEVERAGE(1),
+    SERVICES(2),
+    ;
+
+    companion object {
+        fun fromValue(value: Int): Vertical = entries.first { it.value == value }
+    }
+}

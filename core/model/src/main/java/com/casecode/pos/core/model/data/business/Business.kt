@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data.permissions
+package com.casecode.pos.core.model.data.business
 
-enum class Permission(
-    val englishName: String,
-    val arabicName: String,
-) {
-    ADMIN("Admin", ""),
-    SALE("Sales", ""),
-    NONE("None", ""),
-}
+import kotlinx.datetime.Instant
 
-fun String.toPermission(): Permission? = Permission.entries.find { type ->
-    type.arabicName == this || type.englishName.lowercase() == this.lowercase()
-}
+data class Business(
+    val id: String,
+    val name: String,
+    val ownerUid: String,
+    val vertical: Vertical,
+    val companyCode: String,
+    val currencyCode: String,
+    val status: BusinessStatus,
+    val email: String,
+    val phone: String,
+    val updatedAt: Instant,
+    val createdAt: Instant,
+)
