@@ -15,6 +15,8 @@ plugins {
     alias(libs.plugins.dependencyGuard) apply false
     alias(libs.plugins.module.graph) apply true
     alias(libs.plugins.power.assert) apply false
+    alias(libs.plugins.room) apply false
+
     // alias(libs.plugins.dependency.analysis) apply true
 }
 
