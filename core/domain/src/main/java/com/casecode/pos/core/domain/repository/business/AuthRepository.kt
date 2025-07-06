@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services
+package com.casecode.pos.core.domain.repository.business
 
-interface LogService {
-    fun logNonFatalCrash(throwable: Throwable)
+import com.casecode.pos.core.model.data.users.User
+import kotlinx.coroutines.flow.Flow
 
-    fun log(message: String)
+interface AuthRepository {
+    val currentUser: Flow<User?>
+
+    suspend fun getCurrentUser(): User?
+    suspend fun signInWithGoogle(idToken: String): Result<User>
+    suspend fun signOut()
 }

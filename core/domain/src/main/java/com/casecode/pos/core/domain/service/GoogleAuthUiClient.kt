@@ -13,21 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.repository
+package com.casecode.pos.core.domain.service
 
-import com.casecode.pos.core.model.data.LoginStateResult
-import com.casecode.pos.core.model.data.users.FirebaseUser
-import kotlinx.coroutines.flow.Flow
+import android.content.Context
 
-interface AuthRepository {
-    val currentUser: Flow<FirebaseUser?>
-    val loginData: Flow<LoginStateResult>
+interface GoogleAuthUiClient {
+    suspend fun getIdToken(activity: Context): Result<String>
 
-    suspend fun hasUser(): Boolean
-
-    suspend fun currentUserId(): String
-
-    suspend fun currentNameLogin(): String
-
-    suspend fun hasEmployeeLogin(): Boolean
+    fun isGooglePlayServicesAvailable(context: Context): Boolean
 }

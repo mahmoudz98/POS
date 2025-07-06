@@ -13,27 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.repository
+package com.casecode.pos.core.domain.repository.business
 
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.domain.utils.SignInGoogleState
+import com.casecode.pos.core.model.data.business.Employee
 
-interface AccountRepository {
-    fun isGooglePlayServicesAvailable(): Boolean
-
-    suspend fun signIn(idToken: suspend () -> String): SignInGoogleState
-
-    suspend fun employeeLogin(
-        uid: String,
-        employeeId: String,
+interface EmployeeRepository {
+    suspend fun authenticateEmployee(
+        companyCode: String,
+        employeeIdentifier: String,
         password: String,
-    ): Resource<Boolean>
-
-    suspend fun checkUserLogin(): Boolean
-
-    suspend fun checkRegistration(email: String): Resource<Boolean>
-
-    suspend fun employeeLogOut()
-
-    suspend fun signOut()
+    ): Result<Pair<String, Employee>?>
 }

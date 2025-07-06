@@ -15,25 +15,19 @@
  */
 package com.casecode.pos.core.domain.repository
 
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.domain.utils.SignInGoogleState
+import com.casecode.pos.core.model.data.LoginStateResultOld
+import com.casecode.pos.core.model.data.users.User
+import kotlinx.coroutines.flow.Flow
 
-interface AccountRepository {
-    fun isGooglePlayServicesAvailable(): Boolean
+interface AuthRepositoryO {
+    val currentUser: Flow<User?>
+    val loginData: Flow<LoginStateResultOld>
 
-    suspend fun signIn(idToken: suspend () -> String): SignInGoogleState
+    suspend fun hasUser(): Boolean
 
-    suspend fun employeeLogin(
-        uid: String,
-        employeeId: String,
-        password: String,
-    ): Resource<Boolean>
+    suspend fun currentUserId(): String
 
-    suspend fun checkUserLogin(): Boolean
+    suspend fun currentNameLogin(): String
 
-    suspend fun checkRegistration(email: String): Resource<Boolean>
-
-    suspend fun employeeLogOut()
-
-    suspend fun signOut()
+    suspend fun hasEmployeeLogin(): Boolean
 }
