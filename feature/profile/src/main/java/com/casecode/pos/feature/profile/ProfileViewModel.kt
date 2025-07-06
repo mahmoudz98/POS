@@ -17,7 +17,7 @@ package com.casecode.pos.feature.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.usecase.AddBranchBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetSubscriptionBusinessUseCase
@@ -40,7 +40,7 @@ import javax.inject.Inject
 class ProfileViewModel
 @Inject
 constructor(
-    private val authRepository: AuthRepository,
+    private val authRepositoryO: AuthRepositoryO,
     private val getBusinessUseCase: GetBusinessUseCase,
     private val addBranchBusinessUseCase: AddBranchBusinessUseCase,
     private val getSubscriptionBusinessUseCase: GetSubscriptionBusinessUseCase,
@@ -58,7 +58,7 @@ constructor(
 
     private fun fetchCurrentUser() {
         viewModelScope.launch {
-            authRepository.currentUser.collect { user ->
+            authRepositoryO.currentUser.collect { user ->
                 _uiState.update { it.copy(currentUser = user) }
             }
         }

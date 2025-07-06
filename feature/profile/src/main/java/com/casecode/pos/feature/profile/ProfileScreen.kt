@@ -51,7 +51,7 @@ import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
-import com.casecode.pos.core.model.data.users.FirebaseUser
+import com.casecode.pos.core.model.data.users.User
 import kotlinx.coroutines.launch
 
 @Composable
@@ -170,7 +170,7 @@ fun ProfileScreen(
 }
 
 @Composable
-fun ProfileHeader(firebaseUser: FirebaseUser?) {
+fun ProfileHeader(firebaseUser: User?) {
     Column(
         modifier =
         Modifier
@@ -188,7 +188,7 @@ fun ProfileHeader(firebaseUser: FirebaseUser?) {
                 .size(64.dp)
                 .clip(CircleShape),
         )
-        Text(text = firebaseUser?.displayName ?: "")
+        Text(text = firebaseUser?.name ?: "")
         Text(text = firebaseUser?.email ?: "")
     }
 }

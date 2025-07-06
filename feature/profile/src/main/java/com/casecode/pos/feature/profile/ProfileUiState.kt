@@ -17,10 +17,10 @@ package com.casecode.pos.feature.profile
 
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.model.data.users.Business
-import com.casecode.pos.core.model.data.users.FirebaseUser
+import com.casecode.pos.core.model.data.users.User
 
 data class ProfileUiState(
-    val currentUser: FirebaseUser? = null,
+    val currentUser: User? = null,
     val business: Business = Business(),
     val isLoading: Boolean = false,
     val userMessage: Int? = null,

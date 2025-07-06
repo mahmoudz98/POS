@@ -21,7 +21,7 @@ import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
 import com.casecode.pos.core.model.data.users.Employee
-import com.casecode.pos.core.testing.repository.TestAuthRepository
+import com.casecode.pos.core.testing.repository.TestAuthRepositoryO
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
@@ -42,7 +42,7 @@ class EmployeeViewModelTest {
     private lateinit var viewModel: EmployeeViewModel
     private val networkMonitor = TestNetworkMonitor()
     private val employeesBusinessRepository = TestEmployeesBusinessRepository()
-    private val testAuth = TestAuthRepository()
+    private val testAuth = TestAuthRepositoryO()
     private val businessRepository = TestBusinessRepository()
     private val getEmployees = GetEmployeesBusinessUseCase(employeesBusinessRepository)
     private val getBusiness = GetBusinessUseCase(businessRepository)

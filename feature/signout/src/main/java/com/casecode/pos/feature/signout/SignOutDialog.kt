@@ -51,7 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.FirebaseUser
+import com.casecode.pos.core.model.data.users.User
 import com.casecode.pos.core.ui.R
 
 @Composable
@@ -75,7 +75,7 @@ fun SignOutDialog(
 @Composable
 private fun SignOutDialog(
     onDismiss: () -> Unit,
-    currentUser: FirebaseUser?,
+    currentUser: User?,
     onSignOut: () -> Unit,
 ) {
     val configuration = LocalConfiguration.current
@@ -115,7 +115,7 @@ private fun SignOutDialog(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = currentUser?.displayName ?: "",
+                    text = currentUser?.name ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                 )
 
@@ -152,7 +152,7 @@ fun SignOutDialogPreview() {
     POSTheme {
         SignOutDialog(
             onDismiss = {},
-            currentUser = FirebaseUser("email", "name", "photoUrl"),
+            currentUser = User("email", "name", "", "photoUrl"),
             onSignOut = {},
         )
     }
