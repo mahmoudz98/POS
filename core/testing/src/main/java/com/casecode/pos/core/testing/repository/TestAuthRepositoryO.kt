@@ -15,17 +15,20 @@
  */
 package com.casecode.pos.core.testing.repository
 
-import com.casecode.pos.core.domain.repository.AuthRepository
-import com.casecode.pos.core.model.data.LoginStateResult
-import com.casecode.pos.core.model.data.users.FirebaseUser
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
+import com.casecode.pos.core.model.data.LoginStateResultOld
+import com.casecode.pos.core.model.data.users.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
-class TestAuthRepository
+class TestAuthRepositoryO
 @Inject
-constructor() : AuthRepository {
-    override val loginData: Flow<LoginStateResult> = flowOf(LoginStateResult.NotSignIn)
+constructor() : AuthRepositoryO {
+    var userLoginChecked = false
+        private set // To allow checking from tests but not setting externally
+
+    override val loginData: Flow<LoginStateResultOld> = flowOf(LoginStateResultOld.NotSignIn)
 
     override suspend fun hasUser(): Boolean = true
 
@@ -33,8 +36,12 @@ constructor() : AuthRepository {
 
     override suspend fun currentNameLogin(): String = "TestName"
 
-    override val currentUser: Flow<FirebaseUser?> =
-        flowOf(FirebaseUser("TestEmail", "TestName", "TestPhotoUrl"))
+    override val currentUser: Flow<User?> =
+        flowOf(User("TestUid", "TestEmail", "TestName", "TestPhotoUrl"))
 
     override suspend fun hasEmployeeLogin(): Boolean = true
+
+    fun resetLoginCheck() {
+        userLoginChecked = false
+    }
 }

@@ -15,33 +15,27 @@
  */
 package com.casecode.pos.core.testing.base
 
-import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
-import com.casecode.pos.core.domain.usecase.AddEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.AddInvoiceUseCase
 import com.casecode.pos.core.domain.usecase.AddItemUseCase
-import com.casecode.pos.core.domain.usecase.CompleteBusinessUseCase
 import com.casecode.pos.core.domain.usecase.DeleteItemUseCase
-import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.GetItemsUseCase
-import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.pos.core.domain.usecase.GetTodayInvoicesUseCase
 import com.casecode.pos.core.domain.usecase.ItemImageUseCase
-import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
-import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
+import com.casecode.pos.core.domain.usecase.SignInEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.SignInOwnerUseCase
+import com.casecode.pos.core.domain.usecase.SignOutUseCase
 import com.casecode.pos.core.domain.usecase.UpdateItemUseCase
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
-import com.casecode.pos.core.testing.repository.TestAccountRepository
-import com.casecode.pos.core.testing.repository.TestAuthRepository
-import com.casecode.pos.core.testing.repository.TestBusinessRepository
-import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
 import com.casecode.pos.core.testing.repository.TestInvoiceRepository
 import com.casecode.pos.core.testing.repository.TestItemImageRepository
 import com.casecode.pos.core.testing.repository.TestItemRepository
-import com.casecode.pos.core.testing.repository.TestSubscriptionsBusinessRepository
-import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
+import com.casecode.pos.core.testing.repository.business.TestAuthRepository
+import com.casecode.pos.core.testing.repository.business.TestBranchRepository
+import com.casecode.pos.core.testing.repository.business.TestBusinessRepository
+import com.casecode.pos.core.testing.repository.business.TestEmployeeRepository
+import com.casecode.pos.core.testing.repository.business.TestSessionRepository
+import com.casecode.pos.core.testing.services.TestLogService
 import com.casecode.pos.core.testing.util.CoroutinesTestRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
 import org.junit.Before
@@ -52,29 +46,25 @@ abstract class BaseTest {
     @get:Rule
     var coroutinesRule = CoroutinesTestRule()
 
-    // Repo
-    lateinit var accountService: TestAccountRepository
-    lateinit var authService: TestAuthRepository
-
     lateinit var networkMonitor: TestNetworkMonitor
-    lateinit var businessRepository: TestBusinessRepository
-    lateinit var subscriptionsRepository: TestSubscriptionsRepository
-    lateinit var subscriptionsBusinessRepository: TestSubscriptionsBusinessRepository
-    lateinit var employeesBusinessRepository: TestEmployeesBusinessRepository
+    lateinit var fakeLogService: TestLogService
+
+    // Repo
+    lateinit var testAuthRepository: TestAuthRepository
+    lateinit var testBusinessRepository: TestBusinessRepository
+    lateinit var testBranchRepository: TestBranchRepository
+    lateinit var testEmployeeRepository: TestEmployeeRepository
+    lateinit var testSessionRepository: TestSessionRepository
+
     lateinit var itemRepository: TestItemRepository
     lateinit var imageRepository: TestItemImageRepository
     lateinit var invoiceRepository: TestInvoiceRepository
 
     // Use cases
-    lateinit var getBusiness: GetBusinessUseCase
-    lateinit var setBusiness: SetBusinessUseCase
-    lateinit var getEmployees: GetEmployeesBusinessUseCase
-    lateinit var addEmployee: AddEmployeeUseCase
-    lateinit var updateEmployee: UpdateEmployeesUseCase
-    lateinit var completeBusiness: CompleteBusinessUseCase
-    lateinit var getSubscriptions: GetSubscriptionsUseCase
-    lateinit var setSubscription: SetSubscriptionBusinessUseCase
-    lateinit var setEmployees: AddEmployeesBusinessUseCase
+
+    lateinit var signInOwnerUseCase: SignInOwnerUseCase
+    lateinit var signInEmployeeUseCase: SignInEmployeeUseCase
+    lateinit var signOutUseCase: SignOutUseCase
     lateinit var getImage: ItemImageUseCase
     lateinit var getItems: GetItemsUseCase
     lateinit var addItem: AddItemUseCase
@@ -89,12 +79,12 @@ abstract class BaseTest {
     fun setup() {
         networkMonitor = TestNetworkMonitor()
 
-        accountService = TestAccountRepository()
-        authService = TestAuthRepository()
-        businessRepository = TestBusinessRepository()
-        subscriptionsRepository = TestSubscriptionsRepository()
-        subscriptionsBusinessRepository = TestSubscriptionsBusinessRepository()
-        employeesBusinessRepository = TestEmployeesBusinessRepository()
+        testAuthRepository = TestAuthRepository()
+        testBusinessRepository = TestBusinessRepository()
+        testBranchRepository = TestBranchRepository()
+        testEmployeeRepository = TestEmployeeRepository()
+        testSessionRepository = TestSessionRepository()
+        fakeLogService = TestLogService()
 
         // Items repo
         itemRepository = TestItemRepository()
@@ -104,16 +94,25 @@ abstract class BaseTest {
         invoiceRepository = TestInvoiceRepository()
 
         // use cases
-        getBusiness = GetBusinessUseCase(businessRepository)
-        setBusiness = SetBusinessUseCase(businessRepository)
-        getEmployees = GetEmployeesBusinessUseCase(employeesBusinessRepository)
-        addEmployee = AddEmployeeUseCase(employeesBusinessRepository)
-        updateEmployee = UpdateEmployeesUseCase(employeesBusinessRepository)
-        getSubscriptions = GetSubscriptionsUseCase(subscriptionsRepository)
-        completeBusiness = CompleteBusinessUseCase(businessRepository)
-        setSubscription =
-            SetSubscriptionBusinessUseCase(subscriptionsBusinessRepository)
-        setEmployees = AddEmployeesBusinessUseCase(employeesBusinessRepository)
+        signInOwnerUseCase = SignInOwnerUseCase(
+            authRepository = testAuthRepository,
+            businessRepository = testBusinessRepository,
+            branchRepository = testBranchRepository,
+            sessionRepository = testSessionRepository,
+            logService = fakeLogService,
+        )
+
+        signInEmployeeUseCase = SignInEmployeeUseCase(
+            employeeRepository = testEmployeeRepository,
+            sessionRepository = testSessionRepository,
+            logService = fakeLogService,
+        )
+
+        signOutUseCase = SignOutUseCase(
+            authRepository = testAuthRepository,
+            sessionRepository = testSessionRepository,
+            logService = fakeLogService,
+        )
 
         // Items use cases
         getImage = ItemImageUseCase(imageRepository)

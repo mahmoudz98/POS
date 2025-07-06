@@ -38,3 +38,40 @@ abstract class BaseTestRepository {
         shouldReturnEmpty = value
     }
 }
+
+/**
+ * An improved base class for test repositories that allows for simulating
+ * specific, controlled failures.
+ */
+abstract class FakeRepository {
+
+    // Instead of a boolean, we hold an optional Throwable.
+    // If this is not null, repository methods should fail with this exception.
+    private var failureThrowable: Throwable? = null
+
+    /**
+     * Configures the fake to return a Result.failure with the given Throwable
+     * on its next suspending call.
+     *
+     * @param throwable The exception to be returned. Common examples include
+     *                  IOException for network errors or a custom domain exception.
+     */
+    fun setFailure(throwable: Throwable) {
+        this.failureThrowable = throwable
+    }
+
+    /**
+     * Resets the repository to its default success state.
+     */
+    fun returnSuccess() {
+        failureThrowable = null
+    }
+
+    /**
+     * A helper for child classes to easily check if they should fail and with what exception.
+     * It returns a failure Result if one is configured, otherwise null.
+     */
+    protected fun <T> getFailureResult(): Result<T>? {
+        return failureThrowable?.let { Result.failure(it) }
+    }
+}

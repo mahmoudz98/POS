@@ -21,12 +21,12 @@ import androidx.test.runner.AndroidJUnitRunner
 import dagger.hilt.android.testing.CustomTestApplication
 import dagger.hilt.android.testing.HiltTestApplication
 
-open class TestApplication : Application()
+open class PosTestApplication : Application()
 
 /**
  * A custom runner to set up the instrumented application class for tests.
  */
-@CustomTestApplication(TestApplication::class)
+@CustomTestApplication(PosTestApplication::class)
 class PosTestRunner : AndroidJUnitRunner() {
     override fun newApplication(
         cl: ClassLoader?,

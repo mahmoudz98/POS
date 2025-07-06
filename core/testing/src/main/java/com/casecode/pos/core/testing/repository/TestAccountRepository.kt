@@ -26,9 +26,13 @@ constructor() : AccountRepository {
     var signInResult: SignInGoogleState =
         SignInGoogleState.Success
     var employeeLoginResult: Resource<Boolean> = Resource.Success(true)
+    private var googlePlayServicesAvailable: Boolean = true
 
-    override fun isGooglePlayServicesAvailable(): Boolean = true
+    override fun isGooglePlayServicesAvailable(): Boolean = googlePlayServicesAvailable
 
+    fun setGooglePlayServicesAvailable(available: Boolean) {
+        googlePlayServicesAvailable = available
+    }
     override suspend fun signIn(idToken: suspend () -> String): SignInGoogleState = signInResult
 
     override suspend fun employeeLogin(
@@ -37,7 +41,7 @@ constructor() : AccountRepository {
         password: String,
     ): Resource<Boolean> = employeeLoginResult
 
-    override suspend fun checkUserLogin() {}
+    override suspend fun checkUserLogin() = false
 
     override suspend fun checkRegistration(email: String): Resource<Boolean> = Resource.Success(true)
 

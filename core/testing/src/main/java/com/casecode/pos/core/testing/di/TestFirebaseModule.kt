@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.testing.di.app
+package com.casecode.pos.core.testing.di
 
-import com.casecode.pos.core.firebase.services.di.FirebaseModule
+import com.casecode.pos.core.firebase.di.FirebaseModule
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import javax.inject.Singleton
 
 @Module
 @TestInstallIn(
@@ -35,24 +34,35 @@ import dagger.hilt.testing.TestInstallIn
     replaces = [FirebaseModule::class],
 )
 object TestFirebaseModule {
-    private const val HOST = "127.0.0.1"
-    private const val AUTH_PORT = 9099
+    private const val HOST = "10.0.2.2"
+    const val AUTH_PORT = 9099
     private const val FIRESTORE_PORT = 8080
+    private const val STORAGE_PORT = 9199
 
     @Provides
-    fun provideFirebaseAuthMockk(): FirebaseAuth? {
-        if (Firebase.auth.currentUser != null) {
-            return Firebase.auth.also { it.useEmulator(HOST, AUTH_PORT) }
-        }
-        return null
+    @Singleton
+    fun provideFirebaseAuth(app: FirebaseApp): FirebaseAuth {
+        return FirebaseAuth.getInstance(app).apply { useEmulator(HOST, AUTH_PORT) }
     }
 
     @Provides
-    fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore.also { it.useEmulator(HOST, FIRESTORE_PORT) }
+    @Singleton
+    fun provideFirebaseFirestore(app: FirebaseApp): FirebaseFirestore {
+        return FirebaseFirestore.getInstance(app).apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setHost("$HOST:$FIRESTORE_PORT")
+                .setSslEnabled(false)
+                .setPersistenceEnabled(false)
+                .build()
+        }
+    }
 
     @Provides
-    fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage
+    @Singleton
+    fun provideFirebaseStorage(app: FirebaseApp): FirebaseStorage {
+        return FirebaseStorage.getInstance(app).apply { useEmulator(HOST, STORAGE_PORT) }
+    }
 
     @Provides
-    fun provideSignInRequest(): GetGoogleIdOption = GetGoogleIdOption("test")
+    fun provideSignInRequest(): GetGoogleIdOption = GetGoogleIdOption.Builder().setServerClientId("test").build()
 }
