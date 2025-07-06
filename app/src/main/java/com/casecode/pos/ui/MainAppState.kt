@@ -30,11 +30,11 @@ import androidx.navigation.navOptions
 import com.casecode.pos.InitialDestinationState
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.feature.inventory.navigation.InventoryRoute
+import com.casecode.pos.feature.login.navigation.navigateToLogin
 import com.casecode.pos.feature.profile.navigateToProfile
 import com.casecode.pos.feature.purchase.navigation.PurchaseRoute
 import com.casecode.pos.feature.sale.navigation.SaleRoute
 import com.casecode.pos.feature.setting.SettingRoute
-import com.casecode.pos.feature.signin.navigation.navigateToSignIn
 import com.casecode.pos.feature.signout.SignOutRoute
 import com.casecode.pos.feature.statistics.ReportsRoute
 import com.casecode.pos.navigation.AdminHomeGraphRoute
@@ -137,7 +137,7 @@ class MainAppState(
         )
     }
     fun signOut() {
-        navController.navigateToSignIn(
+        navController.navigateToLogin(
             navOptions {
                 popUpTo(AdminHomeGraphRoute) { inclusive = true }
                 launchSingleTop = true

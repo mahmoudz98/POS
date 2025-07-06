@@ -16,33 +16,35 @@
 package com.casecode.pos
 
 import androidx.lifecycle.ViewModel
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.business.SessionRepository
 import com.casecode.pos.core.model.data.LoginStateResult
-import com.casecode.pos.core.model.data.permissions.Permission
 import com.casecode.pos.core.ui.stateInWhileSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(authRepository: AuthRepository) : ViewModel() {
+class MainActivityViewModel @Inject constructor(authRepositoryO: SessionRepository) : ViewModel() {
     val initialDestinationState: StateFlow<InitialDestinationState> =
-        authRepository.loginData.map {
+        authRepositoryO.loginState.map {
+            Timber.d("LoginState: $it")
             when (it) {
-                LoginStateResult.Loading -> InitialDestinationState.Loading
-                LoginStateResult.Error, LoginStateResult.NotSignIn -> InitialDestinationState.ErrorLogin
-                is LoginStateResult.NotCompleteBusiness -> InitialDestinationState.NotCompleteBusiness
 
-                is LoginStateResult.EmployeeLogin -> {
-                    when (it.employee.permission) {
-                        Permission.ADMIN -> InitialDestinationState.LoginByAdminEmployee
-                        Permission.SALE -> InitialDestinationState.LoginBySaleEmployee
-                        Permission.NONE -> InitialDestinationState.ErrorLogin
+                LoginStateResult.Loading -> InitialDestinationState.Loading
+                LoginStateResult.LoggedOut -> InitialDestinationState.SignOut
+                is LoginStateResult.OwnerOnBoarding -> InitialDestinationState.NotCompleteBusiness
+                is LoginStateResult.EmployeeLoggedIn -> {
+                    when (it.role) {
+                        "ADMIN" -> InitialDestinationState.LoginByAdminEmployee
+                        "SALE" -> InitialDestinationState.LoginBySaleEmployee
+                        "NONE" -> InitialDestinationState.SignOut
+                        else -> InitialDestinationState.SignOut
                     }
                 }
 
-                is LoginStateResult.SuccessLoginAdmin -> InitialDestinationState.LoginByAdmin
+                is LoginStateResult.OwnerLoggedIn -> InitialDestinationState.LoginByAdmin
             }
         }.stateInWhileSubscribed(InitialDestinationState.Loading)
 }
@@ -50,7 +52,7 @@ class MainActivityViewModel @Inject constructor(authRepository: AuthRepository) 
 sealed interface InitialDestinationState {
     data object Loading : InitialDestinationState
 
-    data object ErrorLogin : InitialDestinationState
+    data object SignOut : InitialDestinationState
     data object NotCompleteBusiness : InitialDestinationState
 
     data object LoginByAdmin : InitialDestinationState

@@ -31,9 +31,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration.Indefinite
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
@@ -90,14 +91,14 @@ fun MainApp(
             val snackbarHostState = remember { SnackbarHostState() }
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
             val notConnectedMessage = stringResource(uiString.core_ui_error_network)
-            LaunchedEffect(isOffline) {
+         /*   LaunchedEffect(isOffline) {
                 if (isOffline) {
                     snackbarHostState.showSnackbar(
                         message = notConnectedMessage,
                         duration = Indefinite,
                     )
                 }
-            }
+            }*/
             MainApp(
                 appState = appState,
                 snackbarHostState = snackbarHostState,
@@ -171,7 +172,12 @@ internal fun MainApp(
             modifier = modifier.semantics { testTagsAsResourceId = true },
             containerColor = Color.Transparent,
             contentColor = MaterialTheme.colorScheme.onBackground,
-            snackbarHost = { SnackbarHost(snackbarHostState) },
+            snackbarHost = {
+                SnackbarHost(
+                    snackbarHostState,
+                    modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
+                )
+            },
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
         ) { padding ->
             Column(
@@ -206,6 +212,13 @@ internal fun MainApp(
                     PosMainNavHost(
                         appState = appState,
                         startGraphDestination = startGraphDestination,
+                        onShowSnackbar = { message, action ->
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                actionLabel = action,
+                                duration = SnackbarDuration.Short,
+                            ) == SnackbarResult.ActionPerformed
+                        },
                     )
                 }
             }
