@@ -18,4 +18,5 @@ plugins {
 }
 dependencies {
     api(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.serialization.json)
 }
