@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services.di
+package com.casecode.pos.core.database.dao
 
-import com.casecode.pos.core.firebase.services.LogService
-import com.casecode.pos.core.firebase.services.LogServiceImpl
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Upsert
+import com.casecode.pos.core.database.model.BranchEntity
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class ServiceModule {
-    @Binds
-    internal abstract fun bindLogService(logServiceImpl: LogServiceImpl): LogService
+/**
+ * DAO for [BranchDao] access
+ */
+@Dao
+interface BranchDao {
+    @Upsert
+    suspend fun insertOrReplaceBranches(branches: List<BranchEntity>)
+
+    @Query("SELECT * FROM branches WHERE businessId = :businessId")
+    suspend fun getBranchesForBusiness(businessId: String): List<BranchEntity>
 }

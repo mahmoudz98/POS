@@ -26,16 +26,20 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.casecode.pos.InitialDestinationState
-import com.casecode.pos.feature.signin.navigation.SignInRoute
-import com.casecode.pos.feature.signin.navigation.navigateToSignIn
-import com.casecode.pos.feature.signin.navigation.signInScreen
+import com.casecode.pos.feature.login.navigation.LoginRoute
+import com.casecode.pos.feature.login.navigation.loginScreen
+import com.casecode.pos.feature.login.navigation.navigateToLogin
 import com.casecode.pos.feature.stepper.navigation.StepperRoute
-import com.casecode.pos.feature.stepper.navigation.navigateToStepper
 import com.casecode.pos.feature.stepper.navigation.stepperScreen
 import com.casecode.pos.ui.MainAppState
+import timber.log.Timber
 
 @Composable
-fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
+fun PosMainNavHost(
+    appState: MainAppState,
+    startGraphDestination: Any,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
+) {
     val navController = appState.navController
     NavHost(
         navController = navController,
@@ -43,23 +47,11 @@ fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
     ) {
-        signInScreen(
-            onSignInSuccessNavigateToMain = {
-                navController.navigateToMainGraph(
-                    navOptions {
-                        popUpTo(SignInRoute) { inclusive = true }
-                        launchSingleTop = true
-                    },
-                )
+        loginScreen(
+            onLoginEmployeeClick = {
+                // TODO: show login by employee dialog
             },
-            onSignInSuccessNavigateToStepper = {
-                navController.navigateToStepper(
-                    navOptions {
-                        popUpTo(SignInRoute) { inclusive = true }
-                        launchSingleTop = true
-                    },
-                )
-            },
+            onShowSnackbar = onShowSnackbar,
             enterTransition = {
                 when (targetState.destination.route) {
                     StepperRoute.toString() -> slideInHorizontally(
@@ -81,6 +73,44 @@ fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
                 }
             },
         )
+        /*    signInScreen(
+                onSignInSuccessNavigateToMain = {
+                    navController.navigateToMainGraph(
+                        navOptions {
+                            popUpTo(LoginRoute) { inclusive = true }
+                            launchSingleTop = true
+                        },
+                    )
+                },
+                onSignInSuccessNavigateToStepper = {
+                    navController.navigateToStepper(
+                        navOptions {
+                            popUpTo(LoginRoute) { inclusive = true }
+                            launchSingleTop = true
+                        },
+                    )
+                },
+                enterTransition = {
+                    when (targetState.destination.route) {
+                        StepperRoute.toString() -> slideInHorizontally(
+                            initialOffsetX = { -it },
+                            animationSpec = defaultTween(),
+                        )
+
+                        else -> fadeIn(animationSpec = slowTween())
+                    }
+                },
+                exitTransition = {
+                    when (targetState.destination.route) {
+                        StepperRoute.toString() -> slideOutHorizontally(
+                            targetOffsetX = { it },
+                            animationSpec = defaultTween(),
+                        )
+
+                        else -> contextShiftExit()
+                    }
+                },
+            )*/
 
         stepperScreen(
             onStepperCompleteToHome = {
@@ -92,7 +122,7 @@ fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
                 )
             },
             onBackToSignIn = {
-                navController.navigateToSignIn(
+                navController.navigateToLogin(
                     navOptions {
                         popUpTo(StepperRoute) { inclusive = true }
                         launchSingleTop = true
@@ -102,7 +132,7 @@ fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
             enterTransition = { flowTransition() },
             exitTransition = {
                 when (targetState.destination.route) {
-                    SignInRoute.toString() -> slideOutVertically(
+                    LoginRoute.toString() -> slideOutVertically(
                         targetOffsetY = { it },
                         animationSpec = defaultTween(),
                     )
@@ -116,7 +146,7 @@ fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
             appState = appState,
             enterTransition = { contextShiftEnter() },
             exitTransition = {
-                if (targetState.destination.route == SignInRoute.toString()) {
+                if (targetState.destination.route == LoginRoute.toString()) {
                     null
                 } else {
                     contextShiftExit()
@@ -127,7 +157,7 @@ fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
             appState = appState,
             enterTransition = { contextShiftEnter() },
             exitTransition = {
-                if (targetState.destination.route == SignInRoute.toString()) {
+                if (targetState.destination.route == LoginRoute.toString()) {
                     null
                 } else {
                     contextShiftExit()
@@ -138,11 +168,13 @@ fun PosMainNavHost(appState: MainAppState, startGraphDestination: Any) {
 }
 
 fun InitialDestinationState.determineStartGraph(): Any {
+    Timber.d("determineStartGraph: $this")
+
     return when (this) {
-        InitialDestinationState.Loading -> SignInRoute
-        InitialDestinationState.ErrorLogin,
+        InitialDestinationState.Loading -> LoginRoute
+        InitialDestinationState.SignOut,
         InitialDestinationState.LoginByNoneEmployee,
-        -> SignInRoute
+        -> LoginRoute
 
         is InitialDestinationState.NotCompleteBusiness -> StepperRoute
         is InitialDestinationState.LoginByAdmin,

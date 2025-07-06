@@ -13,10 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.signin
+package com.casecode.pos.core.database.util
 
-data class SignInActivityUiState(
-    val userMessage: Int? = null,
-    val isOnline: Boolean = false,
-    val isLoading: Boolean = false,
-)
+import androidx.room.TypeConverter
+
+/**
+ * Type converter for [List] of [String] to allow it to be stored in a Room database.
+ */
+internal class StringListConverter {
+    @TypeConverter
+    fun fromString(stringListString: String): List<String> {
+        return stringListString.split(",").map { it }
+    }
+
+    @TypeConverter
+    fun toString(stringList: List<String>): String {
+        return stringList.joinToString(separator = ",")
+    }
+}

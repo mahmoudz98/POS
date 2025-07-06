@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.data
+package com.casecode.pos.core.database.util
 
-sealed interface LoginStateResult {
-    data object Loading : LoginStateResult
+import androidx.room.TypeConverter
+import java.math.BigDecimal
 
-    data class SuccessLoginAdmin(
-        val uid: String,
-    ) : LoginStateResult
+/**
+ * Type converter for [BigDecimal] to allow it to be stored in a Room database.
+ */
+internal class BigDecimalConverter {
+    @TypeConverter
+    fun bigDecimalToString(input: BigDecimal?): String? {
+        return input?.toPlainString()
+    }
 
-    data class NotCompleteBusiness(
-        val uid: String,
-    ) : LoginStateResult
-
-    data class EmployeeLogin(
-        val employee: EmployeeLoginData,
-    ) : LoginStateResult
-
-    data object NotSignIn : LoginStateResult
-
-    data object Error : LoginStateResult
+    @TypeConverter
+    fun stringToBigDecimal(input: String?): BigDecimal? {
+        if (input.isNullOrBlank()) {
+            return null
+        }
+        return BigDecimal(input)
+    }
 }
