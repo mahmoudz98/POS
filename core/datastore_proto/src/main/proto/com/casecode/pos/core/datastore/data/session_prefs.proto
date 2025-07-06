@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_package = "com.casecode.pos.core.datastore";
+option java_multiple_files = true;
+
+message SessionPreferences {
+  // Represents the login status
+  LoginStatus login_status = 1;
+  // Could be the Owner's Firebase UID or the Employee's login ID
+  string user_id = 2;
+  string user_name = 3;
+  // The ID of the parent business this session belongs to
+  string business_id = 4;
+  // The specific branch the user is currently operating in
+  string active_branch_id = 5;
+  // The role of the user, e.g., "OWNER", "MANAGER", "CASHIER"
+  string user_role = 6;
+}
+
+enum LoginStatus {
+  LOGGED_OUT = 0;
+  OWNER_LOGGED_IN = 1;
+  OWNER_ONBOARDING = 2;
+  EMPLOYEE_LOGGED_IN = 3;
+}
