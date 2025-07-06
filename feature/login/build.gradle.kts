@@ -21,14 +21,12 @@ plugins {
     alias(libs.plugins.pos.android.library.jacoco)
 }
 android {
-    namespace = "$APPLICATION_ID.feature.signin"
+    namespace = "$APPLICATION_ID.feature.login"
 }
 
 dependencies {
     implementation(projects.core.domain)
-    implementation(projects.feature.loginEmployee)
 
-    implementation(libs.googleid)
     // implementation(libs.androidx.credentials)
 
     testImplementation(libs.hilt.android.testing)
