@@ -1,16 +1,18 @@
 [versions]
 # AGP and tools should be updated together
-agp = "8.10.0"
-androidTools = "31.10.0"
+agp = "8.11.0"
+androidTools = "31.11.0"
 billingKtx = "7.1.1"
 escposThermalprinterAndroid = "3.4.0"
 googleid = "1.1.1"
 credentials = "1.3.0"
 itext7Core = "7.2.5"
-kotlin = "2.1.10"
+kotlin = "2.2.0"
 androidDesugarJdkLibs = "2.1.4"
 libphonenumber = "8.12.31"
 playServicesBase = "18.5.0"
+revenuecat = "8.20.0"
+billing-client = "7.1.1"
 playServicesCodeScanner = "16.1.0"
 secrets = "2.0.1"
 dependencyGuard = "0.5.0"
@@ -22,32 +24,30 @@ cashe-fix = "3.0"
 dependency-analysis = "2.0.1"
 
 androidxCompose = "1.8.0-alpha07"
-androidxComposeBom = "2025.05.01"
+androidxComposeBom = "2025.06.01"
 androidxComposeRuntimeTracing = "1.7.6"
 androidxHiltNavigationCompose = "1.2.0"
-androidxDataStore = "1.1.1"
+androidxDataStore = "1.1.7"
 androidxActivity = "1.10.1"
 androidxAppcompat = "1.7.0"
 androidxCoreSplashscreen = "1.0.1"
-core = "1.15.0"
-androidLifecycle = "2.8.7"
-androidxTracing = "1.3.0-alpha02"
+androidxCore = "1.16.0"
+androidLifecycle = "2.9.1"
+androidxTracing = "1.3.0"
 androidxMetrics = "1.0.0-beta01"
 constraintlayout = "1.1.0"
-androidxWork = "2.10.0"
+androidxWork = "2.10.2"
 navigation = "2.8.5"
-androidxLintGradle = "1.0.0-alpha03"
+androidxLintGradle = "1.0.0-alpha05"
 androidxMacroBenchmark = "1.3.3"
 coil = "2.7.0"
 kotlinxCoroutines = "1.10.1"
 kotlinxSerializationJson = "1.8.0"
 kotlinxDatetime = "0.6.1"
-# DI
-hilt = "2.54"
+hilt = "2.56.2"
 hiltExt = "1.2.0"
 hilt-navigation = "1.2.0"
-ksp = "2.1.10-1.0.31"
-#  Services
+ksp = "2.2.0-2.0.2"
 firebaseBom = "33.7.0"
 firebase-auth = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
@@ -61,27 +61,29 @@ firebasePerfPlugin = "1.4.2"
 googleOssPlugin = "0.10.6"
 zxing-core = "3.4.1"
 
-coreTesting = "2.2.0"
-truth = "1.4.4"
+
 power-assert = "2.0.20"
 # Debug Tools
 leakcanary = "2.11"
 timber = "5.0.1"
 
-# AndroidX test
+coreTesting = "2.2.0"
+truth = "1.4.4"
 testespresso = "3.6.1"
 testrunner = "1.6.2"
 androidxTestCore = "1.6.1"
 androidxProfileinstaller = "1.3.1"
 androidxTestExt = "1.2.1"
+androidxTestOrchestrator = "1.5.1"
+robolectric = "4.15.1"
 androidxTestRules = "1.6.1"
 androidxUiAutomator = "2.3.0"
-jacoco = "0.8.12"
 mockk-andrdoid = "1.13.12"
+jacoco = "0.8.12"
 
-# Gradle plugins
 ktlint-plugin = "10.3.0"
 spotless = "6.24.0"
+room = "2.7.2"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -90,7 +92,7 @@ androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-tes
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom-alpha", version.ref = "androidxComposeBom" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxCompose" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
@@ -116,8 +118,7 @@ androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", ve
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigation" }
-billing-ktx = { module = "com.android.billingclient:billing-ktx", version.ref = "billingKtx" }
-core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
+core = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppcompat" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -143,7 +144,9 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version = "0.3.8" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
-
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 # DI
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 degger-android = { module = "com.google.dagger:dagger", version.ref = "hilt" }
@@ -170,18 +173,20 @@ firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-testlab = { module = "com.google.firebase:testlab-instr-lib", version.ref = "testlab" }
 play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
+revenuecat-purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "revenuecat" }
+billing-client = { module = "com.android.billingclient:billing-ktx", version.ref = "billing-client" }
 firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase-auth" }
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 zxing-generate-barcode = { module = "com.google.zxing:core", version.ref = "zxing-core" }
 
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
-androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk-andrdoid" }
 mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk-andrdoid" }
@@ -190,14 +195,17 @@ mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk-andrdoid" 
 leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "testespresso" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidxTestExt" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "testrunner" }
+androidx-test-orchestrator = { group = "androidx.test", name = "orchestrator", version.ref = "androidxTestOrchestrator" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxUiAutomator" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "androidxMacroBenchmark" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 
 # Dependencies of the included build-logic
@@ -210,6 +218,7 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 power-assert-plugin = { group = "org.jetbrains.kotlin.plugin.power-assert", name = "org.jetbrains.kotlin.plugin.power-assert.gradle.plugin", version.ref = "kotlin" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -234,6 +243,8 @@ dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.r
 module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 power-assert = { id = "org.jetbrains.kotlin.plugin.power-assert", version.ref = "kotlin" }
+room = { id = "androidx.room", version.ref = "room" }
+
 # Plugins defined by this project
 pos-android-application = { id = "pos.android.application" }
 pos-android-application-compose = { id = "pos.android.application.compose" }
@@ -245,6 +256,7 @@ pos-android-library-jacoco = { id = "pos.android.library.jacoco" }
 pos-android-feature = { id = "pos.android.feature" }
 pos-hilt = { id = "pos.hilt" }
 pos-android-firebase = { id = "pos.android.firebase" }
+pos-android-room = { id = "pos.android.room" }
 pos-android-firebase-library = { id = "pos.android.firebase.library" }
 pos-android-test = { id = "pos.android.test" }
 pos-android-lint = { id = "pos.android.lint" }
