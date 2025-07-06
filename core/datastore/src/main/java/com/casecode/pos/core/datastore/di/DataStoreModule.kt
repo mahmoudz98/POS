@@ -22,8 +22,8 @@ import androidx.datastore.dataStoreFile
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.common.di.ApplicationScope
-import com.casecode.pos.core.datastore.LoginPreferences
-import com.casecode.pos.core.datastore.LoginPreferencesSerializer
+import com.casecode.pos.core.datastore.SessionPreferences
+import com.casecode.pos.core.datastore.SessionPreferencesSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,20 +33,23 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
+private const val SESSION_PREFS_DATA_STORE_FILE_NAME = "session_prefs.pb"
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
+
     @Provides
     @Singleton
-    internal fun providesLoginPreferencesDataStore(
+    internal fun providesSessionPreferencesDataStore(
         @ApplicationContext context: Context,
         @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
         @ApplicationScope scope: CoroutineScope,
-        loginPreferencesSerializer: LoginPreferencesSerializer,
-    ): DataStore<LoginPreferences> = DataStoreFactory.create(
-        serializer = loginPreferencesSerializer,
+        sessionPreferencesSerializer: SessionPreferencesSerializer,
+    ): DataStore<SessionPreferences> = DataStoreFactory.create(
+        serializer = sessionPreferencesSerializer,
         scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
     ) {
-        context.dataStoreFile("login_preferences.pb")
+        context.dataStoreFile(SESSION_PREFS_DATA_STORE_FILE_NAME)
     }
 }

@@ -22,20 +22,20 @@ import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
-class LoginPreferencesSerializer
-@Inject
-constructor() : Serializer<LoginPreferences> {
-    override val defaultValue: LoginPreferences = LoginPreferences.getDefaultInstance()
+class SessionPreferencesSerializer @Inject constructor() : Serializer<SessionPreferences> {
+    override val defaultValue: SessionPreferences = SessionPreferences.getDefaultInstance()
 
-    override suspend fun readFrom(input: InputStream): LoginPreferences = try {
-        // readFrom is already called on the data store background thread
-        LoginPreferences.parseFrom(input)
-    } catch (exception: InvalidProtocolBufferException) {
-        throw CorruptionException("Cannot read proto.", exception)
+    override suspend fun readFrom(input: InputStream): SessionPreferences {
+        try {
+            // readFrom will automatically close the input stream
+            return SessionPreferences.parseFrom(input)
+        } catch (exception: InvalidProtocolBufferException) {
+            throw CorruptionException("Cannot read proto.", exception)
+        }
     }
 
-    override suspend fun writeTo(t: LoginPreferences, output: OutputStream) {
-        // writeTo is already called on the data store background thread
+    override suspend fun writeTo(t: SessionPreferences, output: OutputStream) {
+        // writeTo will automatically close the output stream
         t.writeTo(output)
     }
 }

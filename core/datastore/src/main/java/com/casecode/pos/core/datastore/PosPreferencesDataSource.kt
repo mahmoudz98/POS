@@ -16,125 +16,101 @@
 package com.casecode.pos.core.datastore
 
 import androidx.datastore.core.DataStore
-import com.casecode.pos.core.model.data.EmployeeLoginData
 import com.casecode.pos.core.model.data.LoginStateResult
-import com.casecode.pos.core.model.data.permissions.Permission
-import com.casecode.pos.core.model.data.permissions.toPermission
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
-import com.casecode.pos.core.model.data.users.Employee as EmployeeModel
 
 /**
  * Data source for POS preferences, using DataStore to store and retrieve data.
  *
- * @param loginPreferences The DataStore instance used to store and retrieve login preferences.
+ * @param sessionDataStore The DataStore instance used to store and retrieve session preferences.
  */
 class PosPreferencesDataSource
 @Inject
 constructor(
-    private val loginPreferences: DataStore<LoginPreferences>,
+    private val sessionDataStore: DataStore<SessionPreferences>,
+
 ) {
-    val currentUid =
-        loginPreferences.data.map {
-            it.uid
-        }
-    val currentNameLogin =
-        loginPreferences.data.map {
-            when (it.authState) {
-                AuthState.LOGIN_ADMIN -> {
-                    "Admin"
-                }
+    /**
+     * A Flow that represents the high-level login state of the app.
+     * This maps the raw proto data into our domain-specific LoginStateResult sealed interface.
+     */
+    val loginData: Flow<LoginStateResult> = sessionDataStore.data
+        .map { prefs ->
+            when (prefs.loginStatus) {
+                LoginStatus.OWNER_LOGGED_IN -> LoginStateResult.OwnerLoggedIn(
+                    businessId = prefs.businessId,
+                    activeBranchId = prefs.activeBranchId,
+                )
 
-                AuthState.LOGIN_EMPLOYEE -> {
-                    it.employee.name
-                }
+                LoginStatus.OWNER_ONBOARDING -> LoginStateResult.OwnerOnBoarding(
+                    businessId = prefs.businessId,
+                )
 
-                else -> ""
-            }
-        }
-    val loginData =
-        loginPreferences.data.map {
-            when (it.authState) {
-                AuthState.LOGIN_ADMIN -> {
-                    LoginStateResult.SuccessLoginAdmin(it.uid)
-                }
+                LoginStatus.EMPLOYEE_LOGGED_IN -> LoginStateResult.EmployeeLoggedIn(
+                    businessId = prefs.businessId,
+                    activeBranchId = prefs.activeBranchId,
+                    role = prefs.userRole,
+                )
 
-                AuthState.LOGIN_EMPLOYEE -> {
-                    LoginStateResult.EmployeeLogin(
-                        EmployeeLoginData(
-                            it.employee.name,
-                            it.uid,
-                            it.employee.phoneNumber,
-                            it.employee.password,
-                            it.employee.branchName,
-                            it.employee.permission.toPermission() ?: Permission.NONE,
-                        ),
-                    )
-                }
-
-                AuthState.NOT_COMPLETE_SETUP_BUSINESS -> {
-                    LoginStateResult.NotCompleteBusiness(it.uid)
-                }
-
-                AuthState.NONE, null -> LoginStateResult.NotSignIn
-                AuthState.UNRECOGNIZED -> LoginStateResult.Error
+                else -> LoginStateResult.LoggedOut
             }
         }
 
-    suspend fun setLoginWithAdmin(uid: String, isCompleteSetupBusiness: Boolean) {
-        try {
-            loginPreferences.updateData {
-                it.copy {
-                    authState =
+    /**
+     * Updates the Datastore to reflect a new user session. This is the implementation
+     * that startOwnerSession and startEmployeeSession will call via SessionRepository.
+     *
+     * This single method replaces your previous `saveOwnerLogin` and `saveEmployeeLogin`.
+     */
+    suspend fun saveNewLoginSession(
+        isOwner: Boolean = false,
+        isCompleteSetupBusiness: Boolean = false,
+        userId: String,
+        userName: String,
+        businessId: String,
+        activeBranchId: String,
+        role: String,
+    ) {
+        sessionDataStore.updateData { prefs ->
+            prefs.toBuilder()
+                .setLoginStatus(
+                    if (isOwner) {
                         if (isCompleteSetupBusiness) {
-                            AuthState.LOGIN_ADMIN
+                            LoginStatus.OWNER_LOGGED_IN
                         } else {
-                            AuthState.NOT_COMPLETE_SETUP_BUSINESS
+                            LoginStatus.OWNER_ONBOARDING
                         }
-
-                    this.uid = uid
-                }
-            }
-        } catch (ioException: IOException) {
-            Timber.e("Failed to update login preference: $ioException")
+                    } else {
+                        LoginStatus.EMPLOYEE_LOGGED_IN
+                    },
+                )
+                .setUserId(userId)
+                .setUserName(userName)
+                .setBusinessId(businessId)
+                .setActiveBranchId(activeBranchId)
+                .setUserRole(role)
+                .build()
         }
     }
 
-    suspend fun setLoginByEmployee(employee: EmployeeModel, uid: String) {
-        try {
-            loginPreferences.updateData {
-                it.copy {
-                    authState = AuthState.LOGIN_EMPLOYEE
-                    this.uid = uid
-                    this.employee =
-                        employee {
-                            this.name = employee.name
-                            this.password = employee.password ?: ""
-                            this.branchName = employee.branchName ?: ""
-                            this.phoneNumber = employee.phoneNumber
-                            this.permission = employee.permission
-                        }
-                }
-            }
-        } catch (ioEx: IOException) {
-            Timber.e("Failed to update login preference with employee: $ioEx")
-        }
-    }
-
-    suspend fun restLogin() {
-        try {
-            loginPreferences.updateData {
-                it
-                    .toBuilder()
-                    .clearUid()
-                    .clearEmployee()
-                    .clearAuthState()
-                    .build()
-            }
-        } catch (ioEx: IOException) {
-            Timber.e("Failed to update rest login preference: $ioEx")
+    /**
+     * Clears all session data and sets the state to LoggedOut.
+     * This replaces your old `restLogin`.
+     */
+    suspend fun clearLoginSession() {
+        sessionDataStore.updateData {
+            // It's safer to clear fields explicitly than to just use the default instance,
+            // in case the default ever changes.
+            it.toBuilder()
+                .clearLoginStatus()
+                .clearUserId()
+                .clearUserName()
+                .clearBusinessId()
+                .clearActiveBranchId()
+                .clearUserRole()
+                .build()
         }
     }
 }
