@@ -17,7 +17,7 @@ package com.casecode.pos.feature.employee
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
@@ -47,7 +47,7 @@ constructor(
     private val addEmployeesUseCase: AddEmployeeUseCase,
     private val updateEmployeesUseCase: UpdateEmployeesUseCase,
     private val deleteEmployeeUseCase: DeleteEmployeeUseCase,
-    private val authRepository: AuthRepository,
+    private val authRepositoryO: AuthRepositoryO,
 ) : ViewModel() {
     private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val _uiState = MutableStateFlow(UiEmployeesState())
@@ -66,7 +66,7 @@ constructor(
 
     fun getCurrentUid() {
         viewModelScope.launch {
-            currentUid.update { authRepository.currentUserId() }
+            currentUid.update { authRepositoryO.currentUserId() }
         }
     }
 
