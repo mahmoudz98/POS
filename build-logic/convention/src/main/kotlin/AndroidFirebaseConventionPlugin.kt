@@ -14,6 +14,7 @@ class AndroidFirebaseConventionPlugin : Plugin<Project> {
                 "api"(libs.findLibrary("firebase.auth").get())
                 "api"(libs.findLibrary("firebase.firestore").get())
                 "api"(libs.findLibrary("firebase.storage").get())
+                "api"(libs.findLibrary("firebase.config").get())
                 "implementation"(libs.findLibrary("firebase.analytics").get())
                 "implementation"(libs.findLibrary("firebase.crashlytics").get())
                 "implementation"(libs.findLibrary("firebase.performance").get()) {
