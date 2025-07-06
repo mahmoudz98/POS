@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.signin
+package com.casecode.pos.feature.login
 
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import com.casecode.pos.core.designsystem.component.PosTextButton
 
 @Composable
@@ -32,15 +32,15 @@ internal fun DownloadPlayServiceDialog(
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text(text = stringResource(R.string.feature_signin_google_play_services_required)) },
-        text = { Text(text = stringResource(R.string.feature_signin_google_play_services_message)) },
+        title = { Text(text = stringResource(R.string.feature_login_play_services_dialog_title)) },
+        text = { Text(text = stringResource(R.string.feature_login_play_services_dialog_message)) },
         confirmButton = {
             PosTextButton(
                 onClick = {
                     openGooglePlayStore(context)
                     onDismiss()
                 },
-                text = { Text(stringResource(R.string.feature_signin_action_download)) },
+                text = { Text(stringResource(R.string.feature_login_play_services_dialog_confirm_button)) },
             )
         },
         dismissButton = {
@@ -54,11 +54,11 @@ internal fun DownloadPlayServiceDialog(
 
 private fun openGooglePlayStore(context: Context) {
     val url = "https://play.google.com/store/apps/details?id=com.google.android.gms"
-    val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val playStoreIntent = Intent(Intent.ACTION_VIEW, url.toUri())
     try {
         context.startActivity(playStoreIntent, null)
     } catch (_: ActivityNotFoundException) {
-        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val webIntent = Intent(Intent.ACTION_VIEW, url.toUri())
         context.startActivity(webIntent, null)
     }
 }

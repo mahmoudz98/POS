@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="feature_login_pos" translatable="false">نقطة البيع</string>
+    <!-- Sign In -->
+    <string name="feature_login_hint">تتبع المبيعات، إدارة المخزون، والتحكم الكامل في عملك.</string>
+
+    <string name="feature_login_title">تسجيل الدخول</string>
+    <string name="feature_login_button_owner_google">تسجيل الدخول باستخدام جوجل</string>
+    <string name="feature_login_button_employee">تسجيل الدخول كموظف</string>
+
+
+    <string name="feature_login_error_no_business_found">لم يتم العثور على حساب تجاري لهذا المستخدم. الرجاء التسجيل أولاً أو الاتصال بالمسؤول.</string>
+
+    <string name="feature_login_error_google_sign_in_failed">فشل تسجيل الدخول باستخدام جوجل. الرجاء معاودة المحاولة.</string>
+
+    <string name="feature_login_error_network_connection">تعذر الاتصال. الرجاء التحقق من اتصالك بالشبكة والمحاولة مرة أخرى.</string>
+
+
+    <string name="feature_login_error_unknown">حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى لاحقًا.</string>
+
+    <!-- Dialog for missing Google Play Services -->
+    <string name="feature_login_play_services_dialog_title">خدمات جوجل بلاي مطلوبة</string>
+    <string name="feature_login_play_services_dialog_message">يتطلب هذا التطبيق خدمات جوجل بلاي ليعمل بشكل صحيح. يرجى تثبيتها أو تحديثها من متجر بلاي.</string>
+    <string name="feature_login_play_services_dialog_confirm_button">الذهاب إلى المتجر</string>
+
+</resources>

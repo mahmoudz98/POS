@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.signin.navigation
+package com.casecode.pos.feature.login.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -23,27 +23,29 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.casecode.pos.feature.signin.SignInScreen
+import com.casecode.pos.feature.login.LoginRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SignInRoute
+data object LoginRoute
 
-fun NavGraphBuilder.signInScreen(
-    onSignInSuccessNavigateToMain: () -> Unit,
-    onSignInSuccessNavigateToStepper: () -> Unit,
+fun NavController.navigateToLogin(navOptions: NavOptions? = null) {
+    this.navigate(LoginRoute, navOptions)
+}
+
+fun NavGraphBuilder.loginScreen(
+    onLoginEmployeeClick: () -> Unit,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
     exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
 ) {
-    composable<SignInRoute>(
+    composable<LoginRoute>(
         enterTransition = enterTransition,
         exitTransition = exitTransition,
     ) {
-        SignInScreen(
-            onSignInSuccessNavigateToMain = onSignInSuccessNavigateToMain,
-            onSignInSuccessNavigateToStepper = onSignInSuccessNavigateToStepper,
+        LoginRoute(
+            onLoginEmployeeClick = onLoginEmployeeClick,
+            onShowSnackbar = onShowSnackbar,
         )
     }
 }
-
-fun NavController.navigateToSignIn(navOptions: NavOptions) = navigate(SignInRoute, navOptions)

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Designed and developed 2024 by Mahmood Abdalhafeez
+
+     Licensed under the MIT License (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         https://opensource.org/licenses/MIT
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="feature_login_app_name" translatable="false">POS</string>
+    <string name="feature_login_pos" translatable="false">POS</string>
+    <!-- Sign In -->
+    <string name="feature_login_hint">Track sales, manage inventory, and stay in control of your business.</string>
+
+<!--    <string name="feature_signin_google_title">Sign in with Google</string>
+    <string name="feature_signin_employee_option">Or, log in as an employee</string>
+    <string name="feature_signin_google_play_services_required">Google Play Services Required</string>
+    <string name="feature_signin_google_play_services_message">This app needs Google Play services to work correctly. Please download and install them from the Play Store.</string>
+    <string name="feature_signin_action_download">Download</string>
+    <string name="feature_signin_error_google_sign_in">Google sign-in failed: %s</string>-->
+
+    <string name="feature_login_title">Sign In</string>
+    <string name="feature_login_button_owner_google">Sign In with Google</string>
+    <string name="feature_login_button_employee">Sign In as Employee</string>
+
+    <!-- Error Messages Mapped from Exceptions -->
+
+    <!-- Mapped from BusinessNotFoundException -->
+    <string name="feature_login_error_no_business_found">No business account found for this user. Please sign up or contact your administrator.</string>
+
+    <!-- Mapped from GoogleSignInException / AuthException -->
+    <string name="feature_login_error_google_sign_in_failed">Google Sign-In failed. Please try again.</string>
+
+    <string name="feature_login_error_network_connection">Could not connect. Please check your network connection and try again.</string>
+
+
+    <string name="feature_login_error_unknown">An unexpected error occurred. Please try again later.</string>
+    <string name="feature_login_play_services_dialog_title">Google Play Services Required</string>
+    <string name="feature_login_play_services_dialog_message">This app requires Google Play Services to function correctly. Please install or update it from the Play Store.</string>
+    <string name="feature_login_play_services_dialog_confirm_button">Go to Store</string>
+</resources>
