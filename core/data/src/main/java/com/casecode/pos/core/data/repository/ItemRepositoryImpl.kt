@@ -18,25 +18,26 @@ package com.casecode.pos.core.data.repository
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.model.asDomainModel
+import com.casecode.pos.core.data.model.asExternalModel
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AddItem
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.DeleteItem
 import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.UpdateItem
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.ITEMS_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.ITEM_DELETED_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_NAME_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_QUANTITY_FIELD
-import com.casecode.pos.core.firebase.services.SetOptions
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.model.ItemDataModel
+import com.casecode.pos.core.firebase.FieldValue
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.ITEMS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.ITEM_DELETED_FIELD
+import com.casecode.pos.core.firebase.ITEM_NAME_FIELD
+import com.casecode.pos.core.firebase.ITEM_QUANTITY_FIELD
+import com.casecode.pos.core.firebase.SetOptions
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.model.ItemDataModel
 import com.casecode.pos.core.model.data.users.Item
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -61,7 +62,7 @@ class ItemRepositoryImpl
 @Inject
 constructor(
     private val db: FirestoreService,
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
 ) : ItemRepository {
     override fun getItems(): Flow<Resource<List<Item>>> = flow<Resource<List<Item>>> {
@@ -91,7 +92,7 @@ constructor(
             snapshot.documents.mapNotNull { document ->
                 document
                     .toObject(ItemDataModel::class.java)
-                    ?.let { itemMutableList.add(it.asDomainModel()) }
+                    ?.let { itemMutableList.add(it.asExternalModel()) }
             }
 
             if (itemMutableList.isEmpty()) {
@@ -207,7 +208,7 @@ constructor(
                         batch.update(
                             itemRef,
                             ITEM_QUANTITY_FIELD,
-                            com.casecode.pos.core.firebase.services.FieldValue
+                            FieldValue
                                 .increment(quantity.toLong()),
                         )
                     }

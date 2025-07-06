@@ -15,12 +15,12 @@
  */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.firebase.services.EMPLOYEES_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEE_BRANCH_NAME_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEE_NAME_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEE_PASSWORD_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEE_PERMISSION_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEE_PHONE_NUMBER_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEES_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEE_BRANCH_NAME_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEE_NAME_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEE_PASSWORD_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEE_PERMISSION_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEE_PHONE_NUMBER_FIELD
 import com.casecode.pos.core.model.data.users.Employee
 
 fun Map<String, Any>.asExternalModel(): Employee = Employee(

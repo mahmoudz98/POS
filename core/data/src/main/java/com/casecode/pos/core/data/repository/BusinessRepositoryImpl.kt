@@ -24,17 +24,17 @@ import com.casecode.pos.core.data.model.asExternalBusiness
 import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AddBusiness
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.BusinessRepository
 import com.casecode.pos.core.domain.repository.CompleteBusiness
 import com.casecode.pos.core.domain.utils.AddBranchBusinessResult
 import com.casecode.pos.core.domain.utils.BusinessResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.BRANCHES_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_IS_COMPLETED_STEP_FIELD
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.BRANCHES_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_IS_COMPLETED_STEP_FIELD
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
 import com.google.firebase.firestore.FieldValue
@@ -51,7 +51,7 @@ class BusinessRepositoryImpl
 @Inject
 constructor(
     private val db: FirestoreService,
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
 ) : BusinessRepository {
     override suspend fun getBusiness(): BusinessResult {

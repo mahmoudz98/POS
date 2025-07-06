@@ -15,23 +15,23 @@
  */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.firebase.services.ITEM_CATEGORY_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_COST_PRICE_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_DELETED_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_IMAGE_URL_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_NAME_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_PRICE_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_QTY_PER_PACK_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_QUANTITY_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_REORDER_LEVEL_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_SKU_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_SUPPLIER_NAME_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_UNIT_OF_MEASUREMENT_FIELD
-import com.casecode.pos.core.firebase.services.model.ItemDataModel
+import com.casecode.pos.core.firebase.ITEM_CATEGORY_FIELD
+import com.casecode.pos.core.firebase.ITEM_COST_PRICE_FIELD
+import com.casecode.pos.core.firebase.ITEM_DELETED_FIELD
+import com.casecode.pos.core.firebase.ITEM_IMAGE_URL_FIELD
+import com.casecode.pos.core.firebase.ITEM_NAME_FIELD
+import com.casecode.pos.core.firebase.ITEM_PRICE_FIELD
+import com.casecode.pos.core.firebase.ITEM_QTY_PER_PACK_FIELD
+import com.casecode.pos.core.firebase.ITEM_QUANTITY_FIELD
+import com.casecode.pos.core.firebase.ITEM_REORDER_LEVEL_FIELD
+import com.casecode.pos.core.firebase.ITEM_SKU_FIELD
+import com.casecode.pos.core.firebase.ITEM_SUPPLIER_NAME_FIELD
+import com.casecode.pos.core.firebase.ITEM_UNIT_OF_MEASUREMENT_FIELD
+import com.casecode.pos.core.firebase.model.ItemDataModel
 import com.casecode.pos.core.model.data.users.Item
 import com.casecode.pos.core.model.data.users.UnitOfMeasurement.Companion.toUnitOfMeasurement
 
-fun ItemDataModel.asDomainModel() = Item(
+fun ItemDataModel.asExternalModel() = Item(
     name = this.name,
     category = this.category,
     supplierName = this.supplierName,

@@ -15,23 +15,24 @@
  */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.firebase.model.NetworkSubscription
-import com.casecode.pos.core.model.data.business.Subscription
-import com.casecode.pos.core.model.data.business.SubscriptionStatus
+import com.casecode.pos.core.firebase.model.NetworkBranch
+import com.casecode.pos.core.model.data.business.Branch
+import com.casecode.pos.core.model.data.business.BranchStatus
 import kotlinx.datetime.Instant
 
-fun NetworkSubscription.asExternalModel(): Subscription = Subscription(
-    planId = this.planId ?: "",
-    planName = this.planName ?: "Free",
-    status = this.status ?: SubscriptionStatus.CANCELED,
-    creditBalance = this.creditBalance ?: 0L,
-    currentPeriodEndDate = this.currentPeriodEndDate?.toInstant()?.let { Instant.fromEpochMilliseconds(it.epochSecond) },
+
+fun NetworkBranch.asExternalModel(): Branch = Branch(
+    id = this.id,
+    name = this.name ?: "",
+    phone = this.phone,
+    status = this.status ?: BranchStatus.CLOSED,
+    createdAt = this.createdAt?.toInstant()?.let { Instant.fromEpochMilliseconds(it.epochSecond) },
     updatedAt = this.updatedAt?.toInstant()?.let { Instant.fromEpochMilliseconds(it.epochSecond) },
 )
 
-fun Subscription.asNetworkModel(): NetworkSubscription = NetworkSubscription(
-    planId = this.planId,
-    planName = this.planName,
+fun Branch.asNetworkModel(): NetworkBranch = NetworkBranch(
+    id = this.id,
+    name = this.name,
+    phone = this.phone,
     status = this.status,
-    creditBalance = this.creditBalance,
 )

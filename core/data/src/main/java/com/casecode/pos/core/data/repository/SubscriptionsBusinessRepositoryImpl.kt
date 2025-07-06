@@ -23,12 +23,12 @@ import com.casecode.pos.core.data.model.asSubscriptionBusinessModel
 import com.casecode.pos.core.data.model.asSubscriptionRequest
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.AddSubscriptionBusiness
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.SUBSCRIPTION_BUSINESS_FIELD
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.SUBSCRIPTION_BUSINESS_FIELD
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.casecode.pos.core.model.data.users.SubscriptionBusiness
 import com.google.firebase.firestore.FieldValue
@@ -48,7 +48,7 @@ class SubscriptionsBusinessRepositoryImpl
 @Inject
 constructor(
     private val db: FirestoreService,
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SubscriptionsBusinessRepository {
     override suspend fun setSubscriptionBusiness(

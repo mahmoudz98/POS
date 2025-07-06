@@ -22,16 +22,16 @@ import com.casecode.pos.core.data.model.asDomainModel
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.SupplierInvoiceRepository
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICES_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD
-import com.casecode.pos.core.firebase.services.SetOptions
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.SUPPLIER_INVOICES_COLLECTION_PATH
+import com.casecode.pos.core.firebase.SUPPLIER_INVOICE_PAYMENT_DETAILS_FIELD
+import com.casecode.pos.core.firebase.SUPPLIER_INVOICE_PAYMENT_STATUS_FIELD
+import com.casecode.pos.core.firebase.SetOptions
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.PaymentDetails
 import com.casecode.pos.core.model.data.users.PaymentStatus
 import com.casecode.pos.core.model.data.users.SupplierInvoice
@@ -55,7 +55,7 @@ import kotlin.coroutines.suspendCoroutine
 class SupplierInvoiceRepositoryImpl
 @Inject constructor(
     private val db: FirestoreService,
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SupplierInvoiceRepository {
 

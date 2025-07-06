@@ -15,24 +15,29 @@
  */
 package com.casecode.pos.core.data.di
 
-import android.content.Context
-import com.casecode.pos.core.data.utils.ConnectivityManagerNetworkMonitor
-import com.casecode.pos.core.domain.utils.NetworkMonitor
+import com.casecode.pos.core.data.service.GoogleAuthUiClientImpl
+import com.casecode.pos.core.data.service.LogServiceImpl
+import com.casecode.pos.core.data.service.RevenueCatPaymentServiceImpl
+import com.casecode.pos.core.domain.service.GoogleAuthUiClient
+import com.casecode.pos.core.domain.service.PaymentService
+import com.casecode.pos.core.domain.service.LogService
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
-    @Provides
+abstract class  ServiceModule {
+
+    @Binds
     @Singleton
-    fun provideConnectivityManagerNetworkMonitor(
-        @ApplicationContext context: Context,
-    ): NetworkMonitor = ConnectivityManagerNetworkMonitor(context)
+    internal abstract fun bindLogService(logServiceImpl: LogServiceImpl): LogService
 
+    @Binds
+    abstract fun bindPaymentService(impl: RevenueCatPaymentServiceImpl): PaymentService
 
+    @Binds
+    abstract fun bindGoogleAuthUiClient(impl: GoogleAuthUiClientImpl): GoogleAuthUiClient
 }

@@ -15,15 +15,15 @@
  */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.firebase.services.BRANCHES_CODE_FIELD
-import com.casecode.pos.core.firebase.services.BRANCHES_FIELD
-import com.casecode.pos.core.firebase.services.BRANCHES_NAME_FIELD
-import com.casecode.pos.core.firebase.services.BRANCHES_PHONE_NUMBER_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_EMAIL_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_IS_COMPLETED_STEP_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_PHONE_NUMBER_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_STORE_TYPE_FIELD
+import com.casecode.pos.core.firebase.BRANCHES_CODE_FIELD
+import com.casecode.pos.core.firebase.BRANCHES_FIELD
+import com.casecode.pos.core.firebase.BRANCHES_NAME_FIELD
+import com.casecode.pos.core.firebase.BRANCHES_PHONE_NUMBER_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_EMAIL_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_IS_COMPLETED_STEP_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_PHONE_NUMBER_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_STORE_TYPE_FIELD
 import com.casecode.pos.core.model.data.users.Branch
 import com.casecode.pos.core.model.data.users.Business
 import com.casecode.pos.core.model.data.users.StoreType

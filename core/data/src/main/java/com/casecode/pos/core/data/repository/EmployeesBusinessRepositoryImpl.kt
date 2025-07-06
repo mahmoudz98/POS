@@ -23,14 +23,14 @@ import com.casecode.pos.core.data.model.asExternalEmployee
 import com.casecode.pos.core.data.model.asExternalEmployees
 import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.EmployeesBusinessRepository
 import com.casecode.pos.core.domain.repository.ResourceEmployees
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.EMPLOYEES_FIELD
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.EMPLOYEES_FIELD
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.Employee
 import com.google.firebase.firestore.FieldValue
 import kotlinx.coroutines.CoroutineDispatcher
@@ -47,7 +47,7 @@ class EmployeesBusinessRepositoryImpl
 @Inject
 constructor(
     private val db: FirestoreService,
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : EmployeesBusinessRepository {
     override fun getEmployees(): Flow<ResourceEmployees> = flow {

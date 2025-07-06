@@ -22,13 +22,13 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.model.toInvoicesGroup
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.InvoiceRepository
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.INVOICE_DATE_FIELD
-import com.casecode.pos.core.firebase.services.INVOICE_FIELD
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.INVOICE_DATE_FIELD
+import com.casecode.pos.core.firebase.INVOICE_FIELD
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.Invoice
 import com.casecode.pos.core.model.data.users.InvoiceGroup
 import com.google.firebase.Timestamp
@@ -43,7 +43,7 @@ import kotlin.coroutines.suspendCoroutine
 class InvoiceRepositoryImpl
 @Inject
 constructor(
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     private val db: FirestoreService,
     @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
 ) : InvoiceRepository {

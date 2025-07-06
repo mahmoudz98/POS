@@ -23,18 +23,18 @@ import androidx.credentials.exceptions.GetCredentialException
 import com.casecode.pos.core.common.AppDispatchers
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.model.asExternalModel
 import com.casecode.pos.core.datastore.PosPreferencesDataSource
 import com.casecode.pos.core.domain.repository.AccountRepository
+import com.casecode.pos.core.domain.service.LogService
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.domain.utils.SignInGoogleState
-import com.casecode.pos.core.firebase.services.BUSINESS_FIELD
-import com.casecode.pos.core.firebase.services.BUSINESS_IS_COMPLETED_STEP_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEES_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEE_NAME_FIELD
-import com.casecode.pos.core.firebase.services.EMPLOYEE_PASSWORD_FIELD
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.BUSINESS_FIELD
+import com.casecode.pos.core.firebase.BUSINESS_IS_COMPLETED_STEP_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEES_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEE_NAME_FIELD
+import com.casecode.pos.core.firebase.EMPLOYEE_PASSWORD_FIELD
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.UnsupportedApiCallException
@@ -51,7 +51,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -62,11 +61,11 @@ constructor(
     private val firebaseAuth: FirebaseAuth,
     private val db: FirestoreService,
     private val posPreferencesDataSource: PosPreferencesDataSource,
+    private val logService: LogService,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : AccountRepository {
     private val credentialManager: CredentialManager = CredentialManager.create(context)
 
-    // TODO: refactor use activityContext with HILT and refactor this method
     override suspend fun signIn(idToken: suspend () -> String): SignInGoogleState = withContext(ioDispatcher) {
         try {
             val googleIdToken = idToken()
@@ -85,17 +84,17 @@ constructor(
 
     private fun handleSignInException(e: Exception): SignInGoogleState = when (e) {
         is GetCredentialCancellationException -> {
-            Timber.e(e)
+            logService.logNonFatalCrash(e)
             SignInGoogleState.Cancelled
         }
 
         is GetCredentialException -> {
-            Timber.e(e)
+            logService.logNonFatalCrash(e)
             SignInGoogleState.Error(R.string.core_data_sign_in_exception)
         }
 
         is UnsupportedApiCallException -> {
-            Timber.e("UnsupportedApiCallException: $e")
+            logService.logNonFatalCrash(e)
             SignInGoogleState.Error(R.string.core_data_unsupported_api_call)
         }
 
@@ -104,12 +103,12 @@ constructor(
         }
 
         is FirebaseAuthException -> {
-            Timber.e("Sign-in failed with FirebaseUserException: ${e.message}")
+            logService.log(e.message ?: "")
             SignInGoogleState.Error(R.string.core_data_sign_in_api_exception)
         }
 
         else -> {
-            Timber.e("Sign-in failed with unexpected exception: ${e.message}")
+            logService.log(e.message ?: "")
             SignInGoogleState.Error(R.string.core_data_sign_in_failure)
         }
     }
@@ -124,11 +123,12 @@ constructor(
 
     private suspend fun signInWithGoogleCredentials(credentials: AuthCredential): AuthResult = firebaseAuth.signInWithCredential(credentials).await()
 
-    override suspend fun checkUserLogin() {
-        withContext(ioDispatcher) {
-            val currentUser = firebaseAuth.currentUser ?: return@withContext
+    override suspend fun checkUserLogin(): Boolean {
+        return withContext(ioDispatcher) {
+            val currentUser = firebaseAuth.currentUser ?: return@withContext false
             val isAdmin = isUserCompleteStep(currentUser.uid)
-            posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
+            //posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
+            !isAdmin
         }
     }
 
@@ -149,7 +149,7 @@ constructor(
                 false
             }
         } catch (e: Exception) {
-            Timber.e(e)
+            logService.logNonFatalCrash(e)
             false
         }
     }
@@ -158,21 +158,20 @@ constructor(
         try {
             // Create a temporary user with a generic password
             firebaseAuth.createUserWithEmailAndPassword(email, "temporary_password")
-            // Account creation succeeded, email is available
-            Timber.i("checkRegistration: email is created before :true")
             Resource.Success(true)
         } catch (_: FirebaseAuthUserCollisionException) {
-            Timber.i("checkRegistration: email is created before :false")
+            logService.log("checkRegistration: email is created before :false")
             // Email already exists
             Resource.Success(false) // Assuming password-based sign-in
         } catch (e: Exception) {
+            logService.logNonFatalCrash(e)
             // Other errors
             Resource.Error(e.message)
         }
     }
 
     override suspend fun employeeLogOut() {
-        posPreferencesDataSource.restLogin()
+       // posPreferencesDataSource.restLogin()
     }
 
     override suspend fun employeeLogin(
@@ -192,20 +191,19 @@ constructor(
                         it[EMPLOYEE_PASSWORD_FIELD] == password
                 }
             if (employee != null) {
-                Timber.e("employee: $employee")
-                posPreferencesDataSource.setLoginByEmployee(employee.asExternalModel(), uid)
+               // posPreferencesDataSource.setLoginByEmployee(employee.asExternalModel(), uid)
                 Resource.success(true)
             } else {
                 Resource.success(false)
             }
         } catch (e: FirebaseException) {
-            Timber.e("ex: $e")
+            logService.logNonFatalCrash(e)
             Resource.error(e.message)
         } catch (e: FirebaseFirestoreException) {
-            Timber.e("ex: $e")
+            logService.logNonFatalCrash(e)
             Resource.error(e.message)
         } catch (e: Exception) {
-            Timber.e("exception = $e")
+            logService.logNonFatalCrash(e)
             Resource.error(e.message)
         }
     }
@@ -214,12 +212,12 @@ constructor(
         try {
             credentialManager.clearCredentialState(ClearCredentialStateRequest())
             firebaseAuth.signOut()
-            posPreferencesDataSource.restLogin()
+          //  posPreferencesDataSource.restLogin()
         } catch (e: Exception) {
-            Timber.e("SignOut exception: $e")
+            logService.logNonFatalCrash(e)
             e.printStackTrace()
             if (e is CancellationException) {
-                Timber.e("SignOut Cancellation: $e")
+                logService.logNonFatalCrash(e)
                 throw e
             }
         }

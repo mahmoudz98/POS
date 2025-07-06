@@ -19,14 +19,14 @@ import android.graphics.Bitmap
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.DeleteImage
 import com.casecode.pos.core.domain.repository.ItemImageRepository
 import com.casecode.pos.core.domain.repository.ReplaceImage
 import com.casecode.pos.core.domain.repository.UploadImage
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.IMAGES_PATH_FIELD
-import com.casecode.pos.core.firebase.services.ITEM_PATH_FIELD
+import com.casecode.pos.core.firebase.IMAGES_PATH_FIELD
+import com.casecode.pos.core.firebase.ITEM_PATH_FIELD
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -47,7 +47,7 @@ import com.casecode.pos.core.data.R.string as StringResource
 class ItemImageRepositoryImpl
 @Inject
 constructor(
-    private val authService: AuthRepository,
+    private val authService: AuthRepositoryO,
     private val firebaseStorage: FirebaseStorage,
     @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
 ) : ItemImageRepository {

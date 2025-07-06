@@ -21,9 +21,9 @@ import com.casecode.pos.core.data.model.asEntitySubscriptions
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsResource
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.SUBSCRIPTIONS_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.SUBSCRIPTION_COST_FIELD
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.SUBSCRIPTIONS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.SUBSCRIPTION_COST_FIELD
 import com.casecode.pos.core.model.data.subscriptions.Subscription
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineDispatcher

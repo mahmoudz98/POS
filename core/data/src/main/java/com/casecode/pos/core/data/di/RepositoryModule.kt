@@ -16,29 +16,43 @@
 package com.casecode.pos.core.data.di
 
 import com.casecode.pos.core.data.repository.AccountRepositoryImpl
-import com.casecode.pos.core.data.repository.AuthRepositoryImpl
-import com.casecode.pos.core.data.repository.BusinessRepositoryImpl
+import com.casecode.pos.core.data.repository.AuthRepositoryOImpl
 import com.casecode.pos.core.data.repository.EmployeesBusinessRepositoryImpl
 import com.casecode.pos.core.data.repository.InvoiceRepositoryImpl
 import com.casecode.pos.core.data.repository.ItemImageRepositoryImpl
 import com.casecode.pos.core.data.repository.ItemRepositoryImpl
 import com.casecode.pos.core.data.repository.PrinterRepositoryImpl
+import com.casecode.pos.core.data.repository.business.SessionRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsBusinessRepositoryImpl
 import com.casecode.pos.core.data.repository.SubscriptionsRepositoryImpl
 import com.casecode.pos.core.data.repository.SupplierInvoiceRepositoryImpl
 import com.casecode.pos.core.data.repository.SupplierRepositoryImpl
+import com.casecode.pos.core.data.repository.business.AuthRepositoryImpl
+import com.casecode.pos.core.data.repository.business.BranchRepositoryImpl
+import com.casecode.pos.core.data.repository.business.BusinessRepositoryImpl
+import com.casecode.pos.core.data.repository.business.CurrencyRepositoryImpl
+import com.casecode.pos.core.data.repository.business.EmployeeRepositoryImpl
+import com.casecode.pos.core.data.repository.business.SubscriptionRepositoryImpl
+import com.casecode.pos.core.data.repository.business.TaxRepositoryImpl
 import com.casecode.pos.core.domain.repository.AccountRepository
-import com.casecode.pos.core.domain.repository.AuthRepository
-import com.casecode.pos.core.domain.repository.BusinessRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
+import com.casecode.pos.core.domain.repository.business.BusinessRepository
 import com.casecode.pos.core.domain.repository.EmployeesBusinessRepository
 import com.casecode.pos.core.domain.repository.InvoiceRepository
 import com.casecode.pos.core.domain.repository.ItemImageRepository
 import com.casecode.pos.core.domain.repository.ItemRepository
 import com.casecode.pos.core.domain.repository.PrinterRepository
+import com.casecode.pos.core.domain.repository.business.SessionRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsBusinessRepository
 import com.casecode.pos.core.domain.repository.SubscriptionsRepository
 import com.casecode.pos.core.domain.repository.SupplierInvoiceRepository
 import com.casecode.pos.core.domain.repository.SupplierRepository
+import com.casecode.pos.core.domain.repository.business.AuthRepository
+import com.casecode.pos.core.domain.repository.business.BranchRepository
+import com.casecode.pos.core.domain.repository.business.CurrencyRepository
+import com.casecode.pos.core.domain.repository.business.EmployeeRepository
+import com.casecode.pos.core.domain.repository.business.SubscriptionRepository
+import com.casecode.pos.core.domain.repository.business.TaxRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -48,27 +62,41 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+
+    @Binds
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+    @Binds
+    abstract fun bindBusinessRepository(impl: BusinessRepositoryImpl): BusinessRepository
+
+    @Binds
+    abstract fun bindCurrencyRepository(impl: CurrencyRepositoryImpl): CurrencyRepository
+    @Binds
+    abstract fun bindEmployeeRepository(impl: EmployeeRepositoryImpl): EmployeeRepository
+
+    @Binds
+    abstract fun bindSubscriptionRepository(impl: SubscriptionRepositoryImpl): SubscriptionRepository
+
+    @Binds
+    abstract fun bindBranchRepository(impl: BranchRepositoryImpl): BranchRepository
+
+    @Binds
+    abstract fun bindTaxRepository(impl: TaxRepositoryImpl): TaxRepository
+
+    @Binds
+    abstract fun bindSessionRepository(impl: SessionRepositoryImpl): SessionRepository
+
+
+
     @Binds
     abstract fun bindAccountRepository(impl: AccountRepositoryImpl): AccountRepository
 
     @Binds
-    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
-
-    @Binds
-    abstract fun bindBusinessRepo(impl: BusinessRepositoryImpl): BusinessRepository
+    abstract fun bindAuthRepositoryO(impl: AuthRepositoryOImpl): AuthRepositoryO
 
     @Binds
     abstract fun bindEmployeesBusinessRepo(
         impl: EmployeesBusinessRepositoryImpl,
     ): EmployeesBusinessRepository
-
-    @Binds
-    abstract fun bindSubscriptionsBusinessRepo(
-        impl: SubscriptionsBusinessRepositoryImpl,
-    ): SubscriptionsBusinessRepository
-
-    @Binds
-    abstract fun bindSubscriptionsRepo(impl: SubscriptionsRepositoryImpl): SubscriptionsRepository
 
     @Singleton
     @Binds
@@ -90,4 +118,19 @@ abstract class RepositoryModule {
     abstract fun bindSupplierInvoiceRepo(
         impl: SupplierInvoiceRepositoryImpl,
     ): SupplierInvoiceRepository
+
+    @Binds
+    abstract fun bindSubscriptionsBusinessRepository(
+        impl: SubscriptionsBusinessRepositoryImpl,
+    ): SubscriptionsBusinessRepository
+
+    @Binds
+    abstract fun bindBusinessRepositoryO(
+        impl: com.casecode.pos.core.data.repository.BusinessRepositoryImpl,
+    ): com.casecode.pos.core.domain.repository.BusinessRepository
+
+    @Binds
+    abstract fun bindSubscriptionsRepositoryO(
+        impl: SubscriptionsRepositoryImpl,
+    ): SubscriptionsRepository
 }

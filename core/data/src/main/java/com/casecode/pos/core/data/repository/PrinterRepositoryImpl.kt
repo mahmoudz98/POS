@@ -21,12 +21,12 @@ import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.model.asExternalMapper
 import com.casecode.pos.core.data.model.asExternalModel
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.PrinterRepository
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.PRINTER_INFO_COLLECTION_PATH
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.PrinterInfo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -40,7 +40,7 @@ class PrinterRepositoryImpl
 @Inject
 constructor(
     private val db: FirestoreService,
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     @Dispatcher(IO) val ioDispatcher: CoroutineDispatcher,
 ) : PrinterRepository {
     override suspend fun getPrinters(): Resource<List<PrinterInfo>> {

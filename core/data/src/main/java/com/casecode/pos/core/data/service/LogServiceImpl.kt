@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.services
+package com.casecode.pos.core.data.service
 
+import com.casecode.pos.core.domain.service.LogService
 import com.google.firebase.Firebase
 import com.google.firebase.crashlytics.crashlytics
 import timber.log.Timber
@@ -29,7 +30,7 @@ constructor() : LogService {
     }
 
     override fun log(message: String) {
-        Timber.e(message)
+        Timber.d(message)
         Firebase.crashlytics.log(message)
     }
 }

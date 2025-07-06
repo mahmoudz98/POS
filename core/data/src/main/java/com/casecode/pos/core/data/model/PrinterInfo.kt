@@ -17,14 +17,14 @@
 
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_ADDRESS_FIELD
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_CONNECTION_TYPE_FIELD
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_IS_CURRENT_SELECTED_FIELD
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_NAME_DEVICE_FIELD
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_NAME_FIELD
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_PORT_FIELD
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_SIZE_FIELD
-import com.casecode.pos.core.firebase.services.PRINTER_INFO_USB_NAME_DEVICE_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_ADDRESS_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_CONNECTION_TYPE_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_IS_CURRENT_SELECTED_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_NAME_DEVICE_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_NAME_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_PORT_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_SIZE_FIELD
+import com.casecode.pos.core.firebase.PRINTER_INFO_USB_NAME_DEVICE_FIELD
 import com.casecode.pos.core.model.data.PrinterConnectionInfo
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.google.firebase.firestore.DocumentSnapshot

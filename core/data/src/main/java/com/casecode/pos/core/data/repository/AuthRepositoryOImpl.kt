@@ -18,54 +18,52 @@ package com.casecode.pos.core.data.repository
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.datastore.PosPreferencesDataSource
-import com.casecode.pos.core.model.data.LoginStateResult
-import com.casecode.pos.core.model.data.users.FirebaseUser
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
+import com.casecode.pos.core.model.data.LoginStateResultOld
+import com.casecode.pos.core.model.data.users.User
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class AuthRepositoryImpl
+class AuthRepositoryOImpl
 @Inject
 constructor(
     private val auth: FirebaseAuth,
     private val posPreferencesDataSource: PosPreferencesDataSource,
     @Dispatcher(IO) private val io: CoroutineDispatcher,
-) : com.casecode.pos.core.domain.repository.AuthRepository {
-    override val loginData: Flow<LoginStateResult> =
-        posPreferencesDataSource.loginData.map {
-            LoginStateResult.Loading
-            delay(300L)
-            it
-        }
+) : AuthRepositoryO {
+    override val loginData: Flow<LoginStateResultOld> = flowOf(LoginStateResultOld.Loading)
+
 
     override suspend fun currentUserId(): String = withContext(io) {
         async {
-            posPreferencesDataSource.currentUid.first() ?: ""
+          //  posPreferencesDataSource.currentUid.first() ?: ""
+            ""
         }.await()
     }
 
     override suspend fun currentNameLogin(): String = withContext(io) {
         async {
-            posPreferencesDataSource.currentNameLogin.first() ?: ""
+            ""
+            //posPreferencesDataSource.currentNameLogin.first() ?: ""
         }.await()
     }
 
-    override val currentUser: Flow<FirebaseUser?>
+    override val currentUser: Flow<User?>
         get() =
             callbackFlow {
                 val listener =
                     FirebaseAuth.AuthStateListener { auth ->
                         val user =
-                            FirebaseUser(
+                            User(
+                                auth.uid!!,
                                 auth.currentUser?.email,
                                 auth.currentUser?.displayName,
                                 auth.currentUser?.photoUrl.toString(),
@@ -76,7 +74,8 @@ constructor(
                 awaitClose { auth.removeAuthStateListener(listener) }
             }
 
-    override suspend fun hasEmployeeLogin(): Boolean = loginData.last() is LoginStateResult.EmployeeLogin
+    override suspend fun hasEmployeeLogin(): Boolean =
+        loginData.last() is LoginStateResultOld.EmployeeLoginOld
 
     override suspend fun hasUser(): Boolean = currentUserId().isNotBlank()
 }

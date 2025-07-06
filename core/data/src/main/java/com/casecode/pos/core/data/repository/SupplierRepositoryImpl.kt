@@ -20,20 +20,20 @@ import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
 import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
-import com.casecode.pos.core.domain.repository.AuthRepository
+import com.casecode.pos.core.domain.repository.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.SupplierRepository
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.firebase.services.FirestoreService
-import com.casecode.pos.core.firebase.services.SUPPLIERS_COLLECTION_PATH
-import com.casecode.pos.core.firebase.services.SUPPLIER_ADDRESS_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_CATEGORY_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_COMPANY_NAME_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_CONTACT_EMAIL_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_CONTACT_NAME_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_CONTACT_PHONE_FIELD
-import com.casecode.pos.core.firebase.services.SUPPLIER_ID_FIELD
-import com.casecode.pos.core.firebase.services.USERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.FirestoreService
+import com.casecode.pos.core.firebase.SUPPLIERS_COLLECTION_PATH
+import com.casecode.pos.core.firebase.SUPPLIER_ADDRESS_FIELD
+import com.casecode.pos.core.firebase.SUPPLIER_CATEGORY_FIELD
+import com.casecode.pos.core.firebase.SUPPLIER_COMPANY_NAME_FIELD
+import com.casecode.pos.core.firebase.SUPPLIER_CONTACT_EMAIL_FIELD
+import com.casecode.pos.core.firebase.SUPPLIER_CONTACT_NAME_FIELD
+import com.casecode.pos.core.firebase.SUPPLIER_CONTACT_PHONE_FIELD
+import com.casecode.pos.core.firebase.SUPPLIER_ID_FIELD
+import com.casecode.pos.core.firebase.USERS_COLLECTION_PATH
 import com.casecode.pos.core.model.data.users.Supplier
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -50,7 +50,7 @@ import kotlin.coroutines.suspendCoroutine
 class SupplierRepositoryImpl
 @Inject constructor(
     private val db: FirestoreService,
-    private val auth: AuthRepository,
+    private val auth: AuthRepositoryO,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : SupplierRepository {
     override fun getSuppliers(): Flow<Resource<List<Supplier>>> = flow {

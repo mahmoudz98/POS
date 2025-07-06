@@ -15,23 +15,26 @@
  */
 package com.casecode.pos.core.data.model
 
-import com.casecode.pos.core.firebase.model.NetworkSubscription
-import com.casecode.pos.core.model.data.business.Subscription
-import com.casecode.pos.core.model.data.business.SubscriptionStatus
+import com.casecode.pos.core.firebase.model.NetworkTaxRate
+import com.casecode.pos.core.model.data.business.TaxRate
 import kotlinx.datetime.Instant
+import java.math.BigDecimal
 
-fun NetworkSubscription.asExternalModel(): Subscription = Subscription(
-    planId = this.planId ?: "",
-    planName = this.planName ?: "Free",
-    status = this.status ?: SubscriptionStatus.CANCELED,
-    creditBalance = this.creditBalance ?: 0L,
-    currentPeriodEndDate = this.currentPeriodEndDate?.toInstant()?.let { Instant.fromEpochMilliseconds(it.epochSecond) },
+
+fun NetworkTaxRate.asExternalModel(): TaxRate = TaxRate(
+    id = this.id,
+    name = this.name ?: "",
+    rate = BigDecimal.valueOf(this.rate ?: 0.0),
+    isIncludedInPrice = this.isIncludedInPrice,
+    isDefault = this.isDefault,
+    createdAt = this.createdAt?.toInstant()?.let { Instant.fromEpochMilliseconds(it.epochSecond) },
     updatedAt = this.updatedAt?.toInstant()?.let { Instant.fromEpochMilliseconds(it.epochSecond) },
 )
 
-fun Subscription.asNetworkModel(): NetworkSubscription = NetworkSubscription(
-    planId = this.planId,
-    planName = this.planName,
-    status = this.status,
-    creditBalance = this.creditBalance,
+fun TaxRate.asNetworkModel(): NetworkTaxRate = NetworkTaxRate(
+    id = this.id,
+    name = this.name,
+    rate = this.rate.toDouble(),
+    isIncludedInPrice = this.isIncludedInPrice,
+    isDefault = this.isDefault,
 )
