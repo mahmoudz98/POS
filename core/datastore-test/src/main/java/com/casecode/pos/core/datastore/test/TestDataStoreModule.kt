@@ -18,8 +18,8 @@ package com.casecode.pos.core.datastore.test
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import com.casecode.pos.core.common.di.ApplicationScope
-import com.casecode.pos.core.datastore.LoginPreferences
-import com.casecode.pos.core.datastore.LoginPreferencesSerializer
+import com.casecode.pos.core.datastore.SessionPreferences
+import com.casecode.pos.core.datastore.SessionPreferencesSerializer
 import com.casecode.pos.core.datastore.di.DataStoreModule
 import dagger.Module
 import dagger.Provides
@@ -39,23 +39,23 @@ internal object TestDataStoreModule {
     @Singleton
     fun providesLoginPreferencesDataStore(
         @ApplicationScope scope: CoroutineScope,
-        loginPreferencesSerializer: LoginPreferencesSerializer,
+        sessionPreferencesSerializer: SessionPreferencesSerializer,
         tmpFolder: TemporaryFolder,
-    ): DataStore<LoginPreferences> = tmpFolder.testLoginPreferencesDataStore(
+    ): DataStore<SessionPreferences> = tmpFolder.testSessionPreferencesDataStore(
         coroutineScope = scope,
-        loginPreferencesSerializer = loginPreferencesSerializer,
+        sessionPreferencesSerializer = sessionPreferencesSerializer,
     )
 }
 
-fun TemporaryFolder.testLoginPreferencesDataStore(
+fun TemporaryFolder.testSessionPreferencesDataStore(
     coroutineScope: CoroutineScope,
-    loginPreferencesSerializer: LoginPreferencesSerializer = LoginPreferencesSerializer(),
+    sessionPreferencesSerializer: SessionPreferencesSerializer = SessionPreferencesSerializer(),
 ) = DataStoreFactory.create(
-    serializer = loginPreferencesSerializer,
+    serializer = sessionPreferencesSerializer,
     scope = coroutineScope,
 ) {
     try {
-        newFile("login_preferences_test.pb")
+        newFile("session_preferences_test.pb")
     } catch (e: Exception) {
         println("${e.message}")
         throw e
