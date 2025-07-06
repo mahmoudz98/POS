@@ -23,12 +23,12 @@ plugins {
 android {
     namespace = "$APPLICATION_ID.core.data"
 
-    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests {
             isReturnDefaultValues = true
         }
     }
+
 }
 
 dependencies {
@@ -37,13 +37,17 @@ dependencies {
     api(projects.core.common)
     api(projects.core.datastore)
 
-    implementation(projects.core.firebaseServices)
+    implementation(projects.core.firebase)
     implementation(projects.core.analytics)
+    implementation(libs.googleid)
 
+    implementation(libs.firebase.crashlytics)
     implementation(libs.coroutines.android)
+    implementation(libs.coroutines.services)
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
-    // implementation(libs.billing.ktx)
+    implementation(libs.revenuecat.purchases)
+    implementation(libs.billing.client)
     implementation(libs.hilt.android)
 
     testImplementation(projects.core.testing)
