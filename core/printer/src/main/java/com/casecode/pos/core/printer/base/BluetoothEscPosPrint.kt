@@ -88,14 +88,11 @@ constructor() : EscPosPrint() {
         printerData: EscPosPrinter,
     ): PrinterStatus {
         e.printStackTrace()
-        logger.logNonFatalCrash(e)
         val log =
             """
                 deviceConnection.deviceStatus=${deviceConnection.device?.name},
                  ${deviceConnection.device?.address}
             """.trimIndent()
-        logger.log(log)
-        logger.log("TextsToPrint = ${printerData.getTextsToPrint().first()}")
         return PrinterStatus(
             printerData,
             PrinterStatusCode.FINISH_PRINTER_DISCONNECTED,

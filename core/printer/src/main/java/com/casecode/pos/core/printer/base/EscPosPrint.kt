@@ -18,7 +18,6 @@ package com.casecode.pos.core.printer.base
 import android.annotation.SuppressLint
 import android.content.Context
 import com.casecode.pos.core.common.di.ApplicationScope
-import com.casecode.pos.core.firebase.services.LogService
 import com.casecode.pos.core.model.data.PrinterInfo
 import com.casecode.pos.core.printer.model.PrintContent
 import com.casecode.pos.core.printer.model.PrinterStatus
@@ -44,9 +43,6 @@ abstract class EscPosPrint {
     @Inject
     lateinit var printerState: PrinterStateManager
 
-    @Inject
-    lateinit var logger: LogService
-
     abstract fun print(
         context: Context,
         printerInfo: PrinterInfo,
@@ -69,7 +65,6 @@ abstract class EscPosPrint {
                     printer.printerNbrCharactersPerLine,
                     EscPosCharsetEncoding("Cp864", 0x16),
                 )
-            logger.log("PrinterEncodingName: ${escPosPrinter.encoding.name}")
 
             escPosPrinter.useEscAsteriskCommand(true)
 
@@ -85,7 +80,6 @@ abstract class EscPosPrint {
             return PrinterStatus(printer, PrinterStatusCode.FINISH_SUCCESS)
         } catch (exception: Exception) {
             connection?.disconnect()
-            logger.logNonFatalCrash(exception)
             return handleException(exception, printer)
         }
     }
