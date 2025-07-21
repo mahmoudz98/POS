@@ -18,41 +18,59 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <dist:module dist:instant="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:required="false" />
+
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" /> <!-- For versions below Android 10 -->
+        android:required="false" />
+
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="false"
         android:maxSdkVersion="28" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:required="false"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <uses-permission android:name="android.permission.CAMERA"  android:required="false"/>
+    <!--Violation for google play:
+
+    To get broad access to photos and videos,
+    apps must have core use case that requires persistent or frequent photo/video access of files
+    located in shared storage
+    there are solution:
+    https://proandroiddev.com/dealing-with-read-media-images-permissions-in-android-62d49abd5767
+      -->
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        android:required="false" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 
     <uses-feature
         android:name="android.hardware.usb.host"
-        android:required="true" />
+        android:required="false" />
 
     <uses-permission
         android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30"
-        android:required="true" />
+       />
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30"
-        android:required="true" />
+       />
     <uses-permission
         android:name="android.permission.BLUETOOTH_SCAN"
-        android:required="true" />
+        />
     <uses-permission
         android:name="android.permission.BLUETOOTH_CONNECT"
-        android:required="true" />
+         />
 
 
     <!--
@@ -60,23 +78,17 @@
   If you use these permissions you must declare how you're using them to Google Play, otherwise the
   app will be rejected when publishing it. To avoid this we remove the permissions entirely.
   -->
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
-    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" tools:node="remove"/>
-    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" tools:node="remove"/>
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ACCESS_ADSERVICES_AD_ID"
+        tools:node="remove" />
 
-    <queries>
 
-        <!-- Declare that your app needs access to camera -->
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-        <!-- Declare that your app needs access to the gallery -->
-        <intent>
-            <action android:name="android.intent.action.PICK" />
-
-            <data android:mimeType="image/*" />
-        </intent>
-    </queries>
 
     <application
         android:name=".POSApp"
@@ -86,7 +98,8 @@
         android:label="@string/app_name"
         android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Pos.Splash">
+        android:theme="@style/Theme.Pos.Splash"
+        tools:targetApi="33">
         <profileable
             android:shell="true"
             tools:targetApi="q" />
@@ -95,7 +108,7 @@
         <activity
             android:name="com.casecode.pos.MainActivity"
             android:exported="true"
-        android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -104,11 +117,16 @@
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="www.pos.casecode.com"/>
+
+                <data android:scheme="https" />
+                <data android:host="www.pos.casecode.com" />
+                <data android:scheme="http" />
+                <data android:host="www.pos.casecode.com" />
             </intent-filter>
         </activity>
 
@@ -138,15 +156,32 @@
 
         <!-- Disable Firebase analytics by default. This setting is overwritten for the `prod`
      flavor -->
-        <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="true" />
         <!-- Disable collection of AD_ID for all build variants -->
-        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
         <!-- Firebase automatically adds the following property which we don't use so remove it -->
         <property
-          android:name="android.adservices.AD_SERVICES_CONFIG"
-          tools:node="remove" />
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            tools:node="remove" />
     </application>
     <queries>
+
+        <!-- Declare that your app needs access to camera -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <!-- Declare that your app needs access to the gallery -->
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+
+            <data android:mimeType="image/*" />
+        </intent>
         <package android:name="com.google.android.gms" />
+
     </queries>
+
 </manifest>
