@@ -48,7 +48,7 @@ hilt = "2.56.2"
 hiltExt = "1.2.0"
 hilt-navigation = "1.2.0"
 ksp = "2.2.0-2.0.2"
-firebaseBom = "33.7.0"
+firebaseBom = "33.16.0"
 firebase-auth = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
 firebaseStorageKtx = "21.0.1"
@@ -170,6 +170,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-database = { module = "com.google.firebase:firebase-database" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-performance = { group = "com.google.firebase", name = "firebase-perf-ktx" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
