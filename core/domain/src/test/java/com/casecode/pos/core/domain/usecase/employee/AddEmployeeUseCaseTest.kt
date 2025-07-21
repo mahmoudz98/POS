@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.employee
 
 import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
-import com.casecode.pos.core.model.data.users.Employee
+import com.casecode.pos.core.model.users.Employee
 import com.casecode.pos.core.testing.repository.TestEmployeesBusinessRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

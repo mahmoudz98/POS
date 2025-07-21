@@ -16,12 +16,12 @@
 package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.utils.OwnerLoginResult
-import com.casecode.pos.core.model.data.business.Branch
-import com.casecode.pos.core.model.data.business.BranchStatus
-import com.casecode.pos.core.model.data.business.Business
-import com.casecode.pos.core.model.data.business.BusinessStatus
-import com.casecode.pos.core.model.data.business.Vertical
-import com.casecode.pos.core.model.data.users.User
+import com.casecode.pos.core.model.business.Branch
+import com.casecode.pos.core.model.business.BranchStatus
+import com.casecode.pos.core.model.business.Business
+import com.casecode.pos.core.model.business.BusinessStatus
+import com.casecode.pos.core.model.business.Vertical
+import com.casecode.pos.core.model.users.User
 import com.casecode.pos.core.testing.repository.business.TestAuthRepository
 import com.casecode.pos.core.testing.repository.business.TestBranchRepository
 import com.casecode.pos.core.testing.repository.business.TestBusinessRepository
@@ -206,4 +206,4 @@ class SignInOwnerUseCaseTest {
             // Assert
             assertEquals(OwnerLoginResult.AccountNeedsOnboarding, result)
         }
-}
+)

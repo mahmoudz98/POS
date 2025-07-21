@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.supplier
 
 import com.casecode.pos.core.domain.usecase.DeleteSupplierUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
-import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.model.users.Supplier
 import com.casecode.pos.core.testing.repository.TestSupplierRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest

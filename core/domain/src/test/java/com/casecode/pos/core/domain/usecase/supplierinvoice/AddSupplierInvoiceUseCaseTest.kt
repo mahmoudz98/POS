@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.supplierinvoice
 
 import com.casecode.pos.core.domain.usecase.AddSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.testing.repository.TestSupplierInvoicesRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest

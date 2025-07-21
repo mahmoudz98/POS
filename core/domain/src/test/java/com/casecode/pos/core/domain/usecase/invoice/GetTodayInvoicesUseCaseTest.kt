@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.invoice
 
 import com.casecode.pos.core.domain.usecase.GetTodayInvoicesUseCase
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.Invoice
+import com.casecode.pos.core.model.users.Invoice
 import com.casecode.pos.core.testing.data.invoicesTestData
 import com.casecode.pos.core.testing.repository.TestInvoiceRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule

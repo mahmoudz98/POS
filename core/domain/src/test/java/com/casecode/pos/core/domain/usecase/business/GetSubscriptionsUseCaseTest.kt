@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.business
 
 import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.subscriptions.Subscription
+import com.casecode.pos.core.model.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest

@@ -17,10 +17,10 @@ package com.casecode.pos.core.domain.usecase.supplierinvoice
 
 import com.casecode.pos.core.domain.usecase.AddPaymentDetailsUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
-import com.casecode.pos.core.model.data.users.PaymentDetails
-import com.casecode.pos.core.model.data.users.PaymentMethod
-import com.casecode.pos.core.model.data.users.PaymentStatus
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.PaymentDetails
+import com.casecode.pos.core.model.users.PaymentMethod
+import com.casecode.pos.core.model.users.PaymentStatus
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.testing.repository.TestSupplierInvoicesRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest

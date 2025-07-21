@@ -16,12 +16,12 @@
 package com.casecode.pos.core.domain.usecase.business
 
 import com.casecode.pos.core.domain.R
-import com.casecode.pos.core.domain.repository.AddBusiness
+import com.casecode.pos.core.domain.repository.old.AddBusiness
 import com.casecode.pos.core.domain.usecase.SetBusinessUseCase
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.Branch
-import com.casecode.pos.core.model.data.users.Business
-import com.casecode.pos.core.model.data.users.StoreType
+import com.casecode.pos.core.model.users.Branch
+import com.casecode.pos.core.model.users.Business
+import com.casecode.pos.core.model.users.StoreType
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.flow.Flow

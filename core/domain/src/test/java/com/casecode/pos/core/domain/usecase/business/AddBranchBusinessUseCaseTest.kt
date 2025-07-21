@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.business
 
 import com.casecode.pos.core.domain.usecase.AddBranchBusinessUseCase
 import com.casecode.pos.core.domain.utils.AddBranchBusinessResult
-import com.casecode.pos.core.model.data.users.Branch
+import com.casecode.pos.core.model.users.Branch
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest

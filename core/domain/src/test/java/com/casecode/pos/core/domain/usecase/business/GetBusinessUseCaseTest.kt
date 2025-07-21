@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.business
 
 import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
 import com.casecode.pos.core.domain.utils.BusinessResult
-import com.casecode.pos.core.model.data.users.Business
+import com.casecode.pos.core.model.users.Business
 import com.casecode.pos.core.testing.repository.TestBusinessRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest

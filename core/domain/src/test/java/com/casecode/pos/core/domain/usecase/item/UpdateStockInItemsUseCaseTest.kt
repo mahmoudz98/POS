@@ -17,7 +17,7 @@ package com.casecode.pos.core.domain.usecase.item
 
 import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
 import com.casecode.pos.core.domain.utils.OperationResult
-import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.model.users.Item
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import kotlinx.coroutines.test.runTest

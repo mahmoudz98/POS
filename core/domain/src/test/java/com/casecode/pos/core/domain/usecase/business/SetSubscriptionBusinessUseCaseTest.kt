@@ -18,7 +18,7 @@ package com.casecode.pos.core.domain.usecase.business
 import com.casecode.pos.core.domain.R
 import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.subscriptions.Subscription
+import com.casecode.pos.core.model.subscriptions.Subscription
 import com.casecode.pos.core.testing.repository.TestSubscriptionsBusinessRepository
 import com.casecode.pos.core.testing.util.CoroutinesTestRule
 import kotlinx.coroutines.test.runTest
