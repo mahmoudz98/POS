@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.feature.bill
 
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.SupplierInvoice
 
 sealed interface BillsUiState {
     object Loading : BillsUiState

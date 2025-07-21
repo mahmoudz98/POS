@@ -19,8 +19,8 @@ import androidx.annotation.StringRes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.casecode.pos.core.model.data.users.PaymentMethod
-import com.casecode.pos.core.model.data.users.PaymentStatus
+import com.casecode.pos.core.model.users.PaymentMethod
+import com.casecode.pos.core.model.users.PaymentStatus
 
 @StringRes
 internal fun toPaymentRes(status: PaymentStatus): Int = when (status) {

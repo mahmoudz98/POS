@@ -20,9 +20,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import com.casecode.pos.core.model.data.users.DiscountType
-import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.DiscountType
+import com.casecode.pos.core.model.users.Item
+import com.casecode.pos.core.model.users.SupplierInvoice
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone

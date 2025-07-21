@@ -21,8 +21,8 @@ import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.domain.usecase.GetSupplierInvoicesUseCase
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.PaymentStatus
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.PaymentStatus
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.ui.stateInWhileSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

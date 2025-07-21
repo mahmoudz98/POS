@@ -26,9 +26,9 @@ import com.casecode.pos.core.domain.usecase.UpdateSupplierInvoiceUseCase
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.model.data.users.PaymentDetails
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.Item
+import com.casecode.pos.core.model.users.PaymentDetails
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.ui.shareInWhileSubscribed
 import com.casecode.pos.core.ui.stateInWhileSubscribed
 import com.casecode.pos.feature.bill.R

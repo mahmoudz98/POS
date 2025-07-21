@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.feature.bill.creation
 
-import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.model.users.Item
 
 sealed interface SearchItemUiState {
     data object Loading : SearchItemUiState

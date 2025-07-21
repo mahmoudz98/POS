@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.model.utils.toBigDecimalFormatted
 import com.casecode.pos.core.model.utils.toFormattedDateString
 import com.casecode.pos.core.model.utils.toFormattedString

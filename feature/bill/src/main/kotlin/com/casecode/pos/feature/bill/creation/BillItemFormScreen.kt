@@ -53,7 +53,7 @@ import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
-import com.casecode.pos.core.model.data.users.Item
+import com.casecode.pos.core.model.users.Item
 import com.casecode.pos.core.model.utils.toFormattedString
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.utils.MAX_CURRENCY_LENGTH_SIZE
