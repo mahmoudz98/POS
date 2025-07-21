@@ -51,7 +51,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.DynamicAsyncImage
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.User
+import com.casecode.pos.core.model.users.User
 import com.casecode.pos.core.ui.R
 
 @Composable

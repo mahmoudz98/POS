@@ -17,9 +17,9 @@ package com.casecode.pos.feature.signout
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.repository.AccountRepository
-import com.casecode.pos.core.domain.repository.AuthRepositoryO
-import com.casecode.pos.core.model.data.users.User
+import com.casecode.pos.core.domain.repository.old.AccountRepository
+import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
+import com.casecode.pos.core.model.users.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
