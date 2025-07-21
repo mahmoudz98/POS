@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    namespace = "$APPLICATION_ID.feature.stepper"
+    namespace = "$APPLICATION_ID.feature.onboarding"
 }
 
 dependencies {
