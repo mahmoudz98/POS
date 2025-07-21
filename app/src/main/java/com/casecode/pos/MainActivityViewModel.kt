@@ -17,7 +17,7 @@ package com.casecode.pos
 
 import androidx.lifecycle.ViewModel
 import com.casecode.pos.core.domain.repository.business.SessionRepository
-import com.casecode.pos.core.model.data.LoginStateResult
+import com.casecode.pos.core.model.LoginStateResult
 import com.casecode.pos.core.ui.stateInWhileSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
