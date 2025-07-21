@@ -18,8 +18,10 @@ package com.casecode.pos.core.designsystem.component
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -145,11 +147,12 @@ fun PosOutlinedTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     supportingText: String? = null,
-) {
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
+        label = { if(label.isNotEmpty()) Text(label) else null} ,
         isError = isError,
         readOnly = readOnly,
         enabled = enabled,
@@ -164,6 +167,7 @@ fun PosOutlinedTextField(
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         keyboardOptions = keyboardOptions,
+        colors = colors,
         modifier = modifier,
     )
 }

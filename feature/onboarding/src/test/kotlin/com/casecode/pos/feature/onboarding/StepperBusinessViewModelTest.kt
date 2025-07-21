@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.stepper
+package com.casecode.pos.feature.onboarding
 
-import com.casecode.pos.core.model.data.subscriptions.Subscription
-import com.casecode.pos.core.model.data.users.Branch
-import com.casecode.pos.core.model.data.users.Employee
-import com.casecode.pos.core.model.data.users.StoreType
+import com.casecode.pos.core.model.subscriptions.Subscription
+import com.casecode.pos.core.model.users.Branch
+import com.casecode.pos.core.model.users.Employee
+import com.casecode.pos.core.model.users.StoreType
 import com.casecode.pos.core.testing.base.BaseTest
 import com.casecode.pos.core.testing.util.MainDispatcherRule
+import com.casecode.pos.feature.onboarding.old.StepperBusinessViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -36,7 +37,7 @@ import kotlin.test.assertTrue
 import com.casecode.pos.core.ui.R.string as uiString
 
 /**
- * A JUnit test class for the [StepperBusinessViewModel] class.
+ * A JUnit test class for the [com.casecode.pos.feature.onboarding.old.StepperBusinessViewModel] class.
  *
  */
 class StepperBusinessViewModelTest : BaseTest() {

@@ -50,9 +50,9 @@ fun Stepper(
     numberOfSteps: Int,
     currentStep: Int,
     stepDescriptionList: List<String> = List(numberOfSteps) { "" },
-    unSelectedColor: Color = Color.LightGray,
-    selectedColor: Color,
-    onSelectedColor: Color,
+    unSelectedColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    selectedColor: Color = MaterialTheme.colorScheme.primary,
+    onSelectedColor: Color = MaterialTheme.colorScheme.onPrimary,
 ) {
     val descriptionList = MutableList(numberOfSteps) { "" }
 
