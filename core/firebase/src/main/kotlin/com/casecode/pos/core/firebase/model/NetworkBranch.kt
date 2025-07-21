@@ -15,22 +15,17 @@
  */
 package com.casecode.pos.core.firebase.model
 
-import com.casecode.pos.core.model.data.business.BusinessStatus
-import com.casecode.pos.core.model.data.business.Vertical
+import com.casecode.pos.core.model.business.BranchStatus
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 
-data class NetworkBusiness(
+data class NetworkBranch(
     @DocumentId val id: String = "",
-    val name: String = "",
-    val ownerUid: String = "",
-    val vertical: Int = Vertical.RETAIL.value,
-    val companyCode: String = "",
-    val currencyCode: String = "",
-    val status: Int = BusinessStatus.ACTIVE.value,
-    val email: String = "",
-    val phone: String = "",
-    @ServerTimestamp val updatedAt: Timestamp = Timestamp.now(),
-    @ServerTimestamp val createdAt: Timestamp = Timestamp.now(),
+    val name: String? = null,
+    val address: Map<String, String>? = null,
+    val phone: String? = null,
+    val status: BranchStatus? = null,
+    @ServerTimestamp val createdAt: Timestamp? = null,
+    @ServerTimestamp val updatedAt: Timestamp? = null,
 )

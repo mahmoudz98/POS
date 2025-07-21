@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.core.firebase.datasource
 
-import com.casecode.pos.core.model.data.users.User
+import com.casecode.pos.core.model.users.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.channels.awaitClose
@@ -28,6 +28,7 @@ import javax.inject.Inject
 class FirebaseAuthDataSourceImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
 ) : AuthRemoteDataSource {
+
     override val currentUser: Flow<User?> = callbackFlow {
         val listener = FirebaseAuth.AuthStateListener { auth ->
             val domainUser = auth.currentUser?.let {
@@ -43,8 +44,9 @@ class FirebaseAuthDataSourceImpl @Inject constructor(
 
     override suspend fun signInWithGoogle(idToken: String): User {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
+
         val authResult = firebaseAuth.signInWithCredential(credential).await()
-        val firebaseUser = requireNotNull(authResult.user) { "Firebase sign-in returned a null user." }
+        val firebaseUser = requireNotNull(authResult.user) { "Firebase sign-in returned a not null user." }
         return User(uid = firebaseUser.uid, email = firebaseUser.email, name = firebaseUser.displayName, firebaseUser.photoUrl.toString())
     }
 

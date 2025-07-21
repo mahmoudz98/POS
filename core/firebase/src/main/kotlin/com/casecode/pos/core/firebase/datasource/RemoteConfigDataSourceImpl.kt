@@ -15,8 +15,8 @@
  */
 package com.casecode.pos.core.firebase.datasource
 
-import com.casecode.pos.core.model.data.business.Currency
-import com.casecode.pos.core.model.data.business.SubscriptionPlan
+import com.casecode.pos.core.firebase.model.NetworkSubscriptionPlan
+import com.casecode.pos.core.firebase.model.SupportedCurrency
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
@@ -30,15 +30,15 @@ class RemoteConfigDataSourceImpl @Inject constructor(
     @Named("CurrenciesJsonKey") private val currenciesJsonKey: String,
 ) : ConfigDataSource {
 
-    override suspend fun getSubscriptionPlans(): List<SubscriptionPlan> {
+    override suspend fun getSubscriptionPlans(): List<NetworkSubscriptionPlan> {
         remoteConfig.fetchAndActivate().await()
         val jsonString = remoteConfig.getString(plansJsonKey)
-        return json.decodeFromString<List<SubscriptionPlan>>(jsonString)
+        return json.decodeFromString<List<NetworkSubscriptionPlan>>(jsonString)
     }
 
-    override suspend fun getSupportedCurrencies(): List<Currency> {
+    override suspend fun getSupportedCurrencies(): List<SupportedCurrency> {
         remoteConfig.fetchAndActivate().await()
         val jsonString = remoteConfig.getString(currenciesJsonKey)
-        return json.decodeFromString<List<Currency>>(jsonString)
+        return json.decodeFromString<List<SupportedCurrency>>(jsonString)
     }
 }

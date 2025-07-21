@@ -18,11 +18,17 @@ package com.casecode.pos.core.firebase.di
 import com.casecode.pos.core.firebase.BuildConfig
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestoreSettings
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.memoryCacheSettings
 import com.google.firebase.firestore.persistentCacheSettings
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,7 +56,7 @@ object FirebaseModule {
      */
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+    fun provideFirebaseAuth(): FirebaseAuth = Firebase.auth
 
     /**
      * Provides an instance of FirebaseFirestore.
@@ -59,12 +65,16 @@ object FirebaseModule {
      */
     @Provides
     @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance().apply {
+    fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore.apply {
         firestoreSettings = setting
     }
 
     @Provides
-    fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+    @Singleton
+    fun provideFirebaseRealtime(): FirebaseDatabase = Firebase.database
+
+    @Provides
+    fun provideFirebaseStorage(): FirebaseStorage = Firebase.storage
 
     @Provides
     fun provideSignInRequest(): GetGoogleIdOption {

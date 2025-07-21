@@ -15,15 +15,16 @@
  */
 package com.casecode.pos.core.firebase.model
 
-import com.casecode.pos.core.model.data.business.SubscriptionStatus
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
 
-data class NetworkSubscription(
-    val planId: String? = null,
-    val planName: String? = null,
-    val status: SubscriptionStatus? = null,
-    val creditBalance: Long? = 0L,
-    @ServerTimestamp val currentPeriodEndDate: Date? = null,
+data class NetworkTaxRate(
+    @DocumentId val id: String = "",
+    val name: String? = null,
+    val rate: Float? = null,
+    val isIncludedInPrice: Boolean = false,
+    val isDefault: Boolean = false,
+    @ServerTimestamp val createdAt: Date? = null,
     @ServerTimestamp val updatedAt: Date? = null,
 )

@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.datasource
+package com.casecode.pos.core.firebase.model
 
-import com.casecode.pos.core.model.data.users.User
-import kotlinx.coroutines.flow.Flow
+import com.casecode.pos.core.model.business.SubscriptionStatus
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ServerTimestamp
 
-interface AuthRemoteDataSource {
-    val currentUser: Flow<User?>
-    suspend fun getCurrentUser(): User?
-    suspend fun signInWithGoogle(idToken: String): User
-    suspend fun signOut()
-}
+data class NetworkSubscription(
+    val planId: String? = null,
+    val planName: String? = null,
+    val status: SubscriptionStatus? = null,
+    val creditBalance: Int? = 0,
+    @ServerTimestamp val currentPeriodEndDate: Timestamp? = null,
+    @ServerTimestamp val updatedAt: Timestamp? = null,
+)

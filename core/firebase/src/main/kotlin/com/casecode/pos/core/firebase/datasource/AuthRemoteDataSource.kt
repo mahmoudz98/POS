@@ -13,20 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.model
+package com.casecode.pos.core.firebase.datasource
 
-import com.casecode.pos.core.model.data.business.BillingEventType
-import com.google.firebase.firestore.DocumentId
-import com.google.firebase.firestore.ServerTimestamp
-import java.util.Date
+import com.casecode.pos.core.model.users.User
+import kotlinx.coroutines.flow.Flow
 
-data class NetworkBillingEvent(
-    @DocumentId val id: String = "",
-    val eventType: BillingEventType? = null,
-    val description: String? = null,
-    val amount: Double? = null,
-    val currencyCode: String? = null,
-    val creditsChange: Long? = 0L,
-    @ServerTimestamp val eventDate: Date? = null,
-    val paymentProviderTransactionId: String? = null,
-)
+interface AuthRemoteDataSource {
+    val currentUser: Flow<User?>
+    suspend fun getCurrentUser(): User?
+    suspend fun signInWithGoogle(idToken: String): User
+    suspend fun signOut()
+}

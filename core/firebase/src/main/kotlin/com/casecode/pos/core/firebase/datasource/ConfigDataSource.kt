@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.model
+package com.casecode.pos.core.firebase.datasource
 
-import com.casecode.pos.core.model.data.users.Customer
-import com.casecode.pos.core.model.data.users.Item
-import com.google.firebase.firestore.DocumentId
-import com.google.firebase.firestore.ServerTimestamp
-import java.util.Date
+import com.casecode.pos.core.firebase.model.NetworkSubscriptionPlan
+import com.casecode.pos.core.firebase.model.SupportedCurrency
 
-data class InvoiceDataModel(
-    @DocumentId val invoiceId: String = "",
-    @ServerTimestamp val date: Date = Date(),
-    val createdBy: String = "",
-    val customer: Customer? = null,
-    val items: List<Item> = emptyList(),
-)
+/**
+ * Contract for fetching global, app-wide configuration data.
+ * The implementation for this is likely Remote Config.
+ */
+interface ConfigDataSource {
+    suspend fun getSubscriptionPlans(): List<NetworkSubscriptionPlan>
+    suspend fun getSupportedCurrencies(): List<SupportedCurrency>
+}

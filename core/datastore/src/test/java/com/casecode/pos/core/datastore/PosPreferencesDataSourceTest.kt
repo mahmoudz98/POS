@@ -16,7 +16,7 @@
 package com.casecode.pos.core.datastore
 
 import com.casecode.pos.core.datastore.test.testSessionPreferencesDataStore
-import com.casecode.pos.core.model.data.LoginStateResult
+import com.casecode.pos.core.model.LoginStateResult
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -57,7 +57,7 @@ class PosPreferencesDataSourceTest {
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role = "Admin",
+            role ="Admin"
         )
         assertEquals(subject.loginData.first(), LoginStateResult.OwnerLoggedIn("4erwerwe", "sdfsd123"))
     }
@@ -71,7 +71,7 @@ class PosPreferencesDataSourceTest {
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role = "Admin",
+            role ="Admin"
         )
         subject.clearLoginSession()
         assertEquals(subject.loginData.first(), LoginStateResult.LoggedOut)
@@ -86,16 +86,17 @@ class PosPreferencesDataSourceTest {
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role = "Admin",
+            role ="Admin"
 
         )
+
 
         assertEquals(
             subject.loginData.first(),
             LoginStateResult.EmployeeLoggedIn(
                 businessId = "4erwerwe",
                 activeBranchId = "sdfsd123",
-                role = "admin",
+                role = "admin"
             ),
         )
     }
