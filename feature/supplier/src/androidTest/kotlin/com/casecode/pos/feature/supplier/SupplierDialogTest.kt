@@ -20,7 +20,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.model.users.Supplier
 import org.junit.Rule
 import kotlin.test.Test
 import com.casecode.pos.core.ui.R.string as uiString

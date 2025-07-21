@@ -45,7 +45,7 @@ import com.casecode.pos.core.designsystem.component.SearchTopAppBar
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.model.users.Supplier
 import com.casecode.pos.core.ui.parameterprovider.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.utils.formatPhoneNumber
 

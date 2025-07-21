@@ -26,7 +26,7 @@ import com.casecode.pos.core.domain.usecase.UpdateSupplierUseCase
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.model.users.Supplier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
