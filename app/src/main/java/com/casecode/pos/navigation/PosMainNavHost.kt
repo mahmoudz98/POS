@@ -29,8 +29,8 @@ import com.casecode.pos.InitialDestinationState
 import com.casecode.pos.feature.login.navigation.LoginRoute
 import com.casecode.pos.feature.login.navigation.loginScreen
 import com.casecode.pos.feature.login.navigation.navigateToLogin
-import com.casecode.pos.feature.stepper.navigation.StepperRoute
-import com.casecode.pos.feature.stepper.navigation.stepperScreen
+import com.casecode.pos.feature.onboarding.navigation.OnboardingRoute
+import com.casecode.pos.feature.onboarding.navigation.onboardingScreen
 import com.casecode.pos.ui.MainAppState
 import timber.log.Timber
 
@@ -54,7 +54,7 @@ fun PosMainNavHost(
             onShowSnackbar = onShowSnackbar,
             enterTransition = {
                 when (targetState.destination.route) {
-                    StepperRoute.toString() -> slideInHorizontally(
+                    OnboardingRoute.toString() -> slideInHorizontally(
                         initialOffsetX = { -it },
                         animationSpec = defaultTween(),
                     )
@@ -64,7 +64,7 @@ fun PosMainNavHost(
             },
             exitTransition = {
                 when (targetState.destination.route) {
-                    StepperRoute.toString() -> slideOutHorizontally(
+                    OnboardingRoute.toString() -> slideOutHorizontally(
                         targetOffsetX = { it },
                         animationSpec = defaultTween(),
                     )
@@ -73,50 +73,12 @@ fun PosMainNavHost(
                 }
             },
         )
-        /*    signInScreen(
-                onSignInSuccessNavigateToMain = {
-                    navController.navigateToMainGraph(
-                        navOptions {
-                            popUpTo(LoginRoute) { inclusive = true }
-                            launchSingleTop = true
-                        },
-                    )
-                },
-                onSignInSuccessNavigateToStepper = {
-                    navController.navigateToStepper(
-                        navOptions {
-                            popUpTo(LoginRoute) { inclusive = true }
-                            launchSingleTop = true
-                        },
-                    )
-                },
-                enterTransition = {
-                    when (targetState.destination.route) {
-                        StepperRoute.toString() -> slideInHorizontally(
-                            initialOffsetX = { -it },
-                            animationSpec = defaultTween(),
-                        )
 
-                        else -> fadeIn(animationSpec = slowTween())
-                    }
-                },
-                exitTransition = {
-                    when (targetState.destination.route) {
-                        StepperRoute.toString() -> slideOutHorizontally(
-                            targetOffsetX = { it },
-                            animationSpec = defaultTween(),
-                        )
-
-                        else -> contextShiftExit()
-                    }
-                },
-            )*/
-
-        stepperScreen(
+        onboardingScreen(
             onStepperCompleteToHome = {
                 navController.navigateToMainGraph(
                     navOptions {
-                        popUpTo(StepperRoute) { inclusive = true }
+                        popUpTo(OnboardingRoute) { inclusive = true }
                         launchSingleTop = true
                     },
                 )
@@ -124,7 +86,7 @@ fun PosMainNavHost(
             onBackToSignIn = {
                 navController.navigateToLogin(
                     navOptions {
-                        popUpTo(StepperRoute) { inclusive = true }
+                        popUpTo(OnboardingRoute) { inclusive = true }
                         launchSingleTop = true
                     },
                 )
@@ -176,7 +138,7 @@ fun InitialDestinationState.determineStartGraph(): Any {
         InitialDestinationState.LoginByNoneEmployee,
         -> LoginRoute
 
-        is InitialDestinationState.NotCompleteBusiness -> StepperRoute
+        is InitialDestinationState.NotCompleteBusiness -> OnboardingRoute
         is InitialDestinationState.LoginByAdmin,
         is InitialDestinationState.LoginByAdminEmployee,
         -> AdminHomeGraphRoute
