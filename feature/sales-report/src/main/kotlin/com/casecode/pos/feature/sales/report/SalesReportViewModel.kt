@@ -17,7 +17,7 @@ package com.casecode.pos.feature.sales.report
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.usecase.GetInvoicesUseCase
+import com.casecode.pos.core.domain.usecase.old.GetInvoicesUseCase
 import com.casecode.pos.core.model.users.Invoice
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
