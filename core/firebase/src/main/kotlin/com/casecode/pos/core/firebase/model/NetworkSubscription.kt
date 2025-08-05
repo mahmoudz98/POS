@@ -18,12 +18,17 @@ package com.casecode.pos.core.firebase.model
 import com.casecode.pos.core.model.business.SubscriptionStatus
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ServerTimestamp
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkSubscription(
-    val planId: String? = null,
-    val planName: String? = null,
-    val status: SubscriptionStatus? = null,
-    val creditBalance: Int? = 0,
-    @ServerTimestamp val currentPeriodEndDate: Timestamp? = null,
-    @ServerTimestamp val updatedAt: Timestamp? = null,
+    val planId: String = "",
+    val planName: String = "",
+    val status: SubscriptionStatus? = SubscriptionStatus.TRIAL,
+    val creditBalance: Int = 0,
+    @Contextual
+    @ServerTimestamp val currentPeriodEndDate: Timestamp = Timestamp.now(),
+    @Contextual
+    @ServerTimestamp val updatedAt: Timestamp = Timestamp.now(),
 )

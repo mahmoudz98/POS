@@ -19,6 +19,8 @@ import com.casecode.pos.core.model.business.BillingEventType
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * Data class representing a billing event for network transfer.
@@ -34,13 +36,15 @@ import com.google.firebase.firestore.ServerTimestamp
  * @property eventDate The date and time the event occurred (server timestamp).
  * @property paymentProviderTransactionId The transaction ID from the payment provider.
  */
+@Serializable
 data class NetworkBillingEvent(
     @DocumentId val id: String = "",
-    val eventType: BillingEventType? = null,
-    val description: String? = null,
-    val amount: Double? = null,
-    val currencyCode: String? = null,
-    val creditsChange: Int? = 0,
-    @ServerTimestamp val eventDate: Timestamp? = null,
-    val paymentProviderTransactionId: String? = null,
+    val eventType: BillingEventType = BillingEventType.TRIAL_ENDED,
+    val description: String = "",
+    val amount: Double = 0.0,
+    val currencyCode: String = "",
+    val creditsChange: Int = 0,
+    @Contextual
+    @ServerTimestamp val eventDate: Timestamp = Timestamp.now(),
+    val paymentProviderTransactionId: String = "",
 )

@@ -22,8 +22,10 @@ import com.casecode.pos.core.firebase.datasource.EmployeeNetworkDataSource
 import com.casecode.pos.core.firebase.datasource.FirebaseAuthDataSourceImpl
 import com.casecode.pos.core.firebase.datasource.FirebaseBusinessDataSourceImpl
 import com.casecode.pos.core.firebase.datasource.FirebaseEmployeeDataSourceImpl
+import com.casecode.pos.core.firebase.datasource.FirebaseInboxNetworkDataSource
 import com.casecode.pos.core.firebase.datasource.FirebaseSubscriptionDataSourceImpl
 import com.casecode.pos.core.firebase.datasource.FirebaseTaxDataSourceImpl
+import com.casecode.pos.core.firebase.datasource.InboxNetworkDataSource
 import com.casecode.pos.core.firebase.datasource.RemoteConfigDataSourceImpl
 import com.casecode.pos.core.firebase.datasource.SubscriptionNetworkDataSource
 import com.casecode.pos.core.firebase.datasource.TaxNetworkDataSource
@@ -39,6 +41,9 @@ abstract class FirebaseDataSourceModule {
     abstract fun bindBusinessNetworkDataSource(impl: FirebaseBusinessDataSourceImpl): BusinessNetworkDataSource
 
     @Binds
+    abstract fun bindInboxNetworkDataSource(impl: FirebaseInboxNetworkDataSource): InboxNetworkDataSource
+
+    @Binds
     abstract fun bindAuthRemoteDataSource(impl: FirebaseAuthDataSourceImpl): AuthRemoteDataSource
 
     @Binds
@@ -50,7 +55,6 @@ abstract class FirebaseDataSourceModule {
     @Binds
     abstract fun bindConfigDataSource(impl: RemoteConfigDataSourceImpl): ConfigDataSource
 
-    // You would add the binding for FirebaseEmployeeDataSourceImpl here as well
     @Binds
     abstract fun bindEmployeeNetworkDataSource(impl: FirebaseEmployeeDataSourceImpl): EmployeeNetworkDataSource
 }

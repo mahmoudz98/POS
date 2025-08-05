@@ -19,13 +19,20 @@ import com.casecode.pos.core.model.business.BranchStatus
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkBranch(
     @DocumentId val id: String = "",
-    val name: String? = null,
-    val address: Map<String, String>? = null,
-    val phone: String? = null,
-    val status: BranchStatus? = null,
-    @ServerTimestamp val createdAt: Timestamp? = null,
-    @ServerTimestamp val updatedAt: Timestamp? = null,
+    val name: String = "",
+    val address: String = "",
+    val phone: String = "",
+    val status: BranchStatus = BranchStatus.OPEN,
+    @Contextual
+    @ServerTimestamp
+    val createdAt: Timestamp = Timestamp.now(),
+    @Contextual
+    @ServerTimestamp
+    val updatedAt: Timestamp = Timestamp.now(),
 )

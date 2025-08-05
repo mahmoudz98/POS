@@ -17,25 +17,103 @@
     <entry>
         <key>supported_currencies_json</key>
         <value>
-            [{"code":"USD","name":"United States Dollar","symbol":"$","decimalPlaces":2},
-            {"code":"EUR","name":"Euro","symbol":"€","decimalPlaces":2},
-            {"code":"EGP","name":"Egyptian Pound","symbol":"E£","decimalPlaces":2},
-            {"code":"SAR","name":"Saudi Riyal","symbol":"﷼","decimalPlaces":2},
-            {"code":"AED","name":"United Arab Emirates Dirham","symbol":"د.إ","decimalPlaces":2}]
+            [
+            {
+            "code":"USD",
+            "name_en":"United States Dollar",
+            "name_ar":"دولار أمريكي",
+            "symbol":"$",
+            "decimalPlaces":2
+            },
+            {
+            "code":"CAD",
+            "name_en":"Canadian Dollar",
+            "name_ar":"دولار كندي",
+            "symbol":"C$",
+            "decimalPlaces":2
+            },
+            {
+            "code":"GBP",
+            "name_en":"British Pound Sterling",
+            "name_ar":"جنيه إسترليني",
+            "symbol":"£",
+            "decimalPlaces":2
+            },
+            {
+            "code":"EGP",
+            "name_en":"Egyptian Pound",
+            "name_ar":"جنيه مصري",
+            "symbol":"ج.م",
+            "decimalPlaces":2
+            },
+            {
+            "code":"SAR",
+            "name_en":"Saudi Riyal",
+            "name_ar":"ريال سعودي",
+            "symbol":"ر.س",
+            "decimalPlaces":2
+            },
+            {
+            "code":"AED",
+            "name_en":"UAE Dirham",
+            "name_ar":"درهم إماراتي",
+            "symbol":"د.إ",
+            "decimalPlaces":2
+            }
+            ]
         </value>
     </entry>
+
+    <!-- Subscription plans with multi-currency prices -->
     <entry>
         <key>subscription_plans</key>
         <value>
-            [{"id":"free_tier_2024","name":"Free Plan","price":0.00,"isFree":true,"features":["Up to
-            2 Employees","1 Branch Location","Basic Sales
-            Reporting"],"limits":{"maxBranches":1,"maxEmployees":2,"maxItems":100,"initialCredits":1000}},{"id":"standard_monthly_usd","name":"Standard
-            Plan","price":19.99,"isFree":false,"features":["Up to 10 Employees","Up to 3
-            Branches","Advanced Inventory Control","Detailed Sales
-            Analytics"],"limits":{"maxBranches":3,"maxEmployees":10,"maxItems":5000,"initialCredits":10000}},{"id":"pro_monthly_usd","name":"Pro
-            Plan","price":49.99,"isFree":false,"features":["Unlimited Employees &amp; Branches","All
-            Standard Features","API Access for Integrations","Priority
-            Support"],"limits":{"maxBranches":-1,"maxEmployees":-1,"maxItems":-1,"initialCredits":25000}}]
+            [
+            {
+            "id":"free_tier_2024",
+            "name_en":"Free Plan",
+            "name_ar":"الخطة المجانية",
+            "prices":[{"currency":"USD","amount":0.00}],
+            "isFree":true,
+            "features_en":["Up to 2 Employees","1 Branch Location","Basic Sales Reporting"],
+            "features_ar":["حتى 2 موظفين","موقع فرع واحد","تقارير المبيعات الأساسية"],
+            "limits":{"maxBranches":1,"maxEmployees":2,"maxItems":100,"initialCredits":1000}
+            },
+            {
+            "id":"standard_monthly",
+            "name_en":"Standard Plan",
+            "name_ar":"الخطة القياسية",
+            "prices":[
+            {"currency":"USD","amount":19.99},
+            {"currency":"CAD","amount":26.99},
+            {"currency":"GBP","amount":15.99},
+            {"currency":"EGP","amount":599.00},
+            {"currency":"SAR","amount":74.99},
+            {"currency":"AED","amount":73.99}
+            ],
+            "isFree":false,
+            "features_en":["Up to 10 Employees","Up to 3 Branches","Advanced Inventory Control","Detailed Sales Analytics"],
+            "features_ar":["حتى 10 موظفين","حتى 3 فروع","تحكم متقدم في المخزون","تحليلات المبيعات التفصيلية"],
+            "limits":{"maxBranches":3,"maxEmployees":10,"maxItems":5000,"initialCredits":10000}
+            },
+            {
+            "id":"pro_monthly",
+            "name_en":"Pro Plan",
+            "name_ar":"الخطة الاحترافية",
+            "prices":[
+            {"currency":"USD","amount":49.99},
+            {"currency":"CAD","amount":66.99},
+            {"currency":"GBP","amount":39.99},
+            {"currency":"EGP","amount":1499.00},
+            {"currency":"SAR","amount":187.99},
+            {"currency":"AED","amount":184.99}
+            ],
+            "isFree":false,
+            "features_en":["Unlimited Employees and Branches","All Standard Features","API Access for Integrations","Priority Support"],
+            "features_ar":["عدد غير محدود من الموظفين والفروع","جميع ميزات الخطة القياسية","الوصول إلى واجهة برمجة التطبيقات للتكامل","دعم أولوية"],
+            "limits":{"maxBranches":-1,"maxEmployees":-1,"maxItems":-1,"initialCredits":25000}
+            }
+            ]
         </value>
     </entry>
 </defaultsMap>

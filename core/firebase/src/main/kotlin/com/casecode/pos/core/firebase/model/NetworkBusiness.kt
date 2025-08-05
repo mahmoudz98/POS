@@ -20,7 +20,10 @@ import com.casecode.pos.core.model.business.Vertical
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkBusiness(
     @DocumentId val id: String = "",
     val name: String = "",
@@ -31,6 +34,8 @@ data class NetworkBusiness(
     val status: Int = BusinessStatus.ACTIVE.value,
     val email: String = "",
     val phone: String = "",
+    @Contextual
     @ServerTimestamp val updatedAt: Timestamp = Timestamp.now(),
+    @Contextual
     @ServerTimestamp val createdAt: Timestamp = Timestamp.now(),
 )

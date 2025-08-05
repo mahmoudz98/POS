@@ -15,16 +15,21 @@
  */
 package com.casecode.pos.core.firebase.model
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.ServerTimestamp
-import java.util.Date
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkTaxRate(
     @DocumentId val id: String = "",
-    val name: String? = null,
-    val rate: Float? = null,
+    val name: String = "",
+    val rate: Float = 0.0f,
     val isIncludedInPrice: Boolean = false,
     val isDefault: Boolean = false,
-    @ServerTimestamp val createdAt: Date? = null,
-    @ServerTimestamp val updatedAt: Date? = null,
+    @Contextual
+    @ServerTimestamp val createdAt: Timestamp = Timestamp.now(),
+    @Contextual
+    @ServerTimestamp val updatedAt: Timestamp = Timestamp.now(),
 )

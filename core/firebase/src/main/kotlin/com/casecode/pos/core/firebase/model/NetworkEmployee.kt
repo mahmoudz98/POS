@@ -19,9 +19,9 @@ import com.google.firebase.firestore.DocumentId
 
 data class NetworkEmployee(
     @DocumentId val id: String = "",
-    val employeeId: String? = null,
-    val name: String? = null,
-    val role: String? = null,
-    val assignedBranchIds: List<String>? = emptyList(),
-    val passwordHash: String? = null,
+    val employeeId: String = "",
+    val name: String = "",
+    val role: String = "",
+    val assignedBranchIds: List<String> = emptyList(),
+    val passwordHash: String = "",
 )

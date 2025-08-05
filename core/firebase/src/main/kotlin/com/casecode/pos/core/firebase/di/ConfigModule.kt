@@ -17,6 +17,8 @@ package com.casecode.pos.core.firebase.di
 
 import com.casecode.pos.core.firebase.BuildConfig
 import com.casecode.pos.core.firebase.R
+import com.casecode.pos.core.firebase.TimestampSerializer
+import com.google.firebase.Timestamp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.Module
@@ -24,6 +26,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -51,6 +54,12 @@ object ConfigModule {
     @Singleton
     fun providesNetworkJson(): Json =
         Json {
+            serializersModule = SerializersModule {
+                contextual(
+                    Timestamp::class,
+                    TimestampSerializer,
+                )
+            }
             isLenient = true
             ignoreUnknownKeys = true
         }

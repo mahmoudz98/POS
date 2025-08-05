@@ -36,8 +36,8 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
         initialBillingEvent: NetworkBillingEvent,
     ): String {
         return db.runTransaction { transaction ->
-            val businessRef = db.collection(BUSINESSES_COLLECTION_PATH).document()
             val ownerUid = business.ownerUid
+            val businessRef = db.collection(BUSINESSES_COLLECTION_PATH).document(ownerUid)
 
             val potentialCode = generateCompanyCode(business.name, ownerUid)
             val networkBusiness =
@@ -46,11 +46,11 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
 
             initialBranches.forEach { domainBranch ->
                 val branchRef = businessRef.collection(BRANCHES_SUBCOLLECTION_PATH).document()
-                transaction.set(branchRef, domainBranch.copy(id = branchRef.id))
+                transaction.set(branchRef, domainBranch)
             }
             initialTaxes.forEach { domainTax ->
                 val taxRef = businessRef.collection(TAX_RATES_SUBCOLLECTION_PATH).document()
-                transaction.set(taxRef, domainTax.copy(id = taxRef.id))
+                transaction.set(taxRef, domainTax)
             }
 
             val subRef =
