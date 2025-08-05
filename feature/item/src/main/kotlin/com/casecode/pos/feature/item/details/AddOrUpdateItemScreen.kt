@@ -98,7 +98,7 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
-import com.casecode.pos.core.ui.scanOptions
+import com.casecode.pos.core.ui.utils.scanOptions
 import com.casecode.pos.feature.item.ItemsViewModel
 import com.casecode.pos.feature.item.R
 import com.casecode.pos.feature.item.utils.PhotoUriManager

@@ -20,11 +20,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
-import com.casecode.pos.core.domain.usecase.AddItemUseCase
-import com.casecode.pos.core.domain.usecase.DeleteItemUseCase
-import com.casecode.pos.core.domain.usecase.GetItemsUseCase
-import com.casecode.pos.core.domain.usecase.ItemImageUseCase
-import com.casecode.pos.core.domain.usecase.UpdateItemUseCase
+import com.casecode.pos.core.domain.usecase.old.AddItemUseCase
+import com.casecode.pos.core.domain.usecase.old.DeleteItemUseCase
+import com.casecode.pos.core.domain.usecase.old.GetItemsUseCase
+import com.casecode.pos.core.domain.usecase.old.ItemImageUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateItemUseCase
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.users.Item
