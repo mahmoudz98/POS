@@ -17,8 +17,8 @@ package com.casecode.pos.feature.signout
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.repository.old.AccountRepository
 import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
+import com.casecode.pos.core.domain.usecase.SignOutUseCase
 import com.casecode.pos.core.model.users.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
@@ -32,7 +32,7 @@ import javax.inject.Inject
 class SignOutViewModel
 @Inject
 constructor(
-    private val accountRepository: AccountRepository,
+    private val signOutUseCase: SignOutUseCase,
     authRepositoryO: AuthRepositoryO,
 ) : ViewModel() {
     val userUiState: StateFlow<User?> =
@@ -44,6 +44,6 @@ constructor(
             )
 
     fun signOut(): Deferred<Unit> = viewModelScope.async {
-        accountRepository.signOut()
+        signOutUseCase()
     }
 }
