@@ -30,12 +30,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.designsystem.theme.POSTheme
 
 /**
  * A composable function that displays an empty screen with an image, title, and message.
@@ -60,7 +62,8 @@ fun PosEmptyScreen(
         modifier =
         modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -68,17 +71,20 @@ fun PosEmptyScreen(
             painter = painterResource(id = imageRes),
             contentDescription = null,
             modifier = Modifier.size(120.dp),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.outline),
         )
 
         Text(
             text = stringResource(id = titleRes),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 16.dp),
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(top = 24.dp),
         )
 
         Text(
             text = stringResource(id = messageRes),
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 8.dp),
         )
     }
@@ -102,7 +108,9 @@ fun PosEmptyScreen(
     @StringRes messageRes: Int,
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -110,20 +118,35 @@ fun PosEmptyScreen(
             imageVector = icon,
             contentDescription = null,
             modifier = Modifier.size(120.dp),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primaryContainer),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.outline),
         )
 
         Text(
             text = stringResource(id = titleRes),
             style = MaterialTheme.typography.titleMedium,
-            color = Color.Black,
-            modifier = Modifier.padding(top = 16.dp),
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(top = 24.dp),
         )
 
         Text(
             text = stringResource(id = messageRes),
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 8.dp),
         )
+    }
+}
+
+@Preview
+@Composable
+fun PosEmptyScreenPreview() {
+    POSTheme {
+        PosBackground {
+            PosEmptyScreen(
+                icon = PosIcons.EmptyImage,
+                titleRes = android.R.string.emptyPhoneNumber,
+                messageRes = android.R.string.emptyPhoneNumber,
+            )
+        }
     }
 }
