@@ -16,7 +16,7 @@
 package com.casecode.pos.core.datastore
 
 import androidx.datastore.core.DataStore
-import com.casecode.pos.core.model.data.LoginStateResult
+import com.casecode.pos.core.model.LoginStateResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

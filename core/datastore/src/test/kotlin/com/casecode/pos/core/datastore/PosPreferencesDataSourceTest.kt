@@ -57,7 +57,7 @@ class PosPreferencesDataSourceTest {
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role ="Admin"
+            role = "Admin",
         )
         assertEquals(subject.loginData.first(), LoginStateResult.OwnerLoggedIn("4erwerwe", "sdfsd123"))
     }
@@ -71,7 +71,7 @@ class PosPreferencesDataSourceTest {
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role ="Admin"
+            role = "Admin",
         )
         subject.clearLoginSession()
         assertEquals(subject.loginData.first(), LoginStateResult.LoggedOut)
@@ -86,17 +86,16 @@ class PosPreferencesDataSourceTest {
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role ="Admin"
+            role = "Admin",
 
         )
-
 
         assertEquals(
             subject.loginData.first(),
             LoginStateResult.EmployeeLoggedIn(
                 businessId = "4erwerwe",
                 activeBranchId = "sdfsd123",
-                role = "admin"
+                role = "admin",
             ),
         )
     }
