@@ -18,8 +18,8 @@ package com.casecode.pos.feature.setting.printer
 import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.usecase.AddPrinterUseCase
-import com.casecode.pos.core.domain.usecase.GetPrinterUseCase
+import com.casecode.pos.core.domain.usecase.old.AddPrinterUseCase
+import com.casecode.pos.core.domain.usecase.old.GetPrinterUseCase
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.PrinterConnectionInfo
 import com.casecode.pos.core.model.PrinterConnectionType
