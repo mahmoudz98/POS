@@ -14,9 +14,10 @@
      limitations under the License.
 -->
 <resources>
-  <string name="core_ui_menu_business_info_title">Business Info</string>
-  <string name="core_ui_menu_branches_title">Branches</string>
+  <string name="core_ui_business_info_title">Business Info</string>
+  <string name="core_ui_branches_title">Branches</string>
   <string name="core_ui_employees_title">Employees</string>
+  <string name="core_ui_financials_title">Financials</string>
   <!-- Network -->
   <string name="core_ui_error_network">Please check your internet connection.</string>
   <string name="core_ui_message_back_online">Back online.</string>
@@ -34,15 +35,22 @@
   <string name="core_ui_employee_password_hint">Password</string>
   <string name="core_ui_error_email_empty">Email is required.</string>
   <string name="core_ui_error_phone_empty">Phone number is required.</string>
-  <string name="core_ui_error_phone_invalid">Please enter a valid phone number (exception.g., 1234567890).</string>
+  <string name="core_ui_error_phone_invalid">Please enter a valid phone number.</string>
   <string name="core_ui_email_invalid">Please enter a valid email address.</string>
   <string name="core_ui_error_branch_name_empty">Branch name is required.</string>
 
-  <string name="core_ui_store_type_hint">Store Type</string>
+  <string name="core_ui_business_name_hint">business name</string>
+  <string name="core_ui_country_hint">Country</string>
+  <string name="core_ui_business_vertical_hint">Store Type</string>
+  <string name="core_ui_business_vertical_retail">Retail</string>
+  <string name="core_ui_business_vertical_cafe">Coffee</string>
+  <string name="core_ui_business_vertical_pharmacy">Pharmacy</string>
   <string name="core_ui_work_email_hint">Work Email</string>
   <string name="core_ui_work_phone_number_hint">Work Phone Number</string>
   <string name="core_ui_branch_name_hint">Branch Name: </string>
   <string name="core_ui_hint_phone_number_branch">Branch Phone Number</string>
+  <string name="core_ui_currency_hint">Currencies</string>
+  <string name="core_ui_tax_rate_hint">Tax Rate</string>
 
   <string name="core_ui_add_branch_title">Add a Branch</string>
   <string name="core_ui_update_branch_title">Update a Branch</string>
@@ -95,9 +103,7 @@
   <string name="core_ui_permission_sales_text">Sales</string>
   <string name="core_ui_permission_none_text">None</string>
 
-  <!-- String Arrays -->
   <string name="core_ui_dialog_cancel_button_text">Cancel</string>
-
   <string name="core_ui_save_action_text">Save</string>
 
   <!-- Dialogs -->
