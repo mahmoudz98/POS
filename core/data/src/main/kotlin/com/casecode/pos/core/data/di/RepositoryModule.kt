@@ -1,0 +1,138 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.casecode.pos.core.data.di
+
+import com.casecode.pos.core.data.repository.business.AuthRepositoryImpl
+import com.casecode.pos.core.data.repository.business.BranchRepositoryImpl
+import com.casecode.pos.core.data.repository.business.BusinessRepositoryImpl
+import com.casecode.pos.core.data.repository.business.CurrencyRepositoryImpl
+import com.casecode.pos.core.data.repository.business.EmployeeRepositoryImpl
+import com.casecode.pos.core.data.repository.business.SessionRepositoryImpl
+import com.casecode.pos.core.data.repository.business.SubscriptionRepositoryImpl
+import com.casecode.pos.core.data.repository.business.TaxRepositoryImpl
+import com.casecode.pos.core.data.repository.old.AccountRepositoryImpl
+import com.casecode.pos.core.data.repository.old.AuthRepositoryOImpl
+import com.casecode.pos.core.data.repository.old.EmployeesBusinessRepositoryImpl
+import com.casecode.pos.core.data.repository.old.InvoiceRepositoryImpl
+import com.casecode.pos.core.data.repository.old.ItemImageRepositoryImpl
+import com.casecode.pos.core.data.repository.old.ItemRepositoryImpl
+import com.casecode.pos.core.data.repository.old.PrinterRepositoryImpl
+import com.casecode.pos.core.data.repository.old.SubscriptionsBusinessRepositoryImpl
+import com.casecode.pos.core.data.repository.old.SubscriptionsRepositoryImpl
+import com.casecode.pos.core.data.repository.old.SupplierInvoiceRepositoryImpl
+import com.casecode.pos.core.data.repository.old.SupplierRepositoryImpl
+import com.casecode.pos.core.domain.repository.business.AuthRepository
+import com.casecode.pos.core.domain.repository.business.BranchRepository
+import com.casecode.pos.core.domain.repository.business.BusinessRepository
+import com.casecode.pos.core.domain.repository.business.CurrencyRepository
+import com.casecode.pos.core.domain.repository.business.EmployeeRepository
+import com.casecode.pos.core.domain.repository.business.SessionRepository
+import com.casecode.pos.core.domain.repository.business.SubscriptionRepository
+import com.casecode.pos.core.domain.repository.business.TaxRepository
+import com.casecode.pos.core.domain.repository.old.AccountRepository
+import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
+import com.casecode.pos.core.domain.repository.old.EmployeesBusinessRepository
+import com.casecode.pos.core.domain.repository.old.InvoiceRepository
+import com.casecode.pos.core.domain.repository.old.ItemImageRepository
+import com.casecode.pos.core.domain.repository.old.ItemRepository
+import com.casecode.pos.core.domain.repository.old.PrinterRepository
+import com.casecode.pos.core.domain.repository.old.SubscriptionsBusinessRepository
+import com.casecode.pos.core.domain.repository.old.SubscriptionsRepository
+import com.casecode.pos.core.domain.repository.old.SupplierInvoiceRepository
+import com.casecode.pos.core.domain.repository.old.SupplierRepository
+import com.casecode.pos.core.domain.utils.Syncable
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import dagger.multibindings.IntoSet
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
+    @Binds
+    abstract fun bindBusinessRepository(impl: BusinessRepositoryImpl): BusinessRepository
+
+    @Binds
+    abstract fun bindCurrencyRepository(impl: CurrencyRepositoryImpl): CurrencyRepository
+
+    @Binds
+    abstract fun bindEmployeeRepository(impl: EmployeeRepositoryImpl): EmployeeRepository
+
+    @Binds
+    abstract fun bindSubscriptionRepository(impl: SubscriptionRepositoryImpl): SubscriptionRepository
+
+    @Binds
+    abstract fun bindBranchRepository(impl: BranchRepositoryImpl): BranchRepository
+
+    @Binds
+    abstract fun bindTaxRepository(impl: TaxRepositoryImpl): TaxRepository
+
+    @Binds
+    abstract fun bindSessionRepository(impl: SessionRepositoryImpl): SessionRepository
+
+    @Binds
+    abstract fun bindAccountRepository(impl: AccountRepositoryImpl): AccountRepository
+
+    @Binds
+    abstract fun bindAuthRepositoryO(impl: AuthRepositoryOImpl): AuthRepositoryO
+
+    @Binds
+    abstract fun bindEmployeesBusinessRepo(
+        impl: EmployeesBusinessRepositoryImpl,
+    ): EmployeesBusinessRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindItemRepo(impl: ItemRepositoryImpl): ItemRepository
+
+    @Binds
+    abstract fun bindImageRepo(impl: ItemImageRepositoryImpl): ItemImageRepository
+
+    @Binds
+    abstract fun bindInvoiceRepo(impl: InvoiceRepositoryImpl): InvoiceRepository
+
+    @Binds
+    abstract fun bindPrinterRepo(impl: PrinterRepositoryImpl): PrinterRepository
+
+    @Binds
+    abstract fun bindSupplierRepo(impl: SupplierRepositoryImpl): SupplierRepository
+
+    @Binds
+    abstract fun bindSupplierInvoiceRepo(
+        impl: SupplierInvoiceRepositoryImpl,
+    ): SupplierInvoiceRepository
+
+    @Binds
+    abstract fun bindSubscriptionsBusinessRepository(
+        impl: SubscriptionsBusinessRepositoryImpl,
+    ): SubscriptionsBusinessRepository
+
+    @Binds
+    abstract fun bindBusinessRepositoryO(
+        impl: com.casecode.pos.core.data.repository.old.BusinessRepositoryImpl,
+    ): com.casecode.pos.core.domain.repository.old.BusinessRepository
+
+    @Binds
+    abstract fun bindSubscriptionsRepositoryO(
+        impl: SubscriptionsRepositoryImpl,
+    ): SubscriptionsRepository
+}
