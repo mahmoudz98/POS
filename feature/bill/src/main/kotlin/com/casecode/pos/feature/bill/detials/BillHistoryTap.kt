@@ -47,8 +47,8 @@ import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.model.utils.toFormattedDateTimeString
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
 import com.casecode.pos.feature.bill.R
-import kotlinx.datetime.Clock.System
-import kotlinx.datetime.Instant
+import kotlin.time.Clock.System
+import kotlin.time.Instant
 
 @Composable
 fun BillHistoryTap(

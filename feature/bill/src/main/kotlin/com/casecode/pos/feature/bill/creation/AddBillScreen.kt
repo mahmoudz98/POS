@@ -68,7 +68,7 @@ import com.casecode.pos.core.model.utils.toFormattedDateString
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.bill.R
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable

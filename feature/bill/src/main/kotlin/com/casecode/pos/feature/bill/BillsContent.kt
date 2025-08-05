@@ -79,8 +79,8 @@ import com.casecode.pos.core.model.utils.toBigDecimalFormatted
 import com.casecode.pos.core.model.utils.toFormattedDateString
 import com.casecode.pos.core.ui.FilterSharedElementKey
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @Composable
 fun BillsTopAppBar(

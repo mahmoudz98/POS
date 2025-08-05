@@ -23,11 +23,11 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.casecode.pos.core.model.users.DiscountType
 import com.casecode.pos.core.model.users.Item
 import com.casecode.pos.core.model.users.SupplierInvoice
-import kotlinx.datetime.Clock.System
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock.System
+import kotlin.time.Instant
 
 @Stable
 class BillInputState(

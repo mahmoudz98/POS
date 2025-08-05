@@ -48,7 +48,7 @@ import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
 import com.casecode.pos.feature.bill.R
 import com.casecode.pos.feature.bill.toPaymentMethodRes
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 
 @Composable
 fun BillPaymentTap(modifier: Modifier = Modifier, paymentDetails: List<PaymentDetails>) {

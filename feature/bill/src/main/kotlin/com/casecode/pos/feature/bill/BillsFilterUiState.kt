@@ -16,7 +16,7 @@
 package com.casecode.pos.feature.bill
 
 import androidx.annotation.StringRes
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class BillsFilterUiState(
     val selectedSuppliers: Set<String> = emptySet(),

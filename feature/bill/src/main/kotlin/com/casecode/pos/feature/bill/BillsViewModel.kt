@@ -18,7 +18,7 @@ package com.casecode.pos.feature.bill
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
-import com.casecode.pos.core.domain.usecase.GetSupplierInvoicesUseCase
+import com.casecode.pos.core.domain.usecase.old.GetSupplierInvoicesUseCase
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.users.PaymentStatus
@@ -30,8 +30,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
-import kotlinx.datetime.Clock
 import javax.inject.Inject
+import kotlin.time.Clock
 
 @HiltViewModel
 class BillsViewModel @Inject constructor(

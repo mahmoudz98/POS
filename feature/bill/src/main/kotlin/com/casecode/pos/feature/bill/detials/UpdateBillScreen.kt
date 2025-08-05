@@ -75,7 +75,7 @@ import com.casecode.pos.feature.bill.creation.BillItemFormScreen
 import com.casecode.pos.feature.bill.creation.BillItemsTotalSection
 import com.casecode.pos.feature.bill.creation.BillLineItem
 import com.casecode.pos.feature.bill.creation.millisToStartOfDay
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
