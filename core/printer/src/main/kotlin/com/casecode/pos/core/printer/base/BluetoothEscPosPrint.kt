@@ -42,30 +42,30 @@ class BluetoothEscPosPrint
 @Inject
 constructor() : EscPosPrint() {
     @SuppressLint("MissingPermission")
-    override suspend fun takePrints(printerData: EscPosPrinter): PrinterStatus {
+    override suspend fun takePrints(printer: EscPosPrinter): PrinterStatus {
         Timber.e("takePrints:BluetoothEscPosPrint")
         this@BluetoothEscPosPrint.printerState.publishState(PrinterStatusCode.PROGRESS_CONNECTING)
-        val deviceConnection = (printerData.getPrinterConnection() as? BluetoothConnectionImpl)
+        val deviceConnection = (printer.getPrinterConnection() as? BluetoothConnectionImpl)
         val updatedPrinterData: EscPosPrinter =
             if (deviceConnection == null) {
                 Timber.e("No paired Bluetooth devices found")
                 val pairedDevice = BluetoothPrintersConnections.selectFirstPaired()
                 EscPosPrinter(
                     pairedDevice,
-                    printerData.printerDpi,
-                    printerData.printerWidthMM,
-                    printerData.printerNbrCharactersPerLine,
+                    printer.printerDpi,
+                    printer.printerWidthMM,
+                    printer.printerNbrCharactersPerLine,
                 ).apply {
-                    setTextsToPrint(printerData.getTextsToPrint())
+                    setTextsToPrint(printer.getTextsToPrint())
                 }
             } else {
                 try {
                     if (!deviceConnection.isConnected) {
                         attemptConnection(deviceConnection)
                     }
-                    printerData
+                    printer
                 } catch (e: EscPosConnectionException) {
-                    return handleConnectionException(e, deviceConnection, printerData)
+                    return handleConnectionException(e, deviceConnection, printer)
                 }
             }
         return super.takePrints(updatedPrinterData)
@@ -153,28 +153,28 @@ constructor() : EscPosPrint() {
     }
 
     override fun <T : DeviceConnection> getEscPosPrinterService(
-        printerConnection: T,
-        printContext: PrintContent,
-        widthPaper: Float,
+        deviceConnection: T,
+        content: PrintContent,
+        paperWidth: Float,
         context: Context,
     ): EscPosPrinter = EscPosPrinter(
-        printerConnection,
+        deviceConnection,
         printerDpi = 203,
-        printerWidthMM = widthPaper,
+        printerWidthMM = paperWidth,
         printerNbrCharactersPerLine = 32,
     ).apply {
         val textToPrint =
-            when (printContext) {
+            when (content) {
                 is PrintContent.Receipt -> {
                     PrintUtils.generatePrintText(
-                        printContext.invoiceId,
-                        printContext.phone,
-                        printContext.items,
+                        content.invoiceId,
+                        content.phone,
+                        content.items,
                     )
                 }
 
                 is PrintContent.QrCode -> {
-                    PrintUtils.generateBarcode(printContext.item)
+                    PrintUtils.generateBarcode(content.item)
                 }
 
                 is PrintContent.Test -> {

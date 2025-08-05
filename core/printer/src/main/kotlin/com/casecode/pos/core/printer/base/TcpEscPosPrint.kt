@@ -57,25 +57,25 @@ constructor() : EscPosPrint() {
     }
 
     override fun <T : DeviceConnection> getEscPosPrinterService(
-        printerConnection: T,
-        printContext: PrintContent,
-        widthPaper: Float,
+        deviceConnection: T,
+        content: PrintContent,
+        paperWidth: Float,
         context: Context,
     ): EscPosPrinter {
         // TODO:Handle paper size
-        return EscPosPrinter(printerConnection, 203, widthPaper, 32).apply {
+        return EscPosPrinter(deviceConnection, 203, paperWidth, 32).apply {
             val textToPrint =
-                when (printContext) {
+                when (content) {
                     is PrintContent.Receipt -> {
                         PrintUtils.generatePrintText(
-                            printContext.invoiceId,
-                            printContext.phone,
-                            printContext.items,
+                            content.invoiceId,
+                            content.phone,
+                            content.items,
                         )
                     }
 
                     is PrintContent.QrCode -> {
-                        PrintUtils.generateBarcode(printContext.item)
+                        PrintUtils.generateBarcode(content.item)
                     }
 
                     is PrintContent.Test -> {
