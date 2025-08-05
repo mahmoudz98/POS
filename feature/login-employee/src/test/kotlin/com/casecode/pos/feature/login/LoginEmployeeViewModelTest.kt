@@ -16,6 +16,7 @@
 package com.casecode.pos.feature.login
 
 import com.casecode.pos.core.testing.base.BaseTest
+import com.casecode.pos.core.testing.repository.TestAccountRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.feature.login.employee.LoginEmployeeViewModel
 import kotlinx.coroutines.test.runTest
@@ -31,7 +32,7 @@ class LoginEmployeeViewModelTest : BaseTest() {
     private lateinit var viewModel: LoginEmployeeViewModel
 
     override fun init() {
-        viewModel = LoginEmployeeViewModel(networkMonitor, accountService)
+        viewModel = LoginEmployeeViewModel(networkMonitor, TestAccountRepository())
     }
 
     @Test
