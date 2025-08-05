@@ -24,11 +24,9 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
-import androidx.navigation.navOptions
 import com.casecode.pos.InitialDestinationState
 import com.casecode.pos.feature.login.navigation.LoginRoute
 import com.casecode.pos.feature.login.navigation.loginScreen
-import com.casecode.pos.feature.login.navigation.navigateToLogin
 import com.casecode.pos.feature.onboarding.navigation.OnboardingRoute
 import com.casecode.pos.feature.onboarding.navigation.onboardingScreen
 import com.casecode.pos.ui.MainAppState
@@ -75,22 +73,7 @@ fun PosMainNavHost(
         )
 
         onboardingScreen(
-            onStepperCompleteToHome = {
-                navController.navigateToMainGraph(
-                    navOptions {
-                        popUpTo(OnboardingRoute) { inclusive = true }
-                        launchSingleTop = true
-                    },
-                )
-            },
-            onBackToSignIn = {
-                navController.navigateToLogin(
-                    navOptions {
-                        popUpTo(OnboardingRoute) { inclusive = true }
-                        launchSingleTop = true
-                    },
-                )
-            },
+            onShowSnackbar = { onShowSnackbar(it, null) },
             enterTransition = { flowTransition() },
             exitTransition = {
                 when (targetState.destination.route) {
