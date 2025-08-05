@@ -26,12 +26,8 @@ android {
 
 dependencies {
     implementation(projects.core.domain)
-
-    // implementation(libs.androidx.credentials)
-
     testImplementation(libs.hilt.android.testing)
     testImplementation(projects.core.testing)
 
     androidTestImplementation(libs.bundles.androidx.compose.ui.test)
-    androidTestImplementation(projects.core.testing)
 }
