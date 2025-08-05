@@ -148,11 +148,11 @@ fun PosOutlinedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     supportingText: String? = null,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
-    ) {
+) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { if(label.isNotEmpty()) Text(label) else null} ,
+        label = { if (label.isNotEmpty()) Text(label) else null },
         isError = isError,
         readOnly = readOnly,
         enabled = enabled,
