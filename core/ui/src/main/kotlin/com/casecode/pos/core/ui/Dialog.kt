@@ -31,7 +31,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.casecode.pos.core.designsystem.component.PosTextButton
 
 @Composable
-fun DeleteDialog(
+fun PosDeleteDialog(
     @StringRes titleRes: Int,
     @StringRes messageRes: Int,
     onConfirm: () -> Unit,
@@ -71,11 +71,12 @@ fun DeleteDialog(
         },
     )
 }
+
 @Composable
 fun PosDialog(
     @StringRes titleRes: Int,
     @StringRes messageRes: Int,
-    @StringRes confirmRes:Int = R.string.core_ui_dialog_ok_button_text,
+    @StringRes confirmRes: Int = R.string.core_ui_dialog_ok_button_text,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {

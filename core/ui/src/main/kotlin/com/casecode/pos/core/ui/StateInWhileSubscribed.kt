@@ -25,15 +25,17 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 
 context(viewmodel: ViewModel)
-fun <T> Flow<T>.stateInWhileSubscribed(initialValue: T): StateFlow<T> = stateIn(
-    scope = viewmodel.viewModelScope,
-    started = SharingStarted.WhileSubscribed(5_000),
-    initialValue = initialValue,
-)
+fun <T> Flow<T>.stateInWhileSubscribed(initialValue: T): StateFlow<T> =
+    stateIn(
+        scope = viewmodel.viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = initialValue,
+    )
 
 context(viewmodel: ViewModel)
-fun <T> Flow<T>.shareInWhileSubscribed(replay: Int): SharedFlow<T> = shareIn(
-    scope = viewmodel.viewModelScope,
-    started = SharingStarted.WhileSubscribed(5_000),
-    replay = replay,
-)
+fun <T> Flow<T>.shareInWhileSubscribed(replay: Int): SharedFlow<T> =
+    shareIn(
+        scope = viewmodel.viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        replay = replay,
+    )

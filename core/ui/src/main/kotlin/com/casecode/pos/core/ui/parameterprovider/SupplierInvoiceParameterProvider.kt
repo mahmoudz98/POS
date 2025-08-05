@@ -22,8 +22,8 @@ import com.casecode.pos.core.model.users.PaymentDetails
 import com.casecode.pos.core.model.users.PaymentMethod
 import com.casecode.pos.core.model.users.PaymentStatus
 import com.casecode.pos.core.model.users.SupplierInvoice
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 class SupplierInvoiceParameterProvider : PreviewParameterProvider<List<SupplierInvoice>> {
     override val values: Sequence<List<SupplierInvoice>>

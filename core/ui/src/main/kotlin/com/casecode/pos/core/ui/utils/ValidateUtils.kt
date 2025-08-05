@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.core.ui.utils
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.casecode.pos.core.ui.R
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
@@ -65,8 +65,10 @@ fun validatePhoneNumber(
     }
 }
 
-fun validateEmail(email: String): Int? = when {
-    email.isEmpty() -> R.string.core_ui_error_email_empty
-    !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> R.string.core_ui_email_invalid
-    else -> null
+fun validateEmail(email: String): Int? {
+    return when {
+        email.isEmpty() -> R.string.core_ui_error_email_empty
+        !PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() -> R.string.core_ui_email_invalid
+        else -> null
+    }
 }

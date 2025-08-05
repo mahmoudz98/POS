@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.ui
+package com.casecode.pos.core.ui.utils
 
 import android.content.Context
+import com.casecode.pos.core.ui.R
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.moduleinstall.ModuleInstall
