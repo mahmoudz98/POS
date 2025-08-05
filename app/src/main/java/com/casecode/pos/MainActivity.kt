@@ -34,7 +34,7 @@ import com.casecode.pos.core.analytics.AnalyticsHelper
 import com.casecode.pos.core.analytics.LocalAnalyticsHelper
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.NetworkMonitor
-import com.casecode.pos.sync.initializers.SyncSupplierInvoicesOverdue
+import com.casecode.pos.sync.initializers.Sync
 import com.casecode.pos.ui.MainApp
 import com.casecode.pos.ui.rememberMainAppState
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,7 +86,9 @@ class MainActivity : AppCompatActivity() {
                         currentAuthUiState is InitialDestinationState.LoginByAdminEmployee ||
                         currentAuthUiState is InitialDestinationState.LoginBySaleEmployee
                     ) {
-                        SyncSupplierInvoicesOverdue.initialize(context = this@MainActivity)
+                        Sync.initializeOutbox(context = this@MainActivity)
+                        Sync.initializeInbox(context = this@MainActivity)
+                        Sync.initializeSupplierInvoiceOverDue(context = this@MainActivity)
                     }
                 }
             }
