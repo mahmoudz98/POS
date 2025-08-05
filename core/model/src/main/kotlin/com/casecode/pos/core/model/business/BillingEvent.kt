@@ -15,7 +15,8 @@
  */
 package com.casecode.pos.core.model.business
 
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class BillingEvent(
     val id: String,
@@ -24,8 +25,8 @@ data class BillingEvent(
     val amount: Double,
     val currencyCode: String,
     val creditsChange: Int,
-    val eventDate: Instant?,
-    val paymentProviderTransactionId: String?,
+    val eventDate: Instant,
+    val paymentProviderTransactionId: String,
 ) {
     companion object {
         /**
@@ -34,16 +35,16 @@ data class BillingEvent(
         fun forPlanActivation(
             plan: SubscriptionPlan,
             currencyCode: String,
-            paymentId: String? = null,
+            paymentId: String,
         ): BillingEvent {
             return BillingEvent(
-                id = "", // Will be set by Firestore
+                id = "",
                 eventType = BillingEventType.CHARGE_SUCCESSFUL,
                 description = "Activated plan: ${plan.featuresEn}",
-                amount = plan.prices?.first()?.amount?:0.0,
+                amount = plan.prices?.find { it.currency == currencyCode }?.amount ?: 0.0,
                 currencyCode = currencyCode,
                 creditsChange = plan.limits.initialCredits,
-                eventDate = null, // Firestore will set this
+                eventDate = Clock.System.now(),
                 paymentProviderTransactionId = paymentId,
             )
         }

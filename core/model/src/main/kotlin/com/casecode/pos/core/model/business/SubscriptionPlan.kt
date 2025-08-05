@@ -15,14 +15,6 @@
  */
 package com.casecode.pos.core.model.business
 
-
-data class PlanLimits(
-    val maxBranches: Int,
-    val maxEmployees: Int,
-    val maxItems: Int,
-    val initialCredits: Int,
-)
-
 data class SubscriptionPlan(
     val id: String,
     val nameEn: String,
@@ -35,5 +27,11 @@ data class SubscriptionPlan(
 )
 data class PlanPrice(
     val currency: String,
-    val amount: Double
+    val amount: Double,
+)
+data class PlanLimits(
+    val maxBranches: Int,
+    val maxEmployees: Int,
+    val maxItems: Int,
+    val initialCredits: Int,
 )

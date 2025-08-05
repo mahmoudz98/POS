@@ -15,7 +15,6 @@
  */
 package com.casecode.pos.core.model.business
 
-
 data class Currency(
     val code: String,
     val nameEn: String,

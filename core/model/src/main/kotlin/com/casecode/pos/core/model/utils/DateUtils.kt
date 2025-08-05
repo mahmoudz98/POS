@@ -15,7 +15,6 @@
  */
 package com.casecode.pos.core.model.utils
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -28,12 +27,13 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
+import kotlin.time.Instant
 
 fun Instant.toFormattedDateString(): String = this.toLocalDateTime(TimeZone.currentSystemDefault())
     .date
     .format(
         LocalDate.Format {
-            dayOfMonth()
+            day()
             char(' ')
             monthName(MonthNames.ENGLISH_ABBREVIATED)
             char(' ')
@@ -45,7 +45,7 @@ fun Instant.toFormattedDateTimeString(): String {
     val localDateTime = this.toLocalDateTime(TimeZone.currentSystemDefault())
     return localDateTime.format(
         LocalDateTime.Format {
-            dayOfMonth()
+            day()
             char(' ')
             monthName(MonthNames.ENGLISH_ABBREVIATED)
             char(' ')

@@ -15,15 +15,16 @@
  */
 package com.casecode.pos.core.model.business
 
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class Subscription(
     val planId: String,
     val planName: String,
     val status: SubscriptionStatus,
     val creditBalance: Int,
-    val currentPeriodEndDate: Instant?,
-    val updatedAt: Instant?,
+    val currentPeriodEndDate: Instant,
+    val updatedAt: Instant,
 ) {
     companion object {
         /**
@@ -36,8 +37,8 @@ data class Subscription(
                 planName = plan.nameEn,
                 status = if (trialEndDate != null) SubscriptionStatus.TRIAL else SubscriptionStatus.ACTIVE,
                 creditBalance = plan.limits.initialCredits,
-                currentPeriodEndDate = trialEndDate,
-                updatedAt = null, // Firestore will set this
+                currentPeriodEndDate = trialEndDate ?: Clock.System.now(),
+                updatedAt = Clock.System.now(),
             )
         }
     }

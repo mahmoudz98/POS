@@ -15,14 +15,14 @@
  */
 package com.casecode.pos.core.model.business
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class Business(
-    val id: String,
+    val id: String = "",
     val name: String,
     val ownerUid: String,
     val vertical: Vertical,
-    val companyCode: String,
+    val companyCode: String = "",
     val currencyCode: String,
     val status: BusinessStatus,
     val email: String,

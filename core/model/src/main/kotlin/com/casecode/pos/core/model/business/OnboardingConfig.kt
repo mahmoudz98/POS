@@ -15,7 +15,6 @@
  */
 package com.casecode.pos.core.model.business
 
-
 data class OnboardingConfig(
     val plans: List<SubscriptionPlan>,
     val currencies: List<Currency>,

@@ -15,13 +15,14 @@
  */
 package com.casecode.pos.core.model.business
 
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class Branch(
     val id: String = "",
     val name: String,
     val phone: String,
     val status: BranchStatus = BranchStatus.OPEN,
-    val createdAt: Instant? = null,
-    val updatedAt: Instant? = null,
+    val createdAt: Instant = Clock.System.now(),
+    val updatedAt: Instant = Clock.System.now(),
 )

@@ -15,8 +15,8 @@
  */
 package com.casecode.pos.core.model.users
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class SupplierInvoice(
     val invoiceId: String = "",

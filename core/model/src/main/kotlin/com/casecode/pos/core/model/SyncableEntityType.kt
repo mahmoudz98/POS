@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model.business
+package com.casecode.pos.core.model
 
-enum class BillingEventType(val value: Int) {
-    CHARGE_SUCCESSFUL(0),
-    CHARGE_FAILED(1),
-    REFUND_ISSUED(2),
-    PLAN_UPGRADED(3),
-    PLAN_DOWNGRADED(4),
-    PLAN_CANCELED(5),
-    TRIAL_STARTED(6),
-    TRIAL_ENDED(7),
-    CREDIT_APPLIED(8),
-    CREDIT_ADJUSTMENT(9),
-    PAYMENT_METHOD_UPDATED(10),
+enum class SyncableEntityType {
+    BUSINESS,
+    BRANCH,
+    EMPLOYEE,
+    SUBSCRIPTION,
+    TAX_RATE,
     ;
 
     companion object {
-        fun fromValue(value: Int): BillingEventType = entries.first { it.value == value }
+        fun fromValue(value: String): SyncableEntityType {
+            return SyncableEntityType.entries.find { it.name == value } ?: BUSINESS
+        }
     }
 }

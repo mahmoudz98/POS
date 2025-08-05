@@ -15,14 +15,15 @@
  */
 package com.casecode.pos.core.model.business
 
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 data class TaxRate(
-    val id: String? = null,
+    val id: String = "",
     val name: String,
     val rate: Float,
     val isIncludedInPrice: Boolean = false,
     val isDefault: Boolean = false,
-    val createdAt: Instant? = null,
-    val updatedAt: Instant? = null,
+    val createdAt: Instant = Clock.System.now(),
+    val updatedAt: Instant = Clock.System.now(),
 )
