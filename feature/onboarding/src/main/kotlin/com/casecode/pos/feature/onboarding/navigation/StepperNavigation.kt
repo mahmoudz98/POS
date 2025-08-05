@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.stepper.navigation
+package com.casecode.pos.feature.onboarding.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -23,27 +23,25 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.casecode.pos.feature.stepper.StepperScreen
+import com.casecode.pos.feature.onboarding.OnBoardingScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object StepperRoute
+data object OnboardingRoute
 
-fun NavGraphBuilder.stepperScreen(
-    onStepperCompleteToHome: () -> Unit,
-    onBackToSignIn: () -> Unit,
+fun NavGraphBuilder.onboardingScreen(
+    onShowSnackbar: suspend (String) -> Boolean,
     enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards EnterTransition?)? = null,
     exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> @JvmSuppressWildcards ExitTransition?)? = null,
 ) {
-    composable<StepperRoute>(
+    composable<OnboardingRoute>(
         enterTransition = enterTransition,
         exitTransition = exitTransition,
     ) {
-        StepperScreen(
-            onStepperCompleteToHome = onStepperCompleteToHome,
-            onBackToSignIn = onBackToSignIn,
+        OnBoardingScreen(
+            onShowSnackbar = onShowSnackbar,
         )
     }
 }
 
-fun NavController.navigateToStepper(navOptions: NavOptions) = navigate(StepperRoute, navOptions)
+fun NavController.navigateToOnboarding(navOptions: NavOptions) = navigate(OnboardingRoute, navOptions)
