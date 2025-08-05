@@ -34,7 +34,7 @@ annotation class ApplicationScope
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CoroutinesScopesModule {
+internal object CoroutinesScopesModule {
     @Provides
     @Singleton
     @ApplicationScope
