@@ -18,21 +18,20 @@ package com.casecode.pos.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.data.business.TaxRate
-import kotlinx.datetime.Instant
-import java.math.BigDecimal
+import com.casecode.pos.core.model.business.TaxRate
+import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 @Entity(tableName = "tax_rate")
 data class TaxRateEntity(
     @PrimaryKey
-    val id: String,
+    val id: String = Uuid.random().toString(),
     val name: String,
-    val rate: BigDecimal,
+    val rate: Float,
     @ColumnInfo(name = "is_included_in_price") val isIncludedInPrice: Boolean,
     @ColumnInfo(name = "is_default") val isDefault: Boolean,
-    @ColumnInfo(name = "created_at") val createdAt: Instant?,
-    @ColumnInfo(name = "updated_at") val updatedAt: Instant?,
-    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false,
+    @ColumnInfo(name = "created_at") val createdAt: Instant,
+    @ColumnInfo(name = "updated_at") val updatedAt: Instant,
 )
 
 fun TaxRateEntity.asExternalModel(): TaxRate {

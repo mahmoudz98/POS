@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.repository.business
+package com.casecode.pos.core.database
 
-import com.casecode.pos.core.model.data.business.Branch
+import androidx.room.withTransaction
+import com.casecode.pos.core.database.util.DatabaseTransactionRunner
+import javax.inject.Inject
 
-interface BranchRepository {
-    suspend fun getBranches(businessId: String): Result<List<Branch>>
-    suspend fun addBranch(businessId: String, branch: Branch): Result<String>
+/**
+ * Implementation of [DatabaseTransactionRunner] that uses [withTransaction] to run transactions.
+ */
+class PosDatabaseTransactionRunner @Inject constructor(
+    private val db: PosDatabase,
+) : DatabaseTransactionRunner {
+    override suspend fun <R> run(block: suspend () -> R): R {
+        return db.withTransaction { block() }
+    }
 }

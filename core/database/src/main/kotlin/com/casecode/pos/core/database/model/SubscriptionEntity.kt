@@ -18,9 +18,9 @@ package com.casecode.pos.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.data.business.Subscription
-import com.casecode.pos.core.model.data.business.SubscriptionStatus
-import kotlinx.datetime.Instant
+import com.casecode.pos.core.model.business.Subscription
+import com.casecode.pos.core.model.business.SubscriptionStatus
+import kotlin.time.Instant
 
 @Entity(tableName = "subscription")
 data class SubscriptionEntity(
@@ -28,10 +28,9 @@ data class SubscriptionEntity(
     @ColumnInfo(name = "plan_id") val planId: String,
     @ColumnInfo(name = "plan_name") val planName: String,
     val status: Int,
-    @ColumnInfo(name = "credit_balance") val creditBalance: Long,
-    @ColumnInfo(name = "current_period_end_date") val currentPeriodEndDate: Instant?,
-    @ColumnInfo(name = "updated_at") val updatedAt: Instant?,
-    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false,
+    @ColumnInfo(name = "credit_balance") val creditBalance: Int,
+    @ColumnInfo(name = "current_period_end_date") val currentPeriodEndDate: Instant,
+    @ColumnInfo(name = "updated_at") val updatedAt: Instant,
 )
 
 fun SubscriptionEntity.asExternalModel(): Subscription {

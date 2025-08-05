@@ -16,19 +16,26 @@
 package com.casecode.pos.core.database.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
-import com.casecode.pos.core.database.model.BusinessEntity
+import com.casecode.pos.core.database.model.LocalSignalEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
- * DAO for [BusinessEntity] access
+ * DAO for managing the local signals queue.
  */
 @Dao
-interface BusinessDao {
-    @Upsert
-    suspend fun insertOrReplaceBusiness(business: BusinessEntity)
+interface LocalSignalDao {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertSignal(signal: LocalSignalEntity)
 
-    @Query("SELECT * FROM business WHERE owner_uid = :ownerUid LIMIT 1")
-    fun getBusinessByOwner(ownerUid: String): Flow<BusinessEntity?>
+    @Query("SELECT * FROM local_signals WHERE status = 0 ORDER BY createdAt ASC")
+    fun getPendingSignals(): Flow<List<LocalSignalEntity>>
+
+    @Query("UPDATE local_signals SET status = :status WHERE id = :id")
+    suspend fun updateSignalStatus(id: String, status: Int)
+
+    @Query("DELETE FROM local_signals WHERE id = :id")
+    suspend fun deleteSignal(id: String)
 }

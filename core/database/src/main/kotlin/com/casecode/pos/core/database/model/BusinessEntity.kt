@@ -18,31 +18,45 @@ package com.casecode.pos.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.data.business.Business
-import com.casecode.pos.core.model.data.business.BusinessStatus
-import com.casecode.pos.core.model.data.business.Vertical
-import kotlinx.datetime.Instant
+import com.casecode.pos.core.model.business.Business
+import com.casecode.pos.core.model.business.BusinessStatus
+import com.casecode.pos.core.model.business.Vertical
+import kotlin.time.Instant
 
+/**
+ * Defines a business entity for the local Room database.
+ *
+ * @property businessId The unique ID of the business.
+ * @property name The name of the business.
+ * @property ownerUid The Firebase UID of the business owner.
+ * @property vertical The industry vertical of the business (e.g., Retail, Cafe).
+ * @property companyCode The unique company code for employee logins.
+ * @property currencyCode The default currency code for the business (e.g., "USD").
+ * @property status The current status of the business (e.g., ACTIVE, INACTIVE).
+ * @property email The contact email of the business.
+ * @property phone The contact phone number of the business.
+ * @property updatedAt The timestamp of the last update to this business record.
+ * @property createdAt The timestamp of when this business record was created.
+ */
 @Entity(tableName = "business")
 data class BusinessEntity(
     @PrimaryKey
-    val uid: String,
+    val businessId: String,
     val name: String,
-    @ColumnInfo(name = "owner_uid") val ownerUid: String,
+    @ColumnInfo("owner_uid")val ownerUid: String,
     val vertical: Int,
-    @ColumnInfo(name = "company_code") val companyCode: String,
-    @ColumnInfo(name = "currency_code") val currencyCode: String,
+    val companyCode: String,
+    val currencyCode: String,
     val status: Int,
     val email: String,
     val phone: String,
-    @ColumnInfo(name = "updated_at") val updatedAt: Instant,
-    @ColumnInfo(name = "created_at") val createdAt: Instant,
-    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false,
+    val updatedAt: Instant,
+    val createdAt: Instant,
 )
 
 fun BusinessEntity.asExternalModel(): Business {
     return Business(
-        id = this.uid,
+        id = this.businessId,
         name = this.name,
         ownerUid = this.ownerUid,
         vertical = Vertical.fromValue(this.vertical),
@@ -58,7 +72,7 @@ fun BusinessEntity.asExternalModel(): Business {
 
 fun Business.asEntity(): BusinessEntity {
     return BusinessEntity(
-        uid = this.id,
+        businessId = this.id,
         name = this.name,
         ownerUid = this.ownerUid,
         vertical = this.vertical.value,

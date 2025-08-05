@@ -31,6 +31,8 @@ dependencies {
 
     implementation(libs.kotlinx.datetime)
 
+    ksp(libs.room.compiler)
+
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.runner)

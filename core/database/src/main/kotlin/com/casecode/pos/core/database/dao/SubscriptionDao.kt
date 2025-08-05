@@ -18,17 +18,25 @@ package com.casecode.pos.core.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.casecode.pos.core.database.model.BusinessEntity
+import com.casecode.pos.core.database.model.SubscriptionEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
- * DAO for [BusinessEntity] access
+ * DAO for [SubscriptionEntity] access.
  */
 @Dao
-interface BusinessDao {
+interface SubscriptionDao {
+    /**
+     * Inserts or replaces a [SubscriptionEntity] in the database.
+     * @param subscription The [SubscriptionEntity] to insert or replace.
+     */
     @Upsert
-    suspend fun insertOrReplaceBusiness(business: BusinessEntity)
+    suspend fun insertOrReplaceSubscription(subscription: SubscriptionEntity)
 
-    @Query("SELECT * FROM business WHERE owner_uid = :ownerUid LIMIT 1")
-    fun getBusinessByOwner(ownerUid: String): Flow<BusinessEntity?>
+    /**
+     * Retrieves the current [SubscriptionEntity] as a [Flow].
+     * @return A [Flow] emitting the [SubscriptionEntity] or null if not found.
+     */
+    @Query("SELECT * FROM subscription LIMIT 1")
+    fun getSubscription(): Flow<SubscriptionEntity?>
 }

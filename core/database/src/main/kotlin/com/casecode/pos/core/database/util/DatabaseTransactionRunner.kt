@@ -15,15 +15,10 @@
  */
 package com.casecode.pos.core.database.util
 
-import androidx.room.TypeConverter
-import kotlin.time.Instant
-
-internal class InstantConverter {
-    @TypeConverter
-    fun longToInstant(value: Long?): Instant? =
-        value?.let(Instant::fromEpochMilliseconds)
-
-    @TypeConverter
-    fun instantToLong(instant: Instant?): Long? =
-        instant?.toEpochMilliseconds()
+/**
+ * A utility class to run database operations within a Room transaction.
+ * This wrapper makes transaction logic more easily testable.
+ */
+interface DatabaseTransactionRunner {
+    suspend fun <T> run(block: suspend () -> T): T
 }

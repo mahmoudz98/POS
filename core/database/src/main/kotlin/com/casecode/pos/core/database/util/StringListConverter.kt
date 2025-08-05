@@ -16,6 +16,7 @@
 package com.casecode.pos.core.database.util
 
 import androidx.room.TypeConverter
+import com.casecode.pos.core.database.model.OutboxEventType
 
 /**
  * Type converter for [List] of [String] to allow it to be stored in a Room database.
@@ -29,5 +30,16 @@ internal class StringListConverter {
     @TypeConverter
     fun toString(stringList: List<String>): String {
         return stringList.joinToString(separator = ",")
+    }
+}
+internal class OutboxEventTypeConverter {
+    @TypeConverter
+    fun fromString(value: OutboxEventType): Int {
+        return 1
+    }
+
+    @TypeConverter
+    fun toString(stringList: Int): OutboxEventType {
+        return OutboxEventType.BRANCH_CREATED
     }
 }

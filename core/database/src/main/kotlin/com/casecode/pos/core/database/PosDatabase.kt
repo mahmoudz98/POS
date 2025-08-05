@@ -18,19 +18,44 @@ package com.casecode.pos.core.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.casecode.pos.core.database.dao.BranchDao
 import com.casecode.pos.core.database.dao.BusinessDao
+import com.casecode.pos.core.database.dao.LocalSignalDao
+import com.casecode.pos.core.database.dao.OutboxCommandDao
+import com.casecode.pos.core.database.dao.SubscriptionDao
+import com.casecode.pos.core.database.dao.TaxRateDao
 import com.casecode.pos.core.database.model.BranchEntity
 import com.casecode.pos.core.database.model.BusinessEntity
+import com.casecode.pos.core.database.model.LocalSignalEntity
+import com.casecode.pos.core.database.model.OutboxCommandEntity
+import com.casecode.pos.core.database.model.SubscriptionEntity
+import com.casecode.pos.core.database.model.TaxRateEntity
+import com.casecode.pos.core.database.util.BigDecimalConverter
 import com.casecode.pos.core.database.util.InstantConverter
+import com.casecode.pos.core.database.util.StringListConverter
 
 @Database(
-    entities = [BusinessEntity::class, BranchEntity::class],
+    entities = [
+        BusinessEntity::class,
+        BranchEntity::class,
+        SubscriptionEntity::class,
+        TaxRateEntity::class,
+        OutboxCommandEntity::class,
+        LocalSignalEntity::class,
+    ],
     version = 1,
     exportSchema = true,
 )
 @TypeConverters(
     InstantConverter::class,
+    StringListConverter::class,
+    BigDecimalConverter::class,
 )
-internal abstract class PosDatabase : RoomDatabase() {
+abstract class PosDatabase : RoomDatabase() {
     abstract fun businessDao(): BusinessDao
+    abstract fun branchDao(): BranchDao
+    abstract fun subscriptionDao(): SubscriptionDao
+    abstract fun taxRateDao(): TaxRateDao
+    abstract fun outboxCommandDao(): OutboxCommandDao
+    abstract fun localSignalDao(): LocalSignalDao
 }

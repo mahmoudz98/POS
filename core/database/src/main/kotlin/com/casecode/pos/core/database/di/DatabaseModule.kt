@@ -18,6 +18,9 @@ package com.casecode.pos.core.database.di
 import android.content.Context
 import androidx.room.Room
 import com.casecode.pos.core.database.PosDatabase
+import com.casecode.pos.core.database.PosDatabaseTransactionRunner
+import com.casecode.pos.core.database.util.DatabaseTransactionRunner
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,14 +30,19 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object DatabaseModule {
-    @Provides
-    @Singleton
-    fun providesNiaDatabase(
-        @ApplicationContext context: Context,
-    ): PosDatabase = Room.databaseBuilder(
-        context,
-        PosDatabase::class.java,
-        "pos-database",
-    ).build()
+internal interface DatabaseModule {
+    @Binds
+    fun bindsDatabaseTransactionRunner(impl: PosDatabaseTransactionRunner): DatabaseTransactionRunner
+
+    companion object {
+        @Provides
+        @Singleton
+        fun providesNiaDatabase(
+            @ApplicationContext context: Context,
+        ): PosDatabase = Room.databaseBuilder(
+            context,
+            PosDatabase::class.java,
+            "pos-database",
+        ).build()
+    }
 }

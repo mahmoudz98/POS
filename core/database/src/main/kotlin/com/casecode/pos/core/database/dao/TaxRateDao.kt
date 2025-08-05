@@ -18,17 +18,25 @@ package com.casecode.pos.core.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.casecode.pos.core.database.model.BusinessEntity
+import com.casecode.pos.core.database.model.TaxRateEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
- * DAO for [BusinessEntity] access
+ * DAO for [TaxRateEntity] access.
  */
 @Dao
-interface BusinessDao {
+interface TaxRateDao {
+    /**
+     * Inserts or replaces a list of [TaxRateEntity] in the database.
+     * @param taxRates The list of [TaxRateEntity] to insert or replace.
+     */
     @Upsert
-    suspend fun insertOrReplaceBusiness(business: BusinessEntity)
+    suspend fun insertOrReplaceTaxRates(taxRates: List<TaxRateEntity>)
 
-    @Query("SELECT * FROM business WHERE owner_uid = :ownerUid LIMIT 1")
-    fun getBusinessByOwner(ownerUid: String): Flow<BusinessEntity?>
+    /**
+     * Retrieves all [TaxRateEntity] as a [Flow].
+     * @return A [Flow] emitting a list of [TaxRateEntity].
+     */
+    @Query("SELECT * FROM tax_rate")
+    fun getTaxRates(): Flow<List<TaxRateEntity>>
 }

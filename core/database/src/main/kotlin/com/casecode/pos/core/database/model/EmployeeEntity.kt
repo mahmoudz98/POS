@@ -18,7 +18,7 @@ package com.casecode.pos.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.data.business.Employee
+import com.casecode.pos.core.model.business.Employee
 
 @Entity(tableName = "employee")
 data class EmployeeEntity(
@@ -29,7 +29,6 @@ data class EmployeeEntity(
     val name: String,
     val role: String,
     @ColumnInfo(name = "assigned_branch_ids") val assignedBranchIds: List<String>,
-    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false,
 )
 
 fun EmployeeEntity.asExternalModel(): Employee {
