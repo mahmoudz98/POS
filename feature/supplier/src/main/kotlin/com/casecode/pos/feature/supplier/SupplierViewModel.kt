@@ -19,10 +19,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
-import com.casecode.pos.core.domain.usecase.AddSupplierUseCase
-import com.casecode.pos.core.domain.usecase.DeleteSupplierUseCase
-import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
-import com.casecode.pos.core.domain.usecase.UpdateSupplierUseCase
+import com.casecode.pos.core.domain.usecase.old.AddSupplierUseCase
+import com.casecode.pos.core.domain.usecase.old.DeleteSupplierUseCase
+import com.casecode.pos.core.domain.usecase.old.GetSuppliersUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateSupplierUseCase
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import com.casecode.pos.core.domain.utils.OperationResult
 import com.casecode.pos.core.domain.utils.Resource
