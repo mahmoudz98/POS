@@ -20,28 +20,17 @@ plugins {
     alias(libs.plugins.pos.hilt)
     alias(libs.plugins.pos.android.firebase.library)
     alias(libs.plugins.secrets)
+    alias(libs.plugins.kotlin.serialization)
+
 }
 
 android {
     namespace = "$APPLICATION_ID.core.firebase"
-    defaultConfig{
-        testInstrumentationRunner = "$APPLICATION_ID.core.testing.PosTestRunner"
-    }
-    
+  
     buildFeatures {
         buildConfig = true
     }
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-    packaging {
-        resources {
-            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-            excludes.add("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
-        }
-    }
+
 
 }
 secrets {
@@ -54,6 +43,6 @@ dependencies {
     implementation(projects.core.datastore)
     implementation(libs.coroutines.android)
     implementation(libs.googleid)
-    implementation(libs.kotlinx.serialization.json)
+    api(libs.kotlinx.serialization.json)
 
 }
