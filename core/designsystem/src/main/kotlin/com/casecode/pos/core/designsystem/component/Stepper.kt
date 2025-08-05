@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.core.designsystem.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
@@ -175,6 +176,33 @@ private fun Step(
 @Preview
 @Composable
 fun StepperPreview() {
+    POSTheme {
+        Surface(
+            modifier = Modifier.size(300.dp),
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            Stepper(
+                modifier = Modifier.size(300.dp),
+                numberOfSteps = 4,
+                currentStep = 2,
+                stepDescriptionList =
+                listOf(
+                    "Business info",
+                    "Branches",
+                    "Subscription",
+                    "Employees",
+                ),
+                selectedColor = MaterialTheme.colorScheme.primary,
+                onSelectedColor = MaterialTheme.colorScheme.onPrimary,
+                unSelectedColor = MaterialTheme.colorScheme.surfaceVariant,
+            )
+        }
+    }
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun StepperNightModePreview() {
     POSTheme {
         Surface(
             modifier = Modifier.size(300.dp),
