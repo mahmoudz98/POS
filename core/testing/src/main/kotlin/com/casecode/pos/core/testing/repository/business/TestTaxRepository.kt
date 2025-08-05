@@ -35,7 +35,7 @@ class TestTaxRepository @Inject constructor() : FakeRepository(), TaxRepository 
     override suspend fun addTaxRate(businessId: String, taxRate: TaxRate): Result<String> {
         getFailureResult<String>()?.let { return it }
 
-        val newId = taxRate.id.ifEmpty { UUID.randomUUID().toString() }
+        val newId = taxRate.id!!.ifEmpty { UUID.randomUUID().toString() }
         val rateWithId = taxRate.copy(id = newId)
         val rates = taxRatesByBusiness.getOrPut(businessId) { mutableListOf() }
         rates.add(rateWithId)

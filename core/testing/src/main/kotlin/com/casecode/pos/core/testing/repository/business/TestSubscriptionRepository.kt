@@ -50,7 +50,7 @@ class TestSubscriptionRepository @Inject constructor() : FakeRepository(), Subsc
 
         val currentSub = subscriptions[businessId]
         if (currentSub != null) {
-            val updatedSub = currentSub.copy(creditBalance = currentSub.creditBalance + creditsToAdd)
+            val updatedSub = currentSub.copy(creditBalance = (currentSub.creditBalance + creditsToAdd).toInt())
             subscriptions[businessId] = updatedSub
         }
 
@@ -67,7 +67,7 @@ class TestSubscriptionRepository @Inject constructor() : FakeRepository(), Subsc
         subscriptions[businessId] = subscription
     }
 
-    override  fun clear() {
+    override fun clear() {
         returnSuccess()
         fakeOnboardingConfig = OnboardingConfig(emptyList(), emptyList())
         subscriptions.clear()

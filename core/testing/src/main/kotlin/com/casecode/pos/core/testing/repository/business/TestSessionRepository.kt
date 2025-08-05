@@ -41,13 +41,12 @@ class TestSessionRepository @Inject constructor() : SessionRepository {
     override suspend fun startOwnerSession(
         user: User,
         isCompleteSetupBusiness: Boolean,
-        businessId: String,
         branchId: String,
     ) {
         lastOwnerSession = user
-        lastOwnerBusinessId = businessId
+        lastOwnerBusinessId = user.uid
         lastActiveBranchId = branchId
-        _loginStateFlow.value = LoginStateResult.OwnerLoggedIn(businessId, branchId)
+        _loginStateFlow.value = LoginStateResult.OwnerLoggedIn(user.uid, branchId)
     }
 
     override suspend fun startEmployeeSession(businessId: String, employee: Employee, activeBranchId: String) {

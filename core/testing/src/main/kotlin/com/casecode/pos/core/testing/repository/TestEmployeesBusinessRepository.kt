@@ -77,8 +77,8 @@ constructor() :
     }
 
     override suspend fun updateEmployee(
-        employees: Employee,
         oldEmployee: Employee,
+        newEmployee: Employee,
     ): Resource<Boolean> {
         if (shouldReturnError) {
             return Resource.error(

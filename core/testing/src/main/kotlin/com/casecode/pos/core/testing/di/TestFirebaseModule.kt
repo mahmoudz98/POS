@@ -52,7 +52,6 @@ object TestFirebaseModule {
             firestoreSettings = FirebaseFirestoreSettings.Builder()
                 .setHost("$HOST:$FIRESTORE_PORT")
                 .setSslEnabled(false)
-                .setPersistenceEnabled(false)
                 .build()
         }
     }

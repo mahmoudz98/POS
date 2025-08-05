@@ -15,18 +15,18 @@
  */
 package com.casecode.pos.core.testing.base
 
-import com.casecode.pos.core.domain.usecase.AddInvoiceUseCase
-import com.casecode.pos.core.domain.usecase.AddItemUseCase
-import com.casecode.pos.core.domain.usecase.DeleteItemUseCase
-import com.casecode.pos.core.domain.usecase.GetInvoicesUseCase
-import com.casecode.pos.core.domain.usecase.GetItemsUseCase
-import com.casecode.pos.core.domain.usecase.GetTodayInvoicesUseCase
-import com.casecode.pos.core.domain.usecase.ItemImageUseCase
 import com.casecode.pos.core.domain.usecase.SignInEmployeeUseCase
 import com.casecode.pos.core.domain.usecase.SignInOwnerUseCase
 import com.casecode.pos.core.domain.usecase.SignOutUseCase
-import com.casecode.pos.core.domain.usecase.UpdateItemUseCase
-import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
+import com.casecode.pos.core.domain.usecase.old.AddInvoiceUseCase
+import com.casecode.pos.core.domain.usecase.old.AddItemUseCase
+import com.casecode.pos.core.domain.usecase.old.DeleteItemUseCase
+import com.casecode.pos.core.domain.usecase.old.GetInvoicesUseCase
+import com.casecode.pos.core.domain.usecase.old.GetItemsUseCase
+import com.casecode.pos.core.domain.usecase.old.GetTodayInvoicesUseCase
+import com.casecode.pos.core.domain.usecase.old.ItemImageUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateItemUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateStockInItemsUseCase
 import com.casecode.pos.core.testing.repository.TestInvoiceRepository
 import com.casecode.pos.core.testing.repository.TestItemImageRepository
 import com.casecode.pos.core.testing.repository.TestItemRepository

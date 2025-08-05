@@ -21,9 +21,9 @@ import com.casecode.pos.core.model.users.PaymentDetails
 import com.casecode.pos.core.model.users.PaymentMethod
 import com.casecode.pos.core.model.users.PaymentStatus
 import com.casecode.pos.core.model.users.SupplierInvoice
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 val supplierInvoicesTestData = listOf(
     SupplierInvoice(

@@ -60,7 +60,7 @@ class TestAuthRepository @Inject constructor() : FakeRepository(), AuthRepositor
      * It also resets any previously set failure state.
      */
     fun sendSignInSuccess(user: User) {
-        returnSuccess() // From FakeRepository base class
+        returnSuccess()
         this.successUser = user
         _currentUserFlow.value = user
     }
@@ -80,7 +80,7 @@ class TestAuthRepository @Inject constructor() : FakeRepository(), AuthRepositor
         _currentUserFlow.value = user
     }
 
-   override fun clear() {
+    override fun clear() {
         returnSuccess()
         successUser = null
         _currentUserFlow.value = null

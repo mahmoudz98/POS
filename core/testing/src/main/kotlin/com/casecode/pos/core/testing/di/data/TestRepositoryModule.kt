@@ -16,6 +16,14 @@
 package com.casecode.pos.core.testing.di.data
 
 import com.casecode.pos.core.data.di.RepositoryModule
+import com.casecode.pos.core.domain.repository.business.AuthRepository
+import com.casecode.pos.core.domain.repository.business.BranchRepository
+import com.casecode.pos.core.domain.repository.business.BusinessRepository
+import com.casecode.pos.core.domain.repository.business.CurrencyRepository
+import com.casecode.pos.core.domain.repository.business.EmployeeRepository
+import com.casecode.pos.core.domain.repository.business.SessionRepository
+import com.casecode.pos.core.domain.repository.business.SubscriptionRepository
+import com.casecode.pos.core.domain.repository.business.TaxRepository
 import com.casecode.pos.core.domain.repository.old.AccountRepository
 import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.old.EmployeesBusinessRepository
@@ -27,14 +35,6 @@ import com.casecode.pos.core.domain.repository.old.SubscriptionsBusinessReposito
 import com.casecode.pos.core.domain.repository.old.SubscriptionsRepository
 import com.casecode.pos.core.domain.repository.old.SupplierInvoiceRepository
 import com.casecode.pos.core.domain.repository.old.SupplierRepository
-import com.casecode.pos.core.domain.repository.business.AuthRepository
-import com.casecode.pos.core.domain.repository.business.BranchRepository
-import com.casecode.pos.core.domain.repository.business.BusinessRepository
-import com.casecode.pos.core.domain.repository.business.CurrencyRepository
-import com.casecode.pos.core.domain.repository.business.EmployeeRepository
-import com.casecode.pos.core.domain.repository.business.SessionRepository
-import com.casecode.pos.core.domain.repository.business.SubscriptionRepository
-import com.casecode.pos.core.domain.repository.business.TaxRepository
 import com.casecode.pos.core.testing.repository.TestAccountRepository
 import com.casecode.pos.core.testing.repository.TestAuthRepositoryO
 import com.casecode.pos.core.testing.repository.TestBusinessRepository

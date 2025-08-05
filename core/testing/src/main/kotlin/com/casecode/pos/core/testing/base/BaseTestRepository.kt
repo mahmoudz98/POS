@@ -47,7 +47,7 @@ abstract class FakeRepository {
 
     // Instead of a boolean, we hold an optional Throwable.
     // If this is not null, repository methods should fail with this exception.
-    private var failureThrowable: Throwable? = null
+    protected var failureThrowable: Throwable? = null
 
     /**
      * Configures the fake to return a Result.failure with the given Throwable
@@ -74,7 +74,9 @@ abstract class FakeRepository {
     protected fun <T> getFailureResult(): Result<T>? {
         return failureThrowable?.let { Result.failure(it) }
     }
-    open fun clear(){
-
+    protected fun getFailure(): Throwable? {
+        return failureThrowable
+    }
+    open fun clear() {
     }
 }

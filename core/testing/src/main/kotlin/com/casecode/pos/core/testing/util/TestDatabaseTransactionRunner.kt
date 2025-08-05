@@ -13,21 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.testing.notifications
+package com.casecode.pos.core.testing.util
 
-import com.casecode.pos.core.model.users.SupplierInvoice
-import com.casecode.pos.core.notifications.Notifier
+import com.casecode.pos.core.database.util.DatabaseTransactionRunner
 
 /**
- * Aggregates news resources that have been notified for addition
+ * A fake implementation of [DatabaseTransactionRunner] for use in tests.
+ * It does not perform any real database transaction but simply executes the
+ * passed block of code immediately.
  */
-class TestNotifier : Notifier {
-
-    private val mutableAddedNewResources = mutableListOf<List<SupplierInvoice>>()
-
-    val addedNewsResources: List<List<SupplierInvoice>> = mutableAddedNewResources
-
-    override fun postOverdueNotifications(supplierInvoices: List<SupplierInvoice>) {
-        mutableAddedNewResources.add(supplierInvoices)
+class TestDatabaseTransactionRunner : DatabaseTransactionRunner {
+    private var isError = false
+    override suspend fun <T> run(block: suspend () -> T): T {
+        if (isError) throw RuntimeException("Test database transaction error")
+        return block()
+    }
+    fun setError() {
+        isError = true
     }
 }
