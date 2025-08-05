@@ -49,9 +49,8 @@ class LoginViewModel @Inject constructor(
 
     private fun executeOwnerSignIn(context: Context) {
         if (_uiState.value is LoginUiState.Loading) return
-
-        if (googleAuthUiService.isGooglePlayServicesAvailable(context)) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (googleAuthUiService.isGooglePlayServicesAvailable(context)) {
                 _uiState.value = LoginUiState.Loading
 
                 googleAuthUiService.getIdToken(context).fold(
@@ -62,9 +61,9 @@ class LoginViewModel @Inject constructor(
                         showMessage(R.string.feature_login_error_network_connection)
                     },
                 )
+            } else {
+                _uiState.value = LoginUiState.ShowPlayServicesUnavailableDialog
             }
-        } else {
-            _uiState.value = LoginUiState.ShowPlayServicesUnavailableDialog
         }
     }
 

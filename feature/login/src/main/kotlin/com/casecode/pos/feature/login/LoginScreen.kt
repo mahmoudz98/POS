@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -87,8 +88,6 @@ fun LoginRoute(
         LaunchedEffect(Unit) {
             onShowSnackbar(snackbarText, "")
             viewModel.onEvent(LoginEvent.ErrorMessageShown)
-
-            // onMessageShown()
         }
     }
 }
@@ -112,7 +111,8 @@ internal fun LoginScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .navigationBarsPadding(),
         contentAlignment = Alignment.Center,
     ) {
         if (uiState is LoginUiState.Loading) {
