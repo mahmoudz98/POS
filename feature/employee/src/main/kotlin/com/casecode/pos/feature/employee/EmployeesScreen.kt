@@ -57,8 +57,8 @@ import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.domain.utils.Resource
 import com.casecode.pos.core.model.users.Employee
-import com.casecode.pos.core.ui.DeleteDialog
 import com.casecode.pos.core.ui.EmployeeEmptyScreen
+import com.casecode.pos.core.ui.PosDeleteDialog
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
@@ -97,7 +97,7 @@ fun EmployeesScreen(viewModel: EmployeeViewModel = hiltViewModel()) {
         )
     }
     if (showDeleteDialog) {
-        DeleteDialog(
+        PosDeleteDialog(
             titleRes = R.string.feature_employee_dialog_delete_title,
             messageRes = R.string.feature_employee_dialog_delete_message,
             onConfirm = {

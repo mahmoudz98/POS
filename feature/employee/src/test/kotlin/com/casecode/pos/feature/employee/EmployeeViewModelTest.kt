@@ -15,11 +15,11 @@
  */
 package com.casecode.pos.feature.employee
 
-import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
-import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
-import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
-import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
+import com.casecode.pos.core.domain.usecase.old.AddEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.old.DeleteEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.old.GetBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.GetEmployeesBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateEmployeesUseCase
 import com.casecode.pos.core.model.users.Employee
 import com.casecode.pos.core.testing.repository.TestAuthRepositoryO
 import com.casecode.pos.core.testing.repository.TestBusinessRepository

@@ -18,11 +18,11 @@ package com.casecode.pos.feature.employee
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
-import com.casecode.pos.core.domain.usecase.AddEmployeeUseCase
-import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
-import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.GetEmployeesBusinessUseCase
-import com.casecode.pos.core.domain.usecase.UpdateEmployeesUseCase
+import com.casecode.pos.core.domain.usecase.old.AddEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.old.DeleteEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.old.GetBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.GetEmployeesBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateEmployeesUseCase
 import com.casecode.pos.core.domain.utils.AddEmployeeResult
 import com.casecode.pos.core.domain.utils.BusinessResult
 import com.casecode.pos.core.domain.utils.NetworkMonitor
