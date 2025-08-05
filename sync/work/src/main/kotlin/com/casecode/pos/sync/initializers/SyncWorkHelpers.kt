@@ -21,16 +21,18 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.content.getSystemService
 import androidx.work.Constraints
 import androidx.work.ForegroundInfo
 import androidx.work.NetworkType
 import com.casecode.pos.sync.R
 
-private const val OVERDUE_NOTIFICATION_ID = 0
-private const val OVERDUE_NOTIFICATION_CHANNEL_ID = "OverdueNotifications"
+private const val SYNC_NOTIFICATION_ID = 0
+private const val SYNC_NOTIFICATION_CHANNEL_ID = "SyncNotifications"
 
 // All sync work needs an internet connectionS
-val SyncSupplierInvoicesOverdueConstraints
+
+val SyncConstraints
     get() = Constraints.Builder()
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()
@@ -39,19 +41,19 @@ val SyncSupplierInvoicesOverdueConstraints
  * Foreground information for supplierInvoiceOverdue on lower API levels when sync workers are being
  * run with a foreground service
  */
-fun Context.supplierInvoiceOverdueForegroundInfo() = ForegroundInfo(
-    OVERDUE_NOTIFICATION_ID,
-    supplierInvoiceOverdueWorkNotification(),
+fun Context.syncForegroundInfo() = ForegroundInfo(
+    SYNC_NOTIFICATION_ID,
+    syncWorkNotification(),
 )
 
 /**
  * Notification displayed on lower API levels when supplierInvoiceOverdue workers are being
  * run with a foreground service
  */
-private fun Context.supplierInvoiceOverdueWorkNotification(): Notification {
+private fun Context.syncWorkNotification(): Notification {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val channel = NotificationChannel(
-            OVERDUE_NOTIFICATION_CHANNEL_ID,
+            SYNC_NOTIFICATION_CHANNEL_ID,
             getString(R.string.sync_work_supplier_invoice_overdue_notification_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT,
         ).apply {
@@ -60,15 +62,12 @@ private fun Context.supplierInvoiceOverdueWorkNotification(): Notification {
             )
         }
         // Register the channel with the system
-        val notificationManager: NotificationManager? =
-            getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
-
-        notificationManager?.createNotificationChannel(channel)
+        getSystemService<NotificationManager>()?.createNotificationChannel(channel)
     }
 
     return NotificationCompat.Builder(
         this,
-        OVERDUE_NOTIFICATION_CHANNEL_ID,
+        SYNC_NOTIFICATION_CHANNEL_ID,
     )
         .setSmallIcon(
             com.casecode.pos.core.notifications.R.drawable.core_notifications_ic_pos,
