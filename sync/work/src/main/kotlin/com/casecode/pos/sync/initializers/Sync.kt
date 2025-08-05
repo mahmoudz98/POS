@@ -17,11 +17,14 @@ package com.casecode.pos.sync.initializers
 
 import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
+import com.casecode.pos.sync.workers.InboxSyncWorker
+import com.casecode.pos.sync.workers.OutboxSyncWorker
 import com.casecode.pos.sync.workers.SupplierInvoiceOverdueWorker
 
-object SyncSupplierInvoicesOverdue {
-    fun initialize(context: Context) {
+object Sync {
+    fun initializeSupplierInvoiceOverDue(context: Context) {
         WorkManager.getInstance(context).apply {
             enqueueUniquePeriodicWork(
                 SUPPLIER_INVOICE_OVERDUE_WORK_NAME,
@@ -30,7 +33,29 @@ object SyncSupplierInvoicesOverdue {
             )
         }
     }
+
+    fun initializeOutbox(context: Context) {
+        WorkManager.getInstance(context).apply {
+            enqueueUniqueWork(
+                OUTBOX_WORK_NAME,
+                ExistingWorkPolicy.KEEP,
+                OutboxSyncWorker.startUpSyncWork(),
+            )
+        }
+    }
+
+    fun initializeInbox(context: Context) {
+        WorkManager.getInstance(context).apply {
+            enqueueUniquePeriodicWork(
+                INBOX_WORK_NAME,
+                ExistingPeriodicWorkPolicy.KEEP,
+                InboxSyncWorker.startUpSyncWork(),
+            )
+        }
+    }
 }
 
 // This name should not be changed otherwise the app may have concurrent sync requests running
+internal const val OUTBOX_WORK_NAME = "OutboxWork"
+internal const val INBOX_WORK_NAME = "InboxWork"
 internal const val SUPPLIER_INVOICE_OVERDUE_WORK_NAME = "SupplierInvoiceOverdueWork"
