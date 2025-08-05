@@ -18,11 +18,11 @@ package com.casecode.pos.feature.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
-import com.casecode.pos.core.domain.usecase.AddBranchBusinessUseCase
-import com.casecode.pos.core.domain.usecase.GetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.GetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.usecase.GetSubscriptionsUseCase
-import com.casecode.pos.core.domain.usecase.SetSubscriptionBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.AddBranchBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.GetBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.GetSubscriptionBusinessUseCase
+import com.casecode.pos.core.domain.usecase.old.SetSubscriptionBusinessUseCase
 import com.casecode.pos.core.domain.utils.AddBranchBusinessResult
 import com.casecode.pos.core.domain.utils.BusinessResult
 import com.casecode.pos.core.domain.utils.Resource

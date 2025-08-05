@@ -43,7 +43,7 @@ fun BusinessInfoTab(business: Business) {
             onValueChange = { /* No changes allowed */ },
             label = {
                 Text(
-                    stringResource(id = com.casecode.pos.core.ui.R.string.core_ui_store_type_hint),
+                    stringResource(id = com.casecode.pos.core.ui.R.string.core_ui_business_vertical_hint),
                 )
             },
             modifier = Modifier.fillMaxWidth(),

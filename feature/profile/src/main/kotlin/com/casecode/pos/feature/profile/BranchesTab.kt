@@ -72,7 +72,7 @@ private fun BranchesList(branches: List<Branch>) {
 }
 
 @Composable
-private fun BranchItem(branch: Branch) {
+fun BranchItem(branch: Branch) {
     ElevatedCard(Modifier.padding(bottom = 8.dp)) {
         ListItem(
             headlineContent = {
