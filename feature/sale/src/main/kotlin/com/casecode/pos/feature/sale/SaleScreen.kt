@@ -52,7 +52,7 @@ import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.users.Item
 import com.casecode.pos.core.ui.DevicePreviews
-import com.casecode.pos.core.ui.scanOptions
+import com.casecode.pos.core.ui.utils.scanOptions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState

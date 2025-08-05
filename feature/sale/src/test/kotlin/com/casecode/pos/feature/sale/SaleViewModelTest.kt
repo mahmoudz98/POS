@@ -17,9 +17,9 @@ package com.casecode.pos.feature.sale
 
 import android.icu.text.Collator
 import androidx.lifecycle.SavedStateHandle
-import com.casecode.pos.core.domain.usecase.AddInvoiceUseCase
-import com.casecode.pos.core.domain.usecase.GetItemsUseCase
-import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
+import com.casecode.pos.core.domain.usecase.old.AddInvoiceUseCase
+import com.casecode.pos.core.domain.usecase.old.GetItemsUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateStockInItemsUseCase
 import com.casecode.pos.core.model.users.Item
 import com.casecode.pos.core.testing.repository.TestInvoiceRepository
 import com.casecode.pos.core.testing.repository.TestItemRepository
