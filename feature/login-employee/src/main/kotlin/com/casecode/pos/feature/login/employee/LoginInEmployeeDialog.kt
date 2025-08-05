@@ -59,7 +59,7 @@ import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.ui.DevicePreviews
-import com.casecode.pos.core.ui.scanOptions
+import com.casecode.pos.core.ui.utils.scanOptions
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
