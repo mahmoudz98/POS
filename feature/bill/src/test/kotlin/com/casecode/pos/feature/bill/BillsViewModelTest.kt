@@ -17,7 +17,7 @@ package com.casecode.pos.feature.bill
 
 import androidx.lifecycle.SavedStateHandle
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
-import com.casecode.pos.core.domain.usecase.GetSupplierInvoicesUseCase
+import com.casecode.pos.core.domain.usecase.old.GetSupplierInvoicesUseCase
 import com.casecode.pos.core.testing.repository.TestSupplierInvoicesRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor
