@@ -26,7 +26,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(sessionRepository: SessionRepository) : ViewModel() {
+class MainActivityViewModel @Inject constructor(
+    sessionRepository: SessionRepository,
+) : ViewModel() {
     val initialDestinationState: StateFlow<InitialDestinationState> =
         sessionRepository.loginState.map {
             when (it) {
@@ -35,7 +37,7 @@ class MainActivityViewModel @Inject constructor(sessionRepository: SessionReposi
                 is LoginStateResult.OwnerOnBoarding -> InitialDestinationState.NotCompleteBusiness
                 is LoginStateResult.EmployeeLoggedIn -> {
                     when (it.role) {
-                        EmployeeRole.OWNER, EmployeeRole.MANAGER  -> InitialDestinationState.LoginByAdminEmployee
+                        EmployeeRole.OWNER, EmployeeRole.MANAGER -> InitialDestinationState.LoginByAdminEmployee
                         EmployeeRole.CASHIER -> InitialDestinationState.LoginBySaleEmployee
                     }
                 }
