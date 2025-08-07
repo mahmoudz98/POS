@@ -23,7 +23,6 @@ import androidx.credentials.exceptions.GetCredentialException
 import com.casecode.pos.core.common.AppDispatchers
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.datastore.PosPreferencesDataSource
 import com.casecode.pos.core.domain.repository.old.AccountRepository
 import com.casecode.pos.core.domain.service.LogService
 import com.casecode.pos.core.domain.utils.Resource
@@ -58,7 +57,6 @@ class AccountRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val firebaseAuth: FirebaseAuth,
     private val db: FirestoreService,
-    private val posPreferencesDataSource: PosPreferencesDataSource,
     private val logService: LogService,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : AccountRepository {
