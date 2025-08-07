@@ -17,6 +17,7 @@ package com.casecode.pos.core.datastore
 
 import com.casecode.pos.core.datastore.test.testSessionPreferencesDataStore
 import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.model.business.EmployeeRole
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -45,57 +46,62 @@ class PosPreferencesDataSourceTest {
 
     @Test
     fun shouldGetNotSignInByDefault() = runTest {
-        assertEquals(subject.loginData.first(), LoginStateResult.LoggedOut)
+        assertEquals(subject.sessionData.first(), LoginStateResult.LoggedOut)
     }
 
     @Test
-    fun setLoginWithAdmin_shouldUpdateLoginState() = runTest {
-        subject.saveNewLoginSession(
-            isOwner = true,
-            isCompleteSetupBusiness = true,
+    fun saveOwnerSession_whenCompleteBusinessSetup_returnOwnerLoggedInState() = runTest {
+        subject.saveOwnerSession(
+            isCompleteBusiness = true,
             userId = "213",
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role = "Admin",
         )
-        assertEquals(subject.loginData.first(), LoginStateResult.OwnerLoggedIn("4erwerwe", "sdfsd123"))
+        assertEquals(subject.sessionData.first(), LoginStateResult.OwnerLoggedIn("4erwerwe", "sdfsd123"))
     }
 
     @Test
-    fun setLoginWthAdmin_andRestLogin_shouldUpdateLoginState() = runTest {
-        subject.saveNewLoginSession(
-            isOwner = true,
-            isCompleteSetupBusiness = true,
+    fun saveOwnerSession_withIncompleteBusiness_returnOwnerOnboardingState() = runTest {
+        subject.saveOwnerSession(
+            isCompleteBusiness = false,
             userId = "213",
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role = "Admin",
+        )
+        assertEquals(subject.sessionData.first(), LoginStateResult.OwnerOnBoarding("4erwerwe"))
+    }
+
+    @Test
+    fun saveOwnerSession_andRestLogin_shouldUpdateLoginState() = runTest {
+        subject.saveOwnerSession(
+            isCompleteBusiness = true,
+            userId = "213",
+            userName = "dfsf",
+            businessId = "4erwerwe",
+            activeBranchId = "sdfsd123",
         )
         subject.clearLoginSession()
-        assertEquals(subject.loginData.first(), LoginStateResult.LoggedOut)
+        assertEquals(subject.sessionData.first(), LoginStateResult.LoggedOut)
     }
 
     @Test
-    fun setLoginByEmployee_shouldUpdateLoginState() = runTest {
-        subject.saveNewLoginSession(
-            isOwner = false,
-            isCompleteSetupBusiness = true,
+    fun saveEmployeeSession_shouldUpdateLoginState() = runTest {
+        subject.saveEmployeeSession(
             userId = "213",
             userName = "dfsf",
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
-            role = "Admin",
+            role = EmployeeRole.CASHIER,
 
         )
-
         assertEquals(
-            subject.loginData.first(),
+            subject.sessionData.first(),
             LoginStateResult.EmployeeLoggedIn(
                 businessId = "4erwerwe",
                 activeBranchId = "sdfsd123",
-                role = "admin",
+                role = EmployeeRole.CASHIER,
             ),
         )
     }
