@@ -29,27 +29,24 @@ class SessionRepositoryImpl @Inject constructor(
     private val auth: AuthRemoteDataSource,
     private val prefs: PosPreferencesDataSource,
 ) : SessionRepository {
-    override val loginState: Flow<LoginStateResult> = prefs.loginData
+    override val loginState: Flow<LoginStateResult> = prefs.sessionData
 
     override suspend fun startOwnerSession(
         user: User,
         isCompleteSetupBusiness: Boolean,
         branchId: String,
     ) {
-        prefs.saveNewLoginSession(
-            isOwner = true,
-            isCompleteSetupBusiness = isCompleteSetupBusiness,
+        prefs.saveOwnerSession(
+            isCompleteBusiness = isCompleteSetupBusiness,
             userId = user.uid,
-            userName = user.name ?: auth.getCurrentUser()?.name!!,
+            userName = user.name ?: "",
             businessId = user.uid,
             activeBranchId = branchId,
-            role = "OWNER",
         )
     }
 
     override suspend fun startEmployeeSession(businessId: String, employee: Employee, activeBranchId: String) {
-        prefs.saveNewLoginSession(
-            isOwner = false,
+        prefs.saveEmployeeSession(
             userId = employee.employeeId,
             userName = employee.name,
             businessId = businessId,
