@@ -17,6 +17,7 @@ package com.casecode.pos.core.datastore
 
 import androidx.datastore.core.DataStore
 import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.model.business.EmployeeRole
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -36,7 +37,7 @@ constructor(
      * A Flow that represents the high-level login state of the app.
      * This maps the raw proto data into our domain-specific LoginStateResult sealed interface.
      */
-    val loginData: Flow<LoginStateResult> = sessionDataStore.data
+    val sessionData: Flow<LoginStateResult> = sessionDataStore.data
         .map { prefs ->
             when (prefs.loginStatus) {
                 LoginStatus.OWNER_LOGGED_IN -> LoginStateResult.OwnerLoggedIn(
@@ -51,48 +52,82 @@ constructor(
                 LoginStatus.EMPLOYEE_LOGGED_IN -> LoginStateResult.EmployeeLoggedIn(
                     businessId = prefs.businessId,
                     activeBranchId = prefs.activeBranchId,
-                    role = prefs.userRole,
+                    role = when (prefs.userRole) {
+                        SessionRole.OWNER -> EmployeeRole.OWNER
+                        SessionRole.MANAGER -> EmployeeRole.MANAGER
+                        SessionRole.CASHIER -> EmployeeRole.CASHIER
+                        else -> EmployeeRole.CASHIER
+                    },
                 )
 
                 else -> LoginStateResult.LoggedOut
             }
         }
 
-    /**
-     * Updates the Datastore to reflect a new user session. This is the implementation
-     * that startOwnerSession and startEmployeeSession will call via SessionRepository.
-     *
-     * This single method replaces your previous `saveOwnerLogin` and `saveEmployeeLogin`.
-     */
-    suspend fun saveNewLoginSession(
-        isOwner: Boolean = false,
-        isCompleteSetupBusiness: Boolean = false,
+    suspend fun saveOwnerSession(
+        isCompleteBusiness: Boolean,
         userId: String,
         userName: String,
         businessId: String,
         activeBranchId: String,
-        role: String,
     ) {
-        sessionDataStore.updateData { prefs ->
-            prefs.toBuilder()
-                .setLoginStatus(
-                    if (isOwner) {
-                        if (isCompleteSetupBusiness) {
-                            LoginStatus.OWNER_LOGGED_IN
-                        } else {
-                            LoginStatus.OWNER_ONBOARDING
-                        }
+        sessionDataStore.updateData {
+            it.copy {
+                update(
+                    loginStatus = if (isCompleteBusiness) {
+                        LoginStatus.OWNER_LOGGED_IN
                     } else {
-                        LoginStatus.EMPLOYEE_LOGGED_IN
+                        LoginStatus.OWNER_ONBOARDING
+                    },
+                    userId = userId,
+                    name = userName,
+                    businessId = businessId,
+                    activeBranchId = activeBranchId,
+                    userRole = SessionRole.OWNER,
+                )
+            }
+        }
+    }
+
+    suspend fun saveEmployeeSession(
+        userId: String,
+        userName: String,
+        businessId: String,
+        activeBranchId: String,
+        role: EmployeeRole,
+    ) {
+        sessionDataStore.updateData {
+            it.copy {
+                update(
+                    loginStatus = LoginStatus.EMPLOYEE_LOGGED_IN,
+                    userId = userId,
+                    name = userName,
+                    businessId = businessId,
+                    activeBranchId = activeBranchId,
+                    userRole = when (role) {
+                        EmployeeRole.OWNER -> SessionRole.OWNER
+                        EmployeeRole.MANAGER -> SessionRole.MANAGER
+                        EmployeeRole.CASHIER -> SessionRole.CASHIER
                     },
                 )
-                .setUserId(userId)
-                .setUserName(userName)
-                .setBusinessId(businessId)
-                .setActiveBranchId(activeBranchId)
-                .setUserRole(role)
-                .build()
+            }
         }
+    }
+
+    private fun SessionPreferencesKt.Dsl.update(
+        loginStatus: LoginStatus,
+        userId: String,
+        name: String,
+        businessId: String,
+        activeBranchId: String,
+        userRole: SessionRole,
+    ) {
+        this.userId = userId
+        userName = name
+        this.businessId = businessId
+        this.activeBranchId = activeBranchId
+        this.loginStatus = loginStatus
+        this.userRole = userRole
     }
 
     /**
