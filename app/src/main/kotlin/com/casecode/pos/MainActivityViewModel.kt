@@ -18,29 +18,25 @@ package com.casecode.pos
 import androidx.lifecycle.ViewModel
 import com.casecode.pos.core.domain.repository.business.SessionRepository
 import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.model.business.EmployeeRole
 import com.casecode.pos.core.ui.stateInWhileSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(authRepositoryO: SessionRepository) : ViewModel() {
+class MainActivityViewModel @Inject constructor(sessionRepository: SessionRepository) : ViewModel() {
     val initialDestinationState: StateFlow<InitialDestinationState> =
-        authRepositoryO.loginState.map {
-            Timber.d("LoginState: $it")
+        sessionRepository.loginState.map {
             when (it) {
-
                 LoginStateResult.Loading -> InitialDestinationState.Loading
                 LoginStateResult.LoggedOut -> InitialDestinationState.SignOut
                 is LoginStateResult.OwnerOnBoarding -> InitialDestinationState.NotCompleteBusiness
                 is LoginStateResult.EmployeeLoggedIn -> {
                     when (it.role) {
-                        "ADMIN" -> InitialDestinationState.LoginByAdminEmployee
-                        "SALE" -> InitialDestinationState.LoginBySaleEmployee
-                        "NONE" -> InitialDestinationState.SignOut
-                        else -> InitialDestinationState.SignOut
+                        EmployeeRole.OWNER, EmployeeRole.MANAGER  -> InitialDestinationState.LoginByAdminEmployee
+                        EmployeeRole.CASHIER -> InitialDestinationState.LoginBySaleEmployee
                     }
                 }
 
