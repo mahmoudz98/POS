@@ -15,6 +15,8 @@
  */
 package com.casecode.pos.core.model
 
+import com.casecode.pos.core.model.business.EmployeeRole
+
 sealed interface LoginStateResultOld {
     data object Loading : LoginStateResultOld
 
@@ -34,10 +36,12 @@ sealed interface LoginStateResultOld {
 
     data object Error : LoginStateResultOld
 }
+
 sealed interface LoginStateResult {
     object Loading : LoginStateResult
     object LoggedOut : LoginStateResult
     data class OwnerLoggedIn(val businessId: String, val activeBranchId: String) : LoginStateResult
     data class OwnerOnBoarding(val businessId: String) : LoginStateResult
-    data class EmployeeLoggedIn(val businessId: String, val activeBranchId: String, val role: String) : LoginStateResult
+    data class EmployeeLoggedIn(val businessId: String, val activeBranchId: String, val role: EmployeeRole) :
+        LoginStateResult
 }

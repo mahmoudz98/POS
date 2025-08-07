@@ -20,6 +20,11 @@ data class Employee(
     val employeeId: String,
     val businessId: String,
     val name: String,
-    val role: String,
+    val role: EmployeeRole,
     val assignedBranchIds: List<String>,
 )
+enum class EmployeeRole {
+    OWNER,
+    MANAGER,
+    CASHIER,
+}
