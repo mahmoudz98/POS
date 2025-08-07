@@ -43,7 +43,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.rememberNavigationSuiteScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +50,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -68,14 +66,12 @@ import com.casecode.pos.navigation.PosMainNavHost
 import com.casecode.pos.navigation.SaleHomeGraphRoute
 import com.casecode.pos.navigation.determineStartGraph
 import kotlin.reflect.KClass
-import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 fun MainApp(
     appState: MainAppState,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
-
 ) {
     val shouldShowGradientBackground =
         appState.currentDestination?.hasRoute(SaleRoute::class) == true
@@ -89,16 +85,6 @@ fun MainApp(
             },
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
-            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-            val notConnectedMessage = stringResource(uiString.core_ui_error_network)
-         /*   LaunchedEffect(isOffline) {
-                if (isOffline) {
-                    snackbarHostState.showSnackbar(
-                        message = notConnectedMessage,
-                        duration = Indefinite,
-                    )
-                }
-            }*/
             MainApp(
                 appState = appState,
                 snackbarHostState = snackbarHostState,
@@ -132,13 +118,14 @@ internal fun MainApp(
 
     val isMainRoleGraph =
         startGraphDestination == AdminHomeGraphRoute || startGraphDestination == SaleHomeGraphRoute
-    val navSuiteState = rememberNavigationSuiteScaffoldState(
-        if (isMainRoleGraph) {
-            NavigationSuiteScaffoldValue.Visible
-        } else {
-            NavigationSuiteScaffoldValue.Hidden
-        },
-    )
+    val navSuiteState =
+        rememberNavigationSuiteScaffoldState(
+            if (isMainRoleGraph) {
+                NavigationSuiteScaffoldValue.Visible
+            } else {
+                NavigationSuiteScaffoldValue.Hidden
+            },
+        )
     val currentDestination = appState.currentDestination
 
     PosNavigationSuiteScaffold(
@@ -233,6 +220,7 @@ internal fun MainApp(
     }
 }
 
-private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) = this?.hierarchy?.any {
-    it.hasRoute(route)
-} == true
+private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
+    this?.hierarchy?.any {
+        it.hasRoute(route)
+    } == true
