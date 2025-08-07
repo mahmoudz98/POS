@@ -54,180 +54,177 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class AccountRepositoryImpl
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-        private val firebaseAuth: FirebaseAuth,
-        private val db: FirestoreService,
-        private val posPreferencesDataSource: PosPreferencesDataSource,
-        private val logService: LogService,
-        @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    ) : AccountRepository {
-        private val credentialManager: CredentialManager = CredentialManager.create(context)
+class AccountRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val firebaseAuth: FirebaseAuth,
+    private val db: FirestoreService,
+    private val posPreferencesDataSource: PosPreferencesDataSource,
+    private val logService: LogService,
+    @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+) : AccountRepository {
+    private val credentialManager: CredentialManager = CredentialManager.create(context)
 
-        override suspend fun signIn(idToken: suspend () -> String): SignInGoogleState =
-            withContext(ioDispatcher) {
-                try {
-                    val googleIdToken = idToken()
-                    val googleCredentials = buildGoogleAuthCredential(googleIdToken)
-                    val authResult = signInWithGoogleCredentials(googleCredentials)
+    override suspend fun signIn(idToken: suspend () -> String): SignInGoogleState =
+        withContext(ioDispatcher) {
+            try {
+                val googleIdToken = idToken()
+                val googleCredentials = buildGoogleAuthCredential(googleIdToken)
+                val authResult = signInWithGoogleCredentials(googleCredentials)
 
-                    if (authResult.user != null) {
-                        SignInGoogleState.Success
-                    } else {
-                        SignInGoogleState.Error(R.string.core_data_sign_in_failure)
-                    }
-                } catch (e: Exception) {
-                    handleSignInException(e)
-                }
-            }
-
-        private fun handleSignInException(e: Exception): SignInGoogleState =
-            when (e) {
-                is GetCredentialCancellationException -> {
-                    logService.logNonFatalCrash(e)
-                    SignInGoogleState.Cancelled
-                }
-
-                is GetCredentialException -> {
-                    logService.logNonFatalCrash(e)
-                    SignInGoogleState.Error(R.string.core_data_sign_in_exception)
-                }
-
-                is UnsupportedApiCallException -> {
-                    logService.logNonFatalCrash(e)
-                    SignInGoogleState.Error(R.string.core_data_unsupported_api_call)
-                }
-
-                is FirebaseAuthInvalidCredentialsException -> {
-                    SignInGoogleState.Error(R.string.core_data_sign_in_api_exception)
-                }
-
-                is FirebaseAuthException -> {
-                    logService.log(e.message ?: "")
-                    SignInGoogleState.Error(R.string.core_data_sign_in_api_exception)
-                }
-
-                else -> {
-                    logService.log(e.message ?: "")
+                if (authResult.user != null) {
+                    SignInGoogleState.Success
+                } else {
                     SignInGoogleState.Error(R.string.core_data_sign_in_failure)
                 }
-            }
-
-        override fun isGooglePlayServicesAvailable(): Boolean {
-            val apiAvailability = GoogleApiAvailability.getInstance()
-            val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
-            return resultCode == ConnectionResult.SUCCESS
-        }
-
-        private fun buildGoogleAuthCredential(googleIdToken: String): AuthCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
-
-        private suspend fun signInWithGoogleCredentials(credentials: AuthCredential): AuthResult =
-            firebaseAuth.signInWithCredential(
-                credentials,
-            ).await()
-
-        override suspend fun checkUserLogin(): Boolean {
-            return withContext(ioDispatcher) {
-                val currentUser = firebaseAuth.currentUser ?: return@withContext false
-                val isAdmin = isUserCompleteStep(currentUser.uid)
-                // posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
-                !isAdmin
+            } catch (e: Exception) {
+                handleSignInException(e)
             }
         }
 
-        /**
-         * If user complete step business return true,
-         * else false
-         */
-        private suspend fun isUserCompleteStep(currentUid: String): Boolean =
-            withContext(ioDispatcher) {
-                try {
-                    val docRef = db.getDocument(USERS_COLLECTION_PATH, currentUid)
+    private fun handleSignInException(e: Exception): SignInGoogleState =
+        when (e) {
+            is GetCredentialCancellationException -> {
+                logService.logNonFatalCrash(e)
+                SignInGoogleState.Cancelled
+            }
 
-                    if (docRef.exists()) {
-                        val data =
-                            docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
-                        val isCompletedStep = data as? Boolean == true
-                        isCompletedStep
-                    } else {
-                        false
-                    }
-                } catch (e: Exception) {
-                    logService.logNonFatalCrash(e)
+            is GetCredentialException -> {
+                logService.logNonFatalCrash(e)
+                SignInGoogleState.Error(R.string.core_data_sign_in_exception)
+            }
+
+            is UnsupportedApiCallException -> {
+                logService.logNonFatalCrash(e)
+                SignInGoogleState.Error(R.string.core_data_unsupported_api_call)
+            }
+
+            is FirebaseAuthInvalidCredentialsException -> {
+                SignInGoogleState.Error(R.string.core_data_sign_in_api_exception)
+            }
+
+            is FirebaseAuthException -> {
+                logService.log(e.message ?: "")
+                SignInGoogleState.Error(R.string.core_data_sign_in_api_exception)
+            }
+
+            else -> {
+                logService.log(e.message ?: "")
+                SignInGoogleState.Error(R.string.core_data_sign_in_failure)
+            }
+        }
+
+    override fun isGooglePlayServicesAvailable(): Boolean {
+        val apiAvailability = GoogleApiAvailability.getInstance()
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
+        return resultCode == ConnectionResult.SUCCESS
+    }
+
+    private fun buildGoogleAuthCredential(googleIdToken: String): AuthCredential =
+        GoogleAuthProvider.getCredential(googleIdToken, null)
+
+    private suspend fun signInWithGoogleCredentials(credentials: AuthCredential): AuthResult =
+        firebaseAuth.signInWithCredential(
+            credentials,
+        ).await()
+
+    override suspend fun checkUserLogin(): Boolean {
+        return withContext(ioDispatcher) {
+            val currentUser = firebaseAuth.currentUser ?: return@withContext false
+            val isAdmin = isUserCompleteStep(currentUser.uid)
+            // posPreferencesDataSource.setLoginWithAdmin(currentUser.uid, isAdmin)
+            !isAdmin
+        }
+    }
+
+    /**
+     * If user complete step business return true,
+     * else false
+     */
+    private suspend fun isUserCompleteStep(currentUid: String): Boolean =
+        withContext(ioDispatcher) {
+            try {
+                val docRef = db.getDocument(USERS_COLLECTION_PATH, currentUid)
+
+                if (docRef.exists()) {
+                    val data =
+                        docRef.get("${BUSINESS_FIELD}.${BUSINESS_IS_COMPLETED_STEP_FIELD}")
+                    val isCompletedStep = data as? Boolean == true
+                    isCompletedStep
+                } else {
                     false
                 }
-            }
-
-        override suspend fun checkRegistration(email: String): Resource<Boolean> =
-            withContext(ioDispatcher) {
-                try {
-                    // Create a temporary user with a generic password
-                    firebaseAuth.createUserWithEmailAndPassword(email, "temporary_password")
-                    Resource.Success(true)
-                } catch (_: FirebaseAuthUserCollisionException) {
-                    logService.log("checkRegistration: email is created before :false")
-                    // Email already exists
-                    Resource.Success(false) // Assuming password-based sign-in
-                } catch (e: Exception) {
-                    logService.logNonFatalCrash(e)
-                    // Other errors
-                    Resource.Error(e.message)
-                }
-            }
-
-        override suspend fun employeeLogOut() {
-            // posPreferencesDataSource.restLogin()
-        }
-
-        override suspend fun employeeLogin(
-            uid: String,
-            employeeId: String,
-            password: String,
-        ): Resource<Boolean> =
-            withContext(ioDispatcher) {
-                try {
-                    val document = db.getDocument(USERS_COLLECTION_PATH, uid)
-
-                    @Suppress("UNCHECKED_CAST")
-                    val employees =
-                        document.get(EMPLOYEES_FIELD) as List<Map<String, Any>>?
-                    val employee =
-                        employees?.find {
-                            it[EMPLOYEE_NAME_FIELD] == employeeId &&
-                                it[EMPLOYEE_PASSWORD_FIELD] == password
-                        }
-                    if (employee != null) {
-                        // posPreferencesDataSource.setLoginByEmployee(employee.asExternalModel(), uid)
-                        Resource.success(true)
-                    } else {
-                        Resource.success(false)
-                    }
-                } catch (e: FirebaseException) {
-                    logService.logNonFatalCrash(e)
-                    Resource.error(e.message)
-                } catch (e: FirebaseFirestoreException) {
-                    logService.logNonFatalCrash(e)
-                    Resource.error(e.message)
-                } catch (e: Exception) {
-                    logService.logNonFatalCrash(e)
-                    Resource.error(e.message)
-                }
-            }
-
-        override suspend fun signOut() {
-            try {
-                credentialManager.clearCredentialState(ClearCredentialStateRequest())
-                firebaseAuth.signOut()
-                //  posPreferencesDataSource.restLogin()
             } catch (e: Exception) {
                 logService.logNonFatalCrash(e)
-                e.printStackTrace()
-                if (e is CancellationException) {
-                    logService.logNonFatalCrash(e)
-                    throw e
+                false
+            }
+        }
+
+    override suspend fun checkRegistration(email: String): Resource<Boolean> =
+        withContext(ioDispatcher) {
+            try {
+                // Create a temporary user with a generic password
+                firebaseAuth.createUserWithEmailAndPassword(email, "temporary_password")
+                Resource.Success(true)
+            } catch (_: FirebaseAuthUserCollisionException) {
+                logService.log("checkRegistration: email is created before :false")
+                // Email already exists
+                Resource.Success(false) // Assuming password-based sign-in
+            } catch (e: Exception) {
+                logService.logNonFatalCrash(e)
+                // Other errors
+                Resource.Error(e.message)
+            }
+        }
+
+    override suspend fun employeeLogOut() {
+        // posPreferencesDataSource.restLogin()
+    }
+
+    override suspend fun employeeLogin(
+        uid: String,
+        employeeId: String,
+        password: String,
+    ): Resource<Boolean> =
+        withContext(ioDispatcher) {
+            try {
+                val document = db.getDocument(USERS_COLLECTION_PATH, uid)
+
+                @Suppress("UNCHECKED_CAST")
+                val employees =
+                    document.get(EMPLOYEES_FIELD) as List<Map<String, Any>>?
+                val employee = employees?.find {
+                    it[EMPLOYEE_NAME_FIELD] == employeeId && it[EMPLOYEE_PASSWORD_FIELD] == password
                 }
+                if (employee != null) {
+                    // posPreferencesDataSource.setLoginByEmployee(employee.asExternalModel(), uid)
+                    Resource.success(true)
+                } else {
+                    Resource.success(false)
+                }
+            } catch (e: FirebaseException) {
+                logService.logNonFatalCrash(e)
+                Resource.error(e.message)
+            } catch (e: FirebaseFirestoreException) {
+                logService.logNonFatalCrash(e)
+                Resource.error(e.message)
+            } catch (e: Exception) {
+                logService.logNonFatalCrash(e)
+                Resource.error(e.message)
+            }
+        }
+
+    override suspend fun signOut() {
+        try {
+            credentialManager.clearCredentialState(ClearCredentialStateRequest())
+            firebaseAuth.signOut()
+            //  posPreferencesDataSource.restLogin()
+        } catch (e: Exception) {
+            logService.logNonFatalCrash(e)
+            e.printStackTrace()
+            if (e is CancellationException) {
+                logService.logNonFatalCrash(e)
+                throw e
             }
         }
     }
+}
