@@ -36,94 +36,94 @@ import javax.inject.Inject
 
 @Suppress("DEPRECATION")
 class UsbEscPosPrint
-    @Inject
-    constructor() : EscPosPrint() {
-        companion object {
-            const val ACTION_USB_PERMISSION = "com.casecode.pos.core.printer.USB_PERMISSION"
-        }
+@Inject
+constructor() : EscPosPrint() {
+    companion object {
+        const val ACTION_USB_PERMISSION = "com.casecode.pos.core.printer.USB_PERMISSION"
+    }
 
-        private var printerContext: PrintContent? = null
+    private var printerContext: PrintContent? = null
 
-        @SuppressLint("UnspecifiedRegisterReceiverFlag")
-        override fun print(context: Context, printerInfo: PrinterInfo, printContent: PrintContent) {
-            val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
-            val usbConnection = UsbPrintersConnections.selectFirstConnected(context)
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
+    override fun print(context: Context, printerInfo: PrinterInfo, printContent: PrintContent) {
+        val usbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
+        val usbConnection = UsbPrintersConnections.selectFirstConnected(context)
 
-            if (usbConnection != null) {
-                val permissionIntent =
-                    PendingIntent.getBroadcast(
-                        context,
-                        0,
-                        Intent(ACTION_USB_PERMISSION),
-                        PendingIntent.FLAG_IMMUTABLE,
-                    )
-                context.registerReceiver(
-                    usbReceiver,
-                    IntentFilter(ACTION_USB_PERMISSION),
+        if (usbConnection != null) {
+            val permissionIntent =
+                PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    Intent(ACTION_USB_PERMISSION),
+                    PendingIntent.FLAG_IMMUTABLE,
                 )
-                this.printerContext = printContent
-                usbManager.requestPermission(usbConnection.device, permissionIntent)
-            }
+            context.registerReceiver(
+                usbReceiver,
+                IntentFilter(ACTION_USB_PERMISSION),
+            )
+            this.printerContext = printContent
+            usbManager.requestPermission(usbConnection.device, permissionIntent)
         }
+    }
 
-        private val usbReceiver =
-            object : BroadcastReceiver() {
-                override fun onReceive(context: Context, intent: Intent) {
-                    if (ACTION_USB_PERMISSION == intent.action) {
-                        val usbManager: UsbManager =
-                            context.getSystemService(Context.USB_SERVICE) as UsbManager
-                        val usbDevice: UsbDevice? = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
-                        if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                            usbDevice?.let {
-                                execute(
-                                    getEscPosPrinterService(
-                                        UsbConnection(usbManager, it),
-                                        content = printerContext!!,
-                                        48f,
-                                        context,
-                                    ),
-                                )
-                            }
+    private val usbReceiver =
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (ACTION_USB_PERMISSION == intent.action) {
+                    val usbManager: UsbManager =
+                        context.getSystemService(Context.USB_SERVICE) as UsbManager
+                    val usbDevice: UsbDevice? = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE)
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        usbDevice?.let {
+                            execute(
+                                getEscPosPrinterService(
+                                    UsbConnection(usbManager, it),
+                                    content = printerContext!!,
+                                    48f,
+                                    context,
+                                ),
+                            )
                         }
                     }
                 }
             }
+        }
 
-        override fun <T : DeviceConnection> getEscPosPrinterService(
-            deviceConnection: T,
-            content: PrintContent,
-            paperWidth: Float,
-            context: Context,
-        ): EscPosPrinter =
-            EscPosPrinter(deviceConnection, 203, paperWidth, 32).apply {
-                val textToPrint =
-                    when (content) {
-                        is PrintContent.Receipt -> {
-                            PrintUtils.generatePrintText(
-                                content.invoiceId,
-                                content.phone,
-                                content.items,
-                            )
-                        }
-
-                        is PrintContent.QrCode -> {
-                            PrintUtils.generateBarcode(content.item)
-                        }
-
-                        is PrintContent.Test -> {
-                            val logo =
-                                PrinterTextParserImg.bitmapToHexadecimalString(
-                                    this,
-                                    context.resources.getDrawableForDensity(
-                                        R.drawable.core_printer_ic_point_of_sale_24,
-                                        DisplayMetrics.DENSITY_MEDIUM,
-                                        null,
-                                    ),
-                                )
-                            PrintUtils.test(logo)
-                        }
+    override fun <T : DeviceConnection> getEscPosPrinterService(
+        deviceConnection: T,
+        content: PrintContent,
+        paperWidth: Float,
+        context: Context,
+    ): EscPosPrinter =
+        EscPosPrinter(deviceConnection, 203, paperWidth, 32).apply {
+            val textToPrint =
+                when (content) {
+                    is PrintContent.Receipt -> {
+                        PrintUtils.generatePrintText(
+                            content.invoiceId,
+                            content.phone,
+                            content.items,
+                        )
                     }
 
-                addTextToPrint(textToPrint)
-            }
-    }
+                    is PrintContent.QrCode -> {
+                        PrintUtils.generateBarcode(content.item)
+                    }
+
+                    is PrintContent.Test -> {
+                        val logo =
+                            PrinterTextParserImg.bitmapToHexadecimalString(
+                                this,
+                                context.resources.getDrawableForDensity(
+                                    R.drawable.core_printer_ic_point_of_sale_24,
+                                    DisplayMetrics.DENSITY_MEDIUM,
+                                    null,
+                                ),
+                            )
+                        PrintUtils.test(logo)
+                    }
+                }
+
+            addTextToPrint(textToPrint)
+        }
+}
