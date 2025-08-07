@@ -27,4 +27,9 @@ enum class EmployeeRole {
     OWNER,
     MANAGER,
     CASHIER,
+    ;
+
+    companion object {
+        fun fromInt(value: Int) = entries.first { it.ordinal == value }
+    }
 }

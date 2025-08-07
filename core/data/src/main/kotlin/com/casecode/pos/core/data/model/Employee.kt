@@ -17,12 +17,13 @@ package com.casecode.pos.core.data.model
 
 import com.casecode.pos.core.firebase.model.NetworkEmployee
 import com.casecode.pos.core.model.business.Employee
+import com.casecode.pos.core.model.business.EmployeeRole
 
 fun NetworkEmployee.asExternalModel(businessId: String): Employee = Employee(
     id = this.id,
-    employeeId = this.employeeId ?: "",
+    employeeId = this.employeeId,
     businessId = businessId,
-    name = this.name ?: "",
-    role = this.role ?: "CASHIER",
-    assignedBranchIds = this.assignedBranchIds ?: emptyList(),
+    name = this.name,
+    role = EmployeeRole.fromInt(this.role),
+    assignedBranchIds = this.assignedBranchIds,
 )

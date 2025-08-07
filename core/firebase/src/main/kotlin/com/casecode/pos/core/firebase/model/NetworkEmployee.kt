@@ -21,7 +21,7 @@ data class NetworkEmployee(
     @DocumentId val id: String = "",
     val employeeId: String = "",
     val name: String = "",
-    val role: String = "",
+    val role: Int = 0,
     val assignedBranchIds: List<String> = emptyList(),
     val passwordHash: String = "",
 )
