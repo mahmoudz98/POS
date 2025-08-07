@@ -48,8 +48,7 @@ class InboxSyncWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         // This worker will run long-term, collecting the login state.
-        Timber.e("inboxWork")
-        preferencesDataSource.loginData.collect { loginState ->
+        preferencesDataSource.sessionData.collect { loginState ->
             Timber.e("inboxWork:loginData:$loginState")
             val businessId = when (loginState) {
                 is LoginStateResult.OwnerLoggedIn -> loginState.businessId
