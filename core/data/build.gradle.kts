@@ -25,12 +25,7 @@ plugins {
 android {
     namespace = "$APPLICATION_ID.core.data"
 
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-        }
-    }
-
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {

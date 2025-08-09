@@ -1,5 +1,6 @@
 
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import com.android.build.gradle.LibraryExtension
 import com.casecode.pos.Configuration
 import com.casecode.pos.configureFlavors
 import com.casecode.pos.configureGradleManagedDevices
@@ -27,12 +28,11 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.plugin.power-assert")
             }
 
-            extensions.configure<com.android.build.api.dsl.LibraryExtension> {
+            extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 lint.targetSdk = Configuration.COMPILE_SDK
                 testOptions.targetSdk = Configuration.COMPILE_SDK
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
                 testOptions.animationsDisabled = true
 
                 configureFlavors(this)

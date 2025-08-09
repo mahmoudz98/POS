@@ -1,5 +1,5 @@
 
-import com.android.build.api.dsl.LibraryExtension
+import com.android.build.gradle.LibraryExtension
 import com.casecode.pos.configureGradleManagedDevices
 import com.casecode.pos.libs
 import org.gradle.api.Plugin
