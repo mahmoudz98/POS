@@ -15,9 +15,11 @@
 -->
 <resources>
 
-  <string name="core_ui_menu_business_info_title">معلومات العمل</string>
-  <string name="core_ui_menu_branches_title">الفروع</string>
+  <string name="core_ui_business_info_title">معلومات العمل</string>
+  <string name="core_ui_branches_title">الفروع</string>
   <string name="core_ui_employees_title">الموظفون</string>
+  <string name="core_ui_financials_title">المالية</string>
+
   <!-- Network -->
   <string name="core_ui_error_network">الرجاء التحقق من اتصال الإنترنت.</string>
   <string name="core_ui_message_back_online">تم الاتصال بالإنترنت.</string>
@@ -35,10 +37,15 @@
   <string name="core_ui_email_invalid">الرجاء إدخال عنوان بريد إلكتروني صالح.</string>
   <string name="core_ui_error_email_empty">البريد الإلكتروني مطلوب.</string>
   <string name="core_ui_error_phone_empty">رقم الهاتف مطلوب.</string>
-  <string name="core_ui_error_phone_invalid">الرجاء إدخال رقم هاتف صالح (مثال: 1234567890).</string>
+  <string name="core_ui_error_phone_invalid">الرجاء إدخال رقم هاتف صالح.</string>
   <string name="core_ui_error_branch_name_empty">اسم الفرع مطلوب.</string>
 
-  <string name="core_ui_store_type_hint">نوع المتجر</string>
+  <string name="core_ui_business_name_hint">اسم النشاط التجارى</string>
+  <string name="core_ui_country_hint">الدولة</string>
+  <string name="core_ui_business_vertical_hint">نوع النشاط التجارى</string>
+  <string name="core_ui_business_vertical_retail">بيع بالتجزئه</string>
+  <string name="core_ui_business_vertical_cafe">قهوة</string>
+  <string name="core_ui_business_vertical_pharmacy">صيدلية</string>
   <string name="core_ui_work_email_hint">البريد الإلكتروني للعمل</string>
   <string name="core_ui_work_phone_number_hint">رقم هاتف العمل</string>
   <string name="core_ui_branch_name_hint">اسم الفرع: </string>
@@ -47,7 +54,8 @@
   <string name="core_ui_update_branch_title">تحديث الفرع</string>
   <string name="core_ui_add_branch_button_text">إضافة فرع</string>
   <string name="core_ui_update_branch_button_text">تحديث فرع</string>
-
+  <string name="core_ui_currency_hint">العملات</string>
+  <string name="core_ui_tax_rate_hint">معدل الضريبة</string>
 
   <!-- Branches -->
   <string name="core_ui_branch_header_title">الفروع</string>

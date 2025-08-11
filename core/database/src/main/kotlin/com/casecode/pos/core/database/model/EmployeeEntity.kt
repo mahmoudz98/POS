@@ -18,7 +18,8 @@ package com.casecode.pos.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.data.business.Employee
+import com.casecode.pos.core.model.business.Employee
+import com.casecode.pos.core.model.business.EmployeeRole
 
 @Entity(tableName = "employee")
 data class EmployeeEntity(
@@ -27,9 +28,8 @@ data class EmployeeEntity(
     @ColumnInfo(name = "employee_id") val employeeId: String,
     @ColumnInfo(name = "business_id") val businessId: String,
     val name: String,
-    val role: String,
+    val role: Int,
     @ColumnInfo(name = "assigned_branch_ids") val assignedBranchIds: List<String>,
-    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false,
 )
 
 fun EmployeeEntity.asExternalModel(): Employee {
@@ -38,7 +38,7 @@ fun EmployeeEntity.asExternalModel(): Employee {
         employeeId = this.employeeId,
         businessId = this.businessId,
         name = this.name,
-        role = this.role,
+        role = EmployeeRole.fromInt(this.role),
         assignedBranchIds = this.assignedBranchIds,
     )
 }
@@ -49,7 +49,7 @@ fun Employee.asEntity(): EmployeeEntity {
         employeeId = this.employeeId,
         businessId = this.businessId,
         name = this.name,
-        role = this.role,
+        role = this.role.ordinal,
         assignedBranchIds = this.assignedBranchIds,
     )
 }

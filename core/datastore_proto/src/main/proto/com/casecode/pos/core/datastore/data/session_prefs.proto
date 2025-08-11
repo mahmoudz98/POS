@@ -14,7 +14,7 @@ message SessionPreferences {
   // The specific branch the user is currently operating in
   string active_branch_id = 5;
   // The role of the user, e.g., "OWNER", "MANAGER", "CASHIER"
-  string user_role = 6;
+  SessionRole user_role = 6;
 }
 
 enum LoginStatus {
@@ -22,4 +22,10 @@ enum LoginStatus {
   OWNER_LOGGED_IN = 1;
   OWNER_ONBOARDING = 2;
   EMPLOYEE_LOGGED_IN = 3;
+}
+
+enum SessionRole {
+  OWNER = 0;
+  MANAGER = 1;
+  CASHIER = 2;
 }

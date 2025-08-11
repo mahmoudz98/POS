@@ -18,20 +18,20 @@ package com.casecode.pos.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.data.business.Branch
-import com.casecode.pos.core.model.data.business.BranchStatus
-import kotlinx.datetime.Instant
+import com.casecode.pos.core.model.business.Branch
+import com.casecode.pos.core.model.business.BranchStatus
+import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 @Entity(tableName = "branch")
 data class BranchEntity(
     @PrimaryKey
-    @ColumnInfo(name = "branch_id") val branchId: String,
+    @ColumnInfo(name = "branch_id") val branchId: String = Uuid.random().toString(),
     val name: String,
-    val phone: String?,
+    val phone: String,
     val status: Int,
-    @ColumnInfo(name = "created_at") val createdAt: Instant?,
-    @ColumnInfo(name = "updated_at") val updatedAt: Instant?,
-    @ColumnInfo(name = "is_synced") val isSynced: Boolean = false,
+    @ColumnInfo(name = "created_at") val createdAt: Instant,
+    @ColumnInfo(name = "updated_at") val updatedAt: Instant,
 )
 
 fun BranchEntity.asExternalModel(): Branch {
@@ -47,7 +47,6 @@ fun BranchEntity.asExternalModel(): Branch {
 
 fun Branch.asEntity(): BranchEntity {
     return BranchEntity(
-        branchId = this.id,
         name = this.name,
         phone = this.phone,
         status = this.status.value,

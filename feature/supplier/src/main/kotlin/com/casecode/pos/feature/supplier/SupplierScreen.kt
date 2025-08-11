@@ -57,9 +57,9 @@ import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.SearchWidgetState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.Supplier
-import com.casecode.pos.core.ui.DeleteDialog
+import com.casecode.pos.core.model.users.Supplier
 import com.casecode.pos.core.ui.DevicePreviews
+import com.casecode.pos.core.ui.PosDeleteDialog
 import com.casecode.pos.core.ui.parameterprovider.SupplierPreviewParameterProvider
 import com.casecode.pos.core.ui.R as uiR
 
@@ -112,7 +112,7 @@ fun SupplierScreen(viewModel: SupplierViewModel = hiltViewModel(), onBackClick: 
         )
     }
     if (showDeleteDialog) {
-        DeleteDialog(
+        PosDeleteDialog(
             titleRes = R.string.feature_supplier_dialog_delete_title,
             messageRes = R.string.feature_supplier_dialog_delete_message,
             onConfirm = {

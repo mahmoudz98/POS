@@ -73,14 +73,14 @@ import com.casecode.pos.core.designsystem.component.scrollbar.rememberDraggableS
 import com.casecode.pos.core.designsystem.component.scrollbar.scrollbarState
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.PaymentStatus
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.PaymentStatus
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.model.utils.toBigDecimalFormatted
 import com.casecode.pos.core.model.utils.toFormattedDateString
 import com.casecode.pos.core.ui.FilterSharedElementKey
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 @Composable
 fun BillsTopAppBar(

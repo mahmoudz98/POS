@@ -17,6 +17,8 @@
 import com.casecode.pos.Configuration
 import com.casecode.pos.Configuration.APPLICATION_ID
 import com.casecode.pos.PosBuildType
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.pos.android.application)
@@ -26,6 +28,17 @@ plugins {
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.pos.hilt)
     alias(libs.plugins.baselineprofile)
+}
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+if (keystorePropertiesFile.exists() && keystorePropertiesFile.isFile) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+// 2. Helper function to read properties from environment variables or the properties file.
+//    This prioritizes environment variables, which is ideal for CI/CD environments.
+fun getSigningProperty(key: String): String? {
+    return System.getenv(key) ?: keystoreProperties.getProperty(key)
 }
 
 android {
@@ -38,6 +51,21 @@ android {
     }
     androidResources {
         localeFilters += listOf("en", "ar")
+    }
+    val haveReleaseCredentials = getSigningProperty("RELEASE_STORE_FILE") != null &&
+            getSigningProperty("RELEASE_STORE_PASSWORD") != null &&
+            getSigningProperty("RELEASE_KEY_ALIAS") != null &&
+            getSigningProperty("RELEASE_KEY_PASSWORD") != null
+
+    signingConfigs {
+        create("release") {
+            if (haveReleaseCredentials) {
+                storeFile = file(getSigningProperty("RELEASE_STORE_FILE")!!)
+                storePassword = getSigningProperty("RELEASE_STORE_PASSWORD")
+                keyAlias = getSigningProperty("RELEASE_KEY_ALIAS")
+                keyPassword = getSigningProperty("RELEASE_KEY_PASSWORD")
+            }
+        }
     }
     buildTypes {
         debug {
@@ -53,7 +81,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            signingConfig = signingConfigs.named("debug").get()
+            signingConfig = if (haveReleaseCredentials) {
+                signingConfigs.named("release").get()
+            } else {
+                signingConfigs.named("debug").get()
+            }
             baselineProfile.automaticGenerationDuringBuild = true
         }
     }
@@ -63,18 +95,14 @@ android {
         }
     }
 
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
+    testOptions.unitTests.isIncludeAndroidResources = true
 
     namespace = APPLICATION_ID
 }
 
 dependencies {
     implementation(projects.feature.login)
-    implementation(projects.feature.stepper)
+    implementation(projects.feature.onboarding)
     implementation(projects.feature.employee)
     implementation(projects.feature.salesReport)
     implementation(projects.feature.inventory)

@@ -28,6 +28,7 @@ dependencies {
 
     api(projects.core.data)
     api(projects.core.firebase)
+    api(projects.core.database)
     api(projects.core.notifications)
     implementation(libs.googleid)
     api(libs.coroutines.test)

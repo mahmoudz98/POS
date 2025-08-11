@@ -1,3 +1,4 @@
+
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.casecode.pos.Configuration
@@ -29,9 +30,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = Configuration.COMPILE_SDK
+                lint.targetSdk = Configuration.COMPILE_SDK
+                testOptions.targetSdk = Configuration.COMPILE_SDK
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
                 testOptions.animationsDisabled = true
 
                 configureFlavors(this)

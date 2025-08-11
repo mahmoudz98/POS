@@ -19,6 +19,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.casecode.pos.core.database.model.BranchEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * DAO for [BranchDao] access
@@ -28,6 +29,6 @@ interface BranchDao {
     @Upsert
     suspend fun insertOrReplaceBranches(branches: List<BranchEntity>)
 
-    @Query("SELECT * FROM branches WHERE businessId = :businessId")
-    suspend fun getBranchesForBusiness(businessId: String): List<BranchEntity>
+    @Query("SELECT * FROM branch")
+    fun getBranches(): Flow<List<BranchEntity>>
 }

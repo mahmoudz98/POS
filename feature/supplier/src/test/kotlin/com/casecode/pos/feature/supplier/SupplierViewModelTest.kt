@@ -16,10 +16,10 @@
 package com.casecode.pos.feature.supplier
 
 import androidx.lifecycle.SavedStateHandle
-import com.casecode.pos.core.domain.usecase.AddSupplierUseCase
-import com.casecode.pos.core.domain.usecase.DeleteSupplierUseCase
-import com.casecode.pos.core.domain.usecase.GetSuppliersUseCase
-import com.casecode.pos.core.domain.usecase.UpdateSupplierUseCase
+import com.casecode.pos.core.domain.usecase.old.AddSupplierUseCase
+import com.casecode.pos.core.domain.usecase.old.DeleteSupplierUseCase
+import com.casecode.pos.core.domain.usecase.old.GetSuppliersUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateSupplierUseCase
 import com.casecode.pos.core.testing.repository.TestSupplierRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
 import com.casecode.pos.core.testing.util.TestNetworkMonitor

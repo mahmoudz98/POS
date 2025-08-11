@@ -50,30 +50,35 @@ internal fun Project.configureKotlinJvm() {
 /**
  * Configure base Kotlin options
  */
-private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() = configure<T> {
-    // Treat all Kotlin warnings as errors (disabled by default)
-    // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
-    val warningsAsErrors = providers.gradleProperty("warningsAsErrors").map {
-        it.toBoolean()
-    }.orElse(false)
-    when (this) {
-        is KotlinAndroidProjectExtension -> compilerOptions
-        is KotlinJvmProjectExtension -> compilerOptions
-        else -> TODO("Unsupported project extension $this ${T::class}")
-    }.apply {
-        jvmTarget.set(JvmTarget.JVM_17)
-        allWarningsAsErrors.set(warningsAsErrors)
+private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
+    configure<T> {
+        // Treat all Kotlin warnings as errors (disabled by default)
+        // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
+        val warningsAsErrors =
+            providers.gradleProperty("warningsAsErrors").map {
+                it.toBoolean()
+            }.orElse(false)
+        when (this) {
+            is KotlinAndroidProjectExtension -> compilerOptions
+            is KotlinJvmProjectExtension -> compilerOptions
+            else -> TODO("Unsupported project extension $this ${T::class}")
+        }.apply {
+            jvmTarget.set(JvmTarget.JVM_17)
+            allWarningsAsErrors.set(warningsAsErrors)
 
-        freeCompilerArgs.set(
-            freeCompilerArgs.getOrElse(emptyList()) + listOf(
-                "-Xcontext-parameters",
-                // Enable experimental coroutines APIs, including Flow
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xannotation-default-target=param-property"
-            ),
-        )
-        freeCompilerArgs.add(
-            "-Xconsistent-data-class-copy-visibility"
-        )
+            freeCompilerArgs.set(
+                freeCompilerArgs.getOrElse(emptyList()) +
+                    listOf(
+                        "-Xcontext-parameters",
+                        // Enable experimental coroutines APIs, including Flow
+                        "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                        "-opt-in=kotlin.time.ExperimentalTime",
+                        "-opt-in=kotlin.uuid.ExperimentalUuidApi",
+                        "-Xannotation-default-target=param-property",
+                    ),
+            )
+            freeCompilerArgs.add(
+                "-Xconsistent-data-class-copy-visibility",
+            )
+        }
     }
-}

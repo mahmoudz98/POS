@@ -16,13 +16,13 @@
 package com.casecode.pos.feature.bill
 
 import androidx.lifecycle.SavedStateHandle
-import com.casecode.pos.core.domain.usecase.AddPaymentDetailsUseCase
-import com.casecode.pos.core.domain.usecase.GetItemsUseCase
-import com.casecode.pos.core.domain.usecase.GetSupplierInvoiceDetailsUseCase
-import com.casecode.pos.core.domain.usecase.UpdateStockInItemsUseCase
-import com.casecode.pos.core.domain.usecase.UpdateSupplierInvoiceUseCase
-import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.domain.usecase.old.AddPaymentDetailsUseCase
+import com.casecode.pos.core.domain.usecase.old.GetItemsUseCase
+import com.casecode.pos.core.domain.usecase.old.GetSupplierInvoiceDetailsUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateStockInItemsUseCase
+import com.casecode.pos.core.domain.usecase.old.UpdateSupplierInvoiceUseCase
+import com.casecode.pos.core.model.users.Item
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.testing.repository.TestItemRepository
 import com.casecode.pos.core.testing.repository.TestSupplierInvoicesRepository
 import com.casecode.pos.core.testing.util.MainDispatcherRule
@@ -187,15 +187,15 @@ class BillDetailsViewModelTest {
         )
     }
 
-    context(TestScope)
+    context(_: TestScope)
     private fun collectStates() {
         collectState(viewModel.billDetailsUiState)
         collectState(viewModel.billInputState)
         collectState(viewModel.userMessage)
     }
 
-    context(TestScope)
+    context(testScope: TestScope)
     private fun collectState(stateFlow: SharedFlow<*>) {
-        backgroundScope.launch(UnconfinedTestDispatcher()) { stateFlow.collect() }
+        testScope.backgroundScope.launch(UnconfinedTestDispatcher()) { stateFlow.collect() }
     }
 }

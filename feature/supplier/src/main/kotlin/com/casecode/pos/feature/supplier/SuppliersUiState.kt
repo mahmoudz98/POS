@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.feature.supplier
 
-import com.casecode.pos.core.model.data.users.Supplier
+import com.casecode.pos.core.model.users.Supplier
 
 sealed interface SuppliersUiState {
     data object Loading : SuppliersUiState

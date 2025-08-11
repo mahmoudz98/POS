@@ -16,7 +16,12 @@
 package com.casecode.pos.core.database.di
 
 import com.casecode.pos.core.database.PosDatabase
+import com.casecode.pos.core.database.dao.BranchDao
 import com.casecode.pos.core.database.dao.BusinessDao
+import com.casecode.pos.core.database.dao.LocalSignalDao
+import com.casecode.pos.core.database.dao.OutboxCommandDao
+import com.casecode.pos.core.database.dao.SubscriptionDao
+import com.casecode.pos.core.database.dao.TaxRateDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +32,19 @@ import dagger.hilt.components.SingletonComponent
 internal object DaosModule {
     @Provides
     fun provideBusinessDao(database: PosDatabase): BusinessDao = database.businessDao()
+
+    @Provides
+    fun provideBranchDao(database: PosDatabase): BranchDao = database.branchDao()
+
+    @Provides
+    fun provideOutboxCommandDao(database: PosDatabase): OutboxCommandDao = database.outboxCommandDao()
+
+    @Provides
+    fun provideLocalSignalDao(database: PosDatabase): LocalSignalDao = database.localSignalDao()
+
+    @Provides
+    fun provideSubscriptionDao(database: PosDatabase): SubscriptionDao = database.subscriptionDao()
+
+    @Provides
+    fun provideTaxRateDao(database: PosDatabase): TaxRateDao = database.taxRateDao()
 }

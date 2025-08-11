@@ -19,6 +19,7 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.casecode.pos.core.database.model.BusinessEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * DAO for [BusinessEntity] access
@@ -29,5 +30,5 @@ interface BusinessDao {
     suspend fun insertOrReplaceBusiness(business: BusinessEntity)
 
     @Query("SELECT * FROM business WHERE owner_uid = :ownerUid LIMIT 1")
-    suspend fun getBusinessByOwner(ownerUid: String): BusinessEntity?
+    fun getBusinessByOwner(ownerUid: String): Flow<BusinessEntity?>
 }

@@ -41,14 +41,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.PaymentDetails
-import com.casecode.pos.core.model.data.users.PaymentMethod
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.PaymentDetails
+import com.casecode.pos.core.model.users.PaymentMethod
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.model.utils.toFormattedDateTimeString
 import com.casecode.pos.core.ui.parameterprovider.SupplierInvoiceParameterProvider
 import com.casecode.pos.feature.bill.R
-import kotlinx.datetime.Clock.System
-import kotlinx.datetime.Instant
+import kotlin.time.Clock.System
+import kotlin.time.Instant
 
 @Composable
 fun BillHistoryTap(

@@ -19,16 +19,13 @@ plugins {
     alias(libs.plugins.pos.android.library)
     alias(libs.plugins.pos.android.library.jacoco)
     alias(libs.plugins.pos.hilt)
+    alias(libs.plugins.kotlin.serialization)
+
 }
 android {
     namespace = "$APPLICATION_ID.core.data"
 
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-        }
-    }
-
+    testOptions.unitTests.isIncludeAndroidResources = true
 }
 
 dependencies {
@@ -36,6 +33,7 @@ dependencies {
     api(projects.core.domain)
     api(projects.core.common)
     api(projects.core.datastore)
+    implementation(projects.core.database)
 
     implementation(projects.core.firebase)
     implementation(projects.core.analytics)

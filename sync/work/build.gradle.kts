@@ -36,7 +36,11 @@ dependencies {
     implementation(libs.hilt.ext.work)
     implementation(projects.core.analytics)
     implementation(projects.core.domain)
+    implementation(projects.core.firebase)
+    implementation(projects.core.database)
     implementation(projects.core.common)
+    implementation(projects.core.data)
+
 
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.hilt.android.testing)

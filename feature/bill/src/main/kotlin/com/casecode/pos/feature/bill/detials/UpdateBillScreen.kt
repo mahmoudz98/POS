@@ -65,8 +65,8 @@ import com.casecode.pos.core.designsystem.component.PosTonalButton
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
 import com.casecode.pos.core.designsystem.theme.POSTheme
-import com.casecode.pos.core.model.data.users.Item
-import com.casecode.pos.core.model.data.users.SupplierInvoice
+import com.casecode.pos.core.model.users.Item
+import com.casecode.pos.core.model.users.SupplierInvoice
 import com.casecode.pos.core.model.utils.toFormattedDateString
 import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.feature.bill.R
@@ -75,7 +75,7 @@ import com.casecode.pos.feature.bill.creation.BillItemFormScreen
 import com.casecode.pos.feature.bill.creation.BillItemsTotalSection
 import com.casecode.pos.feature.bill.creation.BillLineItem
 import com.casecode.pos.feature.bill.creation.millisToStartOfDay
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
