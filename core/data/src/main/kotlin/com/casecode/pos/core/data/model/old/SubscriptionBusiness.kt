@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.data.model
+package com.casecode.pos.core.data.model.old
 
 import com.casecode.pos.core.firebase.SUBSCRIPTIONS_COLLECTION_PATH
 import com.casecode.pos.core.firebase.SUBSCRIPTION_COST_FIELD

@@ -15,7 +15,7 @@
  */
 @file:Suppress("UNCHECKED_CAST")
 
-package com.casecode.pos.core.data.model
+package com.casecode.pos.core.data.model.old
 
 import com.casecode.pos.core.firebase.PRINTER_INFO_ADDRESS_FIELD
 import com.casecode.pos.core.firebase.PRINTER_INFO_CONNECTION_TYPE_FIELD

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.data.model
+package com.casecode.pos.core.data.model.old
 
 import com.casecode.pos.core.firebase.EMPLOYEES_FIELD
 import com.casecode.pos.core.firebase.EMPLOYEE_BRANCH_NAME_FIELD

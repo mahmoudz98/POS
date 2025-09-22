@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.data.model
+package com.casecode.pos.core.data.model.old
 
-import com.casecode.pos.core.data.model.old.asExternalMapper
 import com.casecode.pos.core.firebase.ITEM_COST_PRICE_FIELD
 import com.casecode.pos.core.firebase.ITEM_NAME_FIELD
 import com.casecode.pos.core.firebase.ITEM_QUANTITY_FIELD
