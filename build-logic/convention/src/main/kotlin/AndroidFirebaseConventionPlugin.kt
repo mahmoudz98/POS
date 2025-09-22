@@ -13,7 +13,7 @@ class AndroidFirebaseConventionPlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("play.services.auth").get())
                 "api"(libs.findLibrary("firebase.auth").get())
                 "api"(libs.findLibrary("firebase.firestore").get())
-                "implementation"(libs.findLibrary("firebase.database").get())
+                "api"(libs.findLibrary("firebase.database").get())
                 "api"(libs.findLibrary("firebase.storage").get())
                 "api"(libs.findLibrary("firebase.config").get())
                 "implementation"(libs.findLibrary("firebase.analytics").get())
