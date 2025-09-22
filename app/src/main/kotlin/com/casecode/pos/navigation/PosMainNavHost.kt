@@ -89,6 +89,7 @@ fun PosMainNavHost(
 
         homeAdminGraph(
             appState = appState,
+            onShowSnackbar = onShowSnackbar,
             enterTransition = { contextShiftEnter() },
             exitTransition = {
                 if (targetState.destination.route == LoginRoute.toString()) {

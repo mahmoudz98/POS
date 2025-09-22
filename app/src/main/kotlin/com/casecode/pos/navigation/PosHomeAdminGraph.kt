@@ -26,8 +26,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.navOptions
 import com.casecode.pos.feature.bill.navigation.billsGraph
 import com.casecode.pos.feature.bill.navigation.navigateToBillsGraph
-import com.casecode.pos.feature.employee.employeesScreen
-import com.casecode.pos.feature.employee.navigateToEmployees
+import com.casecode.pos.feature.employee.navigation.employeesScreen
+import com.casecode.pos.feature.employee.navigation.navigateToEmployees
 import com.casecode.pos.feature.inventory.navigation.inventoryScreen
 import com.casecode.pos.feature.item.navigation.itemsGraph
 import com.casecode.pos.feature.item.navigation.navigateToItemsGraph
@@ -52,6 +52,7 @@ object AdminHomeGraphRoute
 
 fun NavGraphBuilder.homeAdminGraph(
     appState: MainAppState,
+    onShowSnackbar: suspend (String, String?) -> Boolean,
     enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
     exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
 ) {
@@ -103,7 +104,7 @@ fun NavGraphBuilder.homeAdminGraph(
                 appState.navController.navigateToSignOut()
             },
         )
-        employeesScreen()
+        employeesScreen(onShowSnackbar = {onShowSnackbar(it, null)})
         signOutDialog(
             onSignOut = {
                 appState.signOut()
