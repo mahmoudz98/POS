@@ -19,7 +19,7 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.gradleApiPlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.firebase.crashlytics.gradlePlugin)
@@ -103,6 +103,10 @@ gradlePlugin {
         register("jvmLibrary") {
             id = libs.plugins.pos.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("root") {
+            id = libs.plugins.pos.root.get().pluginId
+            implementationClass = "RootPlugin"
         }
     }
 }
