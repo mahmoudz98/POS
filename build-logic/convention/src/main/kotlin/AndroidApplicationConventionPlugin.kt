@@ -1,6 +1,5 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
-import com.android.build.gradle.BaseExtension
 import com.casecode.pos.Configuration
 import com.casecode.pos.configureBadgingTasks
 import com.casecode.pos.configureGradleManagedDevices
@@ -36,7 +35,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
-                configureBadgingTasks(extensions.getByType<BaseExtension>(), this)
+                configureBadgingTasks(extensions.getByType<ApplicationExtension>(), this)
             }
         }
     }
