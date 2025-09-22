@@ -13,11 +13,12 @@ plugins {
     alias(libs.plugins.secrets)
     alias(libs.plugins.gradle.cache.fix) apply false
     alias(libs.plugins.dependencyGuard) apply false
-    alias(libs.plugins.module.graph) apply true
+    //alias(libs.plugins.module.graph) apply true
     alias(libs.plugins.power.assert) apply false
     alias(libs.plugins.room) apply false
+    alias(libs.plugins.pos.root)
 
-    // alias(libs.plugins.dependency.analysis) apply true
+    // alias(libs.plugins.dependency.analysis)
 }
 
 tasks.withType<JavaCompile>().configureEach {
