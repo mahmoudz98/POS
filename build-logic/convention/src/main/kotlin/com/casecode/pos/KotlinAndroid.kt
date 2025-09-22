@@ -70,7 +70,6 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
                 freeCompilerArgs.getOrElse(emptyList()) +
                     listOf(
                         "-Xcontext-parameters",
-                        // Enable experimental coroutines APIs, including Flow
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                         "-opt-in=kotlin.time.ExperimentalTime",
                         "-opt-in=kotlin.uuid.ExperimentalUuidApi",
