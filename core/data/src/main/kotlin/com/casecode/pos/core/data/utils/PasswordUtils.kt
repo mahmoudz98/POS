@@ -1,81 +1,79 @@
-/*
- * Designed and developed 2024 by Mahmood Abdalhafeez
- *
- * Licensed under the MIT License (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://opensource.org/licenses/MIT
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.casecode.pos.core.data.utils
 
-/*
-import at.favre.lib.crypto.bcrypt.BCrypt // Import from the new library
-import com.casecode.pos.domain.service.LogService // Assuming you can inject a LogService here or handle logging differently
-import kotlin.nio.charset.StandardCharsets
+import java.security.SecureRandom
+import java.util.Base64
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 
-*/
 /**
- * A utility object for handling password hashing and verification using the modern
- * at.favre.lib:bcrypt library.
+ * A utility object for handling password hashing and verification using PBKDF2.
+ * This implementation uses only pure Java/Kotlin libraries to be testable on the JVM.
  */
-/*
-
 object PasswordUtils {
 
-    // Get an instance of the BCrypt hasher. You can configure the version if needed.
-    // BCrypt.Version.VERSION_2A is a strong and common choice.
-    private val bcrypt = BCrypt.with(BCrypt.Version.VERSION_2A)
+    private const val SALT_LENGTH = 16
+    private const val HASH_LENGTH = 32
+    private const val ITERATIONS = 100000 // OWASP recommended minimum
+    private const val ALGORITHM = "PBKDF2WithHmacSHA256"
 
-    // The cost factor determines how much CPU time is used. 12 is a very strong default.
-    private const val COST_FACTOR = 12
-
- */
-/**
- * Hashes a plaintext password using BCrypt with a cost factor of 12.
- *
- * @param password The plaintext password to hash.
- * @return A String containing the complete BCrypt hash (includes version, cost, salt, and hash).
- */
-/*
-
+    /**
+     * Hash a password using PBKDF2 with SHA256
+     * Returns: "salt:hash" format, Base64 encoded.
+     */
     fun hashPassword(password: String): String {
-        // The .withSalt() call automatically generates a secure, random salt for each hash.
-        // It's crucial not to reuse salts. This library handles it for you.
-        return bcrypt.hashToString(COST_FACTOR, password.toCharArray())
+        val salt = generateSalt()
+        val hash = pbkdf2Hash(password, salt)
+
+        val saltBase64 = Base64.getEncoder().encodeToString(salt)
+        val hashBase64 = Base64.getEncoder().encodeToString(hash)
+
+        return "$saltBase64:$hashBase64"
     }
 
- */
-
-/**
- * Verifies a plaintext password against a stored BCrypt hash.
- *
- * @param password The plaintext password entered by the user.
- * @param storedHash The complete hash string retrieved from the database.
- * @return `true` if the password matches the hash, `false` otherwise.
- */
-/*
-
+    /**
+     * Verify a password against a stored hash in the "salt:hash" format.
+     */
     fun verifyPassword(password: String, storedHash: String): Boolean {
         return try {
-            // The .verify() method automatically extracts the salt and version
-            // from the storedHash and performs the comparison.
-            val result = BCrypt.verifyer().verify(password.toCharArray(), storedHash)
-            result.verified
+            val parts = storedHash.split(":")
+            if (parts.size != 2) return false
+
+            val salt = Base64.getDecoder().decode(parts[0])
+            val originalHash = Base64.getDecoder().decode(parts[1])
+
+            val testHash = pbkdf2Hash(password, salt)
+
+            constantTimeEquals(originalHash, testHash)
         } catch (e: Exception) {
-            // This can happen if the storedHash is not a valid BCrypt hash string.
-            // Log this as a serious error in a real app.
-            // logService.logError(e, "BCrypt verification failed due to malformed hash.")
+            // Any error during decoding or hashing means verification fails.
             false
         }
     }
-}*/
-object PasswordUtils {
-    fun pass() = "10"
+
+    private fun generateSalt(): ByteArray {
+        val salt = ByteArray(SALT_LENGTH)
+        SecureRandom().nextBytes(salt)
+        return salt
+    }
+
+    private fun pbkdf2Hash(password: String, salt: ByteArray): ByteArray {
+        val spec = PBEKeySpec(
+            password.toCharArray(),
+            salt,
+            ITERATIONS,
+            HASH_LENGTH * 8 // Convert to bits
+        )
+        val factory = SecretKeyFactory.getInstance(ALGORITHM)
+        return factory.generateSecret(spec).encoded
+    }
+
+    private fun constantTimeEquals(a: ByteArray, b: ByteArray): Boolean {
+        if (a.size != b.size) return false
+
+        var result = 0
+        for (i in a.indices) {
+            result = result or (a[i].toInt() xor b[i].toInt())
+        }
+        return result == 0
+    }
 }
