@@ -16,12 +16,11 @@
 package com.casecode.pos.core.model.business
 
 data class Employee(
-    val id: String,
-    val employeeId: String,
-    val businessId: String,
+    val id: String = "",
     val name: String,
+    val phone: String,
     val role: EmployeeRole,
-    val assignedBranchIds: List<String>,
+    val assignedBranchId: String,
 )
 enum class EmployeeRole {
     OWNER,
