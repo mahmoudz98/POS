@@ -80,6 +80,7 @@
   <string name="core_ui_update_employee_title">تحديث موظف</string>
   <string name="core_ui_error_employee_name_empty">يجب ادخال اسم الموظف</string>
   <string name="core_ui_error_add_employee_password_empty">يجب ادخال كلمه سر للموظف</string>
+  <string name="core_ui_error_add_employee_password_less_than_six">يجب أن تكون كلمة المرور 6 أحرف على الأقل</string>
   <string name="core_ui_error_add_employee_branch_empty">الرجاء اختيار فرع للموظف.</string>
   <string name="core_ui_error_add_employee_permission_empty">الرجاء تحديد صلاحيات الموظف.</string>
   <string name="core_ui_add_employee_button_text">اضافه موظف</string>
@@ -91,16 +92,18 @@
   <string name="core_ui_error_employee_name_duplicate">يوجد موظف بهذا الاسم بالفعل.</string>
   <string name="core_ui_success_update_employee_message">تم تحديث الموظف بنجاح!</string>
   <string name="core_ui_error_update_employee_message">فشل تحديث الموظف.</string>
+    <string name="core_ui_success_delete_employee_message">تم حذف الموظف بنجاح!</string>
+    <string name="core_ui_error_delete_employee_message">فشل في حذف الموظف.</string>
 
   <!-- Employees (Empty State) -->
   <string name="core_ui_employees_empty_title">لم يتم العثور على موظفين.</string>
   <string name="core_ui_employees_empty_message">أضف موظفين لإدارة عملك.</string>
 
   <!-- Permissions -->
-  <string name="core_ui_permissions_text">الصلاحيات</string>
-  <string name="core_ui_permission_admin_text">مدير</string>
-  <string name="core_ui_permission_sales_text">مبيعات</string>
-  <string name="core_ui_permission_none_text">لا يوجد</string>
+  <string name="core_ui_employee_role_text">الصلاحيات</string>
+  <string name="core_ui_employee_role_owner_text">مدير</string>
+  <string name="core_ui_employee_role_manager_text">مبيعات</string>
+  <string name="core_ui_employee_role_cashier_text">لا يوجد</string>
 
   <!-- String Arrays -->
   <string name="core_ui_dialog_cancel_button_text">إلغاء</string>
@@ -118,11 +121,12 @@
   <string name="core_ui_item_reorder_level_label">إعادة ترتيب مستوى الكمية</string>
   <string name="core_ui_item_qty_per_pack_label">الكمية لكل علبة</string>
   <string name="core_ui_item_quantity_format">الكمية: %s</string>
-  <string-array name="core_ui_employee_permissions">
-    <item>@string/core_ui_permission_admin_text</item>
-    <item>@string/core_ui_permission_sales_text</item>
-    <item>@string/core_ui_permission_none_text</item>
+  <string-array name="core_ui_employee_roles">
+    <item>@string/core_ui_employee_role_owner_text</item>
+    <item>@string/core_ui_employee_role_manager_text</item>
+    <item>@string/core_ui_employee_role_cashier_text</item>
   </string-array>
   <string name="core_ui_filter_label">تصفيه</string>
+  <string name="core_ui_error_no_active_session">الرجاء إعادة تسجيل الدخو مرة أخرى</string>
 
 </resources>
