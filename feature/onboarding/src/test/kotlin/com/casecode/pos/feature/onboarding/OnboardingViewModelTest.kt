@@ -22,13 +22,13 @@ import com.casecode.pos.core.domain.usecase.GetOnboardingConfigUseCase
 import com.casecode.pos.core.domain.usecase.ProcessPlanPurchaseUseCase
 import com.casecode.pos.core.domain.usecase.SignOutUseCase
 import com.casecode.pos.core.domain.usecase.StartOwnerSessionUseCase
-import com.casecode.pos.core.model.Country
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Currency
 import com.casecode.pos.core.model.business.PlanLimits
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.model.business.Vertical
+import com.casecode.pos.core.model.data.Country
+import com.casecode.pos.core.model.data.PurchaseResult
 import com.casecode.pos.core.model.users.User
 import com.casecode.pos.core.testing.repository.business.TestAuthRepository
 import com.casecode.pos.core.testing.repository.business.TestBranchRepository
@@ -49,6 +49,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 class OnboardingViewModelTest {
@@ -205,6 +206,17 @@ class OnboardingViewModelTest {
         assertNotNull(uiState.userMessage)
     }
 
+    @Test
+    fun onEvent_whenOpenVisibleDialog__showsIsAddDialogTrue() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher()) { subject.uiState.collect() }
+
+        // Given: A plan with a limit of 1 branch is selected
+        subject.onEvent(OnboardingEvent.SetAddBranchDialogVisibility(true))
+
+        assertTrue {
+            subject.uiState.value.isAddBranchDialogOpen
+        }
+    }
     private fun fillValidBusinessInfo() {
         subject.onEvent(OnboardingEvent.BusinessNameChanged("Test Business"))
         subject.onEvent(OnboardingEvent.BusinessVerticalSelected(Vertical.RETAIL))
