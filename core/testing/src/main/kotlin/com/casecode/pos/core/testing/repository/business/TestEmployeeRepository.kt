@@ -15,41 +15,85 @@
  */
 package com.casecode.pos.core.testing.repository.business
 
+import com.casecode.pos.core.domain.exceptions.EmployeeNameCollisionException
 import com.casecode.pos.core.domain.repository.business.EmployeeRepository
 import com.casecode.pos.core.model.business.Employee
-import com.casecode.pos.core.testing.base.FakeRepository
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.casecode.pos.core.testing.base.TestRepository
+import com.casecode.pos.core.testing.data.employeeTestData
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
-@Singleton
-class TestEmployeeRepository @Inject constructor() : FakeRepository(), EmployeeRepository {
+class TestEmployeeRepository : TestRepository(), EmployeeRepository {
+    private val employeesSharedFlow:
+            MutableSharedFlow<List<Employee>> =
+        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val employees = employeeTestData.toMutableList()
 
-    private val employeesByBusiness = mutableMapOf<String, MutableList<Employee>>()
+    override fun getEmployees(): Flow<List<Employee>> {
+        return employeesSharedFlow
+    }
 
     override suspend fun authenticateEmployee(
         companyCode: String,
         employeeIdentifier: String,
         password: String,
     ): Result<Pair<String, Employee>?> {
-        getFailureResult<Pair<String, Employee>?>()?.let { return it }
-
-        // In a real test, we would look up business by company code first.
-        // For this fake, we can assume the business exists and just find the employee.
-        val foundEmployee = employeesByBusiness.values.flatten()
-            .find { it.employeeId == employeeIdentifier }
-
-        return Result.success(
-            foundEmployee?.let { Pair(it.businessId, it) },
-        )
+        TODO("Not yet implemented")
     }
 
-    fun addEmployee(businessId: String, employee: Employee) {
-        val employeeList = employeesByBusiness.getOrPut(businessId) { mutableListOf() }
-        employeeList.add(employee)
+    override suspend fun createEmployee(
+        employee: Employee,
+        plainTextPassword: String,
+        businessId: String,
+    ): Result<Unit> {
+        if (failureThrowable != null) {
+            return Result.failure(failureThrowable!!)
+        }
+        if (employees.any { it.name == employee.name }) {
+            return Result.failure(
+                EmployeeNameCollisionException("Employee with name ${employee.name} already exists"),
+            )
+        }
+        employees.add(employee)
+        employees.add(employee)
+        employeesSharedFlow.emit(employees)
+        return Result.success(Unit)
     }
 
-    override fun clear() {
-        employeesByBusiness.clear()
-        returnSuccess()
+    override suspend fun updateEmployee(
+        employee: Employee,
+        plainTextPassword: String,
+        businessId: String,
+    ): Result<Unit> {
+        if (failureThrowable != null) {
+            return Result.failure(failureThrowable!!)
+        }
+        val old = employees.find { it.id == employee.id }
+        employees.remove(old)
+        employees.add(employee)
+        employeesSharedFlow.emit(employees)
+        return Result.success(Unit)
+    }
+
+    override suspend fun deleteEmployee(
+        id: String,
+        businessId: String,
+    ): Result<Unit> {
+        if (failureThrowable != null) {
+            return Result.failure(failureThrowable!!)
+        }
+        val old = employees.find { it.id == id }
+        employees.remove(old)
+        employeesSharedFlow.emit(employees)
+        return Result.success(Unit)
+    }
+
+    override suspend fun syncUp(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun syncDown(): Boolean {
+        TODO("Not yet implemented")
     }
 }

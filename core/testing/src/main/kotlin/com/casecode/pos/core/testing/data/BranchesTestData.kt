@@ -13,13 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.employee
+package com.casecode.pos.core.testing.data
 
-import androidx.annotation.StringRes
-import com.casecode.pos.core.domain.repository.old.ResourceEmployees
-import com.casecode.pos.core.domain.utils.Resource
+import com.casecode.pos.core.model.business.Branch
 
-data class UiEmployeesState(
-    val resourceEmployees: ResourceEmployees = Resource.Companion.loading(),
-    @StringRes val userMessage: Int? = null,
+val branchesTestData = listOf(
+    Branch(
+        id = "branch1",
+        name = "Main Branch",
+        phone = "1234567890",
+    ),
+    Branch(
+        id = "branch2",
+        name = "Branch 2",
+        phone = "9876543210",
+    ),
+    Branch(
+        id = "branch3",
+        name = "Branch 3",
+        phone = "5555555555",
+    ),
 )

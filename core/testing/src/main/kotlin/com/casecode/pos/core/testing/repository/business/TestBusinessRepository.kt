@@ -21,7 +21,7 @@ import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
 import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.TaxRate
-import com.casecode.pos.core.testing.base.FakeRepository
+import com.casecode.pos.core.testing.base.TestRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import java.util.UUID
@@ -29,7 +29,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestBusinessRepository @Inject constructor() : FakeRepository(), BusinessRepository {
+class TestBusinessRepository @Inject constructor() : TestRepository(), BusinessRepository {
 
     private val _businessFlow = MutableStateFlow<Business?>(null)
 

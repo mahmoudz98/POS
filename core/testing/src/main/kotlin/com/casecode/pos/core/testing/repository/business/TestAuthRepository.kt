@@ -17,7 +17,7 @@ package com.casecode.pos.core.testing.repository.business
 
 import com.casecode.pos.core.domain.repository.business.AuthRepository
 import com.casecode.pos.core.model.users.User
-import com.casecode.pos.core.testing.base.FakeRepository
+import com.casecode.pos.core.testing.base.TestRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +25,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestAuthRepository @Inject constructor() : FakeRepository(), AuthRepository {
+class TestAuthRepository @Inject constructor() : TestRepository(), AuthRepository {
 
     private val _currentUserFlow = MutableStateFlow<User?>(null)
     override val currentUser: Flow<User?> = _currentUserFlow.asStateFlow()

@@ -17,8 +17,8 @@ package com.casecode.pos.core.testing.services
 
 import android.app.Activity
 import com.casecode.pos.core.domain.service.SubscriptionService
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.SubscriptionPlan
+import com.casecode.pos.core.model.data.PurchaseResult
 
 /**
  * A fake implementation of [SubscriptionService] for use in tests.

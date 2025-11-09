@@ -17,7 +17,7 @@ package com.casecode.pos.core.testing.repository.business
 
 import com.casecode.pos.core.domain.repository.business.BranchRepository
 import com.casecode.pos.core.model.business.Branch
-import com.casecode.pos.core.testing.base.FakeRepository
+import com.casecode.pos.core.testing.base.TestRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,13 +26,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestBranchRepository @Inject constructor() : FakeRepository(), BranchRepository {
+class TestBranchRepository @Inject constructor() : TestRepository(), BranchRepository {
 
-    // An in-memory store for our fake data
     private val branchesByBusiness = mutableMapOf<String, MutableList<Branch>>()
     private val _branchesFlow = MutableStateFlow<List<Branch>>(emptyList())
 
-    override fun getBranches(businessId: String): Flow<List<Branch>> {
+    override fun getBranches(): Flow<List<Branch>> {
         return _branchesFlow.asStateFlow()
     }
 
@@ -68,5 +67,13 @@ class TestBranchRepository @Inject constructor() : FakeRepository(), BranchRepos
         branchesByBusiness.clear()
         _branchesFlow.value = emptyList()
         returnSuccess() // From FakeRepository base class
+    }
+
+    override suspend fun syncUp(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun syncDown(): Boolean {
+        TODO("Not yet implemented")
     }
 }

@@ -17,10 +17,10 @@ package com.casecode.pos.core.testing.repository.business
 
 import com.casecode.pos.core.domain.repository.business.CurrencyRepository
 import com.casecode.pos.core.model.business.Currency
-import com.casecode.pos.core.testing.base.FakeRepository
+import com.casecode.pos.core.testing.base.TestRepository
 import javax.inject.Inject
 
-class TestCurrencyRepository @Inject constructor() : FakeRepository(), CurrencyRepository {
+class TestCurrencyRepository @Inject constructor() : TestRepository(), CurrencyRepository {
 
     private var supportedCurrencies: List<Currency> = emptyList()
 

@@ -19,12 +19,12 @@ import com.casecode.pos.core.domain.repository.business.SubscriptionRepository
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.OnboardingConfig
 import com.casecode.pos.core.model.business.Subscription
-import com.casecode.pos.core.testing.base.FakeRepository
+import com.casecode.pos.core.testing.base.TestRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestSubscriptionRepository @Inject constructor() : FakeRepository(), SubscriptionRepository {
+class TestSubscriptionRepository @Inject constructor() : TestRepository(), SubscriptionRepository {
 
     private var fakeOnboardingConfig = OnboardingConfig(emptyList(), emptyList())
     private val subscriptions = mutableMapOf<String, Subscription>()

@@ -17,13 +17,13 @@ package com.casecode.pos.core.testing.repository.business
 
 import com.casecode.pos.core.domain.repository.business.TaxRepository
 import com.casecode.pos.core.model.business.TaxRate
-import com.casecode.pos.core.testing.base.FakeRepository
+import com.casecode.pos.core.testing.base.TestRepository
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TestTaxRepository @Inject constructor() : FakeRepository(), TaxRepository {
+class TestTaxRepository @Inject constructor() : TestRepository(), TaxRepository {
 
     private val taxRatesByBusiness = mutableMapOf<String, MutableList<TaxRate>>()
 
