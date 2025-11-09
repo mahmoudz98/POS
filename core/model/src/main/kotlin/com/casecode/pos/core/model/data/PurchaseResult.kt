@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model
+package com.casecode.pos.core.model.data
 
 data class PurchaseResult(
     val providerTransactionId: String,

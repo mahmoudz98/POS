@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.model
+package com.casecode.pos.core.model.data
 
 enum class SyncableEntityType {
     BUSINESS,
@@ -25,7 +25,7 @@ enum class SyncableEntityType {
 
     companion object {
         fun fromValue(value: String): SyncableEntityType {
-            return SyncableEntityType.entries.find { it.name == value } ?: BUSINESS
+            return entries.find { it.name == value } ?: BUSINESS
         }
     }
 }
