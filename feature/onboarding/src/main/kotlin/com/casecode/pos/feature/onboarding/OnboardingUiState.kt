@@ -17,14 +17,14 @@ package com.casecode.pos.feature.onboarding
 
 import android.app.Activity
 import androidx.annotation.StringRes
-import com.casecode.pos.core.model.Country
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Currency
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.model.business.TaxRate
 import com.casecode.pos.core.model.business.Vertical
-import com.casecode.pos.core.model.getSupportedCountries
+import com.casecode.pos.core.model.data.Country
+import com.casecode.pos.core.model.data.PurchaseResult
+import com.casecode.pos.core.model.data.getSupportedCountries
 
 /**
  * A data class holding all temporary data collected from the user during the onboarding wizard.
@@ -53,6 +53,7 @@ data class OnboardingData(
  * Represents the entire state of the onboarding screen.
  * This single state object is the source of truth for the UI.
  */
+
 data class OnboardingUiState(
     val currentStep: OnboardingStep = OnboardingStep.BUSINESS_INFO,
     val onboardingData: OnboardingData = OnboardingData(),
@@ -78,8 +79,8 @@ data class OnboardingUiState(
                 onboardingData.phone.isNotBlank()
 
             OnboardingStep.FINANCIALS -> onboardingData.selectedCurrency != null && onboardingData.taxRate != null
-            OnboardingStep.BRANCHES -> onboardingData.branches.isNotEmpty()
             OnboardingStep.SUBSCRIPTION -> onboardingData.selectedPlan != null && paymentResult?.wasSuccessful == true
+            OnboardingStep.BRANCHES -> onboardingData.branches.isNotEmpty()
         }
 }
 

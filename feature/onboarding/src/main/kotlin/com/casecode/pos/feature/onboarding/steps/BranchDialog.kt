@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowDpSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,11 +36,12 @@ import com.casecode.pos.core.ui.BranchDialogContent
 import com.casecode.pos.core.ui.utils.validatePhoneNumber
 import com.casecode.pos.core.ui.R.string as uiString
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 internal fun BranchDialog(
     isoCode: String,
-    onDismissRequest: () -> Unit,
     onAddBranch: (branchName: String, phoneNumber: String) -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
