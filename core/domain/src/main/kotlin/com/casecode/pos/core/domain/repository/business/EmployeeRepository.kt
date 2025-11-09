@@ -15,12 +15,19 @@
  */
 package com.casecode.pos.core.domain.repository.business
 
+import com.casecode.pos.core.domain.utils.Syncable
 import com.casecode.pos.core.model.business.Employee
+import kotlinx.coroutines.flow.Flow
 
-interface EmployeeRepository {
+interface EmployeeRepository : Syncable {
+    fun getEmployees(): Flow<List<Employee>>
     suspend fun authenticateEmployee(
         companyCode: String,
         employeeIdentifier: String,
         password: String,
     ): Result<Pair<String, Employee>?>
+
+    suspend fun createEmployee(employee: Employee, plainTextPassword: String, businessId: String): Result<Unit>
+    suspend fun updateEmployee(employee: Employee, plainTextPassword: String, businessId: String): Result<Unit>
+    suspend fun deleteEmployee(id: String, businessId: String): Result<Unit>
 }

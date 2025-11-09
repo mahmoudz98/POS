@@ -23,6 +23,7 @@ sealed class AppException(message: String) : Exception(message)
 
 class BusinessNotFoundException(message: String) : AppException(message)
 class InvalidCredentialsException(message: String) : AppException(message)
+class NoActiveSessionException() : AppException("")
 
 sealed class AuthException(message: String) : AppException(message)
 class GoogleSignInException(message: String, cause: Throwable? = null) : AuthException(message)
@@ -76,3 +77,6 @@ class PlanNotFoundInProviderException(val planId: String) :
  */
 class InsufficientCreditsException :
     AppException("Operation failed due to insufficient credits.")
+
+class EmployeeNameCollisionException(message: String) :
+    AppException(message)

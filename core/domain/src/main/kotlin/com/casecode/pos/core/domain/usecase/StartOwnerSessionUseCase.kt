@@ -31,7 +31,7 @@ class StartOwnerSessionUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(user: User, businessId: String): Result<Unit> {
         return try {
-            val branches = branchRepository.getBranches(businessId).first()
+            val branches = branchRepository.getBranches().first()
             val initialBranch = branches.firstOrNull()
                 ?: return Result.failure(IllegalStateException("No branches found for new business."))
 

@@ -16,7 +16,6 @@
 package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.exceptions.InvalidCredentialsException
-import com.casecode.pos.core.domain.exceptions.ValidationException
 import com.casecode.pos.core.domain.repository.business.EmployeeRepository
 import com.casecode.pos.core.domain.repository.business.SessionRepository
 import com.casecode.pos.core.domain.service.LogService
@@ -39,8 +38,7 @@ class SignInEmployeeUseCase @Inject constructor(
 
         val (businessId, employee) = resultPair
 
-        val activeBranchId = employee.assignedBranchIds.firstOrNull()
-            ?: throw ValidationException("Employee is not assigned to any branch.")
+        val activeBranchId = employee.assignedBranchId
 
         logService.log("SignInEmployeeUseCase: Employee authenticated: ${employee.id}. Starting session.")
         sessionRepository.startEmployeeSession(businessId, employee, activeBranchId)

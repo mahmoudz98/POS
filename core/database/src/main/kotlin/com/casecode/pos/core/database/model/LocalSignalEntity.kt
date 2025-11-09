@@ -17,7 +17,7 @@ package com.casecode.pos.core.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.SyncableEntityType
+import com.casecode.pos.core.model.data.SyncableEntityType
 import kotlin.time.Clock
 import kotlin.time.Instant
 

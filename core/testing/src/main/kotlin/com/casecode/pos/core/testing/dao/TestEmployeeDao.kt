@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.update
 
 class TestEmployeeDao : EmployeeDao {
 
-    private val entitiesStateFlow = MutableStateFlow<List< EmployeeEntity>>(emptyList())
+    private val entitiesStateFlow = MutableStateFlow<List<EmployeeEntity>>(emptyList())
 
     override suspend fun insertOrReplaceEmployee(employee: EmployeeEntity) {
         entitiesStateFlow.update {
@@ -54,6 +54,5 @@ class TestEmployeeDao : EmployeeDao {
     }
 
     override suspend fun deleteEmployee(id: String) {
-
     }
-        }
+}

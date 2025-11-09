@@ -29,3 +29,9 @@ data class NetworkInboxSignal(
     val entityId: String = "",
     val lastUpdated: Long = 0L,
 )
+enum class EntityType {
+    Business,
+    Branch,
+    TaxRate,
+    Employee,
+}

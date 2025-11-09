@@ -17,7 +17,7 @@ package com.casecode.pos.core.data.repository.old
 
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
-import com.casecode.pos.core.data.model.asEntitySubscriptions
+import com.casecode.pos.core.data.model.old.asEntitySubscriptions
 import com.casecode.pos.core.domain.repository.old.SubscriptionsRepository
 import com.casecode.pos.core.domain.repository.old.SubscriptionsResource
 import com.casecode.pos.core.domain.utils.Resource

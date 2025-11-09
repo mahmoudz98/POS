@@ -56,10 +56,11 @@ class BranchRepositoryImpl @Inject constructor(
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
 ) : BranchRepository {
 
-    override fun getBranches(businessId: String): Flow<List<Branch>> {
+    override fun getBranches(): Flow<List<Branch>> {
         return branchDao.getBranches()
             .map { it.map { branchEntity -> branchEntity.asExternalModel() } }
     }
+
     override suspend fun addBranch(businessId: String, branch: Branch): Result<String> =
         withContext(ioDispatcher) {
             runCatching {
@@ -81,7 +82,7 @@ class BranchRepositoryImpl @Inject constructor(
                     )
 
                     val outboxCommand = OutboxCommandEntity(
-                        type = OutboxEventType.BRANCH_CREATED.ordinal,
+                        type = OutboxEventType.Branch.CREATED,
                         payload = commandPayload,
                         status = OutboxCommandStatus.PENDING,
                     )
@@ -96,19 +97,42 @@ class BranchRepositoryImpl @Inject constructor(
             }
         }
 
-    suspend fun sync(): Boolean = withContext(ioDispatcher) {
+    override suspend fun syncUp(): Boolean = withContext(ioDispatcher) {
         try {
             val unsyncedCommands = outboxCommandDao.getPendingCommands().first()
-            val addBranchCommands = unsyncedCommands.filter { it.type == OutboxEventType.BRANCH_CREATED.ordinal }
+            val addBranchCommands =
+                unsyncedCommands.filter { it.type == OutboxEventType.Branch.CREATED }
 
             addBranchCommands.forEach { command ->
-            /*    val payload = Json.decodeFromString<OutboxPayload.AddBranchPayload>(command.payload)
-                network.addBranch(payload.businessId, payload.branch)
-                outboxCommandDao.updateCommandStatus(
-                    command.id,
-                    OutboxCommandStatus.COMPLETED,
-                    Clock.System.now(),
-                )*/
+                /*    val payload = Json.decodeFromString<OutboxPayload.AddBranchPayload>(command.payload)
+                    network.addBranch(payload.businessId, payload.branch)
+                    outboxCommandDao.updateCommandStatus(
+                        command.id,
+                        OutboxCommandStatus.COMPLETED,
+                        Clock.System.now(),
+                    )*/
+            }
+            true
+        } catch (e: Exception) {
+            logService.log("BranchRepository sync failed: ${e.message}")
+            false
+        }
+    }
+
+    override suspend fun syncDown(): Boolean = withContext(ioDispatcher) {
+        try {
+            val unsyncedCommands = outboxCommandDao.getPendingCommands().first()
+            val addBranchCommands =
+                unsyncedCommands.filter { it.type == OutboxEventType.Branch.CREATED }
+
+            addBranchCommands.forEach { command ->
+                /*    val payload = Json.decodeFromString<OutboxPayload.AddBranchPayload>(command.payload)
+                    network.addBranch(payload.businessId, payload.branch)
+                    outboxCommandDao.updateCommandStatus(
+                        command.id,
+                        OutboxCommandStatus.COMPLETED,
+                        Clock.System.now(),
+                    )*/
             }
             true
         } catch (e: Exception) {

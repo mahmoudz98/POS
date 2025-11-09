@@ -20,18 +20,21 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.casecode.pos.core.database.dao.BranchDao
 import com.casecode.pos.core.database.dao.BusinessDao
+import com.casecode.pos.core.database.dao.EmployeeDao
 import com.casecode.pos.core.database.dao.LocalSignalDao
 import com.casecode.pos.core.database.dao.OutboxCommandDao
 import com.casecode.pos.core.database.dao.SubscriptionDao
 import com.casecode.pos.core.database.dao.TaxRateDao
 import com.casecode.pos.core.database.model.BranchEntity
 import com.casecode.pos.core.database.model.BusinessEntity
+import com.casecode.pos.core.database.model.EmployeeEntity
 import com.casecode.pos.core.database.model.LocalSignalEntity
 import com.casecode.pos.core.database.model.OutboxCommandEntity
 import com.casecode.pos.core.database.model.SubscriptionEntity
 import com.casecode.pos.core.database.model.TaxRateEntity
 import com.casecode.pos.core.database.util.BigDecimalConverter
 import com.casecode.pos.core.database.util.InstantConverter
+import com.casecode.pos.core.database.util.OutBoxEventTypeConverter
 import com.casecode.pos.core.database.util.StringListConverter
 
 @Database(
@@ -42,6 +45,7 @@ import com.casecode.pos.core.database.util.StringListConverter
         TaxRateEntity::class,
         OutboxCommandEntity::class,
         LocalSignalEntity::class,
+        EmployeeEntity::class,
     ],
     version = 1,
     exportSchema = true,
@@ -50,6 +54,7 @@ import com.casecode.pos.core.database.util.StringListConverter
     InstantConverter::class,
     StringListConverter::class,
     BigDecimalConverter::class,
+    OutBoxEventTypeConverter::class,
 )
 abstract class PosDatabase : RoomDatabase() {
     abstract fun businessDao(): BusinessDao
@@ -58,4 +63,5 @@ abstract class PosDatabase : RoomDatabase() {
     abstract fun taxRateDao(): TaxRateDao
     abstract fun outboxCommandDao(): OutboxCommandDao
     abstract fun localSignalDao(): LocalSignalDao
+    abstract fun employeeDao(): EmployeeDao
 }

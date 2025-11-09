@@ -18,9 +18,9 @@ package com.casecode.pos.core.data.repository.old
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.model.asSubscriptionBusiness
-import com.casecode.pos.core.data.model.asSubscriptionBusinessModel
-import com.casecode.pos.core.data.model.asSubscriptionRequest
+import com.casecode.pos.core.data.model.old.asSubscriptionBusiness
+import com.casecode.pos.core.data.model.old.asSubscriptionBusinessModel
+import com.casecode.pos.core.data.model.old.asSubscriptionRequest
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.old.AddSubscriptionBusiness
 import com.casecode.pos.core.domain.repository.old.AuthRepositoryO

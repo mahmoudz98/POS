@@ -13,20 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.sales.report
+package com.casecode.pos.core.domain.usecase
 
-import com.casecode.pos.core.testing.base.BaseTest
-import com.casecode.pos.core.testing.util.MainDispatcherRule
-import org.junit.Rule
+import com.casecode.pos.core.domain.repository.business.BranchRepository
+import javax.inject.Inject
 
-class InvoicesViewModelTest : BaseTest() {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
-
-    // Subject under test
-    private lateinit var viewModel: SalesReportViewModel
-
-    override fun init() {
-        viewModel = SalesReportViewModel(getInvoices)
-    }
+class GetBranchesUseCase @Inject constructor(private val branchRepository: BranchRepository) {
+    operator fun invoke() = branchRepository.getBranches()
 }

@@ -36,9 +36,7 @@ class SignInOwnerUseCase @Inject constructor(
     suspend operator fun invoke(idToken: String): OwnerLoginResult {
         logService.log("SignInOwnerUseCase: Attempting Google Sign-In.")
         val user = authRepository.signInWithGoogle(idToken).getOrNull()
-        if (user == null) {
-            return OwnerLoginResult.AuthenticationFailed
-        }
+            ?: return OwnerLoginResult.AuthenticationFailed
         val business = businessRepository.findBusinessByOwner(user.uid).getOrElse { e ->
             logService.log("SignInOwnerUseCase: Error fetching business: $e")
             if (e is IOException) return OwnerLoginResult.NetworkError
@@ -51,7 +49,7 @@ class SignInOwnerUseCase @Inject constructor(
         }
         logService.log("SignInOwnerUseCase: Business found: ${business.id}. Fetching branches.")
 
-        val branches = branchRepository.getBranches(business.id).firstOrNull()
+        val branches = branchRepository.getBranches().firstOrNull()
 
         if (branches.isNullOrEmpty()) {
             logService.log("SignInOwnerUseCase: Business is active but has no branches. Directing to onboarding to fix.")

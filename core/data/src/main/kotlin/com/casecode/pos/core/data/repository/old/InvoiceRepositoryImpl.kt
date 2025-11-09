@@ -19,8 +19,8 @@ import android.icu.util.Calendar
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.model.asExternalMapper
-import com.casecode.pos.core.data.model.toInvoicesGroup
+import com.casecode.pos.core.data.model.old.asExternalMapper
+import com.casecode.pos.core.data.model.old.toInvoicesGroup
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
 import com.casecode.pos.core.domain.repository.old.InvoiceRepository

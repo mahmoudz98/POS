@@ -1,3 +1,18 @@
+/*
+ * Designed and developed 2024 by Mahmood Abdalhafeez
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.caseocode.pos.core.database
 
 import com.casecode.pos.core.database.model.EmployeeEntity
@@ -8,7 +23,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class EmployeeDaoTest : DatabaseTest() {
-
 
     @Test
     fun getEmployees() = runTest {
@@ -43,7 +57,6 @@ internal class EmployeeDaoTest : DatabaseTest() {
         employeeDao.insertOrReplaceEmployee(newEmployee)
         val savedEmployee = employeeDao.getEmployees().first()
         assertEquals(3, savedEmployee.size)
-
     }
 
     @Test
@@ -65,14 +78,13 @@ internal class EmployeeDaoTest : DatabaseTest() {
         val employeeToDelete = employeeEntities[0]
         employeeDao.deleteEmployee(employeeToDelete.id)
         val savedEmployees = employeeDao.getEmployees().first()
-        assertEquals(2, savedEmployees.size,)
+        assertEquals(2, savedEmployees.size)
     }
 
     private suspend fun insertEmployees() {
         employeeDao.insertOrReplaceEmployee(employeeEntities[0])
         employeeDao.insertOrReplaceEmployee(employeeEntities[1])
         employeeDao.insertOrReplaceEmployee(employeeEntities[2])
-
     }
 
     private val employeeEntities = listOf(

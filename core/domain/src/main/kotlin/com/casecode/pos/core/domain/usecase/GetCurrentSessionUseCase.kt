@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.firebase.datasource
+package com.casecode.pos.core.domain.usecase
 
-import com.casecode.pos.core.model.users.User
+import com.casecode.pos.core.domain.repository.business.SessionRepository
+import com.casecode.pos.core.model.SessionStateResult
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-interface AuthRemoteDataSource {
-    val currentUser: Flow<User?>
-    suspend fun getCurrentUser(): User?
-    suspend fun signInWithGoogle(idToken: String): User
-    suspend fun signOut()
+/**
+ * A use case that provides a stream of the current user's login state.
+ */
+class GetCurrentSessionUseCase @Inject constructor(
+    private val sessionRepository: SessionRepository,
+) {
+    operator fun invoke(): Flow<SessionStateResult> = sessionRepository.sessionInfo
 }

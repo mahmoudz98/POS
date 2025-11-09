@@ -18,7 +18,7 @@ package com.casecode.pos.core.data.repository.business
 import com.casecode.pos.core.datastore.PosPreferencesDataSource
 import com.casecode.pos.core.domain.repository.business.SessionRepository
 import com.casecode.pos.core.firebase.datasource.AuthRemoteDataSource
-import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.model.SessionStateResult
 import com.casecode.pos.core.model.business.Employee
 import com.casecode.pos.core.model.users.User
 import kotlinx.coroutines.flow.Flow
@@ -29,8 +29,7 @@ class SessionRepositoryImpl @Inject constructor(
     private val auth: AuthRemoteDataSource,
     private val prefs: PosPreferencesDataSource,
 ) : SessionRepository {
-    override val loginState: Flow<LoginStateResult> = prefs.sessionData
-
+    override val sessionInfo: Flow<SessionStateResult> = prefs.sessionData
     override suspend fun startOwnerSession(
         user: User,
         isCompleteSetupBusiness: Boolean,
@@ -45,9 +44,13 @@ class SessionRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun startEmployeeSession(businessId: String, employee: Employee, activeBranchId: String) {
+    override suspend fun startEmployeeSession(
+        businessId: String,
+        employee: Employee,
+        activeBranchId: String,
+    ) {
         prefs.saveEmployeeSession(
-            userId = employee.employeeId,
+            userId = employee.id,
             userName = employee.name,
             businessId = businessId,
             activeBranchId = activeBranchId,
@@ -56,7 +59,7 @@ class SessionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun clearSession() {
-        if (loginState.first() is LoginStateResult.OwnerLoggedIn) {
+        if (sessionInfo.first() is SessionStateResult.OwnerLoggedIn) {
             auth.signOut()
         }
         prefs.clearLoginSession()

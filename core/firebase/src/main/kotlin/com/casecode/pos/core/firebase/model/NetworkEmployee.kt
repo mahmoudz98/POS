@@ -16,12 +16,15 @@
 package com.casecode.pos.core.firebase.model
 
 import com.google.firebase.firestore.DocumentId
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class NetworkEmployee(
     @DocumentId val id: String = "",
-    val employeeId: String = "",
     val name: String = "",
     val role: Int = 0,
-    val assignedBranchIds: List<String> = emptyList(),
-    val passwordHash: String = "",
+    val phone: String = "",
+    val assignedBranchIds: String = "",
+    val password: String = "",
+    val isDeleted: Int = 0,
 )

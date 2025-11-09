@@ -35,16 +35,15 @@ import com.casecode.pos.core.database.model.asExternalModel
 import com.casecode.pos.core.database.util.DatabaseTransactionRunner
 import com.casecode.pos.core.domain.repository.business.BusinessRepository
 import com.casecode.pos.core.domain.service.LogService
-import com.casecode.pos.core.domain.utils.Syncable
 import com.casecode.pos.core.firebase.datasource.BusinessNetworkDataSource
 import com.casecode.pos.core.firebase.datasource.InboxNetworkDataSource
 import com.casecode.pos.core.firebase.model.NetworkInboxSignal
-import com.casecode.pos.core.model.SyncableEntityType
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
 import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.TaxRate
+import com.casecode.pos.core.model.data.SyncableEntityType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -65,7 +64,7 @@ class BusinessRepositoryImpl @Inject constructor(
     private val json: Json,
     private val logService: LogService,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-) : BusinessRepository, Syncable {
+) : BusinessRepository {
 
     override suspend fun createInitialBusiness(
         business: Business,
@@ -97,7 +96,7 @@ class BusinessRepositoryImpl @Inject constructor(
                 )
                 outboxCommandDao.insertCommand(
                     OutboxCommandEntity(
-                        type = OutboxEventType.BUSINESS_CREATED.ordinal,
+                        type = OutboxEventType.Business.CREATED,
                         payload = outboxPayload,
                     ),
                 )
@@ -112,10 +111,13 @@ class BusinessRepositoryImpl @Inject constructor(
     override suspend fun findBusinessByOwner(ownerUid: String): Result<Business?> {
         return withContext(ioDispatcher) {
             val localBusiness = businessDao.getBusinessByOwner(ownerUid).first()
+            println("localBusiness:$localBusiness")
             if (localBusiness != null) {
                 Result.success(localBusiness.asExternalModel())
             } else {
                 val networkBusiness = network.findBusinessByOwner(ownerUid)
+                println("networkBusiness:$network")
+
                 if (networkBusiness != null) {
                     val business = networkBusiness.asExternalModel()
                     businessDao.insertOrReplaceBusiness(business.asEntity())
@@ -139,7 +141,7 @@ class BusinessRepositoryImpl @Inject constructor(
         try {
             val pendingCommands = outboxCommandDao.getPendingCommands().first()
             val businessCommands =
-                pendingCommands.filter { it.type == OutboxEventType.BUSINESS_CREATED.ordinal }
+                pendingCommands.filter { it.type == OutboxEventType.Business.CREATED }
 
             businessCommands.forEach { command ->
                 try {

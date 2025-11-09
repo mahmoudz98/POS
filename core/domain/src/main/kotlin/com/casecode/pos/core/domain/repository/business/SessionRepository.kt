@@ -15,14 +15,23 @@
  */
 package com.casecode.pos.core.domain.repository.business
 
-import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.model.SessionStateResult
 import com.casecode.pos.core.model.business.Employee
 import com.casecode.pos.core.model.users.User
 import kotlinx.coroutines.flow.Flow
 
 interface SessionRepository {
-    val loginState: Flow<LoginStateResult>
-    suspend fun startOwnerSession(user: User, isCompleteSetupBusiness: Boolean, branchId: String)
-    suspend fun startEmployeeSession(businessId: String, employee: Employee, activeBranchId: String)
+    val sessionInfo: Flow<SessionStateResult>
+
+    suspend fun startOwnerSession(
+        user: User,
+        isCompleteSetupBusiness: Boolean,
+        branchId: String,
+    )
+    suspend fun startEmployeeSession(
+        businessId: String,
+        employee: Employee,
+        activeBranchId: String,
+    )
     suspend fun clearSession()
 }

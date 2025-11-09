@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 class TestEmployeeRepository : TestRepository(), EmployeeRepository {
     private val employeesSharedFlow:
-            MutableSharedFlow<List<Employee>> =
+        MutableSharedFlow<List<Employee>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val employees = employeeTestData.toMutableList()
 

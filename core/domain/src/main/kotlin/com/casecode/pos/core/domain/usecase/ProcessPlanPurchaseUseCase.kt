@@ -18,8 +18,8 @@ package com.casecode.pos.core.domain.usecase
 import android.app.Activity
 import com.casecode.pos.core.domain.service.LogService
 import com.casecode.pos.core.domain.service.SubscriptionService
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.SubscriptionPlan
+import com.casecode.pos.core.model.data.PurchaseResult
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 

@@ -32,14 +32,3 @@ internal class StringListConverter {
         return stringList.joinToString(separator = ",")
     }
 }
-internal class OutboxEventTypeConverter {
-    @TypeConverter
-    fun fromString(value: OutboxEventType): Int {
-        return 1
-    }
-
-    @TypeConverter
-    fun toString(stringList: Int): OutboxEventType {
-        return OutboxEventType.BRANCH_CREATED
-    }
-}
