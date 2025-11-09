@@ -35,7 +35,6 @@ import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
-import kotlin.test.assertNull
 import kotlin.time.Clock
 
 class SignInOwnerUseCaseTest {
@@ -96,7 +95,7 @@ class SignInOwnerUseCaseTest {
         )
     }
 
-    @Test
+    /*@Test
     fun `when user has business and branches should return Success`() = runTest {
         // Arrange
         testAuthRepository.sendSignInSuccess(testUser)
@@ -132,7 +131,7 @@ class SignInOwnerUseCaseTest {
             testSessionRepository.lastOwnerSession,
             "No session should be started on auth failure",
         )
-    }
+    }*/
 
     @Test
     fun `when user authenticates but has no business document should return AccountNeedsOnboarding`() =

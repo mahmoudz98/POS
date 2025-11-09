@@ -15,12 +15,12 @@
  */
 package com.casecode.pos.core.domain.usecase
 
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.PlanLimits
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.model.business.TaxRate
 import com.casecode.pos.core.model.business.Vertical
+import com.casecode.pos.core.model.data.PurchaseResult
 import com.casecode.pos.core.testing.repository.business.TestBusinessRepository
 import com.casecode.pos.core.testing.services.TestLogService
 import com.casecode.pos.core.testing.util.CoroutinesTestRule
