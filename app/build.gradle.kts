@@ -33,14 +33,17 @@ plugins {
 val keystorePropertiesFile = providers.fileContents(
     isolated.rootProject.projectDirectory.file("keystore.properties")).asText
 
-// 2. Helper function to read properties from environment variables or the properties file.
-//    This prioritizes environment variables, which is ideal for CI/CD environments.
-fun getSigningProperty(key: String): String? {
-   return keystorePropertiesFile.map {
+
+fun getSigningProperty(key: String): String {
+    val envValue = System.getenv(key)
+    if (!envValue.isNullOrEmpty()) {
+        return envValue
+    }
+    return keystorePropertiesFile.map {
         val properties = Properties()
         properties.load(StringReader(it))
-        properties[key]
-    }.orElse("").get() as String
+        properties[key] as String? ?: ""
+    }.orElse("").get()
 }
 
 android {
@@ -54,19 +57,15 @@ android {
     androidResources {
         localeFilters += listOf("en", "ar")
     }
-    val haveReleaseCredentials = getSigningProperty("RELEASE_STORE_FILE") != null &&
-            getSigningProperty("RELEASE_STORE_PASSWORD") != null &&
-            getSigningProperty("RELEASE_KEY_ALIAS") != null &&
-            getSigningProperty("RELEASE_KEY_PASSWORD") != null
+
 
     signingConfigs {
         create("release") {
-            if (haveReleaseCredentials) {
-                storeFile = file(getSigningProperty("RELEASE_STORE_FILE")!!)
+                storeFile = file(getSigningProperty("RELEASE_STORE_FILE"))
                 storePassword = getSigningProperty("RELEASE_STORE_PASSWORD")
                 keyAlias = getSigningProperty("RELEASE_KEY_ALIAS")
                 keyPassword = getSigningProperty("RELEASE_KEY_PASSWORD")
-            }
+
         }
     }
     buildTypes {
@@ -83,11 +82,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            signingConfig = if (haveReleaseCredentials) {
-                signingConfigs.named("release").get()
-            } else {
-                signingConfigs.named("debug").get()
-            }
+            signingConfig = signingConfigs.named("release").get()
             baselineProfile.automaticGenerationDuringBuild = true
         }
     }
