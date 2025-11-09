@@ -21,7 +21,6 @@ import com.casecode.pos.core.database.model.LocalSignalStatus
 import com.casecode.pos.core.database.model.OutboxCommandEntity
 import com.casecode.pos.core.database.model.OutboxEventType
 import com.casecode.pos.core.firebase.TimestampSerializer
-import com.casecode.pos.core.model.SyncableEntityType
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
@@ -31,6 +30,7 @@ import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.model.business.TaxRate
 import com.casecode.pos.core.model.business.Vertical
+import com.casecode.pos.core.model.data.SyncableEntityType
 import com.casecode.pos.core.testing.dao.TestBranchDao
 import com.casecode.pos.core.testing.dao.TestBusinessDao
 import com.casecode.pos.core.testing.dao.TestLocalSignalDao
@@ -129,7 +129,7 @@ class BusinessRepositoryImplTest {
         // Verify command queuing
         assertEquals(1, outboxCommandDao.insertedCommands.size)
         assertEquals(
-            OutboxEventType.BUSINESS_CREATED.ordinal,
+            OutboxEventType.Business.CREATED,
             outboxCommandDao.insertedCommands.first().type,
         )
     }
@@ -177,7 +177,7 @@ class BusinessRepositoryImplTest {
         )
         val command = OutboxCommandEntity(
             id = 1,
-            type = OutboxEventType.BUSINESS_CREATED.ordinal,
+            type = OutboxEventType.Business.CREATED,
             payload = payload,
         )
         outboxCommandDao.insertCommand(command)
