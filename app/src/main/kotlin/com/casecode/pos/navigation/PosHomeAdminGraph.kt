@@ -104,7 +104,7 @@ fun NavGraphBuilder.homeAdminGraph(
                 appState.navController.navigateToSignOut()
             },
         )
-        employeesScreen(onShowSnackbar = {onShowSnackbar(it, null)})
+        employeesScreen(onShowSnackbar = { onShowSnackbar(it, null) })
         signOutDialog(
             onSignOut = {
                 appState.signOut()
