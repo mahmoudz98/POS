@@ -37,7 +37,7 @@ sealed interface EmployeeEvent {
     object CreationEmployeeOpened : EmployeeEvent
     data class UpdatingEmployeeOpened(val employee: Employee) : EmployeeEvent
     object EmployeeFormClosed : EmployeeEvent
-    data class DeletingEmployeeOpened(val employee:Employee) : EmployeeEvent
+    data class DeletingEmployeeOpened(val employee: Employee) : EmployeeEvent
     object DeletingEmployeeClosed : EmployeeEvent
     object UserMessageShown : EmployeeEvent
 }

@@ -59,7 +59,7 @@ internal data class EmployeeFormUiState(
     fun isValid(): Boolean {
         return formErrors.run {
             this.nameError == null && this.passwordError == null &&
-                    this.phoneError == null && this.assignedBranchesError == null
+                this.phoneError == null && this.assignedBranchesError == null
         }
     }
 }

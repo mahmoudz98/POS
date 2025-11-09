@@ -143,7 +143,7 @@ internal class EmployeeViewModel @Inject constructor(
             is EmployeeFormEvent.EmployeeBranchAssigned -> updateAssignedBranches(
                 event.branchId,
 
-                )
+            )
 
             is EmployeeFormEvent.EmployeeRoleChanged -> updateEmployeeFormState {
                 it.copy(
@@ -178,7 +178,7 @@ internal class EmployeeViewModel @Inject constructor(
                 role = formState.role,
                 assignedBranchId = formState.assignedBranchId,
 
-                )
+            )
             val result = if (isUpdate) {
                 updateEmployeeUseCase(
                     employee,
@@ -217,7 +217,7 @@ internal class EmployeeViewModel @Inject constructor(
                         )
                     }
                 }
-                is EmployeeNameCollisionException ->{
+                is EmployeeNameCollisionException -> {
                     _uiState.update { state ->
                         state.copy(
                             userMessage = uiString.core_ui_error_employee_name_duplicate,
@@ -233,34 +233,32 @@ internal class EmployeeViewModel @Inject constructor(
                                 uiString.core_ui_error_add_employee_message
                             },
 
-                            )
+                        )
                     }
                 }
             }
         }
     }
-        fun deleteEmployee() {
-            viewModelScope.launch {
-                val employee = _uiState.value.employeeSelected
-                if (employee == null) {
-                    _uiState.update { it.copy(userMessage = uiString.core_ui_error_unknown) }
-                    return@launch
-                }
-                deleteEmployeeUseCase(employee.id).onSuccess {
-                    _uiState.update { it.copy(userMessage = uiString.core_ui_success_delete_employee_message) }
-
-                }.onFailure {
-                    _uiState.update { it.copy(userMessage = uiString.core_ui_error_delete_employee_message) }
-
-                }
-                onEvent(EmployeeEvent.EmployeeFormClosed)
-                _uiState.update { it.copy(employeeSelected = null) }
+    fun deleteEmployee() {
+        viewModelScope.launch {
+            val employee = _uiState.value.employeeSelected
+            if (employee == null) {
+                _uiState.update { it.copy(userMessage = uiString.core_ui_error_unknown) }
+                return@launch
             }
-        }
-
-        private fun updateEmployeeFormState(updateAction: (EmployeeFormUiState) -> EmployeeFormUiState) {
-            _employeeFormUiState.updateWithViewModelScope { currentState ->
-                updateAction(currentState)
+            deleteEmployeeUseCase(employee.id).onSuccess {
+                _uiState.update { it.copy(userMessage = uiString.core_ui_success_delete_employee_message) }
+            }.onFailure {
+                _uiState.update { it.copy(userMessage = uiString.core_ui_error_delete_employee_message) }
             }
+            onEvent(EmployeeEvent.EmployeeFormClosed)
+            _uiState.update { it.copy(employeeSelected = null) }
         }
     }
+
+    private fun updateEmployeeFormState(updateAction: (EmployeeFormUiState) -> EmployeeFormUiState) {
+        _employeeFormUiState.updateWithViewModelScope { currentState ->
+            updateAction(currentState)
+        }
+    }
+}

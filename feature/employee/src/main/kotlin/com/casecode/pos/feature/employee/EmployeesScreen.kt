@@ -206,16 +206,16 @@ fun EmployeeItem(
             headlineContent = { Text(employee.role.toDisplayString()) },
             supportingContent = { Text(text = employee.phone) },
             colors =
-                ListItemDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                ),
+            ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
             modifier =
-                modifier
-                    .fillMaxWidth()
-                    .combinedClickable(onClick = onItemClick, onLongClick = onItemLongClick),
+            modifier
+                .fillMaxWidth()
+                .combinedClickable(onClick = onItemClick, onLongClick = onItemLongClick),
         )
     }
 }
