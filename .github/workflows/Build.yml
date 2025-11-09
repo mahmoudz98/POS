@@ -79,6 +79,23 @@ jobs:
           # Create a symlink for compatibility
           ln -s /home/runner/.config/.android/debug.keystore /home/runner/.android/debug.keystore
 
+      - name: Setup release keystore
+        env:
+          RELEASE_STORE_FILE_BASE64: ${{ secrets.RELEASE_STORE_FILE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          # Decode and save the release keystore
+          if [ -n "$RELEASE_STORE_FILE_BASE64" ]; then
+            echo "$RELEASE_STORE_FILE_BASE64" | base64 --decode > pos-keystore-release.jks
+            chmod 600 pos-keystore-release.jks
+            ls -la pos-keystore-release.jks
+            echo "Release keystore setup completed"
+          else
+            echo "Release keystore not available, will use debug keystore for signing"
+          fi
+
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
