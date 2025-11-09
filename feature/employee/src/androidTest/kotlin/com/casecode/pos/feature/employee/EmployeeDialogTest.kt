@@ -24,7 +24,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
-import com.casecode.pos.core.model.users.Branch
+import com.casecode.pos.core.model.business.Branch
 import org.junit.Rule
 import kotlin.test.Test
 import com.casecode.pos.core.ui.R.string as uiString
@@ -33,19 +33,19 @@ class EmployeeDialogTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
     val adminPermission by lazy {
-        composeTestRule.activity.getString(uiString.core_ui_permission_admin_text)
+        composeTestRule.activity.getString(uiString.core_ui_employee_role_owner_text)
     }
+    private val branches =
+        listOf(Branch(name = "Branch 1", phone = "1231232"))
 
     @Test
     fun whenEmployeeInputEmpty_thenShowError() {
         composeTestRule.setContent {
-            EmployeeDialog(
+            EmployeeFormDialog(
                 isUpdate = false,
-                employeeUpdate = null,
-                countryIsoCode = "en",
-                branches = listOf(Branch(1, "Branch 1")),
-                onAddEmployee = { _ -> },
-                onUpdateEmployee = { _ -> },
+                uiState = EmployeeFormUiState(),
+                onEvent = { _ -> },
+                branches = branches,
                 onDismiss = {},
             )
         }
@@ -97,15 +97,12 @@ class EmployeeDialogTest {
 
     @Test
     fun whenInputEmployeeValidate_thenAssertErrorValidationNotExist() {
-        val branches = listOf(Branch(1, "Branch 1"))
         composeTestRule.setContent {
-            EmployeeDialog(
+            EmployeeFormDialog(
                 isUpdate = false,
-                employeeUpdate = null,
-                countryIsoCode = "EG",
+                uiState = EmployeeFormUiState(),
+                onEvent = { _ -> },
                 branches = branches,
-                onAddEmployee = {},
-                onUpdateEmployee = {},
                 onDismiss = {},
             )
         }
@@ -129,9 +126,9 @@ class EmployeeDialogTest {
             .performScrollTo()
             .performClick()
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithText(branches[0].branchName).performClick()
+        composeTestRule.onNodeWithText(branches[0].name).performClick()
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_permissions_text))
+            .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_employee_role_text))
             .performScrollTo()
             .performClick()
         composeTestRule.waitForIdle()

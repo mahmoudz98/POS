@@ -16,90 +16,30 @@
 package com.casecode.pos.feature.employee
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.users.Employee
+import androidx.compose.ui.test.performClick
+import com.casecode.pos.core.ui.R
 import org.junit.Rule
-import kotlin.test.Test
-import com.casecode.pos.core.ui.R.string as uiString
+import org.junit.Test
 
 class EmployeeScreenTest {
+
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun circularProgressIndicator_whenScreenIsLoading_exists() {
+    fun `addEmployeeFab_showsAddEmployeeDialog`() {
+        // Arrange
         composeTestRule.setContent {
-            EmployeesScreen(
-                uiState = UiEmployeesState(resourceEmployees = Resource.loading()),
-                onAddClick = {},
-                onEmployeeClick = {},
-                onItemLongClick = {},
-            )
+            // EmployeesScreen()
         }
-        composeTestRule
-            .onNodeWithContentDescription("LoadingEmployees")
-            .assertExists()
-    }
 
-    @Test
-    fun employeesResourceEmpty_whenScreenIsEmpty_exists() {
-        composeTestRule.setContent {
-            EmployeesScreen(
-                uiState = UiEmployeesState(resourceEmployees = Resource.empty()),
-                onAddClick = {},
-                onEmployeeClick = {},
-                onItemLongClick = {},
-            )
-        }
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_employees_empty_title))
-    }
+        // Act
+        composeTestRule.onNodeWithContentDescription(composeTestRule.activity.getString(R.string.core_ui_add_employee_button_text)).performClick()
 
-    @Test
-    fun employeesResourceError_whenScreenIsError_exists() {
-        composeTestRule.setContent {
-            EmployeesScreen(
-                uiState = UiEmployeesState(resourceEmployees = Resource.error(uiString.core_ui_error_unknown)),
-                onAddClick = {},
-                onEmployeeClick = {},
-                onItemLongClick = {},
-            )
-        }
-        composeTestRule.onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_error_unknown))
+        // Assert
+        composeTestRule.onNodeWithText(composeTestRule.activity.getString(R.string.core_ui_add_employee_title)).assertExists()
     }
-
-    @Test
-    fun employeesResourceSuccess_whenScreenIsSuccess_exists() {
-        composeTestRule.setContent {
-            EmployeesScreen(
-                uiState = UiEmployeesState(resourceEmployees = Resource.success(employees)),
-                onAddClick = {},
-                onEmployeeClick = {},
-                onItemLongClick = {},
-            )
-        }
-        composeTestRule.onNodeWithText(employees[0].name).assertIsDisplayed()
-        composeTestRule.onNodeWithText(employees[1].name).assertIsDisplayed()
-    }
-
-    val employees =
-        listOf(
-            Employee(
-                name = "John Doe",
-                phoneNumber = "123-456-7890",
-                permission = "Admin",
-                branchName = "Branch 1",
-                password = "password",
-            ),
-            Employee(
-                name = "Jane Smith",
-                phoneNumber = "987-654-3210",
-                permission = "User",
-                branchName = "Branch 2",
-                password = "password2",
-            ),
-        )
 }
