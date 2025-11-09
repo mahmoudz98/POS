@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.feature.employee
+package com.casecode.pos.feature.employee.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.casecode.pos.feature.employee.EmployeesScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object EmployeesRoute
 
-fun NavGraphBuilder.employeesScreen() {
+fun NavGraphBuilder.employeesScreen(
+    onShowSnackbar: suspend (String) -> Boolean,
+) {
     composable<EmployeesRoute> {
-        EmployeesScreen()
+        EmployeesScreen(onShowSnackbar = onShowSnackbar)
     }
 }
 
-fun NavController.navigateToEmployees(navOptions: NavOptions? = null) = navigate(EmployeesRoute, navOptions)
+fun NavController.navigateToEmployees(navOptions: NavOptions? = null) =
+    navigate(EmployeesRoute, navOptions)

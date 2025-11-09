@@ -27,7 +27,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -36,23 +35,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.casecode.pos.core.designsystem.component.DynamicAsyncQrCodeImage
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.ui.utils.encodeAsBitmap
 
 @Composable
-fun UserAdminQrDialog(
+internal fun UserAdminQrDialog(
     viewModel: EmployeeViewModel = hiltViewModel(),
     onDismiss: () -> Unit,
 ) {
-    val userAdmin = viewModel.currentUid.collectAsStateWithLifecycle()
+ /*   val userAdmin = viewModel.currentUid.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         viewModel.getCurrentUid()
-    }
-    UserAdminQrDialog(userAdmin = userAdmin.value, onDismiss = onDismiss)
+    }*/
+    UserAdminQrDialog(userAdmin = "", onDismiss = onDismiss)
 }
 
 @Composable
