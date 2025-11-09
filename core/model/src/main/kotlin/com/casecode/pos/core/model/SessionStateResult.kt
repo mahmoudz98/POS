@@ -16,7 +16,7 @@
 package com.casecode.pos.core.model
 
 import com.casecode.pos.core.model.business.EmployeeRole
-
+@Deprecated("This is a temporary solution")
 sealed interface LoginStateResultOld {
     data object Loading : LoginStateResultOld
 
@@ -37,11 +37,22 @@ sealed interface LoginStateResultOld {
     data object Error : LoginStateResultOld
 }
 
-sealed interface LoginStateResult {
-    object Loading : LoginStateResult
-    object LoggedOut : LoginStateResult
-    data class OwnerLoggedIn(val businessId: String, val activeBranchId: String) : LoginStateResult
-    data class OwnerOnBoarding(val businessId: String) : LoginStateResult
-    data class EmployeeLoggedIn(val businessId: String, val activeBranchId: String, val role: EmployeeRole) :
-        LoginStateResult
+sealed interface SessionStateResult {
+    object Loading : SessionStateResult
+    data class OwnerOnBoarding(val businessId: String) : SessionStateResult
+    data class OwnerLoggedIn(
+        val businessId: String,
+        val activeBranchId: String,
+        val userId: String,
+        val userName: String,
+    ) : SessionStateResult
+
+    data class EmployeeLoggedIn(
+        val businessId: String,
+        val activeBranchId: String,
+        val userId: String,
+        val userName: String,
+        val role: EmployeeRole,
+    ) : SessionStateResult
+    object None : SessionStateResult
 }
