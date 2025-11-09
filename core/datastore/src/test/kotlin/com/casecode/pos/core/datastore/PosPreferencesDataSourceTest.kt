@@ -16,7 +16,7 @@
 package com.casecode.pos.core.datastore
 
 import com.casecode.pos.core.datastore.test.testSessionPreferencesDataStore
-import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.model.SessionStateResult
 import com.casecode.pos.core.model.business.EmployeeRole
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -46,7 +46,7 @@ class PosPreferencesDataSourceTest {
 
     @Test
     fun shouldGetNotSignInByDefault() = runTest {
-        assertEquals(subject.sessionData.first(), LoginStateResult.LoggedOut)
+        assertEquals(subject.sessionData.first(), SessionStateResult.None)
     }
 
     @Test
@@ -58,7 +58,15 @@ class PosPreferencesDataSourceTest {
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
         )
-        assertEquals(subject.sessionData.first(), LoginStateResult.OwnerLoggedIn("4erwerwe", "sdfsd123"))
+        assertEquals(
+            subject.sessionData.first(),
+            SessionStateResult.OwnerLoggedIn(
+                businessId = "4erwerwe",
+                activeBranchId = "sdfsd123",
+                userId = "213",
+                userName = "dfsf",
+            ),
+        )
     }
 
     @Test
@@ -70,7 +78,7 @@ class PosPreferencesDataSourceTest {
             businessId = "4erwerwe",
             activeBranchId = "sdfsd123",
         )
-        assertEquals(subject.sessionData.first(), LoginStateResult.OwnerOnBoarding("4erwerwe"))
+        assertEquals(subject.sessionData.first(), SessionStateResult.OwnerOnBoarding("4erwerwe"))
     }
 
     @Test
@@ -83,7 +91,7 @@ class PosPreferencesDataSourceTest {
             activeBranchId = "sdfsd123",
         )
         subject.clearLoginSession()
-        assertEquals(subject.sessionData.first(), LoginStateResult.LoggedOut)
+        assertEquals(subject.sessionData.first(), SessionStateResult.None)
     }
 
     @Test
@@ -98,9 +106,11 @@ class PosPreferencesDataSourceTest {
         )
         assertEquals(
             subject.sessionData.first(),
-            LoginStateResult.EmployeeLoggedIn(
+            SessionStateResult.EmployeeLoggedIn(
+                userName = "dfsf",
                 businessId = "4erwerwe",
                 activeBranchId = "sdfsd123",
+                userId = "213",
                 role = EmployeeRole.CASHIER,
             ),
         )
