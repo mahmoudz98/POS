@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowDpSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.casecode.pos.core.designsystem.component.PosTextButton
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun PosDeleteDialog(
     @StringRes titleRes: Int,
@@ -72,6 +74,7 @@ fun PosDeleteDialog(
     )
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun PosDialog(
     @StringRes titleRes: Int,
