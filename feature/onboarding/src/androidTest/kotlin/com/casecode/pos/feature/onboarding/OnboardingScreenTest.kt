@@ -23,13 +23,13 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Currency
 import com.casecode.pos.core.model.business.PlanLimits
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.model.business.TaxRate
 import com.casecode.pos.core.model.business.Vertical
+import com.casecode.pos.core.model.data.PurchaseResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Rule
 import org.junit.Test
