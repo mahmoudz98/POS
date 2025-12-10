@@ -134,6 +134,7 @@ jobs:
 
       - name: Update Graphs
         run: ./gradlew graphUpdate
+        continue-on-error: true
 
       - name: Check Graphs
         id: graphs_verify
@@ -264,6 +265,23 @@ jobs:
         env:
           DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo $DATA | base64 -di > app/google-services.json
+
+      - name: Setup release keystore
+        env:
+          RELEASE_STORE_FILE_BASE64: ${{ secrets.RELEASE_STORE_FILE_BASE64 }}
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          # Decode and save the release keystore
+          if [ -n "$RELEASE_STORE_FILE_BASE64" ]; then
+            echo "$RELEASE_STORE_FILE_BASE64" | base64 --decode > pos-keystore-release.jks
+            chmod 600 pos-keystore-release.jks
+            ls -la pos-keystore-release.jks
+            echo "Release keystore setup completed"
+          else
+            echo "Release keystore not available, will use debug keystore for signing"
+          fi
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
