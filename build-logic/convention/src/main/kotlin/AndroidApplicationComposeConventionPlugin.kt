@@ -3,7 +3,7 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.casecode.pos.configureAndroidCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.the
 
 class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -14,9 +14,7 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.plugin.serialization")
 
             }
-
-            val extension = extensions.getByType<ApplicationExtension>()
-            configureAndroidCompose(extension)
+            configureAndroidCompose(the<ApplicationExtension>())
         }
     }
 }
