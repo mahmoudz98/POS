@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.usecase
+package com.casecode.pos.feature.employee
 
-import com.casecode.pos.core.domain.repository.business.SessionRepository
-import com.casecode.pos.core.model.SessionStateResult
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.ViewModel
+import com.casecode.pos.core.domain.usecase.GetCompanyCodeUseCase
+import com.casecode.pos.core.ui.stateInWhileSubscribed
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
-/**
- * A use case that provides a stream of the current user's login state.
- */
-class GetCurrentSessionUseCase @Inject constructor(
-    private val sessionRepository: SessionRepository,
-) {
-    operator fun invoke(): Flow<SessionStateResult> = sessionRepository.sessionInfo
+@HiltViewModel
+class CompanyCodeViewModel @Inject constructor(
+    getCompanyCodeUseCase: GetCompanyCodeUseCase,
+) : ViewModel() {
+
+    val companyCode: StateFlow<String?> = getCompanyCodeUseCase()
+        .stateInWhileSubscribed(initialValue = null)
 }

@@ -99,6 +99,7 @@ android {
 }
 dependencies {
     implementation(projects.feature.login)
+    implementation(projects.feature.loginEmployee)
     implementation(projects.feature.onboarding)
     implementation(projects.feature.employee)
     implementation(projects.feature.salesReport)

@@ -17,9 +17,20 @@ package com.casecode.pos.core.domain.usecase
 
 import com.casecode.pos.core.domain.repository.business.BranchRepository
 import com.casecode.pos.core.domain.repository.business.SessionRepository
+import com.casecode.pos.core.model.SessionStateResult
 import com.casecode.pos.core.model.users.User
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
+
+/**
+ * A use case that provides a stream of the current user's login state.
+ */
+class GetCurrentSessionUseCase @Inject constructor(
+    private val sessionRepository: SessionRepository,
+) {
+    operator fun invoke(): Flow<SessionStateResult> = sessionRepository.sessionInfo
+}
 
 /**
  * A use case responsible for starting a new owner session immediately after
@@ -31,7 +42,7 @@ class StartOwnerSessionUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(user: User, businessId: String): Result<Unit> {
         return try {
-            val branches = branchRepository.getBranches().first()
+            val branches = branchRepository.getBranches(businessId).first()
             val initialBranch = branches.firstOrNull()
                 ?: return Result.failure(IllegalStateException("No branches found for new business."))
 
