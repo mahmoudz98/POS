@@ -73,6 +73,7 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                         "-opt-in=kotlin.time.ExperimentalTime",
                         "-opt-in=kotlin.uuid.ExperimentalUuidApi",
+                        "-Xexplicit-backing-fields",
                         "-Xannotation-default-target=param-property",
                     ),
             )
