@@ -160,10 +160,30 @@ class BusinessRepositoryImplTest {
     @Test
     fun syncUp_withPendingBusinessCommand_callsNetworkAndPostsSignal() = runTest {
         // Given
-        val business = Business(id = "biz1", name = "Test Cafe", ownerUid = "owner1", vertical = Vertical.CAFE, currencyCode = "USD", status = BusinessStatus.ACTIVE, email = "", phone = "", updatedAt = Clock.System.now(), createdAt = Clock.System.now())
+        val business = Business(
+            id = "biz1",
+            name = "Test Cafe",
+            ownerUid = "owner1",
+            vertical = Vertical.CAFE,
+            currencyCode = "USD",
+            status = BusinessStatus.ACTIVE,
+            email = "",
+            phone = "",
+            updatedAt = Clock.System.now(),
+            createdAt = Clock.System.now(),
+        )
         val branch = Branch(id = "branch1", name = "Main St", phone = "")
         val tax = TaxRate(id = "tax1", name = "VAT", rate = 10.0f)
-        val subscriptionPlan = SubscriptionPlan("plan1", "Basic", "أساسي", emptyList(), true, emptyList(), emptyList(), PlanLimits(1, 1, 1, 1))
+        val subscriptionPlan = SubscriptionPlan(
+            "plan1",
+            "Basic",
+            "أساسي",
+            emptyList(),
+            true,
+            emptyList(),
+            emptyList(),
+            PlanLimits(1, 1, 1, 1),
+        )
         val subscription = Subscription.fromPlan(subscriptionPlan)
         val billingEvent = BillingEvent.forPlanActivation(subscriptionPlan, "USD", "fake_id")
         val payload = json.encodeToString(
@@ -194,7 +214,13 @@ class BusinessRepositoryImplTest {
     fun syncDown_withPendingLocalSignal_fetchesFromNetworkAndUpdatesLocalDb() = runTest {
         // Given
         val ownerId = "owner1"
-        val signal = LocalSignalEntity(id = "22121", entityType = SyncableEntityType.BUSINESS, entityId = ownerId)
+        val entityId = "entity1"
+        val signal = LocalSignalEntity(
+            id = "22121",
+            entityType = SyncableEntityType.BUSINESS,
+            entityId = entityId,
+            businessId = ownerId,
+        )
         localSignalDao.insertSignal(signal)
 
         network.createInitialBusiness(
@@ -211,7 +237,10 @@ class BusinessRepositoryImplTest {
         // Then
         assertTrue(result)
         // Verify the local signal was processed
-        assertEquals(LocalSignalStatus.PROCESSED, localSignalDao.getPendingSignals().first().first().status)
+        assertEquals(
+            LocalSignalStatus.PROCESSED,
+            localSignalDao.getPendingSignals().first().first().status,
+        )
     }
 
     val business = Business(
