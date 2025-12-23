@@ -25,6 +25,8 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import com.casecode.pos.InitialDestinationState
+import com.casecode.pos.feature.login.employee.navigation.loginInEmployeeDialog
+import com.casecode.pos.feature.login.employee.navigation.navigateToLoginEmployee
 import com.casecode.pos.feature.login.navigation.LoginRoute
 import com.casecode.pos.feature.login.navigation.loginScreen
 import com.casecode.pos.feature.onboarding.navigation.OnboardingRoute
@@ -47,7 +49,7 @@ fun PosMainNavHost(
     ) {
         loginScreen(
             onLoginEmployeeClick = {
-                // TODO: show login by employee dialog
+                navController.navigateToLoginEmployee()
             },
             onShowSnackbar = onShowSnackbar,
             enterTransition = {
@@ -71,7 +73,9 @@ fun PosMainNavHost(
                 }
             },
         )
-
+        loginInEmployeeDialog {
+            appState.navController.popBackStack()
+        }
         onboardingScreen(
             onShowSnackbar = { onShowSnackbar(it, null) },
             enterTransition = { flowTransition() },
