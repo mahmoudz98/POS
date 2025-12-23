@@ -10,7 +10,6 @@ import com.casecode.pos.configurePrintApksTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.the
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.powerassert.gradle.PowerAssertGradleExtension
 
@@ -28,6 +27,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = Configuration.TARGET_SDK
+                @Suppress("UnstableApiUsage")
+                testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
             }
             extensions.configure<PowerAssertGradleExtension> {
@@ -36,7 +37,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationAndroidComponentsExtension> {
                 configurePrintApksTask(this)
-                configureBadgingTasks(the<ApplicationExtension>(), this)
+                configureBadgingTasks( this)
             }
         }
     }
