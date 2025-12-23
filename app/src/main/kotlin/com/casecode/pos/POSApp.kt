@@ -20,7 +20,7 @@ import android.content.pm.ApplicationInfo
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy.Builder
 import androidx.compose.runtime.Composer
-import androidx.compose.runtime.ExperimentalComposeRuntimeApi
+import androidx.compose.runtime.tooling.ComposeStackTraceMode
 import com.google.firebase.Firebase
 import com.google.firebase.app
 import com.revenuecat.purchases.LogLevel
@@ -38,8 +38,7 @@ class POSApp : Application() {
         setStrictModePolicy()
         Firebase.app
         setPurchaseConfiguration()
-        @OptIn(ExperimentalComposeRuntimeApi::class)
-        Composer.setDiagnosticStackTraceEnabled(BuildConfig.DEBUG)
+        Composer.setDiagnosticStackTraceMode(if (isDebuggable()) ComposeStackTraceMode.SourceInformation else ComposeStackTraceMode.Auto)
     }
 
     private fun isDebuggable(): Boolean {
@@ -55,6 +54,7 @@ class POSApp : Application() {
     }
 
     private fun setPurchaseConfiguration() {
+        // TODO: replace with hilt :http://revenuecat.com/blog/engineering/hilt-sdk-lifecycle/
         Purchases.logLevel = if (isDebuggable()) LogLevel.DEBUG else LogLevel.INFO
         Purchases.configure(
             PurchasesConfiguration.Builder(this, BuildConfig.revenuecat_id).build(),
