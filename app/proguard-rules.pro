@@ -16,3 +16,9 @@
 
 -dontwarn org.slf4j.impl.StaticLoggerBinder
 -keep class com.revenuecat.purchases.** { *; }
+
+# Fix R8 missing classes errors for iText
+-dontwarn com.itextpdf.bouncycastle.**
+-dontwarn com.itextpdf.bouncycastlefips.**
+-dontwarn java.awt.**
+-dontwarn javax.imageio.**
