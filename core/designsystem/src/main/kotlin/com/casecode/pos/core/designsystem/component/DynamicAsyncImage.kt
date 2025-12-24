@@ -17,6 +17,7 @@ package com.casecode.pos.core.designsystem.component
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -32,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -55,19 +55,18 @@ fun DynamicAsyncImage(
     imageUrl: String?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    placeholder: Painter = painterResource(R.drawable.core_designsystem_ic_placeholder),
+    @DrawableRes placeholder: Int = R.drawable.core_designsystem_ic_placeholder,
 ) {
     val iconTint = LocalTintTheme.current.iconTint
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
-    val imageLoader =
-        rememberAsyncImagePainter(
-            model = imageUrl,
-            onState = { state ->
-                isLoading = state is Loading
-                isError = state is Error
-            },
-        )
+    val imageLoader = rememberAsyncImagePainter(
+        model = imageUrl,
+        onState = { state ->
+            isLoading = state is Loading
+            isError = state is Error
+        },
+    )
     val isLocalInspection = LocalInspectionMode.current
     Box(
         modifier = modifier,
@@ -76,8 +75,7 @@ fun DynamicAsyncImage(
         if (isLoading && !isLocalInspection) {
             // Display a progress bar while loading
             CircularProgressIndicator(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .align(Alignment.Center)
                     .size(64.dp),
                 color = MaterialTheme.colorScheme.tertiary,
@@ -85,7 +83,11 @@ fun DynamicAsyncImage(
         }
         Image(
             contentScale = ContentScale.Crop,
-            painter = if (isError.not() && !isLocalInspection) imageLoader else placeholder,
+            painter = if (isError.not() && !isLocalInspection) {
+                imageLoader
+            } else {
+                painterResource(placeholder)
+            },
             contentDescription = contentDescription,
             colorFilter = if (iconTint != Unspecified) ColorFilter.tint(iconTint) else null,
         )
@@ -97,19 +99,18 @@ fun DynamicAsyncQrCodeImage(
     data: Bitmap?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    placeholder: Painter = painterResource(R.drawable.core_designsystem_ic_placeholder),
+    @DrawableRes placeholder: Int = R.drawable.core_designsystem_ic_placeholder,
 ) {
     val iconTint = LocalTintTheme.current.iconTint
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
-    val imageLoader =
-        rememberAsyncImagePainter(
-            model = data,
-            onState = { state ->
-                isLoading = state is Loading
-                isError = state is Error
-            },
-        )
+    val imageLoader = rememberAsyncImagePainter(
+        model = data,
+        onState = { state ->
+            isLoading = state is Loading
+            isError = state is Error
+        },
+    )
     val isLocalInspection = LocalInspectionMode.current
     Box(
         modifier = modifier,
@@ -118,8 +119,7 @@ fun DynamicAsyncQrCodeImage(
         if (isLoading && !isLocalInspection) {
             // Display a progress bar while loading
             CircularProgressIndicator(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .align(Alignment.Center)
                     .size(64.dp),
                 color = MaterialTheme.colorScheme.tertiary,
@@ -127,7 +127,13 @@ fun DynamicAsyncQrCodeImage(
         }
         Image(
             contentScale = ContentScale.Crop,
-            painter = if (isError.not() && !isLocalInspection) imageLoader else placeholder,
+            painter = if (isError.not() && !isLocalInspection) {
+                imageLoader
+            } else {
+                painterResource(
+                    placeholder,
+                )
+            },
             contentDescription = contentDescription,
             colorFilter = if (iconTint != Unspecified) ColorFilter.tint(iconTint) else null,
         )
@@ -149,23 +155,22 @@ fun DynamicAsyncImage(
     imageUrl: Uri,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    placeholder: Painter = painterResource(R.drawable.core_designsystem_ic_placeholder),
+    @DrawableRes placeholder: Int = R.drawable.core_designsystem_ic_placeholder,
     onSuccess: (Bitmap?) -> Unit,
 ) {
     val iconTint = LocalTintTheme.current.iconTint
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
-    val imageLoader =
-        rememberAsyncImagePainter(
-            model = imageUrl,
-            onState = { state ->
-                isLoading = state is Loading
-                isError = state is Error
-                if (state is Success) {
-                    onSuccess(state.result.drawable.toBitmap())
-                }
-            },
-        )
+    val imageLoader = rememberAsyncImagePainter(
+        model = imageUrl,
+        onState = { state ->
+            isLoading = state is Loading
+            isError = state is Error
+            if (state is Success) {
+                onSuccess(state.result.drawable.toBitmap())
+            }
+        },
+    )
     val isLocalInspection = LocalInspectionMode.current
     Box(
         modifier = modifier,
@@ -174,8 +179,7 @@ fun DynamicAsyncImage(
         if (isLoading && !isLocalInspection) {
             // Display a progress bar while loading
             CircularProgressIndicator(
-                modifier =
-                Modifier
+                modifier = Modifier
                     .align(Alignment.Center)
                     .size(64.dp),
                 color = MaterialTheme.colorScheme.tertiary,
@@ -183,7 +187,11 @@ fun DynamicAsyncImage(
         }
         Image(
             contentScale = ContentScale.Crop,
-            painter = if (isError.not() && !isLocalInspection) imageLoader else placeholder,
+            painter = if (isError.not() && !isLocalInspection) {
+                imageLoader
+            } else {
+                painterResource(placeholder)
+            },
             contentDescription = contentDescription,
             colorFilter = if (iconTint != Unspecified) ColorFilter.tint(iconTint) else null,
         )
@@ -203,17 +211,16 @@ fun DynamicAsyncImage(
     if (imageUrl != null && imageUrl != Uri.EMPTY) {
         var isLoading by remember { mutableStateOf(true) }
         var isError by remember { mutableStateOf(false) }
-        val imageLoader =
-            rememberAsyncImagePainter(
-                model = imageUrl,
-                onState = { state ->
-                    isLoading = state is Loading
-                    isError = state is Error
-                    if (state is Success) {
-                        onSuccess(state.result.drawable.toBitmap())
-                    }
-                },
-            )
+        val imageLoader = rememberAsyncImagePainter(
+            model = imageUrl,
+            onState = { state ->
+                isLoading = state is Loading
+                isError = state is Error
+                if (state is Success) {
+                    onSuccess(state.result.drawable.toBitmap())
+                }
+            },
+        )
         val isLocalInspection = LocalInspectionMode.current
         Box(modifier = modifier) {
             if (isLoading && !isLocalInspection) {
