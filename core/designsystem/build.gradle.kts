@@ -23,8 +23,6 @@ plugins {
 
 android {
     namespace = "$APPLICATION_ID.core.designsystem"
-    testOptions.unitTests.isIncludeAndroidResources = true
-
 }
 
 dependencies {
