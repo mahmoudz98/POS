@@ -17,6 +17,7 @@ package com.casecode.pos.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.casecode.pos.core.database.model.EmployeeEntity
@@ -24,21 +25,24 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EmployeeDao {
-    @Insert
+    @Query("SELECT * FROM employees WHERE is_active = 0 ")
+    fun getEmployees(): Flow<List<EmployeeEntity>>
+
+    @Query("SELECT * FROM employees WHERE business_id = :businessId   AND id = :identifier  LIMIT 1")
+    suspend fun getEmployeeById(identifier: String, businessId: String): EmployeeEntity?
+
+    @Query("SELECT MAX(CAST(id AS INTEGER)) FROM employees ")
+    suspend fun getHighestEmployeeId(): Int?
+
+    @Query("SELECT EXISTS(SELECT 1 FROM employees WHERE id = :id)")
+    suspend fun employeeExists(id: String): Boolean
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrReplaceEmployee(employee: EmployeeEntity)
 
     @Update
     suspend fun updateEmployees(vararg employees: EmployeeEntity)
 
-    @Query("SELECT * FROM employee WHERE is_deleted = 0")
-    fun getEmployees(): Flow<List<EmployeeEntity>>
-
-    @Query("SELECT * FROM employee WHERE id = :id and is_deleted = 0")
-    suspend fun getEmployeeById(id: String): EmployeeEntity?
-
-    @Query("SELECT * FROM employee WHERE name = :name and is_deleted = 0")
-    suspend fun getEmployeeByName(name: String): EmployeeEntity?
-
-    @Query("UPDATE employee SET is_deleted = 1 WHERE id = :id")
-    suspend fun deleteEmployee(id: String)
+    @Query("UPDATE employees SET is_active = 1 WHERE id = :id AND business_id = :businessId")
+    suspend fun deleteEmployee(id: String, businessId: String)
 }
