@@ -29,8 +29,10 @@ import kotlin.time.Instant
 data class LocalSignalEntity(
     @PrimaryKey
     val id: String,
+    val businessId: String,
     val entityType: SyncableEntityType,
     val entityId: String,
+    val operationType: String,
     val status: Int = LocalSignalStatus.PENDING,
     val createdAt: Instant = Clock.System.now(),
 )
