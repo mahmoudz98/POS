@@ -43,7 +43,7 @@ data class BusinessEntity(
     @PrimaryKey
     val businessId: String,
     val name: String,
-    @ColumnInfo("owner_uid")val ownerUid: String,
+    @ColumnInfo("owner_uid") val ownerUid: String,
     val vertical: Int,
     val companyCode: String,
     val currencyCode: String,
