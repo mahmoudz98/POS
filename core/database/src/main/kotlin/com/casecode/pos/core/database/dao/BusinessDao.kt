@@ -31,4 +31,10 @@ interface BusinessDao {
 
     @Query("SELECT * FROM business WHERE owner_uid = :ownerUid LIMIT 1")
     fun getBusinessByOwner(ownerUid: String): Flow<BusinessEntity?>
+
+    @Query("SELECT * FROM business WHERE companyCode = :companyCode LIMIT 1")
+    suspend fun getBusinessByCompanyCode(companyCode: String): BusinessEntity?
+
+    @Query("DELETE FROM business WHERE businessId = :businessId")
+    suspend fun deleteBusiness(businessId: String)
 }
