@@ -32,13 +32,11 @@ dependencies {
     api(projects.core.common)
     api(projects.core.datastore)
     implementation(projects.core.database)
-
     implementation(projects.core.firebase)
     implementation(projects.core.analytics)
     implementation(libs.googleid)
-    implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.firebase.crashlytics)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.services)
     implementation(libs.androidx.credentials)
