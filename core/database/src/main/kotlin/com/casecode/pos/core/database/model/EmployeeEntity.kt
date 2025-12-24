@@ -21,18 +21,18 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.casecode.pos.core.model.business.Employee
 import com.casecode.pos.core.model.business.EmployeeRole
-import kotlin.uuid.Uuid
 
-@Entity(tableName = "employee", indices = [Index(value = ["name"], unique = true)])
+@Entity(tableName = "employees", indices = [Index(value = ["id", "business_id"], unique = true)])
 data class EmployeeEntity(
     @PrimaryKey
-    val id: String = Uuid.random().toString(),
+    val id: String,
     val name: String,
     val password: String,
     val phone: String,
     val role: Int,
+    @ColumnInfo(name = "business_id") val businessId: String,
     @ColumnInfo(name = "assigned_branch_id") val assignedBranchId: String,
-    @ColumnInfo(name = "is_deleted") val isDeleted: Int = 0,
+    @ColumnInfo(name = "is_active") val isActive: Int = 0,
 )
 
 fun EmployeeEntity.asExternalModel(): Employee {
@@ -45,21 +45,14 @@ fun EmployeeEntity.asExternalModel(): Employee {
     )
 }
 
-fun Employee.asEntity(hashedPassword: String): EmployeeEntity {
+fun Employee.asEntity(hashedPassword: String, businessId: String): EmployeeEntity {
     return EmployeeEntity(
+        id = this.id,
         name = this.name,
         role = this.role.ordinal,
         password = hashedPassword,
         phone = this.phone,
-        assignedBranchId = this.assignedBranchId,
-    )
-}
-fun Employee.asEntity(): EmployeeEntity {
-    return EmployeeEntity(
-        name = this.name,
-        role = this.role.ordinal,
-        password = "",
-        phone = this.phone,
+        businessId = businessId,
         assignedBranchId = this.assignedBranchId,
     )
 }
