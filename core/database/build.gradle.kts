@@ -28,13 +28,11 @@ android {
 
 dependencies {
     api(projects.core.model)
-
     implementation(libs.kotlinx.datetime)
-
     ksp(libs.room.compiler)
-
     androidTestImplementation(projects.core.testing)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.coroutines.test)
+    androidTestImplementation(libs.turbine)
 }
