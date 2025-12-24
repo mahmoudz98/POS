@@ -37,6 +37,6 @@ interface TaxRateDao {
      * Retrieves all [TaxRateEntity] as a [Flow].
      * @return A [Flow] emitting a list of [TaxRateEntity].
      */
-    @Query("SELECT * FROM tax_rate")
+    @Query("SELECT * FROM tax_rates")
     fun getTaxRates(): Flow<List<TaxRateEntity>>
 }
