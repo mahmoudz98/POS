@@ -23,66 +23,67 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
 import androidx.core.content.getSystemService
+import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
-import timber.log.Timber
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class ConnectivityManagerNetworkMonitor @Inject constructor(
     @ApplicationContext private val context: Context,
+    @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : NetworkMonitor {
-    override val isOnline: Flow<Boolean> =
-        callbackFlow {
-            val connectivityManager = context.getSystemService<ConnectivityManager>()
-            if (connectivityManager == null) {
-                channel.trySend(false)
-                channel.close()
-                return@callbackFlow
-            }
-            /**
-             * The callback's methods are invoked on changes to *any* network matching the [NetworkRequest],
-             * not just the active network. So we can simply track the presence (or absence) of such [Network].
-             */
-            val callback =
-                object : NetworkCallback() {
-                    private val networks = mutableSetOf<Network>()
+    override val isOnline: Flow<Boolean> = callbackFlow {
+        val connectivityManager = context.getSystemService<ConnectivityManager>()
+        if (connectivityManager == null) {
+            channel.trySend(false)
+            channel.close()
+            return@callbackFlow
+        }
+        /**
+         * The callback's methods are invoked on changes to *any* network matching the [NetworkRequest],
+         * not just the active network. So we can simply track the presence (or absence) of such [Network].
+         */
+        val callback =
+            object : NetworkCallback() {
+                private val networks = mutableSetOf<Network>()
 
-                    override fun onAvailable(network: Network) {
-                        networks += network
-                        channel.trySend(true)
-                    }
-
-                    override fun onLost(network: Network) {
-                        networks -= network
-                        channel.trySend(networks.isNotEmpty())
-                    }
+                override fun onAvailable(network: Network) {
+                    networks += network
+                    channel.trySend(true)
                 }
-            val request =
-                Builder()
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-                    .build()
-            connectivityManager.registerNetworkCallback(request, callback)
-            /**
-             * Sends the latest connectivity status to the underlying channel.
-             */
-            channel.trySend(connectivityManager.isCurrentlyConnected())
 
-            awaitClose {
-                connectivityManager.unregisterNetworkCallback(callback)
-                Timber.d("close connectivity manager")
+                override fun onLost(network: Network) {
+                    networks -= network
+                    channel.trySend(networks.isNotEmpty())
+                }
             }
-        }.conflate()
+        val request =
+            Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                .build()
+        connectivityManager.registerNetworkCallback(request, callback)
+
+        /**
+         * Sends the latest connectivity status to the underlying channel.
+         */
+        channel.trySend(connectivityManager.isCurrentlyConnected())
+
+        awaitClose {
+            connectivityManager.unregisterNetworkCallback(callback)
+        }
+    }.flowOn(ioDispatcher)
+        .conflate()
 
     private fun ConnectivityManager.isCurrentlyConnected(): Boolean {
-        val capabilities =
-            this.getNetworkCapabilities(
-                this.activeNetwork,
-            )
+        val capabilities = this.getNetworkCapabilities(activeNetwork)
         return capabilities != null &&
             (
                 capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
