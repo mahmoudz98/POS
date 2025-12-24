@@ -26,11 +26,31 @@ fun NetworkEmployee.asExternalModel(): Employee = Employee(
     phone = phone,
     role = EmployeeRole.fromInt(this.role),
     assignedBranchId = this.assignedBranchIds,
+
+)
+fun NetworkEmployee.asEntity(businessId: String): EmployeeEntity = EmployeeEntity(
+    id = this.id,
+    name = this.name,
+    phone = phone,
+    role = this.role,
+    password = this.password,
+    businessId = businessId,
+    assignedBranchId = this.assignedBranchIds,
 )
 fun EmployeeEntity.asNetworkModel(): NetworkEmployee = NetworkEmployee(
     id = this.id,
     name = this.name,
     role = this.role,
+    phone = this.phone,
     assignedBranchIds = this.assignedBranchId,
     password = this.password,
+)
+
+fun Employee.asNetworkModel(hashedPassword: String): NetworkEmployee = NetworkEmployee(
+    id = this.id,
+    name = this.name,
+    role = this.role.ordinal,
+    phone = this.phone,
+    assignedBranchIds = this.assignedBranchId,
+    password = hashedPassword,
 )
