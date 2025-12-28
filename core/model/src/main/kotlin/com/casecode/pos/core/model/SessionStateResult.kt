@@ -16,7 +16,6 @@
 package com.casecode.pos.core.model
 
 import com.casecode.pos.core.model.business.EmployeeRole
-@Deprecated("This is a temporary solution")
 sealed interface LoginStateResultOld {
     data object Loading : LoginStateResultOld
 
