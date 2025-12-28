@@ -16,6 +16,7 @@
 package com.casecode.pos.core.model.business
 
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Instant
 
 data class Subscription(
@@ -37,7 +38,7 @@ data class Subscription(
                 planName = plan.nameEn,
                 status = if (trialEndDate != null) SubscriptionStatus.TRIAL else SubscriptionStatus.ACTIVE,
                 creditBalance = plan.limits.initialCredits,
-                currentPeriodEndDate = trialEndDate ?: Clock.System.now(),
+                currentPeriodEndDate = trialEndDate ?: (Clock.System.now() + 30.days),
                 updatedAt = Clock.System.now(),
             )
         }
