@@ -308,8 +308,8 @@ constructor(
                     initialBranches = data.branches,
                     initialTaxRate = data.taxRate!!,
                 )
-            createBusinessUseCase(useCaseData).onSuccess { businessId ->
-                startOwnerSessionUseCase(owner, businessId).onSuccess {
+            createBusinessUseCase(useCaseData).onSuccess {
+                startOwnerSessionUseCase(owner).onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                 }.onFailure {
                     _uiState.update {
