@@ -40,16 +40,19 @@ class StartOwnerSessionUseCase @Inject constructor(
     private val sessionRepository: SessionRepository,
     private val branchRepository: BranchRepository,
 ) {
-    suspend operator fun invoke(user: User, businessId: String): Result<Unit> {
+    suspend operator fun invoke(
+        user: User,
+        branchId: String = "",
+    ): Result<Unit> {
         return try {
-            val branches = branchRepository.getBranches(businessId).first()
-            val initialBranch = branches.firstOrNull()
-                ?: return Result.failure(IllegalStateException("No branches found for new business."))
-
+            val id = branchId.ifEmpty {
+                branchRepository.getBranches(user.uid).first().firstOrNull()?.id
+                    ?: return Result.failure(IllegalStateException("No branches found for new business."))
+            }
             sessionRepository.startOwnerSession(
                 user = user,
                 isCompleteSetupBusiness = true,
-                branchId = initialBranch.id,
+                branchId = id,
             )
             Result.success(Unit)
         } catch (e: Exception) {
