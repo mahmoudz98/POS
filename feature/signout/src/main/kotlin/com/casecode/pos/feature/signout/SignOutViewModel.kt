@@ -17,9 +17,9 @@ package com.casecode.pos.feature.signout
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
+import com.casecode.pos.core.domain.usecase.GetCurrentSessionUseCase
 import com.casecode.pos.core.domain.usecase.SignOutUseCase
-import com.casecode.pos.core.model.users.User
+import com.casecode.pos.core.model.SessionStateResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -33,14 +33,14 @@ class SignOutViewModel
 @Inject
 constructor(
     private val signOutUseCase: SignOutUseCase,
-    authRepositoryO: AuthRepositoryO,
+    getCurrentSessionUseCase: GetCurrentSessionUseCase,
 ) : ViewModel() {
-    val userUiState: StateFlow<User?> =
-        authRepositoryO.currentUser
+    val uiState: StateFlow<SessionStateResult> =
+        getCurrentSessionUseCase()
             .stateIn(
                 scope = viewModelScope,
-                initialValue = null,
-                started = SharingStarted.WhileSubscribed(1_000),
+                initialValue = SessionStateResult.Loading,
+                started = SharingStarted.WhileSubscribed(5_000),
             )
 
     fun signOut(): Deferred<Unit> = viewModelScope.async {
