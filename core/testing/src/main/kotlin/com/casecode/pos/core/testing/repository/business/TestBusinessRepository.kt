@@ -19,18 +19,33 @@ import com.casecode.pos.core.domain.repository.business.BusinessRepository
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
+import com.casecode.pos.core.model.business.BusinessStatus
 import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.TaxRate
+import com.casecode.pos.core.model.business.Vertical
 import com.casecode.pos.core.testing.base.TestRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.time.Clock
 
 @Singleton
 class TestBusinessRepository @Inject constructor() : TestRepository(), BusinessRepository {
-
+    val testBusiness = Business(
+        id = "business123",
+        name = "Test Business",
+        ownerUid = "owner123",
+        vertical = Vertical.RETAIL,
+        companyCode = "bus-BUBU",
+        currencyCode = "USD",
+        status = BusinessStatus.ACTIVE,
+        email = "test@business.com",
+        phone = "1234567890",
+        updatedAt = Clock.System.now(),
+        createdAt = Clock.System.now(),
+    )
     private val _businessFlow = MutableStateFlow<Business?>(null)
 
     override suspend fun createInitialBusiness(
@@ -57,13 +72,13 @@ class TestBusinessRepository @Inject constructor() : TestRepository(), BusinessR
         return Result.success(_businessFlow.value)
     }
 
-    override suspend fun companyCodeExists(companyCode: String): Result<Boolean> {
-        getFailureResult<Boolean>()?.let { return it }
+    override suspend fun getBusinessByCompanyCode(companyCode: String): Result<Business?> {
+        getFailureResult<Business?>()?.let { return it }
         val exists = _businessFlow.first().takeIf { it?.companyCode == companyCode }
-        return Result.success(exists != null)
+        return Result.success(exists)
     }
 
-    fun addBusiness(business: Business) {
+    infix fun addBusiness(business: Business?) {
         _businessFlow.value = business
     }
 
