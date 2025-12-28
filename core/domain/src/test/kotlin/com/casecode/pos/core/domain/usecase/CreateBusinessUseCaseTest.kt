@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.core.domain.usecase
 
+import com.casecode.pos.core.domain.exceptions.ValidationException
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.PlanLimits
 import com.casecode.pos.core.model.business.SubscriptionPlan
@@ -28,6 +29,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class CreateBusinessUseCaseTest {
@@ -37,7 +41,6 @@ class CreateBusinessUseCaseTest {
 
     private lateinit var createBusinessUseCase: CreateBusinessUseCase
 
-    // Helper test data
     private val testPlan = SubscriptionPlan(
         id = "plan_1",
         nameEn = "Basic",
@@ -60,7 +63,7 @@ class CreateBusinessUseCaseTest {
     }
 
     @Test
-    fun `createBusiness with empty businessName returns failure`() = runTest {
+    fun emptyBusinessName_returnsValidationException() = runTest {
         val invalidData = OnboardingData(
             ownerUid = "test_uid",
             businessName = "",
@@ -77,10 +80,11 @@ class CreateBusinessUseCaseTest {
         val result = createBusinessUseCase(invalidData)
 
         assertTrue(result.isFailure)
+        assertIs<ValidationException>(result.exceptionOrNull())
     }
 
     @Test
-    fun `createBusiness with empty initialBranches returns failure`() = runTest {
+    fun emptyInitialBranches_returnsValidationException() = runTest {
         val invalidData = OnboardingData(
             ownerUid = "test_uid",
             businessName = "My Awesome Business",
@@ -97,10 +101,11 @@ class CreateBusinessUseCaseTest {
         val result = createBusinessUseCase(invalidData)
 
         assertTrue(result.isFailure)
+        assertIs<ValidationException>(result.exceptionOrNull())
     }
 
     @Test
-    fun `createBusiness with unsuccessful paymentResult returns failure`() = runTest {
+    fun unsuccessfulPayment_returnsValidationException() = runTest {
         val invalidData = OnboardingData(
             ownerUid = "test_uid",
             businessName = "My Awesome Business",
@@ -117,10 +122,11 @@ class CreateBusinessUseCaseTest {
         val result = createBusinessUseCase(invalidData)
 
         assertTrue(result.isFailure)
+        assertIs<ValidationException>(result.exceptionOrNull())
     }
 
     @Test
-    fun `createBusiness with valid data returns success`() = runTest {
+    fun validData_returnsSuccess() = runTest {
         val validData = OnboardingData(
             ownerUid = "test_uid",
             businessName = "My Awesome Business",
@@ -134,10 +140,13 @@ class CreateBusinessUseCaseTest {
             initialTaxRate = testTaxRate,
         )
 
-        // When: The use case is invoked
         val result = createBusinessUseCase(validData)
 
-        // Then: The result should be a success
         assertTrue(result.isSuccess)
+
+        val storedBusiness = testBusinessRepository.findBusinessByOwner("test_uid").getOrNull()
+        assertNotNull(storedBusiness)
+        assertEquals(validData.businessName, storedBusiness.name)
+        assertEquals(validData.ownerUid, storedBusiness.ownerUid)
     }
 }

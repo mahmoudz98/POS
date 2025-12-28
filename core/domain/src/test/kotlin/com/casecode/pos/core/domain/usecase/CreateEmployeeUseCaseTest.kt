@@ -43,28 +43,52 @@ class CreateEmployeeUseCaseTest {
     }
 
     @Test
-    fun `createEmployee with plainTextPassword saves employee with hashed password`() = runTest {
-        // Arrange
+    fun `OwnerSession_SavesEmployeeSuccessfully`() = runTest {
         val plainTextPassword = "my-secret-password-123"
         val employee = Employee(
-            name = "John Doe",
+            name = "Ahmed",
             phone = "1234567890",
             role = EmployeeRole.CASHIER,
             assignedBranchId = "branch1",
         )
-        // Act
         sessionRepository.setSessionInfoOwnerLoggedIn()
         val result = createEmployeeUseCase(
             employee,
             password = plainTextPassword,
         )
-        // Assert
+
         assertTrue { result.isSuccess }
     }
 
     @Test
-    fun whenSessionIsNone_returnsNoActiveSessionException() = runTest {
-        // Arrange
+    fun `EmployeeSession_SavesEmployeeSuccessfully`() = runTest {
+        val plainTextPassword = "my-secret-password-123"
+        val employee = Employee(
+            name = "Sarah",
+            phone = "0987654321",
+            role = EmployeeRole.CASHIER,
+            assignedBranchId = "branch1",
+        )
+        sessionRepository.setSessionInfo(
+            SessionStateResult.EmployeeLoggedIn(
+                businessId = "business123",
+                activeBranchId = "branch1",
+                userId = "emp123",
+                userName = "Manager",
+                role = EmployeeRole.MANAGER,
+            ),
+        )
+
+        val result = createEmployeeUseCase(
+            employee,
+            password = plainTextPassword,
+        )
+
+        assertTrue { result.isSuccess }
+    }
+
+    @Test
+    fun `NoActiveSession_ReturnsNoActiveSessionException`() = runTest {
         val plainTextPassword = "my-secret-password-123"
         val employee = Employee(
             name = "John Doe",
@@ -72,8 +96,8 @@ class CreateEmployeeUseCaseTest {
             role = EmployeeRole.CASHIER,
             assignedBranchId = "branch1",
         )
-        // Act
         sessionRepository.setSessionInfo(SessionStateResult.None)
+
         val result = createEmployeeUseCase(
             employee,
             password = plainTextPassword,

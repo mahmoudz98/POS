@@ -41,53 +41,59 @@ class GetCurrentSessionUseCaseTest {
     }
 
     @Test
-    fun whenLoading_returnsLoadingState() = runTest {
+    fun loadingState_ReturnsLoading() = runTest {
         val result = getCurrentSessionUseCase().first()
+
         assertEquals(SessionStateResult.Loading, result)
     }
 
     @Test
-    fun whenLoggedOut_returnsNoneState() = runTest {
+    fun loggedOutState_ReturnsNone() = runTest {
         sessionRepository.setSessionInfo(SessionStateResult.None)
+
         val result = getCurrentSessionUseCase().first()
+
         assertEquals(SessionStateResult.None, result)
     }
 
     @Test
-    fun whenOwnerOnBoarding_returnsOwnerOnBoardingState() = runTest {
-        sessionRepository.setSessionInfo(SessionStateResult.OwnerOnBoarding("businessId"))
+    fun ownerOnBoardingState_ReturnsOwnerOnBoarding() = runTest {
+        val expectedState = SessionStateResult.OwnerOnBoarding("businessId")
+        sessionRepository.setSessionInfo(expectedState)
+
         val result = getCurrentSessionUseCase().first()
-        assertEquals(SessionStateResult.OwnerOnBoarding("businessId"), result)
+
+        assertEquals(expectedState, result)
     }
 
     @Test
-    fun whenOwnerLoggedIn_returnsOwnerLoggedInState() = runTest {
+    fun ownerLoggedInState_ReturnsOwnerLoggedIn() = runTest {
         val expectedSession = SessionStateResult.OwnerLoggedIn(
-            "businessId",
-            "activeBranchId",
-            "userId",
-            "userName",
+            businessId = "businessId",
+            activeBranchId = "activeBranchId",
+            userId = "userId",
+            userName = "userName",
         )
-        sessionRepository.setSessionInfo(
-            expectedSession,
-        )
+        sessionRepository.setSessionInfo(expectedSession)
+
         val result = getCurrentSessionUseCase().first()
+
         assertEquals(expectedSession, result)
     }
 
     @Test
-    fun whenEmployeeLoggedIn_returnsEmployeeLoggedInState() = runTest {
+    fun employeeLoggedInState_ReturnsEmployeeLoggedIn() = runTest {
         val expectedSession = SessionStateResult.EmployeeLoggedIn(
-            "businessId",
-            "activeBranchId",
-            "userId",
-            "userName",
-            EmployeeRole.CASHIER,
+            businessId = "businessId",
+            activeBranchId = "activeBranchId",
+            userId = "userId",
+            userName = "userName",
+            role = EmployeeRole.CASHIER,
         )
-        sessionRepository.setSessionInfo(
-            expectedSession,
-        )
+        sessionRepository.setSessionInfo(expectedSession)
+
         val result = getCurrentSessionUseCase().first()
+
         assertEquals(expectedSession, result)
     }
 }

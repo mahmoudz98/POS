@@ -27,22 +27,22 @@ import org.junit.Test
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-class UpdateEmployeeUseCaseTest {
+class DeleteEmployeeUseCaseTest {
     private lateinit var testEmployeeRepository: TestEmployeeRepository
     private lateinit var testSessionRepository: TestSessionRepository
     private lateinit var getCurrentSessionUseCase: GetCurrentSessionUseCase
-    private lateinit var updateEmployeeUseCase: UpdateEmployeeUseCase
+    private lateinit var deleteEmployeeUseCase: DeleteEmployeeUseCase
 
     @Before
     fun setup() {
         testEmployeeRepository = TestEmployeeRepository()
         testSessionRepository = TestSessionRepository()
         getCurrentSessionUseCase = GetCurrentSessionUseCase(testSessionRepository)
-        updateEmployeeUseCase = UpdateEmployeeUseCase(testEmployeeRepository, getCurrentSessionUseCase)
+        deleteEmployeeUseCase = DeleteEmployeeUseCase(testEmployeeRepository, getCurrentSessionUseCase)
     }
 
     @Test
-    fun whenActiveSession_UpdatesEmployeeSuccessfully() = runTest {
+    fun activeSession_deletesEmployeeSuccessfully() = runTest {
         val businessId = "business_1"
         testSessionRepository.setSessionInfo(
             SessionStateResult.OwnerLoggedIn(
@@ -60,25 +60,17 @@ class UpdateEmployeeUseCaseTest {
             assignedBranchId = "branch_1",
         )
         testEmployeeRepository.sendEmployees(listOf(employee))
-        val updatedEmployee = employee.copy(name = "Updated Employee")
 
-        val result = updateEmployeeUseCase(updatedEmployee, "password")
+        val result = deleteEmployeeUseCase("emp_1")
 
         assertTrue(result.isSuccess)
     }
 
     @Test
-    fun whenNoActiveSession_ReturnsNoActiveSessionException() = runTest {
+    fun noActiveSession_returnsNoActiveSessionException() = runTest {
         testSessionRepository.setSessionInfo(SessionStateResult.None)
-        val employee = Employee(
-            id = "emp_1",
-            name = "Employee 1",
-            phone = "123",
-            role = EmployeeRole.CASHIER,
-            assignedBranchId = "branch_1",
-        )
 
-        val result = updateEmployeeUseCase(employee, "password")
+        val result = deleteEmployeeUseCase("emp_1")
 
         assertTrue(result.isFailure)
         assertIs<NoActiveSessionException>(result.exceptionOrNull())
