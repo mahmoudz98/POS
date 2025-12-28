@@ -49,7 +49,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Clock
 
@@ -106,8 +105,9 @@ class BranchRepositoryImpl @Inject constructor(
     override suspend fun addBranch(businessId: String, branch: Branch): Result<String> =
         withContext(ioDispatcher) {
             runCatching {
+                val branchEntity = branch.asEntity(businessId)
                 transaction.run {
-                    branchDao.insertOrReplaceBranches(listOf(branch.asEntity(businessId)))
+                    branchDao.insertOrReplaceBranches(listOf(branchEntity))
 
                     val commandPayload = json.encodeToString(
                         OutboxPayload.AddBranchPayload(
@@ -119,12 +119,11 @@ class BranchRepositoryImpl @Inject constructor(
                     val outboxCommand = OutboxCommandEntity(
                         type = OutboxEventType.Branch.CREATED,
                         payload = commandPayload,
-                        status = OutboxCommandStatus.PENDING,
                     )
                     outboxCommandDao.insertCommand(outboxCommand)
                 }
 
-                branch.id
+                branchEntity.branchId
             }.onSuccess { newBranchId ->
                 logService.log("$TAG: Successfully added new branch with ID $newBranchId to business $businessId locally. Sync requested.")
             }.onFailure { e ->
