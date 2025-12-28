@@ -18,11 +18,23 @@ package com.casecode.pos.core.testing.services
 import com.casecode.pos.core.domain.service.LogService
 
 class TestLogService : LogService {
+    private val logHistory = mutableListOf<String>()
+
     override fun logNonFatalCrash(throwable: Throwable) {
-        println(throwable)
+        val message = "NonFatalCrash: ${throwable.message}"
+        logHistory.add(message)
+        println(message)
     }
 
     override fun log(message: String) {
+        logHistory.add(message)
         println(message)
+    }
+
+    // Test helper methods
+    fun getLogHistory(): List<String> = logHistory.toList()
+
+    fun clearHistory() {
+        logHistory.clear()
     }
 }
