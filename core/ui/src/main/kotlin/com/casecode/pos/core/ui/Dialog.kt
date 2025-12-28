@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.casecode.pos.core.designsystem.component.PosTextButton
@@ -36,11 +37,10 @@ import com.casecode.pos.core.designsystem.component.PosTextButton
 fun PosDeleteDialog(
     @StringRes titleRes: Int,
     @StringRes messageRes: Int,
+    currentSize: DpSize = currentWindowDpSize(),
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val currentSize = currentWindowDpSize()
-
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = Modifier.widthIn(max = currentSize.width - 80.dp),
@@ -80,11 +80,10 @@ fun PosDialog(
     @StringRes titleRes: Int,
     @StringRes messageRes: Int,
     @StringRes confirmRes: Int = R.string.core_ui_dialog_ok_button_text,
+    currentSize: DpSize = currentWindowDpSize(),
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val currentSize = currentWindowDpSize()
-
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = Modifier.widthIn(max = currentSize.width - 80.dp),
