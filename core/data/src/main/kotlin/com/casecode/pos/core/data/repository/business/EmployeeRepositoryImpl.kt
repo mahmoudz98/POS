@@ -166,7 +166,7 @@ constructor(
      * @param plainTextPassword The plain-text password for the new employee.
      * @param businessId The ID of the business this employee belongs to.
      * @return A [Result] indicating success or failure.
-     *         Returns [EmployeeNameCollisionException] if an employee with the same name already exists in the business.
+     *         Returns [EmployeeIdCollisionException] if an employee with the same name already exists in the business.
      */
     override suspend fun createEmployee(
         employee: Employee,
@@ -219,7 +219,7 @@ constructor(
      * @param businessId The ID of the business this employee belongs to.
      * @return A [Result] indicating success or failure.
      *         Returns [NoSuchElementException] if the employee is not found.
-     *         Returns [EmployeeNameCollisionException] if the updated name conflicts with an existing employee.
+     *         Returns [EmployeeIdCollisionException] if the updated name conflicts with an existing employee.
      */
     override suspend fun updateEmployee(
         employee: Employee,
