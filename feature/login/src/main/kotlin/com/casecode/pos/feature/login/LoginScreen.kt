@@ -57,6 +57,7 @@ import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
 import com.casecode.pos.core.designsystem.component.PosTextButton
 import com.casecode.pos.core.designsystem.theme.POSTheme
+import com.casecode.pos.core.ui.BranchSelectionDialog
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.R as uiR
 
@@ -80,6 +81,14 @@ fun LoginRoute(
         DownloadPlayServiceDialog(
             context = context,
             onDismiss = { viewModel.onEvent(LoginEvent.PlayServicesDialogDismissed) },
+        )
+    }
+
+    if (uiState is LoginUiState.BranchSelection) {
+        BranchSelectionDialog(
+            branches = (uiState as LoginUiState.BranchSelection).branches,
+            onBranchSelected = { viewModel.onEvent(LoginEvent.BranchSelected(it)) },
+            onDismissRequest = { viewModel.onEvent(LoginEvent.ErrorMessageShown) },
         )
     }
 
