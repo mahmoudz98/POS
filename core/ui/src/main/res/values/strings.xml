@@ -31,8 +31,7 @@
     <string name="core_ui_scan_module_downloading">Downloading module…</string>
     <string name="core_ui_scan_module_complete_downloading">Go to Scanner…</string>
 
-    <string name="core_ui_employee_name_hint">Name</string>
-    <string name="core_ui_employee_password_hint">Password</string>
+
     <string name="core_ui_error_email_empty">Email is required.</string>
     <string name="core_ui_error_phone_empty">Phone number is required.</string>
     <string name="core_ui_error_phone_invalid">Please enter a valid phone number.</string>
@@ -59,6 +58,7 @@
 
     <!-- Branches -->
     <string name="core_ui_branch_header_title">Branches</string>
+    <string name="core_ui_dialog_title_select_branch">Select Branch</string>
     <string name="core_ui_success_add_branch_message">Branch added successfully!</string>
     <string name="core_ui_error_add_branch_message">Failed to add branch.</string>
     <string name="core_ui_success_update_branch_message">Branch updated successfully!</string>
@@ -78,6 +78,14 @@
     <string name="core_ui_employee_header_title">Employees</string>
     <string name="core_ui_add_employee_title">Add a employee</string>
     <string name="core_ui_update_employee_title">Update a employee</string>
+    <string name="core_ui_employee_id_hint">Employee ID</string>
+    <string name="core_ui_auto_generate_id">Auto-generate ID</string>
+    <string name="core_ui_auto_generate_id_hint">ID will be generated automatically</string>
+    <string name="core_ui_error_employee_id_empty">Employee ID cannot be empty</string>
+    <string name="core_ui_employee_name_hint">Name</string>
+    <string name="core_ui_employee_password_hint">Password</string>
+    <string name="core_ui_error_employee_id_duplicate">This Employee ID already exists</string>
+    <string name="core_ui_error_generate_id">Failed to generate employee ID</string>
     <string name="core_ui_error_employee_name_empty">Employee name is required.</string>
     <string name="core_ui_error_add_employee_password_empty">Password is required.</string>
     <string name="core_ui_error_add_employee_password_less_than_six">Password must be at least 6 characters.</string>
@@ -127,6 +135,4 @@
     </string-array>
     <string name="core_ui_filter_label">Filters</string>
     <string name="core_ui_error_no_active_session">Please retry to login again</string>
-
-
 </resources>
