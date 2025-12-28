@@ -25,8 +25,8 @@ import com.casecode.pos.core.database.dao.LocalSignalDao
 import com.casecode.pos.core.database.model.LocalSignalEntity
 import com.casecode.pos.core.datastore.PosPreferencesDataSource
 import com.casecode.pos.core.firebase.datasource.InboxNetworkDataSource
-import com.casecode.pos.core.model.LoginStateResult
-import com.casecode.pos.core.model.SyncableEntityType
+import com.casecode.pos.core.model.SessionStateResult
+import com.casecode.pos.core.model.data.SyncableEntityType
 import com.casecode.pos.sync.initializers.SyncConstraints
 import com.casecode.pos.sync.initializers.syncForegroundInfo
 import dagger.assisted.Assisted
@@ -51,17 +51,14 @@ class InboxSyncWorker @AssistedInject constructor(
         preferencesDataSource.sessionData.collect { loginState ->
             Timber.e("inboxWork:loginData:$loginState")
             val businessId = when (loginState) {
-                is LoginStateResult.OwnerLoggedIn -> loginState.businessId
-                is LoginStateResult.EmployeeLoggedIn -> loginState.businessId
+                is SessionStateResult.OwnerLoggedIn -> loginState.businessId
+                is SessionStateResult.EmployeeLoggedIn -> loginState.businessId
                 else -> null
             }
-            Timber.e("inboxWork:businessId:$businessId")
-
             if (businessId != null) {
                 listenForAndQueueInboxSignals(businessId)
             }
         }
-
         return Result.success()
     }
 
@@ -72,8 +69,10 @@ class InboxSyncWorker @AssistedInject constructor(
             localSignalDao.insertSignal(
                 LocalSignalEntity(
                     id = signalId,
+                    businessId = businessId,
                     entityType = SyncableEntityType.fromValue(signal.entityType),
                     entityId = signal.entityId,
+                    operationType = signal.operationType,
                 ),
             )
         }
