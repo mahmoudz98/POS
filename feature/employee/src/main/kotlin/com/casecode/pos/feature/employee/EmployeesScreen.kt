@@ -80,7 +80,9 @@ internal fun EmployeesScreen(
         onEventClick = {
             if (it is EmployeeEvent.NavigationBack) {
                 onBackClick()
-            } else viewModel.onEvent(it)
+            } else {
+                viewModel.onEvent(it)
+            }
         },
     )
 
@@ -132,13 +134,12 @@ fun EmployeesScreen(
     modifier: Modifier = Modifier,
     onEventClick: (EmployeeEvent) -> Unit,
 
-    ) {
+) {
     Scaffold(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
-
             PosTopAppBar(
                 modifier = modifier,
                 titleRes = uiString.core_ui_employee_header_title,
@@ -248,16 +249,16 @@ fun EmployeeItem(
             },
             supportingContent = { Text(text = employee.phone) },
             colors =
-                ListItemDefaults.colors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                ),
+            ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
             modifier =
-                modifier
-                    .fillMaxWidth()
-                    .combinedClickable(onClick = onItemClick, onLongClick = onItemLongClick),
+            modifier
+                .fillMaxWidth()
+                .combinedClickable(onClick = onItemClick, onLongClick = onItemLongClick),
         )
     }
 }
@@ -290,10 +291,10 @@ fun EmployeesScreenErrorPreview() {
     POSTheme {
         EmployeesScreen(
             uiState =
-                EmployeeUiState(userMessage = uiString.core_ui_error_unknown),
+            EmployeeUiState(userMessage = uiString.core_ui_error_unknown),
             onEventClick = {},
 
-            )
+        )
     }
 }
 

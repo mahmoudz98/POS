@@ -27,7 +27,7 @@ fun NavGraphBuilder.signOutDialog(
     onDismiss: () -> Unit,
 ) {
     dialog<SignOutRoute> {
-        SignOutDialog( onDismiss = onDismiss)
+        SignOutDialog(onDismiss = onDismiss)
     }
 }
 

@@ -53,15 +53,15 @@ object AdminHomeGraphRoute
 fun NavGraphBuilder.homeAdminGraph(
     appState: MainAppState,
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = null,
-    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = null,
+    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)?,
+    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)?,
 ) {
     navigation<AdminHomeGraphRoute>(
         startDestination = SaleRoute,
         enterTransition = enterTransition,
         exitTransition = exitTransition,
 
-        ) {
+    ) {
         saleScreen {
             appState.navController.navigateToItemsGraph(
                 defaultNavOptions(),

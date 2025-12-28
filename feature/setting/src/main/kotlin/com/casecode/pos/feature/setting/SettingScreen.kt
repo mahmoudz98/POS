@@ -89,7 +89,6 @@ fun SettingScreen(
             )
         }
         Column(modifier = Modifier.align(Alignment.BottomStart)) {
-
             PosOutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onSignOutClick,

@@ -128,7 +128,6 @@ private fun SignOutDialogContent(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
-
                 }
             }
         },

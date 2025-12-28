@@ -23,8 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel
 @Inject
-constructor(
-) : ViewModel() {
+constructor() : ViewModel() {
 
     private val _currentLanguage: MutableLiveData<String> = MutableLiveData()
     val currentLanguage get() = _currentLanguage

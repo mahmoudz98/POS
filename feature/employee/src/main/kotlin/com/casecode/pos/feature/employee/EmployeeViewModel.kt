@@ -167,7 +167,7 @@ internal class EmployeeViewModel @Inject constructor(
                 _uiState.update { it.copy(dialogState = DialogState.CompanyCode) }
             }
 
-            EmployeeEvent.NavigationBack ->Unit
+            EmployeeEvent.NavigationBack -> Unit
         }
     }
 
