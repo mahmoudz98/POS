@@ -26,10 +26,14 @@ import kotlinx.serialization.Serializable
 data object EmployeesRoute
 
 fun NavGraphBuilder.employeesScreen(
+    onBackClick: ()->Unit,
     onShowSnackbar: suspend (String) -> Boolean,
 ) {
     composable<EmployeesRoute> {
-        EmployeesScreen(onShowSnackbar = onShowSnackbar)
+        EmployeesScreen(
+            onBackClick = onBackClick,
+            onShowSnackbar = onShowSnackbar,
+        )
     }
 }
 
