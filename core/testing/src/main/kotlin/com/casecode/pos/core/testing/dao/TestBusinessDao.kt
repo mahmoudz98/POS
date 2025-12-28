@@ -42,4 +42,18 @@ class TestBusinessDao : BusinessDao {
         currentList.add(business)
         businessesFlow.value = currentList
     }
+
+    override suspend fun getBusinessByCompanyCode(companyCode: String): BusinessEntity? {
+        // Return configured value if set, otherwise check actual businesses
+        return businessesFlow.value.find { it.companyCode == companyCode }
+    }
+
+    override suspend fun deleteBusiness(businessId: String) {
+        TODO("Not yet implemented")
+    }
+
+    fun reset() {
+        businessesFlow.value = emptyList()
+        insertedBusiness = null
+    }
 }
