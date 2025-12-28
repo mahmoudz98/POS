@@ -51,7 +51,7 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.SessionStateResult
 import com.casecode.pos.core.model.business.EmployeeRole
 import com.casecode.pos.core.ui.business.toDisplayString
-import com.casecode.pos.core.ui.R as UiR
+import com.casecode.pos.core.ui.R.string as uiString
 import com.casecode.pos.feature.signout.R as FeatureR
 
 @Composable
@@ -110,7 +110,7 @@ private fun SignOutDialogContent(
                     is SessionStateResult.OwnerLoggedIn -> {
                         UserInfoContent(
                             name = uiState.userName,
-                            role = stringResource(UiR.string.core_ui_employee_role_owner_text),
+                            role = stringResource(uiString.core_ui_employee_role_owner_text),
                         )
                     }
 
@@ -143,7 +143,7 @@ private fun SignOutDialogContent(
         },
         dismissButton = {
             PosTextButton(onClick = onDismiss) {
-                Text(stringResource(UiR.string.core_ui_dialog_cancel_button_text))
+                Text(stringResource(uiString.core_ui_dialog_cancel_button_text))
             }
         },
     )

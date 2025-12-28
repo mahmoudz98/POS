@@ -18,6 +18,4 @@
     <string name="feature_signout_message">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
     <string name="feature_signout_confirmation">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>
     <string name="feature_signout_action_sign_out">تسجيل الخروج</string>
-    <string name="feature_signout_action_cancel">إلغاء</string>
-    <string name="feature_signout_role_owner">المالك</string>
 </resources>
