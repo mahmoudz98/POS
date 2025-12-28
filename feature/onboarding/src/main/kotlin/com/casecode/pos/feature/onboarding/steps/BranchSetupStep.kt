@@ -95,7 +95,7 @@ fun BranchSetupStepPreview() {
                 uiState = OnboardingUiState(
                     onboardingData = OnboardingData(
                         branches = listOf(
-                            Branch("1", "branch 1", "123455"),
+                            Branch(id = "1", businessId = "business1", name = "branch 1", phone = "123455"),
                         ),
                     ),
                 ),
