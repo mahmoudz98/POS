@@ -32,11 +32,11 @@ interface BusinessNetworkDataSource {
         initialTaxes: List<NetworkTaxRate>,
         initialSubscription: NetworkSubscription,
         initialBillingEvent: NetworkBillingEvent,
-    ): String
+    ): NetworkBusiness
 
     suspend fun findBusinessByOwner(ownerUid: String): NetworkBusiness?
 
-    suspend fun companyCodeExists(companyCode: String): Boolean
+    suspend fun getBusinessByCompanyCode(companyCode: String): NetworkBusiness?
 
     suspend fun getBranches(businessId: String): List<NetworkBranch>
     suspend fun addBranch(businessId: String, branch: NetworkBranch): String
@@ -51,7 +51,7 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
         initialTaxes: List<NetworkTaxRate>,
         initialSubscription: NetworkSubscription,
         initialBillingEvent: NetworkBillingEvent,
-    ): String {
+    ): NetworkBusiness {
         return db.runTransaction { transaction ->
             val ownerUid = business.ownerUid
             val businessRef = db.collection(BUSINESSES_COLLECTION_PATH).document(ownerUid)
@@ -77,7 +77,7 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
             val eventRef = businessRef.collection(BILLING_EVENTS_SUBCOLLECTION_PATH).document()
             transaction.set(eventRef, initialBillingEvent.copy(id = eventRef.id))
 
-            businessRef.id
+            networkBusiness
         }.await()
     }
 
@@ -92,12 +92,13 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
         return doc.toObject(NetworkBusiness::class.java)
     }
 
-    override suspend fun companyCodeExists(companyCode: String): Boolean {
+    override suspend fun getBusinessByCompanyCode(companyCode: String): NetworkBusiness? {
         val snapshot =
             db.collection(BUSINESSES_COLLECTION_PATH)
-                .whereEqualTo(BUSINESS_COMPANY_CODE_FIELD, companyCode).limit(1)
+                .whereEqualTo(BUSINESS_COMPANY_CODE_FIELD, companyCode.uppercase())
+                .limit(1)
                 .get().await()
-        return !snapshot.isEmpty
+        return snapshot.documents.firstOrNull()?.toObject(NetworkBusiness::class.java)
     }
 
     override suspend fun getBranches(businessId: String): List<NetworkBranch> {
@@ -133,5 +134,8 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
         const val SUB_CURRENT_DOC_ID = "current"
         const val BUSINESS_COMPANY_CODE_FIELD = "companyCode"
         const val BUSINESS_CREATED_AT_FIELD = "createdAt"
+
+        fun FirebaseFirestore.getBusinessDocument(businessId: String) =
+            this.collection(BUSINESSES_COLLECTION_PATH).document(businessId)
     }
 }
