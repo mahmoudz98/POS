@@ -25,6 +25,6 @@ class ValidateCompanyCodeUseCase @Inject constructor(
         if (companyCode.length < 5 || !companyCode.contains("-")) {
             return Result.failure(IllegalArgumentException("Invalid Company Code format."))
         }
-        return businessRepository.companyCodeExists(companyCode)
+        return businessRepository.getBusinessByCompanyCode(companyCode).map { it != null }
     }
 }
