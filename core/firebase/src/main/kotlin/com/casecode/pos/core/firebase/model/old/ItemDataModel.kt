@@ -35,8 +35,7 @@ data class ItemDataModel(
     @get:PropertyName(ITEM_COST_PRICE_FIELD)
     var costPrice: Double = 0.0,
     val price: Double = 0.0,
-    @set:PropertyName(ITEM_REORDER_LEVEL_FIELD)
-    @get:PropertyName(ITEM_REORDER_LEVEL_FIELD)
+    @PropertyName(ITEM_REORDER_LEVEL_FIELD)
     var reorderLevel: Int = 0,
     val quantity: Int = 0,
     @get:PropertyName(ITEM_QTY_PER_PACK_FIELD)
