@@ -15,21 +15,17 @@
  */
 package com.casecode.pos.core.firebase.datasource
 
-import com.casecode.pos.core.firebase.BUSINESS_COMPANY_CODE_FIELD
-import com.casecode.pos.core.firebase.datasource.FirebaseBusinessDataSourceImpl.Companion.BUSINESSES_COLLECTION_PATH
-import com.casecode.pos.core.firebase.model.NetworkBusiness
+import com.casecode.pos.core.firebase.EMPLOYEE_NAME_FIELD
+import com.casecode.pos.core.firebase.datasource.FirebaseBusinessDataSourceImpl.Companion.getBusinessDocument
 import com.casecode.pos.core.firebase.model.NetworkEmployee
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.toObjects
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 interface EmployeeNetworkDataSource {
-
-    /**
-     * Finds the parent business by its company code.
-     * @return The `NetworkBusiness` DTO or null if not found.
-     */
-    suspend fun findBusinessByCompanyCode(companyCode: String): NetworkBusiness?
 
     /**
      * Finds a specific employee within a given business by their login identifier.
@@ -41,43 +37,81 @@ interface EmployeeNetworkDataSource {
     ): NetworkEmployee?
 
     suspend fun addEmployee(businessId: String, employee: NetworkEmployee)
+    suspend fun updateEmployee(businessId: String, employee: NetworkEmployee)
+    suspend fun deleteEmployee(businessId: String, employee: NetworkEmployee)
+
     suspend fun getEmployees(businessId: String): List<NetworkEmployee>
 }
 
 class FirebaseEmployeeDataSourceImpl @Inject constructor(
     private val db: FirebaseFirestore,
 ) : EmployeeNetworkDataSource {
-    override suspend fun findBusinessByCompanyCode(companyCode: String): NetworkBusiness? {
-        return db.collection(BUSINESSES_COLLECTION_PATH)
-            .whereEqualTo(BUSINESS_COMPANY_CODE_FIELD, companyCode.uppercase()).limit(1).get()
-            .await()
-            .documents.firstOrNull()?.toObject(NetworkBusiness::class.java)
-    }
 
     override suspend fun findEmployeeByIdentifier(
         businessId: String,
         employeeIdentifier: String,
     ): NetworkEmployee? {
-        return db.collection(BUSINESSES_COLLECTION_PATH).document(businessId)
+        return db.getBusinessDocument(businessId)
             .collection(EMPLOYEES_SUBCOLLECTION_PATH)
-            .whereEqualTo(EMPLOYEE_ID_FIELD, employeeIdentifier).limit(1).get().await()
+            .where(
+                Filter.and(
+                    Filter.or(
+                        Filter.equalTo(EMPLOYEE_ID_FIELD, employeeIdentifier),
+                        Filter.equalTo(EMPLOYEE_NAME_FIELD, employeeIdentifier),
+                    ),
+                    Filter.equalTo(EMPLOYEES_IS_ACTIVE_FIELD, NOT_ACTIVE_EMPLOYEE_VALUE),
+                ),
+            ).limit(1).get().await()
             .documents.firstOrNull()?.toObject(NetworkEmployee::class.java)
     }
+
     override suspend fun addEmployee(
         businessId: String,
         employee: NetworkEmployee,
     ) {
-        db.collection(BUSINESSES_COLLECTION_PATH).document(businessId)
-            .collection(EMPLOYEES_SUBCOLLECTION_PATH).document()
+        db.getBusinessDocument(businessId)
+            .collection(EMPLOYEES_SUBCOLLECTION_PATH).document(employee.id)
             .set(employee).await()
     }
 
+    /**
+     * Updates an existing employee's data in Firestore.
+     * Uses `SetOptions.merge()` to update the document with the provided `NetworkEmployee` object,
+     * merging with any existing fields.
+     *
+     * @param businessId The ID of the business the employee belongs to.
+     * @param employee The `NetworkEmployee` object containing the updated data.
+     */
+    override suspend fun updateEmployee(
+        businessId: String,
+        employee: NetworkEmployee,
+    ) {
+        db.getBusinessDocument(businessId)
+            .collection(EMPLOYEES_SUBCOLLECTION_PATH).document(employee.id)
+            .set(employee, SetOptions.merge()).await()
+    }
+
+    override suspend fun deleteEmployee(
+        businessId: String,
+        employee: NetworkEmployee,
+    ) {
+        db.getBusinessDocument(businessId)
+            .collection(EMPLOYEES_SUBCOLLECTION_PATH).document(employee.id)
+            .update(EMPLOYEES_IS_ACTIVE_FIELD, ACTIVE_EMPLOYEE_VALUE).await()
+    }
+
     override suspend fun getEmployees(businessId: String): List<NetworkEmployee> {
-        TODO("Not yet implemented")
+        return db.getBusinessDocument(businessId)
+            .collection(EMPLOYEES_SUBCOLLECTION_PATH)
+            .whereEqualTo(EMPLOYEES_IS_ACTIVE_FIELD, NOT_ACTIVE_EMPLOYEE_VALUE)
+            .get().await().toObjects<NetworkEmployee>()
     }
 
     internal companion object {
         const val EMPLOYEES_SUBCOLLECTION_PATH = "employees"
+        const val EMPLOYEES_IS_ACTIVE_FIELD = "is_active"
+        const val NOT_ACTIVE_EMPLOYEE_VALUE = 1
+        const val ACTIVE_EMPLOYEE_VALUE = 0
         const val EMPLOYEE_ID_FIELD = "id"
     }
 }
