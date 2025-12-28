@@ -41,7 +41,7 @@ import com.casecode.pos.core.testing.util.TestNetworkMonitor
 import org.junit.Before
 import org.junit.Rule
 
-abstract class BaseTest {
+abstract class BaseTest(function: () -> Unit) {
     // Set the main coroutines dispatcher for unit testing.
     @get:Rule
     var coroutinesRule = CoroutinesTestRule()
@@ -94,20 +94,20 @@ abstract class BaseTest {
         invoiceRepository = TestInvoiceRepository()
 
         // use cases
-        signInOwnerUseCase = SignInOwnerUseCase(
-            authRepository = testAuthRepository,
-            businessRepository = testBusinessRepository,
-            branchRepository = testBranchRepository,
-            sessionRepository = testSessionRepository,
-            logService = fakeLogService,
-        )
+        /*  signInOwnerUseCase = SignInOwnerUseCase(
+              authRepository = testAuthRepository,
+              businessRepository = testBusinessRepository,
+              branchRepository = testBranchRepository,
+              sessionRepository = testSessionRepository,
+              logService = fakeLogService,
+          )*/
 
-        signInEmployeeUseCase = SignInEmployeeUseCase(
-            employeeRepository = testEmployeeRepository,
-            sessionRepository = testSessionRepository,
-            logService = fakeLogService,
-        )
-
+        /*       signInEmployeeUseCase = SignInEmployeeUseCase(
+                   employeeRepository = testEmployeeRepository,
+                   sessionRepository = testSessionRepository,
+                   logService = fakeLogService,
+               )
+         */
         signOutUseCase = SignOutUseCase(
             authRepository = testAuthRepository,
             sessionRepository = testSessionRepository,
