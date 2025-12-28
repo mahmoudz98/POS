@@ -19,5 +19,5 @@ import com.casecode.pos.core.domain.repository.business.BranchRepository
 import javax.inject.Inject
 
 class GetBranchesUseCase @Inject constructor(private val branchRepository: BranchRepository) {
-    operator fun invoke() = branchRepository.getBranches()
+    operator fun invoke(businessId: String) = branchRepository.getBranches(businessId)
 }
