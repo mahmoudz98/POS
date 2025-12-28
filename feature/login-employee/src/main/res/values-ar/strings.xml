@@ -14,16 +14,24 @@
      limitations under the License.
 -->
 <resources>
-
-    <!-- Employee Login -->
+    <!-- عنوان الشاشة -->
     <string name="feature_login_employee_title">تسجيل دخول الموظف</string>
-    <string name="feature_login_employee_hint_scan_admin_id">مسح هوية المدير</string>
 
-    <string name="feature_login_employee_login_error_uid_empty">يجب عليك مسح هوية المدير لتسجيل الدخول كموظف.</string>
-    <string name="feature_login_employee_login_error_employee_incorrect">اسم المستخدم أو كلمة المرور غير صحيحة.</string>
-    <string name="feature_login_employee_login_error_login">حدث خطأ أثناء تسجيل الدخول. الرجاء المحاولة مرة أخرى.</string>
-    <string name="feature_login_employee_login_action_login">تسجيل الدخول</string>
+    <!-- تسميات النموذج -->
+    <string name="feature_login_employee_login_label_company_code">رمز الشركة</string>
+    <string name="feature_login_employee_login_label_uid">رقم الموظف</string>
+    <string name="feature_login_employee_login_label_password">كلمة المرور</string>
+    <string name="feature_login_employee_hint_scan_company_code">امسح أو أدخل رمز الشركة</string>
 
-    <string name="feature_login_employee_error_name_empty">يجب ادخال اسم الموظف</string>
-    <string name="feature_login_employee_error_password_empty">يجب ادخال كلمه سر للموظف</string>
+    <!-- إجراءات النموذج -->
+    <string name="feature_login_employee_login_button_text">تسجيل الدخول</string>
+
+    <!-- أخطاء التحقق -->
+    <string name="feature_login_employee_login_error_uid_empty">رمز الشركة مطلوب.</string>
+    <string name="feature_login_employee_error_name_empty">رقم الموظف مطلوب.</string>
+    <string name="feature_login_employee_error_password_empty">كلمة المرور مطلوبة.</string>
+
+    <!-- أخطاء تسجيل الدخول -->
+    <string name="feature_login_employee_login_error_employee_incorrect">بيانات الاعتماد غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.</string>
+    <string name="feature_login_employee_login_error_login">حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.</string>
 </resources>
