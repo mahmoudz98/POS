@@ -61,7 +61,7 @@ fun NavGraphBuilder.homeAdminGraph(
         enterTransition = enterTransition,
         exitTransition = exitTransition,
 
-    ) {
+        ) {
         saleScreen {
             appState.navController.navigateToItemsGraph(
                 defaultNavOptions(),
@@ -104,11 +104,11 @@ fun NavGraphBuilder.homeAdminGraph(
                 appState.navController.navigateToSignOut()
             },
         )
-        employeesScreen(onShowSnackbar = { onShowSnackbar(it, null) })
+        employeesScreen(
+            onBackClick = appState.navController::popBackStack,
+            onShowSnackbar = { onShowSnackbar(it, null) },
+        )
         signOutDialog(
-            onSignOut = {
-                appState.signOut()
-            },
             onDismiss = appState.navController::popBackStack,
         )
         profileScreen { appState.navController.popBackStack() }
