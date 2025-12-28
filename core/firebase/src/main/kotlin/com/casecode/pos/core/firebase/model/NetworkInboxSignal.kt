@@ -15,6 +15,8 @@
  */
 package com.casecode.pos.core.firebase.model
 
+import com.google.firebase.database.Exclude
+
 /**
  * Represents a lightweight sync signal received from the Firebase Realtime Database "inbox".
  * This signal informs the client that a specific entity has been updated on the server.
@@ -24,11 +26,18 @@ package com.casecode.pos.core.firebase.model
  * @property lastUpdated A server-side timestamp indicating when the update occurred.
  */
 data class NetworkInboxSignal(
-    val id: String = "",
+    @Exclude val id: String = "",
     val entityType: String = "",
     val entityId: String = "",
+    val operationType: String = OperationType.UPDATED,
     val lastUpdated: Long = 0L,
 )
+
+object OperationType {
+    const val CREATED = "created"
+    const val UPDATED = "updated"
+    const val DELETED = "deleted"
+}
 enum class EntityType {
     Business,
     Branch,
