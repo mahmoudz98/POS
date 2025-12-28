@@ -16,6 +16,7 @@
 package com.casecode.pos.core.firebase.model
 
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.PropertyName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,5 +27,5 @@ data class NetworkEmployee(
     val phone: String = "",
     val assignedBranchIds: String = "",
     val password: String = "",
-    val isDeleted: Int = 0,
+    @PropertyName("is_active") val isActive: Int = 0,
 )
