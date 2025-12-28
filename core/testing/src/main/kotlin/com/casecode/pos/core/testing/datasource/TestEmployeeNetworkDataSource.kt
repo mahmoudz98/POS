@@ -16,32 +16,97 @@
 package com.casecode.pos.core.testing.datasource
 
 import com.casecode.pos.core.firebase.datasource.EmployeeNetworkDataSource
-import com.casecode.pos.core.firebase.model.NetworkBusiness
 import com.casecode.pos.core.firebase.model.NetworkEmployee
 
 class TestEmployeeNetworkDataSource : EmployeeNetworkDataSource {
-    var createdEmployee: NetworkEmployee? = null
-        private set
 
-    override suspend fun findBusinessByCompanyCode(companyCode: String): NetworkBusiness? {
-        TODO("Not yet implemented")
-    }
+    // Use a flat list to store all NetworkEmployee objects
+    private val employees = mutableListOf<NetworkEmployee>()
+    private var networkError: Throwable? = null
+
+    var findEmployeeByIdentifierCallCount = 0
+        private set
+    var addEmployeeCallCount = 0
+        private set
 
     override suspend fun findEmployeeByIdentifier(
         businessId: String,
         employeeIdentifier: String,
     ): NetworkEmployee? {
-        TODO("Not yet implemented")
+        networkError?.let { throw it }
+        findEmployeeByIdentifierCallCount++
+        return employees.find { it.assignedBranchIds == businessId && (it.id == employeeIdentifier || it.name == employeeIdentifier) }
     }
 
     override suspend fun addEmployee(
         businessId: String,
         employee: NetworkEmployee,
     ) {
-        createdEmployee = employee
+        networkError?.let { throw it }
+        addEmployeeCallCount++
+        // Ensure the employee has the correct businessId if it's not already set
+        val employeeWithBusinessId = employee.copy(assignedBranchIds = businessId)
+        employees.add(employeeWithBusinessId)
+    }
+
+    override suspend fun updateEmployee(
+        businessId: String,
+        employee: NetworkEmployee,
+    ) {
+        networkError?.let { throw it }
+        // Remove the old version of the employee
+        employees.removeIf { it.id == employee.id && it.assignedBranchIds == businessId }
+        // Add the updated version
+        employees.add(employee.copy(assignedBranchIds = businessId))
+    }
+
+    /**
+     * Simulates deleting an employee from the network.
+     *
+     * @param businessId The ID of the business the employee belongs to.
+     * @param employee The `NetworkEmployee` object to delete.
+     */
+    override suspend fun deleteEmployee(
+        businessId: String,
+        employee: NetworkEmployee,
+    ) {
+        networkError?.let { throw it }
+        // Remove the employee from the list
+        employees.removeIf { it.id == employee.id && it.assignedBranchIds == businessId }
     }
 
     override suspend fun getEmployees(businessId: String): List<NetworkEmployee> {
-        TODO("Not yet implemented")
+        networkError?.let { throw it }
+        return employees.filter { it.assignedBranchIds == businessId }
+    }
+
+    /**
+     * Helper method for tests to pre-populate the network data source.
+     */
+    fun setEmployee(businessId: String, employee: NetworkEmployee) {
+        // Ensure the employee has the correct businessId if it's not already set
+        val employeeWithBusinessId = employee.copy(assignedBranchIds = businessId)
+        employees.add(employeeWithBusinessId)
+    }
+
+    /**
+     * Helper method for tests to simulate a network error.
+     */
+    fun setNetworkError(error: Throwable) {
+        networkError = error
+    }
+
+    /**
+     * Helper method to clear the network error.
+     */
+    fun clearNetworkError() {
+        networkError = null
+    }
+
+    fun clear() {
+        employees.clear()
+        networkError = null
+        findEmployeeByIdentifierCallCount = 0
+        addEmployeeCallCount = 0
     }
 }

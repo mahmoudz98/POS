@@ -30,7 +30,7 @@ android {
     }
     kotlin{
         compilerOptions {
-            freeCompilerArgs.add( "-Xopt-in=kotlinx.serialization.InternalSerializationApi")
+            freeCompilerArgs.add( "-opt-in=kotlinx.serialization.InternalSerializationApi")
         }
     }
 
