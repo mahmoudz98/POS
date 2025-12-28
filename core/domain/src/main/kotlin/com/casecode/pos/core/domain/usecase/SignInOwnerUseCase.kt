@@ -15,12 +15,12 @@
  */
 package com.casecode.pos.core.domain.usecase
 
+import com.casecode.pos.core.domain.model.OwnerLoginResult
 import com.casecode.pos.core.domain.repository.business.AuthRepository
 import com.casecode.pos.core.domain.repository.business.BranchRepository
 import com.casecode.pos.core.domain.repository.business.BusinessRepository
 import com.casecode.pos.core.domain.repository.business.SessionRepository
 import com.casecode.pos.core.domain.service.LogService
-import com.casecode.pos.core.domain.utils.OwnerLoginResult
 import com.casecode.pos.core.model.business.BusinessStatus
 import kotlinx.coroutines.flow.firstOrNull
 import java.io.IOException
@@ -48,18 +48,21 @@ class SignInOwnerUseCase @Inject constructor(
             return OwnerLoginResult.AccountNeedsOnboarding
         }
         logService.log("SignInOwnerUseCase: Business found: ${business.id}. Fetching branches.")
-
-        val branches = branchRepository.getBranches().firstOrNull()
+        val branches = branchRepository.getBranches(business.id).firstOrNull()
 
         if (branches.isNullOrEmpty()) {
-            logService.log("SignInOwnerUseCase: Business is active but has no branches. Directing to onboarding to fix.")
+            logService.log("SignInOwnerUseCase: Business is active but branches list is empty. Background sync expected.")
             sessionRepository.startOwnerSession(user, false, "")
+            return OwnerLoginResult.Success
+        }
 
-            return OwnerLoginResult.AccountNeedsOnboarding
+        if (branches.size > 1) {
+            logService.log("SignInOwnerUseCase: Multiple branches found. Requesting selection.")
+            return OwnerLoginResult.BranchSelectionRequired(branches)
         }
 
         val firstBranchId = branches.first().id
-        logService.log("SignInOwnerUseCase: Branches found. Starting session for branch: $firstBranchId")
+        logService.log("SignInOwnerUseCase: Single branch found. Starting session for branch: $firstBranchId")
         sessionRepository.startOwnerSession(user, true, firstBranchId)
 
         return OwnerLoginResult.Success
