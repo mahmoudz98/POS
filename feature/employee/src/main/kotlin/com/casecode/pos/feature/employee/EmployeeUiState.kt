@@ -34,7 +34,10 @@ data class EmployeeUiState(
 )
 
 sealed interface EmployeeEvent {
+    object CompanyCodeOpened : EmployeeEvent
+    object CompanyCodeClosed : EmployeeEvent
     object CreationEmployeeOpened : EmployeeEvent
+    object NavigationBack : EmployeeEvent
     data class UpdatingEmployeeOpened(val employee: Employee) : EmployeeEvent
     object EmployeeFormClosed : EmployeeEvent
     data class DeletingEmployeeOpened(val employee: Employee) : EmployeeEvent
@@ -44,6 +47,7 @@ sealed interface EmployeeEvent {
 
 enum class DialogState {
     None,
+    CompanyCode,
     Creating,
     Updating,
     Deleting,

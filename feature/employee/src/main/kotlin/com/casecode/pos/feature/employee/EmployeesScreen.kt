@@ -17,14 +17,18 @@ package com.casecode.pos.feature.employee
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -33,56 +37,59 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosLoadingWheel
 import com.casecode.pos.core.designsystem.component.PosTopAppBar
 import com.casecode.pos.core.designsystem.icon.PosIcons
+import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.business.Employee
 import com.casecode.pos.core.ui.EmployeeEmptyScreen
 import com.casecode.pos.core.ui.PosDeleteDialog
+import com.casecode.pos.core.ui.TrackScreenViewEvent
+import com.casecode.pos.core.ui.TrackScrollJank
 import com.casecode.pos.core.ui.business.toDisplayString
+import com.casecode.pos.core.ui.parameterprovider.EmployeesPreviewParameterProvider
 import com.casecode.pos.core.ui.R.string as uiString
 
 @Composable
 internal fun EmployeesScreen(
     viewModel: EmployeeViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
     onShowSnackbar: suspend (String) -> Boolean,
 ) {
+    TrackScreenViewEvent(screenName = "EmployeesScreen")
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var showUserAdminQrDialog by remember { mutableStateOf(false) }
 
     EmployeesScreen(
         uiState = uiState,
-        onActionClick = { showUserAdminQrDialog = true },
-        onAddClick = {
-            viewModel.onEvent(EmployeeEvent.CreationEmployeeOpened)
-        },
-        onEmployeeClick = {
-            viewModel.onEvent(EmployeeEvent.UpdatingEmployeeOpened(it))
-        },
-        onItemLongClick = {
-            viewModel.onEvent(EmployeeEvent.DeletingEmployeeOpened(it))
+        onEventClick = {
+            if (it is EmployeeEvent.NavigationBack) {
+                onBackClick()
+            } else viewModel.onEvent(it)
         },
     )
-    if (showUserAdminQrDialog) {
-        UserAdminQrDialog(onDismiss = { showUserAdminQrDialog = false })
-    }
+
     when (uiState.dialogState) {
         DialogState.None -> Unit
+        DialogState.CompanyCode -> {
+            CompanyCodeQrDialog(onDismiss = { viewModel.onEvent(EmployeeEvent.CompanyCodeClosed) })
+        }
+
         DialogState.Creating -> EmployeeFormDialog(
             onDismiss = {
                 viewModel.onEvent(EmployeeEvent.EmployeeFormClosed)
@@ -123,44 +130,50 @@ internal fun EmployeesScreen(
 fun EmployeesScreen(
     uiState: EmployeeUiState,
     modifier: Modifier = Modifier,
-    onActionClick: () -> Unit = {},
-    onAddClick: () -> Unit,
-    onEmployeeClick: (Employee) -> Unit,
-    onItemLongClick: (Employee) -> Unit,
-) {
+    onEventClick: (EmployeeEvent) -> Unit,
+
+    ) {
     Scaffold(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+
+            PosTopAppBar(
+                modifier = modifier,
+                titleRes = uiString.core_ui_employee_header_title,
+                navigationIcon = PosIcons.ArrowBack,
+                onNavigationClick = { onEventClick(EmployeeEvent.NavigationBack) },
+                onActionClick = { onEventClick(EmployeeEvent.CompanyCodeOpened) },
+                actionIconContentDescription = stringResource(R.string.feature_employee_dialog_title_company_code),
+                actionIcon = PosIcons.UserAdman,
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+            )
+        },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onAddClick() }, modifier = Modifier.padding(16.dp)) {
+            FloatingActionButton(
+                onClick = { onEventClick(EmployeeEvent.CreationEmployeeOpened) },
+                modifier = Modifier.padding(16.dp),
+            ) {
                 Icon(
                     imageVector = PosIcons.Add,
                     contentDescription = stringResource(uiString.core_ui_add_employee_button_text),
                 )
             }
         },
-    ) {
-        Column(
+    ) { paddingValues ->
+        Box(
             modifier = modifier
                 .fillMaxSize()
-                .padding(it),
+                .padding(paddingValues),
         ) {
-            PosTopAppBar(
-                modifier = modifier,
-                titleRes = uiString.core_ui_employee_header_title,
-                onActionClick = { onActionClick() },
-                actionIconContentDescription = null,
-                actionIcon = PosIcons.UserAdman,
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-            )
-            if (uiState.employees.isEmpty()) {
+            if (uiState.employees.isEmpty() && !uiState.isLoading) {
                 EmployeeEmptyScreen()
             } else {
                 EmployeesContent(
-                    uiState.employees,
-                    onEmployeeClick = onEmployeeClick,
-                    onEmployeeLongClick = onItemLongClick,
+                    employees = uiState.employees,
+                    onEmployeeClick = { onEventClick(EmployeeEvent.UpdatingEmployeeOpened(it)) },
+                    onEmployeeLongClick = { onEventClick(EmployeeEvent.DeletingEmployeeOpened(it)) },
                 )
             }
             if (uiState.isLoading) {
@@ -176,17 +189,26 @@ fun EmployeesScreen(
 }
 
 @Composable
-private fun EmployeesContent(
+fun EmployeesContent(
     employees: List<Employee>,
     onEmployeeClick: (Employee) -> Unit,
     onEmployeeLongClick: (Employee) -> Unit,
 ) {
-    LazyColumn(modifier = Modifier.padding(horizontal = 8.dp)) {
-        items(employees) {
+    val lazyListState = rememberLazyListState()
+    TrackScrollJank(scrollableState = lazyListState, stateName = "employee:list")
+    LazyColumn(
+        modifier = Modifier.padding(horizontal = 8.dp),
+        contentPadding = PaddingValues(vertical = 8.dp),
+        state = lazyListState,
+    ) {
+        items(
+            items = employees,
+            key = { it.id },
+        ) { employee ->
             EmployeeItem(
-                employee = it,
-                onItemClick = { onEmployeeClick(it) },
-                onItemLongClick = { onEmployeeLongClick(it) },
+                employee = employee,
+                onItemClick = { onEmployeeClick(employee) },
+                onItemLongClick = { onEmployeeLongClick(employee) },
             )
         }
     }
@@ -202,33 +224,51 @@ fun EmployeeItem(
 ) {
     ElevatedCard(modifier.padding(bottom = 8.dp)) {
         ListItem(
-            overlineContent = { Text(text = employee.name) },
-            headlineContent = { Text(employee.role.toDisplayString()) },
+            leadingContent = {
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    modifier = Modifier.size(40.dp),
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Text(
+                            text = employee.name.take(1),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                }
+            },
+            overlineContent = { Text(text = "#${employee.id}") },
+            headlineContent = { Text(text = employee.name) },
+            trailingContent = {
+                Text(
+                    modifier = Modifier.padding(top = 8.dp),
+                    text = employee.role.toDisplayString(),
+                )
+            },
             supportingContent = { Text(text = employee.phone) },
             colors =
-            ListItemDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            ),
+                ListItemDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                    headlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    overlineColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
             modifier =
-            modifier
-                .fillMaxWidth()
-                .combinedClickable(onClick = onItemClick, onLongClick = onItemLongClick),
+                modifier
+                    .fillMaxWidth()
+                    .combinedClickable(onClick = onItemClick, onLongClick = onItemLongClick),
         )
     }
 }
 
-/*@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun EmployeesScreenLoadingPreview() {
     POSTheme {
         EmployeesScreen(
-            uiState = UiEmployeesState(resourceEmployees = Resource.loading()),
-            onAddClick = {},
-            onEmployeeClick = {},
-            onItemLongClick = {},
+            uiState = EmployeeUiState(isLoading = true),
+            onEventClick = {},
         )
     }
 }
@@ -238,10 +278,8 @@ fun EmployeesScreenLoadingPreview() {
 fun EmployeesScreenEmptyPreview() {
     POSTheme {
         EmployeesScreen(
-            uiState = UiEmployeesState(resourceEmployees = Resource.empty()),
-            onAddClick = {},
-            onEmployeeClick = {},
-            onItemLongClick = {},
+            uiState = EmployeeUiState(),
+            onEventClick = {},
         )
     }
 }
@@ -252,61 +290,52 @@ fun EmployeesScreenErrorPreview() {
     POSTheme {
         EmployeesScreen(
             uiState =
-                UiEmployeesState(resourceEmployees = Resource.error(uiString.core_ui_error_unknown)),
-            onAddClick = {},
-            onEmployeeClick = {},
-            onItemLongClick = {},
-        )
+                EmployeeUiState(userMessage = uiString.core_ui_error_unknown),
+            onEventClick = {},
+
+            )
+    }
+}
+
+@Preview
+@Composable
+fun EmployeesScreenSuccessPreview(
+    @PreviewParameter(EmployeesPreviewParameterProvider::class) employees: List<Employee>,
+) {
+    POSTheme {
+        PosBackground {
+            EmployeesScreen(
+                uiState = EmployeeUiState(employees = employees),
+                onEventClick = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun EmployeesScreenSuccessWithLoadingPreview(
+    @PreviewParameter(EmployeesPreviewParameterProvider::class) employees: List<Employee>,
+) {
+    POSTheme {
+        PosBackground {
+            EmployeesScreen(
+                uiState = EmployeeUiState(
+                    employees = employees,
+                    isLoading = true,
+                ),
+                onEventClick = {},
+            )
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun EmployeesScreenSuccessPreview() {
+fun EmployeeItemPreview(
+    @PreviewParameter(EmployeesPreviewParameterProvider::class) employees: List<Employee>,
+) {
     POSTheme {
-        EmployeesScreen(
-            uiState =
-                UiEmployeesState(
-                    resourceEmployees =
-                        Resource.Success(
-                            listOf(
-                                Employee(
-                                    name = "Lillie Humphrey",
-                                    phoneNumber = "(113) 581-4083",
-                                    password = null,
-                                    branchName = "branch2",
-                                    permission = "sale",
-                                ),
-                                Employee(
-                                    name = "Jeanine Moran",
-                                    phoneNumber = "(799) 177-5393",
-                                    password = null,
-                                    branchName = "bransh 1",
-                                    permission = "admin",
-                                ),
-                            )
-                        ),
-                ),
-            onAddClick = {},
-            onEmployeeClick = {},
-            onItemLongClick = {},
-        )
+        EmployeeItem(employee = employees[0])
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun EmployeeItemPreview() {
-    POSTheme {
-        EmployeeItem(
-            employee =
-                Employee(
-                    name = "John Doe",
-                    phoneNumber = "123-456-7890",
-                    permission = "Admin",
-                    branchName = "Branch 1",
-                    password = "password",
-                ),
-        )
-    }
-}*/

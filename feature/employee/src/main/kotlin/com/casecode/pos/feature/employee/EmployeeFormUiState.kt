@@ -20,6 +20,7 @@ import com.casecode.pos.core.ui.utils.validatePassword
 import com.casecode.pos.core.ui.R.string as uiString
 
 internal data class FormErrors(
+    val idError: Int? = null,
     val nameError: Int? = null,
     val phoneError: Int? = null,
     val passwordError: Int? = null,
@@ -31,6 +32,8 @@ internal data class FormErrors(
  * Adheres to SRP by only containing state related to adding a form employee.
  */
 internal data class EmployeeFormUiState(
+    val employeeId: String = "",
+    val isAutoGenerateId: Boolean = true,
     val name: String = "",
     val phone: String = "",
     val password: String = "",
@@ -39,6 +42,12 @@ internal data class EmployeeFormUiState(
     val formErrors: FormErrors = FormErrors(),
 ) {
     fun validate(isUpdate: Boolean): FormErrors {
+        val idError = when {
+            !isUpdate && employeeId.isBlank() -> uiString.core_ui_error_employee_id_empty
+            !isUpdate && !isAutoGenerateId ->
+                uiString.core_ui_error_employee_id_duplicate
+            else -> null
+        }
         val nameError =
             if (name.isBlank()) uiString.core_ui_error_employee_name_empty else null
         val phoneError =
@@ -49,6 +58,7 @@ internal data class EmployeeFormUiState(
             if (assignedBranchId.isEmpty()) uiString.core_ui_error_branch_name_empty else null
 
         return FormErrors(
+            idError = idError,
             nameError = nameError,
             phoneError = phoneError,
             passwordError = passwordError,
@@ -65,6 +75,8 @@ internal data class EmployeeFormUiState(
 }
 
 sealed interface EmployeeFormEvent {
+    data class EmployeeIdChanged(val id: String) : EmployeeFormEvent
+    data class AutoGenerateIdToggled(val isEnabled: Boolean) : EmployeeFormEvent
     data class EmployeeNameChanged(val name: String) : EmployeeFormEvent
     data class EmployeePhoneChanged(val phone: String) : EmployeeFormEvent
     data class EmployeePasswordChanged(val password: String) : EmployeeFormEvent

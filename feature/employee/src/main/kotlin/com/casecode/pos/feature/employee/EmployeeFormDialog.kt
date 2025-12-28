@@ -21,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -40,12 +41,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosOutlinedTextField
 import com.casecode.pos.core.designsystem.component.PosTextButton
+import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.EmployeeRole
+import com.casecode.pos.core.ui.TrackScreenViewEvent
 import com.casecode.pos.core.ui.business.toDisplayString
 import com.casecode.pos.core.ui.R.string as uiString
 
@@ -76,6 +81,7 @@ internal fun EmployeeFormDialog(
     onEvent: (EmployeeFormEvent) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    TrackScreenViewEvent(screenName = if (isUpdate) "EmployeeUpdateDialog" else "EmployeeCreateDialog")
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
@@ -98,31 +104,10 @@ internal fun EmployeeFormDialog(
         },
         text = {
             EmployeeDialogContent(
-                name = uiState.name,
-                onNameChange = {
-                    onEvent(EmployeeFormEvent.EmployeeNameChanged(it))
-                },
-                hasNameError = uiState.formErrors.nameError,
-                password = uiState.password,
-                onPasswordChange = {
-                    onEvent(EmployeeFormEvent.EmployeePasswordChanged(it))
-                },
-                hasPasswordError = uiState.formErrors.passwordError,
-                phone = uiState.phone,
-                onPhoneChange = {
-                    onEvent(EmployeeFormEvent.EmployeePhoneChanged(it))
-                },
-                hasPhoneError = uiState.formErrors.phoneError,
+                uiState = uiState,
+                isUpdate = isUpdate,
                 branches = branches,
-                selectedBranchId = uiState.assignedBranchId,
-                onSelectedBranchChange = {
-                    onEvent(EmployeeFormEvent.EmployeeBranchAssigned(it))
-                },
-                branchError = uiState.formErrors.assignedBranchesError,
-                selectedRole = uiState.role,
-                onSelectedRoleChange = {
-                    onEvent(EmployeeFormEvent.EmployeeRoleChanged(it))
-                },
+                onEvent = onEvent,
                 focusRequester = focusRequester,
             )
         },
@@ -150,21 +135,10 @@ internal fun EmployeeFormDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EmployeeDialogContent(
-    name: String,
-    onNameChange: (String) -> Unit,
-    hasNameError: Int?,
-    password: String,
-    onPasswordChange: (String) -> Unit,
-    hasPasswordError: Int?,
-    phone: String,
-    onPhoneChange: (String) -> Unit,
-    hasPhoneError: Int?,
+    uiState: EmployeeFormUiState,
+    isUpdate: Boolean,
+    onEvent: (EmployeeFormEvent) -> Unit,
     branches: List<Branch>,
-    selectedBranchId: String,
-    onSelectedBranchChange: (String) -> Unit,
-    branchError: Int?,
-    selectedRole: EmployeeRole,
-    onSelectedRoleChange: (EmployeeRole) -> Unit,
     focusRequester: FocusRequester,
 ) {
     var rolesExpanded by remember { mutableStateOf(false) }
@@ -172,36 +146,66 @@ private fun EmployeeDialogContent(
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         PosOutlinedTextField(
-            value = name,
-            onValueChange = { onNameChange(it) },
-            label = stringResource(uiString.core_ui_employee_name_hint),
-            isError = hasNameError != null,
+            value = uiState.employeeId,
+            enabled = uiState.isAutoGenerateId && !isUpdate,
+            onValueChange = { onEvent(EmployeeFormEvent.EmployeeIdChanged(it)) },
+            label = stringResource(uiString.core_ui_employee_id_hint),
+            isError = uiState.formErrors.idError != null,
             keyboardOptions =
             KeyboardOptions(
-                keyboardType = KeyboardType.Text,
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next,
             ),
-            supportingText = hasNameError?.let { stringResource(it) },
+            supportingText = uiState.formErrors.idError?.let { stringResource(it) },
+            trailingIcon = {
+                Checkbox(
+                    checked = uiState.isAutoGenerateId,
+                    enabled = !isUpdate,
+                    onCheckedChange = { onEvent(EmployeeFormEvent.AutoGenerateIdToggled(it)) },
+                )
+            },
             modifier =
             Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester),
         )
         PosOutlinedTextField(
-            value = password,
-            onValueChange = { onPasswordChange(it) },
+            value = uiState.name,
+            onValueChange = {
+                onEvent(EmployeeFormEvent.EmployeeNameChanged(it))
+            },
+            label = stringResource(uiString.core_ui_employee_name_hint),
+            isError = uiState.formErrors.nameError != null,
+            keyboardOptions =
+            KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next,
+            ),
+            supportingText = uiState.formErrors.nameError?.let { stringResource(it) },
+            modifier =
+            Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
+        )
+        PosOutlinedTextField(
+            value = uiState.password,
+            onValueChange = {
+                onEvent(EmployeeFormEvent.EmployeePasswordChanged(it))
+            },
             label = stringResource(uiString.core_ui_employee_password_hint),
-            supportingText = hasPasswordError?.let { stringResource(it) },
+            supportingText = uiState.formErrors.passwordError?.let { stringResource(it) },
             visualTransformation = PasswordVisualTransformation(),
-            isError = hasPasswordError != null,
+            isError = uiState.formErrors.passwordError != null,
             modifier = Modifier.fillMaxWidth(),
         )
         PosOutlinedTextField(
-            value = phone,
-            onValueChange = { onPhoneChange(it) },
+            value = uiState.phone,
+            onValueChange = {
+                onEvent(EmployeeFormEvent.EmployeePhoneChanged(it))
+            },
             label = stringResource(uiString.core_ui_work_phone_number_hint),
-            supportingText = hasPhoneError?.let { stringResource(it) },
-            isError = hasPhoneError != null,
+            supportingText = uiState.formErrors.phoneError?.let { stringResource(it) },
+            isError = uiState.formErrors.phoneError != null,
             modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenuBox(
@@ -209,7 +213,7 @@ private fun EmployeeDialogContent(
             onExpandedChange = { rolesExpanded = !rolesExpanded },
         ) {
             PosOutlinedTextField(
-                value = selectedRole.toDisplayString(),
+                value = uiState.role.toDisplayString(),
                 onValueChange = {},
                 readOnly = true,
                 label = stringResource(uiString.core_ui_employee_role_text),
@@ -231,7 +235,7 @@ private fun EmployeeDialogContent(
                     DropdownMenuItem(
                         text = { Text(role.toDisplayString()) },
                         onClick = {
-                            onSelectedRoleChange(role)
+                            onEvent(EmployeeFormEvent.EmployeeRoleChanged(role))
                             rolesExpanded = false
                         },
                     )
@@ -243,11 +247,15 @@ private fun EmployeeDialogContent(
             onExpandedChange = { branchExpanded = !branchExpanded },
         ) {
             PosOutlinedTextField(
-                value = branches.find { it.id == selectedBranchId }?.name ?: "",
+                value = branches.find { it.id == uiState.assignedBranchId }?.name ?: "",
                 onValueChange = {},
                 readOnly = true,
-                isError = branchError != null,
-                supportingText = branchError?.let { stringResource(it) },
+                isError = uiState.formErrors.assignedBranchesError != null,
+                supportingText = uiState.formErrors.assignedBranchesError?.let {
+                    stringResource(
+                        it,
+                    )
+                },
                 label = stringResource(uiString.core_ui_branch_name_hint),
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(
@@ -265,18 +273,30 @@ private fun EmployeeDialogContent(
             ) {
                 branches.forEach { branch ->
                     DropdownMenuItem(
-                        text = {
-                            Text(
-                                branch.name,
-                            )
-                        },
+                        text = { Text(branch.name) },
                         onClick = {
-                            onSelectedBranchChange(branch.id)
+                            onEvent(EmployeeFormEvent.EmployeeBranchAssigned(branch.id))
                             branchExpanded = false
                         },
                     )
                 }
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun EmployeeFormDialogPreview() {
+    POSTheme {
+        PosBackground {
+            EmployeeDialogContent(
+                uiState = EmployeeFormUiState(),
+                isUpdate = false,
+                onEvent = {},
+                branches = listOf(),
+                focusRequester = FocusRequester.Default,
+            )
         }
     }
 }
