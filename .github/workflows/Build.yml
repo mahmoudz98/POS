@@ -158,12 +158,6 @@ jobs:
       - name: Run local tests
         run: ./gradlew testDemoDebug :lint:test
 
-      - name: Setup GMD
-        run: ./gradlew :benchmarks:pixel6Api33Setup
-          --info
-          -Pandroid.experimental.testOptions.managedDevices.emulator.showKernelLogging=true
-          -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect"
-
       - name: Build all build type and flavor permutations
         run: ./gradlew :app:assemble
 
