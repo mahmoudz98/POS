@@ -694,6 +694,7 @@ class EmployeeRepositoryImplTest {
                 entityType = SyncableEntityType.EMPLOYEE,
                 entityId = "deleted-employee",
                 status = LocalSignalStatus.PENDING,
+                operationType = OperationType.UPDATED,
             ),
         )
 

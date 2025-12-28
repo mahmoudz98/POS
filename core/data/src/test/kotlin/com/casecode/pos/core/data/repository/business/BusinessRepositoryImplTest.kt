@@ -21,6 +21,7 @@ import com.casecode.pos.core.database.model.LocalSignalStatus
 import com.casecode.pos.core.database.model.OutboxCommandEntity
 import com.casecode.pos.core.database.model.OutboxEventType
 import com.casecode.pos.core.firebase.TimestampSerializer
+import com.casecode.pos.core.firebase.model.OperationType
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
@@ -219,6 +220,7 @@ class BusinessRepositoryImplTest {
             id = "22121",
             entityType = SyncableEntityType.BUSINESS,
             entityId = entityId,
+            operationType = OperationType.CREATED,
             businessId = ownerId,
         )
         localSignalDao.insertSignal(signal)
@@ -236,7 +238,6 @@ class BusinessRepositoryImplTest {
 
         // Then
         assertTrue(result)
-        // Verify the local signal was processed
         assertEquals(
             LocalSignalStatus.PROCESSED,
             localSignalDao.getPendingSignals().first().first().status,
