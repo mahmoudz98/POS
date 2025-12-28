@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.casecode.pos.core.domain.utils
+package com.casecode.pos.core.domain.model
 
+import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
 
 sealed interface OwnerLoginStatus {
-    data class Active(val business: Business?) : OwnerLoginStatus // User has an active business
-    object NeedsOnboarding : OwnerLoginStatus // User has no business, send to start of wizard
-    data class OnboardingPending(val business: Business?) : OwnerLoginStatus // User has a pending business, send back to wizard
+    data class Active(val business: Business?) : OwnerLoginStatus
+    object NeedsOnboarding : OwnerLoginStatus
+    data class OnboardingPending(val business: Business?) : OwnerLoginStatus
 }
 
 /**
@@ -35,8 +36,7 @@ sealed interface OwnerLoginResult {
     data object Success : OwnerLoginResult
 
     /**
-     * The user authenticated successfully, but has not completed the business setup wizard.
-     * The app should force the user into the onboarding flow.
+     * The user's business account requires onboarding (e.g., first-time setup).
      */
     data object AccountNeedsOnboarding : OwnerLoginResult
 
@@ -57,4 +57,9 @@ sealed interface OwnerLoginResult {
      * The UI should return to an idle state without showing a disruptive error message.
      */
     object AuthenticationFailed : OwnerLoginResult
+
+    /**
+     * The user has multiple branches and needs to select one to proceed.
+     */
+    data class BranchSelectionRequired(val branches: List<Branch>) : OwnerLoginResult
 }
