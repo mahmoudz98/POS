@@ -31,7 +31,7 @@ interface BranchRepository : Syncable {
      *
      * @return A [Flow] emitting a list of [Branch] objects.
      */
-    fun getBranches(): Flow<List<Branch>>
+    fun getBranches(businessId: String): Flow<List<Branch>>
 
     /**
      * Adds a new branch to a specific business. This operation is typically performed locally first
