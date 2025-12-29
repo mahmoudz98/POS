@@ -287,7 +287,7 @@ internal class EmployeeDaoTest : DatabaseTest() {
         employeeDao.insertOrReplaceEmployee(emp)
 
         employeeDao.getEmployees().test {
-            awaitItem() // Initial emission
+            awaitItem()
 
             employeeDao.updateEmployees(emp.copy(name = "Updated"))
 
