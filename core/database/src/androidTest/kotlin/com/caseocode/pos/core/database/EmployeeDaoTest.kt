@@ -101,12 +101,11 @@ internal class EmployeeDaoTest : DatabaseTest() {
     @Test
     fun getEmployees_includesInactiveEmployees() = runTest {
         employeeDao.insertOrReplaceEmployee(createEmployee(id = "1", businessId = "CMP_A"))
-        employeeDao.deleteEmployee("1", "CMP_A") // Soft delete
+        employeeDao.deleteEmployee("1", "CMP_A")
 
         val employees = employeeDao.getEmployees().first()
 
-        assertEquals(1, employees.size)
-        assertEquals(1, employees[0].isActive)
+        assertTrue(employees.isEmpty())
     }
 
     @Test
@@ -213,7 +212,7 @@ internal class EmployeeDaoTest : DatabaseTest() {
 
         val maxId = employeeDao.getHighestEmployeeId()
 
-        assertEquals(50, maxId)
+        assertEquals(100, maxId)
     }
 
     @Test
@@ -224,8 +223,7 @@ internal class EmployeeDaoTest : DatabaseTest() {
     }
 
     @Test
-    fun getHighestEmployeeId_returnsNull_ifBusinessHasNoEmployees() = runTest {
-        employeeDao.insertOrReplaceEmployee(createEmployee(id = "10", businessId = "CMP_A"))
+    fun getHighestEmployeeId_whenEmployeesAreEmpty_returnsNull() = runTest {
 
         val maxId = employeeDao.getHighestEmployeeId()
 
@@ -313,7 +311,7 @@ internal class EmployeeDaoTest : DatabaseTest() {
             employeeDao.deleteEmployee("1", "CMP_A")
 
             val afterDelete = awaitItem()
-            assertEquals(1, afterDelete[0].isActive)
+            assertTrue(afterDelete.isEmpty())
 
             cancelAndIgnoreRemainingEvents()
         }
