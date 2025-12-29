@@ -31,14 +31,13 @@ plugins {
     alias(libs.plugins.baselineprofile)
 }
 val keystorePropertiesFile = providers.fileContents(
-    isolated.rootProject.projectDirectory.file("keystore.properties")).asText
+    isolated.rootProject.projectDirectory.file("keystore.properties"),
+).asText
 
 
 fun getSigningProperty(key: String): String {
-    val envValue = System.getenv(key)
-    if (!envValue.isNullOrEmpty()) {
-        return envValue
-    }
+    System.getenv(key)?.takeIf { it.isNotBlank() }?.let { return it }
+
     return keystorePropertiesFile.map {
         val properties = Properties()
         properties.load(StringReader(it))
@@ -61,11 +60,15 @@ android {
 
     signingConfigs {
         create("release") {
-                storeFile = file(getSigningProperty("RELEASE_STORE_FILE"))
+            val storeFilePath = getSigningProperty("RELEASE_STORE_FILE")
+
+            if (storeFilePath.isNotBlank()) {
+                storeFile = file(storeFilePath)
                 storePassword = getSigningProperty("RELEASE_STORE_PASSWORD")
                 keyAlias = getSigningProperty("RELEASE_KEY_ALIAS")
                 keyPassword = getSigningProperty("RELEASE_KEY_PASSWORD")
 
+            }
         }
     }
     buildTypes {
