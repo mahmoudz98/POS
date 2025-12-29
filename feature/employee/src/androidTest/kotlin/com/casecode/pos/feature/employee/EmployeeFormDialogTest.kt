@@ -22,6 +22,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.EmployeeRole
 import org.junit.Rule
@@ -36,7 +37,6 @@ class EmployeeFormDialogTest {
 
     @Test
     fun whenStateHasErrors_thenErrorMessagesAreDisplayed() {
-        // Given a state with errors
         val errorState = EmployeeFormUiState(
             formErrors = FormErrors(
                 nameError = uiString.core_ui_error_employee_name_empty,
@@ -45,8 +45,6 @@ class EmployeeFormDialogTest {
                 assignedBranchesError = uiString.core_ui_error_branch_name_empty,
             ),
         )
-
-        // When content is set
         composeTestRule.setContent {
             EmployeeFormDialog(
                 isUpdate = false,
@@ -57,7 +55,6 @@ class EmployeeFormDialogTest {
             )
         }
 
-        // Then verify error messages are displayed
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_error_employee_name_empty))
             .assertIsDisplayed()
@@ -72,6 +69,7 @@ class EmployeeFormDialogTest {
 
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_error_branch_name_empty))
+            .performScrollTo()
             .assertIsDisplayed()
     }
 
@@ -97,7 +95,6 @@ class EmployeeFormDialogTest {
             )
         }
 
-        // Then verify no error messages are displayed
         listOf(
             uiString.core_ui_error_employee_name_empty,
             uiString.core_ui_error_phone_empty,
@@ -184,7 +181,6 @@ class EmployeeFormDialogTest {
             )
             .assertIsDisplayed()
 
-        // Test Buttons
         composeTestRule
             .onNodeWithText(composeTestRule.activity.getString(uiString.core_ui_dialog_cancel_button_text))
             .performClick()
