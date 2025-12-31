@@ -96,6 +96,21 @@ jobs:
           
           echo "RELEASE_STORE_FILE=$GITHUB_WORKSPACE/pos-keystore-release.jks" >> $GITHUB_ENV
 
+      - name: Validate release keystore
+        env:
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+        run: |
+          echo "Validating release keystore..."
+          
+           keytool -list \
+          -keystore pos-keystore-release.jks \
+          -storepass "$RELEASE_STORE_PASSWORD" \
+          -alias "$RELEASE_KEY_ALIAS" \
+          > /dev/null
+          
+          echo "Keystore validation successful"
+
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
@@ -145,7 +160,7 @@ jobs:
         continue-on-error: false
         if: steps.graphs_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
-            echo "::error::Check Graphs failed, please update graphs with: ./gradlew graphUpdate" && exit 1
+          echo "::error::Check Graphs failed, please update graphs with: ./gradlew graphUpdate" && exit 1
 
       - name: Push new graphs if available
         if: steps.graphs_verify.outcome == 'failure' && github.event_name == 'pull_request'
@@ -276,6 +291,21 @@ jobs:
           chmod 600 pos-keystore-release.jks
           
           echo "RELEASE_STORE_FILE=$GITHUB_WORKSPACE/pos-keystore-release.jks" >> $GITHUB_ENV
+
+      - name: Validate release keystore
+        env:
+          RELEASE_STORE_PASSWORD: ${{ secrets.RELEASE_STORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+        run: |
+          echo "Validating release keystore..."
+          
+           keytool -list \
+          -keystore pos-keystore-release.jks \
+          -storepass "$RELEASE_STORE_PASSWORD" \
+          -alias "$RELEASE_KEY_ALIAS" \
+          > /dev/null
+          
+          echo "Keystore validation successful"  
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
