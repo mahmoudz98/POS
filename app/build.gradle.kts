@@ -79,10 +79,10 @@ android {
             }
         }
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = providers.gradleProperty("minifyWithR8")
+                .map(String::toBooleanStrict).getOrElse(true)
             applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
             signingConfig = signingConfigs.named("release").get()
@@ -99,6 +99,15 @@ android {
     }
     testOptions.unitTests.isIncludeAndroidResources = true
     namespace = APPLICATION_ID
+}
+androidComponents {
+    onVariants { variant ->
+        if (variant.name.contains("benchmark", ignoreCase = true)) {
+            variant.signingConfig?.setConfig(
+                android.signingConfigs.getByName("debug")
+            )
+        }
+    }
 }
 dependencies {
     implementation(projects.feature.login)
