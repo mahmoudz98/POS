@@ -102,7 +102,14 @@ android {
 }
 androidComponents {
     onVariants { variant ->
-        if (variant.name.contains("benchmark", ignoreCase = true)) {
+        val name = variant.name.lowercase()
+
+        val shouldUseDebugSigning =
+            name.contains("benchmark") ||
+                    name.contains("nonminified") ||
+                    name.contains("demo")
+
+        if (shouldUseDebugSigning) {
             variant.signingConfig?.setConfig(
                 android.signingConfigs.getByName("debug")
             )
