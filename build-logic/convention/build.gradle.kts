@@ -89,6 +89,10 @@ gradlePlugin {
             id = libs.plugins.pos.android.application.flavors.get().pluginId
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
+        register("androidApplicationSigning") {
+            id = libs.plugins.pos.android.application.signing.get().pluginId
+            implementationClass = "AndroidApplicationSigningConventionPlugin"
+        }
 
         register("androidTest") {
             id = libs.plugins.pos.android.test.get().pluginId
