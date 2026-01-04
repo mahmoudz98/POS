@@ -31,12 +31,12 @@ internal fun Project.configureSigning(
 
         signingConfigs {
             create("release") {
-                val storeFilePath = getSigningProperty("RELEASE_STORE_FILE", "SIGNING_STORE_FILE")
+                val storeFilePath = getSigningProperty("RELEASE_STORE_FILE", "RELEASE_STORE_FILE")
                 val storePasswordValue =
-                    getSigningProperty("RELEASE_STORE_PASSWORD", "SIGNING_STORE_PASSWORD")
-                val keyAliasValue = getSigningProperty("RELEASE_KEY_ALIAS", "SIGNING_KEY_ALIAS")
+                    getSigningProperty("RELEASE_STORE_PASSWORD", "RELEASE_STORE_PASSWORD")
+                val keyAliasValue = getSigningProperty("RELEASE_KEY_ALIAS", "RELEASE_KEY_ALIAS")
                 val keyPasswordValue =
-                    getSigningProperty("RELEASE_KEY_PASSWORD", "SIGNING_KEY_PASSWORD")
+                    getSigningProperty("RELEASE_KEY_PASSWORD", "RELEASE_KEY_PASSWORD")
 
                 if (storeFilePath != null && storePasswordValue != null && keyAliasValue != null && keyPasswordValue != null) {
                     val storeFileHandle = if (File(storeFilePath).isAbsolute) {
@@ -44,6 +44,8 @@ internal fun Project.configureSigning(
                     } else {
                         project.isolated.rootProject.projectDirectory.file(storeFilePath).asFile
                     }
+                    
+                    project.logger.lifecycle("POS: Configuring release signing. Path: ${storeFileHandle.absolutePath}, Exists: ${storeFileHandle.exists()}")
 
                     if (storeFileHandle.exists()) {
                         storeFile = storeFileHandle
@@ -51,6 +53,8 @@ internal fun Project.configureSigning(
                         keyAlias = keyAliasValue
                         keyPassword = keyPasswordValue
                     }
+                } else {
+                    project.logger.lifecycle("POS: Release signing properties missing. Path: $storeFilePath")
                 }
             }
 
@@ -79,6 +83,9 @@ internal fun Project.configureSigning(
                             } else {
                                 project.isolated.rootProject.projectDirectory.file(storeFilePath).asFile
                             }
+                            
+                            project.logger.lifecycle("POS: Configuring $variantName signing. Path: ${storeFileHandle.absolutePath}, Exists: ${storeFileHandle.exists()}")
+
                             if (storeFileHandle.exists()) {
                                 storeFile = storeFileHandle
                                 storePassword =
@@ -94,11 +101,11 @@ internal fun Project.configureSigning(
 
         androidComponents.onVariants { variant ->
             val specificConfig = signingConfigs.findByName(variant.name)
-            if (specificConfig != null) {
+            if (specificConfig != null && specificConfig.storeFile != null) {
                 variant.signingConfig.setConfig(specificConfig)
             } else if (variant.buildType == "release") {
                 val releaseConfig = signingConfigs.findByName("release")
-                if (releaseConfig != null) {
+                if (releaseConfig != null && releaseConfig.storeFile != null) {
                     variant.signingConfig.setConfig(releaseConfig)
                 }
             }
