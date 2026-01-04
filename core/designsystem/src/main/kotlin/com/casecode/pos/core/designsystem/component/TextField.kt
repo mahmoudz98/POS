@@ -140,6 +140,7 @@ fun PosOutlinedTextField(
     isError: Boolean = false,
     readOnly: Boolean = false,
     label: String,
+    placeHolder: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -152,7 +153,8 @@ fun PosOutlinedTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { if (label.isNotEmpty()) Text(label) else null },
+        label = { if (label.isNotEmpty()) Text(label) },
+        placeholder = placeHolder,
         isError = isError,
         readOnly = readOnly,
         enabled = enabled,
