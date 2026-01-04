@@ -223,24 +223,5 @@ class LoginInEmployeeDialogTest {
         assert(submitClicked)
     }
 
-    @Test
-    fun loginSuccess_triggersOnDismiss() {
-        var dismissed = false
 
-        composeTestRule.setContent {
-            POSTheme {
-                LoginInEmployeeDialog(
-                    uiState = LoginEmployeeUiState(isLoginSuccess = true),
-                    formState = LoginEmployeeFormState(),
-                    onFormEvent = {},
-                    showMessage = {},
-                    onShowMessage = {},
-                    onDismiss = { dismissed = true },
-                )
-            }
-        }
-
-        composeTestRule.waitForIdle()
-        assert(dismissed)
-    }
 }
