@@ -182,7 +182,7 @@ class LoginEmployeeViewModelTest {
         val state = viewModel.loginEmployeeUiState.value
         assertFalse(state.isLoginSuccess)
         assertFalse(state.inProgressLoginEmployee)
-        assertEquals(R.string.feature_login_employee_login_error_employee_incorrect, state.userMessage)
+        assertEquals(R.string.feature_login_employee_error_employee_incorrect, state.userMessage)
     }
 
     @Test
@@ -199,7 +199,7 @@ class LoginEmployeeViewModelTest {
         advanceUntilIdle()
 
         val state = viewModel.loginEmployeeUiState.value
-        assertEquals(R.string.feature_login_employee_login_error_employee_incorrect, state.userMessage)
+        assertEquals(R.string.feature_login_employee_error_employee_incorrect, state.userMessage)
     }
 
     @Test
@@ -218,7 +218,7 @@ class LoginEmployeeViewModelTest {
         advanceUntilIdle()
 
         val state = viewModel.loginEmployeeUiState.value
-        assertEquals(R.string.feature_login_employee_login_error_employee_incorrect, state.userMessage)
+        assertEquals(R.string.feature_login_employee_error_employee_incorrect, state.userMessage)
     }
 
     @Test
@@ -256,7 +256,7 @@ class LoginEmployeeViewModelTest {
         advanceUntilIdle()
 
         val state = viewModel.loginEmployeeUiState.value
-        assertEquals(R.string.feature_login_employee_login_error_login, state.userMessage)
+        assertEquals(R.string.feature_login_employee_error_login, state.userMessage)
     }
 
     @Test
