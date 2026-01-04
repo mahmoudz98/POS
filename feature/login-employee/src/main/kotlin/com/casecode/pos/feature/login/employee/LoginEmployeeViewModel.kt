@@ -120,7 +120,7 @@ constructor(
                     -> {
                         state.copy(
                             inProgressLoginEmployee = false,
-                            userMessage = R.string.feature_login_employee_login_error_employee_incorrect,
+                            userMessage = R.string.feature_login_employee_error_employee_incorrect,
                         )
                     }
 
@@ -134,7 +134,7 @@ constructor(
                     is EmployeeLoginResult.GeneralError -> {
                         state.copy(
                             inProgressLoginEmployee = false,
-                            userMessage = R.string.feature_login_employee_login_error_login,
+                            userMessage = R.string.feature_login_employee_error_login,
                         )
                     }
                 }

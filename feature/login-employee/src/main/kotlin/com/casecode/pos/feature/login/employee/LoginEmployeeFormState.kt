@@ -27,7 +27,7 @@ data class LoginEmployeeFormState(
 ) {
     fun validate(): LoginEmployeeFormState {
         return this.copy(
-            companyCodeError = if (companyCode.isBlank()) featureString.feature_login_employee_login_error_uid_empty else null,
+            companyCodeError = if (companyCode.isBlank()) featureString.feature_login_employee_error_company_code_empty else null,
             employeeIdError = if (employeeId.isBlank()) featureString.feature_login_employee_error_name_empty else null,
             passwordError = if (password.isBlank()) featureString.feature_login_employee_error_password_empty else null,
         )
