@@ -95,6 +95,9 @@ jobs:
           chmod 600 pos-keystore-release.jks
           
           echo "RELEASE_STORE_FILE=$GITHUB_WORKSPACE/pos-keystore-release.jks" >> $GITHUB_ENV
+          echo "RELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD" >> $GITHUB_ENV
+          echo "RELEASE_KEY_ALIAS=$RELEASE_KEY_ALIAS" >> $GITHUB_ENV
+          echo "RELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD" >> $GITHUB_ENV
 
       - name: Validate release keystore
         env:
@@ -292,6 +295,9 @@ jobs:
           chmod 600 pos-keystore-release.jks
           
           echo "RELEASE_STORE_FILE=$GITHUB_WORKSPACE/pos-keystore-release.jks" >> $GITHUB_ENV
+          echo "RELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD" >> $GITHUB_ENV
+          echo "RELEASE_KEY_ALIAS=$RELEASE_KEY_ALIAS" >> $GITHUB_ENV
+          echo "RELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD" >> $GITHUB_ENV
 
       - name: Validate release keystore
         env:
