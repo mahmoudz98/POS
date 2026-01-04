@@ -18,8 +18,8 @@
     <string name="feature_login_employee_title">Employee Login</string>
 
     <!-- Form Labels -->
-    <string name="feature_login_employee_login_label_company_code">Company Code</string>
-    <string name="feature_login_employee_login_label_uid">Employee ID</string>
+    <string name="feature_login_employee_label_company_code">Company Code</string>
+    <string name="feature_login_employee_label_uid">Employee ID</string>
     <string name="feature_login_employee_login_label_password">Password</string>
     <string name="feature_login_employee_hint_scan_company_code">Scan or enter company code</string>
 
@@ -27,11 +27,11 @@
     <string name="feature_login_employee_login_button_text">Log In</string>
 
     <!-- Validation Errors -->
-    <string name="feature_login_employee_login_error_uid_empty">Company code is required.</string>
+    <string name="feature_login_employee_error_company_code_empty">Company code is required.</string>
     <string name="feature_login_employee_error_name_empty">Employee ID is required.</string>
     <string name="feature_login_employee_error_password_empty">Password is required.</string>
 
     <!-- Login Errors -->
-    <string name="feature_login_employee_login_error_employee_incorrect">Incorrect credentials. Please check and try again.</string>
-    <string name="feature_login_employee_login_error_login">An error occurred while logging in. Please try again.</string>
+    <string name="feature_login_employee_error_employee_incorrect">Incorrect credentials. Please check and try again.</string>
+    <string name="feature_login_employee_error_login">An error occurred while logging in. Please try again.</string>
 </resources>

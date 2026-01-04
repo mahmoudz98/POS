@@ -18,8 +18,8 @@
     <string name="feature_login_employee_title">تسجيل دخول الموظف</string>
 
     <!-- تسميات النموذج -->
-    <string name="feature_login_employee_login_label_company_code">رمز الشركة</string>
-    <string name="feature_login_employee_login_label_uid">رقم الموظف</string>
+    <string name="feature_login_employee_label_company_code">رمز الشركة</string>
+    <string name="feature_login_employee_label_uid">رقم الموظف</string>
     <string name="feature_login_employee_login_label_password">كلمة المرور</string>
     <string name="feature_login_employee_hint_scan_company_code">امسح أو أدخل رمز الشركة</string>
 
@@ -27,11 +27,11 @@
     <string name="feature_login_employee_login_button_text">تسجيل الدخول</string>
 
     <!-- أخطاء التحقق -->
-    <string name="feature_login_employee_login_error_uid_empty">رمز الشركة مطلوب.</string>
+    <string name="feature_login_employee_error_company_code_empty">رمز الشركة مطلوب.</string>
     <string name="feature_login_employee_error_name_empty">رقم الموظف مطلوب.</string>
     <string name="feature_login_employee_error_password_empty">كلمة المرور مطلوبة.</string>
 
     <!-- أخطاء تسجيل الدخول -->
-    <string name="feature_login_employee_login_error_employee_incorrect">بيانات الاعتماد غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.</string>
-    <string name="feature_login_employee_login_error_login">حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.</string>
+    <string name="feature_login_employee_error_employee_incorrect">بيانات الاعتماد غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.</string>
+    <string name="feature_login_employee_error_login">حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.</string>
 </resources>
