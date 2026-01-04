@@ -81,12 +81,12 @@ class LoginInEmployeeDialogTest {
 
         // Company code field
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_login_label_company_code))
+            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_label_company_code))
             .assertIsDisplayed()
 
         // Employee ID field
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_login_label_uid))
+            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_label_uid))
             .assertIsDisplayed()
 
         // Password field
@@ -107,7 +107,7 @@ class LoginInEmployeeDialogTest {
                 LoginInEmployeeDialog(
                     uiState = LoginEmployeeUiState(),
                     formState = LoginEmployeeFormState(
-                        companyCodeError = R.string.feature_login_employee_login_error_uid_empty,
+                        companyCodeError = R.string.feature_login_employee_error_company_code_empty,
                     ),
                     onFormEvent = {},
                     showMessage = {},
@@ -118,7 +118,7 @@ class LoginInEmployeeDialogTest {
         }
 
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_login_error_uid_empty))
+            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_error_company_code_empty))
             .assertIsDisplayed()
     }
 
@@ -185,7 +185,7 @@ class LoginInEmployeeDialogTest {
 
         // Enter company code
         composeTestRule
-            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_login_label_company_code))
+            .onNodeWithText(composeTestRule.activity.getString(R.string.feature_login_employee_label_company_code))
             .performTextInput("TEST123")
 
         assert(capturedEvent is LoginEmployeeFormEvent.CompanyCodeChanged)
