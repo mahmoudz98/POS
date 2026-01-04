@@ -4,6 +4,7 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import org.gradle.api.Project
 import java.io.File
+import java.io.StringReader
 import java.util.Properties
 
 /**
@@ -15,13 +16,13 @@ internal fun Project.configureSigning(
     androidComponents: ApplicationAndroidComponentsExtension,
 ) {
     commonExtension.apply {
-        val keystorePropertiesFile = rootProject.file("keystore.properties")
         val keystoreProperties = Properties()
+        val keystoreContent = providers.fileContents(
+            project.isolated.rootProject.projectDirectory.file("keystore.properties"),
+        ).asText
 
-        if (keystorePropertiesFile.exists()) {
-            keystorePropertiesFile.inputStream().use { input ->
-                keystoreProperties.load(input)
-            }
+        if (keystoreContent.isPresent) {
+            keystoreProperties.load(StringReader(keystoreContent.get()))
         }
 
         fun getSigningProperty(key: String, envKey: String): String? {
@@ -41,7 +42,7 @@ internal fun Project.configureSigning(
                     val storeFileHandle = if (File(storeFilePath).isAbsolute) {
                         File(storeFilePath)
                     } else {
-                        rootProject.file(storeFilePath)
+                        project.isolated.rootProject.projectDirectory.file(storeFilePath).asFile
                     }
 
                     if (storeFileHandle.exists()) {
@@ -56,7 +57,6 @@ internal fun Project.configureSigning(
             // Dynamic per-flavor/build-type configs
             PosFlavor.entries.forEach { flavor ->
                 PosBuildType.entries.forEach { buildType ->
-                    if (buildType == PosBuildType.DEBUG) return@forEach
 
                     val flavorNameUpper = flavor.name.uppercase()
                     val buildTypeUpper = buildType.name.uppercase()
@@ -77,7 +77,7 @@ internal fun Project.configureSigning(
                             val storeFileHandle = if (File(storeFilePath).isAbsolute) {
                                 File(storeFilePath)
                             } else {
-                                rootProject.file(storeFilePath)
+                                project.isolated.rootProject.projectDirectory.file(storeFilePath).asFile
                             }
                             if (storeFileHandle.exists()) {
                                 storeFile = storeFileHandle
