@@ -28,21 +28,9 @@ plugins {
     alias(libs.plugins.pos.android.application.jacoco)
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.pos.hilt)
+    alias(libs.plugins.google.osslicenses)
     alias(libs.plugins.baselineprofile)
-}
-val keystorePropertiesFile = providers.fileContents(
-    isolated.rootProject.projectDirectory.file("keystore.properties"),
-).asText
-
-
-fun getSigningProperty(key: String): String {
-    System.getenv(key)?.takeIf { it.isNotBlank() }?.let { return it }
-
-    return keystorePropertiesFile.map {
-        val properties = Properties()
-        properties.load(StringReader(it))
-        properties[key] as String? ?: ""
-    }.orElse("").get()
+    alias(libs.plugins.pos.android.application.signing)
 }
 
 android {
@@ -57,20 +45,6 @@ android {
         localeFilters += listOf("en", "ar")
     }
 
-
-    signingConfigs {
-        create("release") {
-            val storeFilePath = getSigningProperty("RELEASE_STORE_FILE")
-
-            if (storeFilePath.isNotBlank()) {
-                storeFile = file(storeFilePath)
-                storePassword = getSigningProperty("RELEASE_STORE_PASSWORD")
-                keyAlias = getSigningProperty("RELEASE_KEY_ALIAS")
-                keyPassword = getSigningProperty("RELEASE_KEY_PASSWORD")
-
-            }
-        }
-    }
     buildTypes {
         debug {
             applicationIdSuffix = PosBuildType.DEBUG.applicationIdSuffix
@@ -100,7 +74,7 @@ android {
     testOptions.unitTests.isIncludeAndroidResources = true
     namespace = APPLICATION_ID
 }
-androidComponents {
+/*androidComponents {
     onVariants { variant ->
         val name = variant.name.lowercase()
 
@@ -115,7 +89,7 @@ androidComponents {
             )
         }
     }
-}
+}*/
 dependencies {
     implementation(projects.feature.login)
     implementation(projects.feature.loginEmployee)
@@ -157,19 +131,17 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.revenuecat.purchases)
 
-    debugCompileOnly(libs.kotlinx.coroutines.debug)
-    // debugImplementation(libs.leakcanary)
     implementation(libs.timber)
-    // ******* UNIT TESTING ******************************************************
+
+    debugCompileOnly(libs.kotlinx.coroutines.debug)
     debugImplementation(projects.uiTestHiltManifest)
     testImplementation(projects.core.testing)
+    testImplementation(libs.kotlin.test)
 
     kspTest(libs.hilt.compiler)
-    testImplementation(kotlin("test"))
     testImplementation(libs.coroutines.android)
 
     androidTestImplementation(projects.core.testing)
-    androidTestImplementation(kotlin("test"))
     kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.test.espresso.core)
@@ -177,6 +149,7 @@ dependencies {
     androidTestImplementation(libs.coil.test)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.kotlin.test)
 
     baselineProfile(projects.benchmarks)
 }
