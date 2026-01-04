@@ -59,6 +59,7 @@ import com.casecode.pos.core.designsystem.theme.POSTheme
 import com.casecode.pos.core.ui.DevicePreviews
 import com.casecode.pos.core.ui.utils.scanOptions
 import com.casecode.pos.core.ui.R.string as uiString
+import com.casecode.pos.feature.login.employee.R.string as fString
 
 @Composable
 fun LoginInEmployeeDialog(
@@ -87,11 +88,12 @@ fun LoginInEmployeeDialog(
     onFormEvent: (LoginEmployeeFormEvent) -> Unit,
     showMessage: (Int) -> Unit,
     onShowMessage: () -> Unit,
-    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
+    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo(true).windowSizeClass,
     onDismiss: () -> Unit,
 ) {
     val isCompact =
         windowSizeClass.isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)
+
     val context = LocalContext.current
     val snackState = remember { SnackbarHostState() }
     val currentSize = currentWindowDpSize()
@@ -101,7 +103,7 @@ fun LoginInEmployeeDialog(
         onDismissRequest = { onDismiss() },
         title = {
             Text(
-                stringResource(R.string.feature_login_employee_title),
+                stringResource(fString.feature_login_employee_title),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -121,7 +123,10 @@ fun LoginInEmployeeDialog(
                         onValueChange = {
                             onFormEvent(LoginEmployeeFormEvent.CompanyCodeChanged(it))
                         },
-                        label = stringResource(R.string.feature_login_employee_hint_scan_company_code),
+                        label = stringResource(fString.feature_login_employee_label_company_code),
+                        placeHolder = {
+                            Text(stringResource(fString.feature_login_employee_hint_scan_company_code))
+                        },
                         isError = formState.companyCodeError != null,
                         supportingText = formState.companyCodeError?.let { stringResource(it) },
                         visualTransformation = PasswordVisualTransformation(),
@@ -148,7 +153,10 @@ fun LoginInEmployeeDialog(
                                     )
                                 },
                             ) {
-                                Icon(PosIcons.QrCodeScanner, "")
+                                Icon(
+                                    PosIcons.QrCodeScanner,
+                                    stringResource(fString.feature_login_employee_label_company_code),
+                                )
                             }
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -156,72 +164,10 @@ fun LoginInEmployeeDialog(
 
                     if (!isCompact) {
                         Row {
-                            PosOutlinedTextField(
-                                value = formState.employeeId,
-                                onValueChange = {
-                                    onFormEvent(LoginEmployeeFormEvent.EmployeeIdChanged(it))
-                                },
-                                isError = formState.employeeIdError != null,
-                                label = stringResource(uiString.core_ui_employee_id_hint),
-                                keyboardOptions =
-                                KeyboardOptions(
-                                    keyboardType = KeyboardType.Decimal,
-                                    imeAction = ImeAction.Next,
-                                ),
-                                modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .padding(end = 8.dp),
-                                supportingText = formState.employeeIdError?.let { stringResource(it) },
-                            )
-                            PosOutlinedTextField(
-                                value = formState.password,
-                                onValueChange = {
-                                    onFormEvent(LoginEmployeeFormEvent.PasswordChanged(it))
-                                },
-                                isError = formState.passwordError != null,
-                                label = stringResource(uiString.core_ui_employee_password_hint),
-                                visualTransformation = PasswordVisualTransformation(),
-                                supportingText = formState.passwordError?.let { stringResource(it) },
-                                keyboardOptions =
-                                KeyboardOptions(
-                                    keyboardType = KeyboardType.Text,
-                                    imeAction = ImeAction.Done,
-                                ),
-                                modifier = Modifier.weight(1f),
-                            )
+                            CredentialsInputs(modifier.weight(1f), formState, onFormEvent)
                         }
                     } else {
-                        PosOutlinedTextField(
-                            value = formState.employeeId,
-                            onValueChange = {
-                                onFormEvent(LoginEmployeeFormEvent.EmployeeIdChanged(it))
-                            },
-                            isError = formState.employeeIdError != null,
-                            label = stringResource(uiString.core_ui_employee_id_hint),
-                            keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Next,
-                            ),
-                            modifier = Modifier.fillMaxWidth(),
-                            supportingText = formState.employeeIdError?.let { stringResource(it) },
-                        )
-                        PosOutlinedTextField(
-                            value = formState.password,
-                            onValueChange = {
-                                onFormEvent(LoginEmployeeFormEvent.PasswordChanged(it))
-                            },
-                            isError = formState.passwordError != null,
-                            label = stringResource(uiString.core_ui_employee_password_hint),
-                            visualTransformation = PasswordVisualTransformation(),
-                            supportingText = formState.passwordError?.let { stringResource(it) },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                                imeAction = ImeAction.Done,
-                            ),
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                        CredentialsInputs(modifier.fillMaxWidth(), formState, onFormEvent)
                     }
                     if (uiState.inProgressLoginEmployee) {
                         PosLoadingWheel(
@@ -239,7 +185,7 @@ fun LoginInEmployeeDialog(
                     onFormEvent(LoginEmployeeFormEvent.SubmitClicked)
                 },
             ) {
-                Text(stringResource(R.string.feature_login_employee_login_button_text))
+                Text(stringResource(fString.feature_login_employee_login_button_text))
             }
         },
     )
@@ -250,6 +196,47 @@ fun LoginInEmployeeDialog(
             onShowMessage()
         }
     }
+}
+
+@Composable
+private fun CredentialsInputs(
+    modifier: Modifier,
+    formState: LoginEmployeeFormState,
+    onFormEvent: (LoginEmployeeFormEvent) -> Unit,
+) {
+    PosOutlinedTextField(
+        value = formState.employeeId,
+        onValueChange = {
+            onFormEvent(LoginEmployeeFormEvent.EmployeeIdChanged(it))
+        },
+        isError = formState.employeeIdError != null,
+        label = stringResource(uiString.core_ui_employee_id_hint),
+        keyboardOptions =
+        KeyboardOptions(
+            keyboardType = KeyboardType.Decimal,
+            imeAction = ImeAction.Next,
+        ),
+        modifier =
+        modifier
+            .padding(end = 8.dp),
+        supportingText = formState.employeeIdError?.let { stringResource(it) },
+    )
+    PosOutlinedTextField(
+        value = formState.password,
+        onValueChange = {
+            onFormEvent(LoginEmployeeFormEvent.PasswordChanged(it))
+        },
+        isError = formState.passwordError != null,
+        label = stringResource(uiString.core_ui_employee_password_hint),
+        visualTransformation = PasswordVisualTransformation(),
+        supportingText = formState.passwordError?.let { stringResource(it) },
+        keyboardOptions =
+        KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Done,
+        ),
+        modifier = modifier,
+    )
 }
 
 @DevicePreviews
