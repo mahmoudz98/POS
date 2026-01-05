@@ -15,7 +15,7 @@
  */
 package com.casecode.pos.core.domain.usecase
 
-import com.casecode.pos.core.domain.utils.OwnerLoginResult
+import com.casecode.pos.core.domain.model.OwnerLoginResult
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.BranchStatus
 import com.casecode.pos.core.model.business.Business
@@ -36,7 +36,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
-import kotlin.time.Clock
+import kotlin.time.Instant
 
 class SignInOwnerUseCaseTest {
 
@@ -48,10 +48,8 @@ class SignInOwnerUseCaseTest {
     private lateinit var testBranchRepository: TestBranchRepository
     private lateinit var testSessionRepository: TestSessionRepository
 
-    // The System Under Test (SUT)
     private lateinit var signInOwnerUseCase: SignInOwnerUseCase
 
-    // Test data
     private val testToken = "valid_google_id_token"
     private val testUser = User(
         uid = "owner123",
@@ -66,8 +64,8 @@ class SignInOwnerUseCaseTest {
         currencyCode = "egp",
         email = "test@pos.com",
         phone = "12345666",
-        updatedAt = Clock.System.now(),
-        createdAt = Clock.System.now(),
+        updatedAt = Instant.parse("2024-01-01T00:00:00Z"),
+        createdAt = Instant.parse("2024-01-01T00:00:00Z"),
     )
     private val testBranches = listOf(
         Branch(
@@ -75,8 +73,8 @@ class SignInOwnerUseCaseTest {
             name = "Main Street",
             phone = "12",
             status = BranchStatus.OPEN,
-            createdAt = Clock.System.now(),
-            updatedAt = Clock.System.now(),
+            createdAt = Instant.parse("2024-01-01T00:00:00Z"),
+            updatedAt = Instant.parse("2024-01-01T00:00:00Z"),
         ),
     )
 
@@ -97,114 +95,104 @@ class SignInOwnerUseCaseTest {
     }
 
     @Test
-    fun `when user has business and branches should return Success`() = runTest {
-        // Arrange
+    fun whenHasBusiness_ReturnsSuccess() = runTest {
         testAuthRepository.sendSignInSuccess(testUser)
         testBusinessRepository.addBusiness(testBusiness)
         testBranchRepository.setBranchesForBusiness(testBusiness.id, testBranches)
 
-        // Act
         val result = signInOwnerUseCase(testToken)
 
-        // Assert
-        assertEquals(OwnerLoginResult.Success, result, "Result should be the Success object")
+        assertEquals(OwnerLoginResult.Success, result)
 
-        // Assert side-effects
         assertEquals(
             testUser,
             testSessionRepository.lastOwnerSession,
-            "A session should have been started for the correct user",
         )
     }
 
     @Test
-    fun `when google sign-in fails should return AuthenticationFailed`() = runTest {
-        // Arrange
+    fun whenAuthFailure_ReturnsAuthenticationFailed() = runTest {
         val authError = Exception("Invalid Token")
         testAuthRepository.sendSignInFailure(authError)
 
-        // Act
         val result = signInOwnerUseCase(testToken)
 
-        // Assert
         assertEquals(OwnerLoginResult.AuthenticationFailed, result)
         assertNull(
             testSessionRepository.lastOwnerSession,
-            "No session should be started on auth failure",
         )
     }
 
     @Test
-    fun `when user authenticates but has no business document should return AccountNeedsOnboarding`() =
+    fun whenNoBusiness_ReturnsAccountNeedsOnboarding() =
         runTest {
-            // Arrange
             testAuthRepository.sendSignInSuccess(testUser)
-            // Note: No business is added to the business repository.
 
-            // Act
             val result = signInOwnerUseCase(testToken)
 
-            // Assert
             assertEquals(OwnerLoginResult.AccountNeedsOnboarding, result)
         }
 
     @Test
-    fun `when business status is PENDING_ONBOARDING should return AccountNeedsOnboarding`() =
+    fun whenBusinessPendingOnboarding_ReturnsAccountNeedsOnboarding() =
         runTest {
-            // Arrange
             testAuthRepository.sendSignInSuccess(testUser)
             val pendingBusiness = testBusiness.copy(status = BusinessStatus.PENDING_ONBOARDING)
             testBusinessRepository.addBusiness(pendingBusiness)
 
-            // Act
             val result = signInOwnerUseCase(testToken)
 
-            // Assert
             assertEquals(OwnerLoginResult.AccountNeedsOnboarding, result)
         }
 
     @Test
-    fun `when getting business fails with IOException should return NetworkError`() =
+    fun whenNetworkError_ReturnsNetworkError() =
         runTest {
-            // Arrange
             testAuthRepository.sendSignInSuccess(testUser)
             testBusinessRepository.setFailure(IOException("Network unavailable"))
 
-            // Act
             val result = signInOwnerUseCase(testToken)
 
-            // Assert
             assertEquals(OwnerLoginResult.NetworkError, result)
         }
 
     @Test
-    fun `when getting business fails with other Exception should return GeneralError`() =
+    fun whenGenericError_ReturnsGeneralError() =
         runTest {
-            // Arrange
             val genericError = IllegalStateException("Firestore corrupted")
             testAuthRepository.sendSignInSuccess(testUser)
             testBusinessRepository.setFailure(genericError)
 
-            // Act
             val result = signInOwnerUseCase(testToken)
 
-            // Assert
             assertIs<OwnerLoginResult.GeneralError>(result)
             assertEquals(genericError, result.exception)
         }
 
     @Test
-    fun `when business is active but has no branches should return AccountNeedsOnboarding`() =
+    fun whenActiveBusinessNoBranches_ReturnsSuccess() =
         runTest {
-            // Arrange
             testAuthRepository.sendSignInSuccess(testUser)
             testBusinessRepository.addBusiness(testBusiness)
             testBranchRepository.setBranchesForBusiness(testBusiness.id, emptyList())
 
-            // Act
             val result = signInOwnerUseCase(testToken)
 
-            // Assert
-            assertEquals(OwnerLoginResult.AccountNeedsOnboarding, result)
+            assertEquals(OwnerLoginResult.Success, result)
         }
+
+    @Test
+    fun whenMultipleBranches_ReturnsBranchSelectionRequired() = runTest {
+        val branch1 = testBranches.first()
+        val branch2 = branch1.copy(id = "branch2", name = "Second Branch")
+        val multipleBranches = listOf(branch1, branch2)
+
+        testAuthRepository.sendSignInSuccess(testUser)
+        testBusinessRepository.addBusiness(testBusiness)
+        testBranchRepository.setBranchesForBusiness(testBusiness.id, multipleBranches)
+
+        val result = signInOwnerUseCase(testToken)
+
+        assertEquals(OwnerLoginResult.BranchSelectionRequired(multipleBranches), result)
+    }
 }

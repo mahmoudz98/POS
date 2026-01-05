@@ -29,7 +29,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import kotlin.test.Test
 
-class ReportsViewModelTest : BaseTest() {
+class ReportsViewModelTest : BaseTest({
+}) {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
     private lateinit var viewModel: ReportsViewModel

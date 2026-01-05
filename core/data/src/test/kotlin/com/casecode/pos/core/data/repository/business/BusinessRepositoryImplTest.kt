@@ -21,7 +21,7 @@ import com.casecode.pos.core.database.model.LocalSignalStatus
 import com.casecode.pos.core.database.model.OutboxCommandEntity
 import com.casecode.pos.core.database.model.OutboxEventType
 import com.casecode.pos.core.firebase.TimestampSerializer
-import com.casecode.pos.core.model.SyncableEntityType
+import com.casecode.pos.core.firebase.model.OperationType
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
@@ -31,6 +31,7 @@ import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.model.business.TaxRate
 import com.casecode.pos.core.model.business.Vertical
+import com.casecode.pos.core.model.data.SyncableEntityType
 import com.casecode.pos.core.testing.dao.TestBranchDao
 import com.casecode.pos.core.testing.dao.TestBusinessDao
 import com.casecode.pos.core.testing.dao.TestLocalSignalDao
@@ -129,7 +130,7 @@ class BusinessRepositoryImplTest {
         // Verify command queuing
         assertEquals(1, outboxCommandDao.insertedCommands.size)
         assertEquals(
-            OutboxEventType.BUSINESS_CREATED.ordinal,
+            OutboxEventType.Business.CREATED,
             outboxCommandDao.insertedCommands.first().type,
         )
     }
@@ -160,10 +161,30 @@ class BusinessRepositoryImplTest {
     @Test
     fun syncUp_withPendingBusinessCommand_callsNetworkAndPostsSignal() = runTest {
         // Given
-        val business = Business(id = "biz1", name = "Test Cafe", ownerUid = "owner1", vertical = Vertical.CAFE, currencyCode = "USD", status = BusinessStatus.ACTIVE, email = "", phone = "", updatedAt = Clock.System.now(), createdAt = Clock.System.now())
+        val business = Business(
+            id = "biz1",
+            name = "Test Cafe",
+            ownerUid = "owner1",
+            vertical = Vertical.CAFE,
+            currencyCode = "USD",
+            status = BusinessStatus.ACTIVE,
+            email = "",
+            phone = "",
+            updatedAt = Clock.System.now(),
+            createdAt = Clock.System.now(),
+        )
         val branch = Branch(id = "branch1", name = "Main St", phone = "")
         val tax = TaxRate(id = "tax1", name = "VAT", rate = 10.0f)
-        val subscriptionPlan = SubscriptionPlan("plan1", "Basic", "أساسي", emptyList(), true, emptyList(), emptyList(), PlanLimits(1, 1, 1, 1))
+        val subscriptionPlan = SubscriptionPlan(
+            "plan1",
+            "Basic",
+            "أساسي",
+            emptyList(),
+            true,
+            emptyList(),
+            emptyList(),
+            PlanLimits(1, 1, 1, 1),
+        )
         val subscription = Subscription.fromPlan(subscriptionPlan)
         val billingEvent = BillingEvent.forPlanActivation(subscriptionPlan, "USD", "fake_id")
         val payload = json.encodeToString(
@@ -177,7 +198,7 @@ class BusinessRepositoryImplTest {
         )
         val command = OutboxCommandEntity(
             id = 1,
-            type = OutboxEventType.BUSINESS_CREATED.ordinal,
+            type = OutboxEventType.Business.CREATED,
             payload = payload,
         )
         outboxCommandDao.insertCommand(command)
@@ -194,7 +215,14 @@ class BusinessRepositoryImplTest {
     fun syncDown_withPendingLocalSignal_fetchesFromNetworkAndUpdatesLocalDb() = runTest {
         // Given
         val ownerId = "owner1"
-        val signal = LocalSignalEntity(id = "22121", entityType = SyncableEntityType.BUSINESS, entityId = ownerId)
+        val entityId = "entity1"
+        val signal = LocalSignalEntity(
+            id = "22121",
+            entityType = SyncableEntityType.BUSINESS,
+            entityId = entityId,
+            operationType = OperationType.CREATED,
+            businessId = ownerId,
+        )
         localSignalDao.insertSignal(signal)
 
         network.createInitialBusiness(
@@ -210,8 +238,10 @@ class BusinessRepositoryImplTest {
 
         // Then
         assertTrue(result)
-        // Verify the local signal was processed
-        assertEquals(LocalSignalStatus.PROCESSED, localSignalDao.getPendingSignals().first().first().status)
+        assertEquals(
+            LocalSignalStatus.PROCESSED,
+            localSignalDao.getPendingSignals().first().first().status,
+        )
     }
 
     val business = Business(

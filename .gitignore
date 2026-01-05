@@ -51,3 +51,5 @@ captures/
 secrets.defaults.properties
 
 app/google-services.json
+.gemini/
+gha-creds-*.json

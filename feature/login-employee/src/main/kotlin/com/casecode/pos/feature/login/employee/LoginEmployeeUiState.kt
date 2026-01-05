@@ -19,4 +19,5 @@ data class LoginEmployeeUiState(
     val userMessage: Int? = null,
     val isOnline: Boolean = false,
     val inProgressLoginEmployee: Boolean = false,
+    val isLoginSuccess: Boolean = false,
 )

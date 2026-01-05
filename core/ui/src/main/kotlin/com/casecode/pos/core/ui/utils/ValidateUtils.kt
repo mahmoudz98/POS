@@ -72,3 +72,10 @@ fun validateEmail(email: String): Int? {
         else -> null
     }
 }
+fun validatePassword(password: String): Int? {
+    return when {
+        password.isEmpty() -> R.string.core_ui_error_add_employee_password_empty
+        password.length < 6 -> R.string.core_ui_error_add_employee_password_less_than_six
+        else -> null
+    }
+}

@@ -58,3 +58,16 @@ fun BranchEntity.asNetworkModel(): NetworkBranch = NetworkBranch(
     createdAt = this.createdAt.toFirestoreTimestamp(),
     updatedAt = this.updatedAt.toFirestoreTimestamp(),
 )
+
+/**
+ * Converts a [NetworkBranch] data transfer object to a [BranchEntity] Room entity.
+ */
+fun NetworkBranch.asEntity(businessId: String): BranchEntity = BranchEntity(
+    branchId = this.id,
+    businessId = businessId,
+    name = this.name,
+    phone = this.phone,
+    status = this.status.value,
+    createdAt = this.createdAt.toKotlinInstant(),
+    updatedAt = this.updatedAt.toKotlinInstant(),
+)

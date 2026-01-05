@@ -20,6 +20,7 @@ import kotlin.time.Instant
 
 data class Branch(
     val id: String = "",
+    val businessId: String = "",
     val name: String,
     val phone: String,
     val status: BranchStatus = BranchStatus.OPEN,

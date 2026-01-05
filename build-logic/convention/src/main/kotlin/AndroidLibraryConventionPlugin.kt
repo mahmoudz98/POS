@@ -1,6 +1,6 @@
 
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import com.casecode.pos.Configuration
 import com.casecode.pos.configureFlavors
 import com.casecode.pos.configureGradleManagedDevices
@@ -33,8 +33,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 lint.targetSdk = Configuration.COMPILE_SDK
                 testOptions.targetSdk = Configuration.COMPILE_SDK
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                testOptions.animationsDisabled = true
-
+                testOptions {
+                    animationsDisabled = true
+                }
                 configureFlavors(this)
                 configureGradleManagedDevices(this)
                 resourcePrefix = path

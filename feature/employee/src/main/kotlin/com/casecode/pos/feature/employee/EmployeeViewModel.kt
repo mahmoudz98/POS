@@ -17,190 +17,352 @@ package com.casecode.pos.feature.employee
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
-import com.casecode.pos.core.domain.usecase.old.AddEmployeeUseCase
-import com.casecode.pos.core.domain.usecase.old.DeleteEmployeeUseCase
-import com.casecode.pos.core.domain.usecase.old.GetBusinessUseCase
-import com.casecode.pos.core.domain.usecase.old.GetEmployeesBusinessUseCase
-import com.casecode.pos.core.domain.usecase.old.UpdateEmployeesUseCase
-import com.casecode.pos.core.domain.utils.AddEmployeeResult
-import com.casecode.pos.core.domain.utils.BusinessResult
-import com.casecode.pos.core.domain.utils.NetworkMonitor
-import com.casecode.pos.core.domain.utils.Resource
-import com.casecode.pos.core.model.users.Branch
-import com.casecode.pos.core.model.users.Employee
+import com.casecode.pos.core.domain.exceptions.EmployeeIdCollisionException
+import com.casecode.pos.core.domain.exceptions.NoActiveSessionException
+import com.casecode.pos.core.domain.usecase.CreateEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.DeleteEmployeeUseCase
+import com.casecode.pos.core.domain.usecase.GenerateEmployeeIdUseCase
+import com.casecode.pos.core.domain.usecase.GetBranchesUseCase
+import com.casecode.pos.core.domain.usecase.GetEmployeesUseCase
+import com.casecode.pos.core.domain.usecase.UpdateEmployeeUseCase
+import com.casecode.pos.core.model.SessionStateResult.EmployeeLoggedIn
+import com.casecode.pos.core.model.SessionStateResult.OwnerLoggedIn
+import com.casecode.pos.core.model.business.Employee
+import com.casecode.pos.core.ui.stateInWhileSubscribed
+import com.casecode.pos.core.ui.updateWithViewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.casecode.pos.core.ui.R.string as uiString
 
 @HiltViewModel
-class EmployeeViewModel
-@Inject
-constructor(
-    private val networkMonitor: NetworkMonitor,
-    private val getEmployeesBusinessUseCase: GetEmployeesBusinessUseCase,
-    private val getBusinessUseCase: GetBusinessUseCase,
-    private val addEmployeesUseCase: AddEmployeeUseCase,
-    private val updateEmployeesUseCase: UpdateEmployeesUseCase,
+internal class EmployeeViewModel @Inject constructor(
+    private val getEmployeesUseCase: GetEmployeesUseCase,
+    private val getBranchesUseCase: GetBranchesUseCase,
+    private val generateEmployeeIdUseCase: GenerateEmployeeIdUseCase,
+    private val createEmployeeUseCase: CreateEmployeeUseCase,
+    private val updateEmployeeUseCase: UpdateEmployeeUseCase,
     private val deleteEmployeeUseCase: DeleteEmployeeUseCase,
-    private val authRepositoryO: AuthRepositoryO,
+    private val getCurrentSessionUseCase: com.casecode.pos.core.domain.usecase.GetCurrentSessionUseCase,
 ) : ViewModel() {
-    private val isOnline: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    private val _uiState = MutableStateFlow(UiEmployeesState())
-    val uiState get() = _uiState.asStateFlow()
-    private val _employeeSelected: MutableStateFlow<Employee?> = MutableStateFlow(null)
-    val employeeSelected = _employeeSelected.asStateFlow()
-    private val _branches: MutableStateFlow<List<Branch>> = MutableStateFlow(emptyList())
-    val branches get() = _branches.asStateFlow()
-    val currentUid = MutableStateFlow<String>("")
 
-    init {
-        fetchEmployees()
-        fetchBusiness()
-        setNetworkMonitor()
-    }
+    private val _uiState = MutableStateFlow(EmployeeUiState())
+    val uiState = _uiState.onStart {
+        loadInitialData()
+    }.stateInWhileSubscribed(EmployeeUiState())
+    private val _employeeFormUiState = MutableStateFlow(EmployeeFormUiState())
+    val employeeFormUiState = _employeeFormUiState.asStateFlow()
 
-    fun getCurrentUid() {
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    private fun loadInitialData() {
         viewModelScope.launch {
-            currentUid.update { authRepositoryO.currentUserId() }
-        }
-    }
+            _uiState.update { it.copy(isLoading = true) }
+            getCurrentSessionUseCase()
+                .flatMapLatest { sessionState ->
+                    when (sessionState) {
+                        is OwnerLoggedIn -> {
+                            val employeesFlow = getEmployeesUseCase()
+                            val branchesFlow = getBranchesUseCase(sessionState.businessId)
+                            combine(
+                                employeesFlow,
+                                branchesFlow,
+                            ) { employeesResult, branchesResult ->
+                                Triple(employeesResult, branchesResult, null)
+                            }
+                        }
 
-    private fun setNetworkMonitor() = viewModelScope.launch {
-        networkMonitor.isOnline.collect {
-            setConnected(it)
-        }
-    }
+                        is EmployeeLoggedIn -> {
+                            val employeesFlow = getEmployeesUseCase()
+                            val branchesFlow = getBranchesUseCase(sessionState.businessId)
+                            combine(
+                                employeesFlow,
+                                branchesFlow,
+                            ) { employeesResult, branchesResult ->
+                                Triple(employeesResult, branchesResult, null)
+                            }
+                        }
 
-    private fun setConnected(isConnect: Boolean) {
-        isOnline.update { isConnect }
-    }
-
-    private fun fetchEmployees() {
-        viewModelScope.launch {
-            getEmployeesBusinessUseCase().collect { resourceEmployees ->
-                when (resourceEmployees) {
-                    is Resource.Empty -> {
-                        _uiState.update { it.copy(resourceEmployees = Resource.empty()) }
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.update {
-                            it.copy(
-                                resourceEmployees = resourceEmployees,
-                                userMessage = resourceEmployees.message as Int,
+                        else -> {
+                            flowOf(
+                                Triple(
+                                    emptyList(),
+                                    emptyList(),
+                                    uiString.core_ui_error_no_active_session,
+                                ),
                             )
                         }
                     }
-                    Resource.Loading -> _uiState.update {
+                }
+                .collect { (employees, branches, message) ->
+                    _uiState.update {
                         it.copy(
-                            resourceEmployees = resourceEmployees,
+                            employees = employees,
+                            availableBranches = branches,
+                            isLoading = false,
+                            userMessage = message,
                         )
                     }
+                }
+        }
+    }
 
-                    is Resource.Success -> {
-                        _uiState.update { it.copy(resourceEmployees = resourceEmployees) }
+    fun onEvent(event: EmployeeEvent) {
+        when (event) {
+            is EmployeeEvent.UserMessageShown -> _uiState.update {
+                it.copy(
+                    userMessage = null,
+                )
+            }
+
+            EmployeeEvent.EmployeeFormClosed, EmployeeEvent.DeletingEmployeeClosed -> {
+                _uiState.update { it.copy(dialogState = DialogState.None) }
+                _employeeFormUiState.update { EmployeeFormUiState() }
+            }
+
+            EmployeeEvent.CreationEmployeeOpened -> {
+                _uiState.update { it.copy(dialogState = DialogState.Creating) }
+                updateSuggestionId()
+            }
+
+            is EmployeeEvent.DeletingEmployeeOpened ->
+                _uiState.update {
+                    it.copy(
+                        dialogState = DialogState.Deleting,
+                        employeeSelected = event.employee,
+                    )
+                }
+
+            is EmployeeEvent.UpdatingEmployeeOpened -> {
+                _uiState.update { state ->
+                    state.copy(
+                        employeeSelected = event.employee,
+                        dialogState = DialogState.Updating,
+                    )
+                }
+                _employeeFormUiState.update {
+                    it.copy(
+                        employeeId = event.employee.id,
+                        isAutoGenerateId = false,
+                        name = event.employee.name,
+                        phone = event.employee.phone,
+                        password = "",
+                        role = event.employee.role,
+                        assignedBranchId = event.employee.assignedBranchId,
+                    )
+                }
+            }
+
+            EmployeeEvent.CompanyCodeClosed -> {
+                _uiState.update { it.copy(dialogState = DialogState.None) }
+            }
+
+            EmployeeEvent.CompanyCodeOpened -> {
+                _uiState.update { it.copy(dialogState = DialogState.CompanyCode) }
+            }
+
+            EmployeeEvent.NavigationBack -> Unit
+        }
+    }
+
+    private fun updateSuggestionId() {
+        viewModelScope.launch {
+            generateEmployeeIdUseCase().onSuccess { generatedId ->
+                updateEmployeeFormState {
+                    it.copy(
+                        isAutoGenerateId = true,
+                        employeeId = generatedId,
+                        formErrors = it.formErrors.copy(idError = null),
+                    )
+                }
+            }.onFailure {
+                updateEmployeeFormState {
+                    it.copy(
+                        isAutoGenerateId = false,
+                        formErrors = it.formErrors.copy(
+                            idError = uiString.core_ui_error_generate_id,
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    fun onEventEmployeeForm(event: EmployeeFormEvent) {
+        when (event) {
+            is EmployeeFormEvent.AutoGenerateIdToggled -> {
+                viewModelScope.launch {
+                    if (event.isEnabled) {
+                        updateSuggestionId()
+                    } else {
+                        updateEmployeeFormState {
+                            it.copy(
+                                isAutoGenerateId = false,
+                                employeeId = "",
+                                formErrors = it.formErrors.copy(idError = null),
+                            )
+                        }
+                    }
+                }
+            }
+
+            is EmployeeFormEvent.EmployeeIdChanged -> {
+                updateEmployeeFormState {
+                    it.copy(
+                        employeeId = event.id,
+                        formErrors = it.formErrors.copy(idError = null),
+                    )
+                }
+            }
+
+            is EmployeeFormEvent.EmployeeNameChanged -> updateEmployeeFormState {
+                it.copy(
+                    name = event.name,
+                    formErrors = it.formErrors.copy(nameError = null),
+                )
+            }
+
+            is EmployeeFormEvent.EmployeePasswordChanged -> updateEmployeeFormState {
+                it.copy(
+                    password = event.password,
+                    formErrors = it.formErrors.copy(passwordError = null),
+                )
+            }
+
+            is EmployeeFormEvent.EmployeePhoneChanged -> updateEmployeeFormState {
+                it.copy(
+                    phone = event.phone,
+                    formErrors = it.formErrors.copy(phoneError = null),
+                )
+            }
+
+            is EmployeeFormEvent.EmployeeBranchAssigned -> updateAssignedBranches(
+                event.branchId,
+
+            )
+
+            is EmployeeFormEvent.EmployeeRoleChanged -> updateEmployeeFormState {
+                it.copy(
+                    role = event.role,
+                )
+            }
+
+            EmployeeFormEvent.SaveClicked -> saveEmployee()
+        }
+    }
+
+    private fun updateAssignedBranches(branchId: String) {
+        updateEmployeeFormState { currentState ->
+            currentState.copy(assignedBranchId = branchId)
+        }
+    }
+
+    private fun saveEmployee() {
+        val isUpdate = _uiState.value.dialogState == DialogState.Updating
+        viewModelScope.launch {
+            _employeeFormUiState.update { it.copy(formErrors = it.validate(isUpdate)) }
+            val formState = _employeeFormUiState.value
+            if (!formState.isValid()) {
+                return@launch
+            }
+
+            val employee = Employee(
+                id = if (isUpdate) {
+                    _uiState.value.employeeSelected?.id
+                        ?: ""
+                } else {
+                    formState.employeeId
+                },
+                name = formState.name,
+                phone = formState.phone,
+                role = formState.role,
+                assignedBranchId = formState.assignedBranchId,
+            )
+            onEvent(EmployeeEvent.EmployeeFormClosed)
+            updateEmployeeFormState { EmployeeFormUiState() }
+            _uiState.update { it.copy(isLoading = true) }
+
+            val result = if (isUpdate) {
+                updateEmployeeUseCase(employee, password = formState.password)
+            } else {
+                createEmployeeUseCase(employee, password = formState.password)
+            }
+            handleResult(result, isUpdate)
+        }
+    }
+
+    private fun handleResult(result: Result<Unit>, isUpdate: Boolean) {
+        result.onSuccess {
+            _uiState.update {
+                it.copy(
+                    userMessage = if (isUpdate) {
+                        uiString.core_ui_success_update_employee_message
+                    } else {
+                        uiString.core_ui_success_add_employee_message
+                    },
+                )
+            }
+        }.onFailure {
+            when (it) {
+                is NoActiveSessionException -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            userMessage = uiString.core_ui_error_no_active_session,
+                        )
+                    }
+                }
+
+                is EmployeeIdCollisionException -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            userMessage = uiString.core_ui_error_employee_id_duplicate,
+                        )
+                    }
+                }
+
+                else -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            userMessage = if (isUpdate) {
+                                uiString.core_ui_error_update_employee_message
+                            } else {
+                                uiString.core_ui_error_add_employee_message
+                            },
+
+                        )
                     }
                 }
             }
         }
-    }
-
-    private fun fetchBusiness() {
-        viewModelScope.launch {
-            when (val result = getBusinessUseCase()) {
-                is BusinessResult.Error -> {
-                    val message = result.message ?: uiString.core_ui_error_unknown
-                    showSnackbarMessage(message)
-                }
-
-                is BusinessResult.Success -> {
-                    _branches.value = result.data.branches
-                }
-            }
-        }
-    }
-
-    fun setEmployeeSelected(employeeSelect: Employee) {
-        _employeeSelected.value = employeeSelect
-    }
-
-    fun addEmployee(employee: Employee) {
-        if (isOnline.value == false) {
-            return showSnackbarMessage(uiString.core_ui_error_network)
-        }
-        val employees = (uiState.value.resourceEmployees as? Resource.Success)?.data
-        if (employee.isEmployeeNameDuplicate(employees) == true) {
-            return showSnackbarMessage(uiString.core_ui_error_employee_name_duplicate)
-        }
-        viewModelScope.launch {
-            val addEmployeeResult = addEmployeesUseCase(employee)
-            when (addEmployeeResult) {
-                is AddEmployeeResult.Error -> {
-                    showSnackbarMessage(addEmployeeResult.message)
-                }
-
-                is AddEmployeeResult.Success -> {
-                    showSnackbarMessage(uiString.core_ui_success_add_employee_message)
-                }
-            }
-        }
-    }
-
-    fun updateEmployee(newEmployee: Employee) {
-        if (isOnline.value == false) return showSnackbarMessage(uiString.core_ui_error_network)
-        val oldEmployee =
-            _employeeSelected.value
-                ?: return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
-
-        if (oldEmployee == newEmployee) {
-            return showSnackbarMessage(uiString.core_ui_error_update_employee_message)
-        }
-        val employees = (uiState.value.resourceEmployees as? Resource.Success)?.data
-        if (newEmployee.isEmployeeNameDuplicate(employees, oldEmployee) == true) {
-            return showSnackbarMessage(uiString.core_ui_error_employee_name_duplicate)
-        }
-        viewModelScope.launch {
-            val updateEmployeeResource = updateEmployeesUseCase(oldEmployee, newEmployee)
-            if (updateEmployeeResource is Resource.Error) {
-                val message =
-                    updateEmployeeResource.message as? Int
-                        ?: uiString.core_ui_error_update_employee_message
-                showSnackbarMessage(message)
-            } else if (updateEmployeeResource is Resource.Success) {
-                showSnackbarMessage(uiString.core_ui_success_update_employee_message)
-            }
-        }
+        _uiState.update { it.copy(isLoading = false) }
     }
 
     fun deleteEmployee() {
-        if (isOnline.value == false) {
-            return showSnackbarMessage(uiString.core_ui_error_network)
-        }
-        val employee =
-            _employeeSelected.value ?: return showSnackbarMessage(uiString.core_ui_error_unknown)
         viewModelScope.launch {
-            val deleteEmployeeResource = deleteEmployeeUseCase(employee)
-            if (deleteEmployeeResource is Resource.Error) {
-                val message =
-                    deleteEmployeeResource.message as? Int ?: uiString.core_ui_error_unknown
-                showSnackbarMessage(message)
-            } else if (deleteEmployeeResource is Resource.Success) {
-                showSnackbarMessage(deleteEmployeeResource.data)
-                _employeeSelected.value = null
+            val employee = _uiState.value.employeeSelected
+            if (employee == null) {
+                _uiState.update { it.copy(userMessage = uiString.core_ui_error_unknown) }
+                return@launch
             }
+            deleteEmployeeUseCase(employee.id).onSuccess {
+                _uiState.update { it.copy(userMessage = uiString.core_ui_success_delete_employee_message) }
+            }.onFailure {
+                _uiState.update { it.copy(userMessage = uiString.core_ui_error_delete_employee_message) }
+            }
+            onEvent(EmployeeEvent.EmployeeFormClosed)
+            _uiState.update { it.copy(employeeSelected = null) }
         }
     }
 
-    fun showSnackbarMessage(message: Int) {
-        _uiState.update { it.copy(userMessage = message) }
-    }
-
-    fun snackbarMessageShown() {
-        _uiState.update { it.copy(userMessage = null) }
+    private fun updateEmployeeFormState(updateAction: (EmployeeFormUiState) -> EmployeeFormUiState) {
+        _employeeFormUiState.updateWithViewModelScope { currentState ->
+            updateAction(currentState)
+        }
     }
 }

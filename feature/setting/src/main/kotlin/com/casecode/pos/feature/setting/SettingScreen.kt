@@ -34,13 +34,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.ConfigurationCompat
 import androidx.core.os.LocaleListCompat
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.casecode.pos.core.designsystem.component.PosExposeDropdownMenuBox
 import com.casecode.pos.core.designsystem.component.PosOutlinedButton
 import com.casecode.pos.core.designsystem.component.PosTextButton
@@ -55,19 +53,16 @@ fun SettingScreen(
     onPrinterScreenClick: () -> Unit,
     onSignOutClick: () -> Unit,
 ) {
-    val user by viewModel.userUiState.collectAsStateWithLifecycle()
     SettingScreen(
         onEmployeesClick = onEmployeesScreenClick,
         onPrintersClick = onPrinterScreenClick,
         onSignOutClick = onSignOutClick,
-        emailUser = user?.email ?: "",
     )
 }
 
 @Composable
 fun SettingScreen(
     modifier: Modifier = Modifier,
-    emailUser: String,
     onEmployeesClick: () -> Unit,
     onPrintersClick: () -> Unit,
     onSignOutClick: () -> Unit,
@@ -94,8 +89,6 @@ fun SettingScreen(
             )
         }
         Column(modifier = Modifier.align(Alignment.BottomStart)) {
-            Text(text = emailUser, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
-
             PosOutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onSignOutClick,
@@ -142,7 +135,6 @@ fun SettingPreview() {
             onEmployeesClick = {},
             onPrintersClick = {},
             onSignOutClick = {},
-            emailUser = "",
         )
     }
 }

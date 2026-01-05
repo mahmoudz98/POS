@@ -17,15 +17,17 @@ package com.casecode.pos.core.testing.services
 
 import android.app.Activity
 import com.casecode.pos.core.domain.service.SubscriptionService
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.SubscriptionPlan
+import com.casecode.pos.core.model.data.PurchaseResult
+import javax.inject.Inject
 
 /**
  * A fake implementation of [SubscriptionService] for use in tests.
  * This class allows for setting a predefined result for the purchasePlan method,
  * enabling tests to simulate success, failure, or cancellation scenarios.
  */
-class TestSubscriptionService : SubscriptionService {
+class TestSubscriptionService @Inject
+constructor() : SubscriptionService {
 
     private var nextResult: Result<PurchaseResult> = Result.success(
         PurchaseResult(wasSuccessful = true, providerTransactionId = "fake_test_transaction_id"),

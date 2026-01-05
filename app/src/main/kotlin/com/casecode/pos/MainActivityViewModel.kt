@@ -16,8 +16,8 @@
 package com.casecode.pos
 
 import androidx.lifecycle.ViewModel
-import com.casecode.pos.core.domain.repository.business.SessionRepository
-import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.domain.usecase.GetCurrentSessionUseCase
+import com.casecode.pos.core.model.SessionStateResult
 import com.casecode.pos.core.model.business.EmployeeRole
 import com.casecode.pos.core.ui.stateInWhileSubscribed
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,22 +27,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    sessionRepository: SessionRepository,
+    getCurrentSessionUseCase: GetCurrentSessionUseCase,
 ) : ViewModel() {
     val initialDestinationState: StateFlow<InitialDestinationState> =
-        sessionRepository.loginState.map {
+        getCurrentSessionUseCase().map {
             when (it) {
-                LoginStateResult.Loading -> InitialDestinationState.Loading
-                LoginStateResult.LoggedOut -> InitialDestinationState.SignOut
-                is LoginStateResult.OwnerOnBoarding -> InitialDestinationState.NotCompleteBusiness
-                is LoginStateResult.EmployeeLoggedIn -> {
+                SessionStateResult.Loading -> InitialDestinationState.Loading
+                SessionStateResult.None -> InitialDestinationState.SignOut
+                is SessionStateResult.OwnerOnBoarding -> InitialDestinationState.NotCompleteBusiness
+                is SessionStateResult.EmployeeLoggedIn -> {
                     when (it.role) {
                         EmployeeRole.OWNER, EmployeeRole.MANAGER -> InitialDestinationState.LoginByAdminEmployee
                         EmployeeRole.CASHIER -> InitialDestinationState.LoginBySaleEmployee
                     }
                 }
 
-                is LoginStateResult.OwnerLoggedIn -> InitialDestinationState.LoginByAdmin
+                is SessionStateResult.OwnerLoggedIn -> InitialDestinationState.LoginByAdmin
             }
         }.stateInWhileSubscribed(InitialDestinationState.Loading)
 }

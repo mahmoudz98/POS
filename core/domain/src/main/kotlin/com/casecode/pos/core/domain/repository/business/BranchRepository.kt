@@ -15,6 +15,7 @@
  */
 package com.casecode.pos.core.domain.repository.business
 
+import com.casecode.pos.core.domain.utils.Syncable
 import com.casecode.pos.core.model.business.Branch
 import kotlinx.coroutines.flow.Flow
 
@@ -23,12 +24,11 @@ import kotlinx.coroutines.flow.Flow
  * Provides methods for retrieving, adding, and refreshing branch information.
  */
 
-interface BranchRepository {
+interface BranchRepository : Syncable {
     /**
      * Retrieves all branches for a given business ID as a reactive [Flow].
      * This flow emits the latest branch data from the local database.
      *
-     * @param businessId The ID of the business whose branches to retrieve.
      * @return A [Flow] emitting a list of [Branch] objects.
      */
     fun getBranches(businessId: String): Flow<List<Branch>>

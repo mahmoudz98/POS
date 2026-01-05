@@ -25,6 +25,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+interface AuthRemoteDataSource {
+    val currentUser: Flow<User?>
+    suspend fun getCurrentUser(): User?
+    suspend fun signInWithGoogle(idToken: String): User
+    suspend fun signOut()
+}
 class FirebaseAuthDataSourceImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
 ) : AuthRemoteDataSource {

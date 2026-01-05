@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
+import com.android.build.api.variant.BuildConfigField
 import com.casecode.pos.Configuration
 import com.casecode.pos.Configuration.APPLICATION_ID
 import com.casecode.pos.PosBuildType
-import java.io.FileInputStream
+import java.io.StringReader
 import java.util.Properties
 
 plugins {
@@ -27,18 +28,9 @@ plugins {
     alias(libs.plugins.pos.android.application.jacoco)
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.pos.hilt)
+    alias(libs.plugins.google.osslicenses)
     alias(libs.plugins.baselineprofile)
-}
-val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-if (keystorePropertiesFile.exists() && keystorePropertiesFile.isFile) {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-}
-
-// 2. Helper function to read properties from environment variables or the properties file.
-//    This prioritizes environment variables, which is ideal for CI/CD environments.
-fun getSigningProperty(key: String): String? {
-    return System.getenv(key) ?: keystoreProperties.getProperty(key)
+    alias(libs.plugins.pos.android.application.signing)
 }
 
 android {
@@ -52,21 +44,7 @@ android {
     androidResources {
         localeFilters += listOf("en", "ar")
     }
-    val haveReleaseCredentials = getSigningProperty("RELEASE_STORE_FILE") != null &&
-            getSigningProperty("RELEASE_STORE_PASSWORD") != null &&
-            getSigningProperty("RELEASE_KEY_ALIAS") != null &&
-            getSigningProperty("RELEASE_KEY_PASSWORD") != null
 
-    signingConfigs {
-        create("release") {
-            if (haveReleaseCredentials) {
-                storeFile = file(getSigningProperty("RELEASE_STORE_FILE")!!)
-                storePassword = getSigningProperty("RELEASE_STORE_PASSWORD")
-                keyAlias = getSigningProperty("RELEASE_KEY_ALIAS")
-                keyPassword = getSigningProperty("RELEASE_KEY_PASSWORD")
-            }
-        }
-    }
     buildTypes {
         debug {
             applicationIdSuffix = PosBuildType.DEBUG.applicationIdSuffix
@@ -75,17 +53,13 @@ android {
             }
         }
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = providers.gradleProperty("minifyWithR8")
+                .map(String::toBooleanStrict).getOrElse(true)
             applicationIdSuffix = PosBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            signingConfig = if (haveReleaseCredentials) {
-                signingConfigs.named("release").get()
-            } else {
-                signingConfigs.named("debug").get()
-            }
+            signingConfig = signingConfigs.named("release").get()
             baselineProfile.automaticGenerationDuringBuild = true
         }
     }
@@ -94,14 +68,31 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-
+    buildFeatures {
+        buildConfig = true
+    }
     testOptions.unitTests.isIncludeAndroidResources = true
-
     namespace = APPLICATION_ID
 }
+/*androidComponents {
+    onVariants { variant ->
+        val name = variant.name.lowercase()
 
+        val shouldUseDebugSigning =
+            name.contains("benchmark") ||
+                    name.contains("nonminified") ||
+                    name.contains("demo")
+
+        if (shouldUseDebugSigning) {
+            variant.signingConfig?.setConfig(
+                android.signingConfigs.getByName("debug")
+            )
+        }
+    }
+}*/
 dependencies {
     implementation(projects.feature.login)
+    implementation(projects.feature.loginEmployee)
     implementation(projects.feature.onboarding)
     implementation(projects.feature.employee)
     implementation(projects.feature.salesReport)
@@ -140,19 +131,17 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.revenuecat.purchases)
 
-    debugCompileOnly(libs.kotlinx.coroutines.debug)
-    // debugImplementation(libs.leakcanary)
     implementation(libs.timber)
-    // ******* UNIT TESTING ******************************************************
+
+    debugCompileOnly(libs.kotlinx.coroutines.debug)
     debugImplementation(projects.uiTestHiltManifest)
     testImplementation(projects.core.testing)
+    testImplementation(libs.kotlin.test)
 
     kspTest(libs.hilt.compiler)
-    testImplementation(kotlin("test"))
     testImplementation(libs.coroutines.android)
 
     androidTestImplementation(projects.core.testing)
-    androidTestImplementation(kotlin("test"))
     kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     androidTestImplementation(libs.androidx.test.espresso.core)
@@ -160,6 +149,7 @@ dependencies {
     androidTestImplementation(libs.coil.test)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.kotlin.test)
 
     baselineProfile(projects.benchmarks)
 }
@@ -172,4 +162,22 @@ baselineProfile {
 
 dependencyGuard {
     configuration("prodReleaseRuntimeClasspath")
+}
+val revenuecatId = providers.fileContents(
+    isolated.rootProject.projectDirectory.file("local.properties"),
+).asText.map { text ->
+    val properties = Properties()
+    properties.load(StringReader(text))
+    properties["revenuecat_id"]
+}.orElse("")
+
+androidComponents {
+    onVariants {
+        it.buildConfigFields!!.put(
+            "revenuecat_id",
+            revenuecatId.map { value ->
+                BuildConfigField(type = "String", value = """"$value"""", comment = null)
+            },
+        )
+    }
 }

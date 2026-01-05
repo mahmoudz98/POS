@@ -17,28 +17,14 @@ package com.casecode.pos.feature.setting
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.casecode.pos.core.domain.repository.old.AuthRepositoryO
-import com.casecode.pos.core.model.users.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel
 @Inject
-constructor(
-    authRepositoryO: AuthRepositoryO,
-) : ViewModel() {
-    val userUiState: StateFlow<User?> =
-        authRepositoryO.currentUser
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = null,
-                started = SharingStarted.WhileSubscribed(1_000),
-            )
+constructor() : ViewModel() {
+
     private val _currentLanguage: MutableLiveData<String> = MutableLiveData()
     val currentLanguage get() = _currentLanguage
 

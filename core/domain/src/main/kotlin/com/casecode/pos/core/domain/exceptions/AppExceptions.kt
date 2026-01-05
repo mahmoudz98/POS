@@ -23,9 +23,29 @@ sealed class AppException(message: String) : Exception(message)
 
 class BusinessNotFoundException(message: String) : AppException(message)
 class InvalidCredentialsException(message: String) : AppException(message)
+class NoActiveSessionException() : AppException("")
 
-sealed class AuthException(message: String) : AppException(message)
-class GoogleSignInException(message: String, cause: Throwable? = null) : AuthException(message)
+/**
+ * Domain exception for employee authentication failures.
+ *
+ * Following security best practices, this exception provides a generic
+ * failure without revealing specific details about what failed
+ * (company code, employee existence, or password correctness).
+ *
+ * This prevents information disclosure attacks where attackers could
+ * enumerate valid company codes or employee identifiers.
+ */
+open class AuthenticationException(message: String = "Authentication failed") : AppException(message)
+
+/**
+ * Thrown when an employee is not found during authentication.
+ */
+class EmployeeNotFoundException(message: String = "Employee not found") : AuthenticationException(message)
+
+/**
+ * Thrown when the password provided during authentication is incorrect.
+ */
+class InvalidPasswordException(message: String = "Invalid password") : AuthenticationException(message)
 
 /**
  * Thrown when user-provided data fails a specific business rule validation.
@@ -76,3 +96,6 @@ class PlanNotFoundInProviderException(val planId: String) :
  */
 class InsufficientCreditsException :
     AppException("Operation failed due to insufficient credits.")
+
+class EmployeeIdCollisionException(message: String) :
+    AppException(message)

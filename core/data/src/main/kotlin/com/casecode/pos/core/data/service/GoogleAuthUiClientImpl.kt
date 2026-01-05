@@ -50,7 +50,6 @@ class GoogleAuthUiClientImpl @Inject constructor(
         return apiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
     }
 
-    // TODO: use clear credential when user  signOut
     suspend fun clear() {
         credentialManager.clearCredentialState(ClearCredentialStateRequest())
     }

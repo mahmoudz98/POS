@@ -45,7 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.casecode.pos.core.designsystem.component.PosBackground
 import com.casecode.pos.core.designsystem.component.PosButton
@@ -91,7 +91,19 @@ internal fun OnBoardingScreen(
 ) {
     val pagerState = rememberPagerState(pageCount = { OnboardingStep.entries.size })
     var showClosingDialog by remember { mutableStateOf(false) }
-
+    if (showClosingDialog) {
+        PosDialog(
+            titleRes = R.string.feature_onboarding_dialog_exit_title,
+            messageRes = R.string.feature_onboarding_dialog_exit_message,
+            confirmRes = R.string.feature_onboarding_dialog_exit_yes_button_text,
+            onConfirm = {
+                onEvent(OnboardingEvent.CloseOnboardingClicked)
+            },
+            onDismiss = {
+                showClosingDialog = false
+            },
+        )
+    }
     Scaffold(
         topBar = {
             Stepper(
@@ -144,31 +156,17 @@ internal fun OnBoardingScreen(
                             uiState = uiState,
                             onEvent = onEvent,
                         )
-
+                    OnboardingStep.SUBSCRIPTION -> SubscriptionStep(uiState, onEvent)
                     OnboardingStep.BRANCHES ->
                         BranchSetupStep(
                             uiState = uiState,
                             onEvent = onEvent,
                         )
-
-                    OnboardingStep.SUBSCRIPTION -> SubscriptionStep(uiState, onEvent)
                 }
             }
         }
     }
-    if (showClosingDialog) {
-        PosDialog(
-            titleRes = R.string.feature_onboarding_dialog_exit_title,
-            messageRes = R.string.feature_onboarding_dialog_exit_message,
-            confirmRes = R.string.feature_onboarding_dialog_exit_yes_button_text,
-            onConfirm = {
-                onEvent(OnboardingEvent.CloseOnboardingClicked)
-            },
-            onDismiss = {
-                showClosingDialog = false
-            },
-        )
-    }
+
     BackHandler {
         if (uiState.currentStep > OnboardingStep.BUSINESS_INFO) {
             onEvent(OnboardingEvent.BackClicked)

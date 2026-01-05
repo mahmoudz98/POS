@@ -28,7 +28,7 @@ sealed interface LoginUiState {
     data object Idle : LoginUiState
     data object Loading : LoginUiState
     data object ShowPlayServicesUnavailableDialog : LoginUiState
-
+    data class BranchSelection(val branches: List<com.casecode.pos.core.model.business.Branch>) : LoginUiState
     data class Error(@StringRes val messageResId: Int) : LoginUiState
 }
 
@@ -37,10 +37,8 @@ sealed interface LoginUiState {
  */
 @Immutable
 sealed interface LoginEvent {
-    // Event when Google Sign-In provides a result (success or failure).
     data class GoogleSignInResult(val context: Context) : LoginEvent
-
-    // Event to acknowledge that an error message has been displayed.
     data object ErrorMessageShown : LoginEvent
     data object PlayServicesDialogDismissed : LoginEvent
+    data class BranchSelected(val branch: com.casecode.pos.core.model.business.Branch) : LoginEvent
 }

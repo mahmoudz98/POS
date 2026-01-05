@@ -21,24 +21,26 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.currentWindowDpSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.casecode.pos.core.designsystem.component.PosTextButton
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun PosDeleteDialog(
     @StringRes titleRes: Int,
     @StringRes messageRes: Int,
+    currentSize: DpSize = currentWindowDpSize(),
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val currentSize = currentWindowDpSize()
-
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = Modifier.widthIn(max = currentSize.width - 80.dp),
@@ -72,16 +74,16 @@ fun PosDeleteDialog(
     )
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun PosDialog(
     @StringRes titleRes: Int,
     @StringRes messageRes: Int,
     @StringRes confirmRes: Int = R.string.core_ui_dialog_ok_button_text,
+    currentSize: DpSize = currentWindowDpSize(),
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val currentSize = currentWindowDpSize()
-
     AlertDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
         modifier = Modifier.widthIn(max = currentSize.width - 80.dp),

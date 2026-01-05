@@ -43,7 +43,7 @@ abstract class BaseTestRepository {
  * An improved base class for test repositories that allows for simulating
  * specific, controlled failures.
  */
-abstract class FakeRepository {
+abstract class TestRepository {
 
     // Instead of a boolean, we hold an optional Throwable.
     // If this is not null, repository methods should fail with this exception.

@@ -29,6 +29,12 @@ interface BranchDao {
     @Upsert
     suspend fun insertOrReplaceBranches(branches: List<BranchEntity>)
 
-    @Query("SELECT * FROM branch")
-    fun getBranches(): Flow<List<BranchEntity>>
+    @Query("SELECT * FROM branches WHERE business_id = :businessId")
+    fun getBranches(businessId: String): Flow<List<BranchEntity>>
+
+    @Query("SELECT COUNT(*) FROM branches WHERE business_id = :businessId")
+    suspend fun getBranchesCount(businessId: String): Int
+
+    @Query("DELETE FROM branches WHERE branch_id = :branchId")
+    suspend fun deleteBranch(branchId: String)
 }

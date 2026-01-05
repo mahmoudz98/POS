@@ -37,6 +37,5 @@ dependencies {
     implementation(libs.play.services.base)
     implementation(libs.zxing.generate.barcode)
     implementation(libs.itext7.core)
-
     implementation(libs.play.services.code.scanner)
 }

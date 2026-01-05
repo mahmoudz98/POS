@@ -20,7 +20,6 @@ plugins {
     alias(libs.plugins.pos.android.library.jacoco)
     alias(libs.plugins.pos.hilt)
     alias(libs.plugins.kotlin.serialization)
-
 }
 android {
     namespace = "$APPLICATION_ID.core.data"
@@ -29,17 +28,15 @@ android {
 }
 
 dependencies {
-
     api(projects.core.domain)
     api(projects.core.common)
     api(projects.core.datastore)
     implementation(projects.core.database)
-
     implementation(projects.core.firebase)
     implementation(projects.core.analytics)
     implementation(libs.googleid)
-
     implementation(libs.firebase.crashlytics)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.services)
     implementation(libs.androidx.credentials)

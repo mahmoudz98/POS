@@ -25,7 +25,6 @@ android {
     namespace = "$APPLICATION_ID.core.datastore_proto"
 }
 
-// Setup protobuf configuration, generating lite Java and Kotlin classes
 protobuf {
     protoc {
         artifact =

@@ -39,7 +39,6 @@ class AddInvoiceUseCaseTest {
 
     @Test
     fun whenHasInvoices_returnMessageAddedInvoice() = runTest {
-        // Given
         // When
         val result = addInvoiceUseCase(itemsTestData).last()
         // Then

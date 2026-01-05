@@ -18,11 +18,14 @@ package com.casecode.pos.core.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 context(viewmodel: ViewModel)
 fun <T> Flow<T>.stateInWhileSubscribed(initialValue: T): StateFlow<T> =
@@ -39,3 +42,10 @@ fun <T> Flow<T>.shareInWhileSubscribed(replay: Int): SharedFlow<T> =
         started = SharingStarted.WhileSubscribed(5_000),
         replay = replay,
     )
+
+context(viewModel: ViewModel)
+fun <T> MutableStateFlow<T>.updateWithViewModelScope(function: (T) -> T) {
+    viewModel.viewModelScope.launch {
+        this@updateWithViewModelScope.update { function(it) }
+    }
+}

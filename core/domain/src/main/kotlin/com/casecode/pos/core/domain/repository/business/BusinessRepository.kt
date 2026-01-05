@@ -26,7 +26,6 @@ import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
 import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.TaxRate
-import kotlinx.coroutines.flow.Flow
 
 interface BusinessRepository : Syncable {
     /**
@@ -50,22 +49,7 @@ interface BusinessRepository : Syncable {
         initialBillingEvent: BillingEvent,
     ): Result<String>
 
-    /**
-     * Retrieves the business associated with the given owner UID as a reactive [Flow].
-     * This flow emits the latest business data from the local database.
-     *
-     * @param ownerUid The UID of the business owner.
-     * @return A [Flow] emitting the [Business] object or null if not found.
-     */
     suspend fun findBusinessByOwner(ownerUid: String): Result<Business?>
 
-    /**
-     * Checks if a given company code already exists in the remote data source.
-     * This is typically a direct network call for validation purposes.
-     *
-     * @param companyCode The company code to check.
-     * @return A [Result] containing `true` if the company code exists, `false` otherwise,
-     *         or a [Throwable] if an error occurred during the network call.
-     */
-    suspend fun companyCodeExists(companyCode: String): Result<Boolean>
+    suspend fun getBusinessByCompanyCode(companyCode: String): Result<Business?>
 }

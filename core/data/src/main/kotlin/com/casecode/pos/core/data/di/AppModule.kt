@@ -16,6 +16,8 @@
 package com.casecode.pos.core.data.di
 
 import android.content.Context
+import com.casecode.pos.core.common.AppDispatchers.IO
+import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.utils.ConnectivityManagerNetworkMonitor
 import com.casecode.pos.core.domain.utils.NetworkMonitor
 import dagger.Module
@@ -23,6 +25,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 @Module
@@ -32,5 +35,6 @@ object AppModule {
     @Singleton
     fun provideConnectivityManagerNetworkMonitor(
         @ApplicationContext context: Context,
-    ): NetworkMonitor = ConnectivityManagerNetworkMonitor(context)
+        @Dispatcher(IO) ioDispatcher: CoroutineDispatcher,
+    ): NetworkMonitor = ConnectivityManagerNetworkMonitor(context, ioDispatcher)
 }

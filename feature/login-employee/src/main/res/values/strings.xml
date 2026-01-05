@@ -14,17 +14,24 @@
      limitations under the License.
 -->
 <resources>
-
+    <!-- Screen Title -->
     <string name="feature_login_employee_title">Employee Login</string>
-    <string name="feature_login_employee_hint_scan_admin_id">Scan admin ID</string>
 
-    <string name="feature_login_employee_login_error_uid_empty">You must scan an admin ID to log in as an employee.</string>
-    <string name="feature_login_employee_login_error_employee_incorrect">Incorrect name or password.</string>
-    <string name="feature_login_employee_login_error_login">An error occurred while logging in. Please try again.</string>
-    <string name="feature_login_employee_login_action_login">Log In</string>
+    <!-- Form Labels -->
+    <string name="feature_login_employee_label_company_code">Company Code</string>
+    <string name="feature_login_employee_label_uid">Employee ID</string>
+    <string name="feature_login_employee_login_label_password">Password</string>
+    <string name="feature_login_employee_hint_scan_company_code">Scan or enter company code</string>
 
-    <string name="feature_login_employee_error_name_empty">Employee name is required.</string>
+    <!-- Form Actions -->
+    <string name="feature_login_employee_login_button_text">Log In</string>
+
+    <!-- Validation Errors -->
+    <string name="feature_login_employee_error_company_code_empty">Company code is required.</string>
+    <string name="feature_login_employee_error_name_empty">Employee ID is required.</string>
     <string name="feature_login_employee_error_password_empty">Password is required.</string>
 
-
+    <!-- Login Errors -->
+    <string name="feature_login_employee_error_employee_incorrect">Incorrect credentials. Please check and try again.</string>
+    <string name="feature_login_employee_error_login">An error occurred while logging in. Please try again.</string>
 </resources>

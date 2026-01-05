@@ -16,7 +16,7 @@
 package com.casecode.pos.core.datastore
 
 import androidx.datastore.core.DataStore
-import com.casecode.pos.core.model.LoginStateResult
+import com.casecode.pos.core.model.SessionStateResult
 import com.casecode.pos.core.model.business.EmployeeRole
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -37,21 +37,25 @@ constructor(
      * A Flow that represents the high-level login state of the app.
      * This maps the raw proto data into our domain-specific LoginStateResult sealed interface.
      */
-    val sessionData: Flow<LoginStateResult> = sessionDataStore.data
+    val sessionData: Flow<SessionStateResult> = sessionDataStore.data
         .map { prefs ->
             when (prefs.loginStatus) {
-                LoginStatus.OWNER_LOGGED_IN -> LoginStateResult.OwnerLoggedIn(
+                LoginStatus.OWNER_LOGGED_IN -> SessionStateResult.OwnerLoggedIn(
                     businessId = prefs.businessId,
                     activeBranchId = prefs.activeBranchId,
+                    userId = prefs.userId,
+                    userName = prefs.userName,
                 )
 
-                LoginStatus.OWNER_ONBOARDING -> LoginStateResult.OwnerOnBoarding(
+                LoginStatus.OWNER_ONBOARDING -> SessionStateResult.OwnerOnBoarding(
                     businessId = prefs.businessId,
                 )
 
-                LoginStatus.EMPLOYEE_LOGGED_IN -> LoginStateResult.EmployeeLoggedIn(
+                LoginStatus.EMPLOYEE_LOGGED_IN -> SessionStateResult.EmployeeLoggedIn(
                     businessId = prefs.businessId,
                     activeBranchId = prefs.activeBranchId,
+                    userId = prefs.userId,
+                    userName = prefs.userName,
                     role = when (prefs.userRole) {
                         SessionRole.OWNER -> EmployeeRole.OWNER
                         SessionRole.MANAGER -> EmployeeRole.MANAGER
@@ -60,7 +64,7 @@ constructor(
                     },
                 )
 
-                else -> LoginStateResult.LoggedOut
+                else -> SessionStateResult.None
             }
         }
 

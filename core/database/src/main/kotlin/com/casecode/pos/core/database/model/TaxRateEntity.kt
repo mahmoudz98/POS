@@ -22,7 +22,7 @@ import com.casecode.pos.core.model.business.TaxRate
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
-@Entity(tableName = "tax_rate")
+@Entity(tableName = "tax_rates")
 data class TaxRateEntity(
     @PrimaryKey
     val id: String = Uuid.random().toString(),

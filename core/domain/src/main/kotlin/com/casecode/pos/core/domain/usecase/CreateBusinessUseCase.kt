@@ -18,7 +18,6 @@ package com.casecode.pos.core.domain.usecase
 import com.casecode.pos.core.domain.exceptions.ValidationException
 import com.casecode.pos.core.domain.repository.business.BusinessRepository
 import com.casecode.pos.core.domain.service.LogService
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
@@ -27,6 +26,7 @@ import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.model.business.TaxRate
 import com.casecode.pos.core.model.business.Vertical
+import com.casecode.pos.core.model.data.PurchaseResult
 import javax.inject.Inject
 import kotlin.time.Clock
 

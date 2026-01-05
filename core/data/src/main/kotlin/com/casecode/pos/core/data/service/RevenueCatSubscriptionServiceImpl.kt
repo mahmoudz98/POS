@@ -21,8 +21,8 @@ import com.casecode.pos.core.domain.exceptions.PaymentProviderException
 import com.casecode.pos.core.domain.exceptions.PlanNotFoundInProviderException
 import com.casecode.pos.core.domain.service.LogService
 import com.casecode.pos.core.domain.service.SubscriptionService
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.SubscriptionPlan
+import com.casecode.pos.core.model.data.PurchaseResult
 import com.revenuecat.purchases.Package
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
@@ -30,7 +30,6 @@ import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.models.StoreTransaction
 import com.revenuecat.purchases.purchaseWith
 import kotlinx.coroutines.suspendCancellableCoroutine
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
@@ -52,7 +51,6 @@ class RevenueCatSubscriptionServiceImpl @Inject constructor(
                     val packageToPurchase: Package? = offerings.current?.availablePackages?.find { pkg ->
                         pkg.product.id == plan.id
                     }
-                    Timber.e("packageToPurchase: $packageToPurchase")
                     if (packageToPurchase == null) {
                         val ex = PlanNotFoundInProviderException(plan.id)
                         logService.logNonFatalCrash(ex)

@@ -35,16 +35,16 @@ import com.casecode.pos.core.database.model.asExternalModel
 import com.casecode.pos.core.database.util.DatabaseTransactionRunner
 import com.casecode.pos.core.domain.repository.business.BusinessRepository
 import com.casecode.pos.core.domain.service.LogService
-import com.casecode.pos.core.domain.utils.Syncable
 import com.casecode.pos.core.firebase.datasource.BusinessNetworkDataSource
 import com.casecode.pos.core.firebase.datasource.InboxNetworkDataSource
 import com.casecode.pos.core.firebase.model.NetworkInboxSignal
-import com.casecode.pos.core.model.SyncableEntityType
+import com.casecode.pos.core.firebase.model.OperationType
 import com.casecode.pos.core.model.business.BillingEvent
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.Business
 import com.casecode.pos.core.model.business.Subscription
 import com.casecode.pos.core.model.business.TaxRate
+import com.casecode.pos.core.model.data.SyncableEntityType
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -65,7 +65,7 @@ class BusinessRepositoryImpl @Inject constructor(
     private val json: Json,
     private val logService: LogService,
     @Dispatcher(AppDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-) : BusinessRepository, Syncable {
+) : BusinessRepository {
 
     override suspend fun createInitialBusiness(
         business: Business,
@@ -77,7 +77,7 @@ class BusinessRepositoryImpl @Inject constructor(
         try {
             transaction.run {
                 val businessEntity = business.asEntity()
-                val branchesEntity = initialBranches.map { it.asEntity() }
+                val branchesEntity = initialBranches.map { it.asEntity(business.id) }
                 val taxRatesEntity = initialTaxes.map { it.asEntity() }
                 val subscriptionEntity = initialSubscription.asEntity()
                 businessDao.insertOrReplaceBusiness(businessEntity)
@@ -97,7 +97,7 @@ class BusinessRepositoryImpl @Inject constructor(
                 )
                 outboxCommandDao.insertCommand(
                     OutboxCommandEntity(
-                        type = OutboxEventType.BUSINESS_CREATED.ordinal,
+                        type = OutboxEventType.Business.CREATED,
                         payload = outboxPayload,
                     ),
                 )
@@ -116,6 +116,7 @@ class BusinessRepositoryImpl @Inject constructor(
                 Result.success(localBusiness.asExternalModel())
             } else {
                 val networkBusiness = network.findBusinessByOwner(ownerUid)
+
                 if (networkBusiness != null) {
                     val business = networkBusiness.asExternalModel()
                     businessDao.insertOrReplaceBusiness(business.asEntity())
@@ -127,10 +128,25 @@ class BusinessRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun companyCodeExists(companyCode: String): Result<Boolean> =
+    override suspend fun getBusinessByCompanyCode(companyCode: String): Result<Business?> =
         withContext(ioDispatcher) {
-            runCatching {
-                network.companyCodeExists(companyCode)
+            try {
+                val localBusiness = businessDao.getBusinessByCompanyCode(companyCode)
+                if (localBusiness != null) {
+                    return@withContext Result.success(localBusiness.asExternalModel())
+                }
+
+                val networkBusiness = network.getBusinessByCompanyCode(companyCode)
+                if (networkBusiness != null) {
+                    val business = networkBusiness.asExternalModel()
+                    businessDao.insertOrReplaceBusiness(business.asEntity())
+                    return@withContext Result.success(business)
+                }
+
+                Result.success(null)
+            } catch (e: Exception) {
+                logService.log("Error fetching business by code: ${e.message}")
+                Result.failure(e)
             }
         }
 
@@ -139,7 +155,7 @@ class BusinessRepositoryImpl @Inject constructor(
         try {
             val pendingCommands = outboxCommandDao.getPendingCommands().first()
             val businessCommands =
-                pendingCommands.filter { it.type == OutboxEventType.BUSINESS_CREATED.ordinal }
+                pendingCommands.filter { it.type == OutboxEventType.Business.CREATED }
 
             businessCommands.forEach { command ->
                 try {
@@ -151,18 +167,20 @@ class BusinessRepositoryImpl @Inject constructor(
                     )
                     val payload =
                         json.decodeFromString<OutboxPayload.CreateBusinessPayload>(command.payload)
-                    val resultBusinessId = network.createInitialBusiness(
+                    val createdNetworkBusiness = network.createInitialBusiness(
                         business = payload.business,
                         initialBranches = payload.initialBranches,
                         initialTaxes = payload.initialTaxes,
                         initialSubscription = payload.initialSubscription,
                         initialBillingEvent = payload.initialBillingEvent,
                     )
+                    val resultBusinessId = createdNetworkBusiness.id
                     inboxNetworkDataSource.postSignal(
                         resultBusinessId,
                         NetworkInboxSignal(
                             entityType = SyncableEntityType.BUSINESS.name,
                             entityId = resultBusinessId,
+                            operationType = OperationType.CREATED,
                             lastUpdated = Clock.System.now().toEpochMilliseconds(),
                         ),
                     )
@@ -198,19 +216,45 @@ class BusinessRepositoryImpl @Inject constructor(
             val businessSignals =
                 pendingSignals.filter { it.entityType == SyncableEntityType.BUSINESS }
 
-            businessSignals.forEach { signal ->
+            val uniqueBusinessIds = businessSignals
+                .filter { it.operationType == OperationType.CREATED || it.operationType == OperationType.UPDATED }
+                .map { it.entityId }
+                .distinct()
+
+            uniqueBusinessIds.forEach { businessId ->
                 try {
-                    val ownerUid = signal.entityId
-                    val networkBusiness = network.findBusinessByOwner(ownerUid)
+                    val networkBusiness = network.findBusinessByOwner(businessId)
                     if (networkBusiness != null) {
                         val businessEntity = networkBusiness.asExternalModel().asEntity()
                         businessDao.insertOrReplaceBusiness(businessEntity)
-                        localSignalDao.updateSignalStatus(signal.id, LocalSignalStatus.PROCESSED)
+                        logService.log("BusinessRepository(syncDown): Synced business $businessId from network.")
+                    } else {
+                        logService.log("BusinessRepository(syncDown): Business $businessId not found on network.")
                     }
                 } catch (e: Exception) {
-                    logService.log("BusinessRepository(syncDown): Failed to process signal ${signal.id}. Error: ${e.message}")
+                    logService.log("BusinessRepository(syncDown): Failed to sync business $businessId. Error: ${e.message}")
                     success = false
                 }
+            }
+
+            val deletedBusinessIds = businessSignals
+                .filter { it.operationType == OperationType.DELETED }
+                .map { it.entityId }
+                .distinct()
+
+            deletedBusinessIds.forEach { businessId ->
+                try {
+                    businessDao.deleteBusiness(businessId)
+                    logService.log("BusinessRepository(syncDown): Deleted business $businessId locally.")
+                } catch (e: Exception) {
+                    logService.log("BusinessRepository(syncDown): Failed to delete business $businessId. Error: ${e.message}")
+                    success = false
+                }
+            }
+
+            // Mark all signals as processed
+            businessSignals.forEach { signal ->
+                localSignalDao.updateSignalStatus(signal.id, LocalSignalStatus.PROCESSED)
             }
         } catch (e: Exception) {
             logService.log("BusinessRepository(syncDown): Failed with exception: ${e.message}")

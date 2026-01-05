@@ -18,6 +18,7 @@ package com.casecode.pos.core.data.model
 import com.casecode.pos.core.firebase.model.NetworkBillingEvent
 import com.casecode.pos.core.firebase.model.NetworkBranch
 import com.casecode.pos.core.firebase.model.NetworkBusiness
+import com.casecode.pos.core.firebase.model.NetworkEmployee
 import com.casecode.pos.core.firebase.model.NetworkSubscription
 import com.casecode.pos.core.firebase.model.NetworkTaxRate
 import kotlinx.serialization.Serializable
@@ -32,6 +33,7 @@ sealed class OutboxPayload {
      * Payload for the CREATE_BUSINESS command.
      * Contains all data necessary to create a new business on the backend.
      */
+
     @Serializable
     data class CreateBusinessPayload(
         val business: NetworkBusiness,
@@ -49,6 +51,12 @@ sealed class OutboxPayload {
     data class AddBranchPayload(
         val businessId: String,
         val branch: NetworkBranch,
+    ) : OutboxPayload()
+
+    @Serializable
+    data class CreateEmployeePayload(
+        val businessId: String,
+        val employee: NetworkEmployee,
     ) : OutboxPayload()
 
     // TODO: Add other command payloads as needed

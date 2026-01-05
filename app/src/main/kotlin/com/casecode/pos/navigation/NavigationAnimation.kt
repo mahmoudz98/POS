@@ -27,9 +27,9 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavBackStackEntry
 
-const val ANIMATION_DURATION_MS = 3000
-const val FAST_ANIMATION_DURATION_MS = 1500
-const val SLOW_ANIMATION_DURATION_MS = 4000
+const val ANIMATION_DURATION_MS = 150
+const val FAST_ANIMATION_DURATION_MS = 150
+const val SLOW_ANIMATION_DURATION_MS = 200
 
 val contextShiftEnter: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition = {
     slideInHorizontally(initialOffsetX = { it }, animationSpec = slowTween()) +

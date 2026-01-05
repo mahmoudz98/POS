@@ -15,7 +15,9 @@
  */
 package com.casecode.pos.core.data.di
 
+import com.casecode.pos.core.data.repository.business.BranchRepositoryImpl
 import com.casecode.pos.core.data.repository.business.BusinessRepositoryImpl
+import com.casecode.pos.core.data.repository.business.EmployeeRepositoryImpl
 import com.casecode.pos.core.domain.utils.Syncable
 import dagger.Binds
 import dagger.Module
@@ -31,4 +33,14 @@ abstract class SyncModule {
     @IntoSet
     @Singleton
     abstract fun bindSyncableBusinessRepository(impl: BusinessRepositoryImpl): Syncable
+
+    @Binds
+    @IntoSet
+    @Singleton
+    abstract fun bindSyncableEmployeeRepository(impl: EmployeeRepositoryImpl): Syncable
+
+    @Binds
+    @IntoSet
+    @Singleton
+    abstract fun bindSyncableBranchRepository(impl: BranchRepositoryImpl): Syncable
 }

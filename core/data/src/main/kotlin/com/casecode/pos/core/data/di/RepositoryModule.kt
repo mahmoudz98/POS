@@ -53,12 +53,10 @@ import com.casecode.pos.core.domain.repository.old.SubscriptionsBusinessReposito
 import com.casecode.pos.core.domain.repository.old.SubscriptionsRepository
 import com.casecode.pos.core.domain.repository.old.SupplierInvoiceRepository
 import com.casecode.pos.core.domain.repository.old.SupplierRepository
-import com.casecode.pos.core.domain.utils.Syncable
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 
 @Module

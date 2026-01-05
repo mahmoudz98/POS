@@ -1,5 +1,5 @@
 
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import com.casecode.pos.configureGradleManagedDevices
 import com.casecode.pos.libs
 import org.gradle.api.Plugin
@@ -16,7 +16,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.plugin.serialization")
             }
             extensions.configure<LibraryExtension> {
-                testOptions.animationsDisabled = true
+                testOptions {
+                    animationsDisabled = true
+                }
                 configureGradleManagedDevices(this)
             }
 

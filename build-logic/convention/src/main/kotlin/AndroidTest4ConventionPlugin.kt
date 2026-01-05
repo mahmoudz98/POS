@@ -1,4 +1,4 @@
-import com.android.build.gradle.TestExtension
+import com.android.build.api.dsl.TestExtension
 import com.casecode.pos.Configuration
 import com.casecode.pos.configureGradleManagedDevices
 import com.casecode.pos.configureKotlinAndroid

@@ -19,7 +19,7 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.gradleApiPlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.firebase.crashlytics.gradlePlugin)
@@ -89,6 +89,10 @@ gradlePlugin {
             id = libs.plugins.pos.android.application.flavors.get().pluginId
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
+        register("androidApplicationSigning") {
+            id = libs.plugins.pos.android.application.signing.get().pluginId
+            implementationClass = "AndroidApplicationSigningConventionPlugin"
+        }
 
         register("androidTest") {
             id = libs.plugins.pos.android.test.get().pluginId
@@ -103,6 +107,10 @@ gradlePlugin {
         register("jvmLibrary") {
             id = libs.plugins.pos.jvm.library.get().pluginId
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("root") {
+            id = libs.plugins.pos.root.get().pluginId
+            implementationClass = "RootPlugin"
         }
     }
 }

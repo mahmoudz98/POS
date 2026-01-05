@@ -25,6 +25,23 @@ import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
+interface BusinessNetworkDataSource {
+    suspend fun createInitialBusiness(
+        business: NetworkBusiness,
+        initialBranches: List<NetworkBranch>,
+        initialTaxes: List<NetworkTaxRate>,
+        initialSubscription: NetworkSubscription,
+        initialBillingEvent: NetworkBillingEvent,
+    ): NetworkBusiness
+
+    suspend fun findBusinessByOwner(ownerUid: String): NetworkBusiness?
+
+    suspend fun getBusinessByCompanyCode(companyCode: String): NetworkBusiness?
+
+    suspend fun getBranches(businessId: String): List<NetworkBranch>
+    suspend fun addBranch(businessId: String, branch: NetworkBranch): String
+}
+
 class FirebaseBusinessDataSourceImpl @Inject constructor(
     private val db: FirebaseFirestore,
 ) : BusinessNetworkDataSource {
@@ -34,7 +51,7 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
         initialTaxes: List<NetworkTaxRate>,
         initialSubscription: NetworkSubscription,
         initialBillingEvent: NetworkBillingEvent,
-    ): String {
+    ): NetworkBusiness {
         return db.runTransaction { transaction ->
             val ownerUid = business.ownerUid
             val businessRef = db.collection(BUSINESSES_COLLECTION_PATH).document(ownerUid)
@@ -60,9 +77,10 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
             val eventRef = businessRef.collection(BILLING_EVENTS_SUBCOLLECTION_PATH).document()
             transaction.set(eventRef, initialBillingEvent.copy(id = eventRef.id))
 
-            businessRef.id
+            networkBusiness
         }.await()
     }
+
     private fun generateCompanyCode(name: String, uid: String): String {
         val namePart = name.trim().filter(Char::isLetterOrDigit).take(3).uppercase()
         val uidPart = uid.filter(Char::isLetterOrDigit).take(4).uppercase()
@@ -74,17 +92,18 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
         return doc.toObject(NetworkBusiness::class.java)
     }
 
-    override suspend fun companyCodeExists(companyCode: String): Boolean {
+    override suspend fun getBusinessByCompanyCode(companyCode: String): NetworkBusiness? {
         val snapshot =
             db.collection(BUSINESSES_COLLECTION_PATH)
-                .whereEqualTo(BUSINESS_COMPANY_CODE_FIELD, companyCode).limit(1)
+                .whereEqualTo(BUSINESS_COMPANY_CODE_FIELD, companyCode.uppercase())
+                .limit(1)
                 .get().await()
-        return !snapshot.isEmpty
+        return snapshot.documents.firstOrNull()?.toObject(NetworkBusiness::class.java)
     }
 
     override suspend fun getBranches(businessId: String): List<NetworkBranch> {
         val snapshot = getBranchesCollection(businessId)
-            .orderBy("createdAt", Query.Direction.ASCENDING)
+            .orderBy(BUSINESS_CREATED_AT_FIELD, Query.Direction.ASCENDING)
             .get().await()
 
         return snapshot.toObjects(NetworkBranch::class.java)
@@ -103,9 +122,10 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
      * A helper function to get a reference to the branches sub-collection for a specific business.
      */
     private fun getBranchesCollection(businessId: String) =
-        db.collection(BUSINESSES_COLLECTION_PATH).document(businessId).collection(BRANCHES_SUBCOLLECTION_PATH)
+        db.collection(BUSINESSES_COLLECTION_PATH).document(businessId)
+            .collection(BRANCHES_SUBCOLLECTION_PATH)
 
-    companion object {
+    internal companion object {
         const val BUSINESSES_COLLECTION_PATH = "businesses"
         const val BRANCHES_SUBCOLLECTION_PATH = "branches"
         const val TAX_RATES_SUBCOLLECTION_PATH = "taxRates"
@@ -113,5 +133,9 @@ class FirebaseBusinessDataSourceImpl @Inject constructor(
         const val BILLING_EVENTS_SUBCOLLECTION_PATH = "billingEvents"
         const val SUB_CURRENT_DOC_ID = "current"
         const val BUSINESS_COMPANY_CODE_FIELD = "companyCode"
+        const val BUSINESS_CREATED_AT_FIELD = "createdAt"
+
+        fun FirebaseFirestore.getBusinessDocument(businessId: String) =
+            this.collection(BUSINESSES_COLLECTION_PATH).document(businessId)
     }
 }

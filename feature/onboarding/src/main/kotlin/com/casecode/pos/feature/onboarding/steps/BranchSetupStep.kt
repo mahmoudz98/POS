@@ -45,12 +45,6 @@ import com.casecode.pos.core.ui.R as uiR
 @Composable
 internal fun BranchSetupStep(uiState: OnboardingUiState, onEvent: (OnboardingEvent) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
-        ExtendedFloatingActionButton(
-            modifier = Modifier.align(Alignment.BottomEnd).padding(bottom = 8.dp),
-            onClick = { onEvent(OnboardingEvent.SetAddBranchDialogVisibility(true)) },
-        ) {
-            Text(stringResource(id = uiR.string.core_ui_add_branch_button_text))
-        }
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,6 +64,15 @@ internal fun BranchSetupStep(uiState: OnboardingUiState, onEvent: (OnboardingEve
                     BranchItem(branch = it)
                 }
             }
+        }
+
+        ExtendedFloatingActionButton(
+            onClick = { onEvent(OnboardingEvent.SetAddBranchDialogVisibility(true)) },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 8.dp),
+        ) {
+            Text(stringResource(id = uiR.string.core_ui_add_branch_button_text))
         }
     }
     if (uiState.isAddBranchDialogOpen) {
@@ -92,7 +95,7 @@ fun BranchSetupStepPreview() {
                 uiState = OnboardingUiState(
                     onboardingData = OnboardingData(
                         branches = listOf(
-                            Branch("1", "branch 1", "123455"),
+                            Branch(id = "1", businessId = "business1", name = "branch 1", phone = "123455"),
                         ),
                     ),
                 ),

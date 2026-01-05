@@ -66,7 +66,7 @@ lint-update:
 
 tests:
 	@echo "Run all unit tests without linting"
-	./gradlew tests -x lint
+	./gradlew testDemoDebug :lint:test
 
 spotlessCheck:
 	@echo "Run spotless check"

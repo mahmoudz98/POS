@@ -18,6 +18,7 @@ package com.casecode.pos.core.database.di
 import com.casecode.pos.core.database.PosDatabase
 import com.casecode.pos.core.database.dao.BranchDao
 import com.casecode.pos.core.database.dao.BusinessDao
+import com.casecode.pos.core.database.dao.EmployeeDao
 import com.casecode.pos.core.database.dao.LocalSignalDao
 import com.casecode.pos.core.database.dao.OutboxCommandDao
 import com.casecode.pos.core.database.dao.SubscriptionDao
@@ -47,4 +48,7 @@ internal object DaosModule {
 
     @Provides
     fun provideTaxRateDao(database: PosDatabase): TaxRateDao = database.taxRateDao()
+
+    @Provides
+    fun provideEmployeeDao(database: PosDatabase): EmployeeDao = database.employeeDao()
 }

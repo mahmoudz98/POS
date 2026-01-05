@@ -18,9 +18,9 @@ package com.casecode.pos.core.data.repository.old
 import com.casecode.pos.core.common.AppDispatchers.IO
 import com.casecode.pos.core.common.Dispatcher
 import com.casecode.pos.core.data.R
-import com.casecode.pos.core.data.model.asEntityEmployees
-import com.casecode.pos.core.data.model.asExternalEmployee
-import com.casecode.pos.core.data.model.asExternalEmployees
+import com.casecode.pos.core.data.model.old.asEntityEmployees
+import com.casecode.pos.core.data.model.old.asExternalEmployee
+import com.casecode.pos.core.data.model.old.asExternalEmployees
 import com.casecode.pos.core.data.utils.ensureUserExists
 import com.casecode.pos.core.data.utils.ensureUserExistsOrReturnError
 import com.casecode.pos.core.domain.repository.old.AuthRepositoryO

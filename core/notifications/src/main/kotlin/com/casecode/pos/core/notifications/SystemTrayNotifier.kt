@@ -57,7 +57,7 @@ internal class SystemTrayNotifier @Inject constructor(
 ) : Notifier {
     override fun postOverdueNotifications(supplierInvoices: List<SupplierInvoice>) = with(context) {
         if (checkSelfPermission(this, permission.POST_NOTIFICATIONS) != PERMISSION_GRANTED) {
-            return
+            return@with
         }
 
         val truncatedSupplierInvoices = supplierInvoices.take(MAX_NUM_NOTIFICATIONS)

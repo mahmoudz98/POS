@@ -17,39 +17,42 @@ package com.casecode.pos.core.database.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.casecode.pos.core.model.business.Employee
 import com.casecode.pos.core.model.business.EmployeeRole
 
-@Entity(tableName = "employee")
+@Entity(tableName = "employees", indices = [Index(value = ["id", "business_id"], unique = true)])
 data class EmployeeEntity(
     @PrimaryKey
     val id: String,
-    @ColumnInfo(name = "employee_id") val employeeId: String,
-    @ColumnInfo(name = "business_id") val businessId: String,
     val name: String,
+    val password: String,
+    val phone: String,
     val role: Int,
-    @ColumnInfo(name = "assigned_branch_ids") val assignedBranchIds: List<String>,
+    @ColumnInfo(name = "business_id") val businessId: String,
+    @ColumnInfo(name = "assigned_branch_id") val assignedBranchId: String,
+    @ColumnInfo(name = "is_active") val isActive: Int = 0,
 )
 
 fun EmployeeEntity.asExternalModel(): Employee {
     return Employee(
         id = this.id,
-        employeeId = this.employeeId,
-        businessId = this.businessId,
         name = this.name,
+        phone = this.phone,
         role = EmployeeRole.fromInt(this.role),
-        assignedBranchIds = this.assignedBranchIds,
+        assignedBranchId = this.assignedBranchId,
     )
 }
 
-fun Employee.asEntity(): EmployeeEntity {
+fun Employee.asEntity(hashedPassword: String, businessId: String): EmployeeEntity {
     return EmployeeEntity(
         id = this.id,
-        employeeId = this.employeeId,
-        businessId = this.businessId,
         name = this.name,
         role = this.role.ordinal,
-        assignedBranchIds = this.assignedBranchIds,
+        password = hashedPassword,
+        phone = this.phone,
+        businessId = businessId,
+        assignedBranchId = this.assignedBranchId,
     )
 }

@@ -19,8 +19,10 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy.Builder
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
+import androidx.compose.runtime.Composer
+import androidx.compose.runtime.tooling.ComposeStackTraceMode
+import com.google.firebase.Firebase
+import com.google.firebase.app
 import com.revenuecat.purchases.LogLevel
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
@@ -32,13 +34,11 @@ import timber.log.Timber.DebugTree
 class POSApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        Purchases.logLevel = LogLevel.DEBUG
-        Purchases.configure(
-            PurchasesConfiguration.Builder(this, "goog_BZKRMWIZezGiZCtSeqmPRbgYIAu").build(),
-        )
-        Firebase.app
         Timber.plant(DebugTree())
         setStrictModePolicy()
+        Firebase.app
+        setPurchaseConfiguration()
+        Composer.setDiagnosticStackTraceMode(if (isDebuggable()) ComposeStackTraceMode.SourceInformation else ComposeStackTraceMode.Auto)
     }
 
     private fun isDebuggable(): Boolean {
@@ -51,5 +51,13 @@ class POSApp : Application() {
                 Builder().detectAll().penaltyLog().build(),
             )
         }
+    }
+
+    private fun setPurchaseConfiguration() {
+        // TODO: replace with hilt :http://revenuecat.com/blog/engineering/hilt-sdk-lifecycle/
+        Purchases.logLevel = if (isDebuggable()) LogLevel.DEBUG else LogLevel.INFO
+        Purchases.configure(
+            PurchasesConfiguration.Builder(this, BuildConfig.revenuecat_id).build(),
+        )
     }
 }

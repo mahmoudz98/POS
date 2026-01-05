@@ -29,7 +29,7 @@ fun configureFlavors(
     commonExtension.apply {
         flavorDimensions += FlavorDimension.contentType.name
         productFlavors {
-            PosFlavor.values().forEach {
+            PosFlavor.entries.forEach {
                 create(it.name) {
                     dimension = it.dimension.name
                     flavorConfigurationBlock(this, it)

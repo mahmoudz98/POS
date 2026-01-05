@@ -20,15 +20,13 @@ import com.casecode.pos.core.database.model.BranchEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 
 class TestBranchDao : BranchDao {
 
     private val branchesFlow = MutableStateFlow<List<BranchEntity>>(emptyList())
-    val insertedBranches = mutableListOf<BranchEntity>()
 
-    override fun getBranches(): Flow<List<BranchEntity>> {
-        return branchesFlow.asStateFlow()
-    }
+    val insertedBranches = mutableListOf<BranchEntity>()
 
     override suspend fun insertOrReplaceBranches(branches: List<BranchEntity>) {
         insertedBranches.addAll(branches)
@@ -38,6 +36,22 @@ class TestBranchDao : BranchDao {
             currentList.removeAll { it.branchId == newBranch.branchId }
             currentList.add(newBranch)
         }
+        branchesFlow.value = currentList
+    }
+
+    override fun getBranches(businessId: String): Flow<List<BranchEntity>> {
+        return branchesFlow.asStateFlow().map { list ->
+            list.filter { it.businessId == businessId }
+        }
+    }
+
+    override suspend fun getBranchesCount(businessId: String): Int {
+        return branchesFlow.value.count { it.businessId == businessId }
+    }
+
+    override suspend fun deleteBranch(branchId: String) {
+        val currentList = branchesFlow.value.toMutableList()
+        currentList.removeAll { it.branchId == branchId }
         branchesFlow.value = currentList
     }
 }

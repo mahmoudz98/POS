@@ -82,9 +82,6 @@ fun NavGraphBuilder.homeSaleGraph(
             },
         )
         signOutDialog(
-            onSignOut = {
-                appState.signOut()
-            },
             onDismiss = appState.navController::popBackStack,
         )
         profileScreen { appState.navController.popBackStack() }

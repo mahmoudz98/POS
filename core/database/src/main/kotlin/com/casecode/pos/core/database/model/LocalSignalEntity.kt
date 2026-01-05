@@ -17,7 +17,7 @@ package com.casecode.pos.core.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.casecode.pos.core.model.SyncableEntityType
+import com.casecode.pos.core.model.data.SyncableEntityType
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -29,8 +29,10 @@ import kotlin.time.Instant
 data class LocalSignalEntity(
     @PrimaryKey
     val id: String,
+    val businessId: String,
     val entityType: SyncableEntityType,
     val entityId: String,
+    val operationType: String,
     val status: Int = LocalSignalStatus.PENDING,
     val createdAt: Instant = Clock.System.now(),
 )

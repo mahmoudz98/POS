@@ -27,6 +27,7 @@ import com.casecode.pos.core.domain.usecase.StartOwnerSessionUseCase
 import com.casecode.pos.core.model.business.Branch
 import com.casecode.pos.core.model.business.SubscriptionPlan
 import com.casecode.pos.core.ui.stateInWhileSubscribed
+import com.casecode.pos.core.ui.updateWithViewModelScope
 import com.casecode.pos.core.ui.utils.validateEmail
 import com.casecode.pos.core.ui.utils.validatePhoneNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -71,7 +72,7 @@ constructor(
                 } else {
                     it.copy(
                         isLoading = false,
-                        userMessage = com.casecode.pos.core.ui.R.string.core_ui_error_unknown,
+                        userMessage = uiString.core_ui_error_unknown,
                     )
                 }
             }
@@ -112,12 +113,13 @@ constructor(
             is OnboardingEvent.PlanSelected -> {
                 handlePlanSelected(event.plan, event.activity)
             }
+
             is OnboardingEvent.AddBranch -> {
                 val currentBranches = _uiState.value.onboardingData.branches
                 val planLimit = _uiState.value.onboardingData.selectedPlan?.limits?.maxBranches
 
                 if (planLimit != null && currentBranches.size >= planLimit) {
-                    _uiState.update {
+                    _uiState.updateWithViewModelScope {
                         it.copy(
                             userMessage = R.string.feature_onboarding_error_branch_limit_reached_message,
                         )
@@ -131,7 +133,9 @@ constructor(
             is OnboardingEvent.RemoveBranch -> updateData { it.copy(branches = it.branches - event.branch) }
 
             is OnboardingEvent.SetAddBranchDialogVisibility -> {
-                _uiState.update { it.copy(isAddBranchDialogOpen = event.visible) }
+                _uiState.updateWithViewModelScope {
+                    it.copy(isAddBranchDialogOpen = event.visible)
+                }
             }
 
             OnboardingEvent.NextClicked -> handleNextClicked()
@@ -139,7 +143,7 @@ constructor(
                 val currentStepOrdinal = _uiState.value.currentStep.ordinal
                 if (currentStepOrdinal > 0) {
                     val previousStep = OnboardingStep.fromOrdinal(currentStepOrdinal - 1)
-                    _uiState.update { it.copy(currentStep = previousStep) }
+                    _uiState.updateWithViewModelScope { it.copy(currentStep = previousStep) }
                 }
             }
 
@@ -184,7 +188,7 @@ constructor(
         val data = uiState.value.onboardingData
 
         val businessNameError =
-            if (data.businessName.isBlank()) com.casecode.pos.core.ui.R.string.core_ui_error_unknown else null
+            if (data.businessName.isBlank()) uiString.core_ui_error_unknown else null
         val emailError = validateEmail(data.email)
         val phoneError =
             validatePhoneNumber(data.phone, uiState.value.countrySelected?.countryCode ?: "")
@@ -205,11 +209,11 @@ constructor(
     private fun validateFinancials(): Boolean {
         val data = _uiState.value.onboardingData
         val currencyError =
-            if (data.selectedCurrency == null) com.casecode.pos.core.ui.R.string.core_ui_error_unknown else null
+            if (data.selectedCurrency == null) uiString.core_ui_error_unknown else null
         val taxRateError =
-            if (data.taxRate == null || data.taxRate.rate < 0.0f) com.casecode.pos.core.ui.R.string.core_ui_error_unknown else null
+            if (data.taxRate == null || data.taxRate.rate < 0.0f) uiString.core_ui_error_unknown else null
 
-        _uiState.update {
+        _uiState.updateWithViewModelScope {
             val newData =
                 it.onboardingData.copy(
                     currencyError = currencyError,
@@ -304,8 +308,8 @@ constructor(
                     initialBranches = data.branches,
                     initialTaxRate = data.taxRate!!,
                 )
-            createBusinessUseCase(useCaseData).onSuccess { businessId ->
-                startOwnerSessionUseCase(owner, businessId).onSuccess {
+            createBusinessUseCase(useCaseData).onSuccess {
+                startOwnerSessionUseCase(owner).onSuccess {
                     _uiState.update { it.copy(isLoading = false) }
                 }.onFailure {
                     _uiState.update {
@@ -327,7 +331,7 @@ constructor(
     }
 
     private fun updateData(updateAction: (OnboardingData) -> OnboardingData) {
-        _uiState.update { currentState ->
+        _uiState.updateWithViewModelScope { currentState ->
             val newData = updateAction(currentState.onboardingData)
             currentState.copy(onboardingData = newData)
         }

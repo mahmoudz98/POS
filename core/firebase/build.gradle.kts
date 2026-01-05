@@ -23,14 +23,16 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 
 }
-
 android {
     namespace = "$APPLICATION_ID.core.firebase"
-  
     buildFeatures {
         buildConfig = true
     }
-
+    kotlin{
+        compilerOptions {
+            freeCompilerArgs.add( "-opt-in=kotlinx.serialization.InternalSerializationApi")
+        }
+    }
 
 }
 secrets {
@@ -43,6 +45,6 @@ dependencies {
     implementation(projects.core.datastore)
     implementation(libs.coroutines.android)
     implementation(libs.googleid)
-    api(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.json)
 
 }

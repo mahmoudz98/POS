@@ -39,7 +39,7 @@ import kotlin.time.Instant
 data class OutboxCommandEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val type: Int,
+    val type: OutboxEventType,
     val payload: String,
     val status: Int = OutboxCommandStatus.PENDING,
     @ColumnInfo(name = "created_at")
@@ -51,21 +51,36 @@ data class OutboxCommandEntity(
     @ColumnInfo(name = "last_error")
     val lastError: String? = null,
 )
-
-enum class OutboxEventType {
- /*   PRODUCT_CREATED,
-    PRODUCT_UPDATED,
-    PRODUCT_DELETED,
-    SALE_COMPLETED,
-    SALE_REFUNDED,
-    STOCK_RECEIVED,
-    STOCK_TRANSFERRED,
-    STOCK_ADJUSTED,*/
-    BUSINESS_CREATED,
-    BRANCH_CREATED,
-    BRANCH_UPDATED,
-    USER_CREATED,
-    USER_UPDATED,
+sealed interface OutboxEventType {
+    enum class Business : OutboxEventType {
+        CREATED,
+        UPDATED,
+        DELETED,
+    }
+    enum class Branch : OutboxEventType {
+        CREATED,
+        UPDATED,
+        DELETED,
+    }
+    enum class Employee : OutboxEventType {
+        CREATED,
+        UPDATED,
+        DELETED,
+    }
+    enum class ProductO : OutboxEventType {
+        CREATED,
+        UPDATED,
+        DELETED,
+    }
+    enum class Sale : OutboxEventType {
+        COMPLETED,
+        REFUNDED,
+    }
+    enum class Stock : OutboxEventType {
+        RECEIVED,
+        TRANSFERRED,
+        ADJUSTED,
+    }
 }
 
 /**

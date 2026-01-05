@@ -15,9 +15,9 @@
  */
 package com.casecode.pos.core.domain.usecase
 
+import com.casecode.pos.core.domain.model.OwnerLoginStatus
 import com.casecode.pos.core.domain.repository.business.BusinessRepository
 import com.casecode.pos.core.domain.service.LogService
-import com.casecode.pos.core.domain.utils.OwnerLoginStatus
 import com.casecode.pos.core.model.business.BusinessStatus
 import com.casecode.pos.core.model.users.User
 import javax.inject.Inject

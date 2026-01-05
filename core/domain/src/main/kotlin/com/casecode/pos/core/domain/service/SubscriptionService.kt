@@ -16,8 +16,8 @@
 package com.casecode.pos.core.domain.service
 
 import android.app.Activity
-import com.casecode.pos.core.model.PurchaseResult
 import com.casecode.pos.core.model.business.SubscriptionPlan
+import com.casecode.pos.core.model.data.PurchaseResult
 
 interface SubscriptionService {
     suspend fun purchasePlan(activity: Activity, plan: SubscriptionPlan): Result<PurchaseResult>

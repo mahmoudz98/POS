@@ -23,10 +23,11 @@ import com.casecode.pos.core.model.business.BranchStatus
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
-@Entity(tableName = "branch")
+@Entity(tableName = "branches")
 data class BranchEntity(
     @PrimaryKey
     @ColumnInfo(name = "branch_id") val branchId: String = Uuid.random().toString(),
+    @ColumnInfo(name = "business_id") val businessId: String,
     val name: String,
     val phone: String,
     val status: Int,
@@ -37,6 +38,7 @@ data class BranchEntity(
 fun BranchEntity.asExternalModel(): Branch {
     return Branch(
         id = this.branchId,
+        businessId = this.businessId,
         name = this.name,
         phone = this.phone,
         status = BranchStatus.fromValue(this.status),
@@ -45,8 +47,9 @@ fun BranchEntity.asExternalModel(): Branch {
     )
 }
 
-fun Branch.asEntity(): BranchEntity {
+fun Branch.asEntity(businessId: String): BranchEntity {
     return BranchEntity(
+        businessId = businessId,
         name = this.name,
         phone = this.phone,
         status = this.status.value,
