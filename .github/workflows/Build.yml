@@ -336,13 +336,13 @@ jobs:
           heap-size: 600M
           script: ./gradlew connectedDemoDebugAndroidTest --daemon
 
-      - name: Run local tests for the combined coverage report (only API 34)
-        if: matrix.api-level == 34
+      - name: Run local tests for the combined coverage report (only API 30)
+        if: matrix.api-level == 30
         run: ./gradlew testDemoDebugUnitTest
 
         # Add `createProdDebugUnitTestCoverageReport` if we ever add JVM tests for prod
-      - name: Generate coverage reports for Debug variants (only API 34)
-        if: matrix.api-level == 34
+      - name: Generate coverage reports for Debug variants (only API 30)
+        if: matrix.api-level == 30
         run: ./gradlew createDemoDebugCombinedCoverageReport
 
       - name: Upload test reports
@@ -352,8 +352,8 @@ jobs:
           name: test-reports-${{ matrix.api-level }}
           path: '**/build/reports/androidTests'
 
-      - name: Display local test coverage (only API 34)
-        if: matrix.api-level == 34
+      - name: Display local test coverage (only API 30)
+        if: matrix.api-level == 30
         id: jacoco
         uses: madrapps/jacoco-report@v1.7.0
         with:
@@ -364,8 +364,8 @@ jobs:
             ${{ github.workspace }}/**/build/reports/jacoco/**/*Report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload local coverage reports (XML + HTML) (only API 34)
-        if: matrix.api-level == 34
+      - name: Upload local coverage reports (XML + HTML) (only API 30)
+        if: matrix.api-level == 30
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
