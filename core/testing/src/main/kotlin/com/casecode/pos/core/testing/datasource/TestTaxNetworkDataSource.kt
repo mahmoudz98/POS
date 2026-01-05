@@ -17,8 +17,9 @@ package com.casecode.pos.core.testing.datasource
 
 import com.casecode.pos.core.firebase.datasource.TaxNetworkDataSource
 import com.casecode.pos.core.firebase.model.NetworkTaxRate
+import javax.inject.Inject
 
-class TestTaxNetworkDataSource : TaxNetworkDataSource {
+class TestTaxNetworkDataSource @Inject constructor() : TaxNetworkDataSource {
     private val taxRates = mutableListOf<NetworkTaxRate>()
 
     override suspend fun getTaxRates(businessId: String): List<NetworkTaxRate> = taxRates

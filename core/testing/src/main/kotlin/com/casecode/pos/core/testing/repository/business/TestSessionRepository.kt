@@ -21,8 +21,10 @@ import com.casecode.pos.core.model.business.Employee
 import com.casecode.pos.core.model.users.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import javax.inject.Inject
 
-class TestSessionRepository : SessionRepository {
+class TestSessionRepository @Inject
+constructor() : SessionRepository {
 
     private val _sessionInfoFlow = MutableStateFlow<SessionStateResult>(SessionStateResult.Loading)
     override val sessionInfo: Flow<SessionStateResult> = _sessionInfoFlow

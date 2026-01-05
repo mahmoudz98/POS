@@ -18,8 +18,10 @@ package com.casecode.pos.core.testing.datasource
 import com.casecode.pos.core.firebase.datasource.ConfigDataSource
 import com.casecode.pos.core.firebase.model.NetworkSubscriptionPlan
 import com.casecode.pos.core.firebase.model.SupportedCurrency
+import javax.inject.Inject
 
-class TestConfigDataSource : ConfigDataSource {
+class TestConfigDataSource @Inject
+constructor() : ConfigDataSource {
 
     private var shouldReturnError = false
     private val subscriptionPlans = mutableListOf<NetworkSubscriptionPlan>()

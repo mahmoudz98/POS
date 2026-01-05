@@ -22,8 +22,10 @@ import com.casecode.pos.core.firebase.model.NetworkBusiness
 import com.casecode.pos.core.firebase.model.NetworkSubscription
 import com.casecode.pos.core.firebase.model.NetworkTaxRate
 import java.util.UUID
+import javax.inject.Inject
 
-class TestBusinessNetworkDataSource : BusinessNetworkDataSource {
+class TestBusinessNetworkDataSource @Inject
+constructor() : BusinessNetworkDataSource {
 
     private val businesses = mutableMapOf<String, NetworkBusiness>()
     private val branches = mutableListOf<NetworkBranch>()

@@ -20,8 +20,10 @@ import com.casecode.pos.core.model.users.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class TestAuthRemoteDataSource : AuthRemoteDataSource {
+class TestAuthRemoteDataSource @Inject
+constructor() : AuthRemoteDataSource {
     private val _currentUser = MutableStateFlow<User?>(null)
     override val currentUser: Flow<User?> = _currentUser
 

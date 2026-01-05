@@ -18,8 +18,10 @@ package com.casecode.pos.core.testing.datasource
 import com.casecode.pos.core.firebase.datasource.SubscriptionNetworkDataSource
 import com.casecode.pos.core.firebase.model.NetworkBillingEvent
 import com.casecode.pos.core.firebase.model.NetworkSubscription
+import javax.inject.Inject
 
-class TestSubscriptionNetworkDataSource : SubscriptionNetworkDataSource {
+class TestSubscriptionNetworkDataSource @Inject
+constructor() : SubscriptionNetworkDataSource {
     private var subscription: NetworkSubscription? = null
     private var billingHistory = mutableListOf<NetworkBillingEvent>()
     var updateCreditBalanceCallCount = 0

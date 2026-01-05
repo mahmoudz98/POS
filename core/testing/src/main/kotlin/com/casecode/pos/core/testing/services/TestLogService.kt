@@ -16,8 +16,10 @@
 package com.casecode.pos.core.testing.services
 
 import com.casecode.pos.core.domain.service.LogService
+import javax.inject.Inject
 
-class TestLogService : LogService {
+class TestLogService @Inject
+constructor() : LogService {
     private val logHistory = mutableListOf<String>()
 
     override fun logNonFatalCrash(throwable: Throwable) {

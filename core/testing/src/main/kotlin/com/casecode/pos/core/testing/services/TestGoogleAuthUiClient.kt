@@ -17,8 +17,10 @@ package com.casecode.pos.core.testing.services
 
 import android.content.Context
 import com.casecode.pos.core.domain.service.GoogleAuthUiClient
+import javax.inject.Inject
 
-class TestGoogleAuthUiClient : GoogleAuthUiClient {
+class TestGoogleAuthUiClient @Inject
+constructor() : GoogleAuthUiClient {
     private var getIdTokenResult: Result<String> = Result.success("idTokenTest")
     private var isAvailable = true
 

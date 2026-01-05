@@ -27,8 +27,10 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
 
-class TestEmployeeRepository : TestRepository(), EmployeeRepository {
+class TestEmployeeRepository @Inject
+constructor() : TestRepository(), EmployeeRepository {
     private val employeesSharedFlow:
         MutableSharedFlow<List<Employee>> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)

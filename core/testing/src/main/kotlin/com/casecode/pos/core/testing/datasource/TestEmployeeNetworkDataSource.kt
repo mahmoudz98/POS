@@ -17,8 +17,10 @@ package com.casecode.pos.core.testing.datasource
 
 import com.casecode.pos.core.firebase.datasource.EmployeeNetworkDataSource
 import com.casecode.pos.core.firebase.model.NetworkEmployee
+import javax.inject.Inject
 
-class TestEmployeeNetworkDataSource : EmployeeNetworkDataSource {
+class TestEmployeeNetworkDataSource @Inject
+constructor() : EmployeeNetworkDataSource {
 
     // Use a flat list to store all NetworkEmployee objects
     private val employees = mutableListOf<NetworkEmployee>()

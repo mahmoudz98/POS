@@ -20,8 +20,10 @@ import com.casecode.pos.core.firebase.model.NetworkInboxSignal
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import javax.inject.Inject
 
-class TestInboxNetworkDataSource : InboxNetworkDataSource {
+class TestInboxNetworkDataSource @Inject
+constructor() : InboxNetworkDataSource {
 
     private val signalsFlow = MutableSharedFlow<Pair<String, NetworkInboxSignal>>()
     val postedSignals = mutableListOf<NetworkInboxSignal>()
