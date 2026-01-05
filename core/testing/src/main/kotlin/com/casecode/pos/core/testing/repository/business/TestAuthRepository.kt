@@ -30,21 +30,15 @@ class TestAuthRepository @Inject constructor() : TestRepository(), AuthRepositor
     private val _currentUserFlow = MutableStateFlow<User?>(null)
     override val currentUser: Flow<User?> = _currentUserFlow.asStateFlow()
 
-    // This variable will hold the pre-configured success result.
     private var successUser: User? = null
 
     override suspend fun getCurrentUser(): User? {
-        // We can't easily simulate a failure for a non-Result return type,
-        // so this method remains a simple property read.
         return _currentUserFlow.value
     }
 
     override suspend fun signInWithGoogle(idToken: String): Result<User> {
-        // The new pattern: First, check if a failure has been configured.
         getFailureResult<User>()?.let { return it }
 
-        // If no failure is set, return the pre-configured success result.
-        // Or fail if no success result was configured, making tests more explicit.
         return successUser?.let { Result.success(it) }
             ?: Result.failure(IllegalStateException("TestAuthRepository: signInWithGoogle was called, but no success or failure state was configured."))
     }
@@ -52,8 +46,6 @@ class TestAuthRepository @Inject constructor() : TestRepository(), AuthRepositor
     override suspend fun signOut() {
         _currentUserFlow.value = null
     }
-
-    // --- Test Control Functions ---
 
     /**
      * Configures the repository to return a successful sign-in result with the given user.
@@ -69,7 +61,7 @@ class TestAuthRepository @Inject constructor() : TestRepository(), AuthRepositor
      * Overrides the base setFailure to also clear the success user, preventing ambiguity.
      */
     fun sendSignInFailure(exception: Throwable) {
-        setFailure(exception) // From FakeRepository base class
+        setFailure(exception)
         this.successUser = null
     }
 
