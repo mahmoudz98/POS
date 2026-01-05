@@ -13,7 +13,6 @@ plugins {
     alias(libs.plugins.secrets)
     alias(libs.plugins.gradle.cache.fix) apply false
     alias(libs.plugins.dependencyGuard) apply false
-    alias(libs.plugins.google.osslicenses) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.power.assert) apply false
     alias(libs.plugins.pos.root)

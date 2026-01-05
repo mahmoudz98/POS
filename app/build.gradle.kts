@@ -28,7 +28,6 @@ plugins {
     alias(libs.plugins.pos.android.application.jacoco)
     alias(libs.plugins.pos.android.firebase)
     alias(libs.plugins.pos.hilt)
-    alias(libs.plugins.google.osslicenses)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.pos.android.application.signing)
 }
